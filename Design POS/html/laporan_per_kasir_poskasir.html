@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Laporan Per Kasir - PosKasir</title>
+<!-- Google Fonts: Geist, Instrument Serif, JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "amber-50": "#FAEEDA",
+                    "gray-800": "#2C2C2A",
+                    "tertiary-fixed-dim": "#ffb95d",
+                    "danger-bg": "#FCEBEB",
+                    "surface-variant": "#e2e3e1",
+                    "primary-fixed": "#ffdcbb",
+                    "info-bg": "#E6F1FB",
+                    "amber-800": "#633806",
+                    "error": "#ba1a1a",
+                    "success-text": "#3B6D11",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#825100",
+                    "surface-container": "#eeeeec",
+                    "success-bg": "#EAF3DE",
+                    "on-secondary-fixed-variant": "#474742",
+                    "inverse-primary": "#ffb869",
+                    "primary": "#855000",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#f9f9f7",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#a36800",
+                    "gray-400": "#888780",
+                    "on-secondary-container": "#63635d",
+                    "tertiary-fixed": "#ffddb7",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#e1e0d9",
+                    "primary-container": "#a76500",
+                    "info-text": "#185FA5",
+                    "amber-600": "#854F0B",
+                    "surface-container-highest": "#e2e3e1",
+                    "surface-bright": "#f9f9f7",
+                    "primary-fixed-dim": "#ffb869",
+                    "gray-600": "#444441",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#673d00",
+                    "amber-100": "#FAC775",
+                    "background": "#f9f9f7",
+                    "surface-dim": "#dadad8",
+                    "on-background": "#1a1c1b",
+                    "on-tertiary-fixed": "#2a1700",
+                    "inverse-on-surface": "#f1f1ef",
+                    "inverse-surface": "#2f3130",
+                    "on-surface": "#1a1c1b",
+                    "outline": "#857464",
+                    "secondary": "#5f5f59",
+                    "surface-container-low": "#f4f4f2",
+                    "secondary-fixed-dim": "#c8c6c0",
+                    "danger-text": "#A32D2D",
+                    "outline-variant": "#d7c3b1",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed": "#1b1c18",
+                    "secondary-fixed": "#e4e2dc",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#524436",
+                    "on-primary-fixed": "#2b1700",
+                    "surface-tint": "#885200",
+                    "surface-container-high": "#e8e8e6",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "gray-200": "#D3D1C7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xs": "4px",
+                    "layout-margin": "28px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "base": "4px",
+                    "topbar-height": "48px",
+                    "sidebar-width": "220px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Instrument Serif"],
+                    "body-md": ["Geist"],
+                    "price-md": ["JetBrains Mono"],
+                    "price-lg": ["JetBrains Mono"],
+                    "headline-sm": ["Geist"],
+                    "body-lg": ["Geist"],
+                    "label-caps": ["Geist"],
+                    "display-md": ["Instrument Serif"],
+                    "caption": ["Geist"]
+            },
+            "fontSize": {
+                    "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden">
+<!-- SideNavBar (Shared Component) -->
+<!-- Applying exact style JSON classes for structure and coloring -->
+<nav class="bg-surface-container-low dark:bg-gray-800 text-primary dark:text-primary-fixed font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40 shadow-none">
+<!-- Header -->
+<div class="px-md mb-xl flex flex-col items-start">
+<span class="font-display-md text-display-md text-primary font-bold">PosKasir</span>
+<span class="font-caption text-caption text-on-surface-variant opacity-80">Terminal 01</span>
+</div>
+<!-- CTA -->
+<div class="px-md mb-lg">
+<button class="w-full bg-amber-400 text-amber-800 font-body-md rounded-lg py-2 px-4 shadow-sm hover:bg-amber-100 transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<!-- Navigation Tabs -->
+<ul class="flex-1 flex flex-col gap-xs px-sm overflow-y-auto">
+<!-- Inactive -->
+<li><a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
+            </a></li>
+<li><a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">point_of_sale</span> Point of Sale
+            </a></li>
+<li><a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span> Orders
+            </a></li>
+<li><a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">restaurant_menu</span> Menu Management
+            </a></li>
+<li><a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span> Inventory
+            </a></li>
+<!-- Active (Reports) -->
+<li><a class="flex items-center gap-sm px-3 py-2 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary scale-[0.99] duration-150 transition-all font-semibold" href="#">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">analytics</span> Reports
+            </a></li>
+</ul>
+<!-- Footer Tabs -->
+<ul class="flex flex-col gap-xs px-sm mt-auto pt-md border-t border-outline-variant/30">
+<li><a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span> Settings
+            </a></li>
+<li><a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span> Support
+            </a></li>
+</ul>
+</nav>
+<!-- TopAppBar (Shared Component) -->
+<!-- Executing exact string injection: h-topbar-height fixed top-0 right-0 z-50 flex justify-between items-center w-full px-lg ml-sidebar-width -->
+<!-- Wrapping content in a div that subtracts sidebar width to prevent horizontal scroll bleed from w-full + fixed + ml-sidebar-width -->
+<header class="bg-surface-bright dark:bg-surface-dim text-primary dark:text-primary-fixed font-label-caps text-label-caps h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flex justify-between items-center px-lg" style="width: calc(100% - var(--spacing-sidebar-width));">
+<!-- Breadcrumbs / Navigation Area -->
+<div class="flex items-center gap-md">
+<span class="text-on-surface-variant dark:text-gray-400">Reports</span>
+<span class="material-symbols-outlined text-[14px] text-gray-400">chevron_right</span>
+<span class="text-primary border-b-2 border-primary pb-1">Laporan Per Kasir</span>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-primary transition-opacity flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity flex items-center gap-xs relative">
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border border-surface-bright"></span>
+</button>
+<div class="h-6 w-[1px] bg-outline-variant/50 mx-2"></div>
+<button class="bg-amber-50 text-amber-800 border border-amber-200 rounded-lg px-3 py-1 hover:opacity-80 transition-all font-medium">Hold Order</button>
+<button class="bg-amber-400 text-amber-800 rounded-lg px-3 py-1 hover:opacity-80 transition-all font-medium">Checkout</button>
+<div class="ml-sm w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex-shrink-0 cursor-pointer">
+<img alt="Manager Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a young male restaurant manager in a brightly lit, modern café setting. The lighting is soft and flattering, highlighting a warm, approachable demeanor. The background is slightly blurred, emphasizing a clean, light-mode operational aesthetic consistent with high-end F&amp;B management software." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlMuswrcaHiXmnAEUukUpQs_F_I7D33UnPY5KJaSNzSnUrxqVk8Am2QCFunWzb1pGVhpbG5ff-8LtU7fduDQEvtZYqNy0rBmSGO90Y3b_0E7ET6KNDk4chpCuZ0WMmPtyOgN7I8UVGnumq-SiagAQ0sB1V0iXe3SuC9iVB3g25ciuusEggmoCR6ZivU8zKtesDY7GT1VUpW5sxxOkHkM7XVAGjiz_I8jQSi99kl2OW9wGYr_l2iGv-W07UbKZe10CwVW7EDm6o1v9y"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-sidebar-width pt-topbar-height p-layout-margin min-h-screen flex flex-col gap-lg">
+<!-- Header Section -->
+<section class="flex justify-between items-end">
+<div>
+<h1 class="font-display-lg text-display-lg text-gray-800 tracking-tight">Laporan Per Kasir</h1>
+<p class="font-body-md text-body-md text-gray-600 mt-1">Shift performance &amp; till reconciliation tracking.</p>
+</div>
+<div class="flex gap-sm">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-lg px-3 py-1.5 flex items-center gap-sm text-gray-800 cursor-pointer hover:border-amber-400 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-gray-400">calendar_today</span>
+<span class="font-body-md">Today, Oct 24, 2023</span>
+<span class="material-symbols-outlined text-[16px] text-gray-400 ml-sm">expand_more</span>
+</div>
+<button class="bg-surface-container-lowest border border-gray-200 rounded-lg px-3 py-1.5 text-gray-800 hover:bg-surface-container transition-colors shadow-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">download</span> Export
+                </button>
+</div>
+</section>
+<!-- Bento Grid Summary -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-sm">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm relative overflow-hidden">
+<div class="font-label-caps text-label-caps text-gray-400 mb-1">Total Active Cashiers</div>
+<div class="font-display-md text-display-md text-gray-800">4 Staff</div>
+<div class="absolute -bottom-2 -right-2 text-surface-container-high opacity-50">
+<span class="material-symbols-outlined text-[64px]" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm">
+<div class="font-label-caps text-label-caps text-gray-400 mb-1">Total System Revenue</div>
+<div class="font-price-lg text-price-lg text-gray-800">Rp 12,450,000</div>
+<div class="mt-2 text-caption text-success-text flex items-center gap-xs">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +5.2% vs yesterday
+                </div>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm">
+<div class="font-label-caps text-label-caps text-gray-400 mb-1">Avg Ticket Value (Overall)</div>
+<div class="font-price-lg text-price-lg text-gray-800">Rp 84,500</div>
+</div>
+<div class="bg-surface-container-lowest border-[1px] border-danger-text/20 bg-danger-bg/10 rounded-xl p-md shadow-sm">
+<div class="font-label-caps text-label-caps text-danger-text mb-1 flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">warning</span> Total Discrepancy
+                </div>
+<div class="font-price-lg text-price-lg text-gray-800">-Rp 45,000</div>
+<div class="mt-2 text-caption text-gray-600">Across 2 tills</div>
+</div>
+</section>
+<!-- High-Density Data Table Card -->
+<section class="bg-surface-container-lowest border border-gray-200 rounded-xl shadow-sm overflow-hidden flex flex-col flex-1">
+<!-- Table Toolbar -->
+<div class="px-md py-sm border-b-[0.5px] border-gray-200 bg-surface flex justify-between items-center">
+<h2 class="font-headline-sm text-headline-sm text-gray-800">Cashier Manifest</h2>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-[16px]">search</span>
+<input class="w-full pl-xl pr-3 py-1.5 bg-surface-container-lowest border-[0.5px] border-gray-200 rounded-lg font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all" placeholder="Search staff name..." type="text"/>
+</div>
+</div>
+<!-- Table Wrapper -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead class="bg-surface-container-low font-label-caps text-label-caps text-gray-400">
+<tr>
+<th class="py-2.5 px-md font-medium border-b-[0.5px] border-gray-200">Cashier Name</th>
+<th class="py-2.5 px-md font-medium text-right border-b-[0.5px] border-gray-200">Total Transacted</th>
+<th class="py-2.5 px-md font-medium text-right border-b-[0.5px] border-gray-200">Avg Ticket Value</th>
+<th class="py-2.5 px-md font-medium text-right border-b-[0.5px] border-gray-200">Total Cash Handled</th>
+<th class="py-2.5 px-md font-medium text-right border-b-[0.5px] border-gray-200">Discrepancy (Tutup)</th>
+<th class="py-2.5 px-md font-medium text-center border-b-[0.5px] border-gray-200 w-[120px]">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800">
+<!-- Row 1: Perfect Till -->
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-surface-container/50 transition-colors group">
+<td class="py-2 px-md flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-amber-50 border border-amber-200 text-amber-800 flex items-center justify-center font-bold text-[10px]">DA</div>
+<span class="font-medium text-gray-800">Dian Anugrah</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-high text-gray-600 text-[9px] uppercase tracking-wider ml-2">Till 01</span>
+</td>
+<td class="py-2 px-md text-right font-price-md text-price-md">Rp 4,250,000</td>
+<td class="py-2 px-md text-right font-price-md text-price-md text-gray-600">Rp 85,000</td>
+<td class="py-2 px-md text-right font-price-md text-price-md">Rp 1,500,000</td>
+<td class="py-2 px-md text-right">
+<span class="inline-flex items-center justify-center px-2 py-[2px] rounded-full bg-success-bg text-success-text font-label-caps text-[10px]">
+                                    MATCH
+                                </span>
+</td>
+<td class="py-2 px-md text-center">
+<button class="text-primary opacity-0 group-hover:opacity-100 hover:bg-amber-50 px-3 py-1 rounded-md transition-all text-body-md font-medium">View History</button>
+</td>
+</tr>
+<!-- Row 2: Shortage -->
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-surface-container/50 transition-colors group">
+<td class="py-2 px-md flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-gray-600 flex items-center justify-center font-bold text-[10px]">RS</div>
+<span class="font-medium text-gray-800">Rizky Saputra</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-high text-gray-600 text-[9px] uppercase tracking-wider ml-2">Till 02</span>
+</td>
+<td class="py-2 px-md text-right font-price-md text-price-md">Rp 3,800,000</td>
+<td class="py-2 px-md text-right font-price-md text-price-md text-gray-600">Rp 76,000</td>
+<td class="py-2 px-md text-right font-price-md text-price-md">Rp 2,100,000</td>
+<td class="py-2 px-md text-right">
+<span class="inline-flex items-center justify-center px-2 py-[2px] rounded-full bg-danger-bg text-danger-text font-label-caps text-[10px] font-price-md border border-danger-text/20">
+                                    -Rp 15,000
+                                </span>
+</td>
+<td class="py-2 px-md text-center">
+<button class="text-primary opacity-0 group-hover:opacity-100 hover:bg-amber-50 px-3 py-1 rounded-md transition-all text-body-md font-medium">View History</button>
+</td>
+</tr>
+<!-- Row 3: Overage -->
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-surface-container/50 transition-colors group">
+<td class="py-2 px-md flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-gray-600 flex items-center justify-center font-bold text-[10px]">MW</div>
+<span class="font-medium text-gray-800">Maya Wulandari</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-high text-gray-600 text-[9px] uppercase tracking-wider ml-2">Till 03</span>
+</td>
+<td class="py-2 px-md text-right font-price-md text-price-md">Rp 2,900,000</td>
+<td class="py-2 px-md text-right font-price-md text-price-md text-gray-600">Rp 96,600</td>
+<td class="py-2 px-md text-right font-price-md text-price-md">Rp 850,000</td>
+<td class="py-2 px-md text-right">
+<span class="inline-flex items-center justify-center px-2 py-[2px] rounded-full bg-info-bg text-info-text font-label-caps text-[10px] font-price-md">
+                                    +Rp 5,000
+                                </span>
+</td>
+<td class="py-2 px-md text-center">
+<button class="text-primary opacity-0 group-hover:opacity-100 hover:bg-amber-50 px-3 py-1 rounded-md transition-all text-body-md font-medium">View History</button>
+</td>
+</tr>
+<!-- Row 4: Severe Shortage -->
+<tr class="hover:bg-surface-container/50 transition-colors group bg-danger-bg/5">
+<td class="py-2 px-md flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-gray-600 flex items-center justify-center font-bold text-[10px]">BP</div>
+<span class="font-medium text-gray-800">Budi Perkasa</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-high text-gray-600 text-[9px] uppercase tracking-wider ml-2">Till 01 (E)</span>
+</td>
+<td class="py-2 px-md text-right font-price-md text-price-md">Rp 1,500,000</td>
+<td class="py-2 px-md text-right font-price-md text-price-md text-gray-600">Rp 60,000</td>
+<td class="py-2 px-md text-right font-price-md text-price-md">Rp 1,200,000</td>
+<td class="py-2 px-md text-right">
+<span class="inline-flex items-center justify-center px-2 py-[2px] rounded-full bg-danger-bg text-danger-text font-label-caps text-[10px] font-price-md border border-danger-text/20">
+                                    -Rp 30,000
+                                </span>
+</td>
+<td class="py-2 px-md text-center">
+<button class="text-primary opacity-0 group-hover:opacity-100 hover:bg-amber-50 px-3 py-1 rounded-md transition-all text-body-md font-medium">View History</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer Pagination -->
+<div class="px-md py-sm bg-surface border-t-[0.5px] border-gray-200 flex justify-between items-center text-caption text-gray-600">
+<span>Showing 1-4 of 4 staff records</span>
+<div class="flex items-center gap-sm">
+<button class="p-1 rounded hover:bg-surface-container text-gray-400 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<span class="font-medium text-gray-800">1</span>
+<button class="p-1 rounded hover:bg-surface-container text-gray-400 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+</body></html>

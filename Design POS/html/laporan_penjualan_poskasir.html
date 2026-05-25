@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Laporan Penjualan - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "amber-50": "#FAEEDA",
+                        "gray-800": "#2C2C2A",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "danger-bg": "#FCEBEB",
+                        "surface-variant": "#e2e3e1",
+                        "primary-fixed": "#ffdcbb",
+                        "info-bg": "#E6F1FB",
+                        "amber-800": "#633806",
+                        "error": "#ba1a1a",
+                        "success-text": "#3B6D11",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#825100",
+                        "surface-container": "#eeeeec",
+                        "success-bg": "#EAF3DE",
+                        "on-secondary-fixed-variant": "#474742",
+                        "inverse-primary": "#ffb869",
+                        "primary": "#855000",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f7",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#a36800",
+                        "gray-400": "#888780",
+                        "on-secondary-container": "#63635d",
+                        "tertiary-fixed": "#ffddb7",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#e1e0d9",
+                        "primary-container": "#a76500",
+                        "info-text": "#185FA5",
+                        "amber-600": "#854F0B",
+                        "surface-container-highest": "#e2e3e1",
+                        "surface-bright": "#f9f9f7",
+                        "primary-fixed-dim": "#ffb869",
+                        "gray-600": "#444441",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#673d00",
+                        "amber-100": "#FAC775",
+                        "background": "#f9f9f7",
+                        "surface-dim": "#dadad8",
+                        "on-background": "#1a1c1b",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-on-surface": "#f1f1ef",
+                        "inverse-surface": "#2f3130",
+                        "on-surface": "#1a1c1b",
+                        "outline": "#857464",
+                        "secondary": "#5f5f59",
+                        "surface-container-low": "#f4f4f2",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "danger-text": "#A32D2D",
+                        "outline-variant": "#d7c3b1",
+                        "on-tertiary-container": "#fffbff",
+                        "on-secondary-fixed": "#1b1c18",
+                        "secondary-fixed": "#e4e2dc",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#524436",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-tint": "#885200",
+                        "surface-container-high": "#e8e8e6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "gray-200": "#D3D1C7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "base": "4px",
+                        "topbar-height": "48px",
+                        "sidebar-width": "220px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Instrument Serif"],
+                        "body-md": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "price-lg": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "label-caps": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "caption": ["Geist"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Utility for Material Symbols to apply Fill based on attribute */
+        [data-weight="fill"] { font-variation-settings: 'FILL' 1; }
+        
+        /* Subtle scrollbar for table */
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #D3D1C7; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md overflow-x-hidden antialiased">
+<!-- Shared Component: SideNavBar -->
+<aside class="bg-surface-container-low dark:bg-gray-800 text-primary dark:text-primary-fixed font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flat no shadows flex flex-col h-full py-md z-40">
+<!-- Header / Logo Area -->
+<div class="px-md mb-xl">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-md bg-amber-50 border border-amber-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-800 text-lg">storefront</span>
+</div>
+<div>
+<h1 class="font-display-md text-display-md text-primary font-bold leading-none">PosKasir</h1>
+<span class="font-caption text-caption text-gray-400">Terminal 01</span>
+</div>
+</div>
+</div>
+<!-- CTA Button -->
+<div class="px-md mb-md">
+<button class="w-full bg-amber-100 text-amber-800 font-label-caps text-label-caps py-2 rounded shadow-sm hover:bg-amber-50 border border-amber-200 transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                New Order
+            </button>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 overflow-y-auto px-sm flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-3 py-2 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">restaurant_menu</span>
+                Menu Management
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                Inventory
+            </a>
+<!-- Active Tab -->
+<a class="flex items-center gap-sm px-3 py-2 rounded-[6px] bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]" data-weight="fill">analytics</span>
+<span class="font-semibold">Reports</span>
+</a>
+</nav>
+<!-- Footer Tabs -->
+<div class="mt-auto px-sm flex flex-col gap-xs pt-md border-t border-outline-variant mx-md">
+<a class="flex items-center gap-sm px-3 py-2 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Shared Component: TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim text-primary dark:text-primary-fixed font-label-caps text-label-caps h-topbar-height fixed top-0 right-0 z-30 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-lg ml-sidebar-width" style="width: calc(100% - 220px);">
+<!-- Left Area: Navigation Links (All Inactive since we are in Reports) -->
+<div class="flex items-center gap-lg h-full">
+<a class="h-full flex items-center text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity Tap: opacity-80 transition-all" href="#">Fast Food</a>
+<a class="h-full flex items-center text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity Tap: opacity-80 transition-all" href="#">Drinks</a>
+<a class="h-full flex items-center text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity Tap: opacity-80 transition-all" href="#">Desserts</a>
+</div>
+<!-- Right Area: Actions & Profile -->
+<div class="flex items-center gap-sm">
+<div class="flex items-center border-r border-outline-variant pr-sm mr-sm gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded text-gray-600 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-gray-600 hover:bg-surface-container-high transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-error rounded-full"></span>
+</button>
+</div>
+<button class="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded flex items-center gap-xs hover:bg-amber-100 transition-colors">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+                Hold Order
+            </button>
+<button class="bg-primary text-on-primary px-3 py-1.5 rounded flex items-center gap-xs hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-[16px]">shopping_cart_checkout</span>
+                Checkout
+            </button>
+<button class="w-8 h-8 rounded-full bg-surface-container ml-sm overflow-hidden border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-600">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-[220px] pt-[48px] p-lg min-h-screen pb-layout-margin bg-background">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl border-b border-gray-200 pb-sm">
+<div>
+<h2 class="font-display-lg text-display-lg text-gray-800 mb-1">Laporan Penjualan</h2>
+<p class="font-body-md text-body-md text-gray-600">Review detailed transaction history and aggregated metrics.</p>
+</div>
+<!-- Date Range Picker (Simplified UI) -->
+<div class="flex items-center bg-surface-container-lowest border border-gray-200 rounded px-3 py-1.5 shadow-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-amber-50 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-gray-400 text-[18px] mr-2">calendar_today</span>
+<span class="font-body-md text-body-md text-gray-800 mr-2">Oct 01, 2023 - Oct 31, 2023</span>
+<span class="material-symbols-outlined text-gray-400 text-[18px]">arrow_drop_down</span>
+</div>
+</div>
+<!-- Bento Grid / KPI Summaries -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-sm mb-lg">
+<!-- Total Revenue Card -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm col-span-2 relative overflow-hidden group">
+<!-- Subtle background pattern injection via CSS gradient for depth -->
+<div class="absolute right-0 top-0 w-32 h-32 bg-gradient-to-bl from-amber-50 to-transparent opacity-50 rounded-bl-full pointer-events-none"></div>
+<h3 class="font-label-caps text-label-caps text-gray-400 mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">payments</span>
+                    Total Revenue
+                </h3>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="font-price-lg text-price-lg text-primary text-[24px]">Rp 45.250.000</span>
+<span class="font-caption text-caption text-success-text flex items-center bg-success-bg px-1 rounded-full">
+<span class="material-symbols-outlined text-[10px]">trending_up</span> 12.5%
+                    </span>
+</div>
+<p class="font-caption text-caption text-gray-400">vs last period (Rp 40.220.000)</p>
+</div>
+<!-- Total Transactions -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col justify-between">
+<h3 class="font-label-caps text-label-caps text-gray-400 mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">receipt</span>
+                    Transactions
+                </h3>
+<div>
+<div class="font-price-lg text-price-lg text-gray-800 text-[20px]">1,248</div>
+<p class="font-caption text-caption text-gray-400 mt-1">Avg 40/day</p>
+</div>
+</div>
+<!-- Average Order Value -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col justify-between">
+<h3 class="font-label-caps text-label-caps text-gray-400 mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">shopping_bag</span>
+                    Avg Order Value
+                </h3>
+<div>
+<div class="font-price-lg text-price-lg text-gray-800 text-[20px]">Rp 36.250</div>
+<p class="font-caption text-caption text-gray-400 mt-1">Steady</p>
+</div>
+</div>
+</div>
+<!-- Controls Toolbar -->
+<div class="flex flex-wrap items-center justify-between gap-md mb-sm bg-surface-container-low p-2 rounded border border-gray-200">
+<!-- Grouping Segmented Control -->
+<div class="flex bg-surface-container-highest rounded p-[2px]">
+<button class="px-3 py-1 bg-surface-container-lowest rounded shadow-sm font-label-caps text-label-caps text-gray-800 transition-colors">Date</button>
+<button class="px-3 py-1 rounded font-label-caps text-label-caps text-gray-600 hover:text-gray-800 transition-colors">Category</button>
+<button class="px-3 py-1 rounded font-label-caps text-label-caps text-gray-600 hover:text-gray-800 transition-colors">Payment Method</button>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-sm">
+<!-- Outlet Filter -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-lowest border border-gray-200 rounded pl-3 pr-8 py-1.5 font-body-md text-body-md text-gray-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-amber-50">
+<option>All Outlets</option>
+<option>Terminal 01</option>
+<option>Terminal 02</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[16px]">expand_more</span>
+</div>
+<!-- Cashier Filter -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-lowest border border-gray-200 rounded pl-3 pr-8 py-1.5 font-body-md text-body-md text-gray-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-amber-50">
+<option>All Cashiers</option>
+<option>Budi Santoso</option>
+<option>Siti Aminah</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[16px]">expand_more</span>
+</div>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-lowest border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors ml-2" title="Export CSV">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+</div>
+<!-- Detailed Data Table Container -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-lg overflow-x-auto custom-scrollbar shadow-sm">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead class="bg-surface-container text-gray-400 font-label-caps text-label-caps border-b border-gray-200">
+<tr>
+<th class="py-2 px-3 font-semibold uppercase tracking-wider w-12"></th> <!-- Expand Icon -->
+<th class="py-2 px-3 font-semibold uppercase tracking-wider">Date &amp; Time</th>
+<th class="py-2 px-3 font-semibold uppercase tracking-wider">Receipt No.</th>
+<th class="py-2 px-3 font-semibold uppercase tracking-wider">Cashier</th>
+<th class="py-2 px-3 font-semibold uppercase tracking-wider">Payment</th>
+<th class="py-2 px-3 font-semibold uppercase tracking-wider">Items</th>
+<th class="py-2 px-3 font-semibold uppercase tracking-wider text-right">Total</th>
+<th class="py-2 px-3 font-semibold uppercase tracking-wider text-center">Status</th>
+<th class="py-2 px-3 w-10"></th> <!-- Action -->
+</tr>
+</thead>
+<tbody class="text-gray-800 font-body-md text-body-md">
+<!-- Row 1 -->
+<tr class="border-b border-[0.5px] border-gray-200 hover:bg-amber-50/30 transition-colors cursor-pointer group">
+<td class="py-2 px-3 text-center text-gray-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</td>
+<td class="py-2 px-3">
+<div class="whitespace-nowrap">24 Oct, 14:32</div>
+</td>
+<td class="py-2 px-3 font-price-md text-price-md text-gray-600">#TRX-8901</td>
+<td class="py-2 px-3">Budi S.</td>
+<td class="py-2 px-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">credit_card</span>
+                                QRIS
+                            </div>
+</td>
+<td class="py-2 px-3 text-gray-600">3 items</td>
+<td class="py-2 px-3 text-right font-price-md text-price-md">Rp 125.000</td>
+<td class="py-2 px-3 text-center">
+<span class="inline-block bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-label-caps">Success</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-[0.5px] border-gray-200 hover:bg-amber-50/30 transition-colors cursor-pointer group">
+<td class="py-2 px-3 text-center text-gray-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</td>
+<td class="py-2 px-3">
+<div class="whitespace-nowrap">24 Oct, 14:15</div>
+</td>
+<td class="py-2 px-3 font-price-md text-price-md text-gray-600">#TRX-8900</td>
+<td class="py-2 px-3">Siti A.</td>
+<td class="py-2 px-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">payments</span>
+                                Cash
+                            </div>
+</td>
+<td class="py-2 px-3 text-gray-600">1 item</td>
+<td class="py-2 px-3 text-right font-price-md text-price-md">Rp 45.000</td>
+<td class="py-2 px-3 text-center">
+<span class="inline-block bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-label-caps">Success</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 (Refund/Error example) -->
+<tr class="border-b border-[0.5px] border-gray-200 bg-danger-bg/30 hover:bg-danger-bg/50 transition-colors cursor-pointer group">
+<td class="py-2 px-3 text-center text-gray-400 group-hover:text-danger-text transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</td>
+<td class="py-2 px-3">
+<div class="whitespace-nowrap">24 Oct, 13:50</div>
+</td>
+<td class="py-2 px-3 font-price-md text-price-md text-gray-600">#TRX-8899</td>
+<td class="py-2 px-3">Budi S.</td>
+<td class="py-2 px-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">credit_card</span>
+                                Debit Card
+                            </div>
+</td>
+<td class="py-2 px-3 text-gray-600">2 items</td>
+<td class="py-2 px-3 text-right font-price-md text-price-md text-danger-text line-through opacity-70">Rp 80.000</td>
+<td class="py-2 px-3 text-center">
+<span class="inline-block bg-danger-bg text-danger-text px-2 py-0.5 border border-danger-text/20 rounded-full font-label-caps text-label-caps">Void</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-danger-text opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="border-b border-[0.5px] border-gray-200 hover:bg-amber-50/30 transition-colors cursor-pointer group">
+<td class="py-2 px-3 text-center text-gray-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</td>
+<td class="py-2 px-3">
+<div class="whitespace-nowrap">24 Oct, 13:10</div>
+</td>
+<td class="py-2 px-3 font-price-md text-price-md text-gray-600">#TRX-8898</td>
+<td class="py-2 px-3">Siti A.</td>
+<td class="py-2 px-3">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">credit_card</span>
+                                QRIS
+                            </div>
+</td>
+<td class="py-2 px-3 text-gray-600">5 items</td>
+<td class="py-2 px-3 text-right font-price-md text-price-md">Rp 210.500</td>
+<td class="py-2 px-3 text-center">
+<span class="inline-block bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-label-caps">Success</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination Footer -->
+<div class="bg-surface-container-low p-2 border-t border-gray-200 flex items-center justify-between text-gray-600 font-caption text-caption">
+<span class="pl-2">Showing 1 to 4 of 1,248 entries</span>
+<div class="flex items-center gap-1">
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-gray-200 disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<span class="px-2 font-body-md text-body-md text-gray-800">1</span>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-gray-200">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

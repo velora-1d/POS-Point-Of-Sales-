@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Order Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffdcbb",
+                        "surface-container-highest": "#e2e3e1",
+                        "on-primary-container": "#fffbff",
+                        "gray-400": "#888780",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#857464",
+                        "on-surface-variant": "#524436",
+                        "on-secondary-container": "#63635d",
+                        "on-tertiary-container": "#fffbff",
+                        "success-text": "#3B6D11",
+                        "surface-bright": "#f9f9f7",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary-fixed": "#2b1700",
+                        "gray-800": "#2C2C2A",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#d7c3b1",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "success-bg": "#EAF3DE",
+                        "primary-container": "#a76500",
+                        "info-text": "#185FA5",
+                        "surface": "#f9f9f7",
+                        "on-surface": "#1a1c1b",
+                        "primary-fixed-dim": "#ffb869",
+                        "background": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "primary": "#855000",
+                        "gray-200": "#D3D1C7",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e2e3e1",
+                        "secondary": "#5f5f59",
+                        "surface-tint": "#885200",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "gray-600": "#444441",
+                        "on-error": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "surface-container-low": "#f4f4f2",
+                        "error": "#ba1a1a",
+                        "amber-100": "#FAC775",
+                        "surface-dim": "#dadad8",
+                        "secondary-fixed": "#e4e2dc",
+                        "amber-600": "#854F0B",
+                        "amber-50": "#FAEEDA",
+                        "surface-container": "#eeeeec",
+                        "inverse-on-surface": "#f1f1ef",
+                        "danger-bg": "#FCEBEB",
+                        "amber-800": "#633806",
+                        "secondary-container": "#e1e0d9",
+                        "info-bg": "#E6F1FB",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#825100",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2f3130",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1b1c18",
+                        "on-secondary-fixed-variant": "#474742",
+                        "tertiary-container": "#a36800",
+                        "danger-text": "#A32D2D",
+                        "inverse-primary": "#ffb869"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "md": "16px",
+                        "layout-margin": "28px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sidebar-width": "220px",
+                        "base": "4px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "body-lg": ["Geist"],
+                        "label-caps": ["Geist"],
+                        "body-md": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-lg": ["Instrument Serif"],
+                        "caption": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar Component -->
+<nav class="bg-surface-container-low dark:bg-gray-800 font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40 hidden md:flex">
+<div class="px-md mb-xl flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-[32px]">point_of_sale</span>
+<div>
+<div class="font-display-md text-display-md text-primary font-bold">PosKasir</div>
+<div class="font-caption text-caption text-gray-600">Terminal 01</div>
+</div>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-amber-400 text-amber-800 font-body-md text-body-md py-2 px-3 rounded flex items-center justify-center gap-sm hover:bg-amber-300 transition-colors">
+<span class="material-symbols-outlined icon-fill">add_circle</span>
+                New Order
+            </button>
+</div>
+<ul class="flex-1 flex flex-col gap-xs px-sm">
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+                    Point of Sale
+                </a>
+</li>
+<li>
+<!-- ACTIVE TAB -->
+<a class="flex items-center gap-sm py-2 px-3 rounded bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined icon-fill">receipt_long</span>
+                    Orders
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+                    Menu Management
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                    Reports
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-sm pt-md border-t border-outline-variant/50 flex flex-col gap-xs">
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- TopAppBar Component -->
+<header class="bg-surface-bright dark:bg-surface-dim font-label-caps text-label-caps h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flex justify-between items-center w-full px-lg ml-sidebar-width hidden md:flex" style="width: calc(100% - 220px);">
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-primary transition-opacity flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                Back to Orders
+            </button>
+<div class="w-px h-4 bg-gray-200"></div>
+<div class="flex gap-md">
+<!-- Tabs not really relevant for a detail page, but keeping structure if needed for context, maybe sections of the order -->
+<a class="text-primary border-b-2 border-primary pb-1" href="#">Details</a>
+<a class="text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity" href="#">History</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex gap-sm text-on-surface-variant">
+<button class="hover:text-primary transition-opacity opacity-80 transition-all p-1 rounded hover:bg-surface-container-highest">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:text-primary transition-opacity opacity-80 transition-all p-1 rounded hover:bg-surface-container-highest">
+<span class="material-symbols-outlined">sync</span>
+</button>
+</div>
+<div class="w-px h-4 bg-gray-200"></div>
+<div class="flex items-center gap-sm">
+<img alt="Manager Profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A professional headshot of a restaurant manager with a warm, welcoming smile. The lighting is soft and natural, suggesting a bright, inviting establishment. The background is a slightly blurred, modern restaurant interior. The overall tone is professional, approachable, and high-quality, fitting a premium F&amp;B brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB42RH8hDfvhIKYJ8VYJy41bU5WVK3ZzmG_7se7jdRJlMBwCOs5B_YC2Gv9FI4rr99KcsjZSuzcksOZKVOpIzlHwwuWfEF43E5DTEDiCRoNnB0AbF1paGI-7JZTeSbCENTmXj0ymNqpWMXofvMcsLmovekwYVz-xDKBzZpkGrt_rbzJ45LuUtgPMjQlFEA-VVNhMZvqXTVauQMFZnwIczAzcYqXmEKFLZk8yTYJ3z0DYZDe2EvVq8IXYGBhL6sGxj68ojxEqhyPR_c2"/>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-gray-800 leading-tight">Sarah J.</span>
+<span class="font-caption text-caption text-gray-600 leading-tight">Manager</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 md:ml-sidebar-width pt-topbar-height min-h-screen bg-background p-lg flex justify-center">
+<div class="w-full max-w-4xl flex flex-col gap-md mb-layout-margin">
+<!-- Header Section -->
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-sm mb-1">
+<h1 class="font-display-lg text-display-lg text-gray-800 m-0 leading-none">Order #4092</h1>
+<span class="bg-amber-100 text-amber-800 font-label-caps text-[10px] px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                            In Progress
+                        </span>
+</div>
+<p class="font-body-md text-body-md text-gray-600 m-0">Table 12 • Dine-in • Waiter: Alex M.</p>
+</div>
+<div class="text-right">
+<p class="font-body-md text-body-md text-gray-600 m-0">Time Elapsed</p>
+<p class="font-price-lg text-price-lg text-amber-600 m-0">14:22</p>
+</div>
+</div>
+<!-- Status Timeline (Bento-ish structural element) -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-lg p-md shadow-sm">
+<h2 class="font-label-caps text-label-caps text-gray-400 mb-sm uppercase">Order Timeline</h2>
+<div class="flex items-center justify-between relative">
+<!-- Progress Line Background -->
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -translate-y-1/2 z-0"></div>
+<!-- Active Progress Line -->
+<div class="absolute top-1/2 left-0 w-1/2 h-0.5 bg-amber-400 -translate-y-1/2 z-0"></div>
+<!-- Step 1 -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-success-bg border border-success-text flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-success-text">check</span>
+</div>
+<span class="font-caption text-caption text-gray-800">Placed</span>
+<span class="font-caption text-caption text-gray-400">12:05 PM</span>
+</div>
+<!-- Step 2 -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-success-bg border border-success-text flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-success-text">check</span>
+</div>
+<span class="font-caption text-caption text-gray-800">Confirmed</span>
+<span class="font-caption text-caption text-gray-400">12:06 PM</span>
+</div>
+<!-- Step 3 (Current) -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-amber-50 border-2 border-amber-400 flex items-center justify-center shadow-[0_0_0_4px_rgba(250,199,117,0.2)]">
+<span class="material-symbols-outlined text-[14px] text-amber-600 icon-fill">skillet</span>
+</div>
+<span class="font-caption text-caption text-gray-800 font-semibold">Cooking</span>
+<span class="font-caption text-caption text-amber-600">Now</span>
+</div>
+<!-- Step 4 -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-container-high border border-gray-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-gray-400">room_service</span>
+</div>
+<span class="font-caption text-caption text-gray-400">Served</span>
+<span class="font-caption text-caption text-gray-400">--:--</span>
+</div>
+<!-- Step 5 -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-container-high border border-gray-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-gray-400">payments</span>
+</div>
+<span class="font-caption text-caption text-gray-400">Paid</span>
+<span class="font-caption text-caption text-gray-400">--:--</span>
+</div>
+</div>
+</div>
+<!-- Two Column Layout for Order Details -->
+<div class="flex flex-col lg:flex-row gap-md">
+<!-- Left Column: Item List -->
+<div class="flex-grow flex flex-col gap-sm">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+<!-- Table Header -->
+<div class="bg-surface-container-low border-b-[0.5px] border-gray-200 py-2 px-md flex">
+<div class="font-label-caps text-label-caps text-gray-400 uppercase w-12 text-center">Qty</div>
+<div class="font-label-caps text-label-caps text-gray-400 uppercase flex-grow">Item</div>
+<div class="font-label-caps text-label-caps text-gray-400 uppercase w-24 text-right">Price</div>
+<div class="font-label-caps text-label-caps text-gray-400 uppercase w-24 text-right">Total</div>
+</div>
+<!-- Item Row 1 -->
+<div class="border-b-[0.5px] border-gray-200 py-3 px-md flex items-start bg-amber-50/30">
+<div class="font-headline-sm text-headline-sm text-gray-800 w-12 text-center pt-1">2x</div>
+<div class="flex-grow flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm text-gray-800">Classic Wagyu Burger</span>
+<div class="bg-amber-100/50 border border-amber-200 rounded px-2 py-1 inline-block self-start">
+<span class="font-caption text-caption text-amber-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">edit_note</span>
+                                        Note: Medium Rare, No onions on one.
+                                    </span>
+</div>
+<div class="flex gap-2 mt-1">
+<span class="bg-surface-container border border-gray-200 rounded px-1.5 py-0.5 font-caption text-[10px] text-gray-600">+ Truffle Fries</span>
+</div>
+</div>
+<div class="font-price-md text-price-md text-gray-600 w-24 text-right pt-1">Rp 120.000</div>
+<div class="font-price-md text-price-md text-gray-800 w-24 text-right pt-1">Rp 240.000</div>
+</div>
+<!-- Item Row 2 -->
+<div class="border-b-[0.5px] border-gray-200 py-3 px-md flex items-start">
+<div class="font-headline-sm text-headline-sm text-gray-800 w-12 text-center pt-1">1x</div>
+<div class="flex-grow flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm text-gray-800">Truffle Mushroom Pasta</span>
+</div>
+<div class="font-price-md text-price-md text-gray-600 w-24 text-right pt-1">Rp 95.000</div>
+<div class="font-price-md text-price-md text-gray-800 w-24 text-right pt-1">Rp 95.000</div>
+</div>
+<!-- Item Row 3 -->
+<div class="py-3 px-md flex items-start">
+<div class="font-headline-sm text-headline-sm text-gray-800 w-12 text-center pt-1">3x</div>
+<div class="flex-grow flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm text-gray-800">Iced Lemon Tea</span>
+<div class="bg-surface-container border border-gray-200 rounded px-2 py-1 inline-block self-start">
+<span class="font-caption text-caption text-gray-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">edit_note</span>
+                                        Less Sugar
+                                    </span>
+</div>
+</div>
+<div class="font-price-md text-price-md text-gray-600 w-24 text-right pt-1">Rp 25.000</div>
+<div class="font-price-md text-price-md text-gray-800 w-24 text-right pt-1">Rp 75.000</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary & Actions -->
+<div class="w-full lg:w-80 flex flex-col gap-sm">
+<!-- Summary Card -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-lg p-md shadow-sm flex flex-col gap-sm">
+<h3 class="font-label-caps text-label-caps text-gray-400 uppercase mb-xs border-b-[0.5px] border-gray-200 pb-2">Payment Summary</h3>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-gray-600">Subtotal</span>
+<span class="font-price-md text-price-md text-gray-800">Rp 410.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-gray-600">Tax (10%)</span>
+<span class="font-price-md text-price-md text-gray-800">Rp 41.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-gray-600">Service Charge (5%)</span>
+<span class="font-price-md text-price-md text-gray-800">Rp 20.500</span>
+</div>
+<div class="border-t border-gray-200 pt-sm mt-xs flex justify-between items-center">
+<span class="font-headline-sm text-headline-sm text-gray-800">Total</span>
+<span class="font-price-lg text-price-lg text-primary text-[20px]">Rp 471.500</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-sm">
+<button class="w-full bg-amber-400 text-amber-800 font-headline-sm text-headline-sm py-3 px-4 rounded-md flex items-center justify-center gap-sm hover:bg-amber-300 transition-colors shadow-sm">
+<span class="material-symbols-outlined icon-fill">payments</span>
+                            Proses Pembayaran (Bayar)
+                        </button>
+<div class="flex gap-sm">
+<button class="flex-1 bg-surface-container-lowest border border-gray-200 text-gray-800 font-body-md text-body-md py-2 px-3 rounded hover:bg-surface-container transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">print</span>
+                                Print Bill
+                            </button>
+<button class="flex-1 bg-amber-50 border border-amber-200 text-amber-800 font-body-md text-body-md py-2 px-3 rounded hover:bg-amber-100 transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                                Edit Order
+                            </button>
+</div>
+<button class="w-full mt-2 bg-transparent border-none text-danger-text font-body-md text-body-md py-2 hover:underline opacity-80 hover:opacity-100 transition-opacity">
+                            Cancel Order
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

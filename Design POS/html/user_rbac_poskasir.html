@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User &amp; RBAC - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#ffb869",
+                        "surface-tint": "#885200",
+                        "on-background": "#1a1c1b",
+                        "primary": "#855000",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-container-low": "#f4f4f2",
+                        "on-error": "#ffffff",
+                        "danger-text": "#A32D2D",
+                        "secondary": "#5f5f59",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-container": "#e1e0d9",
+                        "surface-dim": "#dadad8",
+                        "tertiary-container": "#a36800",
+                        "outline-variant": "#d7c3b1",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeeec",
+                        "gray-200": "#D3D1C7",
+                        "danger-bg": "#FCEBEB",
+                        "gray-600": "#444441",
+                        "surface-variant": "#e2e3e1",
+                        "inverse-on-surface": "#f1f1ef",
+                        "success-bg": "#EAF3DE",
+                        "on-surface-variant": "#524436",
+                        "tertiary-fixed": "#ffddb7",
+                        "secondary-fixed": "#e4e2dc",
+                        "primary-fixed": "#ffdcbb",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-highest": "#e2e3e1",
+                        "info-bg": "#E6F1FB",
+                        "outline": "#857464",
+                        "info-text": "#185FA5",
+                        "tertiary": "#825100",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-800": "#2C2C2A",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#63635d",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1b",
+                        "background": "#f9f9f7",
+                        "primary-container": "#a76500",
+                        "primary-fixed-dim": "#ffb869",
+                        "on-secondary-fixed": "#1b1c18",
+                        "surface-bright": "#f9f9f7",
+                        "amber-600": "#854F0B",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "amber-50": "#FAEEDA",
+                        "surface": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "success-text": "#3B6D11",
+                        "amber-800": "#633806",
+                        "inverse-surface": "#2f3130",
+                        "amber-100": "#FAC775",
+                        "gray-400": "#888780"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "md": "16px",
+                        "sidebar-width": "220px",
+                        "base": "4px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "xl": "32px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "label-caps": ["Geist"],
+                        "caption": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "price-lg": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "display-lg": ["Instrument Serif"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[style*="FILL' 1"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen">
+<!-- TopAppBar Component -->
+<header class="bg-surface-bright h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-lg ml-sidebar-width" style="left: 220px; width: calc(100% - 220px);">
+<div class="flex items-center gap-sm">
+<!-- Search bar placeholder -->
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-[18px]" data-icon="search">search</span>
+<input class="pl-8 pr-3 py-1.5 bg-white border border-gray-200 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 focus:outline-none rounded w-64 font-body-md text-body-md transition-shadow" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm text-gray-600">
+<button class="p-1 hover:text-primary transition-opacity tap:opacity-80 transition-all"><span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span></button>
+<button class="p-1 hover:text-primary transition-opacity tap:opacity-80 transition-all"><span class="material-symbols-outlined text-[20px]" data-icon="sync">sync</span></button>
+<button class="p-1 hover:text-primary transition-opacity tap:opacity-80 transition-all"><span class="material-symbols-outlined text-[20px]" data-icon="account_circle">account_circle</span></button>
+</div>
+<div class="flex items-center gap-sm border-l border-outline-variant pl-md">
+<button class="px-3 py-1.5 bg-amber-50 border border-amber-200 text-amber-800 rounded font-label-caps text-label-caps uppercase hover:bg-amber-100 transition-colors">Hold Order</button>
+<button class="px-3 py-1.5 bg-amber-400 text-amber-800 rounded font-label-caps text-label-caps uppercase hover:bg-amber-500 transition-colors shadow-sm">Checkout</button>
+</div>
+</div>
+</header>
+<!-- SideNavBar Component -->
+<nav class="bg-surface-container-low font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flat no shadows flex flex-col h-full py-md z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600 mt-xs">Terminal 01</p>
+</div>
+<div class="px-md mb-md">
+<button class="w-full py-2 bg-amber-400 text-amber-800 rounded font-label-caps text-label-caps uppercase hover:bg-amber-500 transition-colors shadow-sm flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span> New Order
+            </button>
+</div>
+<ul class="flex flex-col flex-grow mt-sm">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 mx-2 rounded-[6px] text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 mx-2 rounded-[6px] text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale">point_of_sale</span>
+                    Point of Sale
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 mx-2 rounded-[6px] text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="receipt_long">receipt_long</span>
+                    Orders
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 mx-2 rounded-[6px] text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="restaurant_menu">restaurant_menu</span>
+                    Menu Management
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 mx-2 rounded-[6px] text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory_2">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 mx-2 rounded-[6px] text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+                    Reports
+                </a>
+</li>
+</ul>
+<div class="mt-auto border-t border-outline-variant pt-sm">
+<ul class="flex flex-col">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 mx-2 rounded-[6px] bg-surface-container text-gray-800 border-l-2 border-primary active:scale-[0.99] duration-150 font-semibold" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+                        Settings
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 mx-2 rounded-[6px] text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+                        Support
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="ml-sidebar-width mt-topbar-height p-lg pb-layout-margin">
+<div class="max-w-6xl mx-auto">
+<div class="flex justify-between items-end border-b border-gray-200 pb-md mb-lg">
+<div>
+<div class="flex items-center gap-2 text-gray-400 font-label-caps text-label-caps uppercase mb-1">
+<span>Settings</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary">User &amp; RBAC</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-gray-800">User &amp; RBAC</h2>
+<p class="font-caption text-caption text-gray-600 mt-1">Manage system users and their role-based access permissions.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-4 py-2 bg-amber-50 border border-amber-200 text-amber-800 rounded font-label-caps text-label-caps uppercase hover:bg-amber-100 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add</span> Add Role
+                    </button>
+<button class="px-4 py-2 bg-amber-400 text-amber-800 rounded font-label-caps text-label-caps uppercase hover:bg-amber-500 transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">person_add</span> Add User
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout for Settings -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Roles List (Sidebar-ish) -->
+<div class="col-span-12 md:col-span-4 lg:col-span-3 space-y-4">
+<div class="bg-white border border-gray-200 rounded-[8px] p-2 flex flex-col gap-1 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+<div class="px-3 py-2 font-label-caps text-label-caps text-gray-400 uppercase mb-1 border-b border-gray-100">System Roles</div>
+<button class="w-full text-left px-3 py-2 rounded-[6px] bg-amber-50 border-l-2 border-amber-400 text-gray-800 font-medium flex justify-between items-center group">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-amber-600">manage_accounts</span> Owner</span>
+<span class="text-xs bg-white border border-amber-200 text-amber-800 px-2 py-0.5 rounded-full">1 User</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-[6px] text-gray-600 hover:bg-gray-50 flex justify-between items-center group transition-colors">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-gray-400 group-hover:text-gray-600">supervisor_account</span> Manager</span>
+<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">3 Users</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-[6px] text-gray-600 hover:bg-gray-50 flex justify-between items-center group transition-colors">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-gray-400 group-hover:text-gray-600">point_of_sale</span> Cashier</span>
+<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">8 Users</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-[6px] text-gray-600 hover:bg-gray-50 flex justify-between items-center group transition-colors">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-gray-400 group-hover:text-gray-600">restaurant</span> Chef/Kitchen</span>
+<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">4 Users</span>
+</button>
+</div>
+<div class="bg-info-bg border border-info-text/20 rounded-[8px] p-md">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-info-text text-[20px]">info</span>
+<div>
+<h4 class="font-headline-sm text-[14px] text-info-text mb-1">Owner Role</h4>
+<p class="font-caption text-caption text-info-text/80">The Owner role has full system access. These permissions cannot be restricted to ensure system accessibility.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="col-span-12 md:col-span-8 lg:col-span-9 space-y-lg">
+<!-- Role Header -->
+<div class="bg-white border border-gray-200 rounded-[8px] p-md flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center border border-amber-100">
+<span class="material-symbols-outlined text-amber-600 text-[24px]">manage_accounts</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Owner</h3>
+<p class="font-caption text-caption text-gray-500 mt-0.5">Highest level of administrative access.</p>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<span class="px-2 py-1 bg-gray-100 text-gray-600 font-label-caps text-[10px] uppercase rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span> System Default
+                            </span>
+</div>
+</div>
+<!-- Permission Matrix Card -->
+<div class="bg-white border border-gray-200 rounded-[8px] shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
+<div class="px-md py-3 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+<h4 class="font-label-caps text-label-caps text-gray-600 uppercase">Access Matrix</h4>
+<div class="flex gap-4 font-caption text-caption text-gray-500">
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-success-text opacity-50"></span> View</div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500 opacity-50"></span> Edit</div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error opacity-50"></span> Delete</div>
+</div>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b-[0.5px] border-gray-200 bg-gray-50/50">
+<th class="px-md py-2 font-label-caps text-label-caps text-gray-400 w-1/3">Module / Feature</th>
+<th class="px-md py-2 font-label-caps text-label-caps text-gray-400 text-center w-24">View</th>
+<th class="px-md py-2 font-label-caps text-label-caps text-gray-400 text-center w-24">Edit/Create</th>
+<th class="px-md py-2 font-label-caps text-label-caps text-gray-400 text-center w-24">Delete</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800">
+<!-- Row Group: POS -->
+<tr class="border-b-[0.5px] border-gray-200 bg-gray-50/20">
+<td class="px-md py-3 flex items-center gap-2 font-medium">
+<span class="material-symbols-outlined text-gray-400 text-[18px]">point_of_sale</span> Point of Sale
+                                        </td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-success-text focus:ring-success-text" disabled="" type="checkbox"/></td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" disabled="" type="checkbox"/></td>
+<td class="px-md py-3 text-center"><span class="text-gray-300">—</span></td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200">
+<td class="px-md py-2 pl-10 text-gray-600 text-[12px]">- Apply Discounts</td>
+<td class="px-md py-2 text-center"><span class="text-gray-300">—</span></td>
+<td class="px-md py-2 text-center"><input checked="" class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" disabled="" type="checkbox"/></td>
+<td class="px-md py-2 text-center"><span class="text-gray-300">—</span></td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200">
+<td class="px-md py-2 pl-10 text-gray-600 text-[12px]">- Void Transactions</td>
+<td class="px-md py-2 text-center"><span class="text-gray-300">—</span></td>
+<td class="px-md py-2 text-center"><span class="text-gray-300">—</span></td>
+<td class="px-md py-2 text-center"><input checked="" class="rounded border-gray-300 text-error focus:ring-error" disabled="" type="checkbox"/></td>
+</tr>
+<!-- Row Group: Inventory -->
+<tr class="border-b-[0.5px] border-gray-200 bg-gray-50/20">
+<td class="px-md py-3 flex items-center gap-2 font-medium">
+<span class="material-symbols-outlined text-gray-400 text-[18px]">inventory_2</span> Inventory Management
+                                        </td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-success-text focus:ring-success-text" disabled="" type="checkbox"/></td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" disabled="" type="checkbox"/></td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-error focus:ring-error" disabled="" type="checkbox"/></td>
+</tr>
+<!-- Row Group: Reports -->
+<tr class="border-b-[0.5px] border-gray-200 bg-gray-50/20">
+<td class="px-md py-3 flex items-center gap-2 font-medium">
+<span class="material-symbols-outlined text-gray-400 text-[18px]">analytics</span> Reports &amp; Analytics
+                                        </td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-success-text focus:ring-success-text" disabled="" type="checkbox"/></td>
+<td class="px-md py-3 text-center"><span class="text-gray-300">—</span></td>
+<td class="px-md py-3 text-center"><span class="text-gray-300">—</span></td>
+</tr>
+<!-- Row Group: Settings -->
+<tr class="border-b-[0.5px] border-gray-200 bg-gray-50/20">
+<td class="px-md py-3 flex items-center gap-2 font-medium">
+<span class="material-symbols-outlined text-gray-400 text-[18px]">settings</span> System Settings
+                                        </td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-success-text focus:ring-success-text" disabled="" type="checkbox"/></td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" disabled="" type="checkbox"/></td>
+<td class="px-md py-3 text-center"><input checked="" class="rounded border-gray-300 text-error focus:ring-error" disabled="" type="checkbox"/></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Assigned Users Table -->
+<div class="bg-white border border-gray-200 rounded-[8px] shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
+<div class="px-md py-3 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+<h4 class="font-label-caps text-label-caps text-gray-600 uppercase">Users with 'Owner' Role (1)</h4>
+<button class="text-primary hover:text-amber-800 text-[12px] font-medium flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]">add</span> Assign User
+                            </button>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b-[0.5px] border-gray-200 bg-white">
+<th class="px-md py-2 font-label-caps text-label-caps text-gray-400">User</th>
+<th class="px-md py-2 font-label-caps text-label-caps text-gray-400">Email / ID</th>
+<th class="px-md py-2 font-label-caps text-label-caps text-gray-400">Last Active</th>
+<th class="px-md py-2 font-label-caps text-label-caps text-gray-400 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800">
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="px-md py-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-[12px]">JD</div>
+<span class="font-medium">John Doe</span>
+</td>
+<td class="px-md py-3 text-gray-600">john.doe@poskasir.com</td>
+<td class="px-md py-3 text-gray-500 text-[12px]">Just now</td>
+<td class="px-md py-3 text-right">
+<button class="p-1 text-gray-400 hover:text-gray-800 transition-colors"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

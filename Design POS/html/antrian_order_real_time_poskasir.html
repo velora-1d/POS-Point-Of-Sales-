@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Kitchen Display System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#a36800",
+                    "danger-bg": "#FCEBEB",
+                    "success-text": "#3B6D11",
+                    "surface-tint": "#885200",
+                    "on-error-container": "#93000a",
+                    "amber-600": "#854F0B",
+                    "primary": "#855000",
+                    "on-tertiary-fixed": "#2a1700",
+                    "surface-container-high": "#e8e8e6",
+                    "surface-variant": "#e2e3e1",
+                    "info-text": "#185FA5",
+                    "gray-200": "#D3D1C7",
+                    "gray-600": "#444441",
+                    "outline-variant": "#d7c3b1",
+                    "on-surface": "#1a1c1b",
+                    "tertiary-fixed-dim": "#ffb95d",
+                    "surface-container-lowest": "#ffffff",
+                    "amber-50": "#FAEEDA",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#c8c6c0",
+                    "on-primary-fixed-variant": "#673d00",
+                    "info-bg": "#E6F1FB",
+                    "success-bg": "#EAF3DE",
+                    "outline": "#857464",
+                    "tertiary-fixed": "#ffddb7",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f4f4f2",
+                    "surface": "#f9f9f7",
+                    "inverse-surface": "#2f3130",
+                    "on-primary-container": "#fffbff",
+                    "on-secondary-fixed": "#1b1c18",
+                    "gray-400": "#888780",
+                    "on-secondary-fixed-variant": "#474742",
+                    "gray-800": "#2C2C2A",
+                    "secondary": "#5f5f59",
+                    "on-tertiary-container": "#fffbff",
+                    "amber-100": "#FAC775",
+                    "on-surface-variant": "#524436",
+                    "secondary-container": "#e1e0d9",
+                    "primary-fixed": "#ffdcbb",
+                    "surface-container-highest": "#e2e3e1",
+                    "secondary-fixed": "#e4e2dc",
+                    "surface-dim": "#dadad8",
+                    "on-secondary-container": "#63635d",
+                    "background": "#f9f9f7",
+                    "tertiary": "#825100",
+                    "primary-fixed-dim": "#ffb869",
+                    "primary-container": "#a76500",
+                    "surface-bright": "#f9f9f7",
+                    "on-primary-fixed": "#2b1700",
+                    "inverse-on-surface": "#f1f1ef",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#eeeeec",
+                    "on-background": "#1a1c1b",
+                    "amber-800": "#633806",
+                    "on-error": "#ffffff",
+                    "danger-text": "#A32D2D",
+                    "inverse-primary": "#ffb869",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "layout-margin": "28px",
+                    "md": "16px",
+                    "topbar-height": "48px",
+                    "lg": "24px",
+                    "base": "4px",
+                    "sidebar-width": "220px",
+                    "xs": "4px",
+                    "xl": "32px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "headline-sm": [
+                            "Geist"
+                    ],
+                    "caption": [
+                            "Geist"
+                    ],
+                    "body-lg": [
+                            "Geist"
+                    ],
+                    "body-md": [
+                            "Geist"
+                    ],
+                    "display-md": [
+                            "Instrument Serif"
+                    ],
+                    "display-lg": [
+                            "Instrument Serif"
+                    ],
+                    "price-lg": [
+                            "JetBrains Mono"
+                    ],
+                    "price-md": [
+                            "JetBrains Mono"
+                    ],
+                    "label-caps": [
+                            "Geist"
+                    ]
+            },
+            "fontSize": {
+                    "headline-sm": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "caption": [
+                            "11px",
+                            {
+                                    "lineHeight": "14px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "display-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "price-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "1",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "price-md": [
+                            "13px",
+                            {
+                                    "lineHeight": "1",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "label-caps": [
+                            "11px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-surface h-screen flex overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-lg ml-sidebar-width" style="left: 220px; width: calc(100% - 220px);">
+<div class="flex items-center gap-md">
+<span class="font-display-md text-display-md text-primary font-black">PosKasir</span>
+<div class="h-6 w-px bg-gray-200 mx-sm"></div>
+<span class="font-headline-sm text-headline-sm text-gray-800">Kitchen Display</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-amber-50 border border-amber-200 text-amber-800 font-label-caps text-label-caps px-md py-sm rounded-DEFAULT flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-size: 16px;">sync</span>
+                Sync
+            </button>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity opacity-80 p-xs">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 bg-gray-200 rounded-full overflow-hidden border border-gray-200">
+<img alt="Manager Profile" class="w-full h-full object-cover" data-alt="A close up portrait of a restaurant manager in a professional setting, warm lighting, shallow depth of field, highlighting the professional and organic aesthetic of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf8xD_W-_thwDDQWup_3MG9Uq16YVD-4TItzf7BXkr2fq09N1Nqel2Tt_de8CZiJikvukyjTtzuCOig9oi3KNn5Sh8wJzhFlCqHU4ilYNT-mtefKxu7hUazYM9LHfkAJmTGTKB8THf33zY92xb7ghBBVGEz746Y4bGFgMz6n0G71v8Yr7SKTkQmv3_BcAVMFcFzx-sj2zJMqioPiKY-fgE4SMTEj9GfWByFKOt8dSNYCzTxFLa3RBWpvOAxdLDNtB_2J8A9Ff94b_r"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-gray-800 w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flat no shadows flex flex-col h-full py-md z-50">
+<div class="px-md mb-xl flex flex-col gap-xs">
+<span class="font-display-md text-display-md text-primary font-bold">PosKasir</span>
+<span class="font-caption text-caption text-gray-600">Terminal 01</span>
+</div>
+<div class="px-md mb-lg">
+<button class="w-full bg-primary text-on-primary font-body-md text-body-md py-sm px-md rounded-lg flex justify-center items-center gap-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                New Order
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary rounded-r-lg font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+                Menu Management
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Reports
+            </a>
+</div>
+<div class="mt-auto px-sm flex flex-col gap-xs pt-md border-t border-gray-200">
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="ml-sidebar-width mt-topbar-height flex-1 p-layout-margin overflow-x-auto bg-background">
+<!-- Kanban Board -->
+<div class="flex gap-lg h-full min-w-max">
+<!-- Column: Baru (New) -->
+<div class="w-[320px] flex flex-col gap-sm bg-surface-container-low p-sm rounded-xl border border-gray-200 h-full overflow-hidden">
+<div class="flex justify-between items-center px-xs py-1">
+<h2 class="font-headline-sm text-headline-sm text-gray-800 flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-info-text"></div>
+                        Baru
+                    </h2>
+<span class="bg-gray-200 text-gray-800 font-label-caps text-label-caps px-2 py-0.5 rounded-full">3</span>
+</div>
+<div class="flex-1 overflow-y-auto flex flex-col gap-sm pr-1 pb-xl">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-gray-200 p-md flex flex-col gap-md shadow-sm">
+<div class="flex justify-between items-start border-b border-gray-200 pb-sm">
+<div>
+<span class="font-label-caps text-label-caps text-gray-600 block">Order ID</span>
+<span class="font-price-lg text-price-lg text-gray-800">#1042</span>
+</div>
+<div class="text-right">
+<span class="font-label-caps text-label-caps text-gray-600 block">Table</span>
+<span class="font-headline-sm text-headline-sm text-gray-800">T-04</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<span class="font-body-md text-body-md text-gray-800">2x Nasi Goreng Spesial</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="font-body-md text-body-md text-gray-800">1x Sate Ayam (10 tsk)</span>
+<span class="font-caption text-caption text-danger-text bg-danger-bg px-1.5 py-0.5 rounded">Tanpa Kacang</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="font-body-md text-body-md text-gray-800">3x Es Teh Manis</span>
+</div>
+</div>
+<div class="mt-auto pt-sm flex justify-between items-center">
+<div class="flex items-center gap-xs text-info-text font-price-md text-price-md bg-info-bg px-2 py-1 rounded-DEFAULT">
+<span class="material-symbols-outlined" style="font-size: 14px;">timer</span>
+                                02:15
+                            </div>
+<button class="bg-surface-container-high hover:bg-amber-50 text-gray-800 hover:text-amber-800 hover:border-amber-400 border border-transparent transition-colors font-body-md text-body-md px-sm py-1 rounded-DEFAULT">
+                                Mulai Proses
+                            </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-gray-200 p-md flex flex-col gap-md shadow-sm">
+<div class="flex justify-between items-start border-b border-gray-200 pb-sm">
+<div>
+<span class="font-label-caps text-label-caps text-gray-600 block">Order ID</span>
+<span class="font-price-lg text-price-lg text-gray-800">#1044</span>
+</div>
+<div class="text-right">
+<span class="font-label-caps text-label-caps text-gray-600 block">Table</span>
+<span class="font-headline-sm text-headline-sm text-gray-800">Takeaway</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<span class="font-body-md text-body-md text-gray-800">1x Mie Goreng Seafood</span>
+<span class="font-caption text-caption text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded">Pedas</span>
+</div>
+<div class="flex justify-between items-start">
+<span class="font-body-md text-body-md text-gray-800">1x Kopi Hitam</span>
+</div>
+</div>
+<div class="mt-auto pt-sm flex justify-between items-center">
+<div class="flex items-center gap-xs text-info-text font-price-md text-price-md bg-info-bg px-2 py-1 rounded-DEFAULT">
+<span class="material-symbols-outlined" style="font-size: 14px;">timer</span>
+                                00:45
+                            </div>
+<button class="bg-surface-container-high hover:bg-amber-50 text-gray-800 hover:text-amber-800 hover:border-amber-400 border border-transparent transition-colors font-body-md text-body-md px-sm py-1 rounded-DEFAULT">
+                                Mulai Proses
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Diproses (Processing) -->
+<div class="w-[320px] flex flex-col gap-sm bg-surface-container-low p-sm rounded-xl border border-gray-200 h-full overflow-hidden">
+<div class="flex justify-between items-center px-xs py-1">
+<h2 class="font-headline-sm text-headline-sm text-gray-800 flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-amber-400"></div>
+                        Diproses
+                    </h2>
+<span class="bg-gray-200 text-gray-800 font-label-caps text-label-caps px-2 py-0.5 rounded-full">2</span>
+</div>
+<div class="flex-1 overflow-y-auto flex flex-col gap-sm pr-1 pb-xl">
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl border-l-[3px] border-l-amber-400 border-y border-r border-gray-200 p-md flex flex-col gap-md shadow-sm">
+<div class="flex justify-between items-start border-b border-gray-200 pb-sm">
+<div>
+<span class="font-label-caps text-label-caps text-gray-600 block">Order ID</span>
+<span class="font-price-lg text-price-lg text-gray-800">#1039</span>
+</div>
+<div class="text-right">
+<span class="font-label-caps text-label-caps text-gray-600 block">Table</span>
+<span class="font-headline-sm text-headline-sm text-gray-800">T-12</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<input class="rounded border-gray-200 text-amber-600 focus:ring-amber-400 h-4 w-4" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-800">4x Ayam Bakar Madu</span>
+</div>
+<div class="flex items-center gap-sm">
+<input checked="" class="rounded border-gray-200 text-amber-600 focus:ring-amber-400 h-4 w-4" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-400 line-through">4x Nasi Putih</span>
+</div>
+<div class="flex items-center gap-sm">
+<input class="rounded border-gray-200 text-amber-600 focus:ring-amber-400 h-4 w-4" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-800">2x Cah Kangkung</span>
+</div>
+</div>
+<div class="mt-auto pt-sm flex justify-between items-center">
+<div class="flex items-center gap-xs text-amber-800 font-price-md text-price-md bg-amber-50 px-2 py-1 rounded-DEFAULT border border-amber-200">
+<span class="material-symbols-outlined" style="font-size: 14px;">timer</span>
+                                12:40
+                            </div>
+<button class="bg-amber-400 text-amber-800 font-body-md text-body-md px-md py-1.5 rounded-DEFAULT shadow-sm hover:bg-amber-500 transition-colors">
+                                Siap
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Siap (Ready) -->
+<div class="w-[320px] flex flex-col gap-sm bg-surface-container-low p-sm rounded-xl border border-gray-200 h-full overflow-hidden">
+<div class="flex justify-between items-center px-xs py-1">
+<h2 class="font-headline-sm text-headline-sm text-gray-800 flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-success-text"></div>
+                        Siap Diambil
+                    </h2>
+<span class="bg-gray-200 text-gray-800 font-label-caps text-label-caps px-2 py-0.5 rounded-full">1</span>
+</div>
+<div class="flex-1 overflow-y-auto flex flex-col gap-sm pr-1 pb-xl">
+<!-- Card 4 -->
+<div class="bg-success-bg bg-opacity-30 rounded-xl border border-success-text border-opacity-20 p-md flex flex-col gap-md opacity-75 hover:opacity-100 transition-opacity">
+<div class="flex justify-between items-start border-b border-success-text border-opacity-20 pb-sm">
+<div>
+<span class="font-label-caps text-label-caps text-success-text block">Order ID</span>
+<span class="font-price-lg text-price-lg text-gray-800">#1035</span>
+</div>
+<div class="text-right">
+<span class="font-label-caps text-label-caps text-success-text block">Table</span>
+<span class="font-headline-sm text-headline-sm text-gray-800">T-02</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-body-md text-body-md text-gray-600">2x Sop Iga</span>
+<span class="font-body-md text-body-md text-gray-600">2x Nasi Putih</span>
+</div>
+<div class="mt-auto pt-sm flex justify-between items-center">
+<span class="font-caption text-caption text-success-text flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+                                Selesai
+                            </span>
+<button class="text-gray-400 hover:text-gray-800 font-body-md text-body-md px-sm py-1 rounded-DEFAULT transition-colors">
+                                Hapus
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

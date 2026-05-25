@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alert Stok Menipis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#e1e0d9",
+                        "danger-bg": "#FCEBEB",
+                        "amber-600": "#854F0B",
+                        "surface-variant": "#e2e3e1",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e8e8e6",
+                        "surface-container-highest": "#e2e3e1",
+                        "surface": "#f9f9f7",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f1ef",
+                        "secondary": "#5f5f59",
+                        "amber-100": "#FAC775",
+                        "on-primary-container": "#fffbff",
+                        "amber-50": "#FAEEDA",
+                        "primary": "#855000",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#d7c3b1",
+                        "on-error-container": "#93000a",
+                        "outline": "#857464",
+                        "on-secondary-container": "#63635d",
+                        "on-surface": "#1a1c1b",
+                        "on-tertiary-container": "#fffbff",
+                        "gray-400": "#888780",
+                        "info-text": "#185FA5",
+                        "on-secondary-fixed": "#1b1c18",
+                        "danger-text": "#A32D2D",
+                        "gray-800": "#2C2C2A",
+                        "surface-tint": "#885200",
+                        "success-bg": "#EAF3DE",
+                        "on-background": "#1a1c1b",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-bright": "#f9f9f7",
+                        "on-tertiary-fixed": "#2a1700",
+                        "success-text": "#3B6D11",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "secondary-fixed": "#e4e2dc",
+                        "info-bg": "#E6F1FB",
+                        "surface-container-low": "#f4f4f2",
+                        "primary-container": "#a76500",
+                        "gray-600": "#444441",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-200": "#D3D1C7",
+                        "primary-fixed-dim": "#ffb869",
+                        "inverse-primary": "#ffb869",
+                        "surface-container": "#eeeeec",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffdcbb",
+                        "tertiary-container": "#a36800",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "inverse-surface": "#2f3130",
+                        "background": "#f9f9f7",
+                        "surface-dim": "#dadad8",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "amber-800": "#633806",
+                        "on-primary-fixed-variant": "#673d00",
+                        "tertiary-fixed": "#ffddb7",
+                        "tertiary": "#825100",
+                        "on-surface-variant": "#524436"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "topbar-height": "48px",
+                        "sidebar-width": "220px",
+                        "layout-margin": "28px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "caption": ["Geist"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-md": ["Instrument Serif"],
+                        "label-caps": ["Geist"],
+                        "body-md": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "display-lg": ["Instrument Serif"]
+                    },
+                    "fontSize": {
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; background-color: #FAFAF8; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="text-on-surface flex min-h-screen">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-gray-800 text-primary dark:text-primary-fixed font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flat no shadows flex flex-col h-full py-md z-40 hidden md:flex">
+<div class="px-md mb-lg">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-on-surface-variant">Terminal 01</p>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-amber-400 text-amber-800 font-label-caps text-label-caps py-2 rounded-lg hover:bg-amber-500 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                New Order
+            </button>
+</div>
+<ul class="flex-1 overflow-y-auto px-sm space-y-1">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+                    Point of Sale
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                    Orders
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+                    Menu Management
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-xl bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                    Reports
+                </a>
+</li>
+</ul>
+<ul class="mt-auto px-sm pt-md border-t border-outline-variant space-y-1">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+                    Support
+                </a>
+</li>
+</ul>
+</nav>
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim text-primary dark:text-primary-fixed font-label-caps text-label-caps h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-lg md:ml-sidebar-width transition-all">
+<div class="flex items-center gap-md h-full">
+<span class="font-display-md text-display-md text-primary font-black md:hidden">PosKasir</span>
+<nav class="hidden sm:flex h-full items-center gap-md ml-md">
+<a class="text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center border-b-2 border-transparent" href="#">Fast Food</a>
+<a class="text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center border-b-2 border-transparent" href="#">Drinks</a>
+<a class="text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center border-b-2 border-transparent" href="#">Desserts</a>
+</nav>
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-primary transition-opacity p-2 flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity p-2 flex items-center justify-center">
+<span class="material-symbols-outlined">sync</span>
+</button>
+<div class="h-6 w-px bg-outline-variant mx-2"></div>
+<button class="text-on-surface-variant hover:text-primary transition-opacity p-2 flex items-center justify-center">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+<div class="hidden sm:flex items-center gap-2 ml-2">
+<button class="bg-amber-50 border border-amber-200 text-amber-800 font-label-caps py-1.5 px-3 rounded-lg hover:bg-amber-100 transition-colors">Hold Order</button>
+<button class="bg-amber-400 text-amber-800 font-label-caps py-1.5 px-3 rounded-lg hover:bg-amber-500 transition-colors">Checkout</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 mt-topbar-height md:ml-sidebar-width p-lg mb-layout-margin overflow-x-hidden">
+<div class="max-w-6xl mx-auto space-y-md">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-lg">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-gray-800 flex items-center gap-2">
+<span class="material-symbols-outlined text-danger-text">warning</span>
+                        Alert Stok Menipis
+                    </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Items below minimum threshold requiring immediate action.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-lowest border border-gray-200 text-gray-600 font-label-caps text-label-caps py-2 px-4 rounded-lg hover:bg-gray-50 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">download</span> Export
+                    </button>
+<button class="bg-amber-400 text-amber-800 font-label-caps text-label-caps py-2 px-4 rounded-lg hover:bg-amber-500 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">shopping_cart</span> Order All
+                    </button>
+</div>
+</div>
+<!-- Stats Overview Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col justify-between h-32 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-danger-bg rounded-full opacity-50"></div>
+<span class="font-label-caps text-label-caps text-gray-600 uppercase">Critical Stock</span>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-danger-text">12</span>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> +3 from yesterday
+                        </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col justify-between h-32 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-50 rounded-full opacity-50"></div>
+<span class="font-label-caps text-label-caps text-gray-600 uppercase">Low Stock</span>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-amber-600">34</span>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">remove</span> No change
+                        </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col justify-between h-32 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-surface-container-low rounded-full opacity-50"></div>
+<span class="font-label-caps text-label-caps text-gray-600 uppercase">Est. Restock Value</span>
+<div class="flex items-end justify-between">
+<span class="font-price-lg text-price-lg text-gray-800">Rp 4.2M</span>
+</div>
+</div>
+</div>
+<!-- High Density Table Card -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+<!-- Table Header Actions -->
+<div class="p-3 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-3 bg-surface-container-lowest">
+<div class="relative w-full sm:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface border border-gray-200 rounded-lg font-body-md text-body-md focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400" placeholder="Search SKU or Product..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-caption text-caption text-gray-600">Filter by:</span>
+<select class="bg-surface border border-gray-200 rounded-lg font-caption text-caption py-1 px-2 focus:outline-none focus:border-amber-400">
+<option>All Critical</option>
+<option>Ingredients</option>
+<option>Packaging</option>
+</select>
+</div>
+</div>
+<!-- Table Content -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-gray-200">
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider w-12">
+<input class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" type="checkbox"/>
+</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider w-24">SKU</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider">Product</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider text-right w-24">Stock</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider text-right w-24">Min</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider text-center w-32">Status</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider text-right w-32">Action</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<!-- Row 1: Critical -->
+<tr class="border-b border-gray-200/50 hover:bg-surface transition-colors bg-danger-bg/20">
+<td class="py-2.5 px-4">
+<input class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" type="checkbox"/>
+</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">ING-042</td>
+<td class="py-2.5 px-4 text-gray-800 font-medium">Biji Kopi Arabica (5kg)</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-danger-text font-bold">1</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-gray-500">5</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-danger-bg text-danger-text">CRITICAL</span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="bg-amber-50 border border-amber-200 text-amber-800 font-label-caps text-[10px] py-1 px-2 rounded hover:bg-amber-100 transition-colors">Order</button>
+</td>
+</tr>
+<!-- Row 2: Low Stock (Amber highlight) -->
+<tr class="border-b border-gray-200/50 hover:bg-surface transition-colors bg-amber-50/30">
+<td class="py-2.5 px-4">
+<input class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" type="checkbox"/>
+</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">PKG-112</td>
+<td class="py-2.5 px-4 text-gray-800 font-medium">Gelas Plastik 16oz</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-amber-600 font-bold">150</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-gray-500">500</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">BUTUH RESTOCK</span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="bg-amber-50 border border-amber-200 text-amber-800 font-label-caps text-[10px] py-1 px-2 rounded hover:bg-amber-100 transition-colors">Order</button>
+</td>
+</tr>
+<!-- Row 3: Low Stock (Amber highlight) -->
+<tr class="border-b border-gray-200/50 hover:bg-surface transition-colors bg-amber-50/30">
+<td class="py-2.5 px-4">
+<input class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" type="checkbox"/>
+</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">ING-089</td>
+<td class="py-2.5 px-4 text-gray-800 font-medium">Susu UHT Full Cream (1L)</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-amber-600 font-bold">8</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-gray-500">24</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">BUTUH RESTOCK</span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="bg-amber-50 border border-amber-200 text-amber-800 font-label-caps text-[10px] py-1 px-2 rounded hover:bg-amber-100 transition-colors">Order</button>
+</td>
+</tr>
+<!-- Row 4: Normalish but approaching low -->
+<tr class="border-b border-gray-200/50 hover:bg-surface transition-colors">
+<td class="py-2.5 px-4">
+<input class="rounded border-gray-300 text-amber-500 focus:ring-amber-500" type="checkbox"/>
+</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">ING-105</td>
+<td class="py-2.5 px-4 text-gray-800 font-medium">Syrup Vanilla (750ml)</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-gray-800">4</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-gray-500">6</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-surface-container-high text-gray-600">LOW</span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="bg-surface-container-lowest border border-gray-200 text-gray-600 font-label-caps text-[10px] py-1 px-2 rounded hover:bg-gray-50 transition-colors">Order</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer/Pagination -->
+<div class="p-3 border-t border-gray-200 bg-surface-container-lowest flex items-center justify-between">
+<span class="font-caption text-caption text-gray-500">Showing 1 to 4 of 46 items</span>
+<div class="flex gap-1">
+<button class="p-1 border border-gray-200 rounded text-gray-400 hover:bg-gray-50 disabled:opacity-50"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
+<button class="p-1 border border-gray-200 rounded text-gray-600 bg-gray-50 font-caption text-caption w-6 h-6 flex items-center justify-center">1</button>
+<button class="p-1 border border-transparent rounded text-gray-500 font-caption text-caption w-6 h-6 flex items-center justify-center hover:bg-gray-50">2</button>
+<button class="p-1 border border-transparent rounded text-gray-500 font-caption text-caption w-6 h-6 flex items-center justify-center hover:bg-gray-50">3</button>
+<button class="p-1 border border-gray-200 rounded text-gray-600 hover:bg-gray-50"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QR Code per Meja - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "danger-text": "#A32D2D",
+                      "on-secondary-fixed": "#1b1c18",
+                      "info-text": "#185FA5",
+                      "gray-400": "#888780",
+                      "on-tertiary-container": "#fffbff",
+                      "on-surface": "#1a1c1b",
+                      "success-text": "#3B6D11",
+                      "on-tertiary-fixed": "#2a1700",
+                      "surface-bright": "#f9f9f7",
+                      "on-primary-fixed": "#2b1700",
+                      "on-background": "#1a1c1b",
+                      "success-bg": "#EAF3DE",
+                      "surface-tint": "#885200",
+                      "gray-800": "#2C2C2A",
+                      "surface-container-highest": "#e2e3e1",
+                      "surface-container-high": "#e8e8e6",
+                      "surface-variant": "#e2e3e1",
+                      "surface-container-lowest": "#ffffff",
+                      "danger-bg": "#FCEBEB",
+                      "amber-600": "#854F0B",
+                      "secondary-container": "#e1e0d9",
+                      "on-secondary-container": "#63635d",
+                      "outline": "#857464",
+                      "on-error-container": "#93000a",
+                      "outline-variant": "#d7c3b1",
+                      "error": "#ba1a1a",
+                      "primary": "#855000",
+                      "amber-50": "#FAEEDA",
+                      "on-primary-container": "#fffbff",
+                      "amber-100": "#FAC775",
+                      "secondary": "#5f5f59",
+                      "surface": "#f9f9f7",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#f1f1ef",
+                      "inverse-surface": "#2f3130",
+                      "background": "#f9f9f7",
+                      "tertiary-container": "#a36800",
+                      "secondary-fixed-dim": "#c8c6c0",
+                      "primary-fixed": "#ffdcbb",
+                      "on-tertiary": "#ffffff",
+                      "surface-container": "#eeeeec",
+                      "on-surface-variant": "#524436",
+                      "tertiary": "#825100",
+                      "tertiary-fixed": "#ffddb7",
+                      "on-primary-fixed-variant": "#673d00",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "amber-800": "#633806",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "error-container": "#ffdad6",
+                      "surface-dim": "#dadad8",
+                      "info-bg": "#E6F1FB",
+                      "tertiary-fixed-dim": "#ffb95d",
+                      "secondary-fixed": "#e4e2dc",
+                      "primary-fixed-dim": "#ffb869",
+                      "inverse-primary": "#ffb869",
+                      "gray-200": "#D3D1C7",
+                      "on-secondary-fixed-variant": "#474742",
+                      "gray-600": "#444441",
+                      "primary-container": "#a76500",
+                      "surface-container-low": "#f4f4f2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "layout-margin": "28px",
+                      "topbar-height": "48px",
+                      "sidebar-width": "220px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "price-md": ["JetBrains Mono"],
+                      "display-lg": ["Instrument Serif"],
+                      "headline-sm": ["Geist"],
+                      "body-lg": ["Geist"],
+                      "price-lg": ["JetBrains Mono"],
+                      "display-md": ["Instrument Serif"],
+                      "caption": ["Geist"],
+                      "body-md": ["Geist"],
+                      "label-caps": ["Geist"]
+              },
+              "fontSize": {
+                      "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                      "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                      "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                      "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        /* Subtle scrollbar for dense interfaces */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: theme('colors.gray-200'); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: theme('colors.gray-400'); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="antialiased overflow-hidden flex font-body-md text-body-md">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-gray-800 border-r border-outline-variant w-sidebar-width h-screen fixed left-0 top-0 flex flex-col h-full py-md z-40">
+<!-- Header -->
+<div class="px-md mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0 border border-amber-200">
+<span class="material-symbols-outlined text-primary text-xl icon-fill" data-icon="restaurant">restaurant</span>
+</div>
+<div>
+<h1 class="font-display-md text-display-md text-primary font-bold leading-none">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600 mt-0.5">Terminal 01</p>
+</div>
+</div>
+<!-- Main Tabs -->
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-1">
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-body-md text-body-md">Point of Sale</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="receipt_long">receipt_long</span>
+<span class="font-body-md text-body-md">Orders</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-body-md text-body-md">Menu Management</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md text-body-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</div>
+<!-- Footer Tabs -->
+<div class="px-sm pt-4 border-t border-gray-200 mt-auto flex flex-col gap-1">
+<!-- Active State for Settings as QR Codes relate to setup/management -->
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] icon-fill" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex flex-col flex-1 ml-[220px]">
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flex justify-between items-center w-full px-lg ml-sidebar-width" style="width: calc(100% - 220px);">
+<!-- Breadcrumbs / Nav Links -->
+<div class="flex items-center gap-6 h-full">
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center uppercase" href="#">Fast Food</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center uppercase" href="#">Drinks</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center uppercase" href="#">Desserts</a>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-gray-600">
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="sync">sync</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-DEFAULT hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+<div class="w-px h-6 bg-gray-200 mx-1"></div>
+<button class="font-label-caps text-label-caps bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-lg uppercase tracking-wider hover:bg-amber-100 transition-colors">Hold Order</button>
+<button class="font-label-caps text-label-caps bg-primary text-on-primary px-4 py-1.5 rounded-lg uppercase tracking-wider hover:bg-amber-800 transition-colors shadow-sm">Checkout</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 mt-[48px] p-lg overflow-y-auto bg-background">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-1">QR Code per Meja</h2>
+<p class="font-body-md text-body-md text-gray-600">Kelola dan unduh kode QR untuk pemesanan mandiri di setiap meja.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-1.5 border border-gray-200 bg-surface-container-lowest rounded-lg hover:bg-surface-container-low transition-colors text-gray-800 font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+                        Unduh Semua
+                    </button>
+<button class="flex items-center gap-2 px-3 py-1.5 border border-gray-200 bg-surface-container-lowest rounded-lg hover:bg-surface-container-low transition-colors text-gray-800 font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined text-[16px]" data-icon="print">print</span>
+                        Cetak Semua
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout for QR Codes -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-layout-margin">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-4 flex flex-col relative group hover:border-amber-200 transition-colors">
+<div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-200/50">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Meja 01</h3>
+<span class="bg-success-bg text-success-text font-label-caps text-label-caps px-2 py-0.5 rounded-full uppercase">Aktif</span>
+</div>
+<div class="bg-surface p-4 rounded-lg flex items-center justify-center mb-4 border border-gray-200/50">
+<!-- Placeholder for QR Code -->
+<div class="w-32 h-32 bg-white flex items-center justify-center border border-gray-200" style="background-image: repeating-linear-gradient(45deg, #f4f4f2 25%, transparent 25%, transparent 75%, #f4f4f2 75%, #f4f4f2), repeating-linear-gradient(45deg, #f4f4f2 25%, #ffffff 25%, #ffffff 75%, #f4f4f2 75%, #f4f4f2); background-position: 0 0, 8px 8px; background-size: 16px 16px;">
+<span class="material-symbols-outlined text-gray-400 text-4xl" data-icon="qr_code_2">qr_code_2</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="font-caption text-caption text-gray-400 uppercase tracking-wider mb-1">URL Pemesanan</p>
+<div class="flex items-center gap-2 bg-surface-container-low px-2 py-1.5 rounded-DEFAULT border border-gray-200 group-hover:border-amber-100 transition-colors">
+<span class="font-price-md text-price-md text-gray-600 truncate flex-1">pos.id/q/m01</span>
+<button class="text-gray-400 hover:text-primary transition-colors" title="Copy URL">
+<span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<div class="flex gap-2 mt-auto pt-2 border-t border-gray-200/50">
+<button class="flex-1 flex justify-center items-center gap-1.5 py-1.5 text-gray-600 hover:text-primary hover:bg-amber-50 rounded-lg transition-colors font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+                            Unduh
+                        </button>
+<button class="flex-1 flex justify-center items-center gap-1.5 py-1.5 text-gray-600 hover:text-primary hover:bg-amber-50 rounded-lg transition-colors font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined text-[16px]" data-icon="print">print</span>
+                            Cetak
+                        </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-4 flex flex-col relative group hover:border-amber-200 transition-colors">
+<div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-200/50">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Meja 02</h3>
+<span class="bg-success-bg text-success-text font-label-caps text-label-caps px-2 py-0.5 rounded-full uppercase">Aktif</span>
+</div>
+<div class="bg-surface p-4 rounded-lg flex items-center justify-center mb-4 border border-gray-200/50">
+<div class="w-32 h-32 bg-white flex items-center justify-center border border-gray-200" style="background-image: repeating-linear-gradient(45deg, #f4f4f2 25%, transparent 25%, transparent 75%, #f4f4f2 75%, #f4f4f2), repeating-linear-gradient(45deg, #f4f4f2 25%, #ffffff 25%, #ffffff 75%, #f4f4f2 75%, #f4f4f2); background-position: 0 0, 8px 8px; background-size: 16px 16px;">
+<span class="material-symbols-outlined text-gray-400 text-4xl" data-icon="qr_code_2">qr_code_2</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="font-caption text-caption text-gray-400 uppercase tracking-wider mb-1">URL Pemesanan</p>
+<div class="flex items-center gap-2 bg-surface-container-low px-2 py-1.5 rounded-DEFAULT border border-gray-200 group-hover:border-amber-100 transition-colors">
+<span class="font-price-md text-price-md text-gray-600 truncate flex-1">pos.id/q/m02</span>
+<button class="text-gray-400 hover:text-primary transition-colors" title="Copy URL">
+<span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<div class="flex gap-2 mt-auto pt-2 border-t border-gray-200/50">
+<button class="flex-1 flex justify-center items-center gap-1.5 py-1.5 text-gray-600 hover:text-primary hover:bg-amber-50 rounded-lg transition-colors font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+                            Unduh
+                        </button>
+<button class="flex-1 flex justify-center items-center gap-1.5 py-1.5 text-gray-600 hover:text-primary hover:bg-amber-50 rounded-lg transition-colors font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined text-[16px]" data-icon="print">print</span>
+                            Cetak
+                        </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-4 flex flex-col relative group hover:border-amber-200 transition-colors">
+<div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-200/50">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Meja 03</h3>
+<span class="bg-success-bg text-success-text font-label-caps text-label-caps px-2 py-0.5 rounded-full uppercase">Aktif</span>
+</div>
+<div class="bg-surface p-4 rounded-lg flex items-center justify-center mb-4 border border-gray-200/50">
+<div class="w-32 h-32 bg-white flex items-center justify-center border border-gray-200" style="background-image: repeating-linear-gradient(45deg, #f4f4f2 25%, transparent 25%, transparent 75%, #f4f4f2 75%, #f4f4f2), repeating-linear-gradient(45deg, #f4f4f2 25%, #ffffff 25%, #ffffff 75%, #f4f4f2 75%, #f4f4f2); background-position: 0 0, 8px 8px; background-size: 16px 16px;">
+<span class="material-symbols-outlined text-gray-400 text-4xl" data-icon="qr_code_2">qr_code_2</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="font-caption text-caption text-gray-400 uppercase tracking-wider mb-1">URL Pemesanan</p>
+<div class="flex items-center gap-2 bg-surface-container-low px-2 py-1.5 rounded-DEFAULT border border-gray-200 group-hover:border-amber-100 transition-colors">
+<span class="font-price-md text-price-md text-gray-600 truncate flex-1">pos.id/q/m03</span>
+<button class="text-gray-400 hover:text-primary transition-colors" title="Copy URL">
+<span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<div class="flex gap-2 mt-auto pt-2 border-t border-gray-200/50">
+<button class="flex-1 flex justify-center items-center gap-1.5 py-1.5 text-gray-600 hover:text-primary hover:bg-amber-50 rounded-lg transition-colors font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+                            Unduh
+                        </button>
+<button class="flex-1 flex justify-center items-center gap-1.5 py-1.5 text-gray-600 hover:text-primary hover:bg-amber-50 rounded-lg transition-colors font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined text-[16px]" data-icon="print">print</span>
+                            Cetak
+                        </button>
+</div>
+</div>
+<!-- Add New Table Card (Ghost) -->
+<div class="bg-surface-container-low border border-dashed border-gray-400 rounded-xl p-4 flex flex-col items-center justify-center hover:bg-surface-container-high transition-colors cursor-pointer group min-h-[300px]">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-gray-600" data-icon="add">add</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-gray-800">Tambah Meja</span>
+<span class="font-caption text-caption text-gray-600 mt-1">Generate QR Code baru</span>
+</div>
+</div>
+</main>
+</div>
+</body></html>

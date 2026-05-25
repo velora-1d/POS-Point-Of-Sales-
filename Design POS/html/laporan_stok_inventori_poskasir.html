@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Laporan Stok &amp; Inventori - PosKasir</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration (Provided) -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "amber-50": "#FAEEDA",
+                    "gray-800": "#2C2C2A",
+                    "tertiary-fixed-dim": "#ffb95d",
+                    "danger-bg": "#FCEBEB",
+                    "surface-variant": "#e2e3e1",
+                    "primary-fixed": "#ffdcbb",
+                    "info-bg": "#E6F1FB",
+                    "amber-800": "#633806",
+                    "error": "#ba1a1a",
+                    "success-text": "#3B6D11",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#825100",
+                    "surface-container": "#eeeeec",
+                    "success-bg": "#EAF3DE",
+                    "on-secondary-fixed-variant": "#474742",
+                    "inverse-primary": "#ffb869",
+                    "primary": "#855000",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#f9f9f7",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#a36800",
+                    "gray-400": "#888780",
+                    "on-secondary-container": "#63635d",
+                    "tertiary-fixed": "#ffddb7",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#e1e0d9",
+                    "primary-container": "#a76500",
+                    "info-text": "#185FA5",
+                    "amber-600": "#854F0B",
+                    "surface-container-highest": "#e2e3e1",
+                    "surface-bright": "#f9f9f7",
+                    "primary-fixed-dim": "#ffb869",
+                    "gray-600": "#444441",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#673d00",
+                    "amber-100": "#FAC775",
+                    "background": "#f9f9f7",
+                    "surface-dim": "#dadad8",
+                    "on-background": "#1a1c1b",
+                    "on-tertiary-fixed": "#2a1700",
+                    "inverse-on-surface": "#f1f1ef",
+                    "inverse-surface": "#2f3130",
+                    "on-surface": "#1a1c1b",
+                    "outline": "#857464",
+                    "secondary": "#5f5f59",
+                    "surface-container-low": "#f4f4f2",
+                    "secondary-fixed-dim": "#c8c6c0",
+                    "danger-text": "#A32D2D",
+                    "outline-variant": "#d7c3b1",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed": "#1b1c18",
+                    "secondary-fixed": "#e4e2dc",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#524436",
+                    "on-primary-fixed": "#2b1700",
+                    "surface-tint": "#885200",
+                    "surface-container-high": "#e8e8e6",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "gray-200": "#D3D1C7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xs": "4px",
+                    "layout-margin": "28px",
+                    "md": "16px",
+                    "xl": "32px",
+                    "base": "4px",
+                    "topbar-height": "48px",
+                    "sidebar-width": "220px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Instrument Serif"],
+                    "body-md": ["Geist"],
+                    "price-md": ["JetBrains Mono"],
+                    "price-lg": ["JetBrains Mono"],
+                    "headline-sm": ["Geist"],
+                    "body-lg": ["Geist"],
+                    "label-caps": ["Geist"],
+                    "display-md": ["Instrument Serif"],
+                    "caption": ["Geist"]
+            },
+            "fontSize": {
+                    "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Utility for 0.5px high-density borders */
+        .border-hd { border-width: 0.5px; }
+        .border-t-hd { border-top-width: 0.5px; }
+        .border-b-hd { border-bottom-width: 0.5px; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- Shared Component: SideNavBar -->
+<nav class="bg-surface-container-low w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40 hidden md:flex">
+<div class="px-md pb-md mb-sm">
+<h1 class="font-display-md text-display-md text-primary font-bold tracking-tight">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600 mt-xs">Terminal 01</p>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-amber-400 text-amber-800 font-headline-sm text-headline-sm py-2 px-4 rounded-lg hover:bg-amber-100 transition-colors flex justify-center items-center gap-xs">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                New Order
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-xs">
+<ul class="space-y-1">
+<!-- Inactive Tabs -->
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">point_of_sale</span>
+                        Point of Sale
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">receipt_long</span>
+                        Orders
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">restaurant_menu</span>
+                        Menu Management
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">inventory_2</span>
+                        Inventory
+                    </a>
+</li>
+<!-- Active Tab Logic: Screen is "Laporan Stok & Inventori", maps to "Reports" -->
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded bg-surface-container text-gray-800 border-l-2 border-primary font-body-md text-body-md hover:bg-surface-container-highest transition-colors scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px; font-variation-settings: 'FILL' 1;">analytics</span>
+                        Reports
+                    </a>
+</li>
+</ul>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant px-xs">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">settings</span>
+                        Settings
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">help</span>
+                        Support
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-[220px] min-h-screen flex flex-col">
+<!-- Shared Component: TopAppBar -->
+<header class="bg-surface-bright h-topbar-height fixed top-0 right-0 z-30 border-b border-outline-variant flex justify-between items-center w-[calc(100%-220px)] px-lg pl-md md:pl-lg">
+<div class="flex items-center gap-md">
+<!-- Breadcrumb context added for practical usability while respecting JSON anchors -->
+<span class="font-label-caps text-label-caps text-gray-400 flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">analytics</span>
+                    Reports / Inventory
+                 </span>
+</div>
+<!-- Applying exact JSON navigation links for compliance, though contextually adapted to right side -->
+<nav class="hidden lg:flex items-center gap-md font-label-caps text-label-caps absolute left-1/2 -translate-x-1/2">
+<a class="text-on-surface-variant hover:text-primary transition-opacity py-3" href="#">Fast Food</a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity py-3" href="#">Drinks</a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity py-3" href="#">Desserts</a>
+</nav>
+<div class="flex items-center gap-sm">
+<!-- Trailing Icon Actions -->
+<button class="text-on-surface-variant hover:text-primary transition-opacity w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined" style="font-size: 20px;">sync</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined" style="font-size: 20px;">notifications</span>
+</button>
+<div class="w-px h-4 bg-outline-variant mx-1"></div>
+<!-- Trailing Primary/Secondary Actions -->
+<button class="font-label-caps text-label-caps text-gray-600 hover:text-gray-800 transition-opacity px-2">Hold Order</button>
+<button class="font-label-caps text-label-caps bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-lg opacity-80 hover:opacity-100 transition-all ml-xs">Checkout</button>
+</div>
+</header>
+<!-- Canvas Content -->
+<main class="pt-[calc(48px+24px)] px-lg pb-layout-margin flex-1 flex flex-col max-w-7xl mx-auto w-full">
+<!-- Page Header & Global Filters -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-md">
+<div>
+<h2 class="font-display-md text-display-md text-gray-800 mb-1">Laporan Stok &amp; Inventori</h2>
+<p class="font-body-md text-body-md text-gray-600">Mutation log and closing balance across all categories.</p>
+</div>
+<div class="flex flex-wrap items-center gap-sm">
+<!-- Filters -->
+<div class="flex items-center bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
+<select class="bg-transparent border-none text-body-md py-1 px-2 focus:ring-0 text-gray-800 w-[140px] cursor-pointer appearance-none">
+<option>Last 7 Days</option>
+<option>This Month</option>
+<option>Last Month</option>
+<option>Custom Range...</option>
+</select>
+<div class="w-px h-4 bg-gray-200 mx-1"></div>
+<select class="bg-transparent border-none text-body-md py-1 px-2 focus:ring-0 text-gray-800 w-[120px] cursor-pointer appearance-none">
+<option>All Types</option>
+<option>Raw Material</option>
+<option>Finished Goods</option>
+<option>Packaging</option>
+</select>
+<div class="w-px h-4 bg-gray-200 mx-1"></div>
+<select class="bg-transparent border-none text-body-md py-1 px-2 focus:ring-0 text-gray-800 w-[130px] cursor-pointer appearance-none">
+<option>All Suppliers</option>
+<option>PT. Boga Utama</option>
+<option>Fresh Farm Co.</option>
+</select>
+</div>
+<!-- Export Action -->
+<button class="bg-amber-50 border border-amber-200 text-amber-800 font-label-caps text-label-caps px-4 py-2 rounded-lg flex items-center gap-xs hover:bg-amber-100 transition-colors shadow-sm h-[34px]">
+<span class="material-symbols-outlined" style="font-size: 16px;">download</span>
+                        Export CSV
+                    </button>
+</div>
+</div>
+<!-- High-Density KPI / Summary Bento -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-sm mb-md">
+<div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm relative overflow-hidden flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-gray-400 block mb-1">Total Items Tracked</span>
+<span class="font-price-lg text-price-lg text-gray-800">1,248</span>
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-surface-variant"></div>
+</div>
+<div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm relative overflow-hidden flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-gray-400 block mb-1">Total Stock In (Units)</span>
+<span class="font-price-lg text-price-lg text-success-text flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                        +4,520
+                    </span>
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-success-bg"></div>
+</div>
+<div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm relative overflow-hidden flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-gray-400 block mb-1">Total Stock Out (Units)</span>
+<span class="font-price-lg text-price-lg text-danger-text flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                        -3,890
+                    </span>
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-danger-bg"></div>
+</div>
+<div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm relative overflow-hidden flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-gray-400 block mb-1">Low Stock Alerts</span>
+<span class="font-price-lg text-price-lg text-amber-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-amber-600">warning</span>
+                        12 Items
+                    </span>
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-amber-400"></div>
+</div>
+</div>
+<!-- Main Data Table Container -->
+<div class="bg-white border border-gray-200 rounded-lg flex-1 flex flex-col overflow-hidden shadow-sm">
+<!-- Table Search/Action Header (Inner) -->
+<div class="px-md py-2 border-b border-gray-200 bg-surface-container-lowest flex justify-between items-center">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" style="font-size: 18px;">search</span>
+<input class="w-full bg-surface-container-low border border-gray-200 text-body-md pl-8 pr-3 py-1 rounded focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all placeholder-gray-400 text-gray-800" placeholder="Search item code or name..." type="text"/>
+</div>
+<button class="text-gray-600 hover:text-gray-800 p-1 rounded hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">filter_list</span>
+</button>
+</div>
+<!-- Scrollable Table Body -->
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead class="bg-gray-50 border-b-hd border-gray-200 sticky top-0 z-10 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.05)]">
+<tr>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 w-24">Date</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400">Item Name</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 w-32">Type</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400">Supplier</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 text-right w-24">Stock In</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 text-right w-24">Stock Out</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 text-right w-28">Closing Bal</th>
+<th class="py-2 px-4 font-label-caps text-label-caps text-gray-400 text-center w-24">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y-[0.5px] divide-gray-200">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">24 Oct, 08:30</td>
+<td class="py-2.5 px-4">
+<div class="font-body-md text-body-md text-gray-800">Premium Arabica Beans</div>
+<div class="font-caption text-caption text-gray-400 mt-0.5">ITM-RB-001 • 1kg bag</div>
+</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">Raw Material</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">PT. Kopi Nusantara</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-success-text">+50</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-gray-400">-</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-gray-800 font-bold">120</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-success-bg text-success-text font-label-caps text-[10px]">Restock</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">24 Oct, 11:15</td>
+<td class="py-2.5 px-4">
+<div class="font-body-md text-body-md text-gray-800">Whole Milk</div>
+<div class="font-caption text-caption text-gray-400 mt-0.5">ITM-DF-042 • 1L carton</div>
+</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">Raw Material</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">Fresh Farm Dairy</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-gray-400">-</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-danger-text">-12</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-gray-800 font-bold">8</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-danger-bg text-danger-text font-label-caps text-[10px]">Depleted</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">24 Oct, 13:40</td>
+<td class="py-2.5 px-4">
+<div class="font-body-md text-body-md text-gray-800">Paper Cup 12oz</div>
+<div class="font-caption text-caption text-gray-400 mt-0.5">PKG-CU-120 • Sleeve (50pcs)</div>
+</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">Packaging</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">Echo Pack Supplies</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-success-text">+20</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-danger-text">-5</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-gray-800 font-bold">45</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-info-bg text-info-text font-label-caps text-[10px]">Normal</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">23 Oct, 09:00</td>
+<td class="py-2.5 px-4">
+<div class="font-body-md text-body-md text-gray-800">Chocolate Muffin</div>
+<div class="font-caption text-caption text-gray-400 mt-0.5">FIN-BK-011 • Single unit</div>
+</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">Finished Goods</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">In-house Bakery</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-success-text">+24</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-danger-text">-20</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-gray-800 font-bold">4</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-variant text-gray-800 font-label-caps text-[10px]">Low Stock</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">23 Oct, 07:15</td>
+<td class="py-2.5 px-4">
+<div class="font-body-md text-body-md text-gray-800">White Sugar</div>
+<div class="font-caption text-caption text-gray-400 mt-0.5">ITM-SW-002 • 5kg bag</div>
+</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">Raw Material</td>
+<td class="py-2.5 px-4 font-body-md text-body-md text-gray-600">PT. Boga Utama</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-gray-400">-</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-danger-text">-1</td>
+<td class="py-2.5 px-4 text-right font-price-md text-price-md text-gray-800 font-bold">14</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-info-bg text-info-text font-label-caps text-[10px]">Normal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="bg-gray-50 border-t-hd border-gray-200 px-md py-2 flex justify-between items-center text-caption text-gray-600">
+<div>Showing 1 to 5 of 124 entries</div>
+<div class="flex gap-1">
+<button class="w-7 h-7 rounded border border-gray-200 bg-white flex items-center justify-center hover:bg-surface-container transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button class="w-7 h-7 rounded border border-amber-400 bg-amber-50 text-amber-800 font-body-md flex items-center justify-center">1</button>
+<button class="w-7 h-7 rounded border border-gray-200 bg-white hover:bg-surface-container transition-colors font-body-md flex items-center justify-center">2</button>
+<button class="w-7 h-7 rounded border border-gray-200 bg-white hover:bg-surface-container transition-colors font-body-md flex items-center justify-center">3</button>
+<button class="w-7 h-7 rounded border border-gray-200 bg-white flex items-center justify-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

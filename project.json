@@ -1,0 +1,30 @@
+{
+  "name": "pos-mentai",
+  "description": "Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, real-time kitchen display, dan integrasi desktop.",
+  "version": "1.0.0",
+  "lastUpdated": "2026-05-25",
+  "stack": {
+    "frontend": "Vue 3 (Composition API) + Pinia + TailwindCSS + shadcn/vue + Tauri",
+    "backend": "Laravel 13 + Inertia.js (Laravel Sanctum, Horizon + Redis, Reverb)",
+    "database": "PostgreSQL 16",
+    "orm": "Drizzle ORM (TypeScript) + Drizzle Kit",
+    "auth": "Laravel Sanctum",
+    "realtime": "Laravel Reverb",
+    "mobile": null
+  },
+  "mode": "other",
+  "platform": [
+    "web",
+    "desktop"
+  ],
+  "multiTenant": false,
+  "tenantStrategy": null,
+  "scale": "small",
+  "team": "solo",
+  "hosting": {
+    "development": "local",
+    "staging": "vps",
+    "production": "vps"
+  },
+  "notes": "Implementasi aktif menggunakan Laravel 13 dan Vue 3 via Inertia.js, dengan flow kasir yang sekarang sudah mendukung takeaway, customer lookup/quick register, kitchen display berbasis data order database, pembayaran kasir cash/QRIS gateway dengan callback Pakasir, serta flow publik QR meja self-service pay-first berbasis QRIS."
+}

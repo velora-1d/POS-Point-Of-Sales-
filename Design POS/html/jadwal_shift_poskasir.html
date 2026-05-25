@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Jadwal Shift</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Design System Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#e1e0d9",
+                      "danger-bg": "#FCEBEB",
+                      "amber-600": "#854F0B",
+                      "surface-variant": "#e2e3e1",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-high": "#e8e8e6",
+                      "surface-container-highest": "#e2e3e1",
+                      "surface": "#f9f9f7",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#f1f1ef",
+                      "secondary": "#5f5f59",
+                      "amber-100": "#FAC775",
+                      "on-primary-container": "#fffbff",
+                      "amber-50": "#FAEEDA",
+                      "primary": "#855000",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#d7c3b1",
+                      "on-error-container": "#93000a",
+                      "outline": "#857464",
+                      "on-secondary-container": "#63635d",
+                      "on-surface": "#1a1c1b",
+                      "on-tertiary-container": "#fffbff",
+                      "gray-400": "#888780",
+                      "info-text": "#185FA5",
+                      "on-secondary-fixed": "#1b1c18",
+                      "danger-text": "#A32D2D",
+                      "gray-800": "#2C2C2A",
+                      "surface-tint": "#885200",
+                      "success-bg": "#EAF3DE",
+                      "on-background": "#1a1c1b",
+                      "on-primary-fixed": "#2b1700",
+                      "surface-bright": "#f9f9f7",
+                      "on-tertiary-fixed": "#2a1700",
+                      "success-text": "#3B6D11",
+                      "tertiary-fixed-dim": "#ffb95d",
+                      "secondary-fixed": "#e4e2dc",
+                      "info-bg": "#E6F1FB",
+                      "surface-container-low": "#f4f4f2",
+                      "primary-container": "#a76500",
+                      "gray-600": "#444441",
+                      "on-secondary-fixed-variant": "#474742",
+                      "gray-200": "#D3D1C7",
+                      "primary-fixed-dim": "#ffb869",
+                      "inverse-primary": "#ffb869",
+                      "surface-container": "#eeeeec",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#ffdcbb",
+                      "tertiary-container": "#a36800",
+                      "secondary-fixed-dim": "#c8c6c0",
+                      "inverse-surface": "#2f3130",
+                      "background": "#f9f9f7",
+                      "surface-dim": "#dadad8",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "amber-800": "#633806",
+                      "on-primary-fixed-variant": "#673d00",
+                      "tertiary-fixed": "#ffddb7",
+                      "tertiary": "#825100",
+                      "on-surface-variant": "#524436"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "lg": "24px",
+                      "xs": "4px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "topbar-height": "48px",
+                      "sidebar-width": "220px",
+                      "layout-margin": "28px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "caption": ["Geist"],
+                      "price-lg": ["JetBrains Mono"],
+                      "display-md": ["Instrument Serif"],
+                      "label-caps": ["Geist"],
+                      "body-md": ["Geist"],
+                      "price-md": ["JetBrains Mono"],
+                      "headline-sm": ["Geist"],
+                      "body-lg": ["Geist"],
+                      "display-lg": ["Instrument Serif"]
+              },
+              "fontSize": {
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                      "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                      "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for high-density UI */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D3D1C7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #888780; }
+        
+        /* Drag state utilities */
+        .dragging { opacity: 0.5; border: 1px dashed #855000; }
+        .drop-zone { background-color: #f4f4f2; border-color: #855000; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md overflow-hidden antialiased">
+<!-- Application Shell Layout -->
+<div class="flex h-screen w-full">
+<!-- Component: SideNavBar -->
+<nav class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant flex flex-col py-md z-40 transition-all">
+<!-- Header/Brand -->
+<div class="px-md mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center border border-amber-200 shadow-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">point_of_sale</span>
+</div>
+<div>
+<h1 class="font-display-md text-display-md text-primary font-bold leading-none">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600 mt-0.5">Terminal 01</p>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="px-3 mb-4">
+<button class="w-full bg-primary text-on-primary py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span class="font-body-md text-body-md">New Order</span>
+</button>
+</div>
+<!-- Navigation Tabs -->
+<div class="flex flex-col flex-1 px-3 gap-1 overflow-y-auto">
+<!-- Highlighted Intent Fallback (Dashboard as base for Management Tools) -->
+<a class="bg-surface-container text-gray-800 border-l-2 border-primary flex items-center gap-md py-2 px-3 rounded hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-800">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-md py-2 px-3 rounded" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-body-md text-body-md">Point of Sale</span>
+</a>
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-md py-2 px-3 rounded" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-body-md text-body-md">Orders</span>
+</a>
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-md py-2 px-3 rounded" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-body-md text-body-md">Menu Management</span>
+</a>
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-md py-2 px-3 rounded" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md text-body-md">Inventory</span>
+</a>
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-md py-2 px-3 rounded" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</div>
+<!-- Footer Tabs -->
+<div class="mt-auto px-3 border-t border-outline-variant pt-2 flex flex-col gap-1">
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-md py-2 px-3 rounded" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-md py-2 px-3 rounded" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Workspace -->
+<div class="ml-sidebar-width flex-1 flex flex-col min-w-0">
+<!-- Component: TopAppBar -->
+<header class="h-topbar-height bg-surface-bright border-b border-outline-variant flex justify-between items-center px-lg shrink-0 z-30 relative shadow-sm">
+<!-- Left: Navigation Links -->
+<div class="flex gap-lg h-full">
+<button class="h-full font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity flex items-center border-b-2 border-transparent hover:border-gray-200">Fast Food</button>
+<button class="h-full font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity flex items-center border-b-2 border-transparent hover:border-gray-200">Drinks</button>
+<button class="h-full font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity flex items-center border-b-2 border-transparent hover:border-gray-200">Desserts</button>
+</div>
+<!-- Right: Trailing Actions -->
+<div class="flex items-center gap-md">
+<button class="text-gray-600 hover:text-primary transition-colors flex items-center justify-center p-1">
+<span class="material-symbols-outlined">sync</span>
+</button>
+<button class="text-gray-600 hover:text-primary transition-colors flex items-center justify-center p-1 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full border border-surface-bright"></span>
+</button>
+<div class="h-4 w-px bg-gray-200 mx-1"></div>
+<button class="font-label-caps text-label-caps text-gray-600 hover:text-primary transition-opacity">Hold Order</button>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-4 py-1.5 rounded hover:opacity-90 transition-opacity ml-2">Checkout</button>
+<button class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center border border-gray-200 ml-sm hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] text-gray-600">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas Content -->
+<main class="flex-1 p-lg flex flex-col gap-md overflow-hidden bg-background">
+<!-- Page Header & Controls -->
+<div class="flex justify-between items-end shrink-0">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-gray-400 text-[20px]">calendar_month</span>
+<h2 class="font-display-md text-display-md text-on-surface leading-none">Jadwal Shift</h2>
+</div>
+<p class="font-body-md text-body-md text-gray-600">Drag and drop to assign team shifts.</p>
+</div>
+<div class="flex items-center gap-md">
+<!-- Date Navigation -->
+<div class="flex items-center bg-surface-container-lowest border border-gray-200 rounded divide-x divide-gray-200 shadow-sm">
+<button aria-label="Previous week" class="p-1 hover:bg-surface-container-low transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-600 text-[18px]">chevron_left</span>
+</button>
+<div class="px-3 py-1 flex items-center gap-2 cursor-pointer hover:bg-surface-container-low transition-colors">
+<span class="font-label-caps text-label-caps text-gray-800">OCT 14 - OCT 20</span>
+</div>
+<button aria-label="Next week" class="p-1 hover:bg-surface-container-low transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-600 text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- View Toggle -->
+<div class="flex bg-surface-container-lowest border border-gray-200 rounded p-0.5 shadow-sm">
+<button class="px-3 py-1 rounded bg-surface-container text-gray-800 font-label-caps text-label-caps shadow-sm">Weekly</button>
+<button class="px-3 py-1 rounded text-gray-600 hover:text-gray-800 font-label-caps text-label-caps transition-colors">Daily</button>
+</div>
+<div class="h-6 w-px bg-gray-200 mx-1"></div>
+<button class="bg-surface-container-lowest border border-gray-200 text-gray-800 font-label-caps text-label-caps px-4 py-1.5 rounded hover:bg-surface-container-low transition-colors shadow-sm">
+                            Save Draft
+                        </button>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-4 py-1.5 rounded hover:opacity-90 transition-opacity shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">publish</span>
+                            Publish
+                        </button>
+</div>
+</div>
+<!-- Layout Wrapper: Split View -->
+<div class="flex flex-1 min-h-0 gap-md">
+<!-- Left Panel: Employee Roster (Draggable Sources) -->
+<aside class="w-64 flex flex-col bg-surface-container-lowest border border-gray-200 rounded-lg overflow-hidden shrink-0 shadow-sm">
+<!-- Search & Filter -->
+<div class="p-3 border-b border-gray-200 bg-surface-container-low flex flex-col gap-2">
+<h3 class="font-label-caps text-label-caps text-gray-600">Available Staff</h3>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-1.5 text-gray-400 text-[16px]">search</span>
+<input class="w-full pl-8 pr-2 py-1 bg-surface border border-gray-200 rounded font-body-md text-body-md focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-100 placeholder-gray-400 transition-shadow" placeholder="Search name or role..." type="text"/>
+</div>
+<div class="flex gap-1 overflow-x-auto pb-1 mt-1 hide-scrollbar">
+<span class="px-2 py-0.5 bg-surface border border-gray-200 rounded-full font-caption text-caption text-gray-600 cursor-pointer hover:bg-gray-50 whitespace-nowrap">All</span>
+<span class="px-2 py-0.5 bg-info-bg border border-info-text/20 rounded-full font-caption text-caption text-info-text cursor-pointer hover:bg-blue-100 whitespace-nowrap">Barista</span>
+<span class="px-2 py-0.5 bg-surface border border-gray-200 rounded-full font-caption text-caption text-gray-600 cursor-pointer hover:bg-gray-50 whitespace-nowrap">Cashier</span>
+</div>
+</div>
+<!-- Draggable List -->
+<div class="flex-1 overflow-y-auto p-2 flex flex-col gap-2">
+<!-- Draggable Item -->
+<div class="bg-surface border border-gray-200 rounded p-2 flex items-center gap-3 cursor-grab hover:border-gray-400 hover:shadow-sm transition-all group active:cursor-grabbing" draggable="true">
+<span class="material-symbols-outlined text-gray-300 text-[16px] group-hover:text-gray-500">drag_indicator</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-label-caps font-label-caps text-gray-800 shrink-0">AR</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-body-md text-on-surface truncate leading-tight">Arief Rahman</p>
+<p class="font-caption text-caption text-info-text truncate leading-tight">Barista</p>
+</div>
+</div>
+<!-- Draggable Item -->
+<div class="bg-surface border border-gray-200 rounded p-2 flex items-center gap-3 cursor-grab hover:border-gray-400 hover:shadow-sm transition-all group active:cursor-grabbing" draggable="true">
+<span class="material-symbols-outlined text-gray-300 text-[16px] group-hover:text-gray-500">drag_indicator</span>
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed-dim flex items-center justify-center text-label-caps font-label-caps text-on-tertiary-fixed shrink-0">SW</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-body-md text-on-surface truncate leading-tight">Siti Wulandari</p>
+<p class="font-caption text-caption text-gray-600 truncate leading-tight">Cashier</p>
+</div>
+<div class="w-2 h-2 rounded-full bg-success-text" title="Available"></div>
+</div>
+<!-- Draggable Item -->
+<div class="bg-surface border border-gray-200 rounded p-2 flex items-center gap-3 cursor-grab hover:border-gray-400 hover:shadow-sm transition-all group active:cursor-grabbing opacity-60" draggable="true">
+<span class="material-symbols-outlined text-gray-300 text-[16px] group-hover:text-gray-500">drag_indicator</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-label-caps font-label-caps text-gray-600 shrink-0">DN</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-body-md text-on-surface truncate leading-tight">Dian N.</p>
+<p class="font-caption text-caption text-gray-600 truncate leading-tight">Kitchen</p>
+</div>
+<span class="material-symbols-outlined text-error text-[14px]" title="On Leave">event_busy</span>
+</div>
+</div>
+</aside>
+<!-- Main Grid: Schedule Area -->
+<section class="flex-1 bg-surface-container-lowest border border-gray-200 rounded-lg overflow-hidden flex flex-col shadow-sm relative">
+<!-- Grid Header (Fixed Top) -->
+<div class="grid grid-cols-[140px_repeat(7,1fr)] border-b border-gray-200 bg-surface-container-low shrink-0 text-center relative z-10">
+<!-- Staff Column Header -->
+<div class="p-3 border-r border-gray-200 flex items-end justify-start bg-surface-container-low sticky left-0 z-20">
+<span class="font-label-caps text-label-caps text-gray-600">Assigned Staff</span>
+</div>
+<!-- Day Columns -->
+<div class="p-2 border-r border-gray-200 flex flex-col items-center justify-center">
+<span class="font-label-caps text-label-caps text-gray-400">MON</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">14</span>
+</div>
+<div class="p-2 border-r border-gray-200 flex flex-col items-center justify-center bg-surface">
+<span class="font-label-caps text-label-caps text-gray-400">TUE</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">15</span>
+</div>
+<div class="p-2 border-r border-gray-200 flex flex-col items-center justify-center">
+<span class="font-label-caps text-label-caps text-gray-400">WED</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">16</span>
+</div>
+<div class="p-2 border-r border-gray-200 flex flex-col items-center justify-center">
+<span class="font-label-caps text-label-caps text-gray-400">THU</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">17</span>
+</div>
+<div class="p-2 border-r border-gray-200 flex flex-col items-center justify-center">
+<span class="font-label-caps text-label-caps text-gray-400">FRI</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">18</span>
+</div>
+<div class="p-2 border-r border-gray-200 flex flex-col items-center justify-center bg-danger-bg/20">
+<span class="font-label-caps text-label-caps text-danger-text">SAT</span>
+<span class="font-body-md text-body-md text-danger-text font-semibold">19</span>
+</div>
+<div class="p-2 flex flex-col items-center justify-center bg-danger-bg/20">
+<span class="font-label-caps text-label-caps text-danger-text">SUN</span>
+<span class="font-body-md text-body-md text-danger-text font-semibold">20</span>
+</div>
+</div>
+<!-- Grid Body (Scrollable) -->
+<div class="flex-1 overflow-y-auto overflow-x-hidden">
+<!-- Row 1: Employee -->
+<div class="grid grid-cols-[140px_repeat(7,1fr)] border-b border-gray-200 min-h-[90px] group hover:bg-surface/50 transition-colors">
+<!-- Staff Info Cell -->
+<div class="p-3 border-r border-gray-200 bg-surface-container-lowest sticky left-0 z-10 flex flex-col justify-center">
+<p class="font-body-md text-body-md text-on-surface truncate font-semibold">Budi Santoso</p>
+<p class="font-caption text-caption text-gray-600 truncate">Manager</p>
+<p class="font-price-md text-price-md text-gray-400 mt-1 text-[10px]">40h / 40h</p>
+</div>
+<!-- Mon: Morning Shift -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors group/cell cursor-pointer">
+<div class="h-full bg-amber-50 border border-amber-200 rounded-md p-2 flex flex-col gap-1 shadow-sm relative overflow-hidden hover:border-amber-400 transition-colors">
+<div class="w-1 h-full bg-amber-400 absolute left-0 top-0"></div>
+<div class="flex justify-between items-start pl-1">
+<span class="font-label-caps text-label-caps text-amber-800">Morning</span>
+<span class="material-symbols-outlined text-[14px] text-amber-600">wb_sunny</span>
+</div>
+<span class="font-price-md text-price-md text-gray-800 pl-1 mt-auto">07:00 - 15:00</span>
+</div>
+</div>
+<!-- Tue: Morning Shift -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors bg-surface group/cell cursor-pointer">
+<div class="h-full bg-amber-50 border border-amber-200 rounded-md p-2 flex flex-col gap-1 shadow-sm relative overflow-hidden hover:border-amber-400 transition-colors">
+<div class="w-1 h-full bg-amber-400 absolute left-0 top-0"></div>
+<div class="flex justify-between items-start pl-1">
+<span class="font-label-caps text-label-caps text-amber-800">Morning</span>
+<span class="material-symbols-outlined text-[14px] text-amber-600">wb_sunny</span>
+</div>
+<span class="font-price-md text-price-md text-gray-800 pl-1 mt-auto">07:00 - 15:00</span>
+</div>
+</div>
+<!-- Wed: Empty Drop Zone -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors flex items-center justify-center group/cell">
+<div class="w-full h-full border-2 border-transparent rounded border-dashed group-hover/cell:border-gray-300 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-gray-300 opacity-0 group-hover/cell:opacity-100 transition-opacity">add</span>
+</div>
+</div>
+<!-- Thu: Evening Shift -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors group/cell cursor-pointer">
+<div class="h-full bg-surface-variant border border-gray-300 rounded-md p-2 flex flex-col gap-1 shadow-sm relative overflow-hidden hover:border-gray-500 transition-colors">
+<div class="w-1 h-full bg-gray-500 absolute left-0 top-0"></div>
+<div class="flex justify-between items-start pl-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Evening</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">brightness_4</span>
+</div>
+<span class="font-price-md text-price-md text-gray-800 pl-1 mt-auto">15:00 - 23:00</span>
+</div>
+</div>
+<!-- Fri: Evening Shift -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors group/cell cursor-pointer">
+<div class="h-full bg-surface-variant border border-gray-300 rounded-md p-2 flex flex-col gap-1 shadow-sm relative overflow-hidden hover:border-gray-500 transition-colors">
+<div class="w-1 h-full bg-gray-500 absolute left-0 top-0"></div>
+<div class="flex justify-between items-start pl-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Evening</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">brightness_4</span>
+</div>
+<span class="font-price-md text-price-md text-gray-800 pl-1 mt-auto">15:00 - 23:00</span>
+</div>
+</div>
+<!-- Sat: Off -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors bg-danger-bg/5 flex items-center justify-center group/cell">
+<span class="font-label-caps text-label-caps text-gray-400">OFF</span>
+</div>
+<!-- Sun: Off -->
+<div class="p-1 border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors bg-danger-bg/5 flex items-center justify-center group/cell">
+<span class="font-label-caps text-label-caps text-gray-400">OFF</span>
+</div>
+</div>
+<!-- Row 2: Employee -->
+<div class="grid grid-cols-[140px_repeat(7,1fr)] border-b border-gray-200 min-h-[90px] group hover:bg-surface/50 transition-colors">
+<div class="p-3 border-r border-gray-200 bg-surface-container-lowest sticky left-0 z-10 flex flex-col justify-center">
+<p class="font-body-md text-body-md text-on-surface truncate font-semibold">Tari Lestari</p>
+<p class="font-caption text-caption text-info-text truncate">Barista</p>
+<p class="font-price-md text-price-md text-gray-400 mt-1 text-[10px]">32h / 40h</p>
+</div>
+<!-- Mon: Empty -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors flex items-center justify-center group/cell">
+<div class="w-full h-full border-2 border-transparent rounded border-dashed group-hover/cell:border-gray-300 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-gray-300 opacity-0 group-hover/cell:opacity-100 transition-opacity">add</span>
+</div>
+</div>
+<!-- Tue: Empty -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors bg-surface flex items-center justify-center group/cell">
+<div class="w-full h-full border-2 border-transparent rounded border-dashed group-hover/cell:border-gray-300 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-gray-300 opacity-0 group-hover/cell:opacity-100 transition-opacity">add</span>
+</div>
+</div>
+<!-- Wed: Night Shift -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors group/cell cursor-pointer">
+<div class="h-full bg-gray-800 border border-gray-600 rounded-md p-2 flex flex-col gap-1 shadow-sm relative overflow-hidden hover:border-gray-400 transition-colors">
+<div class="w-1 h-full bg-gray-400 absolute left-0 top-0"></div>
+<div class="flex justify-between items-start pl-1">
+<span class="font-label-caps text-label-caps text-gray-200">Night</span>
+<span class="material-symbols-outlined text-[14px] text-gray-300">bedtime</span>
+</div>
+<span class="font-price-md text-price-md text-white pl-1 mt-auto">23:00 - 07:00</span>
+</div>
+</div>
+<!-- Thu: Night Shift -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors group/cell cursor-pointer">
+<div class="h-full bg-gray-800 border border-gray-600 rounded-md p-2 flex flex-col gap-1 shadow-sm relative overflow-hidden hover:border-gray-400 transition-colors">
+<div class="w-1 h-full bg-gray-400 absolute left-0 top-0"></div>
+<div class="flex justify-between items-start pl-1">
+<span class="font-label-caps text-label-caps text-gray-200">Night</span>
+<span class="material-symbols-outlined text-[14px] text-gray-300">bedtime</span>
+</div>
+<span class="font-price-md text-price-md text-white pl-1 mt-auto">23:00 - 07:00</span>
+</div>
+</div>
+<!-- Fri: Night Shift -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors group/cell cursor-pointer">
+<div class="h-full bg-gray-800 border border-gray-600 rounded-md p-2 flex flex-col gap-1 shadow-sm relative overflow-hidden hover:border-gray-400 transition-colors">
+<div class="w-1 h-full bg-gray-400 absolute left-0 top-0"></div>
+<div class="flex justify-between items-start pl-1">
+<span class="font-label-caps text-label-caps text-gray-200">Night</span>
+<span class="material-symbols-outlined text-[14px] text-gray-300">bedtime</span>
+</div>
+<span class="font-price-md text-price-md text-white pl-1 mt-auto">23:00 - 07:00</span>
+</div>
+</div>
+<!-- Sat: Morning Shift -->
+<div class="p-1 border-r border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors bg-danger-bg/5 group/cell cursor-pointer">
+<div class="h-full bg-amber-50 border border-amber-200 rounded-md p-2 flex flex-col gap-1 shadow-sm relative overflow-hidden hover:border-amber-400 transition-colors">
+<div class="w-1 h-full bg-amber-400 absolute left-0 top-0"></div>
+<div class="flex justify-between items-start pl-1">
+<span class="font-label-caps text-label-caps text-amber-800">Morning</span>
+<span class="material-symbols-outlined text-[14px] text-amber-600">wb_sunny</span>
+</div>
+<span class="font-price-md text-price-md text-gray-800 pl-1 mt-auto">07:00 - 15:00</span>
+</div>
+</div>
+<!-- Sun: Off -->
+<div class="p-1 border-gray-200 border-dashed relative hover:bg-surface-container-low transition-colors bg-danger-bg/5 flex items-center justify-center group/cell">
+<span class="font-label-caps text-label-caps text-gray-400">OFF</span>
+</div>
+</div>
+<!-- Ghost Row for adding new staff to schedule -->
+<div class="grid grid-cols-[140px_repeat(7,1fr)] border-b border-gray-200 min-h-[90px] opacity-50 hover:opacity-100 transition-opacity bg-surface border-dashed">
+<div class="p-3 border-r border-gray-200 sticky left-0 z-10 flex items-center justify-center cursor-pointer hover:bg-surface-container-low">
+<span class="font-body-md text-body-md text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">add</span> Add Row
+                                    </span>
+</div>
+<div class="p-1 border-r border-gray-200 border-dashed"></div>
+<div class="p-1 border-r border-gray-200 border-dashed bg-surface"></div>
+<div class="p-1 border-r border-gray-200 border-dashed"></div>
+<div class="p-1 border-r border-gray-200 border-dashed"></div>
+<div class="p-1 border-r border-gray-200 border-dashed"></div>
+<div class="p-1 border-r border-gray-200 border-dashed bg-danger-bg/5"></div>
+<div class="p-1 border-gray-200 border-dashed bg-danger-bg/5"></div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+</body></html>

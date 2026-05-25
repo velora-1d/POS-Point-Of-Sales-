@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Laporan Produk Terlaris - PosKasir</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config injected from prompt -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "primary": "#0f172a",
+                "primary-fixed": "#334155",
+                "on-primary": "#ffffff",
+                "surface-container-low": "#f8fafc",
+                "surface-container": "#f1f5f9",
+                "surface-container-high": "#e2e8f0",
+                "surface-container-highest": "#cbd5e1",
+                "surface-bright": "#ffffff",
+                "surface-dim": "#0f172a",
+                "on-surface-variant": "#475569",
+                "outline-variant": "#e2e8f0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                "sidebar-width": "256px",
+                "topbar-height": "64px",
+                "md": "1rem",
+                "lg": "1.5rem"
+            },
+            "fontFamily": {
+                    "headline": [
+                            "Public Sans"
+                    ],
+                    "display": [
+                            "Public Sans"
+                    ],
+                    "body": [
+                            "Public Sans"
+                    ],
+                    "label": [
+                            "Public Sans"
+                    ]
+            },
+            "fontSize": {
+                "display-md": ["1.5rem", { lineHeight: "2rem", fontWeight: "700" }],
+                "body-md": ["0.875rem", { lineHeight: "1.25rem" }],
+                "label-caps": ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.05em", fontWeight: "600", textTransform: "uppercase" }]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        /* Base typography defaults */
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-slate-50 font-body antialiased">
+<!-- Shared Component: SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-gray-800 w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40">
+<!-- Header -->
+<div class="px-6 pb-6 pt-2">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="text-sm text-slate-500 mt-1">Terminal 01</p>
+</div>
+<!-- CTA -->
+<div class="px-4 mb-6">
+<button class="w-full bg-slate-900 text-white hover:bg-slate-800 transition-colors py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+                New Order
+            </button>
+</div>
+<!-- Main Navigation -->
+<div class="flex-1 overflow-y-auto px-3">
+<ul class="space-y-1">
+<!-- Inactive items -->
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+                        Point of Sale
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                        Orders
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+                        Menu Management
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                        Inventory
+                    </a>
+</li>
+<!-- Active item: Reports -->
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary font-body-md text-body-md font-medium Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+                        Reports
+                    </a>
+</li>
+</ul>
+</div>
+<!-- Footer Navigation -->
+<div class="px-3 mt-auto pt-4 border-t border-slate-200">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+                        Settings
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">help</span>
+                        Support
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col ml-sidebar-width h-screen">
+<!-- Shared Component: TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flex justify-between items-center w-full px-lg ml-sidebar-width" style="width: calc(100% - var(--spacing-sidebar-width));">
+<!-- Left: Search/Links -->
+<div class="flex items-center gap-6">
+<!-- Search representation -->
+<div class="relative w-64 hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full pl-9 pr-4 py-1.5 bg-slate-100 border-none rounded-full text-sm focus:ring-2 focus:ring-slate-300 transition-all" placeholder="Search menu..." type="text"/>
+</div>
+<!-- Navigation Links -->
+<nav class="hidden md:flex items-center gap-4">
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity Tap: opacity-80 transition-all uppercase" href="#">Fast Food</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity Tap: opacity-80 transition-all uppercase" href="#">Drinks</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity Tap: opacity-80 transition-all uppercase" href="#">Desserts</a>
+</nav>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-3">
+<!-- Icon Actions -->
+<button class="p-2 text-slate-500 hover:text-slate-900 rounded-full hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-slate-900 rounded-full hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined">sync</span>
+</button>
+<div class="w-px h-6 bg-slate-200 mx-1"></div>
+<!-- Text Actions -->
+<button class="text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors">Hold Order</button>
+<button class="text-sm font-medium bg-slate-900 text-white px-4 py-1.5 rounded-lg hover:bg-slate-800 transition-colors">Checkout</button>
+<!-- Profile -->
+<button class="ml-2 w-8 h-8 rounded-full bg-slate-200 overflow-hidden border border-slate-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Page Content Canvas -->
+<main class="flex-1 overflow-y-auto mt-topbar-height p-8 bg-slate-50/50">
+<!-- Page Header & Filters -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 tracking-tight">Laporan Produk Terlaris</h2>
+<p class="text-slate-500 mt-1 text-sm">Analisis performa penjualan item menu.</p>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-3">
+<div class="relative">
+<select class="appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-4 pr-10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer shadow-sm">
+<option>Semua Kategori</option>
+<option>Makanan Utama</option>
+<option>Minuman</option>
+<option>Cemilan</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-sm">expand_more</span>
+</div>
+<div class="relative">
+<select class="appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-4 pr-10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer shadow-sm">
+<option>7 Hari Terakhir</option>
+<option>30 Hari Terakhir</option>
+<option>Bulan Ini</option>
+<option>Tahun Ini</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-sm">calendar_today</span>
+</div>
+<button class="bg-white border border-slate-200 p-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 shadow-sm transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Top 10 Bar Chart Card (Spans 2 columns on large screens) -->
+<div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-semibold text-slate-900">Top 10 Menu (Qty Terjual)</h3>
+<button class="text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<!-- Conceptual Bar Chart -->
+<div class="flex-1 flex items-end gap-2 md:gap-4 h-64 mt-4 relative">
+<!-- Y-Axis Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="border-t border-slate-100 w-full h-0"></div>
+<div class="border-t border-slate-100 w-full h-0"></div>
+<div class="border-t border-slate-100 w-full h-0"></div>
+<div class="border-t border-slate-100 w-full h-0"></div>
+<div class="border-t border-slate-200 w-full h-0"></div> <!-- Base line -->
+</div>
+<!-- Bars -->
+<div class="relative w-full flex justify-between items-end h-full z-10 px-2 pb-1">
+<!-- Bar 1 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-800 rounded-t-sm h-[90%] group-hover:bg-slate-700 transition-colors relative">
+<div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs py-1 px-2 rounded whitespace-nowrap transition-opacity">450 Qty</div>
+</div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Nasi Gor...</span>
+</div>
+<!-- Bar 2 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[75%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Mie Ayam</span>
+</div>
+<!-- Bar 3 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[65%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Es Teh</span>
+</div>
+<!-- Bar 4 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[55%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Ayam Bakar</span>
+</div>
+<!-- Bar 5 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[50%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Kopi Susu</span>
+</div>
+<!-- Bar 6 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[40%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Kentang</span>
+</div>
+<!-- Bar 7 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[35%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Jus Jeruk</span>
+</div>
+<!-- Bar 8 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[30%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Sate Ayam</span>
+</div>
+<!-- Bar 9 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[25%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Dimsum</span>
+</div>
+<!-- Bar 10 -->
+<div class="w-1/12 flex flex-col items-center group cursor-pointer">
+<div class="w-full bg-slate-300 rounded-t-sm h-[15%] group-hover:bg-slate-400 transition-colors"></div>
+<span class="text-[10px] text-slate-500 mt-2 truncate w-full text-center">Air Mineral</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Stats Card -->
+<div class="bg-slate-900 rounded-xl border border-slate-800 shadow-sm p-6 text-white flex flex-col justify-between relative overflow-hidden">
+<!-- Decorative background glow -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-slate-700/30 rounded-full blur-2xl -mr-10 -mt-10"></div>
+<div>
+<h3 class="text-slate-400 text-sm font-medium mb-1">Total Pendapatan (Top 10)</h3>
+<p class="text-3xl font-bold tracking-tight">Rp 12.450.000</p>
+</div>
+<div class="space-y-4 mt-8 z-10">
+<div class="flex justify-between items-center pb-3 border-b border-slate-700/50">
+<span class="text-slate-300 text-sm">Total Qty Terjual</span>
+<span class="font-semibold text-white">1,245 Pcs</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-slate-700/50">
+<span class="text-slate-300 text-sm">Gross Profit Margin</span>
+<span class="font-semibold text-emerald-400">42.5%</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-300 text-sm">Kategori Terkuat</span>
+<span class="font-semibold text-white">Makanan Utama</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Table Section -->
+<div class="mt-6 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
+<h3 class="font-semibold text-slate-900">Detail Performa Produk</h3>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-8 pr-3 py-1.5 border border-slate-200 rounded-md text-sm focus:ring-1 focus:ring-slate-900 w-48" placeholder="Cari produk..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm whitespace-nowrap">
+<thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold border-b border-slate-200">
+<tr>
+<th class="px-6 py-4 font-medium">Rank</th>
+<th class="px-6 py-4 font-medium">Nama Produk</th>
+<th class="px-6 py-4 font-medium">Kategori</th>
+<th class="px-6 py-4 font-medium text-right">Qty Terjual</th>
+<th class="px-6 py-4 font-medium text-right">Pendapatan</th>
+<th class="px-6 py-4 font-medium text-right">Gross Profit</th>
+<th class="px-6 py-4 font-medium text-center">Trend (vs Prv)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-slate-700">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-3 font-medium text-slate-900">#1</td>
+<td class="px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-[16px]">restaurant</span>
+</div>
+<span class="font-medium text-slate-900">Nasi Goreng Spesial</span>
+</div>
+</td>
+<td class="px-6 py-3"><span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">Makanan Utama</span></td>
+<td class="px-6 py-3 text-right font-medium">450</td>
+<td class="px-6 py-3 text-right">Rp 15.750.000</td>
+<td class="px-6 py-3 text-right text-slate-600">Rp 6.300.000</td>
+<td class="px-6 py-3">
+<div class="flex justify-center">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                            +12%
+                                        </span>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-3 font-medium text-slate-900">#2</td>
+<td class="px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-[16px]">ramen_dining</span>
+</div>
+<span class="font-medium text-slate-900">Mie Ayam Jamur</span>
+</div>
+</td>
+<td class="px-6 py-3"><span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">Makanan Utama</span></td>
+<td class="px-6 py-3 text-right font-medium">380</td>
+<td class="px-6 py-3 text-right">Rp 9.500.000</td>
+<td class="px-6 py-3 text-right text-slate-600">Rp 4.180.000</td>
+<td class="px-6 py-3">
+<div class="flex justify-center">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                            +5%
+                                        </span>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-3 font-medium text-slate-900">#3</td>
+<td class="px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-[16px]">local_cafe</span>
+</div>
+<span class="font-medium text-slate-900">Es Teh Manis</span>
+</div>
+</td>
+<td class="px-6 py-3"><span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">Minuman</span></td>
+<td class="px-6 py-3 text-right font-medium">325</td>
+<td class="px-6 py-3 text-right">Rp 1.625.000</td>
+<td class="px-6 py-3 text-right text-slate-600">Rp 1.137.500</td>
+<td class="px-6 py-3">
+<div class="flex justify-center">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700">
+<span class="material-symbols-outlined text-[14px]">trending_down</span>
+                                            -2%
+                                        </span>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-3 font-medium text-slate-900">#4</td>
+<td class="px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-[16px]">kebab_dining</span>
+</div>
+<span class="font-medium text-slate-900">Ayam Bakar Madu</span>
+</div>
+</td>
+<td class="px-6 py-3"><span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">Makanan Utama</span></td>
+<td class="px-6 py-3 text-right font-medium">290</td>
+<td class="px-6 py-3 text-right">Rp 10.150.000</td>
+<td class="px-6 py-3 text-right text-slate-600">Rp 3.552.500</td>
+<td class="px-6 py-3">
+<div class="flex justify-center">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                            +8%
+                                        </span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-3 border-t border-slate-200 flex items-center justify-between bg-slate-50/50">
+<span class="text-xs text-slate-500">Menampilkan 1-4 dari 45 produk</span>
+<div class="flex gap-1">
+<button class="px-2 py-1 border border-slate-200 rounded text-slate-400 bg-white cursor-not-allowed">
+<span class="material-symbols-outlined text-[16px] block">chevron_left</span>
+</button>
+<button class="px-2 py-1 border border-slate-200 rounded text-slate-700 bg-white hover:bg-slate-50">
+<span class="material-symbols-outlined text-[16px] block">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

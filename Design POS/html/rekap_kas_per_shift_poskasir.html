@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rekap Kas per Shift - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#e1e0d9",
+                        "danger-bg": "#FCEBEB",
+                        "amber-600": "#854F0B",
+                        "surface-variant": "#e2e3e1",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e8e8e6",
+                        "surface-container-highest": "#e2e3e1",
+                        "surface": "#f9f9f7",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f1ef",
+                        "secondary": "#5f5f59",
+                        "amber-100": "#FAC775",
+                        "on-primary-container": "#fffbff",
+                        "amber-50": "#FAEEDA",
+                        "primary": "#855000",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#d7c3b1",
+                        "on-error-container": "#93000a",
+                        "outline": "#857464",
+                        "on-secondary-container": "#63635d",
+                        "on-surface": "#1a1c1b",
+                        "on-tertiary-container": "#fffbff",
+                        "gray-400": "#888780",
+                        "info-text": "#185FA5",
+                        "on-secondary-fixed": "#1b1c18",
+                        "danger-text": "#A32D2D",
+                        "gray-800": "#2C2C2A",
+                        "surface-tint": "#885200",
+                        "success-bg": "#EAF3DE",
+                        "on-background": "#1a1c1b",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-bright": "#f9f9f7",
+                        "on-tertiary-fixed": "#2a1700",
+                        "success-text": "#3B6D11",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "secondary-fixed": "#e4e2dc",
+                        "info-bg": "#E6F1FB",
+                        "surface-container-low": "#f4f4f2",
+                        "primary-container": "#a76500",
+                        "gray-600": "#444441",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-200": "#D3D1C7",
+                        "primary-fixed-dim": "#ffb869",
+                        "inverse-primary": "#ffb869",
+                        "surface-container": "#eeeeec",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffdcbb",
+                        "tertiary-container": "#a36800",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "inverse-surface": "#2f3130",
+                        "background": "#f9f9f7",
+                        "surface-dim": "#dadad8",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "amber-800": "#633806",
+                        "on-primary-fixed-variant": "#673d00",
+                        "tertiary-fixed": "#ffddb7",
+                        "tertiary": "#825100",
+                        "on-surface-variant": "#524436"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "topbar-height": "48px",
+                        "sidebar-width": "220px",
+                        "layout-margin": "28px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "caption": ["Geist"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-md": ["Instrument Serif"],
+                        "label-caps": ["Geist"],
+                        "body-md": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "display-lg": ["Instrument Serif"]
+                    },
+                    "fontSize": {
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; background-color: #FAFAF8; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
+        /* Refined Utilitarian Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D3D1C7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #888780; }
+    </style>
+</head>
+<body class="text-on-surface bg-background antialiased flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col h-full py-md w-sidebar-width h-screen fixed left-0 top-0 bg-surface-container-low dark:bg-gray-800 border-r border-outline-variant z-40">
+<div class="px-md mb-lg">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600">Terminal 01</p>
+</div>
+<div class="px-sm mb-md">
+<button class="w-full bg-amber-400 text-amber-800 rounded py-2 px-3 font-body-md text-body-md flex items-center justify-center gap-2 hover:bg-amber-500 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<ul class="flex-1 flex flex-col gap-1 px-sm">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded font-body-md text-body-md text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded font-body-md text-body-md text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="point_of_sale">point_of_sale</span>
+                    Point of Sale
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded font-body-md text-body-md text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+                    Orders
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded font-body-md text-body-md text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="restaurant_menu">restaurant_menu</span>
+                    Menu Management
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded font-body-md text-body-md text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="inventory_2">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded font-body-md text-body-md bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="analytics">analytics</span>
+                    Reports
+                </a>
+</li>
+</ul>
+<ul class="flex flex-col gap-1 px-sm mt-auto pt-md border-t border-gray-200">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded font-body-md text-body-md text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded font-body-md text-body-md text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span>
+                    Support
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-0 md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar (Shared Component) -->
+<header class="h-topbar-height fixed top-0 right-0 z-30 flex justify-between items-center w-full md:w-[calc(100%-220px)] px-lg bg-surface-bright dark:bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<nav class="hidden md:flex items-center gap-4">
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity active:opacity-80" href="#">Reports</a>
+<span class="text-gray-400 material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-primary transition-opacity active:opacity-80" href="#">Shift Financials</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-amber-50 border border-amber-200 text-amber-800 rounded px-3 py-1.5 font-label-caps text-label-caps hover:bg-amber-100 transition-colors">
+                    Hold Order
+                </button>
+<button class="bg-amber-400 text-amber-800 rounded px-4 py-1.5 font-label-caps text-label-caps hover:bg-amber-500 transition-colors">
+                    Checkout
+                </button>
+<div class="flex items-center gap-2 ml-4 border-l border-gray-200 pl-4">
+<button class="text-gray-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<button class="text-gray-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="sync">sync</span>
+</button>
+<button class="text-gray-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 mt-topbar-height p-lg max-w-7xl w-full mx-auto pb-layout-margin">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-gray-800 mb-1">Rekap Kas per Shift (#40)</h2>
+<p class="font-body-md text-body-md text-gray-600 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                        24 Oct 2023, 08:00 - 16:00
+                        <span class="mx-2 text-gray-400">|</span>
+<span class="material-symbols-outlined text-[16px]">person</span>
+                        Cashier: Budi S.
+                    </p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-lowest border border-gray-200 rounded text-gray-800 font-label-caps text-label-caps hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                        Export Excel
+                    </button>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-lowest border border-gray-200 rounded text-gray-800 font-label-caps text-label-caps hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                        Export PDF
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-sm">
+<!-- Main Summary Cards (Top Row) -->
+<div class="md:col-span-4 bg-surface-container-lowest border border-gray-200 rounded-lg p-md shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+<div class="text-gray-500 font-label-caps text-label-caps mb-2 uppercase tracking-wider">Initial Cash</div>
+<div class="font-price-lg text-price-lg text-gray-800 mb-4">Rp 500.000</div>
+<div class="h-0.5 bg-gray-100 w-full mb-4"></div>
+<div class="text-gray-500 font-label-caps text-label-caps mb-2 uppercase tracking-wider">Total Sales (Gross)</div>
+<div class="font-price-lg text-price-lg text-gray-800">Rp 4.250.000</div>
+</div>
+<div class="md:col-span-4 bg-surface-container-lowest border border-gray-200 rounded-lg p-md shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between">
+<div>
+<div class="text-gray-500 font-label-caps text-label-caps mb-2 uppercase tracking-wider flex justify-between">
+<span>Operational Expenses</span>
+<span class="bg-danger-bg text-danger-text px-2 py-0.5 rounded-full text-[9px]">- deducted</span>
+</div>
+<div class="font-price-lg text-price-lg text-gray-800 mb-2">Rp 150.000</div>
+<div class="font-caption text-caption text-gray-500 mb-4">Water, Ice, Minor supplies</div>
+</div>
+<button class="text-info-text font-label-caps text-label-caps flex items-center gap-1 hover:underline self-start">
+                        View Details <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+<div class="md:col-span-4 bg-amber-50 border border-amber-200 rounded-lg p-md shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-center items-center text-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-amber-100 rounded-bl-full opacity-50 -mr-4 -mt-4"></div>
+<div class="relative z-10 w-full">
+<div class="text-amber-800 font-label-caps text-label-caps mb-2 uppercase tracking-wider">Expected Final Cash (In Drawer)</div>
+<div class="font-display-lg text-display-lg text-amber-800 font-bold mb-1">Rp 1.850.000</div>
+<div class="font-caption text-caption text-amber-600 bg-amber-100/50 inline-block px-2 py-1 rounded">
+                            Initial + Cash Sales - Expenses
+                        </div>
+</div>
+</div>
+<!-- Payment Breakdown (Left Col) -->
+<div class="md:col-span-8 bg-surface-container-lowest border border-gray-200 rounded-lg shadow-[0_1px_2px_rgba(0,0,0,0.02)] mt-sm">
+<div class="px-md py-sm border-b border-gray-200 bg-gray-50 rounded-t-lg flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-gray-600 uppercase tracking-wider">Payment Breakdown</h3>
+<span class="font-caption text-caption text-gray-500">72 Transactions</span>
+</div>
+<div class="p-0">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 font-normal border-b-[0.5px] border-gray-200">Method</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 font-normal border-b-[0.5px] border-gray-200 text-right">Transactions</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 font-normal border-b-[0.5px] border-gray-200 text-right">Amount</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 font-normal border-b-[0.5px] border-gray-200 text-right">% of Total</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800">
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-gray-400 group-hover:text-amber-600">payments</span>
+                                        Cash
+                                    </td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right">28</td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right font-price-md text-price-md">Rp 1.500.000</td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="text-gray-500 text-[11px]">35%</span>
+<div class="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-amber-400 w-[35%]"></div></div>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-gray-400 group-hover:text-amber-600">qr_code_scanner</span>
+                                        QRIS
+                                    </td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right">34</td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right font-price-md text-price-md">Rp 2.000.000</td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="text-gray-500 text-[11px]">47%</span>
+<div class="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-info-text w-[47%]"></div></div>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-gray-400 group-hover:text-amber-600">credit_card</span>
+                                        Card (EDC)
+                                    </td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right">10</td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right font-price-md text-price-md">Rp 750.000</td>
+<td class="py-3 px-md border-b-[0.5px] border-gray-200 text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="text-gray-500 text-[11px]">18%</span>
+<div class="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gray-400 w-[18%]"></div></div>
+</div>
+</td>
+</tr>
+</tbody>
+<tfoot class="bg-gray-50/50">
+<tr>
+<td class="py-3 px-md font-label-caps text-label-caps text-gray-600">Total</td>
+<td class="py-3 px-md text-right font-body-md text-body-md font-semibold text-gray-800">72</td>
+<td class="py-3 px-md text-right font-price-md text-price-md font-semibold text-gray-800">Rp 4.250.000</td>
+<td class="py-3 px-md text-right font-caption text-caption text-gray-500">100%</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- Shift Reconciliation & Actions (Right Col) -->
+<div class="md:col-span-4 mt-sm flex flex-col gap-sm">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-lg p-md shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+<h3 class="font-label-caps text-label-caps text-gray-600 uppercase tracking-wider mb-4">Shift Reconciliation</h3>
+<div class="space-y-4">
+<div>
+<label class="font-label-caps text-label-caps text-gray-500 block mb-1">Actual Cash Counted</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-price-md text-price-md">Rp</span>
+<input class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded bg-white text-gray-800 font-price-md text-price-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all" type="text" value="1.850.000"/>
+</div>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-success-bg border border-green-200">
+<span class="font-body-md text-body-md text-success-text flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                    Variance
+                                </span>
+<span class="font-price-md text-price-md text-success-text font-semibold">Rp 0</span>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-gray-500 block mb-1">Shift Notes</label>
+<textarea class="w-full p-2 border border-gray-200 rounded bg-white text-gray-800 font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all resize-none" placeholder="Any discrepancies or notes..." rows="2"></textarea>
+</div>
+</div>
+</div>
+<button class="w-full bg-gray-800 text-white rounded-lg py-3 font-label-caps text-label-caps flex justify-center items-center gap-2 hover:bg-gray-700 transition-colors mt-auto shadow-sm">
+<span class="material-symbols-outlined text-[18px]">lock_clock</span>
+                        Close Shift
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

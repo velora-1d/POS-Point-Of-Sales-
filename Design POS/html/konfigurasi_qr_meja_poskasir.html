@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Konfigurasi QR Meja - PosKasir</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Subtle scrollbar for operational density */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d7c3b1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #857464; }
+    </style>
+<!-- Tailwind Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-primary": "#ffb869", "surface-tint": "#885200", "on-background": "#1a1c1b", "primary": "#855000",
+                        "on-error-container": "#93000a", "on-primary-fixed-variant": "#673d00", "on-primary-fixed": "#2b1700",
+                        "surface-container-low": "#f4f4f2", "on-error": "#ffffff", "danger-text": "#A32D2D", "secondary": "#5f5f59",
+                        "on-tertiary-fixed": "#2a1700", "secondary-container": "#e1e0d9", "surface-dim": "#dadad8", "tertiary-container": "#a36800",
+                        "outline-variant": "#d7c3b1", "on-secondary": "#ffffff", "surface-container": "#eeeeec", "gray-200": "#D3D1C7",
+                        "danger-bg": "#FCEBEB", "gray-600": "#444441", "surface-variant": "#e2e3e1", "inverse-on-surface": "#f1f1ef",
+                        "success-bg": "#EAF3DE", "on-surface-variant": "#524436", "tertiary-fixed": "#ffddb7", "secondary-fixed": "#e4e2dc",
+                        "primary-fixed": "#ffdcbb", "on-tertiary-container": "#fffbff", "on-primary-container": "#fffbff",
+                        "surface-container-highest": "#e2e3e1", "info-bg": "#E6F1FB", "outline": "#857464", "info-text": "#185FA5",
+                        "tertiary": "#825100", "secondary-fixed-dim": "#c8c6c0", "on-secondary-fixed-variant": "#474742",
+                        "gray-800": "#2C2C2A", "error-container": "#ffdad6", "on-tertiary-fixed-variant": "#653e00", "on-primary": "#ffffff",
+                        "on-secondary-container": "#63635d", "error": "#ba1a1a", "surface-container-lowest": "#ffffff", "on-surface": "#1a1c1b",
+                        "background": "#f9f9f7", "primary-container": "#a76500", "primary-fixed-dim": "#ffb869", "on-secondary-fixed": "#1b1c18",
+                        "surface-bright": "#f9f9f7", "amber-600": "#854F0B", "on-tertiary": "#ffffff", "tertiary-fixed-dim": "#ffb95d",
+                        "amber-50": "#FAEEDA", "surface": "#f9f9f7", "surface-container-high": "#e8e8e6", "success-text": "#3B6D11",
+                        "amber-800": "#633806", "inverse-surface": "#2f3130", "amber-100": "#FAC775", "gray-400": "#888780"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"
+                    },
+                    spacing: {
+                        "lg": "24px", "md": "16px", "sidebar-width": "220px", "base": "4px", "topbar-height": "48px",
+                        "xs": "4px", "layout-margin": "28px", "xl": "32px", "sm": "8px"
+                    },
+                    fontFamily: {
+                        "body-md": ["Geist"], "price-md": ["JetBrains Mono"], "label-caps": ["Geist"], "caption": ["Geist"],
+                        "display-md": ["Instrument Serif"], "price-lg": ["JetBrains Mono"], "headline-sm": ["Geist"],
+                        "display-lg": ["Instrument Serif"], "body-lg": ["Geist"]
+                    },
+                    fontSize: {
+                        "body-md": ["13px", { lineHeight: "18px", fontWeight: "500" }],
+                        "price-md": ["13px", { lineHeight: "1", fontWeight: "500" }],
+                        "label-caps": ["11px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "caption": ["11px", { lineHeight: "14px", fontWeight: "400" }],
+                        "display-md": ["24px", { lineHeight: "1.2", fontWeight: "400" }],
+                        "price-lg": ["16px", { lineHeight: "1", fontWeight: "600" }],
+                        "headline-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }],
+                        "display-lg": ["32px", { lineHeight: "1.2", fontWeight: "400" }],
+                        "body-lg": ["14px", { lineHeight: "20px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-bright text-on-surface antialiased min-h-screen font-body-md text-body-md overflow-x-hidden">
+<!-- Shared Component: SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-gray-800 text-primary dark:text-primary-fixed font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40">
+<!-- Brand Header -->
+<div class="px-md pb-lg mb-sm border-b border-outline-variant">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600 mt-1">Terminal 01</p>
+</div>
+<!-- Primary Actions -->
+<div class="px-md mb-md pt-sm">
+<button class="w-full bg-primary text-on-primary py-2 px-3 rounded-xl flex items-center justify-center gap-2 hover:bg-tertiary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<!-- Main Navigation Tabs -->
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">restaurant_menu</span>
+                Menu Management
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">analytics</span>
+                Reports
+            </a>
+</div>
+<!-- Footer Tabs (Settings is Active) -->
+<div class="mt-auto px-sm pt-sm border-t border-outline-variant flex flex-col gap-1">
+<!-- Active State Applied Here -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[18px] icon-fill">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Shared Component: TopAppBar -->
+<!-- Adjusted width and left position to sit next to sidebar -->
+<header class="bg-surface-bright dark:bg-surface-dim font-label-caps text-label-caps h-topbar-height fixed top-0 right-0 z-30 border-b border-outline-variant flex justify-between items-center px-lg w-[calc(100%-220px)] left-[220px]">
+<!-- Navigation Links (Left) -->
+<div class="flex items-center gap-lg h-full">
+<a class="text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center Tap: opacity-80 transition-all uppercase" href="#">Fast Food</a>
+<a class="text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center Tap: opacity-80 transition-all uppercase" href="#">Drinks</a>
+<a class="text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity h-full flex items-center Tap: opacity-80 transition-all uppercase" href="#">Desserts</a>
+</div>
+<!-- Trailing Actions (Right) -->
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm text-on-surface-variant border-r border-outline-variant pr-md">
+<button class="hover:bg-surface-container-high p-1.5 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="hover:bg-surface-container-high p-1.5 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+</button>
+</div>
+<button class="text-gray-600 bg-transparent hover:bg-surface-container-low border border-gray-200 px-3 py-1.5 rounded-lg transition-colors">Hold Order</button>
+<button class="bg-amber-400 text-amber-800 px-4 py-1.5 rounded-lg hover:bg-amber-500 transition-colors">Checkout</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden ml-sm flex-shrink-0 cursor-pointer">
+<img alt="Manager Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfxeNXyCwl-E2fnsmzoHTSeSNwH1YU8IETd4rqrHNhb5G0x1x0ifQzdU15Lz0kMqogeIjTj9HkKmrthGBoQQxyhXVB6NLUf_xksZHz_jodF-P7Vpuo-3MIeoiW41bcGJAjH3QCnfn5E9cy6E6mrnnR_Y-uW5BluJHUxPFCo-lJplfoESBA7GkgXA2efhP1hghE-ZSH6XzjJe_lHo3Hs8cIl-qu-KflCMBMDk7AuNLhX6AsUwP8zo7_gH0RahJL_FpFz5BNjAfgCDIh"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas Area -->
+<main class="ml-[220px] pt-[48px] p-layout-margin min-h-screen">
+<!-- Page Header -->
+<div class="mb-lg max-w-5xl mx-auto">
+<h2 class="font-display-md text-display-md text-on-surface mb-1">Konfigurasi QR Meja</h2>
+<p class="font-body-md text-body-md text-gray-600 max-w-2xl">Kelola pengaturan URL dan desain kode QR untuk sistem pemesanan mandiri (Self-Ordering). Perubahan akan diterapkan pada semua meja.</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-lg items-start">
+<!-- Left Column: Settings -->
+<div class="md:col-span-8 flex flex-col gap-lg">
+<!-- URL Settings Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-gray-200 p-md shadow-sm">
+<div class="flex items-center justify-between mb-md border-b border-gray-200 pb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400 text-[18px]">link</span>
+                            URL &amp; Prefix Configuration
+                        </h3>
+</div>
+<div class="flex flex-col gap-md">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Base URL Domain</label>
+<input class="w-full bg-surface-container-low border border-gray-200 rounded-lg px-3 py-2 font-body-md text-body-md text-gray-600 focus:outline-none cursor-not-allowed" disabled="" type="text" value="https://order.poskasir.com/m/"/>
+<p class="font-caption text-caption text-gray-400 mt-1">Domain utama dikelola oleh sistem.</p>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Store Slug / Identifier</label>
+<div class="flex items-center relative">
+<span class="absolute left-3 text-gray-400 font-body-md text-body-md select-none">/</span>
+<input class="w-full bg-surface-container-lowest border border-gray-200 rounded-lg pl-6 pr-3 py-2 font-body-md text-body-md text-on-surface focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-shadow" type="text" value="terminal-01"/>
+</div>
+<p class="font-caption text-caption text-gray-400 mt-1">URL akhir: https://order.poskasir.com/m/terminal-01/[nomor-meja]</p>
+</div>
+</div>
+</section>
+<!-- Design Templates Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-gray-200 p-md shadow-sm">
+<div class="flex items-center justify-between mb-md border-b border-gray-200 pb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400 text-[18px]">palette</span>
+                            QR Design Template
+                        </h3>
+<span class="bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full font-label-caps text-label-caps uppercase border border-amber-200">Pro Feature</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-md">
+<!-- Template 1: Active -->
+<div class="group cursor-pointer relative">
+<div class="absolute -inset-0.5 border-2 border-amber-400 rounded-lg z-10 pointer-events-none"></div>
+<div class="bg-surface-bright border border-gray-200 rounded-lg p-sm flex flex-col items-center gap-2 h-full">
+<div class="w-20 h-20 bg-white p-1 rounded border border-gray-200">
+<img alt="QR Classic" class="w-full h-full object-contain mix-blend-multiply opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAAbr88J4Z-9TnIJAxnHItzEMHFPQgdlAx3cma5mrrGEbcqFtyWIEKa4X6FpMsQoxBS4w9P5L280HM_kDia13EPLvxutLIIcaueHa88CkoFCIcJHjxCpS02QSAr88m9JB8gR-eYp6GBE94yC7GyJfog_zk5YQaUf0nM4GZyaNm4yE_wjv6zTj35fAbcfEPmLWT68-bWFmJb5szVzwFwcENMWoN3W16IZ1sH7N9hlSi0pRYebaE3IUcyly6u59In-qUJ12bWLLQy9fI"/>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface uppercase">Classic Sharp</span>
+</div>
+<div class="absolute top-2 right-2 text-amber-600 bg-amber-50 rounded-full w-5 h-5 flex items-center justify-center z-20">
+<span class="material-symbols-outlined text-[14px] icon-fill">check_circle</span>
+</div>
+</div>
+<!-- Template 2 -->
+<div class="group cursor-pointer">
+<div class="bg-surface-bright border border-gray-200 rounded-lg p-sm flex flex-col items-center gap-2 h-full hover:border-gray-400 transition-colors">
+<div class="w-20 h-20 bg-white p-1 rounded-xl border border-gray-200 overflow-hidden">
+<img alt="QR Rounded" class="w-full h-full object-contain mix-blend-multiply opacity-60 rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDulMK4CMQKXZrtf5uw2HYWS_sM0iAouOrsj88uePh0VzgBOh9aiF9EkOLrVSI5dZCOHD2eE0XCJ6Il7VGELDoG6cIBIP1CJPT_GMPzlCfTWfORfiBnBhoF87DXuxF8s2tq_-hxvYdHBjBzIxCdqCrVpl79NDRr38aITKYo--fVtANHQE90u7FP1508fOWnB5yszhcisQCKsQQ1TVPPQFSsm7ZYRkiMBM3DM404GGGiY-JaRSODnYRoxRFakMZBZfCNLpFMfAxOmpI9" style="border-radius: 8px;"/>
+</div>
+<span class="font-label-caps text-label-caps text-gray-600 uppercase group-hover:text-on-surface">Modern Rounded</span>
+</div>
+</div>
+<!-- Template 3 -->
+<div class="group cursor-pointer">
+<div class="bg-surface-bright border border-gray-200 rounded-lg p-sm flex flex-col items-center gap-2 h-full hover:border-gray-400 transition-colors">
+<div class="w-20 h-20 bg-white p-1 rounded border border-gray-200 relative">
+<img alt="QR Branded" class="w-full h-full object-contain mix-blend-multiply opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKbWB-cK57CkY7Z0FLopu6OnKnQdLWrYiCuA_LzItWWJcX0uS8n_JV4EPBpkh4kmYuU_ouvwYTb-HMxbFR62qgakzbNueSSKWbd8Of-Oeuciw3lszGWqTep38XRBt2LUXjUPEGLqi8oLWLlu2kK7lUWm6cSjzEOQWLUDJ2OjVihlgRsQ_k8RX04Wkc0H6wylziVRVagYs4t0CrDmUfxgQZpNCbjO3A_kOxU9gHPLFxFXRkntEaU8-0se0G-lwiD1TDHNoPsRBLXPtK"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-4 h-4 bg-primary rounded-full border-2 border-white"></div>
+</div>
+</div>
+<span class="font-label-caps text-label-caps text-gray-600 uppercase group-hover:text-on-surface">Branded Center</span>
+</div>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-gray-200">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">QR Primary Color</label>
+<div class="flex items-center gap-2">
+<button class="w-6 h-6 rounded-full bg-black ring-2 ring-offset-2 ring-gray-400 focus:outline-none"></button>
+<button class="w-6 h-6 rounded-full bg-primary hover:scale-110 transition-transform focus:outline-none"></button>
+<button class="w-6 h-6 rounded-full bg-[#1e3a8a] hover:scale-110 transition-transform focus:outline-none"></button>
+<button class="w-6 h-6 rounded-full bg-[#065f46] hover:scale-110 transition-transform focus:outline-none"></button>
+<div class="w-[1px] h-4 bg-gray-200 mx-2"></div>
+<button class="font-caption text-caption text-gray-600 flex items-center gap-1 hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]">colorize</span> Custom
+                            </button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Preview & Actions -->
+<div class="md:col-span-4 flex flex-col gap-lg sticky top-[76px]">
+<!-- Live Preview Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
+<div class="bg-surface-container-low px-md py-sm border-b border-gray-200 flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-600 text-[16px]">visibility</span>
+<span class="font-label-caps text-label-caps text-gray-600 uppercase">Live Preview (Table 01)</span>
+</div>
+<div class="p-lg flex flex-col items-center justify-center bg-white relative">
+<!-- Decorative background element for preview -->
+<div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#1a1c1b 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="relative z-10 bg-white p-4 border border-gray-200 shadow-sm rounded-lg flex flex-col items-center w-full max-w-[200px]">
+<div class="w-full aspect-square bg-gray-50 border border-gray-100 rounded mb-3 flex items-center justify-center p-2">
+<img alt="Live QR Preview" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVwQhFXYbLFyT3c7mrORUIgEkcK1SRNwNqwO32NOxGW-7419add90hIpwYY1nBAdspufzXht391X7Sq4-4VGMS9oPt9DYyy3kxevFm-Fq3b8Dl6T3E6WhR9W5Ix7O7eAjdqfLjYFN5eVyYAQSwSO0lcjN5NNlGVezgWRmnsfD6XPtYe-3Np2wVhyj4DN74gdfdelKq8gAQCo6Ixzpo-qb7Nj0eFtnuO1A-oO858qLnxXIL38Obtpn_55Xq7zqGIsPJ4pVbbQD90Vm0"/>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface text-center leading-tight">Meja 01</h4>
+<p class="font-caption text-caption text-gray-500 text-center mt-1">Scan to order</p>
+</div>
+</div>
+<div class="bg-info-bg px-md py-sm border-t border-gray-200 flex items-start gap-2">
+<span class="material-symbols-outlined text-info-text text-[16px] mt-0.5">info</span>
+<p class="font-caption text-caption text-info-text">Preview ini menampilkan contoh untuk Meja 01. Setiap meja akan memiliki kode unik.</p>
+</div>
+</section>
+<!-- Bulk Action Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-gray-200 p-md shadow-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Generate &amp; Apply</h3>
+<p class="font-caption text-caption text-gray-600 mb-md line-clamp-2">Perbarui konfigurasi dan buat ulang kode QR untuk seluruh 24 meja aktif di sistem.</p>
+<button class="w-full bg-amber-400 text-amber-800 font-body-md text-body-md py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-amber-500 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+                        Bulk Regenerate QR
+                    </button>
+<div class="mt-3 flex items-center justify-center gap-1 text-gray-400">
+<span class="material-symbols-outlined text-[14px]">history</span>
+<span class="font-caption text-caption">Terakhir diperbarui: Hari ini, 08:42</span>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

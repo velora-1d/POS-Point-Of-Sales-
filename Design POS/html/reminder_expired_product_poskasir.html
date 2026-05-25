@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reminder Expired Product - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital,wght@0,400;0,600;1,400&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#e1e0d9",
+                      "danger-bg": "#FCEBEB",
+                      "amber-600": "#854F0B",
+                      "surface-variant": "#e2e3e1",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-high": "#e8e8e6",
+                      "surface-container-highest": "#e2e3e1",
+                      "surface": "#f9f9f7",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#f1f1ef",
+                      "secondary": "#5f5f59",
+                      "amber-100": "#FAC775",
+                      "on-primary-container": "#fffbff",
+                      "amber-50": "#FAEEDA",
+                      "primary": "#855000",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#d7c3b1",
+                      "on-error-container": "#93000a",
+                      "outline": "#857464",
+                      "on-secondary-container": "#63635d",
+                      "on-surface": "#1a1c1b",
+                      "on-tertiary-container": "#fffbff",
+                      "gray-400": "#888780",
+                      "info-text": "#185FA5",
+                      "on-secondary-fixed": "#1b1c18",
+                      "danger-text": "#A32D2D",
+                      "gray-800": "#2C2C2A",
+                      "surface-tint": "#885200",
+                      "success-bg": "#EAF3DE",
+                      "on-background": "#1a1c1b",
+                      "on-primary-fixed": "#2b1700",
+                      "surface-bright": "#f9f9f7",
+                      "on-tertiary-fixed": "#2a1700",
+                      "success-text": "#3B6D11",
+                      "tertiary-fixed-dim": "#ffb95d",
+                      "secondary-fixed": "#e4e2dc",
+                      "info-bg": "#E6F1FB",
+                      "surface-container-low": "#f4f4f2",
+                      "primary-container": "#a76500",
+                      "gray-600": "#444441",
+                      "on-secondary-fixed-variant": "#474742",
+                      "gray-200": "#D3D1C7",
+                      "primary-fixed-dim": "#ffb869",
+                      "inverse-primary": "#ffb869",
+                      "surface-container": "#eeeeec",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#ffdcbb",
+                      "tertiary-container": "#a36800",
+                      "secondary-fixed-dim": "#c8c6c0",
+                      "inverse-surface": "#2f3130",
+                      "background": "#f9f9f7",
+                      "surface-dim": "#dadad8",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "amber-800": "#633806",
+                      "on-primary-fixed-variant": "#673d00",
+                      "tertiary-fixed": "#ffddb7",
+                      "tertiary": "#825100",
+                      "on-surface-variant": "#524436"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "lg": "24px",
+                      "xs": "4px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "topbar-height": "48px",
+                      "sidebar-width": "220px",
+                      "layout-margin": "28px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "caption": [
+                              "Geist"
+                      ],
+                      "price-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "display-md": [
+                              "Instrument Serif"
+                      ],
+                      "label-caps": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "price-md": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-sm": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ],
+                      "display-lg": [
+                              "Instrument Serif"
+                      ]
+              },
+              "fontSize": {
+                      "caption": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "price-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "price-md": [
+                              "13px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-hidden selection:bg-amber-100 selection:text-amber-800">
+<!-- TopAppBar -->
+<header class="bg-surface-bright h-topbar-height fixed top-0 right-0 z-50 flex justify-between items-center w-full px-lg ml-sidebar-width border-b border-outline-variant shadow-sm transition-all duration-300 md:w-[calc(100%-220px)] md:ml-[220px]">
+<div class="flex items-center gap-sm">
+<span class="font-display-md text-display-md text-primary font-black">PosKasir</span>
+<div class="h-4 w-px bg-gray-200 mx-2"></div>
+<nav class="hidden md:flex gap-md">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80 hover:opacity-100 py-1" href="#">Fast Food</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80 hover:opacity-100 py-1" href="#">Drinks</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80 hover:opacity-100 py-1" href="#">Desserts</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex items-center gap-xs">
+<button class="bg-amber-400 text-amber-800 px-3 py-1.5 rounded font-label-caps text-label-caps hover:bg-amber-500 transition-colors">Checkout</button>
+<button class="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded font-label-caps text-label-caps hover:bg-amber-100 transition-colors">Hold Order</button>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<button class="hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">notifications</span></button>
+<button class="hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">sync</span></button>
+<button class="hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="bg-surface-container-low w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40 hidden md:flex transition-transform duration-300">
+<div class="px-md mb-xl flex items-center gap-3">
+<div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-primary font-bold overflow-hidden" data-alt="A small circular logo placeholder featuring the stylized letter P in a warm amber tone, set against a pristine white background. Professional and minimalist design suitable for a point-of-sale system icon.">
+                  P
+             </div>
+<div>
+<h1 class="font-display-md text-display-md text-primary font-bold leading-none">PosKasir</h1>
+<p class="font-caption text-caption text-gray-400 mt-1">Terminal 01</p>
+</div>
+</div>
+<nav class="flex-1 px-sm flex flex-col gap-1">
+<a class="flex items-center gap-3 py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-[0.99] duration-150">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-[0.99] duration-150">point_of_sale</span>
+<span>Point of Sale</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-[0.99] duration-150">receipt_long</span>
+<span>Orders</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-[0.99] duration-150">restaurant_menu</span>
+<span>Menu Management</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 bg-surface-container text-gray-800 border-l-2 border-primary font-body-md text-body-md group active" href="#">
+<span class="material-symbols-outlined text-[20px] scale-[0.99] duration-150 fill">inventory_2</span>
+<span class="font-bold">Inventory</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-[0.99] duration-150">analytics</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="px-md mt-auto">
+<button class="w-full bg-amber-400 text-amber-800 py-2 rounded-md font-label-caps text-label-caps hover:bg-amber-500 transition-colors shadow-sm flex justify-center items-center gap-2 mb-md">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                 New Order
+             </button>
+<nav class="flex flex-col gap-1 border-t border-gray-200 pt-sm">
+<a class="flex items-center gap-3 py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span>Support</span>
+</a>
+</nav>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="mt-topbar-height md:ml-sidebar-width p-lg pb-layout-margin min-h-[calc(100vh-48px)] overflow-y-auto">
+<div class="max-w-6xl mx-auto space-y-md">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 pb-4">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-gray-800">Reminder Expired Product</h2>
+<p class="font-body-md text-body-md text-gray-400 mt-1">Review products nearing their expiration date to manage stock rotation.</p>
+</div>
+<!-- Filters & Actions -->
+<div class="flex flex-wrap gap-2 items-center">
+<div class="relative group">
+<select class="appearance-none bg-surface-container-lowest border border-gray-200 text-gray-600 font-label-caps text-label-caps rounded py-1.5 pl-3 pr-8 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-shadow">
+<option value="all">All Categories</option>
+<option value="dairy">Dairy</option>
+<option value="meat">Meat</option>
+<option value="produce">Produce</option>
+<option value="dry">Dry Goods</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</div>
+</div>
+<button class="bg-surface-container-lowest border border-gray-200 text-gray-600 px-3 py-1.5 rounded font-label-caps text-label-caps hover:bg-gray-50 transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">print</span>
+                        Print List
+                    </button>
+</div>
+</div>
+<!-- Bento/Grid Summary (High-end UI detail instead of standard list header) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-lg">
+<div class="bg-danger-bg rounded-xl border border-danger-bg p-4 flex flex-col justify-between shadow-sm relative overflow-hidden group hover:-translate-y-0.5 transition-transform">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-danger-text opacity-5 rounded-full blur-xl group-hover:scale-110 transition-transform"></div>
+<div class="flex items-center gap-2 mb-2 z-10">
+<span class="material-symbols-outlined text-danger-text text-[20px]">warning</span>
+<h3 class="font-label-caps text-label-caps text-danger-text">Kadaluarsa</h3>
+</div>
+<div class="z-10 flex items-baseline gap-2">
+<span class="font-display-md text-[32px] text-danger-text leading-none">12</span>
+<span class="font-caption text-caption text-danger-text opacity-80">items</span>
+</div>
+</div>
+<div class="bg-amber-50 rounded-xl border border-amber-100 p-4 flex flex-col justify-between shadow-sm relative overflow-hidden group hover:-translate-y-0.5 transition-transform">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-400 opacity-5 rounded-full blur-xl group-hover:scale-110 transition-transform"></div>
+<div class="flex items-center gap-2 mb-2 z-10">
+<span class="material-symbols-outlined text-amber-800 text-[20px]">schedule</span>
+<h3 class="font-label-caps text-label-caps text-amber-800">Segera</h3>
+</div>
+<div class="z-10 flex items-baseline gap-2">
+<span class="font-display-md text-[32px] text-amber-800 leading-none">34</span>
+<span class="font-caption text-caption text-amber-800 opacity-80">items</span>
+</div>
+</div>
+<div class="bg-success-bg rounded-xl border border-success-bg p-4 flex flex-col justify-between shadow-sm relative overflow-hidden group hover:-translate-y-0.5 transition-transform">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-success-text opacity-5 rounded-full blur-xl group-hover:scale-110 transition-transform"></div>
+<div class="flex items-center gap-2 mb-2 z-10">
+<span class="material-symbols-outlined text-success-text text-[20px]">check_circle</span>
+<h3 class="font-label-caps text-label-caps text-success-text">Aman</h3>
+</div>
+<div class="z-10 flex items-baseline gap-2">
+<span class="font-display-md text-[32px] text-success-text leading-none">156</span>
+<span class="font-caption text-caption text-success-text opacity-80">items</span>
+</div>
+</div>
+</div>
+<!-- Data Table Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-gray-200 overflow-hidden shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)]">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-gray-200">
+<th class="font-label-caps text-label-caps text-gray-400 py-2.5 px-4 font-normal whitespace-nowrap">Product Name</th>
+<th class="font-label-caps text-label-caps text-gray-400 py-2.5 px-4 font-normal whitespace-nowrap">Category</th>
+<th class="font-label-caps text-label-caps text-gray-400 py-2.5 px-4 font-normal whitespace-nowrap">Expiry Date</th>
+<th class="font-label-caps text-label-caps text-gray-400 py-2.5 px-4 font-normal whitespace-nowrap text-right">Days Remaining</th>
+<th class="font-label-caps text-label-caps text-gray-400 py-2.5 px-4 font-normal whitespace-nowrap text-center">Status</th>
+<th class="font-label-caps text-label-caps text-gray-400 py-2.5 px-4 font-normal whitespace-nowrap text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800 divide-y divide-gray-200/50">
+<!-- Row 1: Kadaluarsa -->
+<tr class="hover:bg-gray-50/50 transition-colors group">
+<td class="py-2.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gray-100 flex-shrink-0 bg-cover bg-center" data-alt="A close-up studio shot of a fresh bottle of artisanal milk standing on a clean white surface. Soft, natural high-key lighting accentuates the crisp white liquid inside the clear glass bottle. The background is a minimalist warm gray, giving a highly professional and hygienic presentation suitable for a premium dairy product listing." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2Sr6UBy4cz9O7FT19GpZEbx1cmhmXgAKYBJPePcfjNYnOzc9ZvK3AtUuthYIOP-gvpHQdCzpcYdkVYF3U_RpceNYRlnu6joFzXnPyJEtC815wlJSwd2BHOZ6sXVtYF3xrD4_QNlVWEaQjRAFsTug0RI5J_XLIiLsGemzwE-8rWtOxMQTqwI7sc15xMd3uBFe9T3qz_eU1FK1SmidsuzuM1bYO20ynassf3vC4jl9I9VWtcz6xgYfb0YzNzXZzhjMMJwTyCJIUvIaQ');"></div>
+<span class="font-medium">Fresh Whole Milk (1L)</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-gray-600">Dairy</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-danger-text">24 Oct 2023</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-danger-text">-2</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-danger-bg text-danger-text font-label-caps text-[10px] uppercase tracking-wider border border-danger-text/20">
+                                        Kadaluarsa
+                                    </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-gray-400 hover:text-danger-text transition-colors p-1 opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Segera -->
+<tr class="hover:bg-gray-50/50 transition-colors group">
+<td class="py-2.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gray-100 flex-shrink-0 bg-cover bg-center" data-alt="A top-down view of premium cuts of raw beef steak resting on a minimalist dark slate board. Subtle warm overhead lighting highlights the marbling of the meat. The composition is tight and professional, typical of high-end restaurant inventory photography, set against a muted, neutral background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdLpkRMNbjbf90kh-RKoCHU58cAEo_JeMSFKQmE8cvtSYOQWTywiSUnf69SlgsSGOCF5mNSRZ0QErzS_9nV03kZKAEJCieUGr1z6NScOF_rHVQCQqtgQJyiL0zaws9tGC5r0slz-ParTu1HNnY4Hb1bIxixCMHhD-NnFHbRt_LNc-90DGKpx4G6L8rC_b5wsDYaUiZnAMYFXWkwRdhE3ClkuCLI3Ld9y4DAcA2xc0sXOAW2O86K0bebNMb_-JoyE53Tc35_Gmel-5F');"></div>
+<span class="font-medium">Premium Ribeye Steak</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-gray-600">Meat</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-amber-600">28 Oct 2023</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-amber-600">2</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-label-caps text-[10px] uppercase tracking-wider border border-amber-200">
+                                        Segera
+                                    </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors p-1 opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Segera -->
+<tr class="hover:bg-gray-50/50 transition-colors group">
+<td class="py-2.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gray-100 flex-shrink-0 bg-cover bg-center flex items-center justify-center text-gray-400">
+<span class="material-symbols-outlined text-[16px]">egg</span>
+</div>
+<span class="font-medium">Organic Brown Eggs (Dozen)</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-gray-600">Dairy</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-amber-600">30 Oct 2023</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-amber-600">4</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-label-caps text-[10px] uppercase tracking-wider border border-amber-200">
+                                        Segera
+                                    </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors p-1 opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Aman -->
+<tr class="hover:bg-gray-50/50 transition-colors group">
+<td class="py-2.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gray-100 flex-shrink-0 bg-cover bg-center flex items-center justify-center text-gray-400">
+<span class="material-symbols-outlined text-[16px]">local_florist</span>
+</div>
+<span class="font-medium">Romaine Lettuce (Box)</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-gray-600">Produce</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-gray-600">05 Nov 2023</td>
+<td class="py-2.5 px-4 font-price-md text-price-md text-right text-gray-600">10</td>
+<td class="py-2.5 px-4 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-success-bg text-success-text font-label-caps text-[10px] uppercase tracking-wider border border-success-text/20">
+                                        Aman
+                                    </span>
+</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors p-1 opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="bg-surface-container-low border-t border-gray-200 px-4 py-3 flex items-center justify-between sm:px-6">
+<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+<div>
+<p class="font-caption text-caption text-gray-600">
+                                Showing <span class="font-medium text-gray-800">1</span> to <span class="font-medium text-gray-800">4</span> of <span class="font-medium text-gray-800">202</span> results
+                            </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+<button class="relative inline-flex items-center rounded-l-md px-2 py-1 text-gray-400 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 border border-gray-200 bg-surface-container-lowest">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button aria-current="page" class="relative z-10 inline-flex items-center bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-800 focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600 border border-amber-200">1</button>
+<button class="relative inline-flex items-center px-3 py-1 text-sm font-semibold text-gray-600 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 border border-gray-200 bg-surface-container-lowest">2</button>
+<button class="relative inline-flex items-center px-3 py-1 text-sm font-semibold text-gray-600 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 border border-gray-200 bg-surface-container-lowest">3</button>
+<span class="relative inline-flex items-center px-3 py-1 text-sm font-semibold text-gray-600 border border-gray-200 bg-surface-container-lowest">...</span>
+<button class="relative inline-flex items-center rounded-r-md px-2 py-1 text-gray-400 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 border border-gray-200 bg-surface-container-lowest">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

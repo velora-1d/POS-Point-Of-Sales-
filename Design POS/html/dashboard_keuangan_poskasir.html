@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Dashboard Keuangan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "amber-50": "#FAEEDA",
+                        "gray-800": "#2C2C2A",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "danger-bg": "#FCEBEB",
+                        "surface-variant": "#e2e3e1",
+                        "primary-fixed": "#ffdcbb",
+                        "info-bg": "#E6F1FB",
+                        "amber-800": "#633806",
+                        "error": "#ba1a1a",
+                        "success-text": "#3B6D11",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#825100",
+                        "surface-container": "#eeeeec",
+                        "success-bg": "#EAF3DE",
+                        "on-secondary-fixed-variant": "#474742",
+                        "inverse-primary": "#ffb869",
+                        "primary": "#855000",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f7",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#a36800",
+                        "gray-400": "#888780",
+                        "on-secondary-container": "#63635d",
+                        "tertiary-fixed": "#ffddb7",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#e1e0d9",
+                        "primary-container": "#a76500",
+                        "info-text": "#185FA5",
+                        "amber-600": "#854F0B",
+                        "surface-container-highest": "#e2e3e1",
+                        "surface-bright": "#f9f9f7",
+                        "primary-fixed-dim": "#ffb869",
+                        "gray-600": "#444441",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#673d00",
+                        "amber-100": "#FAC775",
+                        "background": "#f9f9f7",
+                        "surface-dim": "#dadad8",
+                        "on-background": "#1a1c1b",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-on-surface": "#f1f1ef",
+                        "inverse-surface": "#2f3130",
+                        "on-surface": "#1a1c1b",
+                        "outline": "#857464",
+                        "secondary": "#5f5f59",
+                        "surface-container-low": "#f4f4f2",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "danger-text": "#A32D2D",
+                        "outline-variant": "#d7c3b1",
+                        "on-tertiary-container": "#fffbff",
+                        "on-secondary-fixed": "#1b1c18",
+                        "secondary-fixed": "#e4e2dc",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#524436",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-tint": "#885200",
+                        "surface-container-high": "#e8e8e6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "gray-200": "#D3D1C7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "base": "4px",
+                        "topbar-height": "48px",
+                        "sidebar-width": "220px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Instrument Serif"],
+                        "body-md": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "price-lg": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "label-caps": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "caption": ["Geist"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        body { background-color: theme('colors.background'); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="text-on-surface antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low dark:bg-gray-800 flex flex-col h-full py-md z-40">
+<div class="px-lg mb-xl">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600">Terminal 01</p>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-primary text-on-primary font-body-md text-body-md py-2 rounded-lg hover:opacity-90 transition-opacity">New Order</button>
+</div>
+<ul class="flex-1 px-md space-y-1">
+<li>
+<a class="flex items-center px-3 py-2 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary font-body-md text-body-md hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high font-body-md text-body-md hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">point_of_sale</span>
+                    Point of Sale
+                </a>
+</li>
+<li>
+<a class="flex items-center px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high font-body-md text-body-md hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">receipt_long</span>
+                    Orders
+                </a>
+</li>
+<li>
+<a class="flex items-center px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high font-body-md text-body-md hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">restaurant_menu</span>
+                    Menu Management
+                </a>
+</li>
+<li>
+<a class="flex items-center px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high font-body-md text-body-md hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high font-body-md text-body-md hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">analytics</span>
+                    Reports
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-md space-y-1">
+<a class="flex items-center px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high font-body-md text-body-md transition-colors" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">settings</span>
+                Settings
+            </a>
+<a class="flex items-center px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high font-body-md text-body-md transition-colors" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-sidebar-width flex flex-col h-screen">
+<!-- TopAppBar -->
+<header class="h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant bg-surface-bright dark:bg-surface-dim flex justify-between items-center w-[calc(100%-220px)] px-lg">
+<nav class="flex items-center space-x-md">
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity opacity-80 transition-all uppercase" href="#">Fast Food</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity opacity-80 transition-all uppercase" href="#">Drinks</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity opacity-80 transition-all uppercase" href="#">Desserts</a>
+</nav>
+<div class="flex items-center space-x-sm">
+<button class="p-1 text-gray-600 hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-1 text-gray-600 hover:text-primary transition-colors"><span class="material-symbols-outlined">sync</span></button>
+<button class="p-1 text-gray-600 hover:text-primary transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+<div class="h-4 w-px bg-gray-200 mx-2"></div>
+<button class="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 rounded font-label-caps text-label-caps uppercase">Hold Order</button>
+<button class="px-3 py-1 bg-amber-400 text-amber-800 rounded font-label-caps text-label-caps uppercase">Checkout</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto mt-topbar-height p-layout-margin">
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-gray-800">Financial Overview</h2>
+<p class="font-body-md text-body-md text-gray-600 mt-1">Today's performance vs previous period</p>
+</div>
+<div class="flex space-x-2">
+<button class="px-3 py-1.5 bg-surface-container-lowest border border-gray-200 text-gray-800 rounded font-label-caps text-label-caps flex items-center hover:bg-gray-50 transition-colors uppercase">
+<span class="material-symbols-outlined text-[16px] mr-1">calendar_today</span>
+                        Today
+                    </button>
+<button class="px-3 py-1.5 bg-surface-container-lowest border border-gray-200 text-gray-800 rounded font-label-caps text-label-caps flex items-center hover:bg-gray-50 transition-colors uppercase">
+<span class="material-symbols-outlined text-[16px] mr-1">download</span>
+                        Export
+                    </button>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-lg">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps text-gray-600 uppercase">Daily Revenue</span>
+<span class="material-symbols-outlined text-gray-400 text-[18px]">payments</span>
+</div>
+<div class="font-price-lg text-[24px] text-gray-800 mb-1">Rp 12.450.000</div>
+<div class="flex items-center">
+<span class="px-2 py-0.5 bg-success-bg text-success-text rounded-full font-label-caps text-[10px] flex items-center mr-2">
+<span class="material-symbols-outlined text-[12px] mr-0.5">trending_up</span> +14.2%
+                        </span>
+<span class="font-caption text-caption text-gray-400">vs yesterday</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps text-gray-600 uppercase">Total Orders</span>
+<span class="material-symbols-outlined text-gray-400 text-[18px]">receipt</span>
+</div>
+<div class="font-price-lg text-[24px] text-gray-800 mb-1">342</div>
+<div class="flex items-center">
+<span class="px-2 py-0.5 bg-success-bg text-success-text rounded-full font-label-caps text-[10px] flex items-center mr-2">
+<span class="material-symbols-outlined text-[12px] mr-0.5">trending_up</span> +5.8%
+                        </span>
+<span class="font-caption text-caption text-gray-400">vs yesterday</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps text-gray-600 uppercase">Avg Order Value</span>
+<span class="material-symbols-outlined text-gray-400 text-[18px]">local_mall</span>
+</div>
+<div class="font-price-lg text-[24px] text-gray-800 mb-1">Rp 36.403</div>
+<div class="flex items-center">
+<span class="px-2 py-0.5 bg-danger-bg text-danger-text rounded-full font-label-caps text-[10px] flex items-center mr-2">
+<span class="material-symbols-outlined text-[12px] mr-0.5">trending_down</span> -1.2%
+                        </span>
+<span class="font-caption text-caption text-gray-400">vs yesterday</span>
+</div>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md mb-lg">
+<!-- Line Chart (Span 2) -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">30-Day Revenue Trend</h3>
+<button class="text-gray-400 hover:text-gray-800 transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="flex-1 min-h-[250px] relative w-full">
+<canvas id="revenueChart"></canvas>
+</div>
+</div>
+<!-- Pie Chart -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Payment Distribution</h3>
+<button class="text-gray-400 hover:text-gray-800 transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="flex-1 min-h-[200px] relative w-full flex items-center justify-center">
+<canvas id="paymentChart"></canvas>
+</div>
+<div class="mt-4 grid grid-cols-3 gap-2 text-center">
+<div>
+<div class="font-price-md text-price-md text-gray-800">45%</div>
+<div class="font-caption text-caption text-gray-500 mt-1 flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-amber-400 mr-1"></div> QRIS</div>
+</div>
+<div>
+<div class="font-price-md text-price-md text-gray-800">35%</div>
+<div class="font-caption text-caption text-gray-500 mt-1 flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-gray-800 mr-1"></div> Cash</div>
+</div>
+<div>
+<div class="font-price-md text-price-md text-gray-800">20%</div>
+<div class="font-caption text-caption text-gray-500 mt-1 flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-gray-300 mr-1"></div> Card</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-md">
+<!-- Top Products Bar Chart -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Top Performing Products</h3>
+<button class="text-gray-400 hover:text-gray-800 transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="space-y-4">
+<!-- Bar 1 -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="font-body-md text-body-md text-gray-800">Nasi Goreng Spesial</span>
+<span class="font-price-md text-price-md text-gray-800">124 sold</span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5">
+<div class="bg-amber-400 h-1.5 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<!-- Bar 2 -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="font-body-md text-body-md text-gray-800">Es Teh Manis</span>
+<span class="font-price-md text-price-md text-gray-800">98 sold</span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5">
+<div class="bg-gray-800 h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<!-- Bar 3 -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="font-body-md text-body-md text-gray-800">Ayam Bakar Madu</span>
+<span class="font-price-md text-price-md text-gray-800">76 sold</span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5">
+<div class="bg-gray-400 h-1.5 rounded-full" style="width: 50%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Transactions Table (Example structural filler to balance layout) -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-md border-b border-gray-200 flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Recent Large Transactions</h3>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50 border-b border-gray-200">
+<th class="p-2 font-label-caps text-label-caps text-gray-400 uppercase">Time</th>
+<th class="p-2 font-label-caps text-label-caps text-gray-400 uppercase">Order ID</th>
+<th class="p-2 font-label-caps text-label-caps text-gray-400 uppercase text-right">Amount</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50 transition-colors">
+<td class="p-2 font-body-md text-body-md text-gray-600">14:23</td>
+<td class="p-2 font-body-md text-body-md text-gray-800">#ORD-992</td>
+<td class="p-2 font-price-md text-price-md text-gray-800 text-right">Rp 450.000</td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50 transition-colors">
+<td class="p-2 font-body-md text-body-md text-gray-600">13:15</td>
+<td class="p-2 font-body-md text-body-md text-gray-800">#ORD-985</td>
+<td class="p-2 font-price-md text-price-md text-gray-800 text-right">Rp 320.000</td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50 transition-colors">
+<td class="p-2 font-body-md text-body-md text-gray-600">12:45</td>
+<td class="p-2 font-body-md text-body-md text-gray-800">#ORD-971</td>
+<td class="p-2 font-price-md text-price-md text-gray-800 text-right">Rp 510.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+        // Chart.js Configuration
+        document.addEventListener("DOMContentLoaded", function() {
+            // Revenue Line Chart
+            const ctxRev = document.getElementById('revenueChart').getContext('2d');
+            new Chart(ctxRev, {
+                type: 'line',
+                data: {
+                    labels: ['1', '5', '10', '15', '20', '25', '30'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [12, 19, 15, 25, 22, 30, 28],
+                        borderColor: '#a76500', // primary-container approx
+                        backgroundColor: 'rgba(250, 238, 218, 0.5)', // amber-50 approx
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#a76500',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: 'Geist', size: 11 } } },
+                        y: { border: { dash: [4, 4] }, grid: { color: '#e2e3e1' }, ticks: { font: { family: 'JetBrains Mono', size: 11 } } }
+                    }
+                }
+            });
+
+            // Payment Distribution Pie Chart
+            const ctxPay = document.getElementById('paymentChart').getContext('2d');
+            new Chart(ctxPay, {
+                type: 'doughnut',
+                data: {
+                    labels: ['QRIS', 'Cash', 'Card'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: ['#FAC775', '#2C2C2A', '#D3D1C7'], // amber-100, gray-800, gray-200
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: { legend: { display: false } }
+                }
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Pembayaran</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffdcbb",
+                        "surface-container-highest": "#e2e3e1",
+                        "on-primary-container": "#fffbff",
+                        "gray-400": "#888780",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#857464",
+                        "on-surface-variant": "#524436",
+                        "on-secondary-container": "#63635d",
+                        "on-tertiary-container": "#fffbff",
+                        "success-text": "#3B6D11",
+                        "surface-bright": "#f9f9f7",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary-fixed": "#2b1700",
+                        "gray-800": "#2C2C2A",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#d7c3b1",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "success-bg": "#EAF3DE",
+                        "primary-container": "#a76500",
+                        "info-text": "#185FA5",
+                        "surface": "#f9f9f7",
+                        "on-surface": "#1a1c1b",
+                        "primary-fixed-dim": "#ffb869",
+                        "background": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "primary": "#855000",
+                        "gray-200": "#D3D1C7",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e2e3e1",
+                        "secondary": "#5f5f59",
+                        "surface-tint": "#885200",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "gray-600": "#444441",
+                        "on-error": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "surface-container-low": "#f4f4f2",
+                        "error": "#ba1a1a",
+                        "amber-100": "#FAC775",
+                        "surface-dim": "#dadad8",
+                        "secondary-fixed": "#e4e2dc",
+                        "amber-600": "#854F0B",
+                        "amber-50": "#FAEEDA",
+                        "surface-container": "#eeeeec",
+                        "inverse-on-surface": "#f1f1ef",
+                        "danger-bg": "#FCEBEB",
+                        "amber-800": "#633806",
+                        "secondary-container": "#e1e0d9",
+                        "info-bg": "#E6F1FB",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#825100",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2f3130",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1b1c18",
+                        "on-secondary-fixed-variant": "#474742",
+                        "tertiary-container": "#a36800",
+                        "danger-text": "#A32D2D",
+                        "inverse-primary": "#ffb869"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "md": "16px",
+                        "layout-margin": "28px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sidebar-width": "220px",
+                        "base": "4px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "body-lg": ["Geist"],
+                        "label-caps": ["Geist"],
+                        "body-md": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-lg": ["Instrument Serif"],
+                        "caption": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #FAFAF8; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 20px;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased overflow-hidden flex h-screen">
+<!-- App Shell: SideNavBar & TopAppBar are suppressed for transactional flow (Payment) -->
+<!-- Main Canvas for Checkout Flow -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden bg-background">
+<!-- Simplified Header for Transaction Flow -->
+<header class="h-topbar-height bg-surface-bright border-b border-outline-variant flex items-center justify-between px-lg shrink-0">
+<div class="flex items-center gap-sm">
+<button class="p-1 rounded text-gray-600 hover:bg-surface-container-high transition-colors" onclick="history.back()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-gray-800">Checkout #1042</h1>
+</div>
+<div class="font-label-caps text-label-caps text-gray-600 bg-surface-container px-2 py-1 rounded-full">
+                Terminal 01
+            </div>
+</header>
+<div class="flex-1 flex flex-row h-full overflow-hidden">
+<!-- Left Panel: Order Summary -->
+<section class="w-1/3 min-w-[320px] bg-surface-bright border-r border-outline-variant flex flex-col">
+<div class="p-md border-b border-outline-variant bg-surface-container-low shrink-0">
+<h2 class="font-label-caps text-label-caps text-gray-600 mb-xs">Order Summary</h2>
+<div class="flex justify-between items-end">
+<span class="font-body-md text-body-md text-gray-800">3 Items</span>
+<span class="font-price-lg text-price-lg text-primary">Rp 145.000</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-md space-y-sm">
+<!-- Order Item -->
+<div class="flex justify-between items-start py-sm border-b border-gray-200">
+<div>
+<p class="font-body-md text-body-md text-gray-800">Nasi Goreng Spesial</p>
+<p class="font-caption text-caption text-gray-400">Level Pedas: Sedang</p>
+</div>
+<div class="text-right">
+<p class="font-price-md text-price-md text-gray-800">Rp 45.000</p>
+<p class="font-caption text-caption text-gray-400">x1</p>
+</div>
+</div>
+<!-- Order Item -->
+<div class="flex justify-between items-start py-sm border-b border-gray-200">
+<div>
+<p class="font-body-md text-body-md text-gray-800">Sate Ayam Madura</p>
+</div>
+<div class="text-right">
+<p class="font-price-md text-price-md text-gray-800">Rp 60.000</p>
+<p class="font-caption text-caption text-gray-400">x2</p>
+</div>
+</div>
+<!-- Order Item -->
+<div class="flex justify-between items-start py-sm border-b border-gray-200">
+<div>
+<p class="font-body-md text-body-md text-gray-800">Es Teh Manis</p>
+</div>
+<div class="text-right">
+<p class="font-price-md text-price-md text-gray-800">Rp 40.000</p>
+<p class="font-caption text-caption text-gray-400">x4</p>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-container-low shrink-0 border-t border-outline-variant space-y-xs">
+<div class="flex justify-between font-body-md text-body-md text-gray-600">
+<span>Subtotal</span>
+<span class="font-price-md text-price-md">Rp 145.000</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-gray-600">
+<span>Tax (10%)</span>
+<span class="font-price-md text-price-md">Rp 14.500</span>
+</div>
+<div class="pt-sm mt-sm border-t border-gray-200 flex justify-between items-end">
+<span class="font-headline-sm text-headline-sm text-gray-800">Total</span>
+<span class="font-price-lg text-price-lg text-amber-800">Rp 159.500</span>
+</div>
+</div>
+</section>
+<!-- Right Panel: Payment Interaction -->
+<section class="flex-1 flex flex-col bg-background p-layout-margin overflow-y-auto">
+<div class="max-w-2xl mx-auto w-full flex-1 flex flex-col">
+<h2 class="font-display-md text-display-md text-gray-800 mb-lg">Pilih Metode Pembayaran</h2>
+<!-- Payment Methods Bento -->
+<div class="grid grid-cols-3 gap-sm mb-xl">
+<!-- Active Cash Method -->
+<button class="bg-amber-50 border-2 border-amber-400 rounded-xl p-md flex flex-col items-center justify-center gap-sm text-amber-800 transition-all">
+<span class="material-symbols-outlined text-[32px]">payments</span>
+<span class="font-headline-sm text-headline-sm">Tunai</span>
+</button>
+<!-- Inactive QRIS -->
+<button class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col items-center justify-center gap-sm text-gray-600 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[32px]">qr_code_scanner</span>
+<span class="font-headline-sm text-headline-sm">QRIS</span>
+</button>
+<!-- Inactive Card -->
+<button class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col items-center justify-center gap-sm text-gray-600 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[32px]">credit_card</span>
+<span class="font-headline-sm text-headline-sm">Kartu</span>
+</button>
+</div>
+<!-- Cash Input Area -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-lg flex-1 flex flex-col shadow-sm">
+<div class="mb-lg">
+<label class="font-label-caps text-label-caps text-gray-400 mb-xs block">Uang Diterima</label>
+<div class="flex items-center border-b-2 border-amber-400 pb-sm">
+<span class="font-display-md text-display-md text-gray-400 mr-sm">Rp</span>
+<input class="w-full bg-transparent font-display-lg text-display-lg text-gray-800 focus:outline-none font-price-md" readonly="" type="text" value="200.000"/>
+</div>
+</div>
+<!-- Quick Cash Buttons -->
+<div class="grid grid-cols-4 gap-sm mb-lg">
+<button class="bg-surface-container-low border border-gray-200 rounded p-sm font-price-md text-price-md text-gray-800 hover:bg-surface-container-high">Pas</button>
+<button class="bg-surface-container-low border border-gray-200 rounded p-sm font-price-md text-price-md text-gray-800 hover:bg-surface-container-high">160K</button>
+<button class="bg-surface-container-low border border-gray-200 rounded p-sm font-price-md text-price-md text-gray-800 hover:bg-surface-container-high">170K</button>
+<button class="bg-surface-container-low border border-gray-200 rounded p-sm font-price-md text-price-md text-gray-800 hover:bg-surface-container-high">200K</button>
+</div>
+<!-- Numpad -->
+<div class="grid grid-cols-3 gap-sm flex-1 mb-lg">
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">1</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">2</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">3</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">4</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">5</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">6</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">7</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">8</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">9</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">C</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md font-headline-sm text-headline-sm text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">0</button>
+<button class="bg-surface-container border border-gray-200 rounded p-md flex items-center justify-center text-gray-800 hover:bg-surface-container-high active:scale-95 transition-transform">
+<span class="material-symbols-outlined">backspace</span>
+</button>
+</div>
+<!-- Change & Action -->
+<div class="flex items-center justify-between border-t border-gray-200 pt-md mt-auto">
+<div>
+<p class="font-label-caps text-label-caps text-gray-400">Kembalian</p>
+<p class="font-price-lg text-price-lg text-success-text">Rp 40.500</p>
+</div>
+<button class="bg-amber-400 hover:bg-amber-500 text-amber-800 font-headline-sm text-headline-sm py-sm px-xl rounded-lg shadow-sm transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined">check_circle</span>
+                                Selesaikan
+                            </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

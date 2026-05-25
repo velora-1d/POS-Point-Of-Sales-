@@ -1,0 +1,260 @@
+{
+  "outlets": [
+    {
+      "name": "Mentai Restaurant - Kelapa Gading",
+      "address": "Jl. Boulevard Raya No. 12, Kelapa Gading, Jakarta Utara",
+      "phone": "081234567890",
+      "settings": {
+        "kitchen": {
+          "waiting_alert_threshold_minutes": 3,
+          "cooking_warning_threshold_minutes": 2,
+          "notification_sound_url": "https://storage.googleapis.com/pos-mentai/bell.mp3",
+          "notification_volume": 0.8
+        }
+      }
+    }
+  ],
+  "roles": [
+    {
+      "name": "Owner",
+      "type": "owner"
+    },
+    {
+      "name": "Supervisor",
+      "type": "supervisor"
+    },
+    {
+      "name": "Kasir",
+      "type": "kasir"
+    },
+    {
+      "name": "Bar",
+      "type": "bar"
+    },
+    {
+      "name": "Kitchen",
+      "type": "kitchen"
+    }
+  ],
+  "users": [
+    {
+      "role_type": "owner",
+      "name": "Mahin Utsman (Owner)",
+      "email": "owner@mentai.com",
+      "phone": "081122334455",
+      "password": "password123",
+      "approval_pin": "111111"
+    },
+    {
+      "role_type": "supervisor",
+      "name": "Agus Santoso (Supervisor)",
+      "email": "supervisor@mentai.com",
+      "phone": "081122334456",
+      "password": "password123",
+      "approval_pin": "222222"
+    },
+    {
+      "role_type": "kasir",
+      "name": "Siti Rahma (Kasir)",
+      "email": "kasir@mentai.com",
+      "phone": "081122334457",
+      "password": "password123",
+      "approval_pin": "333333"
+    },
+    {
+      "role_type": "bar",
+      "name": "Budi Utomo (Bar)",
+      "email": "bar@mentai.com",
+      "phone": "081122334458",
+      "password": "password123",
+      "approval_pin": "444444"
+    },
+    {
+      "role_type": "kitchen",
+      "name": "Chef Joko (Kitchen)",
+      "email": "kitchen@mentai.com",
+      "phone": "081122334459",
+      "password": "password123",
+      "approval_pin": "555555"
+    }
+  ],
+  "tables": [
+    { "name": "Meja 01", "capacity": 2 },
+    { "name": "Meja 02", "capacity": 2 },
+    { "name": "Meja 03", "capacity": 4 },
+    { "name": "Meja 04", "capacity": 4 },
+    { "name": "Meja 05", "capacity": 6 },
+    { "name": "VIP 01", "capacity": 8 },
+    { "name": "VIP 02", "capacity": 10 }
+  ],
+  "categories": [
+    { "name": "Mentai Rice", "description": "Nasi panggang dengan saus mentai gurih khas Jepang" },
+    { "name": "Sides", "description": "Menu pendamping gurih dan renyah" },
+    { "name": "Drinks", "description": "Minuman segar dingin dan hangat" }
+  ],
+  "products": [
+    {
+      "category_name": "Mentai Rice",
+      "name": "Salmon Mentai Rice",
+      "description": "Nasi dengan irisan salmon premium, nori, dan saus mentai panggang yang creamy.",
+      "base_price": 45000.00,
+      "hpp": 22000.00,
+      "variants": [
+        { "name": "Level 1 (Original)", "additional_price": 0.00 },
+        { "name": "Level 2 (Spicy)", "additional_price": 0.00 },
+        { "name": "Level 3 (Extra Spicy)", "additional_price": 2000.00 },
+        { "name": "Extra Mozzarella Cheese", "additional_price": 5000.00 }
+      ],
+      "prices": [
+        { "tier": "normal", "price": 45000.00 },
+        { "tier": "member", "price": 40000.00 }
+      ]
+    },
+    {
+      "category_name": "Mentai Rice",
+      "name": "Beef Mentai Rice",
+      "description": "Nasi dengan slice beef tenderloin gurih, nori, dan saus mentai bakar.",
+      "base_price": 38000.00,
+      "hpp": 18000.00,
+      "variants": [
+        { "name": "Level 1 (Original)", "additional_price": 0.00 },
+        { "name": "Level 2 (Spicy)", "additional_price": 0.00 },
+        { "name": "Level 3 (Extra Spicy)", "additional_price": 2000.00 }
+      ],
+      "prices": [
+        { "tier": "normal", "price": 38000.00 },
+        { "tier": "member", "price": 35000.00 }
+      ]
+    },
+    {
+      "category_name": "Sides",
+      "name": "Chicken Gyoza (5 pcs)",
+      "description": "Pangsit panggang ala Jepang berisi daging ayam cincang gurih.",
+      "base_price": 22000.00,
+      "hpp": 9000.00,
+      "variants": [
+        { "name": "Original", "additional_price": 0.00 },
+        { "name": "Spicy Mayo", "additional_price": 2000.00 }
+      ],
+      "prices": [
+        { "tier": "normal", "price": 22000.00 },
+        { "tier": "member", "price": 20000.00 }
+      ]
+    },
+    {
+      "category_name": "Drinks",
+      "name": "Ocha Cold / Hot",
+      "description": "Teh hijau khas Jepang, otentik dan menyegarkan.",
+      "base_price": 8000.00,
+      "hpp": 2000.00,
+      "variants": [
+        { "name": "Cold (Es)", "additional_price": 0.00 },
+        { "name": "Hot (Hangat)", "additional_price": 0.00 }
+      ],
+      "prices": [
+        { "tier": "normal", "price": 8000.00 },
+        { "tier": "member", "price": 7000.00 }
+      ]
+    },
+    {
+      "category_name": "Drinks",
+      "name": "Iced Matcha Latte",
+      "description": "Minuman susu matcha manis dengan es batu.",
+      "base_price": 18000.00,
+      "hpp": 7000.00,
+      "variants": [],
+      "prices": [
+        { "tier": "normal", "price": 18000.00 },
+        { "tier": "member", "price": 16000.00 }
+      ]
+    }
+  ],
+  "membership_tiers": [
+    {
+      "tier": "bronze",
+      "name": "Bronze Member",
+      "point_threshold": 0,
+      "point_rate_per_amount": 0.0001,
+      "discount_percent": 0.00,
+      "description": "Tier dasar keanggotaan"
+    },
+    {
+      "tier": "silver",
+      "name": "Silver Member",
+      "point_threshold": 100,
+      "point_rate_per_amount": 0.00015,
+      "discount_percent": 5.00,
+      "description": "Tier perak dengan diskon pesanan 5%"
+    },
+    {
+      "tier": "gold",
+      "name": "Gold Member",
+      "point_threshold": 500,
+      "point_rate_per_amount": 0.0002,
+      "discount_percent": 10.00,
+      "description": "Tier emas dengan diskon pesanan 10% & pelayanan VIP"
+    }
+  ],
+  "customers": [
+    {
+      "name": "Budi Santoso",
+      "phone": "081299990001",
+      "email": "budi.santoso@gmail.com",
+      "tier": "silver",
+      "total_points": 120,
+      "lifetime_points": 180
+    },
+    {
+      "name": "Dewi Lestari",
+      "phone": "081299990002",
+      "email": "dewi.lestari@gmail.com",
+      "tier": "gold",
+      "total_points": 550,
+      "lifetime_points": 600
+    }
+  ],
+  "promos": [
+    {
+      "name": "Diskon Pembukaan Mentai",
+      "code": "MENTAI10",
+      "type": "percent",
+      "apply_method": "both",
+      "discount_percent": 10.00,
+      "discount_amount": null,
+      "max_discount_amount": 15000.00,
+      "min_transaction_amount": 50000.00,
+      "can_stack": false,
+      "usage_limit": 1000,
+      "start_date": "2026-01-01 00:00:00",
+      "end_date": "2026-12-31 23:59:59",
+      "status": "active"
+    },
+    {
+      "name": "Promo Jumat Berkah",
+      "code": null,
+      "type": "nominal",
+      "apply_method": "auto",
+      "discount_percent": null,
+      "discount_amount": 5000.00,
+      "max_discount_amount": null,
+      "min_transaction_amount": 40000.00,
+      "can_stack": true,
+      "usage_limit": null,
+      "start_date": "2026-01-01 00:00:00",
+      "end_date": "2026-12-31 23:59:59",
+      "status": "active"
+    }
+  ],
+  "shift_templates": [
+    {
+      "name": "Shift Pagi",
+      "start_time": "08:00:00",
+      "end_time": "16:00:00"
+    },
+    {
+      "name": "Shift Malam",
+      "start_time": "16:00:00",
+      "end_time": "00:00:00"
+    }
+  ]
+}

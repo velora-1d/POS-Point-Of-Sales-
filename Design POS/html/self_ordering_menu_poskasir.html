@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>PosKasir - Table Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "gray-600": "#444441",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#ffb869",
+                        "danger-text": "#A32D2D",
+                        "surface-container-lowest": "#ffffff",
+                        "gray-400": "#888780",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e2e3e1",
+                        "tertiary-fixed": "#ffddb7",
+                        "error": "#ba1a1a",
+                        "gray-800": "#2C2C2A",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1b",
+                        "danger-bg": "#FCEBEB",
+                        "surface-bright": "#f9f9f7",
+                        "gray-200": "#D3D1C7",
+                        "secondary-container": "#e1e0d9",
+                        "amber-800": "#633806",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#fffbff",
+                        "info-text": "#185FA5",
+                        "on-primary": "#ffffff",
+                        "background": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "surface": "#f9f9f7",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-container-low": "#f4f4f2",
+                        "on-secondary-fixed-variant": "#474742",
+                        "success-bg": "#EAF3DE",
+                        "tertiary": "#825100",
+                        "on-surface-variant": "#524436",
+                        "on-primary-container": "#fffbff",
+                        "primary": "#855000",
+                        "surface-dim": "#dadad8",
+                        "surface-tint": "#885200",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "surface-container": "#eeeeec",
+                        "inverse-surface": "#2f3130",
+                        "outline": "#857464",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#d7c3b1",
+                        "on-background": "#1a1c1b",
+                        "info-bg": "#E6F1FB",
+                        "amber-100": "#FAC775",
+                        "tertiary-container": "#a36800",
+                        "on-primary-fixed-variant": "#673d00",
+                        "primary-fixed-dim": "#ffb869",
+                        "primary-container": "#a76500",
+                        "on-secondary-fixed": "#1b1c18",
+                        "secondary": "#5f5f59",
+                        "amber-50": "#FAEEDA",
+                        "success-text": "#3B6D11",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-container-highest": "#e2e3e1",
+                        "secondary-fixed": "#e4e2dc",
+                        "primary-fixed": "#ffdcbb",
+                        "amber-600": "#854F0B",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-secondary-container": "#63635d",
+                        "inverse-on-surface": "#f1f1ef"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "sidebar-width": "220px",
+                        "md": "16px",
+                        "base": "4px",
+                        "topbar-height": "48px",
+                        "layout-margin": "28px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Geist"],
+                        "body-md": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "display-md": ["Instrument Serif"],
+                        "caption": ["Geist"],
+                        "display-lg": ["Instrument Serif"],
+                        "body-lg": ["Geist"],
+                        "price-lg": ["JetBrains Mono"],
+                        "label-caps": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-gray-800 font-body-md antialiased pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-40 bg-surface-bright border-b border-gray-200 px-md py-sm flex justify-between items-center shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="font-display-md text-display-md text-primary font-black">PosKasir</span>
+<div class="h-4 w-px bg-gray-200"></div>
+<div class="flex items-center gap-xs text-amber-800 bg-amber-50 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[16px]">restaurant</span>
+<span class="font-label-caps text-label-caps">Meja 01</span>
+</div>
+</div>
+<button class="flex items-center gap-xs text-gray-600 hover:text-gray-800 transition-colors">
+<span class="font-label-caps text-label-caps">EN</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</header>
+<main class="px-md pt-lg max-w-2xl mx-auto">
+<!-- Search & Filter -->
+<div class="mb-lg space-y-sm">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-gray-200 rounded-lg focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 font-body-md text-body-md text-gray-800 placeholder:text-gray-400" placeholder="Search menu..." type="text"/>
+</div>
+<div class="flex overflow-x-auto no-scrollbar gap-sm pb-1">
+<button class="whitespace-nowrap px-3 py-1.5 rounded-full bg-gray-800 text-surface-container-lowest font-label-caps text-label-caps">All</button>
+<button class="whitespace-nowrap px-3 py-1.5 rounded-full bg-surface-container-lowest border border-gray-200 text-gray-600 hover:bg-surface-container-low font-label-caps text-label-caps">Main Course</button>
+<button class="whitespace-nowrap px-3 py-1.5 rounded-full bg-surface-container-lowest border border-gray-200 text-gray-600 hover:bg-surface-container-low font-label-caps text-label-caps">Drinks</button>
+<button class="whitespace-nowrap px-3 py-1.5 rounded-full bg-surface-container-lowest border border-gray-200 text-gray-600 hover:bg-surface-container-low font-label-caps text-label-caps">Snacks</button>
+<button class="whitespace-nowrap px-3 py-1.5 rounded-full bg-surface-container-lowest border border-gray-200 text-gray-600 hover:bg-surface-container-low font-label-caps text-label-caps">Desserts</button>
+</div>
+</div>
+<!-- Menu Grid -->
+<div class="grid grid-cols-1 gap-md">
+<!-- Item 1 -->
+<div class="flex gap-md p-sm bg-surface-container-lowest border border-gray-200 rounded-lg shadow-sm">
+<img alt="Nasi Goreng Spesial" class="w-24 h-24 object-cover rounded-md flex-shrink-0" data-alt="A close-up, high-quality photograph of an appetizing plate of Indonesian fried rice (Nasi Goreng) topped with a perfectly fried sunny-side-up egg and garnished with fresh cucumber slices and crispy shallots. The lighting is bright and warm, emphasizing the rich, savory textures of the dish. The setting is clean and modern, fitting a high-end restaurant menu presentation. The overall aesthetic is warm utilitarian with sharp, appealing details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkGJ6FxyVmPiDl1CCXr7xN-4JcapOjBQ6BDvFZuxWRnry-YgCbajinyAR_2aauM_SZdbs5cz_byx6rXXLfYDdMx-MOsvISO2oXIdld83Kd2JCNlLaG6Lxm70mhs1FvfkD2S18PBCRvxz9v6gda6OwD8_rE9miMn9tXpwP2ukZsRtrcZl7c0KJAbdnPtpvytCnhtjYekzo1putTuVL8Cm0Lnfy9Ra77JYE36DEJUS0t-6CfHtvBOR_gSGClvZkxrfHpSqruXafRCZih"/>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Nasi Goreng Spesial</h3>
+<span class="bg-amber-50 text-amber-800 font-label-caps text-label-caps px-2 py-0.5 rounded-full whitespace-nowrap ml-2">Popular</span>
+</div>
+<p class="font-caption text-caption text-gray-600 mt-1 line-clamp-2">Fried rice with chicken, shrimp, and a sunny side up egg.</p>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="font-price-md text-price-md text-gray-800">Rp 45.000</span>
+<div class="flex items-center bg-surface-container-low rounded-lg border border-gray-200 overflow-hidden">
+<button class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-colors">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="w-6 text-center font-body-md text-body-md font-semibold">1</span>
+<button class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-md p-sm bg-surface-container-lowest border border-gray-200 rounded-lg shadow-sm">
+<img alt="Beef Burger" class="w-24 h-24 object-cover rounded-md flex-shrink-0" data-alt="A mouth-watering, perfectly styled beef burger sitting on a clean, light-colored wooden table. The burger features a thick, juicy patty, melted cheddar cheese, crisp lettuce, and fresh tomato slices within a toasted brioche bun. The lighting is soft and natural, casting subtle, elegant shadows. The mood is inviting and appetizing, perfectly suited for a modern, refined digital menu interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3NsKvQOX6NH2ibSdQHq-YCaXIbrt-2QmBWrK8HyaDxDALFtqpngzk8JbkmzwOf1xk_aTvK84bcPZohcvZB0ptNOTedWX8OBvxDItVHYe_NhLqDt7F8mit1qXBebr6YKjwY828vpYP-WhFoEydhEEZL2BOxvDrcceUyUBdnBeHUJUusCQZ5kH0Dd8PLbYHuyXo_t58usjBS5fQprJvGvrsIP1jDgDKGi90L7M4t5oEsbNMMGeSqznJjjC5tvnLW8GS1Ot5E2EvSl7u"/>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Classic Beef Burger</h3>
+<p class="font-caption text-caption text-gray-600 mt-1 line-clamp-2">Juicy beef patty with cheese, lettuce, and our signature sauce.</p>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="font-price-md text-price-md text-gray-800">Rp 65.000</span>
+<button class="px-4 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 font-body-md text-body-md rounded-lg transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">add</span> Add
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex gap-md p-sm bg-surface-container-lowest border border-gray-200 rounded-lg shadow-sm">
+<div class="w-24 h-24 bg-surface-container-low rounded-md flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-gray-400 text-xl">local_cafe</span>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Iced Latte</h3>
+<p class="font-caption text-caption text-gray-600 mt-1 line-clamp-2">Refreshing espresso mixed with cold milk and ice.</p>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="font-price-md text-price-md text-gray-800">Rp 35.000</span>
+<button class="px-4 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 font-body-md text-body-md rounded-lg transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">add</span> Add
+                        </button>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex gap-md p-sm bg-surface-container-lowest border border-gray-200 rounded-lg shadow-sm opacity-60">
+<div class="relative w-24 h-24 flex-shrink-0">
+<img alt="Chocolate Cake" class="w-full h-full object-cover rounded-md" data-alt="A slice of rich, dark chocolate cake on a minimalist white ceramic plate. The cake has a glossy ganache finish and is garnished with a single fresh raspberry. The setting is clean and high-contrast, with a light gray background that highlights the deep brown tones of the chocolate. The lighting is sharp, creating a sophisticated and tempting dessert presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBowp38VNuCuouQTMFyiXSdPNT4b4U7U08rkc0N9Y5-ASIymhkiHwjTmLQgCgiRrwKd9qrDAO_j1ehv3tOyHZJC7xedep-HBMyS8BCxsUZZYtdP9azPwKlmhkCb9zQFewrFoPRTu8pbnZ7ou0XsBxcfJXQrspPNnQ_sDz58RbZmmBN28ePzy-r7BkpNeTwLE1IjpmaANFwY9F57WJNvSKCIZMSlofJejtWShMDonGM7OzARw6VkbjCzVRyTn39m3V98zsYKhHCP43Qu"/>
+<div class="absolute inset-0 bg-surface-container-lowest/50 rounded-md flex items-center justify-center">
+<span class="bg-gray-800 text-surface-container-lowest font-label-caps text-label-caps px-2 py-1 rounded">Sold Out</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Signature Chocolate Cake</h3>
+<p class="font-caption text-caption text-gray-600 mt-1 line-clamp-2">Decadent chocolate cake with a molten center.</p>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="font-price-md text-price-md text-gray-600 line-through">Rp 40.000</span>
+<button class="px-4 py-1.5 bg-gray-200 text-gray-400 font-body-md text-body-md rounded-lg cursor-not-allowed" disabled="">
+                            Unavailable
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Bottom Bar -->
+<div class="fixed bottom-0 left-0 right-0 p-md bg-surface-bright border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+<div class="max-w-2xl mx-auto flex items-center justify-between">
+<div>
+<p class="font-caption text-caption text-gray-600">Total (1 item)</p>
+<p class="font-price-lg text-price-lg text-gray-800">Rp 45.000</p>
+</div>
+<button class="bg-amber-600 hover:bg-primary text-on-primary px-lg py-2 rounded-lg font-headline-sm text-headline-sm shadow-sm transition-colors flex items-center gap-sm">
+                View Cart
+                <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+</button>
+</div>
+</div>
+</body></html>

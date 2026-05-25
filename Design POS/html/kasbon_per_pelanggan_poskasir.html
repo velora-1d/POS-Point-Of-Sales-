@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Detail Kasbon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "danger-text": "#A32D2D",
+                        "on-secondary-fixed": "#1b1c18",
+                        "info-text": "#185FA5",
+                        "gray-400": "#888780",
+                        "on-tertiary-container": "#fffbff",
+                        "on-surface": "#1a1c1b",
+                        "success-text": "#3B6D11",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-bright": "#f9f9f7",
+                        "on-primary-fixed": "#2b1700",
+                        "on-background": "#1a1c1b",
+                        "success-bg": "#EAF3DE",
+                        "surface-tint": "#885200",
+                        "gray-800": "#2C2C2A",
+                        "surface-container-highest": "#e2e3e1",
+                        "surface-container-high": "#e8e8e6",
+                        "surface-variant": "#e2e3e1",
+                        "surface-container-lowest": "#ffffff",
+                        "danger-bg": "#FCEBEB",
+                        "amber-600": "#854F0B",
+                        "secondary-container": "#e1e0d9",
+                        "on-secondary-container": "#63635d",
+                        "outline": "#857464",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#d7c3b1",
+                        "error": "#ba1a1a",
+                        "primary": "#855000",
+                        "amber-50": "#FAEEDA",
+                        "on-primary-container": "#fffbff",
+                        "amber-100": "#FAC775",
+                        "secondary": "#5f5f59",
+                        "surface": "#f9f9f7",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f1ef",
+                        "inverse-surface": "#2f3130",
+                        "background": "#f9f9f7",
+                        "tertiary-container": "#a36800",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "primary-fixed": "#ffdcbb",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eeeeec",
+                        "on-surface-variant": "#524436",
+                        "tertiary": "#825100",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "amber-800": "#633806",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#dadad8",
+                        "info-bg": "#E6F1FB",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "secondary-fixed": "#e4e2dc",
+                        "primary-fixed-dim": "#ffb869",
+                        "inverse-primary": "#ffb869",
+                        "gray-200": "#D3D1C7",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-600": "#444441",
+                        "primary-container": "#a76500",
+                        "surface-container-low": "#f4f4f2"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "topbar-height": "48px",
+                        "sidebar-width": "220px",
+                        "base": "4px"
+                    },
+                    fontFamily: {
+                        "price-md": ["JetBrains Mono"],
+                        "display-lg": ["Instrument Serif"],
+                        "headline-sm": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-md": ["Instrument Serif"],
+                        "caption": ["Geist"],
+                        "body-md": ["Geist"],
+                        "label-caps": ["Geist"]
+                    },
+                    fontSize: {
+                        "price-md": ["13px", { lineHeight: "1", fontWeight: "500" }],
+                        "display-lg": ["32px", { lineHeight: "1.2", fontWeight: "400" }],
+                        "headline-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }],
+                        "body-lg": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "price-lg": ["16px", { lineHeight: "1", fontWeight: "600" }],
+                        "display-md": ["24px", { lineHeight: "1.2", fontWeight: "400" }],
+                        "caption": ["11px", { lineHeight: "14px", fontWeight: "400" }],
+                        "body-md": ["13px", { lineHeight: "18px", fontWeight: "500" }],
+                        "label-caps": ["11px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }]
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; background-color: #FAFAF8; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+    </style>
+</head>
+<body class="text-on-surface antialiased overflow-hidden flex h-screen w-full">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-gray-800 font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40">
+<div class="px-md mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<div>
+<h1 class="font-display-md text-display-md text-primary font-bold leading-none">PosKasir</h1>
+<span class="font-caption text-caption text-gray-400">Terminal 01</span>
+</div>
+</div>
+<button class="mx-md mb-lg bg-primary text-on-primary rounded-xl py-2 px-4 flex justify-center items-center gap-sm hover:opacity-90 transition-opacity font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            New Order
+        </button>
+<div class="flex-1 overflow-y-auto hide-scroll px-sm space-y-1">
+<a class="flex items-center gap-md py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-md py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="flex items-center gap-md py-2 px-3 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary hover:bg-surface-container-highest transition-colors scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-md py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+                Menu Management
+            </a>
+<a class="flex items-center gap-md py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-md py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Reports
+            </a>
+</div>
+<div class="px-sm mt-auto pt-md border-t border-gray-200 border-opacity-50 space-y-1">
+<a class="flex items-center gap-md py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-md py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col ml-sidebar-width w-[calc(100%-220px)] relative">
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim font-label-caps text-label-caps h-topbar-height fixed top-0 right-0 z-30 border-b border-outline-variant flex justify-between items-center w-[calc(100%-220px)] px-lg">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm text-gray-400">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span class="cursor-pointer hover:text-gray-800 transition-colors">Daftar Pelanggan</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-gray-800 font-semibold">Detail Kasbon</span>
+</div>
+</div>
+<!-- Suppressing JSON navigation links here because this is a specific task view, replacing with contextual info -->
+<div class="flex items-center gap-lg">
+<span class="text-on-surface-variant dark:text-gray-400 opacity-50">Session: 09:41 AM</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm border-r border-gray-200 pr-md">
+<button class="p-1 rounded text-on-surface-variant hover:text-primary transition-opacity opacity-80 transition-all">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-primary transition-opacity opacity-80 transition-all">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-primary transition-opacity opacity-80 transition-all">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+<button class="text-primary hover:opacity-80 transition-opacity font-headline-sm text-headline-sm">Hold Order</button>
+<button class="bg-primary text-on-primary px-4 py-1.5 rounded-xl hover:opacity-90 transition-opacity font-headline-sm text-headline-sm">Checkout</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto p-layout-margin mt-topbar-height">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-display-lg text-display-lg text-gray-800 mb-xs">Budi Santoso</h2>
+<p class="font-body-md text-body-md text-gray-600 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">phone_iphone</span> +62 812 3456 7890
+                        <span class="text-gray-200">|</span>
+<span class="material-symbols-outlined text-[16px]">badge</span> Pelanggan Tetap
+                    </p>
+</div>
+<button class="bg-primary text-on-primary px-5 py-2.5 rounded-xl flex items-center gap-sm hover:opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+<span class="font-headline-sm text-headline-sm">Tambah Pembayaran</span>
+</button>
+</div>
+<!-- Bento Grid Summary -->
+<div class="grid grid-cols-12 gap-md mb-xl">
+<!-- Main Debt Focus -->
+<div class="col-span-12 md:col-span-5 bg-surface-container-lowest border border-gray-200 rounded-xl p-lg relative overflow-hidden flex flex-col justify-between">
+<div class="absolute top-0 right-0 w-32 h-32 bg-danger-bg rounded-bl-full opacity-50 -mr-10 -mt-10"></div>
+<div>
+<h3 class="font-label-caps text-label-caps text-gray-600 mb-sm">Total Sisa Kasbon</h3>
+<div class="font-price-lg text-[36px] font-semibold text-danger-text leading-none mb-1">Rp 1.450.000</div>
+<p class="font-caption text-caption text-gray-400">Jatuh tempo terdekat: 15 Okt 2023</p>
+</div>
+<div class="mt-md">
+<div class="w-full bg-gray-100 rounded-full h-1.5 mb-2">
+<div class="bg-danger-text h-1.5 rounded-full" style="width: 72%"></div>
+</div>
+<div class="flex justify-between font-caption text-caption text-gray-400">
+<span>Penggunaan 72%</span>
+<span>Limit: Rp 2.000.000</span>
+</div>
+</div>
+</div>
+<!-- Secondary Stats -->
+<div class="col-span-12 md:col-span-7 grid grid-cols-2 gap-md">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col justify-center">
+<div class="flex items-center gap-sm mb-2">
+<div class="w-6 h-6 rounded-full bg-success-bg text-success-text flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">south_west</span>
+</div>
+<span class="font-label-caps text-label-caps text-gray-600">Total Dibayar</span>
+</div>
+<div class="font-price-lg text-price-lg text-gray-800">Rp 3.550.000</div>
+<div class="font-caption text-caption text-gray-400 mt-1">Bulan ini: Rp 500.000</div>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col justify-center">
+<div class="flex items-center gap-sm mb-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest text-gray-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">receipt</span>
+</div>
+<span class="font-label-caps text-label-caps text-gray-600">Total Transaksi</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-gray-800">24 Pesanan</div>
+<div class="font-caption text-caption text-gray-400 mt-1">Sejak 01 Jan 2023</div>
+</div>
+<div class="col-span-2 bg-surface-container-low border border-gray-200 rounded-xl p-md flex items-center justify-between">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-gray-800">Status Akun</h4>
+<p class="font-body-md text-body-md text-gray-600">Pelanggan memiliki riwayat pembayaran yang baik.</p>
+</div>
+<span class="px-3 py-1 bg-success-bg text-success-text font-label-caps text-label-caps rounded-full border border-success-text/20">Aman</span>
+</div>
+</div>
+</div>
+<!-- History Table -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden">
+<div class="px-md py-sm border-b border-gray-200 bg-surface-bright flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Riwayat Kasbon &amp; Pembayaran</h3>
+<div class="flex gap-sm">
+<button class="px-3 py-1.5 border border-gray-200 rounded-lg font-body-md text-body-md text-gray-600 hover:bg-gray-50 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+                        </button>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-gray-200">
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 w-32">Tanggal</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400">Keterangan</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 text-right w-32">Kasbon (Keluar)</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 text-right w-32">Bayar (Masuk)</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 text-right w-32">Saldo Sisa</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800">
+<tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+<td class="py-3 px-md text-gray-600">10 Okt 2023</td>
+<td class="py-3 px-md">
+<div class="font-medium text-gray-800">Pesanan #ORD-0092</div>
+<div class="font-caption text-caption text-gray-400">Makan Siang Tim</div>
+</td>
+<td class="py-3 px-md text-right font-price-md text-danger-text">Rp 350.000</td>
+<td class="py-3 px-md text-right font-price-md text-gray-400">-</td>
+<td class="py-3 px-md text-right font-price-md">Rp 1.450.000</td>
+</tr>
+<tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors bg-success-bg/20">
+<td class="py-3 px-md text-gray-600">05 Okt 2023</td>
+<td class="py-3 px-md">
+<div class="font-medium text-gray-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-success-text">check_circle</span>
+                                    Pembayaran Cicilan
+                                </div>
+<div class="font-caption text-caption text-gray-400">Transfer Bank BCA</div>
+</td>
+<td class="py-3 px-md text-right font-price-md text-gray-400">-</td>
+<td class="py-3 px-md text-right font-price-md text-success-text">Rp 500.000</td>
+<td class="py-3 px-md text-right font-price-md">Rp 1.100.000</td>
+</tr>
+<tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+<td class="py-3 px-md text-gray-600">28 Sep 2023</td>
+<td class="py-3 px-md">
+<div class="font-medium text-gray-800">Pesanan #ORD-0045</div>
+<div class="font-caption text-caption text-gray-400">Kopi &amp; Snack Sore</div>
+</td>
+<td class="py-3 px-md text-right font-price-md text-danger-text">Rp 150.000</td>
+<td class="py-3 px-md text-right font-price-md text-gray-400">-</td>
+<td class="py-3 px-md text-right font-price-md">Rp 1.600.000</td>
+</tr>
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="py-3 px-md text-gray-600">15 Sep 2023</td>
+<td class="py-3 px-md">
+<div class="font-medium text-gray-800">Pesanan #ORD-0012</div>
+<div class="font-caption text-caption text-gray-400">Katering Acara Kantor</div>
+</td>
+<td class="py-3 px-md text-right font-price-md text-danger-text">Rp 1.450.000</td>
+<td class="py-3 px-md text-right font-price-md text-gray-400">-</td>
+<td class="py-3 px-md text-right font-price-md">Rp 1.450.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+</div>
+</body></html>

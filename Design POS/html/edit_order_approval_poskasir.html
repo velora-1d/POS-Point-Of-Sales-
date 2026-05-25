@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Edit Order - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffdcbb",
+                        "surface-container-highest": "#e2e3e1",
+                        "on-primary-container": "#fffbff",
+                        "gray-400": "#888780",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#857464",
+                        "on-surface-variant": "#524436",
+                        "on-secondary-container": "#63635d",
+                        "on-tertiary-container": "#fffbff",
+                        "success-text": "#3B6D11",
+                        "surface-bright": "#f9f9f7",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary-fixed": "#2b1700",
+                        "gray-800": "#2C2C2A",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#d7c3b1",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "success-bg": "#EAF3DE",
+                        "primary-container": "#a76500",
+                        "info-text": "#185FA5",
+                        "surface": "#f9f9f7",
+                        "on-surface": "#1a1c1b",
+                        "primary-fixed-dim": "#ffb869",
+                        "background": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "primary": "#855000",
+                        "gray-200": "#D3D1C7",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e2e3e1",
+                        "secondary": "#5f5f59",
+                        "surface-tint": "#885200",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "gray-600": "#444441",
+                        "on-error": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "surface-container-low": "#f4f4f2",
+                        "error": "#ba1a1a",
+                        "amber-100": "#FAC775",
+                        "surface-dim": "#dadad8",
+                        "secondary-fixed": "#e4e2dc",
+                        "amber-600": "#854F0B",
+                        "amber-50": "#FAEEDA",
+                        "surface-container": "#eeeeec",
+                        "inverse-on-surface": "#f1f1ef",
+                        "danger-bg": "#FCEBEB",
+                        "amber-800": "#633806",
+                        "secondary-container": "#e1e0d9",
+                        "info-bg": "#E6F1FB",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#825100",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2f3130",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1b1c18",
+                        "on-secondary-fixed-variant": "#474742",
+                        "tertiary-container": "#a36800",
+                        "danger-text": "#A32D2D",
+                        "inverse-primary": "#ffb869"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "md": "16px",
+                        "layout-margin": "28px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sidebar-width": "220px",
+                        "base": "4px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "body-lg": ["Geist"],
+                        "label-caps": ["Geist"],
+                        "body-md": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-lg": ["Instrument Serif"],
+                        "caption": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #FAFAF8; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="font-body-md text-gray-800 antialiased h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-gray-800 w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40 hidden md:flex">
+<div class="px-md pb-md mb-md border-b border-gray-200">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600">Terminal 01</p>
+</div>
+<div class="px-sm mb-lg">
+<button class="w-full bg-amber-400 hover:bg-amber-500 text-amber-800 rounded py-2 px-3 font-body-md text-body-md flex items-center justify-center gap-sm transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-xs">
+<a class="flex items-center gap-3 py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high transition-colors hover:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high transition-colors hover:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span class="font-body-md text-body-md">Point of Sale</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded bg-surface-container text-gray-800 border-l-2 border-primary transition-colors hover:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="font-body-md text-body-md font-bold">Orders</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high transition-colors hover:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+<span class="font-body-md text-body-md">Menu Management</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high transition-colors hover:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-body-md text-body-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high transition-colors hover:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</div>
+<div class="mt-auto px-sm pt-md border-t border-gray-200 flex flex-col gap-xs">
+<a class="flex items-center gap-3 py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-sidebar-width w-full relative">
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim h-topbar-height border-b border-outline-variant flex justify-between items-center w-full px-lg sticky top-0 z-30">
+<div class="flex items-center gap-md">
+<button class="md:hidden text-gray-600 hover:text-primary transition-opacity">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-gray-400 font-label-caps text-label-caps uppercase">
+<a class="hover:text-primary transition-colors" href="#">Orders</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary">Edit ORD-2023-10-A4F</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<button class="text-gray-600 hover:text-primary transition-opacity opacity-80 hover:opacity-100 p-1">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-gray-600 hover:text-primary transition-opacity opacity-80 hover:opacity-100 p-1">
+<span class="material-symbols-outlined">sync</span>
+</button>
+<button class="text-gray-600 hover:text-primary transition-opacity opacity-80 hover:opacity-100 p-1">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto p-lg pb-layout-margin bg-[#FAFAF8]">
+<!-- Approval Banner -->
+<div class="mb-lg bg-amber-50 border border-amber-200 rounded-lg p-md flex items-start gap-3">
+<span class="material-symbols-outlined text-amber-600 filled">warning</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-amber-800 mb-1">Menunggu Approval</h3>
+<p class="font-body-md text-body-md text-amber-800 opacity-80">Perubahan pada pesanan ini melebihi batas nilai wajar. Persetujuan manajer diperlukan sebelum pesanan dapat diproses.</p>
+</div>
+</div>
+<div class="flex flex-col lg:flex-row gap-lg">
+<!-- Left Column: Order Details -->
+<div class="flex-1 flex flex-col gap-lg">
+<!-- Order Info Card -->
+<div class="bg-white border border-gray-200 rounded-xl p-md shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+<div class="flex justify-between items-center mb-md pb-md border-b border-gray-200 border-opacity-50">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-gray-800">Order Information</h2>
+<p class="font-caption text-caption text-gray-400 mt-1">Dine-in • Table 12</p>
+</div>
+<span class="bg-gray-100 text-gray-600 font-label-caps text-label-caps px-3 py-1 rounded-full border border-gray-200">Processing</span>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="block font-label-caps text-label-caps text-gray-400 mb-1 uppercase">Customer Name</label>
+<input class="w-full bg-white border border-gray-200 rounded font-body-md text-body-md px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-shadow" type="text" value="Budi Santoso"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-gray-400 mb-1 uppercase">Notes</label>
+<input class="w-full bg-white border border-gray-200 rounded font-body-md text-body-md px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-shadow" type="text" value="Alergi kacang"/>
+</div>
+</div>
+</div>
+<!-- Order Items List -->
+<div class="bg-white border border-gray-200 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.02)] overflow-hidden">
+<div class="p-md border-b border-gray-200 flex justify-between items-center bg-gray-50 bg-opacity-50">
+<h2 class="font-headline-sm text-headline-sm text-gray-800">Items</h2>
+<button class="text-primary font-label-caps text-label-caps flex items-center gap-1 hover:text-amber-600 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span> ADD ITEM
+                            </button>
+</div>
+<div class="flex flex-col">
+<!-- Item 1 -->
+<div class="flex items-center justify-between p-md border-b border-gray-200 border-opacity-50 hover:bg-gray-50 transition-colors">
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-semibold text-gray-800">Nasi Goreng Spesial</h4>
+<p class="font-caption text-caption text-gray-400">Extra Telur Mata Sapi, Pedas Sedang</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center border border-gray-200 rounded bg-white">
+<button class="px-2 py-1 text-gray-400 hover:text-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<span class="font-price-md text-price-md px-2 w-8 text-center">2</span>
+<button class="px-2 py-1 text-gray-400 hover:text-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<span class="font-price-md text-price-md text-gray-800 w-20 text-right">Rp 90.000</span>
+<button class="text-gray-400 hover:text-danger-text transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between p-md border-b border-gray-200 border-opacity-50 hover:bg-gray-50 transition-colors">
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-semibold text-gray-800">Es Teh Manis</h4>
+<p class="font-caption text-caption text-gray-400">Es dipisah</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center border border-gray-200 rounded bg-white">
+<button class="px-2 py-1 text-gray-400 hover:text-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<span class="font-price-md text-price-md px-2 w-8 text-center">3</span>
+<button class="px-2 py-1 text-gray-400 hover:text-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<span class="font-price-md text-price-md text-gray-800 w-20 text-right">Rp 24.000</span>
+<button class="text-gray-400 hover:text-danger-text transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Newly Added Item (Highlight) -->
+<div class="flex items-center justify-between p-md bg-amber-50 border-l-2 border-amber-400">
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h4 class="font-body-md text-body-md font-semibold text-gray-800">Sate Ayam Madura</h4>
+<span class="bg-amber-200 text-amber-800 font-label-caps text-label-caps px-2 py-0.5 rounded text-[9px] uppercase">New</span>
+</div>
+<p class="font-caption text-caption text-gray-400">10 Tusuk, Bumbu Kacang</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center border border-amber-200 rounded bg-white">
+<button class="px-2 py-1 text-gray-400 hover:text-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<span class="font-price-md text-price-md px-2 w-8 text-center">1</span>
+<button class="px-2 py-1 text-gray-400 hover:text-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<span class="font-price-md text-price-md text-gray-800 w-20 text-right">Rp 45.000</span>
+<button class="text-gray-400 hover:text-danger-text transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary & Actions -->
+<div class="w-full lg:w-80 flex flex-col gap-lg">
+<!-- Summary Card -->
+<div class="bg-white border border-gray-200 rounded-xl p-md shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+<h2 class="font-headline-sm text-headline-sm text-gray-800 mb-md pb-sm border-b border-gray-200 border-opacity-50">Order Summary</h2>
+<div class="flex flex-col gap-2 mb-md font-body-md text-body-md text-gray-600">
+<div class="flex justify-between">
+<span>Subtotal</span>
+<span class="font-price-md text-price-md text-gray-800">Rp 159.000</span>
+</div>
+<div class="flex justify-between">
+<span>Tax (10%)</span>
+<span class="font-price-md text-price-md text-gray-800">Rp 15.900</span>
+</div>
+<div class="flex justify-between text-amber-600">
+<span>Diff from original</span>
+<span class="font-price-md text-price-md">+Rp 49.500</span>
+</div>
+</div>
+<div class="flex justify-between items-end pt-sm border-t border-gray-200">
+<span class="font-label-caps text-label-caps text-gray-400 uppercase">Total</span>
+<span class="font-price-lg text-price-lg text-primary font-bold">Rp 174.900</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-sm">
+<button class="w-full bg-amber-400 hover:bg-amber-500 text-amber-800 rounded-lg py-3 px-4 font-body-md text-body-md font-semibold transition-colors shadow-sm flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                            Request Approval
+                        </button>
+<button class="w-full bg-surface text-gray-800 border border-gray-200 hover:bg-gray-50 rounded-lg py-3 px-4 font-body-md text-body-md transition-colors">
+                            Cancel Changes
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

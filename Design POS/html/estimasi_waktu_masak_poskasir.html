@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kitchen Performance Dashboard - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#a36800",
+                        "danger-bg": "#FCEBEB",
+                        "success-text": "#3B6D11",
+                        "surface-tint": "#885200",
+                        "on-error-container": "#93000a",
+                        "amber-600": "#854F0B",
+                        "primary": "#855000",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-container-high": "#e8e8e6",
+                        "surface-variant": "#e2e3e1",
+                        "info-text": "#185FA5",
+                        "gray-200": "#D3D1C7",
+                        "gray-600": "#444441",
+                        "outline-variant": "#d7c3b1",
+                        "on-surface": "#1a1c1b",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "surface-container-lowest": "#ffffff",
+                        "amber-50": "#FAEEDA",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "on-primary-fixed-variant": "#673d00",
+                        "info-bg": "#E6F1FB",
+                        "success-bg": "#EAF3DE",
+                        "outline": "#857464",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f4f4f2",
+                        "surface": "#f9f9f7",
+                        "inverse-surface": "#2f3130",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-fixed": "#1b1c18",
+                        "gray-400": "#888780",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-800": "#2C2C2A",
+                        "secondary": "#5f5f59",
+                        "on-tertiary-container": "#fffbff",
+                        "amber-100": "#FAC775",
+                        "on-surface-variant": "#524436",
+                        "secondary-container": "#e1e0d9",
+                        "primary-fixed": "#ffdcbb",
+                        "surface-container-highest": "#e2e3e1",
+                        "secondary-fixed": "#e4e2dc",
+                        "surface-dim": "#dadad8",
+                        "on-secondary-container": "#63635d",
+                        "background": "#f9f9f7",
+                        "tertiary": "#825100",
+                        "primary-fixed-dim": "#ffb869",
+                        "primary-container": "#a76500",
+                        "surface-bright": "#f9f9f7",
+                        "on-primary-fixed": "#2b1700",
+                        "inverse-on-surface": "#f1f1ef",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eeeeec",
+                        "on-background": "#1a1c1b",
+                        "amber-800": "#633806",
+                        "on-error": "#ffffff",
+                        "danger-text": "#A32D2D",
+                        "inverse-primary": "#ffb869",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "layout-margin": "28px",
+                        "md": "16px",
+                        "topbar-height": "48px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "sidebar-width": "220px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Geist", "sans-serif"],
+                        "caption": ["Geist", "sans-serif"],
+                        "body-lg": ["Geist", "sans-serif"],
+                        "body-md": ["Geist", "sans-serif"],
+                        "display-md": ["Instrument Serif", "serif"],
+                        "display-lg": ["Instrument Serif", "serif"],
+                        "price-lg": ["JetBrains Mono", "monospace"],
+                        "price-md": ["JetBrains Mono", "monospace"],
+                        "label-caps": ["Geist", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #FAFAF8; /* Level 0 Canvas */
+            color: #1a1c1b;
+        }
+        /* Custom scrollbar for high-density look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D3D1C7;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #888780;
+        }
+    </style>
+</head>
+<body class="font-body-md antialiased overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flex justify-between items-center w-full px-lg ml-sidebar-width" style="width: calc(100% - 220px);">
+<!-- Breadcrumbs / Title Context -->
+<div class="flex items-center gap-sm">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Kitchen</span>
+<span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-wider">Live Performance</span>
+</div>
+<!-- Global Actions -->
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm text-gray-600">
+<button class="hover:text-primary transition-opacity p-1 rounded hover:bg-surface-container-high" title="Sync">
+<span class="material-symbols-outlined text-[20px]" data-icon="sync">sync</span>
+</button>
+<button class="hover:text-primary transition-opacity p-1 rounded hover:bg-surface-container-high relative" title="Notifications">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+<div class="h-4 w-px bg-gray-200"></div>
+<div class="flex items-center gap-sm cursor-pointer hover:opacity-80 transition-opacity">
+<img alt="Manager Profile" class="w-6 h-6 rounded-full border border-gray-200 object-cover" data-alt="A close up professional headshot of a restaurant kitchen manager in a bright, modern setting. The lighting is soft and flattering, creating a polished look. The background is a slightly blurred, warm-toned kitchen environment, adhering to an earthy, sophisticated utilitarian style with subtle gray and amber notes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3cgXAXyn6Gg0Lnze-S2XOrI1IjqX-F1zyJuxt3LqxuO7GkcY2QAOB9XI7MrtE2DNpr6mw14lq8moPgqpLuB8zApKETrCYP_8mSKpV_7WWM5UQNeccczBBbYSmFNMYWYfolz1v4MxzXnFBInG2JcZ__oGNm-aHdy_9A2Cu9dEebu5rPvK1BaFx6FtCSiHEBKDk-J0xPB3vo-FgIYPtP9RywX72gBmAUtRIvXocvOJ54qxM2Lhhj9WPuFxt19u7p9XHPccp5_RTmUDg"/>
+<span class="font-body-md text-gray-800">Chef A.</span>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-gray-800 w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col py-md z-50">
+<!-- Brand Identity -->
+<div class="px-md mb-lg flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined fill" data-icon="restaurant">restaurant</span>
+</div>
+<span class="font-display-md text-display-md text-primary font-bold tracking-tight">PosKasir</span>
+</div>
+<span class="font-caption text-caption text-gray-600 pl-10">Terminal 01</span>
+</div>
+<!-- Primary Navigation -->
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-1">
+<a class="text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors flex items-center gap-3 py-2 px-3 rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors flex items-center gap-3 py-2 px-3 rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors flex items-center gap-3 py-2 px-3 rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+                Orders
+            </a>
+<!-- Active State Navigation -->
+<a class="bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary flex items-center gap-3 py-2 px-3 rounded-r-lg font-body-md text-body-md font-semibold" href="#">
+<span class="material-symbols-outlined fill text-primary" data-icon="restaurant_menu">restaurant_menu</span>
+                Kitchen Display
+            </a>
+<a class="text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors flex items-center gap-3 py-2 px-3 rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Inventory
+            </a>
+<a class="text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors flex items-center gap-3 py-2 px-3 rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Reports
+            </a>
+</div>
+<!-- Footer Navigation -->
+<div class="px-sm mt-auto pt-4 border-t border-gray-200 flex flex-col gap-1">
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-3 py-2 px-3 rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="text-gray-600 hover:bg-surface-container-highest transition-colors flex items-center gap-3 py-2 px-3 rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="ml-sidebar-width pt-topbar-height h-screen flex flex-col bg-[#FAFAF8]">
+<div class="flex-1 overflow-y-auto p-layout-margin flex flex-col gap-lg">
+<!-- Summary Banner (Bento Style Grid Top) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md">
+<!-- Hourly Average Card -->
+<div class="col-span-2 bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-50 rounded-full opacity-50"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<h3 class="font-label-caps text-label-caps text-gray-600 uppercase tracking-wider">Rolling Avg. Prep Time</h3>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-display-lg text-display-lg text-gray-800">12m 45s</span>
+<span class="font-caption text-caption text-success-text bg-success-bg px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">arrow_downward</span> -1m 15s
+                                </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary bg-amber-50 p-2 rounded-lg">timer</span>
+</div>
+<!-- Mini Trend Line (Visual placeholder via CSS) -->
+<div class="h-12 w-full flex items-end gap-1 mt-auto relative z-10">
+<div class="w-full bg-gray-100 rounded-t h-full flex items-end relative overflow-hidden">
+<!-- SVG for subtle graph line -->
+<svg class="absolute bottom-0 text-amber-200 fill-current opacity-30" height="100%" preserveaspectratio="none" viewbox="0 0 100 40" width="100%">
+<path d="M0,40 L0,20 Q10,25 20,15 T40,25 T60,10 T80,20 T100,5 L100,40 Z"></path>
+</svg>
+<svg class="absolute bottom-0 text-amber-400 stroke-current fill-none stroke-[1.5px]" height="100%" preserveaspectratio="none" viewbox="0 0 100 40" width="100%">
+<path d="M0,20 Q10,25 20,15 T40,25 T60,10 T80,20 T100,5"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Open Orders Stat -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col justify-between shadow-sm">
+<h3 class="font-label-caps text-label-caps text-gray-600 uppercase tracking-wider mb-2">Active Tickets</h3>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-display-lg text-display-lg text-gray-800">24</span>
+</div>
+<div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+</div>
+<p class="font-caption text-caption text-gray-400 mt-2">65% Capacity</p>
+</div>
+<!-- Critical Orders Stat -->
+<div class="bg-surface-container-lowest border border-danger-bg bg-gradient-to-br from-white to-[#FDF4F4] rounded-xl p-md flex flex-col justify-between shadow-sm">
+<h3 class="font-label-caps text-label-caps text-danger-text uppercase tracking-wider mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Overdue
+                    </h3>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-display-lg text-display-lg text-danger-text">3</span>
+</div>
+<p class="font-caption text-caption text-gray-600 mt-auto">Action required immediately</p>
+</div>
+</div>
+<!-- Active Orders List Section (High Density) -->
+<div class="flex-1 bg-surface-container-lowest border border-gray-200 rounded-xl flex flex-col shadow-sm overflow-hidden">
+<!-- Header -->
+<div class="p-md border-b border-gray-200 flex justify-between items-center bg-[#F1EFE8]">
+<h2 class="font-headline-sm text-headline-sm text-gray-800">Live Kitchen Queue</h2>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 bg-white border border-gray-200 rounded-lg font-body-md text-gray-600 hover:bg-gray-50 flex items-center gap-1 text-sm">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+                        </button>
+<button class="px-3 py-1.5 bg-white border border-gray-200 rounded-lg font-body-md text-gray-600 hover:bg-gray-50 flex items-center gap-1 text-sm">
+<span class="material-symbols-outlined text-[16px]">sort</span> Oldest First
+                        </button>
+</div>
+</div>
+<!-- Table Header -->
+<div class="grid grid-cols-12 gap-4 px-md py-2 border-b border-gray-200 bg-gray-50 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider">
+<div class="col-span-1">Ticket</div>
+<div class="col-span-3">Items</div>
+<div class="col-span-2">Station</div>
+<div class="col-span-4">Est. vs Actual Time</div>
+<div class="col-span-2 text-right">Status</div>
+</div>
+<!-- Table Body (Scrollable) -->
+<div class="flex-1 overflow-y-auto">
+<!-- Row 1: Overdue -->
+<div class="grid grid-cols-12 gap-4 px-md py-3 border-b-[0.5px] border-gray-200 items-center hover:bg-gray-50 transition-colors bg-[#FDF4F4]">
+<div class="col-span-1 font-price-md text-price-md text-gray-800">#4092</div>
+<div class="col-span-3">
+<div class="font-body-md text-gray-800 truncate">2x Truffle Burger, 1x Fries</div>
+<div class="font-caption text-caption text-gray-400 truncate">No Onions, Extra Sauce</div>
+</div>
+<div class="col-span-2 font-body-md text-gray-600 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span> Grill
+                        </div>
+<div class="col-span-4 flex flex-col gap-1 justify-center">
+<div class="flex justify-between font-price-md text-xs text-gray-600">
+<span>Est: 15m</span>
+<span class="text-danger-text font-bold">Act: 18m 30s</span>
+</div>
+<div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-danger-text h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<span class="font-label-caps text-[10px] bg-danger-bg text-danger-text border border-red-200 px-2 py-1 rounded-full uppercase">Overdue</span>
+</div>
+</div>
+<!-- Row 2: Warning -->
+<div class="grid grid-cols-12 gap-4 px-md py-3 border-b-[0.5px] border-gray-200 items-center hover:bg-gray-50 transition-colors bg-amber-50/30">
+<div class="col-span-1 font-price-md text-price-md text-gray-800">#4093</div>
+<div class="col-span-3">
+<div class="font-body-md text-gray-800 truncate">1x Caesar Salad, 1x Soup</div>
+<div class="font-caption text-caption text-gray-400 truncate">-</div>
+</div>
+<div class="col-span-2 font-body-md text-gray-600 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Pantry
+                        </div>
+<div class="col-span-4 flex flex-col gap-1 justify-center">
+<div class="flex justify-between font-price-md text-xs text-gray-600">
+<span>Est: 8m</span>
+<span class="text-amber-600">Act: 7m 45s</span>
+</div>
+<div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-400 h-full rounded-full" style="width: 90%;"></div>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<span class="font-label-caps text-[10px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-1 rounded-full uppercase">Expediting</span>
+</div>
+</div>
+<!-- Row 3: On Track -->
+<div class="grid grid-cols-12 gap-4 px-md py-3 border-b-[0.5px] border-gray-200 items-center hover:bg-gray-50 transition-colors">
+<div class="col-span-1 font-price-md text-price-md text-gray-800">#4094</div>
+<div class="col-span-3">
+<div class="font-body-md text-gray-800 truncate">3x Ribeye Steak, 2x Mash</div>
+<div class="font-caption text-caption text-gray-400 truncate">Medium Rare</div>
+</div>
+<div class="col-span-2 font-body-md text-gray-600 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span> Grill
+                        </div>
+<div class="col-span-4 flex flex-col gap-1 justify-center">
+<div class="flex justify-between font-price-md text-xs text-gray-600">
+<span>Est: 25m</span>
+<span>Act: 12m 10s</span>
+</div>
+<div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-info-text h-full rounded-full" style="width: 48%;"></div>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<span class="font-label-caps text-[10px] bg-info-bg text-info-text border border-blue-200 px-2 py-1 rounded-full uppercase">Cooking</span>
+</div>
+</div>
+<!-- Row 4: New -->
+<div class="grid grid-cols-12 gap-4 px-md py-3 border-b-[0.5px] border-gray-200 items-center hover:bg-gray-50 transition-colors">
+<div class="col-span-1 font-price-md text-price-md text-gray-800">#4095</div>
+<div class="col-span-3">
+<div class="font-body-md text-gray-800 truncate">1x Tiramisu, 2x Espresso</div>
+<div class="font-caption text-caption text-gray-400 truncate">Fire when ready</div>
+</div>
+<div class="col-span-2 font-body-md text-gray-600 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-purple-400"></span> Dessert/Bar
+                        </div>
+<div class="col-span-4 flex flex-col gap-1 justify-center">
+<div class="flex justify-between font-price-md text-xs text-gray-600">
+<span>Est: 5m</span>
+<span>Act: 0m 30s</span>
+</div>
+<div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-gray-400 h-full rounded-full" style="width: 10%;"></div>
+</div>
+</div>
+<div class="col-span-2 flex justify-end">
+<span class="font-label-caps text-[10px] bg-gray-100 text-gray-600 border border-gray-200 px-2 py-1 rounded-full uppercase">Preparing</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

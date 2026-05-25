@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="id" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "amber-600": "#854F0B",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary": "#ffffff",
+                        "secondary": "#5f5f59",
+                        "danger-bg": "#FCEBEB",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1a1c1b",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#e1e0d9",
+                        "on-error-container": "#93000a",
+                        "amber-800": "#633806",
+                        "info-text": "#185FA5",
+                        "primary-fixed-dim": "#ffb869",
+                        "on-primary-container": "#fffbff",
+                        "on-background": "#1a1c1b",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f4f4f2",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "surface-tint": "#885200",
+                        "secondary-fixed": "#e4e2dc",
+                        "on-secondary-container": "#63635d",
+                        "gray-600": "#444441",
+                        "surface-container": "#eeeeec",
+                        "outline": "#857464",
+                        "tertiary-fixed": "#ffddb7",
+                        "primary-fixed": "#ffdcbb",
+                        "on-secondary-fixed": "#1b1c18",
+                        "surface-variant": "#e2e3e1",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "inverse-primary": "#ffb869",
+                        "amber-100": "#FAC775",
+                        "outline-variant": "#d7c3b1",
+                        "inverse-on-surface": "#f1f1ef",
+                        "surface-container-highest": "#e2e3e1",
+                        "on-secondary-fixed-variant": "#474742",
+                        "info-bg": "#E6F1FB",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#673d00",
+                        "gray-400": "#888780",
+                        "gray-200": "#D3D1C7",
+                        "tertiary": "#825100",
+                        "surface-dim": "#dadad8",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-bright": "#f9f9f7",
+                        "success-text": "#3B6D11",
+                        "on-surface-variant": "#524436",
+                        "background": "#f9f9f7",
+                        "amber-50": "#FAEEDA",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "primary-container": "#a76500",
+                        "success-bg": "#EAF3DE",
+                        "tertiary-container": "#a36800",
+                        "gray-800": "#2C2C2A",
+                        "inverse-surface": "#2f3130",
+                        "on-primary-fixed": "#2b1700",
+                        "danger-text": "#A32D2D",
+                        "primary": "#855000",
+                        "amber-400": "#BA7517",
+                        "gray-50": "#F1EFE8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "220px",
+                        "sm": "8px",
+                        "base": "4px",
+                        "md": "16px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "price-lg": ["JetBrains Mono"],
+                        "price-md": ["JetBrains Mono"],
+                        "label-caps": ["Geist"],
+                        "body-md": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "headline-sm": ["Geist"],
+                        "display-lg": ["Instrument Serif"],
+                        "caption": ["Geist"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style class="">
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen text-on-surface">
+<!-- Split Screen Layout -->
+<div class="flex w-full min-h-screen flex-col md:flex-row">
+<!-- Left Side: Brand Content (60%) -->
+<div class="hidden md:flex md:w-[60%] bg-gray-50 flex-col p-12 lg:p-24 relative overflow-hidden">
+<div class="z-10 flex flex-col h-full justify-between">
+<div>
+<h1 class="font-display-lg text-[48px] text-primary font-bold mb-4">PosKasir</h1>
+<p class="font-body-lg text-gray-800 text-lg max-w-md">Sistem POS terpadu untuk bisnis F&amp;B yang modern.</p>
+</div>
+<div class="mt-12 flex-grow flex items-center justify-center">
+<!-- Placeholder for illustration -->
+<div class="w-full max-w-lg aspect-video bg-gray-200 rounded-xl flex items-center justify-center shadow-lg border border-gray-300">
+<span class="material-symbols-outlined text-gray-400 text-6xl">storefront</span>
+</div>
+</div>
+<div class="mt-8">
+<span class="font-caption text-caption text-gray-600">© 2024 PosKasir. All rights reserved.</span>
+</div>
+</div>
+<!-- Decorative background elements could go here -->
+</div>
+<!-- Right Side: Login Form (40%) -->
+<div class="w-full md:w-[40%] bg-surface-container-lowest flex flex-col justify-center items-center p-8 lg:p-16 relative">
+<div class="w-full max-w-md">
+<!-- Mobile Logo Header (Hidden on Desktop) -->
+<div class="text-center mb-xl md:hidden">
+<h1 class="font-display-lg text-display-lg text-primary font-bold">PosKasir</h1>
+<p class="font-body-md text-body-md text-gray-600 mt-xs">Terminal Akses</p>
+</div>
+<div class="mb-8 hidden md:block">
+<h2 class="font-display-md text-display-md text-gray-800 font-bold mb-2">Selamat Datang</h2>
+<p class="font-body-md text-gray-600">Masuk ke terminal akses Anda.</p>
+</div>
+<!-- Login Container (No Card Styles) -->
+<div class="w-full bg-surface-container-lowest">
+<!-- Tabs -->
+<div class="flex border-b border-gray-200 mb-6">
+<button class="flex-1 py-3 text-center font-label-caps text-label-caps uppercase border-b-2 border-amber-400 text-gray-800 transition-colors" id="tab-email" onclick="switchTab('email')">
+                        Email &amp; Password
+                    </button>
+<button class="flex-1 py-3 text-center font-label-caps text-label-caps uppercase border-b-2 border-transparent text-gray-400 hover:text-gray-600 transition-colors" id="tab-pin" onclick="switchTab('pin')">
+                        PIN Cepat
+                    </button>
+</div>
+<!-- Email Content -->
+<div id="content-email">
+<form class="space-y-md" onsubmit="event.preventDefault();">
+<div>
+<label class="block font-label-caps text-label-caps text-gray-600 uppercase mb-xs">Email</label>
+<input class="w-full px-3 py-2 bg-surface-container-lowest border border-gray-200 rounded-md font-body-md text-body-md text-gray-800 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-shadow" placeholder="manager@poskasir.com" required="" type="email"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-gray-600 uppercase mb-xs">Password</label>
+<div class="relative">
+<input class="w-full px-3 py-2 bg-surface-container-lowest border border-gray-200 rounded-md font-body-md text-body-md text-gray-800 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-shadow pr-10" id="password-input" placeholder="••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined text-[18px]" id="visibility-icon">visibility</span>
+</button>
+</div>
+</div>
+<div class="pt-sm">
+<button class="w-full py-3 bg-amber-400 hover:bg-amber-600 text-on-primary rounded-md font-body-md text-body-md font-bold transition-colors" type="submit">
+                                Masuk
+                            </button>
+</div>
+</form>
+</div>
+<!-- PIN Content (Hidden by default) -->
+<div class="hidden" id="content-pin">
+<div class="flex flex-col items-center">
+<p class="font-body-md text-body-md text-gray-600 mb-lg">Masukkan 6 digit PIN Terminal</p>
+<!-- PIN Dots -->
+<div class="flex gap-sm mb-xl">
+<div class="w-3 h-3 rounded-full bg-gray-200" id="pin-1"></div>
+<div class="w-3 h-3 rounded-full bg-gray-200" id="pin-2"></div>
+<div class="w-3 h-3 rounded-full bg-gray-200" id="pin-3"></div>
+<div class="w-3 h-3 rounded-full bg-gray-200" id="pin-4"></div>
+<div class="w-3 h-3 rounded-full bg-gray-200" id="pin-5"></div>
+<div class="w-3 h-3 rounded-full bg-gray-200" id="pin-6"></div>
+</div>
+<!-- Numpad -->
+<div class="grid grid-cols-3 gap-sm w-full max-w-[240px]">
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('1')">1</button>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('2')">2</button>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('3')">3</button>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('4')">4</button>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('5')">5</button>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('6')">6</button>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('7')">7</button>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('8')">8</button>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('9')">9</button>
+<div></div>
+<button class="py-3 bg-surface-bright hover:bg-surface-container-high border border-gray-200 rounded-md font-price-lg text-price-lg text-gray-800 transition-colors" onclick="addPin('0')">0</button>
+<button class="py-3 flex items-center justify-center bg-surface-bright hover:bg-danger-bg hover:text-danger-text hover:border-danger-text border border-gray-200 rounded-md text-gray-600 transition-colors" onclick="removePin()">
+<span class="material-symbols-outlined">backspace</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Mobile Footer -->
+<div class="text-center mt-12 md:hidden">
+<span class="font-caption text-caption text-gray-400">PosKasir v1.0 • System Secure</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+        let currentPinLength = 0;
+
+        function switchTab(tab) {
+            const emailTab = document.getElementById('tab-email');
+            const pinTab = document.getElementById('tab-pin');
+            const emailContent = document.getElementById('content-email');
+            const pinContent = document.getElementById('content-pin');
+
+            if (tab === 'email') {
+                emailTab.classList.add('border-amber-400', 'text-gray-800');
+                emailTab.classList.remove('border-transparent', 'text-gray-400');
+                pinTab.classList.add('border-transparent', 'text-gray-400');
+                pinTab.classList.remove('border-amber-400', 'text-gray-800');
+                emailContent.classList.remove('hidden');
+                pinContent.classList.add('hidden');
+            } else {
+                pinTab.classList.add('border-amber-400', 'text-gray-800');
+                pinTab.classList.remove('border-transparent', 'text-gray-400');
+                emailTab.classList.add('border-transparent', 'text-gray-400');
+                emailTab.classList.remove('border-amber-400', 'text-gray-800');
+                pinContent.classList.remove('hidden');
+                emailContent.classList.add('hidden');
+            }
+        }
+
+        function togglePassword() {
+            const input = document.getElementById('password-input');
+            const icon = document.getElementById('visibility-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        function addPin(num) {
+            if (currentPinLength < 6) {
+                currentPinLength++;
+                const dot = document.getElementById(`pin-${currentPinLength}`);
+                dot.classList.remove('bg-gray-200');
+                dot.classList.add('bg-amber-400');
+                
+                if (currentPinLength === 6) {
+                    // Simulate login
+                    setTimeout(() => {
+                        alert('Login dengan PIN disimulasikan');
+                        resetPin();
+                    }, 300);
+                }
+            }
+        }
+
+        function removePin() {
+            if (currentPinLength > 0) {
+                const dot = document.getElementById(`pin-${currentPinLength}`);
+                dot.classList.remove('bg-amber-400');
+                dot.classList.add('bg-gray-200');
+                currentPinLength--;
+            }
+        }
+
+        function resetPin() {
+            for (let i = 1; i <= 6; i++) {
+                const dot = document.getElementById(`pin-${i}`);
+                dot.classList.remove('bg-amber-400');
+                dot.classList.add('bg-gray-200');
+            }
+            currentPinLength = 0;
+        }
+    </script>
+</body></html>

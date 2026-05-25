@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Backup &amp; Keamanan Data - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#ffb869",
+                      "surface-tint": "#885200",
+                      "on-background": "#1a1c1b",
+                      "primary": "#855000",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed-variant": "#673d00",
+                      "on-primary-fixed": "#2b1700",
+                      "surface-container-low": "#f4f4f2",
+                      "on-error": "#ffffff",
+                      "danger-text": "#A32D2D",
+                      "secondary": "#5f5f59",
+                      "on-tertiary-fixed": "#2a1700",
+                      "secondary-container": "#e1e0d9",
+                      "surface-dim": "#dadad8",
+                      "tertiary-container": "#a36800",
+                      "outline-variant": "#d7c3b1",
+                      "on-secondary": "#ffffff",
+                      "surface-container": "#eeeeec",
+                      "gray-200": "#D3D1C7",
+                      "danger-bg": "#FCEBEB",
+                      "gray-600": "#444441",
+                      "surface-variant": "#e2e3e1",
+                      "inverse-on-surface": "#f1f1ef",
+                      "success-bg": "#EAF3DE",
+                      "on-surface-variant": "#524436",
+                      "tertiary-fixed": "#ffddb7",
+                      "secondary-fixed": "#e4e2dc",
+                      "primary-fixed": "#ffdcbb",
+                      "on-tertiary-container": "#fffbff",
+                      "on-primary-container": "#fffbff",
+                      "surface-container-highest": "#e2e3e1",
+                      "info-bg": "#E6F1FB",
+                      "outline": "#857464",
+                      "info-text": "#185FA5",
+                      "tertiary": "#825100",
+                      "secondary-fixed-dim": "#c8c6c0",
+                      "on-secondary-fixed-variant": "#474742",
+                      "gray-800": "#2C2C2A",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary": "#ffffff",
+                      "on-secondary-container": "#63635d",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1a1c1b",
+                      "background": "#f9f9f7",
+                      "primary-container": "#a76500",
+                      "primary-fixed-dim": "#ffb869",
+                      "on-secondary-fixed": "#1b1c18",
+                      "surface-bright": "#f9f9f7",
+                      "amber-600": "#854F0B",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb95d",
+                      "amber-50": "#FAEEDA",
+                      "surface": "#f9f9f7",
+                      "surface-container-high": "#e8e8e6",
+                      "success-text": "#3B6D11",
+                      "amber-800": "#633806",
+                      "inverse-surface": "#2f3130",
+                      "amber-100": "#FAC775",
+                      "gray-400": "#888780"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "md": "16px",
+                      "sidebar-width": "220px",
+                      "base": "4px",
+                      "topbar-height": "48px",
+                      "xs": "4px",
+                      "layout-margin": "28px",
+                      "xl": "32px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "price-md": [
+                              "JetBrains Mono"
+                      ],
+                      "label-caps": [
+                              "Geist"
+                      ],
+                      "caption": [
+                              "Geist"
+                      ],
+                      "display-md": [
+                              "Instrument Serif"
+                      ],
+                      "price-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-sm": [
+                              "Geist"
+                      ],
+                      "display-lg": [
+                              "Instrument Serif"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "price-md": [
+                              "13px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "caption": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "price-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- SideNavBar (Suppressed due to Settings context, prioritizing content canvas as per Semantic Shell Mandate) -->
+<!-- TopAppBar (Suppressed due to Settings context, prioritizing content canvas) -->
+<!-- Main Header for Settings Area -->
+<header class="h-topbar-height fixed top-0 w-full z-50 bg-surface-bright border-b border-outline-variant flex justify-between items-center px-lg">
+<div class="flex items-center gap-sm">
+<button aria-label="Go Back" class="text-gray-600 hover:text-primary transition-opacity" onclick="window.history.back();">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-gray-800">Settings / Backup &amp; Keamanan</h1>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-gray-400" style="font-variation-settings: 'FILL' 0;">help</span>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="pt-[calc(48px+28px)] pb-layout-margin px-lg max-w-5xl mx-auto flex flex-col gap-lg">
+<!-- Header Section -->
+<div>
+<h2 class="font-display-lg text-display-lg text-gray-800 mb-xs">Backup &amp; Keamanan Data</h2>
+<p class="font-body-md text-body-md text-gray-600">Kelola jadwal pencadangan otomatis Anda dan pantau aktivitas keamanan sistem.</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-sm">
+<!-- Backup Status Card (Span 8) -->
+<div class="md:col-span-8 bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex flex-col justify-between shadow-[0_2px_4px_rgba(0,0,0,0.02)] relative overflow-hidden">
+<!-- Subtle Gradient bg -->
+<div class="absolute inset-0 bg-gradient-to-br from-amber-50/30 to-transparent pointer-events-none"></div>
+<div class="relative z-10 flex justify-between items-start mb-lg">
+<div>
+<h3 class="font-label-caps text-label-caps text-gray-400 uppercase tracking-wider mb-base">Status Backup Terakhir</h3>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-success-text" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-headline-sm text-headline-sm text-gray-800">Sukses - Hari ini, 03:00 AM</span>
+</div>
+<p class="font-caption text-caption text-gray-600 mt-xs">Ukuran file: 2.4 GB • Disimpan ke Cloud Storage (AWS S3)</p>
+</div>
+<button class="bg-amber-400 hover:bg-amber-500 text-amber-800 px-md py-sm rounded-lg font-body-md text-body-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">cloud_upload</span>
+                        Backup Now
+                    </button>
+</div>
+<div class="relative z-10 border-t border-gray-200 pt-md mt-auto">
+<h4 class="font-label-caps text-label-caps text-gray-600 mb-sm">Jadwal Otomatis</h4>
+<div class="flex gap-sm">
+<div class="bg-gray-50 border border-gray-200 rounded-lg px-sm py-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-gray-400">schedule</span>
+<span class="font-body-md text-body-md text-gray-800">Harian, 03:00 AM</span>
+</div>
+<button class="text-primary hover:text-amber-800 font-body-md text-body-md transition-colors underline decoration-primary/30 underline-offset-4">
+                            Ubah Jadwal
+                        </button>
+</div>
+</div>
+</div>
+<!-- Encryption & Security Status (Span 4) -->
+<div class="md:col-span-4 bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+<h3 class="font-label-caps text-label-caps text-gray-400 uppercase tracking-wider mb-md">Keamanan Data</h3>
+<div class="space-y-md">
+<div class="flex items-start gap-sm">
+<div class="bg-success-bg p-sm rounded-lg text-success-text">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<h4 class="font-body-md text-body-md text-gray-800">Enkripsi End-to-End</h4>
+<p class="font-caption text-caption text-gray-600">Aktif untuk semua data transit &amp; at-rest.</p>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="bg-info-bg p-sm rounded-lg text-info-text">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div>
+<h4 class="font-body-md text-body-md text-gray-800">2-Factor Authentication</h4>
+<p class="font-caption text-caption text-gray-600">Aktif untuk akun admin (Terminal 01).</p>
+</div>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-gray-200">
+<button class="w-full bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-800 px-md py-sm rounded-lg font-body-md text-body-md transition-colors flex items-center justify-center gap-xs">
+                         Kelola Kunci Keamanan
+                     </button>
+</div>
+</div>
+<!-- User Activity Log (Span 12) -->
+<div class="md:col-span-12 bg-surface-container-lowest border border-gray-200 rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] overflow-hidden">
+<div class="px-md py-sm border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-gray-600 uppercase tracking-wider">Log Aktivitas Keamanan</h3>
+<button class="text-gray-600 hover:text-primary font-caption text-caption transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">filter_list</span> Filter
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50 border-b border-gray-200">
+<th class="py-sm px-md font-label-caps text-label-caps text-gray-400 font-normal">Waktu</th>
+<th class="py-sm px-md font-label-caps text-label-caps text-gray-400 font-normal">User / Terminal</th>
+<th class="py-sm px-md font-label-caps text-label-caps text-gray-400 font-normal">Aktivitas</th>
+<th class="py-sm px-md font-label-caps text-label-caps text-gray-400 font-normal">IP Address</th>
+<th class="py-sm px-md font-label-caps text-label-caps text-gray-400 font-normal right-align">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800">
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="py-sm px-md text-gray-600 font-price-md">10:42 AM, Hari Ini</td>
+<td class="py-sm px-md">Admin (Terminal 01)</td>
+<td class="py-sm px-md">Login Sistem</td>
+<td class="py-sm px-md font-price-md text-gray-600">192.168.1.105</td>
+<td class="py-sm px-md right-align">
+<span class="inline-block px-2 py-[2px] bg-success-bg text-success-text rounded-full font-label-caps text-[10px]">Sukses</span>
+</td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="py-sm px-md text-gray-600 font-price-md">03:00 AM, Hari Ini</td>
+<td class="py-sm px-md">System (Automated)</td>
+<td class="py-sm px-md">Daily Cloud Backup</td>
+<td class="py-sm px-md font-price-md text-gray-600">Internal</td>
+<td class="py-sm px-md right-align">
+<span class="inline-block px-2 py-[2px] bg-success-bg text-success-text rounded-full font-label-caps text-[10px]">Sukses</span>
+</td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="py-sm px-md text-gray-600 font-price-md">11:15 PM, Kemarin</td>
+<td class="py-sm px-md">Kasir B (Terminal 02)</td>
+<td class="py-sm px-md">Gagal Login (Password Salah)</td>
+<td class="py-sm px-md font-price-md text-gray-600">192.168.1.106</td>
+<td class="py-sm px-md right-align">
+<span class="inline-block px-2 py-[2px] bg-danger-bg text-danger-text rounded-full font-label-caps text-[10px]">Peringatan</span>
+</td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="py-sm px-md text-gray-600 font-price-md">11:18 PM, Kemarin</td>
+<td class="py-sm px-md">Kasir B (Terminal 02)</td>
+<td class="py-sm px-md">Login Sistem</td>
+<td class="py-sm px-md font-price-md text-gray-600">192.168.1.106</td>
+<td class="py-sm px-md right-align">
+<span class="inline-block px-2 py-[2px] bg-success-bg text-success-text rounded-full font-label-caps text-[10px]">Sukses</span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50/50 transition-colors">
+<td class="py-sm px-md text-gray-600 font-price-md">08:00 AM, Kemarin</td>
+<td class="py-sm px-md">Admin (Terminal 01)</td>
+<td class="py-sm px-md">Ubah Pengaturan Pajak</td>
+<td class="py-sm px-md font-price-md text-gray-600">192.168.1.105</td>
+<td class="py-sm px-md right-align">
+<span class="inline-block px-2 py-[2px] bg-info-bg text-info-text rounded-full font-label-caps text-[10px]">Info</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-md py-sm border-t border-gray-200 bg-gray-50 text-center">
+<button class="text-gray-600 hover:text-primary font-caption text-caption transition-colors">Muat Lebih Banyak Log</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Reservations</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#a36800",
+                        "danger-bg": "#FCEBEB",
+                        "success-text": "#3B6D11",
+                        "surface-tint": "#885200",
+                        "on-error-container": "#93000a",
+                        "amber-600": "#854F0B",
+                        "primary": "#855000",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-container-high": "#e8e8e6",
+                        "surface-variant": "#e2e3e1",
+                        "info-text": "#185FA5",
+                        "gray-200": "#D3D1C7",
+                        "gray-600": "#444441",
+                        "outline-variant": "#d7c3b1",
+                        "on-surface": "#1a1c1b",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "surface-container-lowest": "#ffffff",
+                        "amber-50": "#FAEEDA",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "on-primary-fixed-variant": "#673d00",
+                        "info-bg": "#E6F1FB",
+                        "success-bg": "#EAF3DE",
+                        "outline": "#857464",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f4f4f2",
+                        "surface": "#f9f9f7",
+                        "inverse-surface": "#2f3130",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-fixed": "#1b1c18",
+                        "gray-400": "#888780",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-800": "#2C2C2A",
+                        "secondary": "#5f5f59",
+                        "on-tertiary-container": "#fffbff",
+                        "amber-100": "#FAC775",
+                        "on-surface-variant": "#524436",
+                        "secondary-container": "#e1e0d9",
+                        "primary-fixed": "#ffdcbb",
+                        "surface-container-highest": "#e2e3e1",
+                        "secondary-fixed": "#e4e2dc",
+                        "surface-dim": "#dadad8",
+                        "on-secondary-container": "#63635d",
+                        "background": "#f9f9f7",
+                        "tertiary": "#825100",
+                        "primary-fixed-dim": "#ffb869",
+                        "primary-container": "#a76500",
+                        "surface-bright": "#f9f9f7",
+                        "on-primary-fixed": "#2b1700",
+                        "inverse-on-surface": "#f1f1ef",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eeeeec",
+                        "on-background": "#1a1c1b",
+                        "amber-800": "#633806",
+                        "on-error": "#ffffff",
+                        "danger-text": "#A32D2D",
+                        "inverse-primary": "#ffb869",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "layout-margin": "28px",
+                        "md": "16px",
+                        "topbar-height": "48px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "sidebar-width": "220px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Geist", "sans-serif"],
+                        "caption": ["Geist", "sans-serif"],
+                        "body-lg": ["Geist", "sans-serif"],
+                        "body-md": ["Geist", "sans-serif"],
+                        "display-md": ["Instrument Serif", "serif"],
+                        "display-lg": ["Instrument Serif", "serif"],
+                        "price-lg": ["JetBrains Mono", "monospace"],
+                        "price-md": ["JetBrains Mono", "monospace"],
+                        "label-caps": ["Geist", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #FAFAF8; }
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="text-on-surface antialiased overflow-hidden h-screen flex">
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant flex flex-col py-md z-40">
+<div class="px-md pb-lg">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600">Terminal 01</p>
+</div>
+<div class="px-sm pb-md">
+<button class="w-full bg-primary text-on-primary font-body-md text-body-md py-2 px-3 rounded flex items-center justify-center gap-sm hover:bg-amber-800 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto px-sm flex flex-col gap-1">
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 bg-gray-50 text-gray-800 border-l-2 border-primary font-body-md text-body-md hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] fill-icon">book_online</span>
+                Reservations
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">restaurant_menu</span>
+                Menu Management
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">analytics</span>
+                Reports
+            </a>
+</nav>
+<div class="mt-auto px-sm pt-md border-t border-outline-variant flex flex-col gap-1">
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Layout -->
+<div class="ml-sidebar-width flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="h-topbar-height bg-surface-bright flex justify-between items-center px-lg border-b border-outline-variant shrink-0">
+<div class="flex items-center gap-lg h-full">
+<nav class="flex h-full gap-lg font-label-caps text-label-caps uppercase text-on-surface-variant">
+<a class="h-full flex items-center hover:text-primary transition-opacity" href="#">Today</a>
+<a class="h-full flex items-center text-primary border-b-2 border-primary" href="#">Upcoming</a>
+<a class="h-full flex items-center hover:text-primary transition-opacity" href="#">Past</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm text-gray-600">
+<button class="hover:text-primary transition-opacity p-1"><span class="material-symbols-outlined text-[20px]">notifications</span></button>
+<button class="hover:text-primary transition-opacity p-1"><span class="material-symbols-outlined text-[20px]">sync</span></button>
+<button class="hover:text-primary transition-opacity p-1"><span class="material-symbols-outlined text-[20px]">account_circle</span></button>
+</div>
+<div class="h-6 w-px bg-gray-200"></div>
+<button class="font-label-caps text-label-caps uppercase text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded hover:opacity-80 transition-opacity">Hold Order</button>
+<button class="font-label-caps text-label-caps uppercase text-amber-800 bg-amber-400 px-3 py-1.5 rounded hover:opacity-80 transition-opacity">Checkout</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-auto p-lg flex gap-lg bg-[#FAFAF8]">
+<!-- Left Column: Calendar & Filters -->
+<div class="w-80 flex flex-col gap-md shrink-0">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md">
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-headline-sm text-headline-sm text-gray-800">October 2023</h2>
+<div class="flex gap-1">
+<button class="p-1 text-gray-600 hover:bg-gray-50 rounded"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<button class="p-1 text-gray-600 hover:bg-gray-50 rounded"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center mb-2 font-label-caps text-label-caps uppercase text-gray-400">
+<div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center font-body-md text-body-md text-gray-800">
+<!-- Sample Calendar Days -->
+<div class="p-1.5 text-gray-400">1</div><div class="p-1.5 text-gray-400">2</div><div class="p-1.5 text-gray-400">3</div><div class="p-1.5">4</div><div class="p-1.5">5</div><div class="p-1.5">6</div><div class="p-1.5">7</div>
+<div class="p-1.5">8</div><div class="p-1.5">9</div><div class="p-1.5">10</div><div class="p-1.5">11</div><div class="p-1.5">12</div><div class="p-1.5">13</div><div class="p-1.5">14</div>
+<div class="p-1.5">15</div><div class="p-1.5">16</div><div class="p-1.5 bg-amber-50 text-amber-800 border border-amber-200 rounded">17</div><div class="p-1.5">18</div><div class="p-1.5">19</div><div class="p-1.5">20</div><div class="p-1.5">21</div>
+<div class="p-1.5">22</div><div class="p-1.5">23</div><div class="p-1.5">24</div><div class="p-1.5">25</div><div class="p-1.5">26</div><div class="p-1.5">27</div><div class="p-1.5">28</div>
+<div class="p-1.5">29</div><div class="p-1.5">30</div><div class="p-1.5">31</div><div class="p-1.5 text-gray-400">1</div><div class="p-1.5 text-gray-400">2</div><div class="p-1.5 text-gray-400">3</div><div class="p-1.5 text-gray-400">4</div>
+</div>
+</div>
+<!-- New Reservation Form -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex-1">
+<h2 class="font-headline-sm text-headline-sm text-gray-800 mb-md border-b border-gray-200 pb-2">New Booking</h2>
+<form class="flex flex-col gap-sm">
+<div>
+<label class="block font-label-caps text-label-caps uppercase text-gray-600 mb-1">Guest Name</label>
+<input class="w-full bg-white border border-gray-200 rounded px-2 py-1.5 font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="John Doe" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps uppercase text-gray-600 mb-1">Phone</label>
+<input class="w-full bg-white border border-gray-200 rounded px-2 py-1.5 font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="+1 555-0123" type="tel"/>
+</div>
+<div class="flex gap-sm">
+<div class="flex-1">
+<label class="block font-label-caps text-label-caps uppercase text-gray-600 mb-1">Time</label>
+<input class="w-full bg-white border border-gray-200 rounded px-2 py-1.5 font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" type="time" value="19:00"/>
+</div>
+<div class="w-24">
+<label class="block font-label-caps text-label-caps uppercase text-gray-600 mb-1">Guests</label>
+<input class="w-full bg-white border border-gray-200 rounded px-2 py-1.5 font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" min="1" type="number" value="2"/>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps uppercase text-gray-600 mb-1">Table Preference</label>
+<select class="w-full bg-white border border-gray-200 rounded px-2 py-1.5 font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+<option>Any Available</option>
+<option>Window Seat</option>
+<option>Booth</option>
+<option>Patio</option>
+</select>
+</div>
+<button class="mt-2 w-full bg-amber-400 text-amber-800 font-label-caps text-label-caps uppercase py-2 rounded hover:opacity-90 transition-opacity" type="button">Create Reservation</button>
+</form>
+</div>
+</div>
+<!-- Right Column: Reservation List -->
+<div class="flex-1 flex flex-col gap-md">
+<div class="flex justify-between items-center">
+<h2 class="font-display-md text-display-md text-gray-800">Tue, Oct 17th</h2>
+<div class="flex gap-sm">
+<span class="inline-flex items-center gap-1 bg-white border border-gray-200 px-2 py-1 rounded font-label-caps text-label-caps uppercase text-gray-600">
+                            Total: 42 Guests
+                        </span>
+<span class="inline-flex items-center gap-1 bg-white border border-gray-200 px-2 py-1 rounded font-label-caps text-label-caps uppercase text-gray-600">
+                            Capacity: 65%
+                        </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden flex-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50 border-b border-gray-200">
+<th class="py-2 px-md font-label-caps text-label-caps uppercase text-gray-400 w-24">Time</th>
+<th class="py-2 px-md font-label-caps text-label-caps uppercase text-gray-400">Guest</th>
+<th class="py-2 px-md font-label-caps text-label-caps uppercase text-gray-400 w-20 text-center">Pax</th>
+<th class="py-2 px-md font-label-caps text-label-caps uppercase text-gray-400 w-32">Table</th>
+<th class="py-2 px-md font-label-caps text-label-caps uppercase text-gray-400 w-32">Status</th>
+<th class="py-2 px-md font-label-caps text-label-caps uppercase text-gray-400 w-16"></th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800 divide-y-[0.5px] divide-gray-200">
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="py-3 px-md font-price-md text-price-md">18:00</td>
+<td class="py-3 px-md">
+<div class="font-medium">Sarah Jenkins</div>
+<div class="font-caption text-caption text-gray-400">+1 555-8392</div>
+</td>
+<td class="py-3 px-md text-center">4</td>
+<td class="py-3 px-md">T-12 (Window)</td>
+<td class="py-3 px-md">
+<span class="bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-[10px] uppercase">Confirmed</span>
+</td>
+<td class="py-3 px-md text-right">
+<button class="text-gray-400 hover:text-primary"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 transition-colors bg-amber-50/30">
+<td class="py-3 px-md font-price-md text-price-md">18:30</td>
+<td class="py-3 px-md">
+<div class="font-medium">Michael Chen</div>
+<div class="font-caption text-caption text-gray-400">+1 555-1029</div>
+</td>
+<td class="py-3 px-md text-center">2</td>
+<td class="py-3 px-md">T-04 (Main)</td>
+<td class="py-3 px-md">
+<span class="bg-info-bg text-info-text px-2 py-0.5 rounded-full font-label-caps text-[10px] uppercase">Check-in</span>
+</td>
+<td class="py-3 px-md text-right">
+<button class="text-gray-400 hover:text-primary"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="py-3 px-md font-price-md text-price-md">19:15</td>
+<td class="py-3 px-md">
+<div class="font-medium">Emily Davis</div>
+<div class="font-caption text-caption text-gray-400">+1 555-7741</div>
+</td>
+<td class="py-3 px-md text-center">6</td>
+<td class="py-3 px-md text-gray-400 italic">Unassigned</td>
+<td class="py-3 px-md">
+<span class="bg-gray-200 text-gray-800 px-2 py-0.5 rounded-full font-label-caps text-[10px] uppercase">Pending</span>
+</td>
+<td class="py-3 px-md text-right">
+<button class="text-gray-400 hover:text-primary"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 transition-colors opacity-60">
+<td class="py-3 px-md font-price-md text-price-md">17:00</td>
+<td class="py-3 px-md">
+<div class="font-medium">Robert Wilson</div>
+<div class="font-caption text-caption text-gray-400">+1 555-3320</div>
+</td>
+<td class="py-3 px-md text-center">3</td>
+<td class="py-3 px-md">T-08 (Patio)</td>
+<td class="py-3 px-md">
+<span class="bg-danger-bg text-danger-text px-2 py-0.5 rounded-full font-label-caps text-[10px] uppercase">No-show</span>
+</td>
+<td class="py-3 px-md text-right">
+<button class="text-gray-400 hover:text-primary"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</body></html>

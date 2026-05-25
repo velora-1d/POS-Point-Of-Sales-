@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Integration Portal</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#ffb869",
+                    "surface-tint": "#885200",
+                    "on-background": "#1a1c1b",
+                    "primary": "#855000",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#673d00",
+                    "on-primary-fixed": "#2b1700",
+                    "surface-container-low": "#f4f4f2",
+                    "on-error": "#ffffff",
+                    "danger-text": "#A32D2D",
+                    "secondary": "#5f5f59",
+                    "on-tertiary-fixed": "#2a1700",
+                    "secondary-container": "#e1e0d9",
+                    "surface-dim": "#dadad8",
+                    "tertiary-container": "#a36800",
+                    "outline-variant": "#d7c3b1",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#eeeeec",
+                    "gray-200": "#D3D1C7",
+                    "danger-bg": "#FCEBEB",
+                    "gray-600": "#444441",
+                    "surface-variant": "#e2e3e1",
+                    "inverse-on-surface": "#f1f1ef",
+                    "success-bg": "#EAF3DE",
+                    "on-surface-variant": "#524436",
+                    "tertiary-fixed": "#ffddb7",
+                    "secondary-fixed": "#e4e2dc",
+                    "primary-fixed": "#ffdcbb",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-highest": "#e2e3e1",
+                    "info-bg": "#E6F1FB",
+                    "outline": "#857464",
+                    "info-text": "#185FA5",
+                    "tertiary": "#825100",
+                    "secondary-fixed-dim": "#c8c6c0",
+                    "on-secondary-fixed-variant": "#474742",
+                    "gray-800": "#2C2C2A",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#63635d",
+                    "error": "#ba1a1a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1b",
+                    "background": "#f9f9f7",
+                    "primary-container": "#a76500",
+                    "primary-fixed-dim": "#ffb869",
+                    "on-secondary-fixed": "#1b1c18",
+                    "surface-bright": "#f9f9f7",
+                    "amber-600": "#854F0B",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb95d",
+                    "amber-50": "#FAEEDA",
+                    "surface": "#f9f9f7",
+                    "surface-container-high": "#e8e8e6",
+                    "success-text": "#3B6D11",
+                    "amber-800": "#633806",
+                    "inverse-surface": "#2f3130",
+                    "amber-100": "#FAC775",
+                    "gray-400": "#888780"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "md": "16px",
+                    "sidebar-width": "220px",
+                    "base": "4px",
+                    "topbar-height": "48px",
+                    "xs": "4px",
+                    "layout-margin": "28px",
+                    "xl": "32px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "body-md": ["Geist", "sans-serif"],
+                    "price-md": ["JetBrains Mono", "monospace"],
+                    "label-caps": ["Geist", "sans-serif"],
+                    "caption": ["Geist", "sans-serif"],
+                    "display-md": ["Instrument Serif", "serif"],
+                    "price-lg": ["JetBrains Mono", "monospace"],
+                    "headline-sm": ["Geist", "sans-serif"],
+                    "display-lg": ["Instrument Serif", "serif"],
+                    "body-lg": ["Geist", "sans-serif"]
+            },
+            "fontSize": {
+                    "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                    "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for high-density look */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d7c3b1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #857464; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-hidden flex h-screen">
+<!-- SideNavBar (JSON Derived) -->
+<nav class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant flex flex-col py-md z-40">
+<!-- Brand Header -->
+<div class="px-md mb-xl">
+<div class="flex items-center gap-sm mb-1">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-size: 20px;">point_of_sale</span>
+</div>
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+</div>
+<p class="font-caption text-caption text-gray-600">Terminal 01</p>
+</div>
+<!-- CTA -->
+<div class="px-md mb-lg">
+<button class="w-full bg-inverse-primary text-amber-800 font-label-caps text-label-caps uppercase py-2 rounded-lg flex items-center justify-center gap-xs hover:bg-amber-100 transition-colors shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+                New Order
+            </button>
+</div>
+<!-- Main Nav Tabs -->
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-1">
+<!-- Inactive Tabs mapped from JSON -->
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">point_of_sale</span>
+<span>Point of Sale</span>
+</a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">receipt_long</span>
+<span>Orders</span>
+</a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">restaurant_menu</span>
+<span>Menu Management</span>
+</a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">inventory_2</span>
+<span>Inventory</span>
+</a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">analytics</span>
+<span>Reports</span>
+</a>
+</div>
+<!-- Footer Nav Tabs -->
+<div class="px-sm flex flex-col gap-1 pt-md border-t border-outline-variant mt-auto">
+<!-- Active Tab: Settings (Determined by semantic context of Integration Hub) -->
+<a class="flex items-center gap-sm py-2 px-3 rounded-r-lg bg-surface-container text-gray-800 border-l-2 border-primary active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 20px;">settings</span>
+<span class="font-bold">Settings</span>
+</a>
+<a class="flex items-center gap-sm py-2 px-3 rounded text-gray-600 hover:bg-surface-container-highest transition-colors active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined" style="font-size: 20px;">help</span>
+<span>Support</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar (JSON Derived) -->
+<header class="h-topbar-height fixed top-0 right-0 z-50 bg-surface-bright border-b border-outline-variant flex justify-between items-center px-lg" style="width: calc(100% - 220px);">
+<!-- Breadcrumbs / Nav Links -->
+<div class="flex items-center gap-md font-label-caps text-label-caps uppercase">
+<span class="text-on-surface-variant">PosKasir</span>
+<span class="text-gray-400">/</span>
+<a class="text-on-surface-variant hover:text-primary transition-opacity opacity-80 transition-all" href="#">Fast Food</a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity opacity-80 transition-all" href="#">Drinks</a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity opacity-80 transition-all" href="#">Desserts</a>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-md">
+<div class="flex gap-sm">
+<button class="font-label-caps text-label-caps uppercase py-1 px-2 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                    Hold Order
+                </button>
+<button class="font-label-caps text-label-caps uppercase py-1 px-3 rounded bg-inverse-primary text-amber-800 hover:bg-amber-100 transition-colors">
+                    Checkout
+                </button>
+</div>
+<div class="w-px h-6 bg-outline-variant mx-1"></div>
+<div class="flex gap-1 text-gray-600">
+<button class="p-1 hover:text-primary transition-colors rounded hover:bg-surface-container"><span class="material-symbols-outlined" style="font-size: 20px;">notifications</span></button>
+<button class="p-1 hover:text-primary transition-colors rounded hover:bg-surface-container"><span class="material-symbols-outlined" style="font-size: 20px;">sync</span></button>
+<button class="p-1 hover:text-primary transition-colors rounded hover:bg-surface-container"><span class="material-symbols-outlined" style="font-size: 20px;">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 ml-[220px] mt-[48px] overflow-y-auto p-layout-margin bg-background relative">
+<!-- Page Header -->
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-1">Partner Integrations</h2>
+<p class="text-on-surface-variant">Configure API connections and map outlets for food aggregators.</p>
+</div>
+<div class="flex gap-sm">
+<button class="flex items-center gap-xs px-3 py-1.5 rounded border border-gray-200 text-gray-800 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" style="font-size: 16px;">history</span>
+                    Sync Logs
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+<!-- Active Integration Panel (GoFood) -->
+<div class="col-span-1 lg:col-span-8 bg-surface-container-lowest border border-gray-200 rounded-xl shadow-sm flex flex-col overflow-hidden">
+<!-- Card Header -->
+<div class="p-md border-b border-gray-200 flex justify-between items-center bg-surface-container-low">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center shadow-sm overflow-hidden">
+<img alt="Abstract red logo placeholder" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, glossy red acrylic abstract shape on a pristine white background. The lighting is bright and studio-quality, creating crisp highlights and a modern, high-contrast aesthetic suitable for a tech brand logo placeholder." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzTzsqJSDr6FGLZssn91y3uOptkrzVqI4CTDJc-CnTxA2kfkkGzikxOAoBP-DbIt026gwIlefQ7KB1gWA5N6QTa1yZVzZPJM6yoo6d69yBrRF5kGieGt1HrJqjmohoyYtTWOYN4qhqRnnF2Ibm3iwBOw8bxxxDBrhK0tqO1s4Jk1r1rwc8FiCaXWkUCE2AVVqg8eJtKXwl5lA620m1Xwa221KXdiJIqFRwCUr0yuT6Uhd7Jo3lIEWJelB4BkrZ_dZGsednSIvmK3mM"/>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-sm">
+                                GoFood
+                                <span class="bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-[10px] uppercase tracking-wider border border-[#d2e3b8]">Active</span>
+</h3>
+<p class="font-caption text-caption text-gray-400">Last synced: Today, 14:32</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success-text"></div>
+</label>
+</div>
+<div class="p-md flex flex-col gap-lg">
+<!-- API Credentials Section -->
+<section>
+<h4 class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-md border-b border-gray-200 pb-1">API Credentials</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps uppercase text-gray-600">Merchant ID</label>
+<input class="border border-gray-200 rounded py-1.5 px-2 bg-white focus:border-inverse-primary focus:ring-1 focus:ring-amber-50 outline-none font-price-md text-price-md text-gray-800 transition-shadow" type="text" value="GF-MERCH-88291"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps uppercase text-gray-600">Environment</label>
+<select class="border border-gray-200 rounded py-1.5 px-2 bg-white focus:border-inverse-primary outline-none font-body-md text-gray-800 appearance-none">
+<option>Production</option>
+<option>Sandbox</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs md:col-span-2">
+<label class="font-label-caps text-label-caps uppercase text-gray-600">Client Secret</label>
+<div class="relative">
+<input class="w-full border border-gray-200 rounded py-1.5 px-2 bg-white focus:border-inverse-primary focus:ring-1 focus:ring-amber-50 outline-none font-price-md text-price-md text-gray-800 pr-8" type="password" value="sk_live_1234567890abcdef"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+<span class="material-symbols-outlined" style="font-size: 16px;">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Outlet Mapping Table -->
+<section>
+<div class="flex justify-between items-end mb-md border-b border-gray-200 pb-1">
+<h4 class="font-label-caps text-label-caps uppercase text-on-surface-variant">Outlet Mapping</h4>
+<button class="text-primary font-label-caps text-label-caps uppercase hover:underline">Auto-Map</button>
+</div>
+<div class="border border-gray-200 rounded-lg overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low font-label-caps text-label-caps text-gray-400 uppercase">
+<tr>
+<th class="py-2 px-3 font-normal">POS Outlet</th>
+<th class="py-2 px-3 font-normal">GoFood ID</th>
+<th class="py-2 px-3 font-normal text-right">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-md">
+<tr class="border-t-[0.5px] border-gray-200 hover:bg-surface-container-lowest">
+<td class="py-2 px-3 text-gray-800">Terminal 01 (Main)</td>
+<td class="py-2 px-3">
+<input class="w-full border border-transparent hover:border-gray-200 focus:border-inverse-primary rounded px-1 py-0.5 bg-transparent focus:bg-white outline-none font-price-md text-price-md transition-colors" type="text" value="GF-OUT-001"/>
+</td>
+<td class="py-2 px-3 text-right">
+<span class="inline-flex items-center gap-1 text-success-text font-caption text-caption">
+<span class="w-1.5 h-1.5 rounded-full bg-success-text"></span> Mapped
+                                            </span>
+</td>
+</tr>
+<tr class="border-t-[0.5px] border-gray-200 hover:bg-surface-container-lowest">
+<td class="py-2 px-3 text-gray-800">Kiosk B (Mall)</td>
+<td class="py-2 px-3">
+<input class="w-full border border-transparent hover:border-gray-200 focus:border-inverse-primary rounded px-1 py-0.5 bg-transparent focus:bg-white outline-none font-price-md text-price-md transition-colors text-gray-400 focus:text-gray-800" placeholder="Enter ID..." type="text"/>
+</td>
+<td class="py-2 px-3 text-right">
+<span class="inline-flex items-center gap-1 text-danger-text font-caption text-caption">
+<span class="w-1.5 h-1.5 rounded-full bg-danger-text"></span> Pending
+                                            </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Action Footer -->
+<div class="mt-auto p-md border-t border-gray-200 bg-surface-container-low flex justify-between items-center">
+<button class="flex items-center gap-xs px-3 py-1.5 rounded border border-gray-200 text-gray-600 hover:bg-white transition-colors bg-surface-container-lowest shadow-sm font-label-caps text-label-caps uppercase">
+<span class="material-symbols-outlined" style="font-size: 16px;">sync</span>
+                        Force Sync Menu
+                    </button>
+<div class="flex gap-sm">
+<button class="px-4 py-1.5 rounded border border-gray-200 text-gray-800 hover:bg-white transition-colors font-label-caps text-label-caps uppercase">Cancel</button>
+<button class="px-4 py-1.5 rounded bg-inverse-primary text-amber-800 hover:bg-amber-100 transition-colors font-label-caps text-label-caps uppercase shadow-sm">Save Config</button>
+</div>
+</div>
+</div>
+<!-- Side Column: Inactive/Setup & Logs -->
+<div class="col-span-1 lg:col-span-4 flex flex-col gap-lg">
+<!-- Inactive Integration (GrabFood) -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl shadow-sm overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
+<div class="p-md flex flex-col items-center text-center gap-sm">
+<div class="w-12 h-12 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center mb-1 grayscale">
+<img alt="Abstract green logo placeholder" class="w-full h-full object-cover rounded-xl" data-alt="A close-up shot of a glossy, vibrant green geometric shape against a neutral gray background. The lighting is soft and diffused, emphasizing the smooth texture and modern tech aesthetic suitable for a corporate identity placeholder." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjSZsft8IisgcdZWkTpPgzj7KwAz04W96LK4IkeuNxJR0qEaWcJwJA3pQxomi7yD3WRHD5n1Sp9MotStoQ7DqvzN9wkJs6kh8RS_s7aM_Vs4gmcCGUeziFi9VJLe_wmDKPW5nNxHVJektpPGaVjFPlMq1YGaokuVDeOOBl7J9ldhMD4G90g7SmK0uLO9dX55R3u6soT-Sp-1aUTMzxVD1tVxg96vMZX498uXNe14MRT4TNQwdH9XAx-WbJJPMjb-nzpJJJDpBw7L7I"/>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">GrabFood</h3>
+<p class="font-body-md text-gray-600 text-[12px] leading-tight mb-2">Connect your menu and receive orders directly into the POS.</p>
+<button class="w-full px-4 py-2 rounded bg-surface-container-high text-gray-800 hover:bg-gray-200 transition-colors font-label-caps text-label-caps uppercase border border-gray-200">
+                            Connect Account
+                        </button>
+</div>
+</div>
+<!-- Info Card -->
+<div class="bg-info-bg border border-[#cce0f5] rounded-xl p-md">
+<div class="flex items-start gap-sm text-info-text">
+<span class="material-symbols-outlined mt-0.5" style="font-size: 18px;">info</span>
+<div>
+<h5 class="font-label-caps text-label-caps uppercase mb-1">Webhook Configuration</h5>
+<p class="font-caption text-caption opacity-90 leading-relaxed">
+                                Ensure your Webhook URL is correctly registered in the aggregator portal to receive real-time order updates. 
+                                <a class="underline hover:text-primary transition-colors" href="#">View documentation</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

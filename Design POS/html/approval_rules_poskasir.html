@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Approval Rules - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#ffb869",
+                        "surface-tint": "#885200",
+                        "on-background": "#1a1c1b",
+                        "primary": "#855000",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-container-low": "#f4f4f2",
+                        "on-error": "#ffffff",
+                        "danger-text": "#A32D2D",
+                        "secondary": "#5f5f59",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-container": "#e1e0d9",
+                        "surface-dim": "#dadad8",
+                        "tertiary-container": "#a36800",
+                        "outline-variant": "#d7c3b1",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeeec",
+                        "gray-200": "#D3D1C7",
+                        "danger-bg": "#FCEBEB",
+                        "gray-600": "#444441",
+                        "surface-variant": "#e2e3e1",
+                        "inverse-on-surface": "#f1f1ef",
+                        "success-bg": "#EAF3DE",
+                        "on-surface-variant": "#524436",
+                        "tertiary-fixed": "#ffddb7",
+                        "secondary-fixed": "#e4e2dc",
+                        "primary-fixed": "#ffdcbb",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-highest": "#e2e3e1",
+                        "info-bg": "#E6F1FB",
+                        "outline": "#857464",
+                        "info-text": "#185FA5",
+                        "tertiary": "#825100",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-800": "#2C2C2A",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#63635d",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1b",
+                        "background": "#f9f9f7",
+                        "primary-container": "#a76500",
+                        "primary-fixed-dim": "#ffb869",
+                        "on-secondary-fixed": "#1b1c18",
+                        "surface-bright": "#f9f9f7",
+                        "amber-600": "#854F0B",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "amber-50": "#FAEEDA",
+                        "surface": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "success-text": "#3B6D11",
+                        "amber-800": "#633806",
+                        "inverse-surface": "#2f3130",
+                        "amber-100": "#FAC775",
+                        "gray-400": "#888780"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "md": "16px",
+                        "sidebar-width": "220px",
+                        "base": "4px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "xl": "32px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "label-caps": ["Geist"],
+                        "caption": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "price-lg": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "display-lg": ["Instrument Serif"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen overflow-hidden flex">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-low dark:bg-gray-800 w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40 hidden md:flex">
+<div class="px-lg mb-xl">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-on-surface-variant">Terminal 01</p>
+</div>
+<div class="px-md mb-lg">
+<button class="w-full bg-amber-400 text-amber-800 rounded py-2 font-body-md text-body-md font-semibold hover:bg-amber-500 transition-colors">
+                New Order
+            </button>
+</div>
+<nav class="flex-1 px-md space-y-1">
+<a class="flex items-center gap-3 py-2 px-3 rounded hover:bg-surface-container-highest transition-colors text-gray-600 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded hover:bg-surface-container-highest transition-colors text-gray-600 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span>Point of Sale</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded hover:bg-surface-container-highest transition-colors text-gray-600 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span>Orders</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded hover:bg-surface-container-highest transition-colors text-gray-600 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+<span>Menu Management</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded hover:bg-surface-container-highest transition-colors text-gray-600 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span>Inventory</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded hover:bg-surface-container-highest transition-colors text-gray-600 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="mt-auto px-md space-y-1 border-t border-outline-variant pt-4 mx-md">
+<!-- Active State on Settings for this specific page context -->
+<a class="flex items-center gap-3 py-2 px-3 rounded bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 py-2 px-3 rounded hover:bg-surface-container-highest transition-colors text-gray-600 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant flex justify-between items-center w-full px-lg md:ml-sidebar-width" style="width: calc(100% - 220px);">
+<!-- Search placeholder on left -->
+<div class="flex items-center gap-2 text-on-surface-variant bg-surface-container py-1 px-3 rounded">
+<span class="material-symbols-outlined text-[18px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 font-body-md text-body-md w-48 text-on-surface placeholder-gray-400" placeholder="Search..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-6">
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity" href="#">Fast Food</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity" href="#">Drinks</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity" href="#">Desserts</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded font-body-md text-body-md hover:bg-amber-100 transition-colors">Hold Order</button>
+<button class="bg-amber-400 text-amber-800 px-3 py-1.5 rounded font-body-md text-body-md hover:bg-amber-500 transition-colors">Checkout</button>
+<div class="flex items-center gap-3 border-l border-outline-variant pl-4 ml-2">
+<button class="text-on-surface-variant hover:text-primary transition-opacity"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity"><span class="material-symbols-outlined">sync</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="mt-topbar-height md:ml-sidebar-width flex-1 overflow-y-auto bg-background p-layout-margin">
+<div class="max-w-4xl mx-auto">
+<!-- Page Header -->
+<div class="mb-xl flex justify-between items-end">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-1">Approval Rules</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Configure operational thresholds for manager overrides.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-4 py-2 border border-gray-200 rounded text-gray-600 hover:bg-gray-50 transition-colors">Discard Changes</button>
+<button class="px-4 py-2 bg-amber-400 text-amber-800 rounded font-semibold hover:bg-amber-500 transition-colors">Save Configuration</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Left Column: Settings List -->
+<div class="lg:col-span-2 space-y-md">
+<!-- Setting Card 1 -->
+<div class="bg-white border border-gray-200 rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Manual Discount Threshold</h3>
+<p class="font-caption text-caption text-gray-600 mt-1">Require owner approval when a cashier applies a manual discount above this amount.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-400"></div>
+</label>
+</div>
+<div class="flex items-center gap-sm bg-gray-50 p-3 rounded border border-gray-200">
+<span class="font-label-caps text-label-caps text-gray-600 w-24">Nominal Limit</span>
+<div class="relative flex-1">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 font-price-md">$</span>
+<input class="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded font-price-md text-price-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-shadow bg-white text-right" type="number" value="25.00"/>
+</div>
+</div>
+</div>
+<!-- Setting Card 2 -->
+<div class="bg-white border border-gray-200 rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Voided Items Value</h3>
+<p class="font-caption text-caption text-gray-600 mt-1">Trigger approval if total voided items in a single check exceed this nominal amount.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-400"></div>
+</label>
+</div>
+<div class="flex items-center gap-sm bg-gray-50 p-3 rounded border border-gray-200">
+<span class="font-label-caps text-label-caps text-gray-600 w-24">Total Value</span>
+<div class="relative flex-1">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 font-price-md">$</span>
+<input class="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded font-price-md text-price-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-shadow bg-white text-right" type="number" value="50.00"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Info / Secondary -->
+<div class="space-y-md">
+<div class="bg-info-bg border border-info-text border-opacity-20 rounded-xl p-md">
+<div class="flex items-center gap-2 mb-2 text-info-text">
+<span class="material-symbols-outlined">info</span>
+<h4 class="font-headline-sm text-headline-sm">How it works</h4>
+</div>
+<p class="font-body-md text-body-md text-gray-800">
+                            When an action exceeds these thresholds, the POS will lock the screen and require a Manager or Owner PIN to proceed.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

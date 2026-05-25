@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
+class Customer extends Model
+{
+    use HasFactory;
+
+    protected $table = 'customers';
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    protected $fillable = [
+        'id',
+        'outlet_id',
+        'name',
+        'phone',
+        'email',
+        'birthdate',
+        'is_active',
+        'registered_via',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'birthdate' => 'datetime',
+        ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($customer) {
+            if (empty($customer->id)) {
+                $customer->id = (string) Str::uuid();
+            }
+        });
+    }
+
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class, 'outlet_id');
+    }
+
+    public function membership()
+    {
+        return $this->hasOne(Membership::class, 'customer_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'customer_id');
+    }
+}

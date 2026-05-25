@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Konfigurasi Printer</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#ffb869",
+                        "surface-tint": "#885200",
+                        "on-background": "#1a1c1b",
+                        "primary": "#855000",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-container-low": "#f4f4f2",
+                        "on-error": "#ffffff",
+                        "danger-text": "#A32D2D",
+                        "secondary": "#5f5f59",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-container": "#e1e0d9",
+                        "surface-dim": "#dadad8",
+                        "tertiary-container": "#a36800",
+                        "outline-variant": "#d7c3b1",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeeec",
+                        "gray-200": "#D3D1C7",
+                        "danger-bg": "#FCEBEB",
+                        "gray-600": "#444441",
+                        "surface-variant": "#e2e3e1",
+                        "inverse-on-surface": "#f1f1ef",
+                        "success-bg": "#EAF3DE",
+                        "on-surface-variant": "#524436",
+                        "tertiary-fixed": "#ffddb7",
+                        "secondary-fixed": "#e4e2dc",
+                        "primary-fixed": "#ffdcbb",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-highest": "#e2e3e1",
+                        "info-bg": "#E6F1FB",
+                        "outline": "#857464",
+                        "info-text": "#185FA5",
+                        "tertiary": "#825100",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-800": "#2C2C2A",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#63635d",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1b",
+                        "background": "#f9f9f7",
+                        "primary-container": "#a76500",
+                        "primary-fixed-dim": "#ffb869",
+                        "on-secondary-fixed": "#1b1c18",
+                        "surface-bright": "#f9f9f7",
+                        "amber-600": "#854F0B",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "amber-50": "#FAEEDA",
+                        "surface": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "success-text": "#3B6D11",
+                        "amber-800": "#633806",
+                        "inverse-surface": "#2f3130",
+                        "amber-100": "#FAC775",
+                        "gray-400": "#888780"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "md": "16px",
+                        "sidebar-width": "220px",
+                        "base": "4px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "xl": "32px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Geist", "sans-serif"],
+                        "price-md": ["JetBrains Mono", "monospace"],
+                        "label-caps": ["Geist", "sans-serif"],
+                        "caption": ["Geist", "sans-serif"],
+                        "display-md": ["Instrument Serif", "serif"],
+                        "price-lg": ["JetBrains Mono", "monospace"],
+                        "headline-sm": ["Geist", "sans-serif"],
+                        "display-lg": ["Instrument Serif", "serif"],
+                        "body-lg": ["Geist", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Base styles to ensure consistency if Tailwind classes are missed */
+        body {
+            background-color: #f9f9f7;
+            color: #1a1c1b;
+            font-family: 'Geist', sans-serif;
+        }
+        
+        /* Subtle transition for interactive elements */
+        .interactive-hover {
+            transition: all 0.15s ease-in-out;
+        }
+        
+        /* Hairline borders */
+        .border-hairline {
+            border-width: 0.5px;
+            border-color: #D3D1C7;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased flex">
+<!-- SideNavBar -->
+<nav class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant flex flex-col h-full py-md z-40 hidden md:flex">
+<!-- Brand Header -->
+<div class="px-lg mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-on-primary font-display-md text-display-md font-bold">P</div>
+<div>
+<h1 class="font-display-md text-display-md text-primary font-bold leading-none">PosKasir</h1>
+<p class="font-caption text-caption text-on-surface-variant">Terminal 01</p>
+</div>
+</div>
+<!-- Main Navigation Tabs -->
+<div class="px-md flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-sm py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+                Menu Management
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+                Reports
+            </a>
+</div>
+<!-- CTA -->
+<div class="px-md mt-auto mb-lg">
+<button class="w-full bg-primary text-on-primary py-2 rounded-lg font-label-caps text-label-caps interactive-hover hover:opacity-90 flex items-center justify-center gap-sm shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<!-- Footer Tabs -->
+<div class="px-md flex flex-col gap-1 border-t border-hairline pt-sm">
+<a class="flex items-center gap-sm py-2 px-3 rounded-md bg-surface-container text-gray-800 border-l-2 border-primary font-body-md text-body-md Active: scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-md text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-0 md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="h-topbar-height fixed top-0 right-0 z-50 bg-surface-bright border-b border-outline-variant flex justify-between items-center w-full px-lg md:w-[calc(100%-220px)]">
+<!-- Navigation Links (Breadcrumbs style) -->
+<div class="flex items-center gap-lg hidden md:flex">
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-opacity uppercase" href="#">Fast Food</a>
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-opacity uppercase" href="#">Drinks</a>
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-opacity uppercase" href="#">Desserts</a>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-md ml-auto">
+<div class="flex items-center gap-sm border-r border-hairline pr-md">
+<button class="text-on-surface-variant hover:text-primary transition-opacity p-1 rounded-full hover:bg-surface-container"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity p-1 rounded-full hover:bg-surface-container"><span class="material-symbols-outlined">sync</span></button>
+</div>
+<button class="text-secondary font-label-caps text-label-caps uppercase hover:text-primary transition-opacity">Hold Order</button>
+<button class="bg-primary text-on-primary px-3 py-1.5 rounded font-label-caps text-label-caps uppercase hover:opacity-90 transition-opacity">Checkout</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-gray-200 overflow-hidden ml-sm cursor-pointer hover:border-primary transition-colors flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="pt-topbar-height p-layout-margin flex-1">
+<!-- Page Header -->
+<div class="mb-xl">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">print</span>
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">Hardware / Settings</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-on-background">Konfigurasi Printer</h2>
+<p class="font-body-md text-body-md text-secondary mt-1">Manage local and network thermal printers for receipts and kitchen dockets.</p>
+</div>
+<!-- Configuration Layout: Bento Grid Style -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+<!-- Left Column: Printer List -->
+<div class="lg:col-span-4 flex flex-col gap-md">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+<div class="bg-surface-container-low border-b border-hairline px-md py-sm flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-background">Active Printers</h3>
+<span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label-caps text-label-caps text-[10px]">2 DEVICES</span>
+</div>
+<div class="flex flex-col">
+<!-- Printer Item 1 (Selected/Active styling) -->
+<div class="p-md border-b border-hairline bg-amber-50/30 border-l-2 border-l-primary cursor-pointer hover:bg-amber-50/50 transition-colors">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h4 class="font-body-md text-body-md text-on-background font-bold">Cashier Main</h4>
+<p class="font-caption text-caption text-secondary">Epson TM-T82X</p>
+</div>
+<span class="bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-label-caps text-[10px]">ONLINE</span>
+</div>
+<div class="flex gap-sm text-secondary font-caption text-caption mt-2">
+<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[14px]">usb</span> USB</span>
+<span class="text-gray-200">|</span>
+<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[14px]">receipt</span> 80mm</span>
+</div>
+</div>
+<!-- Printer Item 2 -->
+<div class="p-md border-b border-hairline hover:bg-surface-container-lowest cursor-pointer transition-colors border-l-2 border-l-transparent">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h4 class="font-body-md text-body-md text-on-background">Kitchen Bar</h4>
+<p class="font-caption text-caption text-secondary">Star Micronics TSP143</p>
+</div>
+<span class="bg-danger-bg text-danger-text px-2 py-0.5 rounded-full font-label-caps text-label-caps text-[10px]">OFFLINE</span>
+</div>
+<div class="flex gap-sm text-secondary font-caption text-caption mt-2">
+<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[14px]">router</span> 192.168.1.105</span>
+<span class="text-gray-200">|</span>
+<span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[14px]">receipt</span> 80mm</span>
+</div>
+</div>
+<!-- Add New Trigger -->
+<button class="p-md text-center text-primary font-body-md text-body-md hover:bg-surface-container transition-colors flex items-center justify-center gap-sm w-full">
+<span class="material-symbols-outlined text-[18px]">add_circle</span> Add Printer
+                            </button>
+</div>
+</div>
+</div>
+<!-- Right Column: Configuration Form -->
+<div class="lg:col-span-8">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-lg shadow-sm">
+<div class="flex justify-between items-center mb-xl pb-sm border-b border-hairline">
+<h3 class="font-headline-sm text-headline-sm text-on-background">Edit Printer Details</h3>
+<button class="text-danger-text font-label-caps text-label-caps hover:bg-danger-bg px-2 py-1 rounded transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">delete</span> Remove
+                            </button>
+</div>
+<form class="flex flex-col gap-lg">
+<!-- Row 1: Basic Info -->
+<div class="grid grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Printer Name</label>
+<input class="bg-surface-container-lowest border border-gray-200 rounded-lg px-sm py-2 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full" type="text" value="Cashier Main"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Model (Optional)</label>
+<input class="bg-surface-container-lowest border border-gray-200 rounded-lg px-sm py-2 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full" type="text" value="Epson TM-T82X"/>
+</div>
+</div>
+<!-- Row 2: Connection Settings -->
+<div class="bg-surface-container-low p-md rounded-lg border border-hairline">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-sm">Connection Interface</h4>
+<div class="flex gap-md mb-md">
+<label class="flex items-center gap-sm cursor-pointer">
+<input checked="" class="text-primary focus:ring-primary h-4 w-4 border-gray-400" name="connection_type" type="radio" value="usb"/>
+<span class="font-body-md text-body-md text-on-background flex items-center gap-xs"><span class="material-symbols-outlined text-[18px] text-secondary">usb</span> USB Local</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer">
+<input class="text-primary focus:ring-primary h-4 w-4 border-gray-400" name="connection_type" type="radio" value="lan"/>
+<span class="font-body-md text-body-md text-on-background flex items-center gap-xs"><span class="material-symbols-outlined text-[18px] text-secondary">router</span> Network / LAN</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer">
+<input class="text-primary focus:ring-primary h-4 w-4 border-gray-400" name="connection_type" type="radio" value="bluetooth"/>
+<span class="font-body-md text-body-md text-on-background flex items-center gap-xs"><span class="material-symbols-outlined text-[18px] text-secondary">bluetooth</span> Bluetooth</span>
+</label>
+</div>
+<!-- Conditional Field: IP Address (Hidden by default since USB is checked, but shown for UI completeness) -->
+<div class="flex flex-col gap-xs opacity-50 pointer-events-none transition-opacity">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">IP Address</label>
+<div class="flex gap-sm">
+<input class="bg-surface-container-lowest border border-gray-200 rounded-lg px-sm py-2 font-price-md text-price-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full max-w-[200px]" disabled="" placeholder="192.168.1.x" type="text"/>
+<button class="bg-surface-container-high text-on-surface-variant px-sm py-2 rounded-lg font-label-caps text-label-caps uppercase border border-gray-200" disabled="" type="button">Ping</button>
+</div>
+</div>
+</div>
+<!-- Row 3: Print Settings -->
+<div class="grid grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Paper Size Width</label>
+<div class="flex gap-sm">
+<label class="flex-1 text-center cursor-pointer">
+<input class="peer sr-only" name="paper_size" type="radio" value="58"/>
+<div class="py-2 border border-gray-200 rounded-lg peer-checked:border-primary peer-checked:bg-amber-50 peer-checked:text-primary font-body-md text-body-md text-secondary transition-colors">
+                                                58 mm
+                                            </div>
+</label>
+<label class="flex-1 text-center cursor-pointer">
+<input checked="" class="peer sr-only" name="paper_size" type="radio" value="80"/>
+<div class="py-2 border border-gray-200 rounded-lg peer-checked:border-primary peer-checked:bg-amber-50 peer-checked:text-primary font-body-md text-body-md text-secondary transition-colors">
+                                                80 mm
+                                            </div>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Assigned Role</label>
+<select class="bg-surface-container-lowest border border-gray-200 rounded-lg px-sm py-2 font-body-md text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full">
+<option>Receipt / Cashier</option>
+<option>Kitchen Docket</option>
+<option>Bar Order</option>
+<option>Label Printer</option>
+</select>
+</div>
+</div>
+<!-- Actions Footer -->
+<div class="flex justify-between items-center mt-md pt-lg border-t border-hairline">
+<button class="bg-amber-50 border border-amber-200 text-amber-800 px-lg py-2 rounded-lg font-label-caps text-label-caps uppercase hover:bg-amber-100 transition-colors flex items-center gap-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span> Test Print
+                                </button>
+<div class="flex gap-md">
+<button class="text-secondary px-lg py-2 rounded-lg font-label-caps text-label-caps uppercase hover:bg-surface-container transition-colors" type="button">Cancel</button>
+<button class="bg-primary text-on-primary px-lg py-2 rounded-lg font-label-caps text-label-caps uppercase hover:opacity-90 transition-opacity shadow-sm" type="button">Save Configuration</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,94 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0;font-family:sans-serif}
+.section{margin-bottom:28px}
+.section-label{font-size:11px;font-weight:500;color:#888780;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:5px}
+.swatch-block{width:52px;height:36px;border-radius:6px;border:0.5px solid rgba(0,0,0,0.08)}
+.swatch-hex{font-size:10px;color:#888780;font-family:monospace}
+.swatch-name{font-size:10px;color:#5F5E5A;text-align:center}
+.token-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.token-card{padding:12px 14px;border-radius:8px;border:0.5px solid #D3D1C7;background:#fff}
+.token-role{font-size:10px;font-weight:500;color:#888780;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.token-val{font-size:13px;font-weight:500;color:#2C2C2A}
+.token-sub{font-size:11px;color:#888780;margin-top:2px}
+.demo-bar{height:36px;border-radius:6px;display:flex;align-items:center;padding:0 14px;font-size:12px;font-weight:500;margin-bottom:6px}
+.demo-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.demo-btn{padding:6px 16px;border-radius:6px;font-size:12px;font-weight:500;border:none;cursor:default}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:500}
+.divider{height:0.5px;background:#D3D1C7;margin:20px 0}
+</style>
+<div class="wrap">
+
+<div class="section">
+  <div class="section-label">Primary — Amber (brand & CTA)</div>
+  <div class="swatches">
+    <div class="swatch"><div class="swatch-block" style="background:#FAEEDA"></div><div class="swatch-hex">#FAEEDA</div><div class="swatch-name">50 · bg subtle</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#FAC775"></div><div class="swatch-hex">#FAC775</div><div class="swatch-name">100 · bg hover</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#EF9F27"></div><div class="swatch-hex">#EF9F27</div><div class="swatch-name">200 · accent</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#BA7517"></div><div class="swatch-hex">#BA7517</div><div class="swatch-name">400 · primary</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#854F0B"></div><div class="swatch-hex">#854F0B</div><div class="swatch-name">600 · border</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#633806"></div><div class="swatch-hex">#633806</div><div class="swatch-name">800 · text</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Neutral — Warm Gray (surface & teks)</div>
+  <div class="swatches">
+    <div class="swatch"><div class="swatch-block" style="background:#FAFAF8"></div><div class="swatch-hex">#FAFAF8</div><div class="swatch-name">page bg</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#F1EFE8"></div><div class="swatch-hex">#F1EFE8</div><div class="swatch-name">surface</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#D3D1C7"></div><div class="swatch-hex">#D3D1C7</div><div class="swatch-name">border</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#888780"></div><div class="swatch-hex">#888780</div><div class="swatch-name">muted</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#444441"></div><div class="swatch-hex">#444441</div><div class="swatch-name">secondary</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#2C2C2A"></div><div class="swatch-hex">#2C2C2A</div><div class="swatch-name">primary</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Semantic — Status colors</div>
+  <div class="swatches">
+    <div class="swatch"><div class="swatch-block" style="background:#EAF3DE;border-color:#97C459"></div><div class="swatch-hex">#EAF3DE</div><div class="swatch-name">success bg</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#3B6D11"></div><div class="swatch-hex">#3B6D11</div><div class="swatch-name">success text</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#FCEBEB;border-color:#F09595"></div><div class="swatch-hex">#FCEBEB</div><div class="swatch-name">danger bg</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#A32D2D"></div><div class="swatch-hex">#A32D2D</div><div class="swatch-name">danger text</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#E6F1FB;border-color:#85B7EB"></div><div class="swatch-hex">#E6F1FB</div><div class="swatch-name">info bg</div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#185FA5"></div><div class="swatch-hex">#185FA5</div><div class="swatch-name">info text</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Preview komponen</div>
+
+  <div class="demo-bar" style="background:#BA7517;color:#fff">Primary button — Buat order baru</div>
+  <div class="demo-bar" style="background:#FAEEDA;color:#633806;border:0.5px solid #EF9F27">Secondary button — Lihat detail</div>
+  <div class="demo-bar" style="background:#F1EFE8;color:#444441;border:0.5px solid #D3D1C7">Sidebar nav item — aktif</div>
+
+  <div class="demo-row">
+    <span class="badge" style="background:#EAF3DE;color:#3B6D11">Selesai</span>
+    <span class="badge" style="background:#FAEEDA;color:#633806">Proses</span>
+    <span class="badge" style="background:#FCEBEB;color:#A32D2D">Dibatalkan</span>
+    <span class="badge" style="background:#E6F1FB;color:#185FA5">Online</span>
+    <span class="badge" style="background:#F1EFE8;color:#5F5E5A">Draft</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Token mapping</div>
+  <div class="token-row">
+    <div class="token-card"><div class="token-role">Page background</div><div class="token-val">#FAFAF8</div><div class="token-sub">Warm white, bukan cold white</div></div>
+    <div class="token-card"><div class="token-role">Card / surface</div><div class="token-val">#FFFFFF</div><div class="token-sub">Putih bersih di atas warm bg</div></div>
+    <div class="token-card"><div class="token-role">Sidebar bg</div><div class="token-val">#F1EFE8</div><div class="token-sub">Warm gray, kontras halus</div></div>
+    <div class="token-card"><div class="token-role">CTA / primary action</div><div class="token-val">#BA7517</div><div class="token-sub">Amber 400 — tegas, hangat</div></div>
+    <div class="token-card"><div class="token-role">Text primary</div><div class="token-val">#2C2C2A</div><div class="token-sub">Bukan pure black</div></div>
+    <div class="token-card"><div class="token-role">Text secondary</div><div class="token-val">#888780</div><div class="token-sub">Label, placeholder, hint</div></div>
+  </div>
+</div>
+
+</div>
+</script>

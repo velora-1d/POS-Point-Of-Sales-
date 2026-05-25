@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pengeluaran Operasional - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#ffb869",
+                      "surface-tint": "#885200",
+                      "on-background": "#1a1c1b",
+                      "primary": "#855000",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed-variant": "#673d00",
+                      "on-primary-fixed": "#2b1700",
+                      "surface-container-low": "#f4f4f2",
+                      "on-error": "#ffffff",
+                      "danger-text": "#A32D2D",
+                      "secondary": "#5f5f59",
+                      "on-tertiary-fixed": "#2a1700",
+                      "secondary-container": "#e1e0d9",
+                      "surface-dim": "#dadad8",
+                      "tertiary-container": "#a36800",
+                      "outline-variant": "#d7c3b1",
+                      "on-secondary": "#ffffff",
+                      "surface-container": "#eeeeec",
+                      "gray-200": "#D3D1C7",
+                      "danger-bg": "#FCEBEB",
+                      "gray-600": "#444441",
+                      "surface-variant": "#e2e3e1",
+                      "inverse-on-surface": "#f1f1ef",
+                      "success-bg": "#EAF3DE",
+                      "on-surface-variant": "#524436",
+                      "tertiary-fixed": "#ffddb7",
+                      "secondary-fixed": "#e4e2dc",
+                      "primary-fixed": "#ffdcbb",
+                      "on-tertiary-container": "#fffbff",
+                      "on-primary-container": "#fffbff",
+                      "surface-container-highest": "#e2e3e1",
+                      "info-bg": "#E6F1FB",
+                      "outline": "#857464",
+                      "info-text": "#185FA5",
+                      "tertiary": "#825100",
+                      "secondary-fixed-dim": "#c8c6c0",
+                      "on-secondary-fixed-variant": "#474742",
+                      "gray-800": "#2C2C2A",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary": "#ffffff",
+                      "on-secondary-container": "#63635d",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1a1c1b",
+                      "background": "#f9f9f7",
+                      "primary-container": "#a76500",
+                      "primary-fixed-dim": "#ffb869",
+                      "on-secondary-fixed": "#1b1c18",
+                      "surface-bright": "#f9f9f7",
+                      "amber-600": "#854F0B",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb95d",
+                      "amber-50": "#FAEEDA",
+                      "surface": "#f9f9f7",
+                      "surface-container-high": "#e8e8e6",
+                      "success-text": "#3B6D11",
+                      "amber-800": "#633806",
+                      "inverse-surface": "#2f3130",
+                      "amber-100": "#FAC775",
+                      "gray-400": "#888780"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "md": "16px",
+                      "sidebar-width": "220px",
+                      "base": "4px",
+                      "topbar-height": "48px",
+                      "xs": "4px",
+                      "layout-margin": "28px",
+                      "xl": "32px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "body-md": ["Geist", "sans-serif"],
+                      "price-md": ["JetBrains Mono", "monospace"],
+                      "label-caps": ["Geist", "sans-serif"],
+                      "caption": ["Geist", "sans-serif"],
+                      "display-md": ["Instrument Serif", "serif"],
+                      "price-lg": ["JetBrains Mono", "monospace"],
+                      "headline-sm": ["Geist", "sans-serif"],
+                      "display-lg": ["Instrument Serif", "serif"],
+                      "body-lg": ["Geist", "sans-serif"]
+              },
+              "fontSize": {
+                      "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                      "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                      "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Hide scrollbar for clean UI but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .chart-pie {
+            background: conic-gradient(
+                #855000 0% 45%, /* primary */
+                #FAC775 45% 75%, /* amber-100 */
+                #D3D1C7 75% 90%, /* gray-200 */
+                #857464 90% 100%  /* outline */
+            );
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden flex">
+<!-- SideNavBar -->
+<nav aria-label="Sidebar Navigation" class="w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low dark:bg-gray-800 flex flex-col h-full py-md z-40">
+<!-- Brand / Header -->
+<div class="px-md pb-md mb-sm border-b-[0.5px] border-outline-variant flex flex-col items-center justify-center">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-on-surface-variant mt-1">Terminal 01</p>
+</div>
+<!-- CTA -->
+<div class="px-md mb-md">
+<button class="w-full bg-amber-400 hover:bg-amber-500 text-amber-800 font-label-caps text-label-caps uppercase py-2 px-4 rounded-lg flex items-center justify-center gap-sm transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                New Order
+            </button>
+</div>
+<!-- Primary Tabs -->
+<div class="flex-1 overflow-y-auto no-scrollbar px-sm flex flex-col gap-xs">
+<a class="flex items-center gap-sm py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">restaurant_menu</span>
+                Menu Management
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                Inventory
+            </a>
+<!-- Active Tab -->
+<a class="flex items-center gap-sm py-2 px-3 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[18px] icon-fill text-primary">analytics</span>
+                Reports
+            </a>
+</div>
+<!-- Footer Tabs -->
+<div class="px-sm mt-auto flex flex-col gap-xs pt-md border-t-[0.5px] border-outline-variant">
+<a class="flex items-center gap-sm py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-sm py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col ml-sidebar-width h-screen relative">
+<!-- TopAppBar -->
+<header class="h-topbar-height fixed top-0 right-0 z-50 border-b border-outline-variant bg-surface-bright dark:bg-surface-dim flex justify-between items-center px-lg" style="width: calc(100% - var(--tw-space-sidebar-width));">
+<!-- Navigation Links (Contextual/Breadcrumbs might fit better here normally, but strictly following JSON) -->
+<div class="flex items-center gap-md font-label-caps text-label-caps uppercase text-on-surface-variant dark:text-gray-400">
+<a class="hover:text-primary transition-opacity opacity-80 transition-all" href="#">Fast Food</a>
+<a class="hover:text-primary transition-opacity opacity-80 transition-all" href="#">Drinks</a>
+<a class="hover:text-primary transition-opacity opacity-80 transition-all" href="#">Desserts</a>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-md">
+<button class="flex items-center justify-center p-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center p-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sync</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant mx-1"></div>
+<button class="font-label-caps text-label-caps uppercase text-secondary hover:text-primary transition-colors">
+                    Hold Order
+                </button>
+<button class="bg-amber-50 border border-amber-200 text-amber-800 font-label-caps text-label-caps uppercase px-3 py-1.5 rounded flex items-center gap-1 hover:bg-amber-100 transition-colors">
+                    Checkout
+                </button>
+<button class="flex items-center justify-center p-1 text-on-surface-variant hover:text-primary transition-colors ml-2">
+<span class="material-symbols-outlined icon-fill">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto mt-topbar-height p-layout-margin bg-background">
+<div class="max-w-6xl mx-auto flex flex-col gap-lg">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-sm">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface leading-tight">Pengeluaran Operasional</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Manage and track your operational expenses.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-lowest border border-gray-200 text-on-surface font-label-caps text-label-caps px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                            Export
+                        </button>
+</div>
+</div>
+<!-- Top Grid: Form & Summary -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Add Expense Form (Left, col-span-4) -->
+<div class="lg:col-span-4 bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-md pb-sm border-b-[0.5px] border-gray-200">Record Expense</h3>
+<form class="flex flex-col gap-md">
+<!-- Field: Category -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Category</label>
+<select class="w-full bg-surface-container-lowest border border-gray-200 rounded-lg px-3 py-2 font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all appearance-none text-on-surface">
+<option>Supplies &amp; Ingredients</option>
+<option>Utilities (Water, Electricity)</option>
+<option>Maintenance &amp; Repairs</option>
+<option>Marketing &amp; Promo</option>
+<option>Miscellaneous</option>
+</select>
+</div>
+<!-- Field: Amount -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Amount (Rp)</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 font-price-md text-price-md text-gray-400">Rp</span>
+<input class="w-full bg-surface-container-lowest border border-gray-200 rounded-lg pl-8 pr-3 py-2 font-price-md text-price-md text-right focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all" placeholder="0" type="text"/>
+</div>
+</div>
+<!-- Field: Date -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Date</label>
+<input class="w-full bg-surface-container-lowest border border-gray-200 rounded-lg px-3 py-2 font-body-md text-body-md text-on-surface focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all" type="date" value="2023-10-24"/>
+</div>
+<!-- Field: Description -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Description</label>
+<textarea class="w-full bg-surface-container-lowest border border-gray-200 rounded-lg px-3 py-2 font-body-md text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition-all resize-none" placeholder="Brief details..." rows="2"></textarea>
+</div>
+<!-- Field: Receipt -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Proof of Receipt</label>
+<div class="border border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-gray-400 mb-1">upload_file</span>
+<span class="font-caption text-caption text-gray-600">Click to upload or drag &amp; drop</span>
+</div>
+</div>
+<button class="mt-2 w-full bg-amber-400 hover:bg-amber-500 text-amber-800 font-label-caps text-label-caps uppercase py-2.5 rounded-lg transition-colors" type="button">
+                                Submit Expense
+                            </button>
+</form>
+</div>
+<!-- Summary & Breakdown (Right, col-span-8) -->
+<div class="lg:col-span-8 flex flex-col gap-md">
+<!-- Top KPI Cards -->
+<div class="grid grid-cols-3 gap-md">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Total Expenses (MTD)</span>
+<span class="font-price-lg text-price-lg text-on-surface">Rp 12.450.000</span>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Largest Category</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">Supplies &amp; Ingredients</span>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Pending Receipts</span>
+<div class="flex items-center gap-2">
+<span class="font-price-lg text-price-lg text-danger-text">3</span>
+<span class="bg-danger-bg text-danger-text px-2 py-0.5 rounded-full font-caption text-caption">Action Required</span>
+</div>
+</div>
+</div>
+<!-- Chart Section -->
+<div class="flex-1 bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-md">Expense Breakdown</h3>
+<div class="flex-1 flex items-center justify-center gap-xl py-4">
+<!-- CSS Pie Chart Placeholder -->
+<div class="w-40 h-40 chart-pie shadow-sm border border-gray-200 relative flex items-center justify-center">
+<div class="w-24 h-24 bg-surface-container-lowest rounded-full absolute flex items-center justify-center flex-col">
+<span class="font-caption text-caption text-gray-400">Total</span>
+<span class="font-price-md text-price-md text-on-surface">12.45M</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex flex-col gap-2 min-w-[200px]">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded bg-primary"></div>
+<span class="font-body-md text-body-md text-on-surface">Supplies</span>
+</div>
+<span class="font-price-md text-price-md text-gray-600">45%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded bg-amber-100"></div>
+<span class="font-body-md text-body-md text-on-surface">Utilities</span>
+</div>
+<span class="font-price-md text-price-md text-gray-600">30%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded bg-gray-200"></div>
+<span class="font-body-md text-body-md text-on-surface">Maintenance</span>
+</div>
+<span class="font-price-md text-price-md text-gray-600">15%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded bg-outline"></div>
+<span class="font-body-md text-body-md text-on-surface">Other</span>
+</div>
+<span class="font-price-md text-price-md text-gray-600">10%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Ledger Table (Bottom) -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+<div class="px-md py-sm border-b border-gray-200 bg-surface-container-low flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Historical Expenses</h3>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-[18px]">search</span>
+<input class="bg-surface-container-lowest border border-gray-200 rounded-md pl-8 pr-3 py-1 font-body-md text-body-md text-sm outline-none focus:border-amber-400" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b-[0.5px] border-gray-200 bg-surface-container-low">
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 uppercase tracking-wider font-medium">Date</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 uppercase tracking-wider font-medium">Ref ID</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 uppercase tracking-wider font-medium">Category</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 uppercase tracking-wider font-medium">Description</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 uppercase tracking-wider font-medium text-center">Receipt</th>
+<th class="py-2 px-md font-label-caps text-label-caps text-gray-400 uppercase tracking-wider font-medium text-right">Amount (Rp)</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<!-- Row 1 -->
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-md text-on-surface-variant whitespace-nowrap">Oct 24, 2023</td>
+<td class="py-3 px-md font-price-md text-price-md text-gray-500">EXP-1024</td>
+<td class="py-3 px-md text-on-surface">Supplies &amp; Ingredients</td>
+<td class="py-3 px-md text-on-surface-variant max-w-[200px] truncate">Weekly vegetable restock from Pasar Induk</td>
+<td class="py-3 px-md text-center">
+<button class="text-success-text hover:text-success-text/80" title="View Receipt">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+<td class="py-3 px-md font-price-md text-price-md text-right text-on-surface">1.250.000</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-md text-on-surface-variant whitespace-nowrap">Oct 22, 2023</td>
+<td class="py-3 px-md font-price-md text-price-md text-gray-500">EXP-1023</td>
+<td class="py-3 px-md text-on-surface">Utilities</td>
+<td class="py-3 px-md text-on-surface-variant max-w-[200px] truncate">Electricity Bill October</td>
+<td class="py-3 px-md text-center">
+<button class="text-gray-400 hover:text-primary" title="Upload Receipt">
+<span class="material-symbols-outlined text-[18px]">upload</span>
+</button>
+</td>
+<td class="py-3 px-md font-price-md text-price-md text-right text-on-surface">850.000</td>
+</tr>
+<!-- Row 3 -->
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-md text-on-surface-variant whitespace-nowrap">Oct 20, 2023</td>
+<td class="py-3 px-md font-price-md text-price-md text-gray-500">EXP-1022</td>
+<td class="py-3 px-md text-on-surface">Maintenance &amp; Repairs</td>
+<td class="py-3 px-md text-on-surface-variant max-w-[200px] truncate">Fixing leaking sink in kitchen</td>
+<td class="py-3 px-md text-center">
+<button class="text-success-text hover:text-success-text/80" title="View Receipt">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+<td class="py-3 px-md font-price-md text-price-md text-right text-on-surface">300.000</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-md text-on-surface-variant whitespace-nowrap">Oct 18, 2023</td>
+<td class="py-3 px-md font-price-md text-price-md text-gray-500">EXP-1021</td>
+<td class="py-3 px-md text-on-surface">Marketing &amp; Promo</td>
+<td class="py-3 px-md text-on-surface-variant max-w-[200px] truncate">Instagram Ads Campaign</td>
+<td class="py-3 px-md text-center">
+<button class="text-success-text hover:text-success-text/80" title="View Receipt">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+<td class="py-3 px-md font-price-md text-price-md text-right text-on-surface">500.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Placeholder -->
+<div class="px-md py-sm border-t border-gray-200 flex justify-between items-center text-sm">
+<span class="font-caption text-caption text-gray-500">Showing 1 to 4 of 48 entries</span>
+<div class="flex gap-1">
+<button class="px-2 py-1 rounded hover:bg-surface-container-low text-gray-500" disabled="">&lt;</button>
+<button class="px-2 py-1 rounded bg-surface-container text-on-surface font-medium">1</button>
+<button class="px-2 py-1 rounded hover:bg-surface-container-low text-gray-500">2</button>
+<button class="px-2 py-1 rounded hover:bg-surface-container-low text-gray-500">3</button>
+<button class="px-2 py-1 rounded hover:bg-surface-container-low text-gray-500">&gt;</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom padding for scroll clearance -->
+<div class="h-xl"></div>
+</main>
+</div>
+</body></html>

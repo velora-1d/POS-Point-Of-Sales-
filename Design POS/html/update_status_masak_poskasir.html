@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kitchen Display - Active Order</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#a36800",
+                      "danger-bg": "#FCEBEB",
+                      "success-text": "#3B6D11",
+                      "surface-tint": "#885200",
+                      "on-error-container": "#93000a",
+                      "amber-600": "#854F0B",
+                      "primary": "#855000",
+                      "on-tertiary-fixed": "#2a1700",
+                      "surface-container-high": "#e8e8e6",
+                      "surface-variant": "#e2e3e1",
+                      "info-text": "#185FA5",
+                      "gray-200": "#D3D1C7",
+                      "gray-600": "#444441",
+                      "outline-variant": "#d7c3b1",
+                      "on-surface": "#1a1c1b",
+                      "tertiary-fixed-dim": "#ffb95d",
+                      "surface-container-lowest": "#ffffff",
+                      "amber-50": "#FAEEDA",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#c8c6c0",
+                      "on-primary-fixed-variant": "#673d00",
+                      "info-bg": "#E6F1FB",
+                      "success-bg": "#EAF3DE",
+                      "outline": "#857464",
+                      "tertiary-fixed": "#ffddb7",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f4f4f2",
+                      "surface": "#f9f9f7",
+                      "inverse-surface": "#2f3130",
+                      "on-primary-container": "#fffbff",
+                      "on-secondary-fixed": "#1b1c18",
+                      "gray-400": "#888780",
+                      "on-secondary-fixed-variant": "#474742",
+                      "gray-800": "#2C2C2A",
+                      "secondary": "#5f5f59",
+                      "on-tertiary-container": "#fffbff",
+                      "amber-100": "#FAC775",
+                      "on-surface-variant": "#524436",
+                      "secondary-container": "#e1e0d9",
+                      "primary-fixed": "#ffdcbb",
+                      "surface-container-highest": "#e2e3e1",
+                      "secondary-fixed": "#e4e2dc",
+                      "surface-dim": "#dadad8",
+                      "on-secondary-container": "#63635d",
+                      "background": "#f9f9f7",
+                      "tertiary": "#825100",
+                      "primary-fixed-dim": "#ffb869",
+                      "primary-container": "#a76500",
+                      "surface-bright": "#f9f9f7",
+                      "on-primary-fixed": "#2b1700",
+                      "inverse-on-surface": "#f1f1ef",
+                      "error": "#ba1a1a",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eeeeec",
+                      "on-background": "#1a1c1b",
+                      "amber-800": "#633806",
+                      "on-error": "#ffffff",
+                      "danger-text": "#A32D2D",
+                      "inverse-primary": "#ffb869",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-secondary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "layout-margin": "28px",
+                      "md": "16px",
+                      "topbar-height": "48px",
+                      "lg": "24px",
+                      "base": "4px",
+                      "sidebar-width": "220px",
+                      "xs": "4px",
+                      "xl": "32px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Geist"
+                      ],
+                      "caption": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "display-md": [
+                              "Instrument Serif"
+                      ],
+                      "display-lg": [
+                              "Instrument Serif"
+                      ],
+                      "price-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "price-md": [
+                              "JetBrains Mono"
+                      ],
+                      "label-caps": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "caption": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "price-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "price-md": [
+                              "13px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface h-full flex flex-col font-body-md">
+<!-- Top Navigation Area (Simplified for Kitchen View) -->
+<header class="h-topbar-height fixed top-0 w-full z-50 bg-surface-bright border-b border-outline-variant flex justify-between items-center px-lg shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="restaurant">restaurant</span>
+<h1 class="font-display-md text-display-md text-primary font-black tracking-tight">PosKasir Kitchen</h1>
+</div>
+<div class="flex items-center gap-md">
+<div class="bg-amber-50 text-amber-800 font-label-caps text-label-caps px-3 py-1.5 rounded-full border border-amber-200 flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span>
+                High Volume
+            </div>
+<div class="w-px h-6 bg-gray-200"></div>
+<button class="flex items-center justify-center w-8 h-8 rounded-full text-gray-600 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="flex items-center justify-center w-8 h-8 rounded-full text-gray-600 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+</button>
+</div>
+</header>
+<!-- Main Kitchen Canvas -->
+<main class="flex-1 mt-topbar-height p-layout-margin overflow-y-auto">
+<!-- Active Order Header -->
+<div class="flex justify-between items-end mb-lg">
+<div>
+<div class="flex items-center gap-sm mb-1">
+<span class="bg-primary text-on-primary font-label-caps text-label-caps px-2 py-0.5 rounded">DINE-IN</span>
+<span class="text-gray-600 font-caption text-caption">Table 12 • 4 Guests</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-gray-800">Order #A-1042</h2>
+<p class="font-body-md text-body-md text-gray-600 flex items-center gap-xs mt-1">
+<span class="material-symbols-outlined text-[16px] text-amber-600">timer</span>
+                    Waiting: 14m 32s
+                </p>
+</div>
+<button class="bg-gray-800 text-white font-label-caps text-label-caps px-6 py-3 rounded-xl hover:bg-gray-600 transition-colors flex items-center gap-sm shadow-sm border border-gray-600 h-fit">
+<span class="material-symbols-outlined">done_all</span>
+                COMPLETE ALL
+            </button>
+</div>
+<!-- Order Items Grid (High Contrast, Touch Friendly) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-md">
+<!-- Item 1: Cooking -->
+<div class="bg-surface-container-lowest border border-amber-400 rounded-xl p-md shadow-sm flex flex-col h-full bg-amber-50/30 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-amber-400"></div>
+<div class="flex justify-between items-start mb-sm pl-2">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Truffle Ribeye Steak</h3>
+<span class="font-price-md text-price-md text-gray-400 border border-gray-200 px-2 py-0.5 rounded bg-gray-50">1x</span>
+</div>
+<div class="pl-2 mb-md flex-1">
+<p class="font-body-md text-body-md text-gray-600 mb-2">Medium Rare, Extra Truffle Butter</p>
+<div class="flex gap-2 flex-wrap">
+<span class="bg-danger-bg text-danger-text font-label-caps text-label-caps px-2 py-0.5 rounded-full border border-danger-text/20">NO ONION</span>
+<span class="bg-info-bg text-info-text font-label-caps text-label-caps px-2 py-0.5 rounded-full border border-info-text/20">SIDE: MASH</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-sm mt-auto">
+<button class="bg-surface-container text-gray-400 font-label-caps text-label-caps py-4 rounded-lg border border-gray-200 flex flex-col items-center justify-center gap-1 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined icon-filled">skillet</span>
+                        MULAI MASAK
+                    </button>
+<button class="bg-amber-400 text-amber-800 font-label-caps text-label-caps py-4 rounded-lg border border-amber-600/30 flex flex-col items-center justify-center gap-1 shadow-sm hover:bg-amber-500 transition-colors active:scale-[0.98]">
+<span class="material-symbols-outlined">check_circle</span>
+                        SELESAI
+                    </button>
+</div>
+</div>
+<!-- Item 2: Pending -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md shadow-sm flex flex-col h-full relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-gray-200"></div>
+<div class="flex justify-between items-start mb-sm pl-2">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Pan-Seared Salmon</h3>
+<span class="font-price-md text-price-md text-gray-400 border border-gray-200 px-2 py-0.5 rounded bg-gray-50">2x</span>
+</div>
+<div class="pl-2 mb-md flex-1">
+<p class="font-body-md text-body-md text-gray-600 mb-2">Crispy skin, lemon butter sauce on side</p>
+<div class="flex gap-2 flex-wrap">
+<span class="bg-info-bg text-info-text font-label-caps text-label-caps px-2 py-0.5 rounded-full border border-info-text/20">SIDE: ASPARAGUS</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-sm mt-auto">
+<button class="bg-gray-800 text-white font-label-caps text-label-caps py-4 rounded-lg flex flex-col items-center justify-center gap-1 shadow-sm hover:bg-gray-700 transition-colors active:scale-[0.98]">
+<span class="material-symbols-outlined">skillet</span>
+                        MULAI MASAK
+                    </button>
+<button class="bg-surface-container text-gray-400 font-label-caps text-label-caps py-4 rounded-lg border border-gray-200 flex flex-col items-center justify-center gap-1 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined">check_circle</span>
+                        SELESAI
+                    </button>
+</div>
+</div>
+<!-- Item 3: Done -->
+<div class="bg-success-bg/30 border border-success-text/30 rounded-xl p-md shadow-sm flex flex-col h-full relative overflow-hidden opacity-70">
+<div class="absolute top-0 left-0 w-1 h-full bg-success-text"></div>
+<div class="flex justify-between items-start mb-sm pl-2">
+<h3 class="font-headline-sm text-headline-sm text-gray-800 line-through">Caesar Salad</h3>
+<span class="font-price-md text-price-md text-gray-400 border border-gray-200 px-2 py-0.5 rounded bg-gray-50">1x</span>
+</div>
+<div class="pl-2 mb-md flex-1">
+<p class="font-body-md text-body-md text-gray-600 mb-2 line-through">Dressing on side, add grilled chicken</p>
+</div>
+<div class="bg-success-bg text-success-text font-label-caps text-label-caps py-3 rounded-lg border border-success-text/20 flex items-center justify-center gap-2 mt-auto">
+<span class="material-symbols-outlined icon-filled">done</span>
+                    COMPLETED
+                </div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Customer Database</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "danger-text": "#A32D2D",
+                        "on-secondary-fixed": "#1b1c18",
+                        "info-text": "#185FA5",
+                        "gray-400": "#888780",
+                        "on-tertiary-container": "#fffbff",
+                        "on-surface": "#1a1c1b",
+                        "success-text": "#3B6D11",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-bright": "#f9f9f7",
+                        "on-primary-fixed": "#2b1700",
+                        "on-background": "#1a1c1b",
+                        "success-bg": "#EAF3DE",
+                        "surface-tint": "#885200",
+                        "gray-800": "#2C2C2A",
+                        "surface-container-highest": "#e2e3e1",
+                        "surface-container-high": "#e8e8e6",
+                        "surface-variant": "#e2e3e1",
+                        "surface-container-lowest": "#ffffff",
+                        "danger-bg": "#FCEBEB",
+                        "amber-600": "#854F0B",
+                        "secondary-container": "#e1e0d9",
+                        "on-secondary-container": "#63635d",
+                        "outline": "#857464",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#d7c3b1",
+                        "error": "#ba1a1a",
+                        "primary": "#855000",
+                        "amber-50": "#FAEEDA",
+                        "on-primary-container": "#fffbff",
+                        "amber-100": "#FAC775",
+                        "secondary": "#5f5f59",
+                        "surface": "#f9f9f7",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f1ef",
+                        "inverse-surface": "#2f3130",
+                        "background": "#f9f9f7",
+                        "tertiary-container": "#a36800",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "primary-fixed": "#ffdcbb",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eeeeec",
+                        "on-surface-variant": "#524436",
+                        "tertiary": "#825100",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "amber-800": "#633806",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#dadad8",
+                        "info-bg": "#E6F1FB",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "secondary-fixed": "#e4e2dc",
+                        "primary-fixed-dim": "#ffb869",
+                        "inverse-primary": "#ffb869",
+                        "gray-200": "#D3D1C7",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-600": "#444441",
+                        "primary-container": "#a76500",
+                        "surface-container-low": "#f4f4f2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "topbar-height": "48px",
+                        "sidebar-width": "220px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "price-md": ["JetBrains Mono"],
+                        "display-lg": ["Instrument Serif"],
+                        "headline-sm": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-md": ["Instrument Serif"],
+                        "caption": ["Geist"],
+                        "body-md": ["Geist"],
+                        "label-caps": ["Geist"]
+                    },
+                    "fontSize": {
+                        "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen">
+<!-- SideNavBar -->
+<nav aria-label="Sidebar" class="bg-surface-container-low text-primary font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-md z-40 hidden md:flex">
+<!-- Brand Header -->
+<div class="px-md mb-xl flex items-center gap-sm">
+<div aria-hidden="true" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-sm">restaurant</span>
+</div>
+<div>
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-on-surface-variant">Terminal 01</p>
+</div>
+</div>
+<!-- CTA -->
+<div class="px-md mb-lg">
+<button class="w-full bg-amber-400 hover:bg-amber-500 text-amber-800 font-headline-sm text-headline-sm py-2 rounded-xl transition-colors shadow-sm flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Order
+            </button>
+</div>
+<!-- Main Nav Links -->
+<ul class="flex-1 px-sm space-y-1 overflow-y-auto">
+<li>
+<a class="flex items-center gap-sm px-3 py-2 rounded-xl text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-800 transition-colors">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-3 py-2 rounded-xl text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-800 transition-colors">point_of_sale</span>
+                    Point of Sale
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-3 py-2 rounded-xl text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-800 transition-colors">receipt_long</span>
+                    Orders
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-3 py-2 rounded-xl text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-800 transition-colors">restaurant_menu</span>
+                    Menu Management
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-3 py-2 rounded-xl text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-800 transition-colors">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-3 py-2 rounded-xl text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-800 transition-colors">analytics</span>
+                    Reports
+                </a>
+</li>
+</ul>
+<!-- Footer Nav Links -->
+<ul class="px-sm mt-auto space-y-1 pt-md border-t border-outline-variant mx-md">
+<li>
+<a class="flex items-center gap-sm px-3 py-2 rounded-xl text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-800 transition-colors">settings</span>
+                    Settings
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-3 py-2 rounded-xl text-gray-600 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-800 transition-colors">help</span>
+                    Support
+                </a>
+</li>
+</ul>
+</nav>
+<!-- TopAppBar -->
+<header class="bg-surface-bright text-primary font-label-caps text-label-caps h-topbar-height fixed top-0 right-0 z-30 border-b border-outline-variant flex justify-between items-center px-lg" style="width: calc(100% - 220px);">
+<!-- Navigation Links (Left) -->
+<nav class="flex gap-lg h-full">
+<a class="flex items-center h-full text-on-surface-variant hover:text-primary transition-opacity hover:opacity-80 transition-all uppercase tracking-wider" href="#">
+                Fast Food
+            </a>
+<a class="flex items-center h-full text-on-surface-variant hover:text-primary transition-opacity hover:opacity-80 transition-all uppercase tracking-wider" href="#">
+                Drinks
+            </a>
+<a class="flex items-center h-full text-on-surface-variant hover:text-primary transition-opacity hover:opacity-80 transition-all uppercase tracking-wider" href="#">
+                Desserts
+            </a>
+</nav>
+<!-- Actions (Right) -->
+<div class="flex items-center gap-md">
+<!-- Secondary Action -->
+<button class="font-body-md text-body-md text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-xl border border-transparent hover:border-gray-200 transition-all">
+                Hold Order
+            </button>
+<!-- Primary Action -->
+<button class="font-body-md text-body-md bg-amber-400 text-amber-800 px-4 py-1.5 rounded-xl hover:bg-amber-500 transition-colors shadow-sm font-medium">
+                Checkout
+            </button>
+<div class="w-px h-6 bg-gray-200 mx-1"></div>
+<!-- Icon Actions -->
+<button aria-label="Notifications" class="text-gray-400 hover:text-primary transition-colors hover:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button aria-label="Sync" class="text-gray-400 hover:text-primary transition-colors hover:opacity-80">
+<span class="material-symbols-outlined">sync</span>
+</button>
+<!-- Profile Image -->
+<button class="ml-sm rounded-full overflow-hidden w-8 h-8 border border-gray-200 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-surface-bright">
+<img alt="Manager Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a restaurant manager in a brightly lit, modern café setting. The lighting is soft and flattering, highlighting a warm, welcoming expression. The overall color palette is earthy and sophisticated, fitting a high-end food and beverage brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCArqgreq8ouXB89tssgAoKfZaWozvp9xGyiCObUTwKpiQUgQNN4f_IX4eOsohFi_b-325GsLmkkxp2j7y3JGlJYSBRwp4adMH5qBNzYY5fxTPr0HmCjvFVqVWh7n60m2xImEGATmPL63MJSXfWNb6f8UMzha4OdekycfVt9maGV9PgOGdgnXX6iYNI44czZQQVABDybTLHtLwYQsuWC2WZM744cPKaNptOpREaBMEyZ3g9-g_rIlX3kuj-92omlt9OShs3GMVQfzXW"/>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="bg-background min-h-screen pt-[48px] pl-[220px]">
+<div class="p-layout-margin max-w-[1400px] mx-auto">
+<!-- Page Header -->
+<div class="mb-lg flex flex-col sm:flex-row sm:items-end justify-between gap-md">
+<div>
+<h2 class="font-display-md text-display-md text-on-surface mb-1">Customer Database</h2>
+<p class="font-body-lg text-body-lg text-gray-400">Manage your patrons, loyalty points, and active tabs.</p>
+</div>
+<div class="flex gap-sm">
+<button class="flex items-center gap-xs font-body-md text-body-md bg-surface-container-lowest text-gray-600 border border-gray-200 px-4 py-2 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-sm">download</span>
+                        Export
+                    </button>
+<button class="flex items-center gap-xs font-body-md text-body-md bg-amber-400 text-amber-800 border border-transparent px-4 py-2 rounded-xl hover:bg-amber-500 transition-colors shadow-sm font-medium">
+<span class="material-symbols-outlined text-sm">person_add</span>
+                        Add Customer
+                    </button>
+</div>
+</div>
+<!-- Toolbar (Search & Filters) -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-3 mb-md shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-wrap gap-md justify-between items-center">
+<!-- Search -->
+<div class="relative w-full sm:w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface border border-gray-200 rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-shadow placeholder:text-gray-400" placeholder="Search by name or phone..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-xs bg-surface p-1 rounded-lg border border-gray-200">
+<button class="font-body-md text-body-md px-4 py-1.5 rounded-md bg-surface-container-lowest text-gray-800 shadow-sm border border-gray-200 transition-all">
+                        All Customers
+                    </button>
+<button class="font-body-md text-body-md px-4 py-1.5 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-all">
+                        Members
+                    </button>
+<button class="font-body-md text-body-md px-4 py-1.5 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-all flex items-center gap-1">
+                        Has Kasbon
+                        <span class="w-2 h-2 rounded-full bg-danger-text inline-block"></span>
+</button>
+</div>
+</div>
+<!-- Data Table Card -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead>
+<tr class="bg-gray-50 border-b border-gray-200 font-label-caps text-label-caps text-gray-400 uppercase tracking-wider">
+<th class="px-4 py-3 font-semibold">Nama</th>
+<th class="px-4 py-3 font-semibold">HP</th>
+<th class="px-4 py-3 font-semibold text-right">Poin</th>
+<th class="px-4 py-3 font-semibold text-right">Total Transaksi</th>
+<th class="px-4 py-3 font-semibold text-center">Status Kasbon</th>
+<th class="px-4 py-3 font-semibold w-10"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-200">
+<!-- Row 1 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-800 font-headline-sm text-headline-sm">
+                                            BS
+                                        </div>
+<span class="font-body-md text-body-md font-medium text-gray-800 group-hover:text-primary transition-colors">Budi Santoso</span>
+</div>
+</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-600">0812-3456-7890</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-800 text-right">150</td>
+<td class="px-4 py-3 font-price-md text-price-md text-gray-800 text-right">Rp 1.500.000</td>
+<td class="px-4 py-3 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-success-bg text-success-text font-label-caps text-label-caps lowercase">
+                                        Clear
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface border border-gray-200 flex items-center justify-center text-gray-600 font-headline-sm text-headline-sm">
+                                            SA
+                                        </div>
+<span class="font-body-md text-body-md font-medium text-gray-800 group-hover:text-primary transition-colors">Siti Aminah</span>
+</div>
+</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-600">0856-1122-3344</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-800 text-right">45</td>
+<td class="px-4 py-3 font-price-md text-price-md text-gray-800 text-right">Rp 450.000</td>
+<td class="px-4 py-3 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-danger-bg text-danger-text font-label-caps text-label-caps lowercase border border-danger-bg">
+<span class="w-1.5 h-1.5 rounded-full bg-danger-text"></span>
+                                        Unpaid (Rp 50k)
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface border border-gray-200 flex items-center justify-center text-gray-600 font-headline-sm text-headline-sm">
+                                            AW
+                                        </div>
+<span class="font-body-md text-body-md font-medium text-gray-800 group-hover:text-primary transition-colors">Andi Wijaya</span>
+</div>
+</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-600">0899-8877-6655</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-800 text-right">320</td>
+<td class="px-4 py-3 font-price-md text-price-md text-gray-800 text-right">Rp 3.200.000</td>
+<td class="px-4 py-3 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-success-bg text-success-text font-label-caps text-label-caps lowercase">
+                                        Clear
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface border border-gray-200 flex items-center justify-center text-gray-600 font-headline-sm text-headline-sm">
+                                            DL
+                                        </div>
+<span class="font-body-md text-body-md font-medium text-gray-800 group-hover:text-primary transition-colors">Dewi Lestari</span>
+</div>
+</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-600">0877-5544-3322</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-800 text-right">10</td>
+<td class="px-4 py-3 font-price-md text-price-md text-gray-800 text-right">Rp 100.000</td>
+<td class="px-4 py-3 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-danger-bg text-danger-text font-label-caps text-label-caps lowercase border border-danger-bg">
+<span class="w-1.5 h-1.5 rounded-full bg-danger-text"></span>
+                                        Unpaid (Rp 15k)
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-4 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-800 font-headline-sm text-headline-sm">
+                                            RK
+                                        </div>
+<span class="font-body-md text-body-md font-medium text-gray-800 group-hover:text-primary transition-colors">Reza Kurniawan</span>
+</div>
+</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-600">0813-9988-7766</td>
+<td class="px-4 py-3 font-body-md text-body-md text-gray-800 text-right">85</td>
+<td class="px-4 py-3 font-price-md text-price-md text-gray-800 text-right">Rp 850.000</td>
+<td class="px-4 py-3 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-success-bg text-success-text font-label-caps text-label-caps lowercase">
+                                        Clear
+                                    </span>
+</td>
+<td class="px-4 py-3 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="bg-surface px-4 py-3 border-t border-gray-200 flex items-center justify-between sm:px-6">
+<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+<div>
+<p class="font-body-md text-body-md text-gray-600">
+                                Showing <span class="font-medium text-gray-800">1</span> to <span class="font-medium text-gray-800">5</span> of <span class="font-medium text-gray-800">97</span> results
+                            </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+<button class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-200 bg-surface-container-lowest text-sm font-medium text-gray-400 hover:bg-gray-50">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="relative inline-flex items-center px-4 py-2 border border-amber-400 bg-amber-50 font-body-md text-body-md font-medium text-amber-800 z-10">
+                                    1
+                                </button>
+<button class="relative inline-flex items-center px-4 py-2 border border-gray-200 bg-surface-container-lowest font-body-md text-body-md font-medium text-gray-600 hover:bg-gray-50">
+                                    2
+                                </button>
+<button class="relative inline-flex items-center px-4 py-2 border border-gray-200 bg-surface-container-lowest font-body-md text-body-md font-medium text-gray-600 hover:bg-gray-50">
+                                    3
+                                </button>
+<button class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-200 bg-surface-container-lowest text-sm font-medium text-gray-400 hover:bg-gray-50">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

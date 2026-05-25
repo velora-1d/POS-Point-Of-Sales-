@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Transaction History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "tertiary-container": "#a36800",
+                            "danger-bg": "#FCEBEB",
+                            "success-text": "#3B6D11",
+                            "surface-tint": "#885200",
+                            "on-error-container": "#93000a",
+                            "amber-600": "#854F0B",
+                            "primary": "#855000",
+                            "on-tertiary-fixed": "#2a1700",
+                            "surface-container-high": "#e8e8e6",
+                            "surface-variant": "#e2e3e1",
+                            "info-text": "#185FA5",
+                            "gray-200": "#D3D1C7",
+                            "gray-600": "#444441",
+                            "outline-variant": "#d7c3b1",
+                            "on-surface": "#1a1c1b",
+                            "tertiary-fixed-dim": "#ffb95d",
+                            "surface-container-lowest": "#ffffff",
+                            "amber-50": "#FAEEDA",
+                            "on-tertiary": "#ffffff",
+                            "secondary-fixed-dim": "#c8c6c0",
+                            "on-primary-fixed-variant": "#673d00",
+                            "info-bg": "#E6F1FB",
+                            "success-bg": "#EAF3DE",
+                            "outline": "#857464",
+                            "tertiary-fixed": "#ffddb7",
+                            "on-primary": "#ffffff",
+                            "surface-container-low": "#f4f4f2",
+                            "surface": "#f9f9f7",
+                            "inverse-surface": "#2f3130",
+                            "on-primary-container": "#fffbff",
+                            "on-secondary-fixed": "#1b1c18",
+                            "gray-400": "#888780",
+                            "on-secondary-fixed-variant": "#474742",
+                            "gray-800": "#2C2C2A",
+                            "secondary": "#5f5f59",
+                            "on-tertiary-container": "#fffbff",
+                            "amber-100": "#FAC775",
+                            "on-surface-variant": "#524436",
+                            "secondary-container": "#e1e0d9",
+                            "primary-fixed": "#ffdcbb",
+                            "surface-container-highest": "#e2e3e1",
+                            "secondary-fixed": "#e4e2dc",
+                            "surface-dim": "#dadad8",
+                            "on-secondary-container": "#63635d",
+                            "background": "#f9f9f7",
+                            "tertiary": "#825100",
+                            "primary-fixed-dim": "#ffb869",
+                            "primary-container": "#a76500",
+                            "surface-bright": "#f9f9f7",
+                            "on-primary-fixed": "#2b1700",
+                            "inverse-on-surface": "#f1f1ef",
+                            "error": "#ba1a1a",
+                            "error-container": "#ffdad6",
+                            "surface-container": "#eeeeec",
+                            "on-background": "#1a1c1b",
+                            "amber-800": "#633806",
+                            "on-error": "#ffffff",
+                            "danger-text": "#A32D2D",
+                            "inverse-primary": "#ffb869",
+                            "on-tertiary-fixed-variant": "#653e00",
+                            "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.125rem",
+                            "lg": "0.25rem",
+                            "xl": "0.5rem",
+                            "full": "0.75rem"
+                    },
+                    "spacing": {
+                            "layout-margin": "28px",
+                            "md": "16px",
+                            "topbar-height": "48px",
+                            "lg": "24px",
+                            "base": "4px",
+                            "sidebar-width": "220px",
+                            "xs": "4px",
+                            "xl": "32px",
+                            "sm": "8px"
+                    },
+                    "fontFamily": {
+                            "headline-sm": [
+                                    "Geist"
+                            ],
+                            "caption": [
+                                    "Geist"
+                            ],
+                            "body-lg": [
+                                    "Geist"
+                            ],
+                            "body-md": [
+                                    "Geist"
+                            ],
+                            "display-md": [
+                                    "Instrument Serif"
+                            ],
+                            "display-lg": [
+                                    "Instrument Serif"
+                            ],
+                            "price-lg": [
+                                    "JetBrains Mono"
+                            ],
+                            "price-md": [
+                                    "JetBrains Mono"
+                            ],
+                            "label-caps": [
+                                    "Geist"
+                            ]
+                    },
+                    "fontSize": {
+                            "headline-sm": [
+                                    "16px",
+                                    {
+                                            "lineHeight": "24px",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "caption": [
+                                    "11px",
+                                    {
+                                            "lineHeight": "14px",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "body-lg": [
+                                    "14px",
+                                    {
+                                            "lineHeight": "20px",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "body-md": [
+                                    "13px",
+                                    {
+                                            "lineHeight": "18px",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "display-md": [
+                                    "24px",
+                                    {
+                                            "lineHeight": "1.2",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "display-lg": [
+                                    "32px",
+                                    {
+                                            "lineHeight": "1.2",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "price-lg": [
+                                    "16px",
+                                    {
+                                            "lineHeight": "1",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "price-md": [
+                                    "13px",
+                                    {
+                                            "lineHeight": "1",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "label-caps": [
+                                    "11px",
+                                    {
+                                            "lineHeight": "16px",
+                                            "letterSpacing": "0.05em",
+                                            "fontWeight": "600"
+                                    }
+                            ]
+                    }
+            },
+                },
+        }
+    </script>
+<style>
+        body { background-color: #FAFAF8; color: #1a1c1b; margin: 0; padding: 0; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined[data-weight="fill"] { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .hairline-border { border-width: 0.5px; border-style: solid; border-color: #D3D1C7; }
+        .std-border { border-width: 1px; border-style: solid; border-color: #D3D1C7; }
+        
+        /* Custom Scrollbar for high-density tables */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D3D1C7; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #888780; }
+    </style>
+</head>
+<body class="font-body-md text-body-md flex bg-background">
+<!-- SideNavBar -->
+<nav class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface-container-low dark:bg-gray-800 border-r border-outline-variant flex flex-col h-full py-md z-40">
+<div class="px-md mb-xl flex flex-col items-center">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<span class="font-caption text-caption text-gray-400">Terminal 01</span>
+</div>
+<div class="px-sm mb-lg">
+<button class="w-full bg-amber-400 text-amber-800 rounded-lg py-2 px-3 font-body-md text-body-md font-bold flex items-center justify-center gap-2 hover:bg-amber-500 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<ul class="flex flex-col gap-1 px-sm flex-grow">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">point_of_sale</span>
+                    Point of Sale
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary font-body-md text-body-md active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                    Orders
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">restaurant_menu</span>
+                    Menu Management
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">analytics</span>
+                    Reports
+                </a>
+</li>
+</ul>
+<div class="px-sm mt-auto border-t hairline-border pt-sm">
+<ul class="flex flex-col gap-1">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+                        Settings
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+                        Support
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-sidebar-width flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="h-topbar-height bg-surface-bright dark:bg-surface-dim border-b border-outline-variant flex justify-between items-center w-full px-lg sticky top-0 z-30">
+<div class="flex items-center gap-md">
+<span class="font-headline-sm text-headline-sm text-gray-800">Transaction History</span>
+</div>
+<div class="flex items-center gap-sm">
+<div class="relative hidden md:block mr-md">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-[16px]">search</span>
+<input class="pl-8 pr-3 py-1.5 std-border rounded-lg text-body-md font-body-md w-64 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 bg-surface-container-lowest" placeholder="Search orders..." type="text"/>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-opacity rounded-full hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-opacity rounded-full hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary transition-opacity rounded-full hover:bg-surface-container-highest ml-sm">
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-layout-margin flex-1 flex flex-col gap-lg">
+<!-- Filters & Actions Header -->
+<div class="flex justify-between items-end flex-wrap gap-md">
+<div class="flex items-center gap-sm flex-wrap">
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-gray-600">Date Range</label>
+<div class="flex items-center std-border rounded-lg bg-surface-container-lowest h-8 px-2 focus-within:border-amber-400 focus-within:ring-1 focus-within:ring-amber-400 transition-all">
+<span class="material-symbols-outlined text-gray-400 text-[16px] mr-2">calendar_today</span>
+<span class="font-body-md text-body-md text-gray-800 mr-2">Today, Oct 24</span>
+<span class="material-symbols-outlined text-gray-400 text-[16px]">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-gray-600">Payment Method</label>
+<select class="std-border rounded-lg bg-surface-container-lowest h-8 px-2 font-body-md text-body-md text-gray-800 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 appearance-none pr-8 relative bg-no-repeat bg-[center_right_0.5rem] bg-[length:16px_16px]" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23888780%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');">
+<option value="all">All Methods</option>
+<option value="card">Credit Card</option>
+<option value="cash">Cash</option>
+<option value="qris">QRIS</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-gray-600">Status</label>
+<select class="std-border rounded-lg bg-surface-container-lowest h-8 px-2 font-body-md text-body-md text-gray-800 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 appearance-none pr-8 relative bg-no-repeat bg-[center_right_0.5rem] bg-[length:16px_16px]" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23888780%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');">
+<option value="all">All Statuses</option>
+<option value="completed">Completed</option>
+<option value="voided">Voided</option>
+<option value="refunded">Refunded</option>
+</select>
+</div>
+</div>
+<button class="bg-surface-container-lowest text-gray-800 std-border rounded-lg h-8 px-3 font-body-md text-body-md font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                    Export CSV
+                </button>
+</div>
+<!-- High Density Table Card -->
+<div class="bg-surface-container-lowest rounded-xl std-border shadow-[0_2px_4px_rgba(0,0,0,0.02)] overflow-hidden flex-1 flex flex-col">
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead>
+<tr class="bg-surface-container-low border-b hairline-border">
+<th class="py-2 px-3 font-label-caps text-label-caps text-gray-600 sticky top-0 bg-surface-container-low z-10">Order ID</th>
+<th class="py-2 px-3 font-label-caps text-label-caps text-gray-600 sticky top-0 bg-surface-container-low z-10">Time</th>
+<th class="py-2 px-3 font-label-caps text-label-caps text-gray-600 sticky top-0 bg-surface-container-low z-10">Table</th>
+<th class="py-2 px-3 font-label-caps text-label-caps text-gray-600 sticky top-0 bg-surface-container-low z-10">Cashier</th>
+<th class="py-2 px-3 font-label-caps text-label-caps text-gray-600 text-right sticky top-0 bg-surface-container-low z-10">Total</th>
+<th class="py-2 px-3 font-label-caps text-label-caps text-gray-600 sticky top-0 bg-surface-container-low z-10">Method</th>
+<th class="py-2 px-3 font-label-caps text-label-caps text-gray-600 sticky top-0 bg-surface-container-low z-10">Status</th>
+<th class="py-2 px-3 font-label-caps text-label-caps text-gray-600 text-center sticky top-0 bg-surface-container-low z-10">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-gray-800">
+<!-- Row 1 -->
+<tr class="border-b hairline-border hover:bg-surface transition-colors cursor-pointer group">
+<td class="py-2 px-3 font-price-md text-price-md text-primary">#ORD-4092</td>
+<td class="py-2 px-3 text-gray-600">14:32:05</td>
+<td class="py-2 px-3">T-12</td>
+<td class="py-2 px-3">Sarah J.</td>
+<td class="py-2 px-3 font-price-md text-price-md text-right">$42.50</td>
+<td class="py-2 px-3">
+<div class="flex items-center gap-1 text-gray-600">
+<span class="material-symbols-outlined text-[14px]">credit_card</span> CC (...4920)
+                                    </div>
+</td>
+<td class="py-2 px-3">
+<span class="inline-flex items-center justify-center bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-[10px]">Completed</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-primary transition-colors p-1 rounded hover:bg-amber-50 opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b hairline-border hover:bg-surface transition-colors cursor-pointer group">
+<td class="py-2 px-3 font-price-md text-price-md text-primary">#ORD-4091</td>
+<td class="py-2 px-3 text-gray-600">14:28:11</td>
+<td class="py-2 px-3">Bar-03</td>
+<td class="py-2 px-3">Mike T.</td>
+<td class="py-2 px-3 font-price-md text-price-md text-right">$18.00</td>
+<td class="py-2 px-3">
+<div class="flex items-center gap-1 text-gray-600">
+<span class="material-symbols-outlined text-[14px]">payments</span> Cash
+                                    </div>
+</td>
+<td class="py-2 px-3">
+<span class="inline-flex items-center justify-center bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-[10px]">Completed</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-primary transition-colors p-1 rounded hover:bg-amber-50 opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 (Voided) -->
+<tr class="border-b hairline-border hover:bg-surface transition-colors cursor-pointer group bg-danger-bg/20">
+<td class="py-2 px-3 font-price-md text-price-md text-gray-400 line-through">#ORD-4090</td>
+<td class="py-2 px-3 text-gray-500">14:15:22</td>
+<td class="py-2 px-3 text-gray-500">T-04</td>
+<td class="py-2 px-3 text-gray-500">Sarah J.</td>
+<td class="py-2 px-3 font-price-md text-price-md text-right text-gray-500 line-through">$105.20</td>
+<td class="py-2 px-3 text-gray-500">-</td>
+<td class="py-2 px-3">
+<span class="inline-flex items-center justify-center bg-danger-bg text-danger-text px-2 py-0.5 rounded-full font-label-caps text-[10px]">Voided</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-primary transition-colors p-1 rounded hover:bg-amber-50 opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[18px]">info</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="border-b hairline-border hover:bg-surface transition-colors cursor-pointer group">
+<td class="py-2 px-3 font-price-md text-price-md text-primary">#ORD-4089</td>
+<td class="py-2 px-3 text-gray-600">14:05:00</td>
+<td class="py-2 px-3">T-08</td>
+<td class="py-2 px-3">Mike T.</td>
+<td class="py-2 px-3 font-price-md text-price-md text-right">$64.75</td>
+<td class="py-2 px-3">
+<div class="flex items-center gap-1 text-gray-600">
+<span class="material-symbols-outlined text-[14px]">qr_code_scanner</span> QRIS
+                                    </div>
+</td>
+<td class="py-2 px-3">
+<span class="inline-flex items-center justify-center bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-[10px]">Completed</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-primary transition-colors p-1 rounded hover:bg-amber-50 opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="border-b hairline-border hover:bg-surface transition-colors cursor-pointer group">
+<td class="py-2 px-3 font-price-md text-price-md text-primary">#ORD-4088</td>
+<td class="py-2 px-3 text-gray-600">13:52:45</td>
+<td class="py-2 px-3">Takeaway</td>
+<td class="py-2 px-3">Sarah J.</td>
+<td class="py-2 px-3 font-price-md text-price-md text-right">$22.00</td>
+<td class="py-2 px-3">
+<div class="flex items-center gap-1 text-gray-600">
+<span class="material-symbols-outlined text-[14px]">payments</span> Cash
+                                    </div>
+</td>
+<td class="py-2 px-3">
+<span class="inline-flex items-center justify-center bg-success-bg text-success-text px-2 py-0.5 rounded-full font-label-caps text-[10px]">Completed</span>
+</td>
+<td class="py-2 px-3 text-center">
+<button class="text-gray-400 hover:text-primary transition-colors p-1 rounded hover:bg-amber-50 opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="border-t hairline-border bg-surface-container-lowest p-2 flex justify-between items-center text-gray-600">
+<span class="font-caption text-caption">Showing 1-25 of 142 orders</span>
+<div class="flex gap-1">
+<button class="p-1 rounded hover:bg-surface-container-highest transition-colors text-gray-400 disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="p-1 rounded bg-amber-50 text-amber-800 font-body-md text-body-md min-w-[28px] text-center">1</button>
+<button class="p-1 rounded hover:bg-surface-container-highest transition-colors font-body-md text-body-md min-w-[28px] text-center">2</button>
+<button class="p-1 rounded hover:bg-surface-container-highest transition-colors font-body-md text-body-md min-w-[28px] text-center">3</button>
+<span class="p-1 font-body-md text-body-md">...</span>
+<button class="p-1 rounded hover:bg-surface-container-highest transition-colors text-gray-600">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Summary Stats Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="bg-surface-container-lowest rounded-xl std-border p-3 flex flex-col gap-1 shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+<span class="font-label-caps text-label-caps text-gray-400">Total Sales (Today)</span>
+<span class="font-display-md text-display-md text-gray-800">$1,245.50</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl std-border p-3 flex flex-col gap-1 shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+<span class="font-label-caps text-label-caps text-gray-400">Total Orders</span>
+<span class="font-display-md text-display-md text-gray-800">142</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl std-border p-3 flex flex-col gap-1 shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+<span class="font-label-caps text-label-caps text-gray-400">Avg. Order Value</span>
+<span class="font-display-md text-display-md text-gray-800">$8.77</span>
+</div>
+</div>
+</div>
+</main>
+</body></html>

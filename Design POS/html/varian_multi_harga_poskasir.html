@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - Halaman Varian &amp; Multi Harga</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Assuming Geist is available locally or via a specific CDN in the real environment, falling back to sans for preview if needed, but styling with the specific names -->
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        /* Polyfill Geist with Inter for preview purposes if actual Geist font files are missing */
+        @font-face {
+            font-family: 'Geist';
+            src: local('Inter');
+        }
+    </style>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 20px; /* Base size */
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "danger-text": "#A32D2D",
+                      "on-secondary-fixed": "#1b1c18",
+                      "info-text": "#185FA5",
+                      "gray-400": "#888780",
+                      "on-tertiary-container": "#fffbff",
+                      "on-surface": "#1a1c1b",
+                      "success-text": "#3B6D11",
+                      "on-tertiary-fixed": "#2a1700",
+                      "surface-bright": "#f9f9f7",
+                      "on-primary-fixed": "#2b1700",
+                      "on-background": "#1a1c1b",
+                      "success-bg": "#EAF3DE",
+                      "surface-tint": "#885200",
+                      "gray-800": "#2C2C2A",
+                      "surface-container-highest": "#e2e3e1",
+                      "surface-container-high": "#e8e8e6",
+                      "surface-variant": "#e2e3e1",
+                      "surface-container-lowest": "#ffffff",
+                      "danger-bg": "#FCEBEB",
+                      "amber-600": "#854F0B",
+                      "secondary-container": "#e1e0d9",
+                      "on-secondary-container": "#63635d",
+                      "outline": "#857464",
+                      "on-error-container": "#93000a",
+                      "outline-variant": "#d7c3b1",
+                      "error": "#ba1a1a",
+                      "primary": "#855000",
+                      "amber-50": "#FAEEDA",
+                      "on-primary-container": "#fffbff",
+                      "amber-100": "#FAC775",
+                      "secondary": "#5f5f59",
+                      "surface": "#f9f9f7",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#f1f1ef",
+                      "inverse-surface": "#2f3130",
+                      "background": "#f9f9f7",
+                      "tertiary-container": "#a36800",
+                      "secondary-fixed-dim": "#c8c6c0",
+                      "primary-fixed": "#ffdcbb",
+                      "on-tertiary": "#ffffff",
+                      "surface-container": "#eeeeec",
+                      "on-surface-variant": "#524436",
+                      "tertiary": "#825100",
+                      "tertiary-fixed": "#ffddb7",
+                      "on-primary-fixed-variant": "#673d00",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "amber-800": "#633806",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "error-container": "#ffdad6",
+                      "surface-dim": "#dadad8",
+                      "info-bg": "#E6F1FB",
+                      "tertiary-fixed-dim": "#ffb95d",
+                      "secondary-fixed": "#e4e2dc",
+                      "primary-fixed-dim": "#ffb869",
+                      "inverse-primary": "#ffb869",
+                      "gray-200": "#D3D1C7",
+                      "on-secondary-fixed-variant": "#474742",
+                      "gray-600": "#444441",
+                      "primary-container": "#a76500",
+                      "surface-container-low": "#f4f4f2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "lg": "24px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "layout-margin": "28px",
+                      "topbar-height": "48px",
+                      "sidebar-width": "220px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "price-md": ["JetBrains Mono"],
+                      "display-lg": ["Instrument Serif"],
+                      "headline-sm": ["Geist"],
+                      "body-lg": ["Geist"],
+                      "price-lg": ["JetBrains Mono"],
+                      "display-md": ["Instrument Serif"],
+                      "caption": ["Geist"],
+                      "body-md": ["Geist"],
+                      "label-caps": ["Geist"]
+              },
+              "fontSize": {
+                      "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                      "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                      "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                      "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                      "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+              }
+      },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased h-screen overflow-hidden flex">
+<!-- SideNavBar (From JSON) -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flat no shadows bg-surface-container-low dark:bg-gray-800 flex flex-col h-full py-md z-40">
+<div class="px-md pb-md mb-sm">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600 mt-1">Terminal 01</p>
+</div>
+<div class="px-sm mb-md">
+<button class="w-full bg-primary text-on-primary font-body-md text-body-md py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-amber-800 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                New Order
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto px-xs flex flex-col gap-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150 group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-600">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Point of Sale -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150 group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-600">point_of_sale</span>
+<span>Point of Sale</span>
+</a>
+<!-- Orders -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150 group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-600">receipt_long</span>
+<span>Orders</span>
+</a>
+<!-- Menu Management (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary font-body-md text-body-md Active: scale-[0.99] duration-150 group" href="#">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<span class="font-semibold">Menu Management</span>
+</a>
+<!-- Inventory -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150 group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-600">inventory_2</span>
+<span>Inventory</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150 group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-600">analytics</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-md border-t border-outline-variant mx-xs px-xs flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150 group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-600">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-surface-container-high hover:bg-surface-container-highest transition-colors font-body-md text-body-md Active: scale-[0.99] duration-150 group" href="#">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-gray-600">help</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar (From JSON) -->
+<header class="h-topbar-height fixed top-0 right-0 z-30 border-b border-outline-variant flat no shadows bg-surface-bright dark:bg-surface-dim flex justify-between items-center px-lg" style="width: calc(100% - var(--spacing-sidebar-width)); margin-left: var(--spacing-sidebar-width);">
+<!-- Navigation Links -->
+<nav class="flex gap-lg h-full items-end">
+<a class="font-label-caps text-label-caps uppercase text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity pb-3" href="#">Fast Food</a>
+<a class="font-label-caps text-label-caps uppercase text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity pb-3" href="#">Drinks</a>
+<a class="font-label-caps text-label-caps uppercase text-on-surface-variant dark:text-gray-400 hover:text-primary transition-opacity pb-3" href="#">Desserts</a>
+</nav>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm text-gray-600">
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined" style="font-size: 20px;">notifications</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined" style="font-size: 20px;">sync</span></button>
+</div>
+<div class="h-5 w-px bg-gray-200"></div>
+<div class="flex items-center gap-sm">
+<button class="font-label-caps text-label-caps text-gray-600 hover:text-primary transition-colors px-2 py-1 rounded">Hold Order</button>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-4 py-1.5 rounded hover:bg-amber-800 transition-colors">Checkout</button>
+</div>
+<div class="ml-sm pl-sm border-l border-gray-200">
+<img alt="Manager Profile" class="w-8 h-8 rounded-full bg-gray-200" data-alt="A professional headshot photo of a restaurant manager wearing a neat uniform, warmly smiling against a clean, bright, white background. The lighting is soft and flattering, creating a welcoming and modern professional look suitable for an enterprise application profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHrKzei7kvD-SbKgLSxH-GkqPMhbNhsBTltnxsOdIk2aKXsxMDoJWzldVlJXKEyMTaJwaxaT555F7n8QgGXbpo6Q554AV7aPyI9dcXaSm4a5FCn5BsWStBb0-AjvJlt1TgZxjWX_-RfgVWnmizLMo7YNNF1dUoaSVAOC1taKeXCeMKDjz_B05tgQIEqmHDrdpErlzDhEAzCFLvZ9O5VmCz6vofBSOhftj8uNoEIKSsnTuTJEpp_t-DHTt6sNhhUsC-dyqraeKYjnTY"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 overflow-y-auto mt-topbar-height ml-sidebar-width relative w-full h-full" style="width: calc(100% - var(--spacing-sidebar-width));">
+<div class="p-layout-margin max-w-5xl mx-auto pb-24">
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-lg">
+<div>
+<div class="flex items-center gap-2 text-gray-400 font-caption text-caption mb-1">
+<a class="hover:text-primary transition-colors" href="#">Menu Management</a>
+<span class="material-symbols-outlined" style="font-size: 14px;">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Burgers</a>
+<span class="material-symbols-outlined" style="font-size: 14px;">chevron_right</span>
+<span class="text-gray-600">Classic Cheeseburger</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-gray-800">Edit Variants &amp; Pricing</h2>
+</div>
+<div class="flex gap-sm">
+<button class="px-4 py-2 rounded border border-gray-200 text-gray-600 font-body-md text-body-md hover:bg-surface-container-high transition-colors">Cancel</button>
+<button class="px-4 py-2 rounded bg-primary text-on-primary font-body-md text-body-md hover:bg-amber-800 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">save</span>
+                        Save Changes
+                    </button>
+</div>
+</div>
+<!-- Base Product Summary Card -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl p-md flex items-center justify-between mb-lg shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded bg-surface-container flex items-center justify-center border border-gray-200">
+<span class="material-symbols-outlined text-gray-400">fastfood</span>
+</div>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-gray-800">Classic Cheeseburger</h3>
+<p class="font-caption text-caption text-gray-600">SKU: BRG-CLS-001</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-caption text-caption text-gray-600 mb-0.5">Base Price</p>
+<p class="font-price-md text-price-md text-gray-800">Rp 45.000</p>
+</div>
+</div>
+<!-- Variant Groups -->
+<div class="space-y-md">
+<!-- Variant Group: Size -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+<!-- Header -->
+<div class="bg-surface px-md py-sm border-b border-gray-200 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400 cursor-move" style="font-size: 18px;">drag_indicator</span>
+<h4 class="font-body-md text-body-md font-semibold text-gray-800">Size</h4>
+<span class="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full font-label-caps text-label-caps tracking-wider uppercase" style="font-size: 9px;">Required</span>
+</div>
+<div class="flex items-center gap-4 text-gray-600 font-caption text-caption">
+<span>Select: 1 - 1</span>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest transition-colors text-gray-400 hover:text-danger-text">
+<span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
+</button>
+</div>
+</div>
+<!-- Options Table -->
+<div class="px-md py-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr>
+<th class="w-8 py-2"></th>
+<th class="font-label-caps text-label-caps text-gray-400 uppercase pb-2 font-normal">Option Name</th>
+<th class="font-label-caps text-label-caps text-gray-400 uppercase pb-2 font-normal">SKU Suffix</th>
+<th class="font-label-caps text-label-caps text-gray-400 uppercase pb-2 font-normal text-right">Price Adj (+/-)</th>
+<th class="font-label-caps text-label-caps text-gray-400 uppercase pb-2 font-normal text-center w-20">Status</th>
+<th class="w-10 py-2"></th>
+</tr>
+</thead>
+<tbody>
+<!-- Option 1 -->
+<tr class="border-t border-gray-200/50 group">
+<td class="py-2"><span class="material-symbols-outlined text-gray-300 cursor-move hover:text-gray-500 transition-colors" style="font-size: 16px;">drag_indicator</span></td>
+<td class="py-2 pr-2">
+<input class="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded px-2 py-1 font-body-md text-body-md outline-none transition-colors" placeholder="e.g. Small" type="text" value="Regular"/>
+</td>
+<td class="py-2 pr-2">
+<input class="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded px-2 py-1 font-price-md text-price-md text-gray-600 outline-none transition-colors uppercase" type="text" value="-REG"/>
+</td>
+<td class="py-2 pr-4 text-right">
+<div class="relative inline-flex items-center">
+<span class="absolute left-2 text-gray-400 font-price-md text-price-md text-[11px]">+</span>
+<input class="w-24 bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded pl-5 pr-2 py-1 font-price-md text-price-md text-right outline-none transition-colors" type="text" value="0"/>
+</div>
+</td>
+<td class="py-2 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-7 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-success-text"></div>
+</label>
+</td>
+<td class="py-2 text-right">
+<button class="w-6 h-6 inline-flex items-center justify-center rounded text-gray-400 hover:text-danger-text hover:bg-danger-bg transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+</button>
+</td>
+</tr>
+<!-- Option 2 -->
+<tr class="border-t border-gray-200/50 group">
+<td class="py-2"><span class="material-symbols-outlined text-gray-300 cursor-move hover:text-gray-500 transition-colors" style="font-size: 16px;">drag_indicator</span></td>
+<td class="py-2 pr-2">
+<input class="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded px-2 py-1 font-body-md text-body-md outline-none transition-colors" type="text" value="Large"/>
+</td>
+<td class="py-2 pr-2">
+<input class="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded px-2 py-1 font-price-md text-price-md text-gray-600 outline-none transition-colors uppercase" type="text" value="-LRG"/>
+</td>
+<td class="py-2 pr-4 text-right">
+<div class="relative inline-flex items-center">
+<span class="absolute left-2 text-gray-400 font-price-md text-price-md text-[11px]">+</span>
+<input class="w-24 bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded pl-5 pr-2 py-1 font-price-md text-price-md text-right outline-none transition-colors" type="text" value="15.000"/>
+</div>
+</td>
+<td class="py-2 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-7 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-success-text"></div>
+</label>
+</td>
+<td class="py-2 text-right">
+<button class="w-6 h-6 inline-flex items-center justify-center rounded text-gray-400 hover:text-danger-text hover:bg-danger-bg transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Add Option Button -->
+<div class="mt-2 pl-8">
+<button class="flex items-center gap-1 text-gray-600 hover:text-primary font-caption text-caption font-medium transition-colors">
+<span class="material-symbols-outlined" style="font-size: 14px;">add</span>
+                                Add Option
+                            </button>
+</div>
+</div>
+</div>
+<!-- Variant Group: Add-ons / Toppings -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+<!-- Header -->
+<div class="bg-surface px-md py-sm border-b border-gray-200 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400 cursor-move" style="font-size: 18px;">drag_indicator</span>
+<h4 class="font-body-md text-body-md font-semibold text-gray-800">Extra Toppings</h4>
+<span class="bg-surface-variant text-gray-600 border border-gray-200 px-2 py-0.5 rounded-full font-label-caps text-label-caps tracking-wider uppercase" style="font-size: 9px;">Optional</span>
+</div>
+<div class="flex items-center gap-4 text-gray-600 font-caption text-caption">
+<span>Select: 0 - Unlimited</span>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-highest transition-colors text-gray-400 hover:text-danger-text">
+<span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
+</button>
+</div>
+</div>
+<!-- Options Table -->
+<div class="px-md py-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr>
+<th class="w-8 py-2"></th>
+<th class="font-label-caps text-label-caps text-gray-400 uppercase pb-2 font-normal">Option Name</th>
+<th class="font-label-caps text-label-caps text-gray-400 uppercase pb-2 font-normal">SKU Suffix</th>
+<th class="font-label-caps text-label-caps text-gray-400 uppercase pb-2 font-normal text-right">Price Adj (+/-)</th>
+<th class="font-label-caps text-label-caps text-gray-400 uppercase pb-2 font-normal text-center w-20">Status</th>
+<th class="w-10 py-2"></th>
+</tr>
+</thead>
+<tbody>
+<!-- Option 1 -->
+<tr class="border-t border-gray-200/50 group">
+<td class="py-2"><span class="material-symbols-outlined text-gray-300 cursor-move hover:text-gray-500 transition-colors" style="font-size: 16px;">drag_indicator</span></td>
+<td class="py-2 pr-2">
+<input class="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded px-2 py-1 font-body-md text-body-md outline-none transition-colors" type="text" value="Extra Cheese"/>
+</td>
+<td class="py-2 pr-2">
+<input class="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded px-2 py-1 font-price-md text-price-md text-gray-600 outline-none transition-colors uppercase" type="text" value="-XCH"/>
+</td>
+<td class="py-2 pr-4 text-right">
+<div class="relative inline-flex items-center">
+<span class="absolute left-2 text-gray-400 font-price-md text-price-md text-[11px]">+</span>
+<input class="w-24 bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded pl-5 pr-2 py-1 font-price-md text-price-md text-right outline-none transition-colors" type="text" value="8.000"/>
+</div>
+</td>
+<td class="py-2 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-7 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-success-text"></div>
+</label>
+</td>
+<td class="py-2 text-right">
+<button class="w-6 h-6 inline-flex items-center justify-center rounded text-gray-400 hover:text-danger-text hover:bg-danger-bg transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+</button>
+</td>
+</tr>
+<!-- Option 2 -->
+<tr class="border-t border-gray-200/50 group">
+<td class="py-2"><span class="material-symbols-outlined text-gray-300 cursor-move hover:text-gray-500 transition-colors" style="font-size: 16px;">drag_indicator</span></td>
+<td class="py-2 pr-2">
+<input class="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded px-2 py-1 font-body-md text-body-md outline-none transition-colors" type="text" value="Beef Bacon"/>
+</td>
+<td class="py-2 pr-2">
+<input class="w-full bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded px-2 py-1 font-price-md text-price-md text-gray-600 outline-none transition-colors uppercase" type="text" value="-BAC"/>
+</td>
+<td class="py-2 pr-4 text-right">
+<div class="relative inline-flex items-center">
+<span class="absolute left-2 text-gray-400 font-price-md text-price-md text-[11px]">+</span>
+<input class="w-24 bg-transparent border border-transparent hover:border-gray-200 focus:border-primary focus:bg-white rounded pl-5 pr-2 py-1 font-price-md text-price-md text-right outline-none transition-colors" type="text" value="12.000"/>
+</div>
+</td>
+<td class="py-2 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-7 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-success-text"></div>
+</label>
+</td>
+<td class="py-2 text-right">
+<button class="w-6 h-6 inline-flex items-center justify-center rounded text-gray-400 hover:text-danger-text hover:bg-danger-bg transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Add Option Button -->
+<div class="mt-2 pl-8">
+<button class="flex items-center gap-1 text-gray-600 hover:text-primary font-caption text-caption font-medium transition-colors">
+<span class="material-symbols-outlined" style="font-size: 14px;">add</span>
+                                Add Option
+                            </button>
+</div>
+</div>
+</div>
+<!-- Add New Variant Group Button -->
+<button class="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 font-body-md text-body-md font-medium hover:border-primary hover:text-primary transition-colors flex flex-col items-center justify-center gap-1 bg-surface-container-lowest bg-opacity-50">
+<span class="material-symbols-outlined">add_circle</span>
+                    Add Variant Group
+                </button>
+</div>
+</div>
+</main>
+</body></html>

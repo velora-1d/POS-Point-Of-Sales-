@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notifikasi &amp; Alert - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#ffb869",
+                    "surface-tint": "#885200",
+                    "on-background": "#1a1c1b",
+                    "primary": "#855000",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#673d00",
+                    "on-primary-fixed": "#2b1700",
+                    "surface-container-low": "#f4f4f2",
+                    "on-error": "#ffffff",
+                    "danger-text": "#A32D2D",
+                    "secondary": "#5f5f59",
+                    "on-tertiary-fixed": "#2a1700",
+                    "secondary-container": "#e1e0d9",
+                    "surface-dim": "#dadad8",
+                    "tertiary-container": "#a36800",
+                    "outline-variant": "#d7c3b1",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#eeeeec",
+                    "gray-200": "#D3D1C7",
+                    "danger-bg": "#FCEBEB",
+                    "gray-600": "#444441",
+                    "surface-variant": "#e2e3e1",
+                    "inverse-on-surface": "#f1f1ef",
+                    "success-bg": "#EAF3DE",
+                    "on-surface-variant": "#524436",
+                    "tertiary-fixed": "#ffddb7",
+                    "secondary-fixed": "#e4e2dc",
+                    "primary-fixed": "#ffdcbb",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-highest": "#e2e3e1",
+                    "info-bg": "#E6F1FB",
+                    "outline": "#857464",
+                    "info-text": "#185FA5",
+                    "tertiary": "#825100",
+                    "secondary-fixed-dim": "#c8c6c0",
+                    "on-secondary-fixed-variant": "#474742",
+                    "gray-800": "#2C2C2A",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#63635d",
+                    "error": "#ba1a1a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1b",
+                    "background": "#f9f9f7",
+                    "primary-container": "#a76500",
+                    "primary-fixed-dim": "#ffb869",
+                    "on-secondary-fixed": "#1b1c18",
+                    "surface-bright": "#f9f9f7",
+                    "amber-600": "#854F0B",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb95d",
+                    "amber-50": "#FAEEDA",
+                    "surface": "#f9f9f7",
+                    "surface-container-high": "#e8e8e6",
+                    "success-text": "#3B6D11",
+                    "amber-800": "#633806",
+                    "inverse-surface": "#2f3130",
+                    "amber-100": "#FAC775",
+                    "gray-400": "#888780"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "md": "16px",
+                    "sidebar-width": "220px",
+                    "base": "4px",
+                    "topbar-height": "48px",
+                    "xs": "4px",
+                    "layout-margin": "28px",
+                    "xl": "32px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "body-md": ["Geist"],
+                    "price-md": ["JetBrains Mono"],
+                    "label-caps": ["Geist"],
+                    "caption": ["Geist"],
+                    "display-md": ["Instrument Serif"],
+                    "price-lg": ["JetBrains Mono"],
+                    "headline-sm": ["Geist"],
+                    "display-lg": ["Instrument Serif"],
+                    "body-lg": ["Geist"]
+            },
+            "fontSize": {
+                    "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                    "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .toggle-checkbox:checked { right: 0; border-color: #855000; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #855000; }
+        .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e3e1; transition: all 0.3s; }
+        .toggle-label { width: 36px; height: 20px; background-color: #e2e3e1; border-radius: 9999px; transition: all 0.3s; }
+        .toggle-dot { top: 2px; left: 2px; width: 16px; height: 16px; background-color: white; border-radius: 50%; transition: all 0.3s; }
+        .toggle-checkbox:checked ~ .toggle-dot { transform: translateX(16px); }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- SideNavBar -->
+<nav class="hidden md:flex w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low dark:bg-gray-800 flex-col py-md z-40">
+<div class="px-lg mb-xl">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600 mt-1">Terminal 01</p>
+</div>
+<div class="px-md mb-lg">
+<button class="w-full bg-amber-400 hover:bg-amber-500 text-amber-800 font-label-caps text-label-caps py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<ul class="flex flex-col gap-1 px-sm flex-grow overflow-y-auto">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-body-md text-body-md">Point of Sale</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="receipt_long">receipt_long</span>
+<span class="font-body-md text-body-md">Orders</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-body-md text-body-md">Menu Management</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md text-body-md">Inventory</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto px-sm pt-md border-t border-gray-200 mx-sm">
+<ul class="flex flex-col gap-1">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-[6px] bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings" data-weight="fill" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-body-md text-body-md font-bold">Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-[6px] text-gray-600 dark:text-gray-400 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="hidden md:flex justify-between items-center w-full px-lg ml-sidebar-width h-topbar-height fixed top-0 right-0 z-30 border-b border-outline-variant bg-surface-bright dark:bg-surface-dim font-label-caps text-label-caps" style="width: calc(100% - 220px);">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[18px]" data-icon="search">search</span>
+<input class="pl-8 pr-3 py-1.5 bg-white border border-gray-200 rounded-lg text-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none w-64 transition-shadow" placeholder="Search settings..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<nav class="flex items-center gap-md">
+<!-- Breadcrumbs or sub-nav here if needed, but not specified in TopBar for this page -->
+<span class="text-on-surface-variant dark:text-gray-400">Settings</span>
+<span class="material-symbols-outlined text-[14px] text-gray-400">chevron_right</span>
+<span class="text-primary border-b-2 border-primary pb-1">Notifikasi &amp; Alert</span>
+</nav>
+<div class="flex items-center gap-3 border-l border-gray-200 pl-lg">
+<button class="text-gray-600 hover:text-primary transition-opacity opacity-80" title="notifications">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<button class="text-gray-600 hover:text-primary transition-opacity opacity-80" title="sync">
+<span class="material-symbols-outlined text-[20px]" data-icon="sync">sync</span>
+</button>
+<button class="text-gray-600 hover:text-primary transition-opacity opacity-80 flex items-center gap-2" title="Profile">
+<img alt="Manager Profile" class="w-6 h-6 rounded-full border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBImjbSA0PA_HEBAud9P11a8VGWP5GvwbQ4rOdrbvl5fNDfwKYeqzkfwIJhO3N_jtmMgLxpepHvx0BuwB72EnbkwYoQVY58XDHhyA6uetd9zF1lcEO0h2tyMT9hbv3dc_H0k4y-DCrxR18oqrauNc13rXVtF8p9WId0zXHjF-AZKEMVxLQ81dj4aprB6c4FVVrHVAULjOPFwh9roBFkva_yBeQ7ze7EoKCcP31s7WMY67XT71QZNOUAT5q-KKGmwyDbGYD8vCLlp3rG"/>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="md:ml-sidebar-width pt-[calc(48px+28px)] px-lg pb-layout-margin max-w-5xl mx-auto">
+<div class="mb-xl flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-gray-800 mb-1">Notifikasi &amp; Alert</h2>
+<p class="font-body-md text-body-md text-gray-600">Manage how and when you receive system alerts across different channels.</p>
+</div>
+<button class="bg-amber-400 hover:bg-amber-500 text-amber-800 font-label-caps text-label-caps py-2 px-4 rounded-lg transition-colors">
+                Save Changes
+            </button>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Main Alert Toggles (Left Column) -->
+<div class="md:col-span-8 flex flex-col gap-md">
+<!-- Low Stock Alert Card -->
+<div class="bg-white border border-gray-200 rounded-xl p-md flex flex-col gap-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center border border-amber-100">
+<span class="material-symbols-outlined text-amber-600" data-icon="inventory_2">inventory_2</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Low Stock Notifications</h3>
+<p class="font-caption text-caption text-gray-500 mt-0.5">Alerts when inventory items fall below minimum threshold.</p>
+</div>
+</div>
+<!-- Toggle -->
+<div class="relative inline-block w-9 h-5 align-middle select-none">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-2 appearance-none cursor-pointer" id="toggle_stock" name="toggle_stock" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer" for="toggle_stock"></label>
+<div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow-sm pointer-events-none"></div>
+</div>
+</div>
+<div class="border-t border-gray-200 pt-3 flex items-center gap-lg">
+<p class="font-label-caps text-label-caps text-gray-400 w-24 shrink-0">CHANNELS</p>
+<div class="flex gap-4">
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="rounded border-gray-300 text-amber-600 focus:ring-amber-500" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-700">In-app</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded border-gray-300 text-amber-600 focus:ring-amber-500" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-700">WhatsApp</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="rounded border-gray-300 text-amber-600 focus:ring-amber-500" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-700">Email</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Customer Debt Due Card -->
+<div class="bg-white border border-gray-200 rounded-xl p-md flex flex-col gap-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-danger-bg flex items-center justify-center border border-[#fad4d4]">
+<span class="material-symbols-outlined text-danger-text" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Customer Debt Due</h3>
+<p class="font-caption text-caption text-gray-500 mt-0.5">Reminders for unpaid invoices and customer tabs approaching due date.</p>
+</div>
+</div>
+<!-- Toggle -->
+<div class="relative inline-block w-9 h-5 align-middle select-none">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-2 appearance-none cursor-pointer" id="toggle_debt" name="toggle_debt" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer" for="toggle_debt"></label>
+<div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow-sm pointer-events-none"></div>
+</div>
+</div>
+<div class="border-t border-gray-200 pt-3 flex items-center gap-lg">
+<p class="font-label-caps text-label-caps text-gray-400 w-24 shrink-0">CHANNELS</p>
+<div class="flex gap-4">
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="rounded border-gray-300 text-amber-600 focus:ring-amber-500" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-700">In-app</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="rounded border-gray-300 text-amber-600 focus:ring-amber-500" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-700">WhatsApp</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded border-gray-300 text-amber-600 focus:ring-amber-500" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-700">Email</span>
+</label>
+</div>
+</div>
+</div>
+<!-- New Online Order Card -->
+<div class="bg-white border border-gray-200 rounded-xl p-md flex flex-col gap-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-info-bg flex items-center justify-center border border-[#cce3f9]">
+<span class="material-symbols-outlined text-info-text" data-icon="storefront">storefront</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-gray-800">New Online Order</h3>
+<p class="font-caption text-caption text-gray-500 mt-0.5">Real-time alerts for incoming orders from integration platforms.</p>
+</div>
+</div>
+<!-- Toggle -->
+<div class="relative inline-block w-9 h-5 align-middle select-none">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-2 appearance-none cursor-pointer" id="toggle_order" name="toggle_order" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer" for="toggle_order"></label>
+<div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow-sm pointer-events-none"></div>
+</div>
+</div>
+<div class="border-t border-gray-200 pt-3 flex flex-col gap-3">
+<div class="flex items-center gap-lg">
+<p class="font-label-caps text-label-caps text-gray-400 w-24 shrink-0">CHANNELS</p>
+<div class="flex gap-4">
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="rounded border-gray-300 text-amber-600 focus:ring-amber-500" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-700">In-app</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded border-gray-300 text-amber-600 focus:ring-amber-500" disabled="" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-400">WhatsApp (N/A)</span>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<p class="font-label-caps text-label-caps text-gray-400 w-24 shrink-0">SOUND</p>
+<div class="flex items-center gap-2">
+<select class="bg-gray-50 border border-gray-200 text-gray-700 text-body-md rounded focus:ring-amber-500 focus:border-amber-500 block w-full py-1 px-2 pr-8 h-8">
+<option>Classic Bell</option>
+<option>Digital Chime</option>
+<option>Subtle Ping</option>
+<option>Muted</option>
+</select>
+<button class="p-1 text-gray-500 hover:text-amber-600 transition-colors" title="Test Sound">
+<span class="material-symbols-outlined text-[18px]" data-icon="volume_up">volume_up</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Global Settings & Summary (Right Column) -->
+<div class="md:col-span-4 flex flex-col gap-md">
+<!-- Quick Actions / Global -->
+<div class="bg-surface-container-low border border-gray-200 rounded-xl p-md">
+<h3 class="font-label-caps text-label-caps text-gray-500 mb-3">GLOBAL CONTROLS</h3>
+<div class="flex flex-col gap-3">
+<button class="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-800 font-body-md text-body-md py-2 px-3 rounded-lg flex items-center justify-between transition-colors">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-500 text-[18px]" data-icon="notifications_off">notifications_off</span>
+                                Mute All Alerts (1hr)
+                            </span>
+</button>
+<div class="bg-white border border-gray-200 rounded-lg p-3 mt-2">
+<label class="font-label-caps text-label-caps text-gray-500 block mb-2">WHATSAPP NUMBER</label>
+<input class="w-full bg-gray-50 border border-gray-200 rounded text-body-md py-1.5 px-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Enter number with country code" type="tel" value="+62 812 3456 7890"/>
+<p class="font-caption text-caption text-gray-400 mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] text-success-text" data-icon="check_circle">check_circle</span>
+                                Verified for alerts
+                            </p>
+</div>
+</div>
+</div>
+<!-- Info Snippet -->
+<div class="bg-amber-50 border border-amber-100 rounded-xl p-md">
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-amber-600 text-[18px]" data-icon="lightbulb">lightbulb</span>
+<div>
+<h4 class="font-body-md text-body-md font-semibold text-amber-800">Operational Tip</h4>
+<p class="font-body-md text-body-md text-amber-800/80 mt-1">Keep 'New Online Order' sounds enabled during peak hours to ensure kitchen staff don't miss integration tickets.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Struk - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#ffdcbb",
+                        "surface-container-highest": "#e2e3e1",
+                        "on-primary-container": "#fffbff",
+                        "gray-400": "#888780",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#857464",
+                        "on-surface-variant": "#524436",
+                        "on-secondary-container": "#63635d",
+                        "on-tertiary-container": "#fffbff",
+                        "success-text": "#3B6D11",
+                        "surface-bright": "#f9f9f7",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary-fixed": "#2b1700",
+                        "gray-800": "#2C2C2A",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#d7c3b1",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "success-bg": "#EAF3DE",
+                        "primary-container": "#a76500",
+                        "info-text": "#185FA5",
+                        "surface": "#f9f9f7",
+                        "on-surface": "#1a1c1b",
+                        "primary-fixed-dim": "#ffb869",
+                        "background": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "primary": "#855000",
+                        "gray-200": "#D3D1C7",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e2e3e1",
+                        "secondary": "#5f5f59",
+                        "surface-tint": "#885200",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "gray-600": "#444441",
+                        "on-error": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "surface-container-low": "#f4f4f2",
+                        "error": "#ba1a1a",
+                        "amber-100": "#FAC775",
+                        "surface-dim": "#dadad8",
+                        "secondary-fixed": "#e4e2dc",
+                        "amber-600": "#854F0B",
+                        "amber-50": "#FAEEDA",
+                        "surface-container": "#eeeeec",
+                        "inverse-on-surface": "#f1f1ef",
+                        "danger-bg": "#FCEBEB",
+                        "amber-800": "#633806",
+                        "secondary-container": "#e1e0d9",
+                        "info-bg": "#E6F1FB",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#825100",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2f3130",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1b1c18",
+                        "on-secondary-fixed-variant": "#474742",
+                        "tertiary-container": "#a36800",
+                        "danger-text": "#A32D2D",
+                        "inverse-primary": "#ffb869"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "sm": "8px",
+                        "md": "16px",
+                        "layout-margin": "28px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sidebar-width": "220px",
+                        "base": "4px",
+                        "lg": "24px"
+                    },
+                    fontFamily: {
+                        "headline-sm": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "body-lg": ["Geist"],
+                        "label-caps": ["Geist"],
+                        "body-md": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-lg": ["Instrument Serif"],
+                        "caption": ["Geist"]
+                    },
+                    fontSize: {
+                        "headline-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }],
+                        "price-md": ["13px", { lineHeight: "1", fontWeight: "500" }],
+                        "body-lg": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "label-caps": ["11px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "body-md": ["13px", { lineHeight: "18px", fontWeight: "500" }],
+                        "display-md": ["24px", { lineHeight: "1.2", fontWeight: "400" }],
+                        "price-lg": ["16px", { lineHeight: "1", fontWeight: "600" }],
+                        "display-lg": ["32px", { lineHeight: "1.2", fontWeight: "400" }],
+                        "caption": ["11px", { lineHeight: "14px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface font-body-md text-on-surface h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- Main Content Canvas (No Nav Shell for transactional page) -->
+<main class="flex-1 flex flex-col h-full bg-background relative z-0">
+<!-- Minimal Top Bar for transactional exit -->
+<header class="h-topbar-height bg-surface-bright border-b border-gray-200 flex justify-between items-center px-md lg:px-layout-margin shrink-0">
+<div class="flex items-center gap-sm">
+<button class="p-1 rounded text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+<span class="font-headline-sm text-headline-sm text-gray-800">Pembayaran Berhasil</span>
+</div>
+<div class="font-display-md text-display-md text-primary font-black">
+                PosKasir
+            </div>
+</header>
+<div class="flex-1 overflow-y-auto p-md lg:p-layout-margin flex justify-center items-start">
+<div class="w-full max-w-[400px] flex flex-col gap-md">
+<!-- Receipt Card -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Receipt Header -->
+<div class="p-md pb-sm text-center border-b-[0.5px] border-dashed border-gray-200">
+<div class="w-16 h-16 bg-surface-container-low rounded-full mx-auto mb-sm flex items-center justify-center text-success-text">
+<span class="material-symbols-outlined text-[32px]" data-icon="check_circle">check_circle</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-gray-800 mb-xs">Transaksi Sukses</h2>
+<p class="font-caption text-caption text-gray-400">Order #10293 • 24 Okt 2023, 14:32</p>
+</div>
+<!-- Receipt Body -->
+<div class="p-md flex flex-col gap-sm">
+<!-- Itemized List -->
+<div class="flex flex-col gap-xs pb-sm border-b-[0.5px] border-dashed border-gray-200">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-gray-800">2x Nasi Goreng Spesial</span>
+<span class="font-caption text-caption text-gray-400">@ Rp 35.000</span>
+</div>
+<span class="font-price-md text-price-md text-gray-800 mt-1">Rp 70.000</span>
+</div>
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-gray-800">1x Es Teh Manis</span>
+<span class="font-caption text-caption text-gray-400">@ Rp 10.000</span>
+</div>
+<span class="font-price-md text-price-md text-gray-800 mt-1">Rp 10.000</span>
+</div>
+</div>
+<!-- Subtotals -->
+<div class="flex flex-col gap-xs pb-sm border-b-[0.5px] border-dashed border-gray-200">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-gray-600">Subtotal</span>
+<span class="font-price-md text-price-md text-gray-600">Rp 80.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-gray-600">Pajak (10%)</span>
+<span class="font-price-md text-price-md text-gray-600">Rp 8.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-gray-600">Layanan (5%)</span>
+<span class="font-price-md text-price-md text-gray-600">Rp 4.000</span>
+</div>
+</div>
+<!-- Total -->
+<div class="flex justify-between items-center pt-xs">
+<span class="font-headline-sm text-headline-sm text-gray-800">Total</span>
+<span class="font-price-lg text-price-lg text-amber-800">Rp 92.000</span>
+</div>
+<!-- Payment Method -->
+<div class="flex justify-between items-center mt-sm p-sm bg-surface-container-low rounded-lg">
+<span class="font-caption text-caption text-gray-600 uppercase">Metode Pembayaran</span>
+<span class="font-body-md text-body-md text-gray-800 font-medium">QRIS BCA</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-sm">
+<div class="flex gap-sm">
+<button class="flex-1 bg-amber-400 hover:bg-amber-500 text-amber-800 font-headline-sm text-headline-sm py-2 px-md rounded-lg transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="print">print</span>
+                            Cetak Struk
+                        </button>
+<button class="flex-1 bg-surface-container-lowest border border-gray-200 hover:border-amber-400 text-gray-800 font-headline-sm text-headline-sm py-2 px-md rounded-lg transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px] text-success-text" data-icon="chat">chat</span>
+                            Kirim WA
+                        </button>
+</div>
+<button class="w-full text-center text-gray-600 hover:text-gray-800 font-body-md text-body-md py-2 transition-colors">
+                        Lewati &amp; Pesanan Baru
+                    </button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

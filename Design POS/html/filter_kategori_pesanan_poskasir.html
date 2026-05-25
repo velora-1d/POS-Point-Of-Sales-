@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PosKasir - KDS Grill Station</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "tertiary-container": "#a36800",
+                "danger-bg": "#FCEBEB",
+                "success-text": "#3B6D11",
+                "surface-tint": "#885200",
+                "on-error-container": "#93000a",
+                "amber-600": "#854F0B",
+                "primary": "#855000",
+                "on-tertiary-fixed": "#2a1700",
+                "surface-container-high": "#e8e8e6",
+                "surface-variant": "#e2e3e1",
+                "info-text": "#185FA5",
+                "gray-200": "#D3D1C7",
+                "gray-600": "#444441",
+                "outline-variant": "#d7c3b1",
+                "on-surface": "#1a1c1b",
+                "tertiary-fixed-dim": "#ffb95d",
+                "surface-container-lowest": "#ffffff",
+                "amber-50": "#FAEEDA",
+                "on-tertiary": "#ffffff",
+                "secondary-fixed-dim": "#c8c6c0",
+                "on-primary-fixed-variant": "#673d00",
+                "info-bg": "#E6F1FB",
+                "success-bg": "#EAF3DE",
+                "outline": "#857464",
+                "tertiary-fixed": "#ffddb7",
+                "on-primary": "#ffffff",
+                "surface-container-low": "#f4f4f2",
+                "surface": "#f9f9f7",
+                "inverse-surface": "#2f3130",
+                "on-primary-container": "#fffbff",
+                "on-secondary-fixed": "#1b1c18",
+                "gray-400": "#888780",
+                "on-secondary-fixed-variant": "#474742",
+                "gray-800": "#2C2C2A",
+                "secondary": "#5f5f59",
+                "on-tertiary-container": "#fffbff",
+                "amber-100": "#FAC775",
+                "on-surface-variant": "#524436",
+                "secondary-container": "#e1e0d9",
+                "primary-fixed": "#ffdcbb",
+                "surface-container-highest": "#e2e3e1",
+                "secondary-fixed": "#e4e2dc",
+                "surface-dim": "#dadad8",
+                "on-secondary-container": "#63635d",
+                "background": "#f9f9f7",
+                "tertiary": "#825100",
+                "primary-fixed-dim": "#ffb869",
+                "primary-container": "#a76500",
+                "surface-bright": "#f9f9f7",
+                "on-primary-fixed": "#2b1700",
+                "inverse-on-surface": "#f1f1ef",
+                "error": "#ba1a1a",
+                "error-container": "#ffdad6",
+                "surface-container": "#eeeeec",
+                "on-background": "#1a1c1b",
+                "amber-800": "#633806",
+                "on-error": "#ffffff",
+                "danger-text": "#A32D2D",
+                "inverse-primary": "#ffb869",
+                "on-tertiary-fixed-variant": "#653e00",
+                "on-secondary": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "layout-margin": "28px",
+                "md": "16px",
+                "topbar-height": "48px",
+                "lg": "24px",
+                "base": "4px",
+                "sidebar-width": "220px",
+                "xs": "4px",
+                "xl": "32px",
+                "sm": "8px"
+        },
+        "fontFamily": {
+                "headline-sm": [
+                        "Geist"
+                ],
+                "caption": [
+                        "Geist"
+                ],
+                "body-lg": [
+                        "Geist"
+                ],
+                "body-md": [
+                        "Geist"
+                ],
+                "display-md": [
+                        "Instrument Serif"
+                ],
+                "display-lg": [
+                        "Instrument Serif"
+                ],
+                "price-lg": [
+                        "JetBrains Mono"
+                ],
+                "price-md": [
+                        "JetBrains Mono"
+                ],
+                "label-caps": [
+                        "Geist"
+                ]
+        },
+        "fontSize": {
+                "headline-sm": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "caption": [
+                        "11px",
+                        {
+                                "lineHeight": "14px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "13px",
+                        {
+                                "lineHeight": "18px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "display-md": [
+                        "24px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "400"
+                        }
+                ],
+                "price-lg": [
+                        "16px",
+                        {
+                                "lineHeight": "1",
+                                "fontWeight": "600"
+                        }
+                ],
+                "price-md": [
+                        "13px",
+                        {
+                                "lineHeight": "1",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-caps": [
+                        "11px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+    body { background-color: #f9f9f7; color: #1a1c1b; }
+    .kds-scroll::-webkit-scrollbar { width: 4px; }
+    .kds-scroll::-webkit-scrollbar-track { background: transparent; }
+    .kds-scroll::-webkit-scrollbar-thumb { background: #e2e3e1; border-radius: 4px; }
+</style>
+</head>
+<body class="flex min-h-screen">
+<nav class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant flex flex-col py-md z-40">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<div>
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600">Terminal 01</p>
+</div>
+</div>
+<button class="mt-md w-full bg-[#ffb869] hover:bg-[#ffb95d] text-[#2b1700] font-body-md text-body-md py-2 rounded flex items-center justify-center gap-2 transition-colors active:scale-[0.99] duration-150">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            New Order
+        </button>
+</div>
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded font-body-md text-body-md text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+            Dashboard
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-body-md text-body-md text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+            Point of Sale
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-body-md text-body-md bg-surface-container text-gray-800 border-l-2 border-primary active:scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+            Orders
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-body-md text-body-md text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+            Menu Management
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-body-md text-body-md text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+            Inventory
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-body-md text-body-md text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+            Reports
+        </a>
+</div>
+<div class="mt-auto px-sm pt-md border-t border-outline-variant flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded font-body-md text-body-md text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+            Settings
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded font-body-md text-body-md text-gray-600 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+            Support
+        </a>
+</div>
+</nav>
+<div class="flex-1 ml-[220px] flex flex-col min-h-screen">
+<header class="h-topbar-height fixed top-0 right-0 left-[220px] z-50 bg-surface-bright border-b border-outline-variant flex justify-between items-center px-lg">
+<div class="flex items-center gap-6">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2 text-gray-400 text-[18px]">search</span>
+<input class="pl-8 pr-3 py-1 bg-surface-container-lowest border border-gray-200 rounded text-body-md font-body-md focus:border-amber-400 focus:ring-1 focus:ring-amber-400 focus:outline-none w-64 transition-all" placeholder="Search orders..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-6">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80" href="#">Fast Food</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80" href="#">Drinks</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80" href="#">Desserts</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-caps text-label-caps text-on-surface-variant border border-gray-200 px-3 py-1 rounded hover:bg-gray-50 transition-colors">Hold Order</button>
+<button class="font-label-caps text-label-caps bg-amber-400 text-amber-800 px-4 py-1 rounded font-bold hover:bg-[#FAC775] transition-colors">Checkout</button>
+<div class="flex items-center gap-2 border-l border-gray-200 pl-4 ml-2">
+<button class="text-gray-600 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span></button>
+<button class="text-gray-600 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">sync</span></button>
+<img alt="Manager Profile" class="w-7 h-7 rounded-full object-cover border border-gray-200 ml-2" data-alt="A professional, brightly lit headshot of a restaurant manager with a friendly expression. They are wearing a neat, dark uniform suitable for an upscale fast-casual dining environment. The background is a softly blurred, warm-toned restaurant interior with modern lighting, matching the refined utilitarian aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ_7WSsL_ni51Luwc-udLoPUhwTEBZlH2guJ6WxRVxa8_tp1uFdxZFvtPUPE-bvNnoHQBorErlJrUXXnv8RJEVTq7ntpSE1lE5b8_P3RlYD8-NCnDotACEq36ujqASJq9ZXx4JrK9YQccFR_-mM2lJE-Il7rNvaKyBbdp6QAnvof4O5VZEtazuz5rAzO6OcmqTQr7HkC9BIF_mAA2R0R8SEBQLwONN_xeQEuU8NG9RQvNFR49__D-DGtauz1eAXJnTBZFcAOhOiita"/>
+</div>
+</div>
+</header>
+<main class="mt-[48px] p-layout-margin flex-1 flex flex-col gap-6">
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-1">Grill Station KDS</h2>
+<p class="font-body-md text-body-md text-gray-600">Active orders routing to this station.</p>
+</div>
+<div class="flex items-center gap-2 bg-white border border-gray-200 rounded p-1 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-success-text ml-2"></span>
+<span class="font-label-caps text-label-caps pr-2 text-gray-600">Sync Active</span>
+</div>
+</div>
+<div class="flex gap-2 border-b border-gray-200 pb-2">
+<button class="px-4 py-1.5 rounded bg-[#FAEEDA] border border-[#FAC775] text-[#854F0B] font-body-md text-body-md transition-colors">Semua</button>
+<button class="px-4 py-1.5 rounded bg-transparent border border-transparent hover:bg-gray-50 text-gray-600 font-body-md text-body-md transition-colors">Makanan</button>
+<button class="px-4 py-1.5 rounded bg-transparent border border-transparent hover:bg-gray-50 text-gray-600 font-body-md text-body-md transition-colors">Minuman</button>
+<button class="px-4 py-1.5 rounded bg-transparent border border-transparent hover:bg-gray-50 text-gray-600 font-body-md text-body-md transition-colors">Snack</button>
+</div>
+</div>
+<div class="flex-1 grid grid-cols-3 gap-6">
+<div class="flex flex-col h-full">
+<div class="bg-[#f4f4f2] border-t border-x border-gray-200 rounded-t-lg px-3 py-2 flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-gray-600">New Orders (3)</span>
+<span class="material-symbols-outlined text-[16px] text-gray-400">fiber_new</span>
+</div>
+<div class="bg-[#f4f4f2]/50 border border-gray-200 rounded-b-lg p-2 flex-1 flex flex-col gap-3 kds-scroll overflow-y-auto" style="max-height: calc(100vh - 280px);">
+<div class="bg-surface-container-lowest border border-[#D3D1C7] rounded shadow-sm p-3 flex flex-col gap-3">
+<div class="flex justify-between items-start border-b border-[#e2e3e1] pb-2">
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface block">Table 12</span>
+<span class="font-caption text-caption text-gray-600">Order #A092 • Dine-in</span>
+</div>
+<div class="bg-[#EAF3DE] text-[#3B6D11] px-2 py-0.5 rounded font-label-caps text-label-caps flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">timer</span> 01:14
+                            </div>
+</div>
+<ul class="flex flex-col gap-1.5">
+<li class="flex items-start gap-2">
+<span class="font-price-md text-price-md bg-gray-50 text-gray-800 px-1.5 rounded border border-gray-200">2x</span>
+<div class="font-body-md text-body-md text-on-surface">Classic Cheeseburger
+                                    <span class="block font-caption text-caption text-danger-text mt-0.5 ml-1 border-l-2 border-danger-bg pl-1">- No Onions</span>
+</div>
+</li>
+<li class="flex items-start gap-2">
+<span class="font-price-md text-price-md bg-gray-50 text-gray-800 px-1.5 rounded border border-gray-200">1x</span>
+<div class="font-body-md text-body-md text-on-surface">Ribeye Steak
+                                    <span class="block font-caption text-caption text-gray-600 mt-0.5 ml-1 border-l-2 border-gray-200 pl-1">- Medium Rare</span>
+</div>
+</li>
+</ul>
+<button class="mt-2 w-full bg-[#FAEEDA] border border-[#ffdcbb] text-[#855000] font-body-md text-body-md py-1.5 rounded hover:bg-[#ffb869] transition-colors">Start Preparing</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col h-full">
+<div class="bg-[#FAEEDA] border-t border-x border-[#ffdcbb] rounded-t-lg px-3 py-2 flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-[#855000]">Preparing (1)</span>
+<span class="material-symbols-outlined text-[16px] text-[#855000]">skillet</span>
+</div>
+<div class="bg-[#FAEEDA]/30 border border-[#ffdcbb] rounded-b-lg p-2 flex-1 flex flex-col gap-3 kds-scroll overflow-y-auto" style="max-height: calc(100vh - 280px);">
+<div class="bg-surface-container-lowest border-l-2 border-[#855000] border-y border-r border-[#D3D1C7] rounded shadow-sm p-3 flex flex-col gap-3">
+<div class="flex justify-between items-start border-b border-[#e2e3e1] pb-2">
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface block">Takeaway #44</span>
+<span class="font-caption text-caption text-gray-600">Order #A088 • Gojek</span>
+</div>
+<div class="bg-[#FCEBEB] text-[#A32D2D] px-2 py-0.5 rounded font-label-caps text-label-caps flex items-center gap-1 animate-pulse">
+<span class="material-symbols-outlined text-[12px]">warning</span> 12:45
+                            </div>
+</div>
+<ul class="flex flex-col gap-1.5">
+<li class="flex items-start gap-2">
+<span class="font-price-md text-price-md bg-gray-50 text-gray-800 px-1.5 rounded border border-gray-200">3x</span>
+<div class="font-body-md text-body-md text-on-surface">Grilled Chicken Wings
+                                    <span class="block font-caption text-caption text-gray-600 mt-0.5 ml-1 border-l-2 border-gray-200 pl-1">- Extra Spicy Dip</span>
+</div>
+</li>
+</ul>
+<button class="mt-2 w-full bg-[#855000] text-white font-body-md text-body-md py-1.5 rounded hover:bg-[#673d00] transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">check_circle</span> Mark Done
+                        </button>
+</div>
+</div>
+</div>
+<div class="flex flex-col h-full">
+<div class="bg-[#EAF3DE] border-t border-x border-[#D3D1C7] rounded-t-lg px-3 py-2 flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-[#3B6D11]">Ready (2)</span>
+<span class="material-symbols-outlined text-[16px] text-[#3B6D11]">done_all</span>
+</div>
+<div class="bg-[#EAF3DE]/30 border border-[#D3D1C7] rounded-b-lg p-2 flex-1 flex flex-col gap-3 kds-scroll overflow-y-auto" style="max-height: calc(100vh - 280px);">
+<div class="bg-surface-container-lowest border border-[#D3D1C7] rounded shadow-sm p-3 flex flex-col gap-3 opacity-70 hover:opacity-100 transition-opacity">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface block line-through">Table 04</span>
+<span class="font-caption text-caption text-gray-600">Order #A085</span>
+</div>
+<span class="material-symbols-outlined text-[#3B6D11]">check</span>
+</div>
+<div class="font-caption text-caption text-gray-400">Waiting for runner pickup...</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

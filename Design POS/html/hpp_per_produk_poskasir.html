@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HPP per Produk - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "danger-text": "#A32D2D",
+                        "on-secondary-fixed": "#1b1c18",
+                        "info-text": "#185FA5",
+                        "gray-400": "#888780",
+                        "on-tertiary-container": "#fffbff",
+                        "on-surface": "#1a1c1b",
+                        "success-text": "#3B6D11",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-bright": "#f9f9f7",
+                        "on-primary-fixed": "#2b1700",
+                        "on-background": "#1a1c1b",
+                        "success-bg": "#EAF3DE",
+                        "surface-tint": "#885200",
+                        "gray-800": "#2C2C2A",
+                        "surface-container-highest": "#e2e3e1",
+                        "surface-container-high": "#e8e8e6",
+                        "surface-variant": "#e2e3e1",
+                        "surface-container-lowest": "#ffffff",
+                        "danger-bg": "#FCEBEB",
+                        "amber-600": "#854F0B",
+                        "secondary-container": "#e1e0d9",
+                        "on-secondary-container": "#63635d",
+                        "outline": "#857464",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#d7c3b1",
+                        "error": "#ba1a1a",
+                        "primary": "#855000",
+                        "amber-50": "#FAEEDA",
+                        "on-primary-container": "#fffbff",
+                        "amber-100": "#FAC775",
+                        "secondary": "#5f5f59",
+                        "surface": "#f9f9f7",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f1ef",
+                        "inverse-surface": "#2f3130",
+                        "background": "#f9f9f7",
+                        "tertiary-container": "#a36800",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "primary-fixed": "#ffdcbb",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eeeeec",
+                        "on-surface-variant": "#524436",
+                        "tertiary": "#825100",
+                        "tertiary-fixed": "#ffddb7",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "amber-800": "#633806",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#dadad8",
+                        "info-bg": "#E6F1FB",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "secondary-fixed": "#e4e2dc",
+                        "primary-fixed-dim": "#ffb869",
+                        "inverse-primary": "#ffb869",
+                        "gray-200": "#D3D1C7",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-600": "#444441",
+                        "primary-container": "#a76500",
+                        "surface-container-low": "#f4f4f2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "topbar-height": "48px",
+                        "sidebar-width": "220px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "price-md": ["JetBrains Mono"],
+                        "display-lg": ["Instrument Serif"],
+                        "headline-sm": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "price-lg": ["JetBrains Mono"],
+                        "display-md": ["Instrument Serif"],
+                        "caption": ["Geist"],
+                        "body-md": ["Geist"],
+                        "label-caps": ["Geist"]
+                    },
+                    "fontSize": {
+                        "price-md": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "display-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "price-lg": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "display-md": ["24px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "caption": ["11px", {"lineHeight": "14px", "fontWeight": "400"}],
+                        "body-md": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #FAFAF8; color: #1a1c1b; font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased flex">
+<!-- SideNavBar -->
+<aside class="w-sidebar-width h-screen fixed left-0 top-0 bg-surface-container-low dark:bg-gray-800 border-r border-outline-variant flex flex-col h-full py-md z-40 hidden md:flex">
+<div class="px-lg mb-8">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-body-md text-body-md text-gray-600">Terminal 01</p>
+</div>
+<div class="px-md mb-6">
+<button class="w-full bg-primary text-on-primary py-2 px-4 rounded-lg font-body-md text-body-md hover:bg-amber-800 transition-colors flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                New Order
+            </button>
+</div>
+<nav class="flex-1 px-sm overflow-y-auto space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+                Point of Sale
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                Orders
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-container dark:bg-gray-600 text-gray-800 dark:text-on-primary border-l-2 border-primary rounded-r-xl font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+                Menu Management
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Reports
+            </a>
+</nav>
+<div class="mt-auto px-sm pt-4 border-t border-outline-variant/30 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="h-topbar-height fixed top-0 right-0 left-0 md:left-sidebar-width bg-surface-bright dark:bg-surface-dim border-b border-outline-variant flex justify-between items-center px-lg z-30">
+<div class="flex items-center gap-6">
+<!-- Mobile Menu Button -->
+<button class="md:hidden text-on-surface-variant p-1">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden md:flex gap-6 font-label-caps text-label-caps">
+<a class="text-on-surface-variant hover:text-primary transition-opacity" href="#">Fast Food</a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity" href="#">Drinks</a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity" href="#">Desserts</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-1.5 text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">notifications</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">sync</span>
+</button>
+</div>
+<div class="h-4 w-px bg-outline-variant"></div>
+<button class="font-label-caps text-label-caps text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg hover:bg-amber-100 transition-colors">
+                    Hold Order
+                </button>
+<button class="font-label-caps text-label-caps text-on-primary bg-primary px-3 py-1.5 rounded-lg hover:bg-amber-800 transition-colors">
+                    Checkout
+                </button>
+<button class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2">
+<span class="material-symbols-outlined text-gray-400 m-auto block mt-1">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 mt-topbar-height p-lg lg:p-xl max-w-[1200px] w-full mx-auto pb-layout-margin">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
+<div>
+<div class="flex items-center gap-2 text-gray-600 mb-2">
+<span class="font-label-caps text-label-caps uppercase">Menu Management</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="font-label-caps text-label-caps text-primary uppercase">Kalkulator HPP</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-gray-800 m-0">Nasi Goreng Spesial</h2>
+</div>
+<div class="flex gap-3">
+<button class="font-body-md text-body-md text-gray-600 bg-white border border-gray-200 px-4 py-2 rounded-xl shadow-sm hover:bg-gray-50 transition-colors">
+                        Batal
+                    </button>
+<button class="font-body-md text-body-md text-on-primary bg-primary px-4 py-2 rounded-xl shadow-sm hover:bg-amber-800 transition-colors">
+                        Simpan HPP
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Left Column: Ingredients / BOM -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Recipe / BOM Card -->
+<div class="bg-white rounded-xl border border-gray-200 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] overflow-hidden">
+<div class="p-4 border-b border-gray-200 bg-surface-container-low flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Bahan Baku (Bill of Materials)</h3>
+<button class="font-label-caps text-label-caps text-primary hover:bg-amber-50 px-2 py-1 rounded flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span> Tambah Bahan
+                            </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50 border-b border-gray-200 font-label-caps text-label-caps text-gray-400">
+<th class="p-3 font-medium uppercase tracking-wider">Bahan Baku</th>
+<th class="p-3 font-medium uppercase tracking-wider text-right">Kebutuhan</th>
+<th class="p-3 font-medium uppercase tracking-wider text-right">Satuan</th>
+<th class="p-3 font-medium uppercase tracking-wider text-right">Biaya Satuan</th>
+<th class="p-3 font-medium uppercase tracking-wider text-right">Total Biaya</th>
+<th class="p-3 w-10"></th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="p-3 text-gray-800 font-medium">Beras Putih Premium</td>
+<td class="p-3 text-right">
+<input class="w-16 text-right bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="number" value="200"/>
+</td>
+<td class="p-3 text-right text-gray-600">Gram</td>
+<td class="p-3 text-right font-price-md text-price-md text-gray-600">Rp 15.000 / Kg</td>
+<td class="p-3 text-right font-price-md text-price-md text-gray-800 font-medium">Rp 3.000</td>
+<td class="p-3 text-center">
+<button class="text-gray-400 hover:text-danger-text transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="p-3 text-gray-800 font-medium">Telur Ayam</td>
+<td class="p-3 text-right">
+<input class="w-16 text-right bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="number" value="1"/>
+</td>
+<td class="p-3 text-right text-gray-600">Butir</td>
+<td class="p-3 text-right font-price-md text-price-md text-gray-600">Rp 2.000 / Btr</td>
+<td class="p-3 text-right font-price-md text-price-md text-gray-800 font-medium">Rp 2.000</td>
+<td class="p-3 text-center">
+<button class="text-gray-400 hover:text-danger-text transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="p-3 text-gray-800 font-medium">Daging Ayam Fillet</td>
+<td class="p-3 text-right">
+<input class="w-16 text-right bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="number" value="50"/>
+</td>
+<td class="p-3 text-right text-gray-600">Gram</td>
+<td class="p-3 text-right font-price-md text-price-md text-gray-600">Rp 45.000 / Kg</td>
+<td class="p-3 text-right font-price-md text-price-md text-gray-800 font-medium">Rp 2.250</td>
+<td class="p-3 text-center">
+<button class="text-gray-400 hover:text-danger-text transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</td>
+</tr>
+<tr class="border-b-[0.5px] border-gray-200 hover:bg-gray-50/50 transition-colors">
+<td class="p-3 text-gray-800 font-medium">Bumbu Nasi Goreng Base</td>
+<td class="p-3 text-right">
+<input class="w-16 text-right bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="number" value="15"/>
+</td>
+<td class="p-3 text-right text-gray-600">Gram</td>
+<td class="p-3 text-right font-price-md text-price-md text-gray-600">Rp 50.000 / Kg</td>
+<td class="p-3 text-right font-price-md text-price-md text-gray-800 font-medium">Rp 750</td>
+<td class="p-3 text-center">
+<button class="text-gray-400 hover:text-danger-text transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr class="bg-gray-50/80">
+<td class="p-3 text-right font-headline-sm text-headline-sm text-gray-600" colspan="4">Total Biaya Bahan Baku</td>
+<td class="p-3 text-right font-price-lg text-price-lg text-gray-800">Rp 8.000</td>
+<td></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- Additional Costs Card -->
+<div class="bg-white rounded-xl border border-gray-200 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] overflow-hidden">
+<div class="p-4 border-b border-gray-200 bg-surface-container-low flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-gray-800">Biaya Tambahan (Packaging, dll)</h3>
+<button class="font-label-caps text-label-caps text-primary hover:bg-amber-50 px-2 py-1 rounded flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span> Tambah Biaya
+                            </button>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex items-center justify-between border-b-[0.5px] border-gray-200 pb-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400">takeout_dining</span>
+<span class="font-body-md text-body-md text-gray-800">Kotak Makan Takeaway (Paper)</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-price-md text-price-md text-gray-800">Rp 1.500</span>
+<button class="text-gray-400 hover:text-danger-text transition-colors"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400">restaurant</span>
+<span class="font-body-md text-body-md text-gray-800">Sendok Garpu Plastik Set</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-price-md text-price-md text-gray-800">Rp 500</span>
+<button class="text-gray-400 hover:text-danger-text transition-colors"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Margin Calculator -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-white rounded-xl border border-gray-200 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] p-5 relative overflow-hidden">
+<!-- Decorative bg -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -z-10 opacity-50"></div>
+<h3 class="font-headline-sm text-headline-sm text-gray-800 border-b border-gray-100 pb-3 mb-4">Kalkulator Margin</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-gray-600">Total HPP (Bahan + Tambahan)</span>
+<span class="font-price-lg text-price-lg text-gray-800">Rp 10.000</span>
+</div>
+<div class="pt-4 border-t border-gray-100">
+<label class="block font-label-caps text-label-caps text-gray-600 mb-2 uppercase">Harga Jual Target</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 font-price-md text-gray-500">Rp</span>
+<input class="w-full pl-10 pr-3 py-2 bg-white border border-gray-200 rounded-lg font-price-lg text-gray-800 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="text" value="25.000"/>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 mt-4 border border-gray-100">
+<div class="flex justify-between items-center mb-2">
+<span class="font-body-md text-body-md text-gray-600">Estimasi Laba Kotor</span>
+<span class="font-price-lg text-price-lg text-success-text">Rp 15.000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-gray-600">Margin Keuntungan</span>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-success-bg text-success-text font-label-caps text-label-caps rounded-full">Sehat</span>
+<span class="font-price-lg text-price-lg text-gray-800">60%</span>
+</div>
+</div>
+</div>
+<!-- Margin slider visualization -->
+<div class="pt-2">
+<div class="flex justify-between font-caption text-caption text-gray-500 mb-1">
+<span>0%</span>
+<span>Target 50%</span>
+<span>100%</span>
+</div>
+<div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden flex">
+<div class="h-full bg-danger-text/50 w-[30%]"></div>
+<div class="h-full bg-amber-400 w-[20%]"></div>
+<div class="h-full bg-success-text/80 w-[50%] relative">
+<div class="absolute left-[20%] top-0 bottom-0 w-0.5 bg-white"></div> <!-- marker for current 60% -->
+</div>
+</div>
+<p class="font-caption text-caption text-gray-500 mt-2 text-center">Margin 60% direkomendasikan untuk produk makanan utama.</p>
+</div>
+</div>
+</div>
+<!-- Pricing Rules Card -->
+<div class="bg-white rounded-xl border border-gray-200 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] p-5">
+<h3 class="font-headline-sm text-headline-sm text-gray-800 border-b border-gray-100 pb-3 mb-4">Aturan Harga Platform</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+<span class="font-body-md text-body-md text-gray-600 flex items-center gap-2"><img alt="Gofood icon" class="w-4 h-4 rounded-sm" data-alt="A generic placeholder icon for a food delivery app, simple gray box with a G inside." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSb-x3sk6rPRkGq9aaXICTDU2pzHUk0I6tT0fW_yvoIPEVqNzZgEQBog7QXlyRHQROqBSxKT1m0fO9f0-6bffhF3Dhp6GHaYaDuszt4ovbn4tlbs6MSWJVhbOpl9h9p62XikbT0ZdqpfoQFwatUECq7a0apweIphZpgET1eqNV5J7YkqL6YWdPDPA9D8crYJgXE-XLeViMR8oZVc2JqiEeTzAxv_G8BEJQuVPlYu-I5heTvEIX8pVmFMHqsZUf0GLHaVHW7ivEqejF"/> GoFood (+20%)</span>
+<span class="font-price-md text-price-md text-gray-800">Rp 30.000</span>
+</div>
+<div class="flex justify-between items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+<span class="font-body-md text-body-md text-gray-600 flex items-center gap-2"><img alt="Grabfood icon" class="w-4 h-4 rounded-sm" data-alt="A generic placeholder icon for a food delivery app, simple gray box with an S inside." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuFNkrZLvuU_2vdfXjmL4R7XP2GeLxWAVc7bU9vss5Cs1vPI67iFgWPOcMq5g0YFaDjF68_zhSCXMzcVtv_zbrHcXdC0iJohTFn05shaAmTD_AMewr9JIuPzxop9ZWs6wmLP-jWnh2KW2E5L_OMV46D-q_T_QbfONN_JJSY4GTNR6p7oosaOiQOInVMU5h-6BzkRzhXezX4DKwZ9Gf7APQcNnfr_EQ2A48Syt-8wkBII0M2a3zxSurfAJmWwZCgRh4I0dfhQlCWBql"/> ShopeeFood (+15%)</span>
+<span class="font-price-md text-price-md text-gray-800">Rp 28.750</span>
+</div>
+<div class="pt-2 border-t border-gray-100">
+<p class="font-caption text-caption text-gray-500">Harga platform dihitung otomatis berdasarkan persentase markup dari Harga Jual Target.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

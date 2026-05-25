@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Real-time Table Monitoring - PosKasir</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#a36800",
+                      "danger-bg": "#FCEBEB",
+                      "success-text": "#3B6D11",
+                      "surface-tint": "#885200",
+                      "on-error-container": "#93000a",
+                      "amber-600": "#854F0B",
+                      "primary": "#855000",
+                      "on-tertiary-fixed": "#2a1700",
+                      "surface-container-high": "#e8e8e6",
+                      "surface-variant": "#e2e3e1",
+                      "info-text": "#185FA5",
+                      "gray-200": "#D3D1C7",
+                      "gray-600": "#444441",
+                      "outline-variant": "#d7c3b1",
+                      "on-surface": "#1a1c1b",
+                      "tertiary-fixed-dim": "#ffb95d",
+                      "surface-container-lowest": "#ffffff",
+                      "amber-50": "#FAEEDA",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#c8c6c0",
+                      "on-primary-fixed-variant": "#673d00",
+                      "info-bg": "#E6F1FB",
+                      "success-bg": "#EAF3DE",
+                      "outline": "#857464",
+                      "tertiary-fixed": "#ffddb7",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f4f4f2",
+                      "surface": "#f9f9f7",
+                      "inverse-surface": "#2f3130",
+                      "on-primary-container": "#fffbff",
+                      "on-secondary-fixed": "#1b1c18",
+                      "gray-400": "#888780",
+                      "on-secondary-fixed-variant": "#474742",
+                      "gray-800": "#2C2C2A",
+                      "secondary": "#5f5f59",
+                      "on-tertiary-container": "#fffbff",
+                      "amber-100": "#FAC775",
+                      "on-surface-variant": "#524436",
+                      "secondary-container": "#e1e0d9",
+                      "primary-fixed": "#ffdcbb",
+                      "surface-container-highest": "#e2e3e1",
+                      "secondary-fixed": "#e4e2dc",
+                      "surface-dim": "#dadad8",
+                      "on-secondary-container": "#63635d",
+                      "background": "#f9f9f7",
+                      "tertiary": "#825100",
+                      "primary-fixed-dim": "#ffb869",
+                      "primary-container": "#a76500",
+                      "surface-bright": "#f9f9f7",
+                      "on-primary-fixed": "#2b1700",
+                      "inverse-on-surface": "#f1f1ef",
+                      "error": "#ba1a1a",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eeeeec",
+                      "on-background": "#1a1c1b",
+                      "amber-800": "#633806",
+                      "on-error": "#ffffff",
+                      "danger-text": "#A32D2D",
+                      "inverse-primary": "#ffb869",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-secondary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "layout-margin": "28px",
+                      "md": "16px",
+                      "topbar-height": "48px",
+                      "lg": "24px",
+                      "base": "4px",
+                      "sidebar-width": "220px",
+                      "xs": "4px",
+                      "xl": "32px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Geist"],
+                      "caption": ["Geist"],
+                      "body-lg": ["Geist"],
+                      "body-md": ["Geist"],
+                      "display-md": ["Instrument Serif"],
+                      "display-lg": ["Instrument Serif"],
+                      "price-lg": ["JetBrains Mono"],
+                      "price-md": ["JetBrains Mono"],
+                      "label-caps": ["Geist"]
+              },
+              "fontSize": {
+                      "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                      "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+                      "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                      "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                      "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                      "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                      "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                      "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; background-color: #f9f9f7; color: #1a1c1b; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen overflow-x-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col py-md z-40">
+<div class="px-md mb-8">
+<h1 class="font-display-md text-display-md text-primary font-bold">PosKasir</h1>
+<p class="font-caption text-caption text-gray-600">Terminal 01</p>
+</div>
+<div class="px-md mb-6">
+<button class="w-full bg-amber-400 text-amber-800 hover:bg-amber-500 transition-colors py-2 px-4 rounded-lg font-body-md text-body-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Order
+            </button>
+</div>
+<ul class="flex-1 flex flex-col gap-1 px-3">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg bg-surface-container text-gray-800 border-l-2 border-primary font-body-md text-body-md scale-[0.99] duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+                    Point of Sale
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+                    Orders
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+                    Menu Management
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+                    Inventory
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+                    Reports
+                </a>
+</li>
+</ul>
+<ul class="mt-auto flex flex-col gap-1 px-3 border-t border-gray-200 pt-4">
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                    Settings
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 hover:bg-surface-container-highest transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                    Support
+                </a>
+</li>
+</ul>
+</nav>
+<!-- TopAppBar -->
+<header class="bg-surface-bright h-topbar-height fixed top-0 right-0 z-30 border-b border-outline-variant flex justify-between items-center px-lg" style="width: calc(100% - 220px);">
+<nav class="flex gap-6 h-full items-center">
+<a class="h-full flex items-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity uppercase" href="#">Fast Food</a>
+<a class="h-full flex items-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity uppercase" href="#">Drinks</a>
+<a class="h-full flex items-center font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity uppercase" href="#">Desserts</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition-colors px-3 py-1.5 rounded-lg font-body-md text-body-md">Hold Order</button>
+<button class="bg-amber-400 text-amber-800 hover:bg-amber-500 transition-colors px-4 py-1.5 rounded-lg font-body-md text-body-md font-semibold">Checkout</button>
+<div class="flex items-center gap-2 ml-4 border-l border-gray-200 pl-4">
+<button class="text-on-surface-variant hover:text-primary transition-opacity p-1">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity p-1">
+<span class="material-symbols-outlined">sync</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity p-1">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-[220px] mt-[48px] p-layout-margin">
+<!-- Header -->
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-display-md text-display-md text-on-surface">Active Tables Overview</h2>
+<p class="font-body-md text-body-md text-gray-600 mt-1">Monitoring 12 occupied tables across all zones.</p>
+</div>
+<div class="flex gap-2">
+<div class="bg-surface-container-lowest border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-amber-400"></div>
+<div>
+<p class="font-caption text-caption text-gray-600 uppercase">Total Guests</p>
+<p class="font-price-lg text-price-lg text-on-surface">42</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-success-text"></div>
+<div>
+<p class="font-caption text-caption text-gray-600 uppercase">Active Revenue</p>
+<p class="font-price-lg text-price-lg text-on-surface">$1,452.80</p>
+</div>
+</div>
+</div>
+</div>
+<!-- High Density Data Table -->
+<div class="bg-surface-container-lowest border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+<!-- Table Header -->
+<div class="grid grid-cols-[1fr_2fr_1fr_1.5fr_2fr] gap-4 px-md py-2 bg-surface-container-low border-b border-gray-200 items-center">
+<div class="font-label-caps text-label-caps text-gray-600 uppercase">Table</div>
+<div class="font-label-caps text-label-caps text-gray-600 uppercase">Status &amp; Time</div>
+<div class="font-label-caps text-label-caps text-gray-600 uppercase text-center">Guests</div>
+<div class="font-label-caps text-label-caps text-gray-600 uppercase text-right">Current Bill</div>
+<div class="font-label-caps text-label-caps text-gray-600 uppercase text-right">Actions</div>
+</div>
+<!-- Table Body -->
+<div class="flex flex-col">
+<!-- Row 1 -->
+<div class="grid grid-cols-[1fr_2fr_1fr_1.5fr_2fr] gap-4 px-md py-2 border-b border-gray-200 items-center hover:bg-surface transition-colors">
+<div class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+                        T-04
+                    </div>
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded-full bg-info-bg text-info-text font-caption text-caption uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] icon-fill">restaurant</span> Eating
+                        </span>
+<span class="font-price-md text-price-md text-gray-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> 45:12
+                        </span>
+</div>
+<div class="font-body-md text-body-md text-on-surface text-center flex justify-center items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-gray-400">group</span> 4
+                    </div>
+<div class="font-price-md text-price-md text-on-surface text-right">
+                        $124.50
+                    </div>
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1 rounded-lg text-gray-600 hover:bg-gray-100 font-body-md text-body-md transition-colors border border-transparent hover:border-gray-200">View Bill</button>
+<button class="px-3 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 font-body-md text-body-md transition-colors">Add Order</button>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-[1fr_2fr_1fr_1.5fr_2fr] gap-4 px-md py-2 border-b border-gray-200 items-center hover:bg-surface transition-colors">
+<div class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+                        T-12
+                    </div>
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-caption text-caption uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] icon-fill">menu_book</span> Ordering
+                        </span>
+<span class="font-price-md text-price-md text-danger-text flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> 08:30
+                        </span>
+</div>
+<div class="font-body-md text-body-md text-on-surface text-center flex justify-center items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-gray-400">group</span> 2
+                    </div>
+<div class="font-price-md text-price-md text-gray-400 text-right">
+                        $0.00
+                    </div>
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1 rounded-lg text-gray-400 cursor-not-allowed font-body-md text-body-md" disabled="">View Bill</button>
+<button class="px-3 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 font-body-md text-body-md transition-colors">Add Order</button>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-[1fr_2fr_1fr_1.5fr_2fr] gap-4 px-md py-2 border-b border-gray-200 items-center hover:bg-surface transition-colors bg-success-bg/20">
+<div class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+                        W-01 <span class="font-caption text-caption text-gray-400 font-normal ml-1">(Window)</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded-full bg-success-bg text-success-text font-caption text-caption uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] icon-fill">payments</span> Paying
+                        </span>
+<span class="font-price-md text-price-md text-gray-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> 01:15:00
+                        </span>
+</div>
+<div class="font-body-md text-body-md text-on-surface text-center flex justify-center items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-gray-400">group</span> 6
+                    </div>
+<div class="font-price-md text-price-md text-on-surface text-right font-bold">
+                        $345.20
+                    </div>
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1 rounded-lg bg-gray-100 text-gray-800 border border-gray-200 hover:bg-gray-200 font-body-md text-body-md transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">receipt</span> Print
+                        </button>
+<button class="px-3 py-1 rounded-lg bg-amber-400 text-amber-800 hover:bg-amber-500 font-body-md text-body-md transition-colors">Checkout</button>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-[1fr_2fr_1fr_1.5fr_2fr] gap-4 px-md py-2 border-b border-gray-200 items-center hover:bg-surface transition-colors">
+<div class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+                        P-08 <span class="font-caption text-caption text-gray-400 font-normal ml-1">(Patio)</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded-full bg-info-bg text-info-text font-caption text-caption uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px] icon-fill">local_cafe</span> Drinks
+                        </span>
+<span class="font-price-md text-price-md text-gray-600 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> 22:45
+                        </span>
+</div>
+<div class="font-body-md text-body-md text-on-surface text-center flex justify-center items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-gray-400">group</span> 3
+                    </div>
+<div class="font-price-md text-price-md text-on-surface text-right">
+                        $48.90
+                    </div>
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1 rounded-lg text-gray-600 hover:bg-gray-100 font-body-md text-body-md transition-colors border border-transparent hover:border-gray-200">View Bill</button>
+<button class="px-3 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 font-body-md text-body-md transition-colors">Add Order</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

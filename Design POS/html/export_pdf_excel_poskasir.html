@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Export Data - PosKasir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#ffb869",
+                        "surface-tint": "#885200",
+                        "on-background": "#1a1c1b",
+                        "primary": "#855000",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#673d00",
+                        "on-primary-fixed": "#2b1700",
+                        "surface-container-low": "#f4f4f2",
+                        "on-error": "#ffffff",
+                        "danger-text": "#A32D2D",
+                        "secondary": "#5f5f59",
+                        "on-tertiary-fixed": "#2a1700",
+                        "secondary-container": "#e1e0d9",
+                        "surface-dim": "#dadad8",
+                        "tertiary-container": "#a36800",
+                        "outline-variant": "#d7c3b1",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeeec",
+                        "gray-200": "#D3D1C7",
+                        "danger-bg": "#FCEBEB",
+                        "gray-600": "#444441",
+                        "surface-variant": "#e2e3e1",
+                        "inverse-on-surface": "#f1f1ef",
+                        "success-bg": "#EAF3DE",
+                        "on-surface-variant": "#524436",
+                        "tertiary-fixed": "#ffddb7",
+                        "secondary-fixed": "#e4e2dc",
+                        "primary-fixed": "#ffdcbb",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-highest": "#e2e3e1",
+                        "info-bg": "#E6F1FB",
+                        "outline": "#857464",
+                        "info-text": "#185FA5",
+                        "tertiary": "#825100",
+                        "secondary-fixed-dim": "#c8c6c0",
+                        "on-secondary-fixed-variant": "#474742",
+                        "gray-800": "#2C2C2A",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#63635d",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1b",
+                        "background": "#f9f9f7",
+                        "primary-container": "#a76500",
+                        "primary-fixed-dim": "#ffb869",
+                        "on-secondary-fixed": "#1b1c18",
+                        "surface-bright": "#f9f9f7",
+                        "amber-600": "#854F0B",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb95d",
+                        "amber-50": "#FAEEDA",
+                        "surface": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "success-text": "#3B6D11",
+                        "amber-800": "#633806",
+                        "inverse-surface": "#2f3130",
+                        "amber-100": "#FAC775",
+                        "gray-400": "#888780"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "md": "16px",
+                        "sidebar-width": "220px",
+                        "base": "4px",
+                        "topbar-height": "48px",
+                        "xs": "4px",
+                        "layout-margin": "28px",
+                        "xl": "32px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Geist"],
+                        "price-md": ["JetBrains Mono"],
+                        "label-caps": ["Geist"],
+                        "caption": ["Geist"],
+                        "display-md": ["Instrument Serif"],
+                        "price-lg": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "display-lg": ["Instrument Serif"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "price-md": ["13px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "caption": ["11px", { "lineHeight": "14px", "fontWeight": "400" }],
+                        "display-md": ["24px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "price-lg": ["16px", { "lineHeight": "1", "fontWeight": "600" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "body-lg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen flex overflow-hidden">
+<!-- Modal Overlay Backdrop -->
+<div class="fixed inset-0 bg-surface-dim/60 backdrop-blur-sm z-50 flex items-center justify-center p-md">
+<!-- Export Modal Container -->
+<div class="bg-surface-container-lowest w-full max-w-2xl rounded-xl border border-gray-200 shadow-sm flex flex-col max-h-[921px]">
+<!-- Modal Header -->
+<div class="flex items-center justify-between px-lg py-md border-b border-gray-200 bg-surface-bright rounded-t-xl">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Export Report Data</h2>
+<p class="font-caption text-caption text-gray-600 mt-1">Configure your data export settings</p>
+</div>
+<button class="text-gray-400 hover:text-gray-800 transition-colors p-1 rounded-DEFAULT hover:bg-gray-50">
+<span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+</button>
+</div>
+<!-- Modal Body (Scrollable) -->
+<div class="flex-1 overflow-y-auto p-lg space-y-xl">
+<!-- Section 1: Data Source & Range -->
+<div class="space-y-md">
+<h3 class="font-label-caps text-label-caps text-gray-400 uppercase tracking-wider mb-sm border-b border-gray-200 pb-1">1. Report Source &amp; Range</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Report Type -->
+<div class="space-y-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Report Type</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-gray-200 rounded-DEFAULT py-1.5 px-3 font-body-md text-body-md text-gray-800 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none appearance-none">
+<option>Sales Summary</option>
+<option>Detailed Transactions</option>
+<option>Inventory Valuation</option>
+<option>Employee Performance</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style="font-size: 18px;">expand_more</span>
+</div>
+</div>
+<!-- Date Range Preset -->
+<div class="space-y-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Date Range</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-gray-200 rounded-DEFAULT py-1.5 px-3 font-body-md text-body-md text-gray-800 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none appearance-none">
+<option>Today</option>
+<option>Yesterday</option>
+<option selected="">Last 7 Days</option>
+<option>This Month</option>
+<option>Custom Range</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style="font-size: 18px;">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Custom Date Range (Visible when selected) -->
+<div class="grid grid-cols-2 gap-md pt-sm">
+<div class="space-y-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Start Date</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" style="font-size: 16px;">calendar_today</span>
+<input class="w-full bg-surface-container-lowest border border-gray-200 rounded-DEFAULT py-1.5 pl-8 pr-3 font-body-md text-body-md text-gray-800 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" type="text" value="Oct 01, 2023"/>
+</div>
+</div>
+<div class="space-y-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">End Date</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" style="font-size: 16px;">calendar_today</span>
+<input class="w-full bg-surface-container-lowest border border-gray-200 rounded-DEFAULT py-1.5 pl-8 pr-3 font-body-md text-body-md text-gray-800 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" type="text" value="Oct 07, 2023"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 2: Data Columns Selection -->
+<div class="space-y-md">
+<div class="flex justify-between items-end mb-sm border-b border-gray-200 pb-1">
+<h3 class="font-label-caps text-label-caps text-gray-400 uppercase tracking-wider">2. Select Data Columns</h3>
+<button class="font-caption text-caption text-primary hover:text-amber-800 transition-colors">Select All</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-sm">
+<!-- Column Checkboxes -->
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input checked="" class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-800">Transaction ID</span>
+</label>
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input checked="" class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-800">Date &amp; Time</span>
+</label>
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input checked="" class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-800">Order Type</span>
+</label>
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input checked="" class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-800">Gross Total</span>
+</label>
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input checked="" class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-800">Discounts</span>
+</label>
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input checked="" class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-800">Net Total</span>
+</label>
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-600">Tax Breakdown</span>
+</label>
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-600">Cashier Name</span>
+</label>
+<label class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-DEFAULT cursor-pointer border border-transparent hover:border-gray-200 transition-all">
+<input class="rounded-sm border-gray-200 text-amber-400 focus:ring-amber-400" type="checkbox"/>
+<span class="font-body-md text-body-md text-gray-600">Payment Method</span>
+</label>
+</div>
+</div>
+<!-- Section 3: File Format -->
+<div class="space-y-md">
+<h3 class="font-label-caps text-label-caps text-gray-400 uppercase tracking-wider mb-sm border-b border-gray-200 pb-1">3. Export Format</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-sm">
+<!-- Format: Excel -->
+<label class="relative flex flex-col items-center justify-center p-md border-2 border-amber-400 bg-amber-50 rounded-lg cursor-pointer transition-colors">
+<input checked="" class="sr-only" name="export_format" type="radio" value="excel"/>
+<span class="material-symbols-outlined text-amber-600 mb-2" style="font-size: 32px; font-variation-settings: 'FILL' 1;">table_chart</span>
+<span class="font-body-md text-body-md text-gray-800 font-semibold">Excel (.xlsx)</span>
+<div class="absolute top-2 right-2 w-4 h-4 rounded-full bg-amber-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-size: 12px; font-weight: bold;">check</span>
+</div>
+</label>
+<!-- Format: CSV -->
+<label class="relative flex flex-col items-center justify-center p-md border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
+<input class="sr-only" name="export_format" type="radio" value="csv"/>
+<span class="material-symbols-outlined text-gray-400 mb-2" style="font-size: 32px;">dataset</span>
+<span class="font-body-md text-body-md text-gray-600">CSV</span>
+</label>
+<!-- Format: PDF -->
+<label class="relative flex flex-col items-center justify-center p-md border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
+<input class="sr-only" name="export_format" type="radio" value="pdf"/>
+<span class="material-symbols-outlined text-gray-400 mb-2" style="font-size: 32px;">picture_as_pdf</span>
+<span class="font-body-md text-body-md text-gray-600">PDF Document</span>
+</label>
+<!-- Format: JSON -->
+<label class="relative flex flex-col items-center justify-center p-md border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
+<input class="sr-only" name="export_format" type="radio" value="json"/>
+<span class="material-symbols-outlined text-gray-400 mb-2" style="font-size: 32px;">data_object</span>
+<span class="font-body-md text-body-md text-gray-600">JSON</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-lg py-md border-t border-gray-200 bg-surface-bright rounded-b-xl flex justify-between items-center">
+<div class="text-caption font-caption text-gray-500">
+                    Estimated file size: <span class="font-medium text-gray-800">~145 KB</span>
+</div>
+<div class="flex space-x-sm">
+<button class="px-4 py-2 rounded-lg font-body-md text-body-md text-gray-600 hover:bg-gray-50 transition-colors border border-transparent">
+                        Cancel
+                    </button>
+<button class="px-4 py-2 rounded-lg font-body-md text-body-md bg-amber-400 text-amber-800 hover:bg-amber-500 transition-colors flex items-center shadow-sm">
+<span class="material-symbols-outlined mr-2" style="font-size: 18px;">download</span>
+                        Export Now
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>
