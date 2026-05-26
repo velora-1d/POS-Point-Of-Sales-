@@ -94,8 +94,18 @@ class Order extends Model
         return $this->belongsTo(User::class, 'cashier_id');
     }
 
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class, 'shift_id');
+    }
+
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id');
+    }
+
+    public function statusLogs()
+    {
+        return $this->hasMany(OrderStatusLog::class, 'order_id');
     }
 }

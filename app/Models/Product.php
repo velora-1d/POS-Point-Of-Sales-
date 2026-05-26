@@ -64,4 +64,14 @@ class Product extends Model
     {
         return $this->hasMany(ProductPrice::class, 'product_id');
     }
+
+    public function stock()
+    {
+        return $this->hasOne(ProductStock::class, 'product_id');
+    }
+
+    public function ingredients()
+    {
+        return $this->hasMany(ProductIngredient::class, 'product_id');
+    }
 }

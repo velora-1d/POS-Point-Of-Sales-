@@ -7,7 +7,9 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Table;
+use App\Models\TableReservation;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
@@ -16,6 +18,9 @@ class OrderPaymentService
 {
     public function __construct(
         protected PakasirService $pakasirService,
+        protected TableReservationService $tableReservationService,
+        protected PromoEngineService $promoEngineService,
+        protected ShiftService $shiftService,
     ) {
     }
 
@@ -29,6 +34,8 @@ class OrderPaymentService
             ]);
         }
 
+        $activeShift = $this->shiftService->requireActiveShiftForOutlet($outletId);
+
         $customer = $this->resolveCustomer(
             $outletId,
             $payload['customer_id'] ?? null,
@@ -36,16 +43,38 @@ class OrderPaymentService
             $payload['customer_phone'] ?? null,
             $payload['customer_email'] ?? null,
         );
-        [$subtotal, $items] = $this->prepareItems($outletId, $payload['items']);
+        $reservation = $this->resolveReservation(
+            $outletId,
+            $payload['reservation_id'] ?? null,
+            $payload['order_type'],
+            $payload['table_id'] ?? null,
+        );
+        [, $items] = $this->prepareItems($outletId, $payload['items']);
+        $pricing = $this->promoEngineService->calculate(
+            $outletId,
+            $items,
+            $customer?->loadMissing('membership.tier'),
+            ($payload['payment_option'] ?? 'pay_later') === 'pay_now'
+                ? ($payload['payment_method'] ?? null)
+                : null,
+            $payload['promo_code'] ?? null,
+        );
 
-        return DB::transaction(function () use ($payload, $actor, $outletId, $customer, $subtotal, $items) {
-            $order = $this->createOrderRecord($payload, $actor, $outletId, $customer?->id, $subtotal);
+        return DB::transaction(function () use ($payload, $actor, $outletId, $customer, $reservation, $items, $pricing, $activeShift) {
+            $order = $this->createOrderRecord($payload, $actor, $outletId, $customer?->id, $pricing, $activeShift->id);
 
-            foreach ($items as $item) {
-                $order->items()->create($item);
-            }
+            $this->persistOrderItems($order, $items);
+            $this->promoEngineService->syncUsageDifference(
+                [],
+                $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []),
+            );
 
             $this->markTableOccupied($order);
+            $this->tableReservationService->completeReservationForOrder(
+                $reservation?->id,
+                $order->outlet_id,
+                $order->table_id,
+            );
 
             return $this->applyInitialPaymentFlow($order, $payload);
         });
@@ -54,6 +83,7 @@ class OrderPaymentService
     public function processExistingOrderPayment(Order $order, array $payload, User $actor): array
     {
         $this->guardOutletAccess($order, $actor);
+        $activeShift = $this->shiftService->requireActiveShiftForOutlet($order->outlet_id);
         $context = $this->resolveExistingPaymentContext($order);
 
         if (!$context) {
@@ -61,6 +91,17 @@ class OrderPaymentService
                 'error' => 'Order ini belum ada di tahap pembayaran.',
             ]);
         }
+
+        if (!$order->shift_id || $order->shift_id !== $activeShift->id) {
+            $this->shiftService->assignOrderToActiveShiftIfMissing($order->id, $order->outlet_id);
+            $order->refresh();
+        }
+
+        $this->repriceExistingOrder(
+            $order,
+            $payload['payment_method'],
+            $payload['promo_code'] ?? data_get($order->metadata, 'promo.manual_code'),
+        );
 
         return $payload['payment_method'] === 'cash'
             ? $this->settleExistingOrderWithCash($order, $payload, $context)
@@ -82,17 +123,24 @@ class OrderPaymentService
             $payload['customer_email'] ?? null,
             'qr_meja',
         );
-        [$subtotal, $items] = $this->prepareItems($table->outlet_id, $payload['items']);
+        [, $items] = $this->prepareItems($table->outlet_id, $payload['items']);
+        $pricing = $this->promoEngineService->calculate(
+            $table->outlet_id,
+            $items,
+            $customer?->loadMissing('membership.tier'),
+            'qris',
+            $payload['promo_code'] ?? null,
+        );
 
-        return DB::transaction(function () use ($payload, $table, $customer, $subtotal, $items, $tableToken) {
+        return DB::transaction(function () use ($payload, $table, $customer, $items, $tableToken, $pricing) {
             $order = Order::create([
                 'outlet_id' => $table->outlet_id,
                 'table_id' => $table->id,
                 'customer_id' => $customer?->id,
                 'cashier_id' => null,
-                'subtotal' => $subtotal,
-                'discount_amount' => 0,
-                'total_amount' => $subtotal,
+                'subtotal' => $pricing['subtotal'],
+                'discount_amount' => $pricing['discount_amount'],
+                'total_amount' => $pricing['total_amount'],
                 'paid_amount' => 0,
                 'status' => 'payment_pending',
                 'source' => 'qr_meja',
@@ -113,12 +161,15 @@ class OrderPaymentService
                         'channel' => 'qr_meja',
                         'table_name' => $table->name,
                     ],
+                    'promo' => $this->buildPromoMetadata($pricing),
                 ],
             ]);
 
-            foreach ($items as $item) {
-                $order->items()->create($item);
-            }
+            $this->persistOrderItems($order, $items);
+            $this->promoEngineService->syncUsageDifference(
+                [],
+                $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []),
+            );
 
             $checkout = $this->startQrisCheckout($order, 'before_kitchen');
 
@@ -363,19 +414,18 @@ class OrderPaymentService
         User $actor,
         string $outletId,
         ?string $customerId,
-        float $subtotal,
+        array $pricing,
+        string $shiftId,
     ): Order {
-        $discount = 0;
-        $totalAmount = $subtotal - $discount;
-
         return Order::create([
             'outlet_id' => $outletId,
+            'shift_id' => $shiftId,
             'table_id' => $payload['order_type'] === 'takeaway' ? null : $payload['table_id'],
             'customer_id' => $customerId,
             'cashier_id' => $actor->id,
-            'subtotal' => $subtotal,
-            'discount_amount' => $discount,
-            'total_amount' => $totalAmount,
+            'subtotal' => $pricing['subtotal'],
+            'discount_amount' => $pricing['discount_amount'],
+            'total_amount' => $pricing['total_amount'],
             'paid_amount' => 0,
             'status' => 'pending',
             'source' => 'kasir',
@@ -391,8 +441,44 @@ class OrderPaymentService
                     'status' => $payload['payment_option'] === 'pay_now' ? 'pending' : 'unpaid',
                     'context' => $payload['payment_option'] === 'pay_now' ? 'before_kitchen' : 'after_service',
                 ],
+                'reservation' => [
+                    'id' => $payload['reservation_id'] ?? null,
+                ],
+                'promo' => $this->buildPromoMetadata($pricing),
             ]),
         ]);
+    }
+
+    protected function resolveReservation(
+        string $outletId,
+        ?string $reservationId,
+        string $orderType,
+        ?string $tableId,
+    ): ?TableReservation {
+        if (!$reservationId) {
+            return null;
+        }
+
+        if ($orderType !== 'dine_in' || !$tableId) {
+            throw ValidationException::withMessages([
+                'reservation_id' => 'Reservasi hanya bisa dipakai untuk order dine-in.',
+            ]);
+        }
+
+        $reservation = TableReservation::query()
+            ->whereKey($reservationId)
+            ->where('outlet_id', $outletId)
+            ->where('table_id', $tableId)
+            ->where('status', 'booked')
+            ->first();
+
+        if (!$reservation) {
+            throw ValidationException::withMessages([
+                'reservation_id' => 'Reservasi meja tidak valid atau sudah tidak aktif.',
+            ]);
+        }
+
+        return $reservation;
     }
 
     protected function resolveCustomer(
@@ -489,6 +575,7 @@ class OrderPaymentService
                 'unit_price' => $unitPrice,
                 'total_price' => $itemTotal,
                 'notes' => $item['notes'] ?? null,
+                'category_id' => $product->category_id,
             ];
         }
 
@@ -567,14 +654,7 @@ class OrderPaymentService
             return;
         }
 
-        $hasActiveOrder = Order::query()
-            ->where('table_id', $tableId)
-            ->whereNotIn('status', ['completed', 'cancelled'])
-            ->exists();
-
-        Table::query()
-            ->whereKey($tableId)
-            ->update(['status' => $hasActiveOrder ? 'occupied' : 'available']);
+        $this->tableReservationService->syncTableStatus($tableId);
     }
 
     protected function guardOutletAccess(Order $order, User $actor): void
@@ -589,5 +669,68 @@ class OrderPaymentService
     protected function mergeArray(array $base, array $override): array
     {
         return array_merge($base, $override);
+    }
+
+    protected function persistOrderItems(Order $order, array $items): void
+    {
+        foreach ($items as $item) {
+            $order->items()->create(Arr::only($item, [
+                'product_id',
+                'variant_id',
+                'quantity',
+                'unit_price',
+                'total_price',
+                'notes',
+            ]));
+        }
+    }
+
+    protected function buildPromoMetadata(array $pricing): array
+    {
+        return [
+            'manual_code' => $pricing['manual_code'],
+            'discount_total' => $pricing['discount_amount'],
+            'applied_promos' => $pricing['applied_promos'],
+            'evaluated_at' => now()->toIso8601String(),
+        ];
+    }
+
+    protected function repriceExistingOrder(Order $order, ?string $paymentMethod, ?string $promoCode): void
+    {
+        $order->loadMissing(['items.product', 'customer.membership.tier']);
+
+        $items = $order->items->map(function ($item) {
+            return [
+                'product_id' => $item->product_id,
+                'variant_id' => $item->variant_id,
+                'quantity' => (int) $item->quantity,
+                'unit_price' => (float) $item->unit_price,
+                'total_price' => (float) $item->total_price,
+                'notes' => $item->notes,
+                'category_id' => $item->product?->category_id,
+            ];
+        })->all();
+
+        $previousPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []);
+        $pricing = $this->promoEngineService->calculate(
+            $order->outlet_id,
+            $items,
+            $order->customer,
+            $paymentMethod,
+            $promoCode,
+        );
+
+        $metadata = $order->metadata ?? [];
+        $metadata['promo'] = $this->buildPromoMetadata($pricing);
+
+        $order->update([
+            'subtotal' => $pricing['subtotal'],
+            'discount_amount' => $pricing['discount_amount'],
+            'total_amount' => $pricing['total_amount'],
+            'metadata' => $metadata,
+        ]);
+
+        $currentPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($metadata);
+        $this->promoEngineService->syncUsageDifference($previousPromoIds, $currentPromoIds);
     }
 }

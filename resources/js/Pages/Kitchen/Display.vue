@@ -11,11 +11,14 @@ type KitchenOrderStatus =
     | 'ready';
 type KitchenLaneKey = 'queued' | 'cooking' | 'handoff';
 type KitchenAction = 'start_cooking' | 'finish_cooking' | null;
+const estimatePresets = [10, 15, 20, 30];
 
 interface KitchenOrderItem {
     id: string;
     name: string;
     quantity: number;
+    categoryId?: string | null;
+    categoryName?: string | null;
     notes?: string | null;
 }
 
@@ -40,6 +43,19 @@ interface BoardConfig {
     defaultEstimatedMinutes: number;
 }
 
+interface KitchenHistoryEntry {
+    id: string;
+    orderNumber?: string | null;
+    tableLabel: string;
+    customerName?: string | null;
+    fromStatus?: string | null;
+    toStatus: string;
+    changedByName: string;
+    changedByType: string;
+    notes?: string | null;
+    createdAt?: string | null;
+}
+
 interface KitchenTicketView {
     id: string;
     orderNumber: string;
@@ -62,10 +78,12 @@ interface KitchenTicketView {
     statusBadge: string | null;
     statusBadgeClass: string;
     sourceBadgeClass: string;
+    estimatedMinutes: number;
 }
 
 const props = defineProps<{
     orders: KitchenOrderPayload[];
+    history: KitchenHistoryEntry[];
     boardConfig: BoardConfig;
     success?: string | null;
     error?: string | null;
@@ -73,6 +91,7 @@ const props = defineProps<{
 
 const now = ref(Date.now());
 const submittingOrderId = ref<string | null>(null);
+const selectedCategoryId = ref<string>('all');
 
 let clockInterval: number | undefined;
 
@@ -107,6 +126,47 @@ const formatDuration = (seconds: number) => {
     }
 
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+};
+
+const formatHistoryDateTime = (value?: string | null) => {
+    if (!value) return '-';
+
+    return new Intl.DateTimeFormat('id-ID', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+    }).format(new Date(value));
+};
+
+const resolveStatusLabel = (status?: string | null) => {
+    switch (status) {
+        case 'pending':
+            return 'Pending';
+        case 'in_progress':
+            return 'Mulai Masak';
+        case 'waiting_bar_approval':
+            return 'Menunggu Bar';
+        case 'ready':
+            return 'Ready';
+        case 'delivered':
+            return 'Diantar';
+        case 'completed':
+            return 'Selesai';
+        default:
+            return status || '-';
+    }
+};
+
+const resolveHistoryTone = (status: string) => {
+    switch (status) {
+        case 'in_progress':
+            return 'border-amber-400/20 bg-amber-500/12 text-amber-300';
+        case 'waiting_bar_approval':
+            return 'border-cyan-400/20 bg-cyan-500/12 text-cyan-300';
+        case 'ready':
+            return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-300';
+        default:
+            return 'border-slate-700/70 bg-slate-800 text-slate-300';
+    }
 };
 
 const resolveSourceLabel = (source: string) => {
@@ -194,6 +254,9 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                     sourceLabel === 'QR Meja'
                         ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
                         : 'border-slate-700/70 bg-slate-800 text-slate-300',
+                estimatedMinutes:
+                    order.estimatedMinutes ||
+                    props.boardConfig.defaultEstimatedMinutes,
             };
         }
 
@@ -243,6 +306,9 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                     sourceLabel === 'QR Meja'
                         ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
                         : 'border-slate-700/70 bg-slate-800 text-slate-300',
+                estimatedMinutes:
+                    order.estimatedMinutes ||
+                    props.boardConfig.defaultEstimatedMinutes,
             };
         }
 
@@ -277,6 +343,9 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                 sourceLabel === 'QR Meja'
                     ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
                     : 'border-slate-700/70 bg-slate-800 text-slate-300',
+            estimatedMinutes:
+                order.estimatedMinutes ||
+                props.boardConfig.defaultEstimatedMinutes,
         };
     });
 });
@@ -295,20 +364,59 @@ const sortedTickets = computed(() => {
     });
 });
 
+const categoryFilters = computed(() => {
+    const categoryMap = new Map<string, string>();
+
+    sortedTickets.value.forEach((ticket) => {
+        ticket.items.forEach((item) => {
+            if (item.categoryId && item.categoryName) {
+                categoryMap.set(item.categoryId, item.categoryName);
+            }
+        });
+    });
+
+    return Array.from(categoryMap.entries())
+        .map(([id, name]) => ({ id, name }))
+        .sort((left, right) => left.name.localeCompare(right.name, 'id-ID'));
+});
+
+const filteredSortedTickets = computed(() => {
+    if (selectedCategoryId.value === 'all') {
+        return sortedTickets.value;
+    }
+
+    return sortedTickets.value
+        .map((ticket) => {
+            const filteredItems = ticket.items.filter(
+                (item) => item.categoryId === selectedCategoryId.value,
+            );
+
+            if (filteredItems.length === 0) {
+                return null;
+            }
+
+            return {
+                ...ticket,
+                items: filteredItems,
+            };
+        })
+        .filter((ticket): ticket is KitchenTicketView => ticket !== null);
+});
+
 const queueTickets = computed(() =>
-    sortedTickets.value.filter((ticket) => ticket.lane === 'queued'),
+    filteredSortedTickets.value.filter((ticket) => ticket.lane === 'queued'),
 );
 const cookingTickets = computed(() =>
-    sortedTickets.value.filter((ticket) => ticket.lane === 'cooking'),
+    filteredSortedTickets.value.filter((ticket) => ticket.lane === 'cooking'),
 );
 const handoffTickets = computed(() =>
-    sortedTickets.value.filter((ticket) => ticket.lane === 'handoff'),
+    filteredSortedTickets.value.filter((ticket) => ticket.lane === 'handoff'),
 );
 
 const boardStats = computed(() => [
     {
         label: 'Total Tiket Aktif',
-        value: String(sortedTickets.value.length),
+        value: String(filteredSortedTickets.value.length),
         hint: 'Semua lane',
         icon: ScanSearch,
         tone: 'text-white',
@@ -396,6 +504,24 @@ const submitKitchenAction = (
         },
     );
 };
+
+const updateEstimate = (orderId: string, minutes: number) => {
+    submittingOrderId.value = orderId;
+
+    router.post(
+        route('kitchen.orders.update-status', orderId),
+        {
+            action: 'set_estimate',
+            estimate_minutes: minutes,
+        },
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                submittingOrderId.value = null;
+            },
+        },
+    );
+};
 </script>
 
 <template>
@@ -451,34 +577,81 @@ const submitKitchenAction = (
                 <div
                     class="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between"
                 >
-                    <div
-                        class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500"
-                    >
-                        <span
-                            class="bg-emerald-500/8 rounded-full border border-emerald-500/20 px-3 py-1 text-emerald-300"
+                    <div class="space-y-3">
+                        <div
+                            class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500"
                         >
-                            Sinkronisasi Aktif
-                        </span>
-                        <span
-                            class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1"
-                        >
-                            Waiting Alert
-                            {{
-                                Math.floor(boardConfig.waitingAlertSeconds / 60)
-                            }}
-                            Menit
-                        </span>
-                        <span
-                            class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1"
-                        >
-                            Cooking Warning
-                            {{
-                                Math.floor(
-                                    boardConfig.cookingWarningSeconds / 60,
-                                )
-                            }}
-                            Menit
-                        </span>
+                            <span
+                                class="bg-emerald-500/8 rounded-full border border-emerald-500/20 px-3 py-1 text-emerald-300"
+                            >
+                                Sinkronisasi Aktif
+                            </span>
+                            <span
+                                class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1"
+                            >
+                                Waiting Alert
+                                {{
+                                    Math.floor(
+                                        boardConfig.waitingAlertSeconds / 60,
+                                    )
+                                }}
+                                Menit
+                            </span>
+                            <span
+                                class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1"
+                            >
+                                Cooking Warning
+                                {{
+                                    Math.floor(
+                                        boardConfig.cookingWarningSeconds / 60,
+                                    )
+                                }}
+                                Menit
+                            </span>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div
+                                class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500"
+                            >
+                                <span
+                                    class="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-orange-300"
+                                >
+                                    Menu #16 Filter Kategori
+                                </span>
+                                <span class="text-slate-500">
+                                    Tampilkan tiket berdasarkan kategori menu
+                                </span>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button
+                                    type="button"
+                                    @click="selectedCategoryId = 'all'"
+                                    :class="[
+                                        'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
+                                        selectedCategoryId === 'all'
+                                            ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
+                                            : 'border-slate-700/70 bg-slate-950/60 text-slate-400 hover:border-slate-600 hover:text-slate-200',
+                                    ]"
+                                >
+                                    Semua Kategori
+                                </button>
+                                <button
+                                    v-for="category in categoryFilters"
+                                    :key="category.id"
+                                    type="button"
+                                    @click="selectedCategoryId = category.id"
+                                    :class="[
+                                        'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
+                                        selectedCategoryId === category.id
+                                            ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
+                                            : 'border-slate-700/70 bg-slate-950/60 text-slate-400 hover:border-slate-600 hover:text-slate-200',
+                                    ]"
+                                >
+                                    {{ category.name }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div
@@ -647,6 +820,11 @@ const submitKitchenAction = (
                                         >
                                             {{ ticket.statusBadge }}
                                         </span>
+                                        <span
+                                            class="rounded-full border border-violet-400/20 bg-violet-500/12 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-violet-200"
+                                        >
+                                            Est {{ ticket.estimatedMinutes }}m
+                                        </span>
                                     </div>
 
                                     <div
@@ -689,6 +867,54 @@ const submitKitchenAction = (
                                         <p class="mt-1">
                                             {{ ticket.orderNotes }}
                                         </p>
+                                    </div>
+
+                                    <div
+                                        class="mt-3 rounded-2xl border border-violet-500/15 bg-violet-500/[0.04] p-3"
+                                    >
+                                        <div
+                                            class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+                                        >
+                                            <div>
+                                                <p
+                                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-200"
+                                                >
+                                                    Menu #18
+                                                </p>
+                                                <p
+                                                    class="mt-1 text-[11px] text-slate-400"
+                                                >
+                                                    Estimasi waktu masak per
+                                                    order.
+                                                </p>
+                                            </div>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button
+                                                    v-for="minutes in estimatePresets"
+                                                    :key="`${ticket.id}-${minutes}`"
+                                                    type="button"
+                                                    @click="
+                                                        updateEstimate(
+                                                            ticket.id,
+                                                            minutes,
+                                                        )
+                                                    "
+                                                    :disabled="
+                                                        submittingOrderId ===
+                                                        ticket.id
+                                                    "
+                                                    :class="[
+                                                        'rounded-full border px-3 py-1.5 text-[11px] font-bold transition disabled:pointer-events-none disabled:opacity-50',
+                                                        ticket.estimatedMinutes ===
+                                                        minutes
+                                                            ? 'border-violet-400/30 bg-violet-500/14 text-violet-200'
+                                                            : 'border-slate-700/70 bg-slate-950/60 text-slate-400 hover:border-violet-400/20 hover:text-slate-200',
+                                                    ]"
+                                                >
+                                                    {{ minutes }}m
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <button
@@ -735,6 +961,95 @@ const submitKitchenAction = (
                         </div>
                     </div>
                 </article>
+            </section>
+
+            <section
+                class="rounded-[22px] border border-slate-800/80 bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+            >
+                <div
+                    class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
+                >
+                    <div>
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-300"
+                        >
+                            Menu #17
+                        </p>
+                        <h3 class="mt-1 text-lg font-black text-white">
+                            Riwayat Order Dapur
+                        </h3>
+                        <p class="mt-1 text-xs text-slate-400">
+                            Log transisi terbaru untuk flow kitchen dan bar.
+                        </p>
+                    </div>
+                    <span
+                        class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300"
+                    >
+                        {{ props.history.length }} log terbaru
+                    </span>
+                </div>
+
+                <div
+                    v-if="props.history.length === 0"
+                    class="rounded-2xl border border-dashed border-slate-800 px-4 py-14 text-center text-xs text-slate-500"
+                >
+                    Riwayat dapur belum ada. Log akan muncul setelah ada
+                    transisi status baru.
+                </div>
+
+                <div v-else class="grid gap-3 xl:grid-cols-2">
+                    <article
+                        v-for="entry in props.history"
+                        :key="entry.id"
+                        class="rounded-2xl border border-slate-800/80 bg-slate-950/65 p-4"
+                    >
+                        <div
+                            class="flex flex-col gap-3 border-b border-slate-800/80 pb-3 sm:flex-row sm:items-start sm:justify-between"
+                        >
+                            <div>
+                                <p
+                                    class="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+                                >
+                                    {{ entry.orderNumber || 'Order' }}
+                                </p>
+                                <h4 class="mt-1 text-base font-black text-white">
+                                    {{ entry.tableLabel }}
+                                </h4>
+                                <p class="mt-1 text-[11px] text-slate-400">
+                                    {{ entry.customerName || 'Walk-in' }}
+                                </p>
+                            </div>
+                            <p class="text-[11px] text-slate-500">
+                                {{ formatHistoryDateTime(entry.createdAt) }}
+                            </p>
+                        </div>
+
+                        <div class="mt-3 flex flex-wrap items-center gap-2">
+                            <span
+                                class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300"
+                            >
+                                {{ resolveStatusLabel(entry.fromStatus) }}
+                            </span>
+                            <span class="text-slate-600">→</span>
+                            <span
+                                class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
+                                :class="resolveHistoryTone(entry.toStatus)"
+                            >
+                                {{ resolveStatusLabel(entry.toStatus) }}
+                            </span>
+                        </div>
+
+                        <p class="mt-3 text-[11px] text-slate-400">
+                            Oleh {{ entry.changedByName }}
+                        </p>
+                        <p
+                            v-if="entry.notes"
+                            class="mt-1 text-[11px] leading-relaxed text-slate-500"
+                        >
+                            {{ entry.notes }}
+                        </p>
+                    </article>
+                </div>
             </section>
         </div>
     </AuthenticatedLayout>

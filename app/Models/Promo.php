@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Promo extends Model
 {
@@ -52,6 +53,17 @@ class Promo extends Model
             'start_date' => 'datetime',
             'end_date' => 'datetime',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($promo) {
+            if (empty($promo->id)) {
+                $promo->id = (string) Str::uuid();
+            }
+        });
     }
 
     public function outlet()

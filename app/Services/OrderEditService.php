@@ -6,12 +6,18 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class OrderEditService
 {
+    public function __construct(
+        protected PromoEngineService $promoEngineService,
+    ) {
+    }
+
     public function updateOrder(Order $order, array $payload, User $actor): void
     {
         if ($order->outlet_id !== $actor->outlet_id) {
@@ -31,8 +37,18 @@ class OrderEditService
         }
 
         $items = $this->prepareItems($order, $payload['items']);
-        $subtotal = collect($items)->sum('total_price');
-        $discountAmount = 0;
+        $previousPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []);
+        $paymentStatus = data_get($order->metadata, 'payment.status');
+        $paymentMethod = $paymentStatus === 'paid'
+            ? data_get($order->metadata, 'payment.method')
+            : null;
+        $pricing = $this->promoEngineService->calculate(
+            $order->outlet_id,
+            $items,
+            $order->loadMissing('customer.membership.tier')->customer,
+            $paymentMethod,
+            data_get($order->metadata, 'promo.manual_code'),
+        );
         $metadata = array_merge($order->metadata ?? [], [
             'last_internal_edit' => [
                 'edited_by' => $actor->id,
@@ -40,24 +56,26 @@ class OrderEditService
                 'required_supervisor_approval' => $order->status === 'in_progress',
             ],
         ]);
+        $metadata['promo'] = $this->buildPromoMetadata($pricing);
 
-        DB::transaction(function () use ($order, $payload, $items, $subtotal, $discountAmount, $metadata) {
+        DB::transaction(function () use ($order, $payload, $items, $pricing, $metadata, $previousPromoIds) {
             $order->items()->delete();
 
-            foreach ($items as $item) {
-                $order->items()->create($item);
-            }
+            $this->persistOrderItems($order, $items);
 
             $order->update([
-                'subtotal' => $subtotal,
-                'discount_amount' => $discountAmount,
-                'total_amount' => $subtotal - $discountAmount,
+                'subtotal' => $pricing['subtotal'],
+                'discount_amount' => $pricing['discount_amount'],
+                'total_amount' => $pricing['total_amount'],
                 'notes' => $payload['notes'] ?? null,
                 'status' => 'pending',
                 'cooking_started_at' => null,
                 'pending_started_at' => now(),
                 'metadata' => $metadata,
             ]);
+
+            $currentPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($metadata);
+            $this->promoEngineService->syncUsageDifference($previousPromoIds, $currentPromoIds);
         });
     }
 
@@ -139,7 +157,32 @@ class OrderEditService
                 'unit_price' => $unitPrice,
                 'total_price' => $unitPrice * $quantity,
                 'notes' => $item['notes'] ?? null,
+                'category_id' => $product->category_id,
             ];
         })->all();
+    }
+
+    protected function persistOrderItems(Order $order, array $items): void
+    {
+        foreach ($items as $item) {
+            $order->items()->create(Arr::only($item, [
+                'product_id',
+                'variant_id',
+                'quantity',
+                'unit_price',
+                'total_price',
+                'notes',
+            ]));
+        }
+    }
+
+    protected function buildPromoMetadata(array $pricing): array
+    {
+        return [
+            'manual_code' => $pricing['manual_code'],
+            'discount_total' => $pricing['discount_amount'],
+            'applied_promos' => $pricing['applied_promos'],
+            'evaluated_at' => now()->toIso8601String(),
+        ];
     }
 }

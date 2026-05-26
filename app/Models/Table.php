@@ -54,4 +54,16 @@ class Table extends Model
             ->whereNotIn('status', ['completed', 'cancelled'])
             ->latest();
     }
+
+    public function reservations()
+    {
+        return $this->hasMany(TableReservation::class, 'table_id');
+    }
+
+    public function activeReservation()
+    {
+        return $this->hasOne(TableReservation::class, 'table_id')
+            ->where('status', 'booked')
+            ->orderBy('reserved_for');
+    }
 }

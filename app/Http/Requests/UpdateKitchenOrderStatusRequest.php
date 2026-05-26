@@ -14,7 +14,8 @@ class UpdateKitchenOrderStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'action' => ['required', 'string', 'in:start_cooking,finish_cooking'],
+            'action' => ['required', 'string', 'in:start_cooking,finish_cooking,set_estimate'],
+            'estimate_minutes' => ['nullable', 'integer', 'min:5', 'max:90'],
         ];
     }
 }

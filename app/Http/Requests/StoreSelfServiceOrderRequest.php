@@ -17,6 +17,7 @@ class StoreSelfServiceOrderRequest extends FormRequest
             'customer_name' => ['required', 'string', 'max:100'],
             'customer_phone' => ['required', 'string', 'max:20'],
             'customer_email' => ['nullable', 'email', 'max:100'],
+            'promo_code' => ['nullable', 'string', 'max:50'],
             'notes' => ['nullable', 'string'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'exists:products,id'],

@@ -24,6 +24,7 @@ const props = defineProps<{
 const customerName = ref('');
 const customerPhone = ref('');
 const customerEmail = ref('');
+const promoCode = ref('');
 const orderNotes = ref('');
 const activeCategory = ref<string>('all');
 const searchQuery = ref('');
@@ -34,6 +35,7 @@ const selectedVariant = ref<any>(null);
 const itemQuantity = ref(1);
 const itemNotes = ref('');
 const isSubmitting = ref(false);
+const checkoutError = ref('');
 
 const formatPrice = (value: any) => {
     const num = parseFloat(value);
@@ -197,6 +199,7 @@ const submitCheckout = () => {
     }
 
     isSubmitting.value = true;
+    checkoutError.value = '';
 
     router.post(
         route('self-service.checkout', props.table.qr_session_token),
@@ -204,6 +207,7 @@ const submitCheckout = () => {
             customer_name: customerName.value,
             customer_phone: customerPhone.value,
             customer_email: customerEmail.value || null,
+            promo_code: promoCode.value || null,
             notes: orderNotes.value || null,
             items: cart.value.map((item) => ({
                 product_id: item.product_id,
@@ -214,6 +218,14 @@ const submitCheckout = () => {
             })),
         },
         {
+            onError: (errors) => {
+                checkoutError.value =
+                    errors.promo_code ||
+                    errors.customer_name ||
+                    errors.customer_phone ||
+                    errors.error ||
+                    'Checkout gagal diproses. Periksa lagi data dan voucher Anda.';
+            },
             onFinish: () => {
                 isSubmitting.value = false;
             },
@@ -341,6 +353,12 @@ const submitCheckout = () => {
                                 type="email"
                                 placeholder="Email (opsional)"
                                 class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 md:col-span-2"
+                            />
+                            <input
+                                v-model="promoCode"
+                                type="text"
+                                placeholder="Voucher / promo code (opsional)"
+                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm uppercase text-slate-100 placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 md:col-span-2"
                             />
                         </div>
                     </section>
@@ -631,6 +649,12 @@ const submitCheckout = () => {
                         </div>
 
                         <div class="mt-5 space-y-3">
+                            <div
+                                v-if="checkoutError"
+                                class="rounded-[22px] border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm font-medium text-rose-200"
+                            >
+                                {{ checkoutError }}
+                            </div>
                             <textarea
                                 v-model="orderNotes"
                                 rows="3"
@@ -648,9 +672,15 @@ const submitCheckout = () => {
                                     <span>{{ formatPrice(cartSubtotal) }}</span>
                                 </div>
                                 <div
+                                    class="mt-3 flex items-center justify-between text-sm text-slate-500"
+                                >
+                                    <span>Estimasi diskon</span>
+                                    <span>Dihitung saat checkout</span>
+                                </div>
+                                <div
                                     class="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-base font-black text-white"
                                 >
-                                    <span>Total Checkout</span>
+                                    <span>Total sebelum promo final</span>
                                     <span class="text-orange-300">{{
                                         formatPrice(cartSubtotal)
                                     }}</span>

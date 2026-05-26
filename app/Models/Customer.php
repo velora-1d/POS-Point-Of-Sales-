@@ -58,4 +58,38 @@ class Customer extends Model
     {
         return $this->hasMany(Order::class, 'customer_id');
     }
+
+    public function latestOrder()
+    {
+        return $this->hasOne(Order::class, 'customer_id')
+            ->ofMany('created_at', 'max');
+    }
+
+    public function recentOrders()
+    {
+        return $this->hasMany(Order::class, 'customer_id')
+            ->latest()
+            ->limit(5);
+    }
+
+    public function kasbonOrders()
+    {
+        return $this->hasMany(Order::class, 'customer_id')
+            ->whereColumn('paid_amount', '<', 'total_amount')
+            ->where('status', '!=', 'cancelled')
+            ->latest();
+    }
+
+    public function latestKasbonOrder()
+    {
+        return $this->hasOne(Order::class, 'customer_id')
+            ->whereColumn('paid_amount', '<', 'total_amount')
+            ->where('status', '!=', 'cancelled')
+            ->ofMany('created_at', 'max');
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(TableReservation::class, 'customer_id');
+    }
 }

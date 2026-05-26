@@ -21,10 +21,34 @@ class KitchenDisplayController extends Controller
         return Inertia::render('Kitchen/Display', $this->kitchenDisplayService->getBoardData(auth()->user()));
     }
 
+    public function barIndex(): Response
+    {
+        return Inertia::render('Bar/Display', $this->kitchenDisplayService->getBarBoardData(auth()->user()));
+    }
+
     public function updateStatus(UpdateKitchenOrderStatusRequest $request, Order $order): RedirectResponse
     {
-        $this->kitchenDisplayService->updateOrderStatus($order, $request->validated()['action'], auth()->user());
+        $payload = $request->validated();
+
+        if ($payload['action'] === 'set_estimate') {
+            $this->kitchenDisplayService->updateOrderEstimate(
+                $order,
+                (int) $payload['estimate_minutes'],
+                auth()->user(),
+            );
+
+            return back()->with('success', 'Estimasi waktu masak berhasil diperbarui.');
+        }
+
+        $this->kitchenDisplayService->updateOrderStatus($order, $payload['action'], auth()->user());
 
         return back()->with('success', 'Status order dapur berhasil diperbarui.');
+    }
+
+    public function approveBar(Order $order): RedirectResponse
+    {
+        $this->kitchenDisplayService->approveBarReady($order, auth()->user());
+
+        return back()->with('success', 'Order berhasil di-approve dan siap disajikan.');
     }
 }

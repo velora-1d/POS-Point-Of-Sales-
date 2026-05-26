@@ -16,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        $middleware->validateCsrfTokens(except: [
+            'api/v1/callback/pakasir',
+            'api/v1/online-orders/webhook/gofood',
+            'api/v1/online-orders/webhook/grabfood',
+        ]);
+
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {

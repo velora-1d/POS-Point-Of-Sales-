@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\OrderStatusLog;
 use App\Models\User;
 use App\Repositories\KitchenDisplayRepository;
 use Illuminate\Support\Carbon;
@@ -11,7 +12,8 @@ use Illuminate\Validation\ValidationException;
 class KitchenDisplayService
 {
     public function __construct(
-        protected KitchenDisplayRepository $kitchenDisplayRepository
+        protected KitchenDisplayRepository $kitchenDisplayRepository,
+        protected OnlineOrderStatusSyncService $onlineOrderStatusSyncService,
     ) {
     }
 
@@ -49,6 +51,8 @@ class KitchenDisplayService
                             'id' => $item->id,
                             'name' => trim(($item->product?->name ?? 'Menu tidak ditemukan').$variantName),
                             'quantity' => (int) $item->quantity,
+                            'categoryId' => $item->product?->category?->id,
+                            'categoryName' => $item->product?->category?->name,
                             'notes' => $item->notes,
                         ];
                     })->values(),
@@ -59,6 +63,53 @@ class KitchenDisplayService
         return [
             'orders' => $orders,
             'boardConfig' => $this->getBoardConfig(),
+            'history' => $this->getRecentHistory($user->outlet_id),
+            'success' => session('success'),
+        ];
+    }
+
+    public function getBarBoardData(User $user): array
+    {
+        if (!$user->outlet_id) {
+            return [
+                'orders' => [],
+                'success' => session('success'),
+                'error' => 'User belum terhubung ke outlet.',
+            ];
+        }
+
+        $orders = $this->kitchenDisplayRepository
+            ->getBarBoardOrders($user->outlet_id)
+            ->map(function (Order $order) {
+                return [
+                    'id' => $order->id,
+                    'orderNumber' => $order->order_number,
+                    'tableLabel' => $order->table?->name ?? 'Takeaway',
+                    'customerName' => $order->customer?->name,
+                    'source' => $order->external_platform ?: $order->source,
+                    'status' => $order->status,
+                    'notes' => $order->notes,
+                    'estimatedMinutes' => $order->estimated_time ?: 15,
+                    'updatedAt' => optional($order->updated_at)->toIso8601String(),
+                    'items' => $order->items->map(function ($item) {
+                        $variantName = $item->variant?->name ? ' - '.$item->variant->name : '';
+
+                        return [
+                            'id' => $item->id,
+                            'name' => trim(($item->product?->name ?? 'Menu tidak ditemukan').$variantName),
+                            'quantity' => (int) $item->quantity,
+                            'categoryId' => $item->product?->category?->id,
+                            'categoryName' => $item->product?->category?->name,
+                            'notes' => $item->notes,
+                        ];
+                    })->values(),
+                ];
+            })
+            ->values();
+
+        return [
+            'orders' => $orders,
+            'history' => $this->getRecentHistory($user->outlet_id),
             'success' => session('success'),
         ];
     }
@@ -72,15 +123,21 @@ class KitchenDisplayService
         }
 
         if ($action === 'start_cooking') {
-            $this->markAsCooking($order);
+            $this->markAsCooking($order, $user);
 
             return;
         }
 
         if ($action === 'finish_cooking') {
-            $this->markAsWaitingBar($order);
+            $this->markAsWaitingBar($order, $user);
 
             return;
+        }
+
+        if ($action === 'set_estimate') {
+            throw ValidationException::withMessages([
+                'action' => 'Gunakan endpoint update estimasi dengan nilai menit yang valid.',
+            ]);
         }
 
         throw ValidationException::withMessages([
@@ -88,7 +145,59 @@ class KitchenDisplayService
         ]);
     }
 
-    protected function markAsCooking(Order $order): void
+    public function updateOrderEstimate(Order $order, int $minutes, User $user): void
+    {
+        if ($order->outlet_id !== $user->outlet_id) {
+            throw ValidationException::withMessages([
+                'estimate_minutes' => 'Order tidak berada di outlet yang sama dengan user aktif.',
+            ]);
+        }
+
+        if (in_array($order->status, ['completed', 'cancelled'], true)) {
+            throw ValidationException::withMessages([
+                'estimate_minutes' => 'Estimasi tidak bisa diubah untuk order yang sudah selesai atau dibatalkan.',
+            ]);
+        }
+
+        $order->update([
+            'estimated_time' => $minutes,
+        ]);
+    }
+
+    public function approveBarReady(Order $order, User $user): void
+    {
+        if ($order->outlet_id !== $user->outlet_id) {
+            throw ValidationException::withMessages([
+                'order' => 'Order tidak berada di outlet yang sama dengan user aktif.',
+            ]);
+        }
+
+        if ($order->status !== 'waiting_bar_approval') {
+            throw ValidationException::withMessages([
+                'order' => 'Hanya order yang menunggu approval bar yang bisa ditandai ready.',
+            ]);
+        }
+
+        $order->update([
+            'status' => 'ready',
+        ]);
+
+        $this->logStatusChange(
+            $order,
+            'waiting_bar_approval',
+            'ready',
+            $user,
+            'Order di-approve bar dan siap disajikan.',
+        );
+
+        $this->syncOnlineOrderStatus(
+            $order,
+            'ready',
+            'Status platform dicatat saat bar mengubah order menjadi ready.',
+        );
+    }
+
+    protected function markAsCooking(Order $order, User $actor): void
     {
         if ($order->status !== 'pending') {
             throw ValidationException::withMessages([
@@ -101,9 +210,23 @@ class KitchenDisplayService
             'pending_started_at' => $order->pending_started_at ?: Carbon::now(),
             'cooking_started_at' => Carbon::now(),
         ]);
+
+        $this->logStatusChange(
+            $order,
+            'pending',
+            'in_progress',
+            $actor,
+            'Kitchen mulai memproses order.',
+        );
+
+        $this->syncOnlineOrderStatus(
+            $order,
+            'in_progress',
+            'Status platform dicatat saat kitchen mulai memproses order.',
+        );
     }
 
-    protected function markAsWaitingBar(Order $order): void
+    protected function markAsWaitingBar(Order $order, User $actor): void
     {
         if ($order->status !== 'in_progress') {
             throw ValidationException::withMessages([
@@ -114,6 +237,65 @@ class KitchenDisplayService
         $order->update([
             'status' => 'waiting_bar_approval',
         ]);
+
+        $this->logStatusChange(
+            $order,
+            'in_progress',
+            'waiting_bar_approval',
+            $actor,
+            'Kitchen selesai memasak dan menunggu finalisasi bar.',
+        );
+
+        $this->syncOnlineOrderStatus(
+            $order,
+            'waiting_bar_approval',
+            'Status platform dicatat saat kitchen selesai memasak.',
+        );
+    }
+
+    protected function getRecentHistory(string $outletId): array
+    {
+        return $this->kitchenDisplayRepository
+            ->getRecentHistoryLogs($outletId)
+            ->map(function (OrderStatusLog $log) {
+                return [
+                    'id' => $log->id,
+                    'orderNumber' => $log->order?->order_number,
+                    'tableLabel' => $log->order?->table?->name ?? 'Takeaway',
+                    'customerName' => $log->order?->customer?->name,
+                    'fromStatus' => $log->from_status,
+                    'toStatus' => $log->to_status,
+                    'changedByName' => $log->changer?->name ?? 'System',
+                    'changedByType' => $log->changed_by_type ?? 'system',
+                    'notes' => $log->notes,
+                    'createdAt' => optional($log->created_at)->toIso8601String(),
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
+    protected function logStatusChange(
+        Order $order,
+        ?string $fromStatus,
+        string $toStatus,
+        ?User $actor,
+        ?string $notes = null,
+    ): void {
+        OrderStatusLog::create([
+            'order_id' => $order->id,
+            'from_status' => $fromStatus,
+            'to_status' => $toStatus,
+            'changed_by' => $actor?->id,
+            'changed_by_type' => $actor ? 'user' : 'system',
+            'notes' => $notes,
+            'created_at' => now(),
+        ]);
+    }
+
+    protected function syncOnlineOrderStatus(Order $order, string $status, string $notes): void
+    {
+        $this->onlineOrderStatusSyncService->sync($order, $status, $notes);
     }
 
     protected function getBoardConfig(): array

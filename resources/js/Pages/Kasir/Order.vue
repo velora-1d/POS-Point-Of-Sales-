@@ -17,7 +17,7 @@ import {
     Utensils,
     X,
 } from '@lucide/vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 // Define Props passed from OrderController
 const props = defineProps<{
@@ -47,6 +47,7 @@ const customerEmail = ref('');
 const paymentOption = ref<PaymentOption>('pay_later');
 const newOrderPaymentMethod = ref<PaymentMethod>('cash');
 const newOrderCashReceived = ref('');
+const newOrderPromoCode = ref('');
 
 // Product filtering
 const activeCategory = ref<string>('all');
@@ -86,6 +87,7 @@ const paymentModalOpen = ref(false);
 const paymentTargetOrder = ref<any>(null);
 const existingPaymentMethod = ref<PaymentMethod>('cash');
 const existingPaymentCashReceived = ref('');
+const existingPaymentPromoCode = ref('');
 const isProcessingPayment = ref(false);
 const paymentCheckoutModalOpen = ref(Boolean(props.paymentCheckout));
 const activePaymentCheckout = ref<Record<string, any> | null>(
@@ -113,6 +115,45 @@ const formatPrice = (value: any) => {
         currency: 'IDR',
         maximumFractionDigits: 0,
     }).format(num);
+};
+
+const isReadyTable = (table: any) =>
+    table?.status === 'available' || table?.status === 'reserved';
+
+const getTableCardClass = (table: any) => {
+    if (table.status === 'occupied') {
+        return 'border-red-500/20 bg-red-950/20 text-red-100 hover:border-red-500/40 hover:shadow-red-500/5';
+    }
+
+    if (table.status === 'reserved') {
+        return 'border-amber-500/20 bg-amber-950/20 text-amber-100 hover:border-amber-500/40 hover:shadow-amber-500/5';
+    }
+
+    return 'border-slate-800 bg-slate-950/60 text-slate-100 hover:-translate-y-0.5 hover:border-orange-500/40 hover:shadow-orange-500/5';
+};
+
+const getTableIconClass = (table: any) => {
+    if (table.status === 'occupied') {
+        return 'border-red-500/30 bg-red-500/10 text-red-400';
+    }
+
+    if (table.status === 'reserved') {
+        return 'border-amber-500/30 bg-amber-500/10 text-amber-400';
+    }
+
+    return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400';
+};
+
+const getTableBadgeClass = (table: any) => {
+    if (table.status === 'occupied') {
+        return 'border-red-500/20 bg-red-500/10 text-red-400';
+    }
+
+    if (table.status === 'reserved') {
+        return 'border-amber-500/20 bg-amber-500/10 text-amber-400';
+    }
+
+    return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400';
 };
 
 // Filtered products list
@@ -252,6 +293,24 @@ watch(customerSearchQuery, (value) => {
 
     if (!customerName.value) {
         customerName.value = trimmed;
+    }
+});
+
+onMounted(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tableId = params.get('table_id');
+    const mode = params.get('mode');
+
+    if (mode === 'takeaway') {
+        selectTakeawayOrder();
+        return;
+    }
+
+    if (!tableId) return;
+
+    const matchedTable = props.tables.find((table) => table.id === tableId);
+    if (matchedTable) {
+        selectTable(matchedTable);
     }
 });
 
@@ -427,6 +486,7 @@ const resetNewOrderPaymentState = () => {
     paymentOption.value = 'pay_later';
     newOrderPaymentMethod.value = 'cash';
     newOrderCashReceived.value = '';
+    newOrderPromoCode.value = '';
 };
 
 const selectCustomer = (customer: any) => {
@@ -478,6 +538,14 @@ const resetMergeBillState = () => {
 
 const getPaymentMeta = (order: any) => {
     return order?.metadata?.payment || {};
+};
+
+const getPromoMeta = (order: any) => {
+    return order?.metadata?.promo || {};
+};
+
+const getAppliedPromos = (order: any) => {
+    return getPromoMeta(order).applied_promos || [];
 };
 
 const isOrderPaid = (order: any) => {
@@ -556,6 +624,7 @@ const openPaymentModal = () => {
     existingPaymentMethod.value =
         activeOrder.status === 'payment_pending' ? 'qris' : 'cash';
     existingPaymentCashReceived.value = '';
+    existingPaymentPromoCode.value = getPromoMeta(activeOrder).manual_code || '';
     paymentModalOpen.value = true;
 };
 
@@ -564,6 +633,7 @@ const closePaymentModal = () => {
     paymentTargetOrder.value = null;
     existingPaymentMethod.value = 'cash';
     existingPaymentCashReceived.value = '';
+    existingPaymentPromoCode.value = '';
     isProcessingPayment.value = false;
 };
 
@@ -902,6 +972,7 @@ const submitExistingPayment = () => {
         route('order.pay', paymentTargetOrder.value.id),
         {
             payment_method: existingPaymentMethod.value,
+            promo_code: existingPaymentPromoCode.value || null,
             cash_received:
                 existingPaymentMethod.value === 'cash' &&
                 existingPaymentCashReceived.value
@@ -919,6 +990,7 @@ const submitExistingPayment = () => {
             onError: (errors) => {
                 isProcessingPayment.value = false;
                 showLocalToast(
+                    errors.promo_code ||
                     errors.cash_received ||
                         errors.error ||
                         'Gagal memproses pembayaran order.',
@@ -937,10 +1009,14 @@ const submitOrder = () => {
     const payload = {
         table_id: isTakeawaySelection.value ? null : selectedTable.value.id,
         order_type: isTakeawaySelection.value ? 'takeaway' : 'dine_in',
+        reservation_id: isTakeawaySelection.value
+            ? null
+            : selectedTable.value.active_reservation?.id ?? null,
         customer_id: selectedCustomer.value?.id ?? null,
         customer_name: customerName.value || null,
         customer_phone: customerPhone.value || null,
         customer_email: customerEmail.value || null,
+        promo_code: newOrderPromoCode.value || null,
         payment_option: paymentOption.value,
         payment_method:
             paymentOption.value === 'pay_now'
@@ -974,6 +1050,7 @@ const submitOrder = () => {
                 showLocalToast(errors.error);
             } else {
                 showLocalToast(
+                    errors.promo_code ||
                     'Gagal menyimpan pesanan. Silakan periksa isian.',
                 );
             }
@@ -1148,18 +1225,14 @@ const openPaymentCheckout = () => {
                             @click="selectTable(table)"
                             :class="[
                                 'group relative cursor-pointer select-none rounded-2xl border p-5 text-center shadow-md transition-all duration-200',
-                                table.status === 'occupied'
-                                    ? 'border-red-500/20 bg-red-950/20 text-red-100 hover:border-red-500/40 hover:shadow-red-500/5'
-                                    : 'border-slate-800 bg-slate-950/60 text-slate-100 hover:-translate-y-0.5 hover:border-orange-500/40 hover:shadow-orange-500/5',
+                                getTableCardClass(table),
                             ]"
                         >
                             <!-- Visual Table icon representation -->
                             <div
                                 :class="[
                                     'mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border text-sm font-bold',
-                                    table.status === 'occupied'
-                                        ? 'border-red-500/30 bg-red-500/10 text-red-400'
-                                        : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400',
+                                    getTableIconClass(table),
                                 ]"
                             >
                                 T
@@ -1178,9 +1251,7 @@ const openPaymentCheckout = () => {
                             <span
                                 :class="[
                                     'absolute right-3 top-3 rounded border px-1.5 py-0.5 text-[8px] font-bold uppercase',
-                                    table.status === 'occupied'
-                                        ? 'border-red-500/20 bg-red-500/10 text-red-400'
-                                        : 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+                                    getTableBadgeClass(table),
                                 ]"
                             >
                                 {{ table.status }}
@@ -1215,13 +1286,32 @@ const openPaymentCheckout = () => {
                                     {{ table.active_orders.length }} bill aktif
                                 </p>
                             </div>
+                            <div
+                                v-else-if="table.active_reservation"
+                                class="mt-3 border-t border-amber-500/10 pt-3 text-left"
+                            >
+                                <p
+                                    class="truncate text-[9px] font-bold uppercase text-amber-300"
+                                >
+                                    Reservasi Aktif
+                                </p>
+                                <p
+                                    class="mt-0.5 text-[10px] font-bold text-slate-200"
+                                >
+                                    {{ table.active_reservation.customer_name }}
+                                </p>
+                                <p class="mt-1 text-[9px] text-slate-400">
+                                    {{ table.active_reservation.guest_count }}
+                                    pax
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- VIEW 2: Product Catalog (when available table selected) -->
                 <div
-                    v-else-if="selectedTable.status === 'available'"
+                    v-else-if="isReadyTable(selectedTable)"
                     class="space-y-6 rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl"
                 >
                     <!-- Catalog Header with Back Button -->
@@ -1669,6 +1759,25 @@ const openPaymentCheckout = () => {
                                     )
                                 }}</span>
                             </div>
+                            <div
+                                v-if="getAppliedPromos(selectedManagedOrder).length"
+                                class="space-y-2 border-t border-slate-800 pt-2"
+                            >
+                                <p
+                                    class="text-[9px] font-bold uppercase tracking-wider text-slate-500"
+                                >
+                                    Promo Applied
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span
+                                        v-for="promo in getAppliedPromos(selectedManagedOrder)"
+                                        :key="promo.id"
+                                        class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-[10px] font-bold text-orange-200"
+                                    >
+                                        {{ promo.name }} • {{ formatPrice(promo.discount_amount) }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div
                             class="border-slate-850 space-y-2 rounded-xl border bg-slate-950/50 p-4 md:w-1/3"
@@ -1743,7 +1852,7 @@ const openPaymentCheckout = () => {
             <div class="space-y-6 lg:col-span-5 xl:col-span-4">
                 <!-- VIEW 1: Cart (when available table selected) -->
                 <div
-                    v-if="selectedTable && selectedTable.status === 'available'"
+                    v-if="selectedTable && isReadyTable(selectedTable)"
                     class="flex min-h-[500px] flex-col rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl"
                 >
                     <h3
@@ -2097,14 +2206,34 @@ const openPaymentCheckout = () => {
                         <div
                             class="border-slate-850 space-y-2 rounded-xl border bg-slate-950/50 p-4"
                         >
+                            <div class="space-y-2 pb-2">
+                                <label
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                >
+                                    Voucher / Promo Code
+                                </label>
+                                <input
+                                    v-model="newOrderPromoCode"
+                                    type="text"
+                                    placeholder="Contoh: MENTAI10"
+                                    class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs uppercase text-slate-200 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                />
+                                <p class="text-[11px] leading-5 text-slate-500">
+                                    Promo otomatis, tier member, happy hour, dan voucher diverifikasi server saat order disimpan.
+                                </p>
+                            </div>
                             <div class="flex justify-between text-slate-400">
                                 <span>Subtotal:</span>
                                 <span>{{ formatPrice(cartSubtotal) }}</span>
                             </div>
+                            <div class="flex justify-between text-slate-500">
+                                <span>Estimasi diskon:</span>
+                                <span>Dihitung saat submit</span>
+                            </div>
                             <div
                                 class="flex justify-between border-t border-slate-800 pt-2 text-sm font-black text-white"
                             >
-                                <span>Total Belanja:</span>
+                                <span>Total sebelum promo final:</span>
                                 <span class="text-orange-400">{{
                                     formatPrice(cartTotal)
                                 }}</span>
@@ -3484,6 +3613,25 @@ const openPaymentCheckout = () => {
                                         ? 'Setelah QRIS lunas, order otomatis pindah ke lane pending agar bisa diproses kitchen.'
                                         : 'Setelah QRIS lunas, order otomatis ditutup sebagai completed.'
                                 }}
+                            </p>
+                        </div>
+
+                        <div
+                            class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+                        >
+                            <label
+                                class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-400"
+                            >
+                                Voucher / Promo Code
+                            </label>
+                            <input
+                                v-model="existingPaymentPromoCode"
+                                type="text"
+                                placeholder="Kosongkan jika tidak pakai voucher"
+                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs uppercase text-slate-200 placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                            />
+                            <p class="mt-2 text-[11px] leading-relaxed text-slate-500">
+                                Total tagihan akan divalidasi ulang dengan promo otomatis, metode bayar, tier member, dan voucher sebelum settlement diproses.
                             </p>
                         </div>
                     </div>

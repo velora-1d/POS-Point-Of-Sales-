@@ -7,6 +7,51 @@ use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
+    protected const TOTAL_BRIEF_MENUS = 62;
+
+    protected const READY_MENU_IDS = [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+    ];
+
     /**
      * The root template that is loaded on the first page visit.
      *
@@ -42,7 +87,14 @@ class HandleInertiaRequests extends Middleware
                     'outlet' => $user->outlet ? $user->outlet->name : null,
                 ] : null,
             ],
+            'menuProgress' => [
+                'totalMenus' => self::TOTAL_BRIEF_MENUS,
+                'readyMenuIds' => self::READY_MENU_IDS,
+                'readyCount' => count(self::READY_MENU_IDS),
+                'progressPercentage' => (int) round(
+                    (count(self::READY_MENU_IDS) / self::TOTAL_BRIEF_MENUS) * 100
+                ),
+            ],
         ];
     }
 }
-

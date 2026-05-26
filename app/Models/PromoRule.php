@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class PromoRule extends Model
 {
@@ -21,6 +22,17 @@ class PromoRule extends Model
         'reference_id',
         'reference_value',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($rule) {
+            if (empty($rule->id)) {
+                $rule->id = (string) Str::uuid();
+            }
+        });
+    }
 
     public function promo()
     {

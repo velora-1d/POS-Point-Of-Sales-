@@ -6,15 +6,21 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class OrderBillService
 {
+    public function __construct(
+        protected PromoEngineService $promoEngineService,
+    ) {
+    }
+
     public function splitOrder(Order $order, array $payload, User $actor): void
     {
-        $order->loadMissing('items');
+        $order->loadMissing(['items.product', 'customer.membership.tier']);
 
         $this->guardEditableOrder($order, $actor, $payload['approval_pin'] ?? null);
 
@@ -50,7 +56,36 @@ class OrderBillService
             ]);
         }
 
-        DB::transaction(function () use ($order, $actor, $sourceItems, $newOrderItems) {
+        $order->loadMissing('customer.membership.tier');
+        $previousPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []);
+        $paymentStatus = data_get($order->metadata, 'payment.status');
+        $paymentMethod = $paymentStatus === 'paid'
+            ? data_get($order->metadata, 'payment.method')
+            : null;
+        $sourcePricing = $this->promoEngineService->calculate(
+            $order->outlet_id,
+            $sourceItems,
+            $order->customer,
+            $paymentMethod,
+            data_get($order->metadata, 'promo.manual_code'),
+        );
+        $newOrderPricing = $this->promoEngineService->calculate(
+            $order->outlet_id,
+            $newOrderItems,
+            $order->customer,
+            $paymentMethod,
+            null,
+        );
+
+        DB::transaction(function () use (
+            $order,
+            $actor,
+            $sourceItems,
+            $newOrderItems,
+            $sourcePricing,
+            $newOrderPricing,
+            $previousPromoIds
+        ) {
             $newOrder = Order::create([
                 'outlet_id' => $order->outlet_id,
                 'shift_id' => $order->shift_id,
@@ -60,9 +95,9 @@ class OrderBillService
                 'source' => $order->source,
                 'type' => $order->type,
                 'status' => 'pending',
-                'subtotal' => $this->sumItems($newOrderItems),
-                'discount_amount' => 0,
-                'total_amount' => $this->sumItems($newOrderItems),
+                'subtotal' => $newOrderPricing['subtotal'],
+                'discount_amount' => $newOrderPricing['discount_amount'],
+                'total_amount' => $newOrderPricing['total_amount'],
                 'paid_amount' => 0,
                 'notes' => $order->notes,
                 'estimated_time' => $order->estimated_time,
@@ -71,38 +106,44 @@ class OrderBillService
                 'metadata' => array_merge($order->metadata ?? [], [
                     'split_from_order_id' => $order->id,
                     'split_at' => now()->toIso8601String(),
+                    'promo' => $this->buildPromoMetadata($newOrderPricing),
                 ]),
             ]);
 
-            foreach ($newOrderItems as $item) {
-                $newOrder->items()->create($item);
-            }
+            $this->persistOrderItems($newOrder, $newOrderItems);
 
             $order->items()->delete();
 
-            foreach ($sourceItems as $item) {
-                $order->items()->create($item);
-            }
+            $this->persistOrderItems($order, $sourceItems);
+
+            $updatedSourceMetadata = array_merge($order->metadata ?? [], [
+                'split_child_order_id' => $newOrder->id,
+                'split_at' => now()->toIso8601String(),
+                'promo' => $this->buildPromoMetadata($sourcePricing),
+            ]);
 
             $order->update([
-                'subtotal' => $this->sumItems($sourceItems),
-                'discount_amount' => 0,
-                'total_amount' => $this->sumItems($sourceItems),
+                'subtotal' => $sourcePricing['subtotal'],
+                'discount_amount' => $sourcePricing['discount_amount'],
+                'total_amount' => $sourcePricing['total_amount'],
                 'status' => 'pending',
                 'cooking_started_at' => null,
                 'pending_started_at' => now(),
-                'metadata' => array_merge($order->metadata ?? [], [
-                    'split_child_order_id' => $newOrder->id,
-                    'split_at' => now()->toIso8601String(),
-                ]),
+                'metadata' => $updatedSourceMetadata,
             ]);
+
+            $currentPromoIds = array_merge(
+                $this->promoEngineService->extractPromoIdsFromMetadata($updatedSourceMetadata),
+                $this->promoEngineService->extractPromoIdsFromMetadata($newOrder->metadata ?? []),
+            );
+            $this->promoEngineService->syncUsageDifference($previousPromoIds, $currentPromoIds);
         });
     }
 
     public function mergeOrders(array $orderIds, ?string $approvalPin, User $actor): void
     {
         $orders = Order::query()
-            ->with('items')
+            ->with(['items.product', 'customer.membership.tier'])
             ->whereIn('id', $orderIds)
             ->get();
 
@@ -138,7 +179,43 @@ class OrderBillService
             ->unique()
             ->implode(' | ');
 
-        DB::transaction(function () use ($orders, $baseOrder, $actor, $combinedItems, $uniqueCustomerIds, $mergedNotes) {
+        $previousPromoIds = $orders
+            ->flatMap(fn (Order $order) => $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []))
+            ->values()
+            ->all();
+        $manualCodes = $orders
+            ->map(fn (Order $order) => data_get($order->metadata, 'promo.manual_code'))
+            ->filter()
+            ->unique()
+            ->values();
+        $paymentMethods = $orders
+            ->map(function (Order $order) {
+                return data_get($order->metadata, 'payment.status') === 'paid'
+                    ? data_get($order->metadata, 'payment.method')
+                    : null;
+            })
+            ->filter()
+            ->unique()
+            ->values();
+        $mergedCustomer = $uniqueCustomerIds->count() === 1 ? $baseOrder->customer : null;
+        $mergedPricing = $this->promoEngineService->calculate(
+            $baseOrder->outlet_id,
+            $combinedItems,
+            $mergedCustomer,
+            $paymentMethods->count() === 1 ? $paymentMethods->first() : null,
+            $manualCodes->count() === 1 ? $manualCodes->first() : null,
+        );
+
+        DB::transaction(function () use (
+            $orders,
+            $baseOrder,
+            $actor,
+            $combinedItems,
+            $uniqueCustomerIds,
+            $mergedNotes,
+            $mergedPricing,
+            $previousPromoIds
+        ) {
             $mergedOrder = Order::create([
                 'outlet_id' => $baseOrder->outlet_id,
                 'shift_id' => $baseOrder->shift_id,
@@ -148,9 +225,9 @@ class OrderBillService
                 'source' => $baseOrder->source,
                 'type' => $baseOrder->type,
                 'status' => 'pending',
-                'subtotal' => $this->sumItems($combinedItems),
-                'discount_amount' => 0,
-                'total_amount' => $this->sumItems($combinedItems),
+                'subtotal' => $mergedPricing['subtotal'],
+                'discount_amount' => $mergedPricing['discount_amount'],
+                'total_amount' => $mergedPricing['total_amount'],
                 'paid_amount' => 0,
                 'notes' => $mergedNotes ?: null,
                 'estimated_time' => $baseOrder->estimated_time,
@@ -159,12 +236,11 @@ class OrderBillService
                 'metadata' => array_merge($baseOrder->metadata ?? [], [
                     'merged_from_order_ids' => $orders->pluck('id')->values()->all(),
                     'merged_at' => now()->toIso8601String(),
+                    'promo' => $this->buildPromoMetadata($mergedPricing),
                 ]),
             ]);
 
-            foreach ($combinedItems as $item) {
-                $mergedOrder->items()->create($item);
-            }
+            $this->persistOrderItems($mergedOrder, $combinedItems);
 
             foreach ($orders as $order) {
                 $order->update([
@@ -175,6 +251,9 @@ class OrderBillService
                     ]),
                 ]);
             }
+
+            $currentPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($mergedOrder->metadata ?? []);
+            $this->promoEngineService->syncUsageDifference($previousPromoIds, $currentPromoIds);
         });
     }
 
@@ -233,6 +312,7 @@ class OrderBillService
             'unit_price' => (float) $item->unit_price,
             'total_price' => (float) $item->unit_price * $quantity,
             'notes' => $item->notes,
+            'category_id' => $item->product?->category_id,
         ];
     }
 
@@ -267,5 +347,29 @@ class OrderBillService
     protected function sumItems(array $items): float
     {
         return (float) collect($items)->sum('total_price');
+    }
+
+    protected function persistOrderItems(Order $order, array $items): void
+    {
+        foreach ($items as $item) {
+            $order->items()->create(Arr::only($item, [
+                'product_id',
+                'variant_id',
+                'quantity',
+                'unit_price',
+                'total_price',
+                'notes',
+            ]));
+        }
+    }
+
+    protected function buildPromoMetadata(array $pricing): array
+    {
+        return [
+            'manual_code' => $pricing['manual_code'],
+            'discount_total' => $pricing['discount_amount'],
+            'applied_promos' => $pricing['applied_promos'],
+            'evaluated_at' => now()->toIso8601String(),
+        ];
     }
 }

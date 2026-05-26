@@ -39,6 +39,15 @@ interface MenuCategory {
 
 const page = usePage<any>();
 const user = computed(() => page.props.auth.user);
+const menuProgress = computed(() => {
+    const progress = page.props.menuProgress ?? {};
+
+    return {
+        readyMenuIds: Array.isArray(progress.readyMenuIds)
+            ? progress.readyMenuIds
+            : [],
+    };
+});
 
 const isMobileOpen = ref(false);
 const searchQuery = ref('');
@@ -52,10 +61,30 @@ const menuData: MenuCategory[] = [
         name: 'Meja',
         icon: TableProperties,
         items: [
-            { id: 19, name: 'Layout Meja Visual', status: 'coming_soon' },
-            { id: 20, name: 'Status Meja Real-time', status: 'coming_soon' },
-            { id: 21, name: 'QR Code per Meja', status: 'coming_soon' },
-            { id: 12, name: 'Reservasi / Book Meja', status: 'coming_soon' },
+            {
+                id: 19,
+                name: 'Layout Meja Visual',
+                status: 'ready',
+                route: 'tables.layout',
+            },
+            {
+                id: 20,
+                name: 'Status Meja Real-time',
+                status: 'ready',
+                route: 'tables.layout',
+            },
+            {
+                id: 21,
+                name: 'QR Code per Meja',
+                status: 'ready',
+                route: 'tables.layout',
+            },
+            {
+                id: 12,
+                name: 'Reservasi / Book Meja',
+                status: 'ready',
+                route: 'tables.layout',
+            },
         ],
     },
     {
@@ -123,15 +152,36 @@ const menuData: MenuCategory[] = [
                 status: 'ready',
                 route: 'kitchen.display',
             },
-            { id: 14, name: 'Update Status Masak', status: 'coming_soon' },
+            {
+                id: 14,
+                name: 'Update Status Masak',
+                status: 'ready',
+                route: 'kitchen.display',
+            },
             {
                 id: 15,
                 name: 'Approval Order Selesai (kitchen->kasir)',
-                status: 'coming_soon',
+                status: 'ready',
+                route: 'bar.display',
             },
-            { id: 16, name: 'Filter Kategori Pesanan', status: 'coming_soon' },
-            { id: 17, name: 'Riwayat Order Dapur', status: 'coming_soon' },
-            { id: 18, name: 'Estimasi Waktu Masak', status: 'coming_soon' },
+            {
+                id: 16,
+                name: 'Filter Kategori Pesanan',
+                status: 'ready',
+                route: 'kitchen.display',
+            },
+            {
+                id: 17,
+                name: 'Riwayat Order Dapur',
+                status: 'ready',
+                route: 'kitchen.display',
+            },
+            {
+                id: 18,
+                name: 'Estimasi Waktu Masak',
+                status: 'ready',
+                route: 'kitchen.display',
+            },
         ],
     },
     {
@@ -140,13 +190,29 @@ const menuData: MenuCategory[] = [
         name: 'Pelanggan',
         icon: Users,
         items: [
-            { id: 22, name: 'Customer Database', status: 'coming_soon' },
-            { id: 23, name: 'Membership & Loyalty', status: 'coming_soon' },
-            { id: 24, name: 'Kasbon per Pelanggan', status: 'coming_soon' },
+            {
+                id: 22,
+                name: 'Customer Database',
+                status: 'ready',
+                route: 'customers.index',
+            },
+            {
+                id: 23,
+                name: 'Membership & Loyalty',
+                status: 'ready',
+                route: 'customers.index',
+            },
+            {
+                id: 24,
+                name: 'Kasbon per Pelanggan',
+                status: 'ready',
+                route: 'customers.index',
+            },
             {
                 id: 25,
                 name: 'Riwayat Transaksi Pelanggan',
-                status: 'coming_soon',
+                status: 'ready',
+                route: 'customers.index',
             },
         ],
     },
@@ -156,17 +222,48 @@ const menuData: MenuCategory[] = [
         name: 'Produk & Stok',
         icon: Package,
         items: [
-            { id: 26, name: 'Katalog Produk', status: 'coming_soon' },
-            { id: 27, name: 'Varian & Multi Harga', status: 'coming_soon' },
+            {
+                id: 26,
+                name: 'Katalog Produk',
+                status: 'ready',
+                route: 'products.index',
+            },
+            {
+                id: 27,
+                name: 'Varian & Multi Harga',
+                status: 'ready',
+                route: 'products.index',
+            },
             {
                 id: 28,
                 name: 'Manajemen Stok Produk Jadi',
-                status: 'coming_soon',
+                status: 'ready',
+                route: 'products.stock',
             },
-            { id: 29, name: 'Inventori Bahan Baku', status: 'coming_soon' },
-            { id: 30, name: 'HPP per Produk', status: 'coming_soon' },
-            { id: 31, name: 'Reminder Expired Product', status: 'coming_soon' },
-            { id: 32, name: 'Alert Stok Menipis', status: 'coming_soon' },
+            {
+                id: 29,
+                name: 'Inventori Bahan Baku',
+                status: 'ready',
+                route: 'raw-materials.index',
+            },
+            {
+                id: 30,
+                name: 'HPP per Produk',
+                status: 'ready',
+                route: 'products.hpp',
+            },
+            {
+                id: 31,
+                name: 'Reminder Expired Product',
+                status: 'ready',
+                route: 'expired-tracking.index',
+            },
+            {
+                id: 32,
+                name: 'Alert Stok Menipis',
+                status: 'ready',
+                route: 'stock-alerts.index',
+            },
         ],
     },
     {
@@ -175,9 +272,9 @@ const menuData: MenuCategory[] = [
         name: 'Promo & Diskon',
         icon: Percent,
         items: [
-            { id: 33, name: 'Template Promo', status: 'coming_soon' },
-            { id: 34, name: 'Diskon Otomatis', status: 'coming_soon' },
-            { id: 35, name: 'Voucher', status: 'coming_soon' },
+            { id: 33, name: 'Template Promo', status: 'ready', route: 'promos.index' },
+            { id: 34, name: 'Diskon Otomatis', status: 'ready', route: 'kasir.order' },
+            { id: 35, name: 'Voucher', status: 'ready', route: 'kasir.order' },
         ],
     },
     {
@@ -186,12 +283,12 @@ const menuData: MenuCategory[] = [
         name: 'Karyawan & Shift',
         icon: CalendarDays,
         items: [
-            { id: 36, name: 'Data Karyawan', status: 'coming_soon' },
-            { id: 37, name: 'Jadwal Shift', status: 'coming_soon' },
-            { id: 38, name: 'Absensi Digital', status: 'coming_soon' },
-            { id: 39, name: 'Buka / Tutup Shift Kasir', status: 'coming_soon' },
-            { id: 40, name: 'Rekap Kas per Shift', status: 'coming_soon' },
-            { id: 41, name: 'Laporan Kehadiran', status: 'coming_soon' },
+            { id: 36, name: 'Data Karyawan', status: 'ready', route: 'employees.index' },
+            { id: 37, name: 'Jadwal Shift', status: 'ready', route: 'schedules.index' },
+            { id: 38, name: 'Absensi Digital', status: 'ready', route: 'attendance.index' },
+            { id: 39, name: 'Buka / Tutup Shift Kasir', status: 'ready', route: 'shifts.index' },
+            { id: 40, name: 'Rekap Kas per Shift', status: 'ready', route: 'shifts.index' },
+            { id: 41, name: 'Laporan Kehadiran', status: 'ready', route: 'attendance.index' },
         ],
     },
     {
@@ -203,10 +300,21 @@ const menuData: MenuCategory[] = [
             {
                 id: 42,
                 name: 'Terima Order GoFood / GrabFood',
-                status: 'coming_soon',
+                status: 'ready',
+                route: 'online-orders.index',
             },
-            { id: 43, name: 'Status Order Online', status: 'coming_soon' },
-            { id: 44, name: 'Riwayat Order Online', status: 'coming_soon' },
+            {
+                id: 43,
+                name: 'Status Order Online',
+                status: 'ready',
+                route: 'online-orders.index',
+            },
+            {
+                id: 44,
+                name: 'Riwayat Order Online',
+                status: 'ready',
+                route: 'online-orders.index',
+            },
         ],
     },
     {
@@ -215,7 +323,7 @@ const menuData: MenuCategory[] = [
         name: 'Laporan & ERP',
         icon: BarChart3,
         items: [
-            { id: 45, name: 'Dashboard Keuangan', status: 'coming_soon' },
+            { id: 45, name: 'Dashboard Keuangan', status: 'ready', route: 'dashboard' },
             { id: 46, name: 'Laporan Penjualan', status: 'coming_soon' },
             { id: 47, name: 'Laporan Per Outlet', status: 'coming_soon' },
             { id: 48, name: 'Laporan Per Kasir', status: 'coming_soon' },
@@ -330,6 +438,18 @@ const getRouteForAntrian = () => {
         return 'bar.display';
     }
     return 'kitchen.display';
+};
+
+const isMenuReady = (menuId: number) => {
+    return menuProgress.value.readyMenuIds.includes(menuId);
+};
+
+const resolveItemRoute = (item: MenuItem): string => {
+    if ([13, 16, 17, 18].includes(item.id)) {
+        return getRouteForAntrian();
+    }
+
+    return item.route ?? 'dashboard';
 };
 </script>
 
@@ -504,21 +624,13 @@ const getRouteForAntrian = () => {
                         <template v-for="item in category.items" :key="item.id">
                             <!-- Ready Item Link -->
                             <Link
-                                v-if="item.status === 'ready' && item.route"
-                                :href="
-                                    route(
-                                        item.id === 13
-                                            ? getRouteForAntrian()
-                                            : item.route,
-                                    )
-                                "
+                                v-if="isMenuReady(item.id) && item.route"
+                                :href="route(resolveItemRoute(item))"
                                 @click="isMobileOpen = false"
                                 :class="[
                                     'group/item flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition duration-150',
                                     route().current(
-                                        item.id === 13
-                                            ? getRouteForAntrian()
-                                            : item.route,
+                                        resolveItemRoute(item),
                                     )
                                         ? 'bg-orange-500/10 font-semibold text-orange-400'
                                         : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200',

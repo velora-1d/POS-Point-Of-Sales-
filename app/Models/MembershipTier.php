@@ -39,4 +39,9 @@ class MembershipTier extends Model
     {
         return $this->belongsTo(Outlet::class, 'outlet_id');
     }
+
+    public function memberships()
+    {
+        return $this->hasMany(Membership::class, 'tier_id');
+    }
 }

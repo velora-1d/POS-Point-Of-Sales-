@@ -12,10 +12,13 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Outlet;
 use App\Models\Table;
+use App\Models\TableReservation;
+use App\Models\User;
 use App\Services\OrderBillService;
 use App\Services\OrderEditService;
 use App\Services\OrderPaymentService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -30,7 +33,7 @@ class OrderController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $outletId = $user->outlet_id ?? Outlet::first()?->id;
+        $outletId = $this->resolveOutletId($user);
 
         if (!$outletId) {
             return Inertia::render('Kasir/Order', [
@@ -41,21 +44,7 @@ class OrderController extends Controller
             ]);
         }
 
-        // Load active tables scoped by outlet
-        $tables = Table::where('outlet_id', $outletId)
-            ->where('is_active', true)
-            ->with([
-                'activeOrder.items.product',
-                'activeOrder.items.variant',
-                'activeOrder.cashier',
-                'activeOrder.customer.membership.tier',
-                'activeOrders.items.product',
-                'activeOrders.items.variant',
-                'activeOrders.cashier',
-                'activeOrders.customer.membership.tier',
-            ])
-            ->orderBy('name')
-            ->get();
+        $tables = $this->loadOutletTables($outletId);
 
         // Load active categories and their products scoped by outlet
         $categories = Category::with(['products' => function ($q) use ($outletId) {
@@ -95,6 +84,42 @@ class OrderController extends Controller
             'customers' => $customers,
             'success' => session('success'),
             'paymentCheckout' => session('paymentCheckout'),
+        ]);
+    }
+
+    public function tableLayout()
+    {
+        $user = auth()->user();
+        $outletId = $this->resolveOutletId($user);
+
+        if (!$outletId) {
+            return Inertia::render('Tables/Layout', [
+                'tables' => [],
+                'reservations' => [],
+                'summary' => [
+                    'total' => 0,
+                    'available' => 0,
+                    'occupied' => 0,
+                    'reserved' => 0,
+                ],
+                'error' => 'Belum ada Outlet terdaftar di sistem.',
+            ]);
+        }
+
+        $tables = $this->loadOutletTables($outletId);
+        $reservations = $this->loadOutletReservations($outletId);
+        $summary = [
+            'total' => $tables->count(),
+            'available' => $tables->where('status', 'available')->count(),
+            'occupied' => $tables->where('status', 'occupied')->count(),
+            'reserved' => $tables->where('status', 'reserved')->count(),
+        ];
+
+        return Inertia::render('Tables/Layout', [
+            'tables' => $tables,
+            'reservations' => $reservations,
+            'summary' => $summary,
+            'success' => session('success'),
         ]);
     }
 
@@ -162,5 +187,52 @@ class OrderController extends Controller
             ->route('kasir.order')
             ->with('success', $result['message'])
             ->with('paymentCheckout', $result['paymentCheckout']);
+    }
+
+    protected function resolveOutletId(?User $user): ?string
+    {
+        return $user?->outlet_id ?? Outlet::first()?->id;
+    }
+
+    protected function loadOutletTables(string $outletId)
+    {
+        $tables = Table::where('outlet_id', $outletId)
+            ->where('is_active', true)
+            ->with([
+                'activeOrder.items.product',
+                'activeOrder.items.variant',
+                'activeOrder.cashier',
+                'activeOrder.customer.membership.tier',
+                'activeOrders.items.product',
+                'activeOrders.items.variant',
+                'activeOrders.cashier',
+                'activeOrders.customer.membership.tier',
+                'activeReservation.customer',
+            ])
+            ->orderBy('name')
+            ->get();
+
+        $tables->each(function (Table $table): void {
+            if ($table->qr_session_token && $table->qr_code) {
+                return;
+            }
+
+            $table->forceFill([
+                'qr_session_token' => $table->qr_session_token ?: (string) Str::ulid(),
+                'qr_code' => $table->qr_code ?: 'QR-' . strtoupper(Str::random(10)),
+            ])->save();
+        });
+
+        return $tables;
+    }
+
+    protected function loadOutletReservations(string $outletId)
+    {
+        return TableReservation::query()
+            ->where('outlet_id', $outletId)
+            ->where('status', 'booked')
+            ->with(['table', 'customer', 'creator'])
+            ->orderBy('reserved_for')
+            ->get();
     }
 }

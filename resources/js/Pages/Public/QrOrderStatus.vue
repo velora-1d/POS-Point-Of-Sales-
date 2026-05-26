@@ -44,6 +44,8 @@ const formatPrice = (value: any) => {
 };
 
 const paymentMeta = computed(() => props.order?.metadata?.payment || {});
+const promoMeta = computed(() => props.order?.metadata?.promo || {});
+const appliedPromos = computed(() => promoMeta.value?.applied_promos || []);
 
 const orderStatusLabel = computed(() => {
     switch (props.order.status) {
@@ -335,6 +337,41 @@ const refreshPage = () => {
                                         </p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-5 rounded-[24px] border border-white/10 bg-slate-900/70 p-4"
+                        >
+                            <div
+                                class="flex items-center justify-between text-sm text-slate-400"
+                            >
+                                <span>Subtotal</span>
+                                <span>{{ formatPrice(order.subtotal) }}</span>
+                            </div>
+                            <div
+                                class="mt-3 flex items-center justify-between text-sm text-slate-400"
+                            >
+                                <span>Diskon</span>
+                                <span>{{ formatPrice(order.discount_amount) }}</span>
+                            </div>
+                            <div
+                                class="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-base font-black text-white"
+                            >
+                                <span>Total final</span>
+                                <span class="text-fuchsia-200">{{ formatPrice(order.total_amount) }}</span>
+                            </div>
+                            <div
+                                v-if="appliedPromos.length"
+                                class="mt-4 flex flex-wrap gap-2"
+                            >
+                                <span
+                                    v-for="promo in appliedPromos"
+                                    :key="promo.id"
+                                    class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold text-fuchsia-100"
+                                >
+                                    {{ promo.name }} • {{ formatPrice(promo.discount_amount) }}
+                                </span>
                             </div>
                         </div>
                     </section>
