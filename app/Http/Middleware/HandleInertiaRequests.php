@@ -50,6 +50,7 @@ class HandleInertiaRequests extends Middleware
         43,
         44,
         45,
+        46,
     ];
 
     /**

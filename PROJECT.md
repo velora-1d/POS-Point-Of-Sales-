@@ -33,6 +33,12 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Menu `#46 Laporan Penjualan` sekarang aktif di halaman `reports/sales`, dengan filter periode, outlet (owner), channel penjualan, metode pembayaran, dan pencarian order untuk melihat transaksi lunas sesuai scope user.
+- Laporan penjualan menampilkan kartu ringkasan revenue/order/diskon/item/rata-rata ticket/transaksi tertinggi, tren penjualan harian, breakdown metode bayar dan channel, serta daftar transaksi lunas yang sudah dipaginasi.
+- Status brief yang aktif saat ini naik menjadi menu `#1-#6`, `#12`, `#13`, `#14`, `#15`, `#16`, `#17`, `#18`, `#19`, `#20`, `#21`, `#22`, `#23`, `#24`, `#25`, `#26`, `#27`, `#28`, `#29`, `#30`, `#31`, `#32`, `#33`, `#34`, `#35`, `#36`, `#37`, `#38`, `#39`, `#40`, `#41`, `#42`, `#43`, `#44`, `#45`, dan `#46`; total ready = 41 dari 62 menu.
+- Verifikasi sesi ini untuk menu `#46`: `php -l` request/controller/repository/service laporan penjualan, `php artisan route:list --name=reports.sales`, dan `npm run build` berhasil.
+- File inti sesi ini untuk menu `#46`: `app/Http/Requests/SalesReportIndexRequest.php`, `app/Http/Controllers/SalesReportController.php`, `app/Repositories/SalesReportRepository.php`, `app/Services/SalesReportService.php`, `resources/js/Pages/Reports/Sales.vue`, `routes/web.php`, `resources/js/Layouts/AuthenticatedLayout.vue`, dan `app/Http/Middleware/HandleInertiaRequests.php`.
+- Task lanjutan: lanjutkan menu `#47 Laporan Per Outlet`.
 - Menu `#45 Dashboard Keuangan` sekarang aktif di halaman `dashboard`, dengan ringkasan harian untuk owner/supervisor berupa total revenue, total order, average ticket, total diskon, produk terlaris, shift aktif, serta breakdown revenue per metode bayar dan channel penjualan.
 - Dashboard keuangan mendukung filter outlet untuk owner langsung dari halaman dashboard, sementara supervisor tetap otomatis scoped ke outlet aktifnya; data finansial dihitung dari order hari ini yang sudah settle atau berstatus payment paid.
 - Status brief yang aktif saat ini naik menjadi menu `#1-#6`, `#12`, `#13`, `#14`, `#15`, `#16`, `#17`, `#18`, `#19`, `#20`, `#21`, `#22`, `#23`, `#24`, `#25`, `#26`, `#27`, `#28`, `#29`, `#30`, `#31`, `#32`, `#33`, `#34`, `#35`, `#36`, `#37`, `#38`, `#39`, `#40`, `#41`, `#42`, `#43`, `#44`, dan `#45`; total ready = 40 dari 62 menu.

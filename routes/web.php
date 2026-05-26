@@ -17,6 +17,7 @@ use App\Http\Controllers\ProductStockController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QrSelfServiceController;
 use App\Http\Controllers\RawMaterialController;
+use App\Http\Controllers\SalesReportController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\TableReservationController;
 use App\Http\Controllers\CustomerController;
@@ -80,6 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/shifts', [ShiftController::class, 'index'])->name('shifts.index');
     Route::post('/shifts/open', [ShiftController::class, 'open'])->name('shifts.open');
     Route::post('/shifts/{shift}/close', [ShiftController::class, 'close'])->name('shifts.close');
+    Route::get('/reports/sales', [SalesReportController::class, 'index'])->name('reports.sales.index');
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/hpp', [ProductHppController::class, 'index'])->name('products.hpp');
     Route::get('/products/stocks', [ProductStockController::class, 'index'])->name('products.stock');

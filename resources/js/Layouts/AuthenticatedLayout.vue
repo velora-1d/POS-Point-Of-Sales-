@@ -324,7 +324,7 @@ const menuData: MenuCategory[] = [
         icon: BarChart3,
         items: [
             { id: 45, name: 'Dashboard Keuangan', status: 'ready', route: 'dashboard' },
-            { id: 46, name: 'Laporan Penjualan', status: 'coming_soon' },
+            { id: 46, name: 'Laporan Penjualan', status: 'ready', route: 'reports.sales.index' },
             { id: 47, name: 'Laporan Per Outlet', status: 'coming_soon' },
             { id: 48, name: 'Laporan Per Kasir', status: 'coming_soon' },
             { id: 49, name: 'Laporan Produk Terlaris', status: 'coming_soon' },
