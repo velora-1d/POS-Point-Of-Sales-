@@ -37,6 +37,24 @@ interface MenuCategory {
     isOpenFiltered?: boolean;
 }
 
+interface SidebarPage {
+    key: string;
+    title: string;
+    route?: string;
+    menuIds: number[];
+    aliases?: string[];
+    routeResolver?: 'default' | 'antrian';
+}
+
+interface SidebarCategory {
+    phase: string;
+    flow: string;
+    name: string;
+    icon: any;
+    pages: SidebarPage[];
+    isOpenFiltered?: boolean;
+}
+
 const page = usePage<any>();
 const user = computed(() => page.props.auth.user);
 const menuProgress = computed(() => {
@@ -51,7 +69,6 @@ const menuProgress = computed(() => {
 
 const isMobileOpen = ref(false);
 const searchQuery = ref('');
-const toastMessage = ref('');
 
 // List of all 62 menu items categorized into 10 categories matching menu-per-role.md
 const menuData: MenuCategory[] = [
@@ -129,15 +146,36 @@ const menuData: MenuCategory[] = [
                 status: 'ready',
                 route: 'kasir.order',
             },
-            { id: 7, name: 'Kasbon & Cicilan', status: 'coming_soon' },
-            { id: 8, name: 'PO / Down Payment', status: 'coming_soon' },
-            { id: 9, name: 'Diskon & Voucher', status: 'coming_soon' },
+            {
+                id: 7,
+                name: 'Kasbon & Cicilan',
+                status: 'ready',
+                route: 'transactions.index',
+            },
+            {
+                id: 8,
+                name: 'PO / Down Payment',
+                status: 'ready',
+                route: 'transactions.index',
+            },
+            {
+                id: 9,
+                name: 'Diskon & Voucher',
+                status: 'ready',
+                route: 'kasir.order',
+            },
             {
                 id: 10,
                 name: 'Struk (print / WA / skip)',
-                status: 'coming_soon',
+                status: 'ready',
+                route: 'transactions.index',
             },
-            { id: 11, name: 'Riwayat Transaksi', status: 'coming_soon' },
+            {
+                id: 11,
+                name: 'Riwayat Transaksi',
+                status: 'ready',
+                route: 'transactions.index',
+            },
         ],
     },
     {
@@ -325,13 +363,13 @@ const menuData: MenuCategory[] = [
         items: [
             { id: 45, name: 'Dashboard Keuangan', status: 'ready', route: 'dashboard' },
             { id: 46, name: 'Laporan Penjualan', status: 'ready', route: 'reports.sales.index' },
-            { id: 47, name: 'Laporan Per Outlet', status: 'coming_soon' },
-            { id: 48, name: 'Laporan Per Kasir', status: 'coming_soon' },
-            { id: 49, name: 'Laporan Produk Terlaris', status: 'coming_soon' },
-            { id: 50, name: 'Laporan Stok & Inventori', status: 'coming_soon' },
-            { id: 51, name: 'Laporan Absensi & Shift', status: 'coming_soon' },
-            { id: 52, name: 'Pengeluaran Operasional', status: 'coming_soon' },
-            { id: 53, name: 'Export PDF & Excel', status: 'coming_soon' },
+            { id: 47, name: 'Laporan Per Outlet', status: 'ready', route: 'reports.outlets.index' },
+            { id: 48, name: 'Laporan Per Kasir', status: 'ready', route: 'reports.cashiers.index' },
+            { id: 49, name: 'Laporan Produk Terlaris', status: 'ready', route: 'reports.top-products.index' },
+            { id: 50, name: 'Laporan Stok & Inventori', status: 'ready', route: 'reports.inventory.index' },
+            { id: 51, name: 'Laporan Absensi & Shift', status: 'ready', route: 'reports.attendance-shifts.index' },
+            { id: 52, name: 'Pengeluaran Operasional', status: 'ready', route: 'reports.expenses.index' },
+            { id: 53, name: 'Export PDF & Excel', status: 'ready', route: 'reports.exports.index' },
         ],
     },
     {
@@ -343,23 +381,56 @@ const menuData: MenuCategory[] = [
             {
                 id: 54,
                 name: 'Manajemen Outlet & Cabang',
-                status: 'coming_soon',
+                status: 'ready',
+                route: 'settings.outlets.index',
             },
-            { id: 55, name: 'User & RBAC', status: 'coming_soon' },
+            {
+                id: 55,
+                name: 'User & RBAC',
+                status: 'ready',
+                route: 'settings.rbac.index',
+            },
             {
                 id: 56,
                 name: 'Konfigurasi Payment Gateway',
-                status: 'coming_soon',
+                status: 'ready',
+                route: 'settings.payment-gateway.index',
             },
-            { id: 57, name: 'Konfigurasi Printer', status: 'coming_soon' },
-            { id: 58, name: 'Konfigurasi QR Meja', status: 'coming_soon' },
-            { id: 59, name: 'Notifikasi & Alert', status: 'coming_soon' },
-            { id: 60, name: 'Backup & Keamanan Data', status: 'coming_soon' },
-            { id: 61, name: 'Approval Rules', status: 'coming_soon' },
+            {
+                id: 57,
+                name: 'Konfigurasi Printer',
+                status: 'ready',
+                route: 'settings.printer.index',
+            },
+            {
+                id: 58,
+                name: 'Konfigurasi QR Meja',
+                status: 'ready',
+                route: 'settings.table-qr.index',
+            },
+            {
+                id: 59,
+                name: 'Notifikasi & Alert',
+                status: 'ready',
+                route: 'settings.notifications.index',
+            },
+            {
+                id: 60,
+                name: 'Backup & Keamanan Data',
+                status: 'ready',
+                route: 'settings.backup-security.index',
+            },
+            {
+                id: 61,
+                name: 'Approval Rules',
+                status: 'ready',
+                route: 'settings.approval-rules.index',
+            },
             {
                 id: 62,
                 name: 'Integrasi GoFood & GrabFood',
-                status: 'coming_soon',
+                status: 'ready',
+                route: 'settings.online-integrations.index',
             },
         ],
     },
@@ -383,22 +454,261 @@ const toggleCategory = (name: string) => {
     collapsedCategories.value[name] = !collapsedCategories.value[name];
 };
 
+const menuItemsById = new Map(
+    menuData.flatMap((category) => category.items).map((item) => [item.id, item]),
+);
+
+const dashboardPage: SidebarPage = {
+    key: 'dashboard',
+    title: 'Dashboard Utama',
+    route: 'dashboard',
+    menuIds: [45],
+    aliases: ['dashboard keuangan'],
+};
+
+const sidebarData: SidebarCategory[] = [
+    {
+        phase: 'Fase 2',
+        flow: 'Meja & Order',
+        name: 'Meja',
+        icon: TableProperties,
+        pages: [
+            {
+                key: 'tables-layout',
+                title: 'Operasional Meja',
+                route: 'tables.layout',
+                menuIds: [19, 20, 21, 12],
+                aliases: ['layout meja', 'status meja', 'reservasi', 'qr meja'],
+            },
+        ],
+    },
+    {
+        phase: 'Fase 2',
+        flow: 'Meja & Order',
+        name: 'Order & Transaksi',
+        icon: ShoppingCart,
+        pages: [
+            {
+                key: 'kasir-order',
+                title: 'Kasir & Order Aktif',
+                route: 'kasir.order',
+                menuIds: [1, 2, 3, 4, 5, 6, 9, 34, 35],
+                aliases: ['buat order', 'split bill', 'pembayaran', 'diskon', 'voucher'],
+            },
+            {
+                key: 'transactions',
+                title: 'Transaksi & Riwayat',
+                route: 'transactions.index',
+                menuIds: [7, 8, 10, 11],
+                aliases: ['kasbon', 'cicilan', 'down payment', 'struk', 'riwayat transaksi'],
+            },
+        ],
+    },
+    {
+        phase: 'Fase 3',
+        flow: 'Kitchen & Bar',
+        name: 'Kitchen Display',
+        icon: ChefHat,
+        pages: [
+            {
+                key: 'kitchen-display',
+                title: 'Kitchen Display',
+                menuIds: [13, 14, 16, 17, 18],
+                aliases: ['antrian order', 'status masak', 'riwayat dapur', 'estimasi masak'],
+                routeResolver: 'antrian',
+            },
+            {
+                key: 'bar-display',
+                title: 'Approval Bar',
+                route: 'bar.display',
+                menuIds: [15],
+                aliases: ['approval order selesai'],
+            },
+        ],
+    },
+    {
+        phase: 'Fase 4',
+        flow: 'Pelanggan',
+        name: 'Pelanggan',
+        icon: Users,
+        pages: [
+            {
+                key: 'customers',
+                title: 'CRM Pelanggan',
+                route: 'customers.index',
+                menuIds: [22, 23, 24, 25],
+                aliases: ['customer', 'loyalty', 'kasbon pelanggan', 'riwayat pelanggan'],
+            },
+        ],
+    },
+    {
+        phase: 'Fase 5',
+        flow: 'Produk & Stok',
+        name: 'Produk & Stok',
+        icon: Package,
+        pages: [
+            {
+                key: 'products',
+                title: 'Katalog Produk',
+                route: 'products.index',
+                menuIds: [26, 27],
+                aliases: ['varian', 'multi harga'],
+            },
+            {
+                key: 'products-stock',
+                title: 'Stok Produk Jadi',
+                route: 'products.stock',
+                menuIds: [28],
+            },
+            {
+                key: 'raw-materials',
+                title: 'Bahan Baku',
+                route: 'raw-materials.index',
+                menuIds: [29],
+            },
+            {
+                key: 'products-hpp',
+                title: 'HPP Produk',
+                route: 'products.hpp',
+                menuIds: [30],
+            },
+            {
+                key: 'expired-tracking',
+                title: 'Tracking Expired',
+                route: 'expired-tracking.index',
+                menuIds: [31],
+            },
+            {
+                key: 'stock-alerts',
+                title: 'Alert Stok',
+                route: 'stock-alerts.index',
+                menuIds: [32],
+            },
+        ],
+    },
+    {
+        phase: 'Fase 6',
+        flow: 'Promo & Diskon',
+        name: 'Promo & Diskon',
+        icon: Percent,
+        pages: [
+            {
+                key: 'promos',
+                title: 'Template Promo',
+                route: 'promos.index',
+                menuIds: [33],
+            },
+        ],
+    },
+    {
+        phase: 'Fase 7',
+        flow: 'Karyawan & Shift',
+        name: 'Karyawan & Shift',
+        icon: CalendarDays,
+        pages: [
+            {
+                key: 'employees',
+                title: 'Data Karyawan',
+                route: 'employees.index',
+                menuIds: [36],
+            },
+            {
+                key: 'schedules',
+                title: 'Jadwal Shift',
+                route: 'schedules.index',
+                menuIds: [37],
+            },
+            {
+                key: 'attendance',
+                title: 'Absensi & Kehadiran',
+                route: 'attendance.index',
+                menuIds: [38, 41],
+                aliases: ['clock in', 'clock out', 'laporan kehadiran'],
+            },
+            {
+                key: 'shifts',
+                title: 'Shift Kasir',
+                route: 'shifts.index',
+                menuIds: [39, 40],
+                aliases: ['buka shift', 'tutup shift', 'rekap kas'],
+            },
+        ],
+    },
+    {
+        phase: 'Fase 8',
+        flow: 'Order Online',
+        name: 'Order Online',
+        icon: Globe,
+        pages: [
+            {
+                key: 'online-orders',
+                title: 'Inbox Order Online',
+                route: 'online-orders.index',
+                menuIds: [42, 43, 44],
+                aliases: ['gofood', 'grabfood', 'riwayat order online'],
+            },
+        ],
+    },
+    {
+        phase: 'Fase 9',
+        flow: 'Laporan & ERP',
+        name: 'Laporan & ERP',
+        icon: BarChart3,
+        pages: [
+            { key: 'report-sales', title: 'Laporan Penjualan', route: 'reports.sales.index', menuIds: [46] },
+            { key: 'report-outlets', title: 'Laporan Per Outlet', route: 'reports.outlets.index', menuIds: [47] },
+            { key: 'report-cashiers', title: 'Laporan Per Kasir', route: 'reports.cashiers.index', menuIds: [48] },
+            { key: 'report-top-products', title: 'Produk Terlaris', route: 'reports.top-products.index', menuIds: [49] },
+            { key: 'report-inventory', title: 'Stok & Inventori', route: 'reports.inventory.index', menuIds: [50] },
+            { key: 'report-attendance', title: 'Absensi & Shift', route: 'reports.attendance-shifts.index', menuIds: [51] },
+            { key: 'report-expenses', title: 'Pengeluaran Operasional', route: 'reports.expenses.index', menuIds: [52] },
+            { key: 'report-exports', title: 'Export PDF & Excel', route: 'reports.exports.index', menuIds: [53] },
+        ],
+    },
+    {
+        phase: 'Fase 10',
+        flow: 'Pengaturan',
+        name: 'Pengaturan',
+        icon: Settings,
+        pages: [
+            { key: 'settings-outlets', title: 'Outlet & Cabang', route: 'settings.outlets.index', menuIds: [54] },
+            { key: 'settings-rbac', title: 'User & RBAC', route: 'settings.rbac.index', menuIds: [55] },
+            { key: 'settings-payment', title: 'Payment Gateway', route: 'settings.payment-gateway.index', menuIds: [56] },
+            { key: 'settings-printer', title: 'Printer', route: 'settings.printer.index', menuIds: [57] },
+            { key: 'settings-table-qr', title: 'QR Meja', route: 'settings.table-qr.index', menuIds: [58] },
+            { key: 'settings-notifications', title: 'Notifikasi & Alert', route: 'settings.notifications.index', menuIds: [59] },
+            { key: 'settings-backup', title: 'Backup & Keamanan', route: 'settings.backup-security.index', menuIds: [60] },
+            { key: 'settings-approval', title: 'Approval Rules', route: 'settings.approval-rules.index', menuIds: [61] },
+            { key: 'settings-online', title: 'Integrasi Online', route: 'settings.online-integrations.index', menuIds: [62] },
+        ],
+    },
+];
+
 // Filter menu items based on search query
-const filteredMenu = computed(() => {
-    if (!searchQuery.value) return menuData;
+const filteredSidebar = computed(() => {
+    if (!searchQuery.value) return sidebarData;
+
     const query = searchQuery.value.toLowerCase();
-    return menuData
+
+    return sidebarData
         .map((category) => {
-            const filteredItems = category.items.filter((item) =>
-                item.name.toLowerCase().includes(query),
-            );
+            const filteredPages = category.pages.filter((page) => {
+                const featureNames = page.menuIds
+                    .map((menuId) => menuItemsById.get(menuId)?.name ?? '')
+                    .join(' ');
+                const aliases = page.aliases?.join(' ') ?? '';
+                const haystack = `${page.title} ${aliases} ${featureNames}`.toLowerCase();
+
+                return haystack.includes(query);
+            });
+
             return {
                 ...category,
-                items: filteredItems,
-                isOpenFiltered: filteredItems.length > 0,
+                pages: filteredPages,
+                isOpenFiltered: filteredPages.length > 0,
             };
         })
-        .filter((category) => category.items.length > 0);
+        .filter((category) => category.pages.length > 0);
 });
 
 // Check if category should be expanded
@@ -407,17 +717,6 @@ const isCategoryExpanded = (categoryName: string, isFilteredOpen?: boolean) => {
         return isFilteredOpen ?? false;
     }
     return collapsedCategories.value[categoryName] !== true;
-};
-
-// Show Toast notification when user clicks on Coming Soon items
-const triggerComingSoonToast = (itemName: string) => {
-    toastMessage.value = `Fitur "${itemName}" sedang dalam tahap pengembangan dan akan segera hadir!`;
-    // Auto clear toast after 4 seconds
-    setTimeout(() => {
-        if (toastMessage.value.includes(itemName)) {
-            toastMessage.value = '';
-        }
-    }, 4000);
 };
 
 // Get initials for user avatar
@@ -444,12 +743,40 @@ const isMenuReady = (menuId: number) => {
     return menuProgress.value.readyMenuIds.includes(menuId);
 };
 
-const resolveItemRoute = (item: MenuItem): string => {
-    if ([13, 16, 17, 18].includes(item.id)) {
+const resolveSidebarRoute = (pageItem: SidebarPage): string => {
+    if (pageItem.routeResolver === 'antrian') {
         return getRouteForAntrian();
     }
 
-    return item.route ?? 'dashboard';
+    return pageItem.route ?? 'dashboard';
+};
+
+const getReadyCount = (menuIds: number[]) => {
+    return menuIds.filter((menuId) => isMenuReady(menuId)).length;
+};
+
+const getPageStatusLabel = (pageItem: SidebarPage) => {
+    const readyCount = getReadyCount(pageItem.menuIds);
+    const totalCount = pageItem.menuIds.length;
+
+    if (readyCount === totalCount) {
+        return `${totalCount} fitur`;
+    }
+
+    return `${readyCount}/${totalCount}`;
+};
+
+const getCategoryStatusLabel = (category: SidebarCategory) => {
+    const totalCount = category.pages.reduce(
+        (sum, pageItem) => sum + pageItem.menuIds.length,
+        0,
+    );
+    const readyCount = category.pages.reduce(
+        (sum, pageItem) => sum + getReadyCount(pageItem.menuIds),
+        0,
+    );
+
+    return `${readyCount}/${totalCount}`;
 };
 </script>
 
@@ -504,7 +831,7 @@ const resolveItemRoute = (item: MenuItem): string => {
                     <input
                         type="text"
                         v-model="searchQuery"
-                        placeholder="Cari dari 62 menu..."
+                        placeholder="Cari halaman atau fitur..."
                         class="border-slate-850 w-full rounded-xl border bg-slate-950/60 py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
                     <button
@@ -536,8 +863,13 @@ const resolveItemRoute = (item: MenuItem): string => {
                         <LayoutDashboard class="h-4 w-4 shrink-0" />
                         <span>Dashboard Utama</span>
                         <span
+                            class="ms-auto scale-90 rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-400"
+                        >
+                            {{ getPageStatusLabel(dashboardPage) }}
+                        </span>
+                        <span
                             v-if="route().current('dashboard')"
-                            class="ms-auto h-1.5 w-1.5 rounded-full bg-orange-500"
+                            class="h-1.5 w-1.5 rounded-full bg-orange-500"
                         ></span>
                     </Link>
                 </div>
@@ -552,19 +884,19 @@ const resolveItemRoute = (item: MenuItem): string => {
                         <p
                             class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
                         >
-                            Urutan Brief
+                            Sidebar Ringkas
                         </p>
                         <p class="mt-1 text-xs leading-relaxed text-slate-400">
-                            Baca menu dari meja, lanjut order, masuk kitchen,
-                            lalu hubungkan ke pelanggan. Fase lain tetap
-                            ditampilkan untuk tracking progress.
+                            Sidebar sekarang tampil per halaman. Progress 62
+                            fitur tetap dihitung dari modul yang ada di dalam
+                            tiap halaman.
                         </p>
                     </div>
                 </div>
 
                 <!-- Dynamic Categories -->
                 <div
-                    v-for="category in filteredMenu"
+                    v-for="category in filteredSidebar"
                     :key="category.name"
                     class="space-y-1.5"
                 >
@@ -597,7 +929,13 @@ const resolveItemRoute = (item: MenuItem): string => {
                                 </p>
                             </div>
                         </div>
-                        <span class="group-hover:text-slate-350 text-slate-500">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="rounded-full border border-slate-700/60 bg-slate-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-400"
+                            >
+                                {{ getCategoryStatusLabel(category) }}
+                            </span>
+                            <span class="group-hover:text-slate-350 text-slate-500">
                             <ChevronDown
                                 v-if="
                                     isCategoryExpanded(
@@ -608,10 +946,11 @@ const resolveItemRoute = (item: MenuItem): string => {
                                 class="h-4 w-4"
                             />
                             <ChevronRight v-else class="h-4 w-4" />
-                        </span>
+                            </span>
+                        </div>
                     </div>
 
-                    <!-- Category Items -->
+                    <!-- Category Pages -->
                     <div
                         v-show="
                             isCategoryExpanded(
@@ -621,54 +960,34 @@ const resolveItemRoute = (item: MenuItem): string => {
                         "
                         class="ml-5 space-y-1 border-l border-slate-800/40 pl-4"
                     >
-                        <template v-for="item in category.items" :key="item.id">
-                            <!-- Ready Item Link -->
+                        <template
+                            v-for="pageItem in category.pages"
+                            :key="pageItem.key"
+                        >
                             <Link
-                                v-if="isMenuReady(item.id) && item.route"
-                                :href="route(resolveItemRoute(item))"
+                                :href="route(resolveSidebarRoute(pageItem))"
                                 @click="isMobileOpen = false"
                                 :class="[
                                     'group/item flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition duration-150',
                                     route().current(
-                                        resolveItemRoute(item),
+                                        resolveSidebarRoute(pageItem),
                                     )
                                         ? 'bg-orange-500/10 font-semibold text-orange-400'
                                         : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200',
                                 ]"
                             >
-                                <span class="flex items-center gap-2 truncate">
+                                <span class="flex min-w-0 items-center gap-2 truncate">
                                     <span
-                                        class="font-mono text-[10px] text-slate-500 group-hover/item:text-slate-400"
-                                        >{{ item.id }}</span
+                                        class="truncate"
+                                        >{{ pageItem.title }}</span
                                     >
-                                    <span>{{ item.name }}</span>
                                 </span>
                                 <span
                                     class="scale-90 rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-400"
                                 >
-                                    Ready
+                                    {{ getPageStatusLabel(pageItem) }}
                                 </span>
                             </Link>
-
-                            <!-- Coming Soon Item Button -->
-                            <button
-                                v-else
-                                @click="triggerComingSoonToast(item.name)"
-                                class="group/item flex w-full cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-left text-xs text-slate-500 transition duration-150 hover:bg-slate-800/20 hover:text-slate-400"
-                            >
-                                <span class="flex items-center gap-2 truncate">
-                                    <span
-                                        class="font-mono text-[10px] text-slate-600 group-hover/item:text-slate-500"
-                                        >{{ item.id }}</span
-                                    >
-                                    <span>{{ item.name }}</span>
-                                </span>
-                                <span
-                                    class="scale-90 rounded-full border border-slate-700/40 bg-slate-800 px-1.5 py-0.5 text-[9px] font-medium text-slate-500"
-                                >
-                                    Soon
-                                </span>
-                            </button>
                         </template>
                     </div>
                 </div>
@@ -768,42 +1087,6 @@ const resolveItemRoute = (item: MenuItem): string => {
             </div>
         </div>
 
-        <!-- Custom Glassmorphism Toast Notification for Coming Soon clicks -->
-        <Transition
-            enter-active-class="transform ease-out duration-300 transition"
-            enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
-            enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
-            leave-active-class="transition ease-in duration-100"
-            leave-from-class="opacity-100"
-            leave-to-class="opacity-0"
-        >
-            <div
-                v-if="toastMessage"
-                class="animate-pulse-subtle fixed bottom-6 right-6 z-50 flex w-full max-w-sm items-start gap-3 rounded-xl border border-orange-500/20 bg-slate-900/95 p-4 shadow-2xl shadow-orange-500/5 backdrop-blur-xl"
-            >
-                <div
-                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-orange-500/20 bg-orange-500/10 text-orange-400"
-                >
-                    🔥
-                </div>
-                <div class="min-w-0 flex-1">
-                    <p
-                        class="text-xs font-bold uppercase tracking-wider text-white"
-                    >
-                        Coming Soon
-                    </p>
-                    <p class="mt-1 text-xs leading-relaxed text-slate-300">
-                        {{ toastMessage }}
-                    </p>
-                </div>
-                <button
-                    @click="toastMessage = ''"
-                    class="hover:text-slate-350 shrink-0 rounded-lg p-0.5 text-slate-500 hover:bg-slate-800 focus:outline-none"
-                >
-                    <X class="h-4 w-4" />
-                </button>
-            </div>
-        </Transition>
     </div>
 </template>
 
@@ -836,17 +1119,4 @@ const resolveItemRoute = (item: MenuItem): string => {
     border-color: rgba(15, 23, 42, 0.9);
 }
 
-/* Subtle glowing micro animation for active card */
-@keyframes pulseSubtle {
-    0%,
-    100% {
-        border-color: rgba(249, 115, 22, 0.2);
-    }
-    50% {
-        border-color: rgba(249, 115, 22, 0.4);
-    }
-}
-.animate-pulse-subtle {
-    animation: pulseSubtle 3s infinite ease-in-out;
-}
 </style>

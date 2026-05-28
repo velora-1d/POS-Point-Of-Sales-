@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Table;
 use App\Services\OrderPaymentService;
+use App\Services\TableQrConfigService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,12 +16,25 @@ class QrSelfServiceController extends Controller
 {
     public function __construct(
         protected OrderPaymentService $orderPaymentService,
+        protected TableQrConfigService $tableQrConfigService,
     ) {
     }
 
     public function showMenu(string $tableToken): Response
     {
         $table = $this->resolveTable($tableToken);
+        $categories = $this->getOutletCategories($table->outlet_id);
+
+        return Inertia::render('Public/QrOrderMenu', [
+            'table' => $table,
+            'outlet' => $table->outlet,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function showMenuByAlias(string $storeSlug, string $tableCode): Response
+    {
+        $table = $this->tableQrConfigService->resolveTableByAlias($storeSlug, $tableCode);
         $categories = $this->getOutletCategories($table->outlet_id);
 
         return Inertia::render('Public/QrOrderMenu', [

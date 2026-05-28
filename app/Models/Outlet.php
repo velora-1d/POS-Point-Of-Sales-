@@ -39,4 +39,44 @@ class Outlet extends Model
     {
         return $this->hasMany(User::class, 'outlet_id');
     }
+
+    public function tables()
+    {
+        return $this->hasMany(Table::class, 'outlet_id');
+    }
+
+    public function paymentGatewayConfig()
+    {
+        return $this->hasOne(PaymentGatewayConfig::class, 'outlet_id');
+    }
+
+    public function printerConfig()
+    {
+        return $this->hasOne(PrinterConfig::class, 'outlet_id');
+    }
+
+    public function tableQrConfig()
+    {
+        return $this->hasOne(TableQrConfig::class, 'outlet_id');
+    }
+
+    public function notificationSetting()
+    {
+        return $this->hasOne(NotificationSetting::class, 'outlet_id');
+    }
+
+    public function backupSecuritySetting()
+    {
+        return $this->hasOne(BackupSecuritySetting::class, 'outlet_id');
+    }
+
+    public function approvalRule()
+    {
+        return $this->hasOne(ApprovalRule::class, 'outlet_id');
+    }
+
+    public function onlineOrderIntegrations()
+    {
+        return $this->hasMany(OnlineOrderIntegration::class, 'outlet_id');
+    }
 }

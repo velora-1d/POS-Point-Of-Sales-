@@ -18,9 +18,11 @@ class OrderPaymentService
 {
     public function __construct(
         protected PakasirService $pakasirService,
+        protected PaymentGatewayConfigService $paymentGatewayConfigService,
         protected TableReservationService $tableReservationService,
         protected PromoEngineService $promoEngineService,
         protected ShiftService $shiftService,
+        protected ApprovalRuleService $approvalRuleService,
     ) {
     }
 
@@ -50,6 +52,9 @@ class OrderPaymentService
             $payload['table_id'] ?? null,
         );
         [, $items] = $this->prepareItems($outletId, $payload['items']);
+        if (($payload['payment_option'] ?? 'pay_later') === 'pay_now' && ($payload['payment_method'] ?? null) === 'qris') {
+            $this->paymentGatewayConfigService->assertMethodEnabledForOutlet($outletId, 'qris');
+        }
         $pricing = $this->promoEngineService->calculate(
             $outletId,
             $items,
@@ -58,6 +63,11 @@ class OrderPaymentService
                 ? ($payload['payment_method'] ?? null)
                 : null,
             $payload['promo_code'] ?? null,
+        );
+        $this->approvalRuleService->assertManualDiscountApproval(
+            $outletId,
+            $pricing,
+            $payload['approval_pin'] ?? null,
         );
 
         return DB::transaction(function () use ($payload, $actor, $outletId, $customer, $reservation, $items, $pricing, $activeShift) {
@@ -97,11 +107,21 @@ class OrderPaymentService
             $order->refresh();
         }
 
-        $this->repriceExistingOrder(
+        $pricing = $this->calculateExistingOrderPricing(
             $order,
             $payload['payment_method'],
             $payload['promo_code'] ?? data_get($order->metadata, 'promo.manual_code'),
         );
+        $this->approvalRuleService->assertManualDiscountApproval(
+            $order->outlet_id,
+            $pricing,
+            $payload['approval_pin'] ?? null,
+        );
+        $this->applyExistingOrderPricing($order, $pricing);
+
+        if (($payload['payment_method'] ?? null) === 'qris') {
+            $this->paymentGatewayConfigService->assertMethodEnabledForOutlet($order->outlet_id, 'qris');
+        }
 
         return $payload['payment_method'] === 'cash'
             ? $this->settleExistingOrderWithCash($order, $payload, $context)
@@ -124,6 +144,7 @@ class OrderPaymentService
             'qr_meja',
         );
         [, $items] = $this->prepareItems($table->outlet_id, $payload['items']);
+        $this->paymentGatewayConfigService->assertMethodEnabledForOutlet($table->outlet_id, 'qris');
         $pricing = $this->promoEngineService->calculate(
             $table->outlet_id,
             $items,
@@ -200,7 +221,7 @@ class OrderPaymentService
 
         $expectedAmount = $this->resolveGatewayAmount($order);
         $transaction = $this->pakasirService
-            ->getTransactionDetail($order->order_number, $expectedAmount)['transaction'] ?? null;
+            ->getTransactionDetail($order->order_number, $expectedAmount, $order->outlet_id)['transaction'] ?? null;
 
         if (!$transaction) {
             throw new RuntimeException('Detail transaksi dari Pakasir tidak ditemukan.');
@@ -310,6 +331,7 @@ class OrderPaymentService
             $order->order_number,
             $this->resolveGatewayAmount($order),
             route('kasir.order'),
+            $order->outlet_id,
         );
 
         $order->update([
@@ -398,7 +420,7 @@ class OrderPaymentService
         }
 
         $transaction = $this->pakasirService
-            ->getTransactionDetail($order->order_number, $this->resolveGatewayAmount($order))['transaction'] ?? null;
+            ->getTransactionDetail($order->order_number, $this->resolveGatewayAmount($order), $order->outlet_id)['transaction'] ?? null;
 
         if (($transaction['status'] ?? null) === 'completed') {
             throw ValidationException::withMessages([
@@ -406,7 +428,7 @@ class OrderPaymentService
             ]);
         }
 
-        $this->pakasirService->cancelTransaction($order->order_number, $this->resolveGatewayAmount($order));
+        $this->pakasirService->cancelTransaction($order->order_number, $this->resolveGatewayAmount($order), $order->outlet_id);
     }
 
     protected function createOrderRecord(
@@ -695,7 +717,7 @@ class OrderPaymentService
         ];
     }
 
-    protected function repriceExistingOrder(Order $order, ?string $paymentMethod, ?string $promoCode): void
+    protected function calculateExistingOrderPricing(Order $order, ?string $paymentMethod, ?string $promoCode): array
     {
         $order->loadMissing(['items.product', 'customer.membership.tier']);
 
@@ -711,14 +733,18 @@ class OrderPaymentService
             ];
         })->all();
 
-        $previousPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []);
-        $pricing = $this->promoEngineService->calculate(
+        return $this->promoEngineService->calculate(
             $order->outlet_id,
             $items,
             $order->customer,
             $paymentMethod,
             $promoCode,
         );
+    }
+
+    protected function applyExistingOrderPricing(Order $order, array $pricing): void
+    {
+        $previousPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []);
 
         $metadata = $order->metadata ?? [];
         $metadata['promo'] = $this->buildPromoMetadata($pricing);

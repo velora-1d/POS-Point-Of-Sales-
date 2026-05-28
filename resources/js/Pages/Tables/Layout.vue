@@ -34,7 +34,9 @@ interface TablePayload {
     name: string;
     capacity?: number | null;
     status: 'available' | 'occupied' | 'reserved';
+    qr_code?: string | null;
     qr_session_token?: string | null;
+    public_qr_url?: string | null;
     position_x?: number | null;
     position_y?: number | null;
     active_reservation?: TableReservationPayload | null;
@@ -227,9 +229,11 @@ const tableCards = computed(() =>
             latestOrder,
             activeReservation,
             customerLabel,
-            qrLabel: table.qr_session_token || null,
+            qrLabel: table.qr_code || table.qr_session_token || null,
             kasirUrl: `${route('kasir.order')}?table_id=${table.id}`,
-            qrUrl: table.qr_session_token
+            qrUrl: table.public_qr_url
+                ? table.public_qr_url
+                : table.qr_session_token
                 ? route('self-service.menu', table.qr_session_token)
                 : null,
         };
@@ -489,7 +493,7 @@ const printSelectedQr = () => {
                     <h1>${selectedQrTable.value.name}</h1>
                     <p>Scan untuk buka menu self-service meja</p>
                     <img src="${qrPreviewUrl.value}" alt="QR ${selectedQrTable.value.name}" />
-                    <p><strong>Token:</strong> ${selectedQrTable.value.qrLabel ?? '-'}</p>
+                    <p><strong>Kode QR:</strong> ${selectedQrTable.value.qrLabel ?? '-'}</p>
                     <p class="link">${selectedQrTable.value.qrUrl}</p>
                 </div>
                 <script>
@@ -1333,7 +1337,7 @@ const cancelReservation = (reservationId: string) => {
                     class="mt-4 rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-3"
                 >
                     <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                        Token Meja
+                        Kode QR Meja
                     </p>
                     <p class="mt-1 break-all text-sm font-bold text-white">
                         {{ selectedQrTable.qrLabel || '-' }}

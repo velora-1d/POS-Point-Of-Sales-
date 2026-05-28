@@ -17,6 +17,8 @@ class StoreOnlineOrderWebhookRequest extends FormRequest
         return [
             'outlet_id' => ['required', 'exists:outlets,id'],
             'external_order_id' => ['required', 'string', 'max:100'],
+            'merchant_id' => ['nullable', 'string', 'max:100'],
+            'external_outlet_id' => ['nullable', 'string', 'max:100'],
             'customer_name' => ['required', 'string', 'max:100'],
             'customer_phone' => ['nullable', 'string', 'max:20'],
             'customer_email' => ['nullable', 'email', 'max:100'],

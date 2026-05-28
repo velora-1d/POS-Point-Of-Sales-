@@ -15,6 +15,7 @@ class OnlineOrderService
     public function __construct(
         protected OnlineOrderRepository $onlineOrderRepository,
         protected OnlineOrderStatusSyncService $onlineOrderStatusSyncService,
+        protected OnlineOrderIntegrationService $onlineOrderIntegrationService,
     ) {
     }
 
@@ -60,6 +61,7 @@ class OnlineOrderService
     public function receiveWebhook(string $platform, array $payload): array
     {
         $normalizedPlatform = $this->normalizePlatform($platform);
+        $integration = $this->onlineOrderIntegrationService->assertWebhookConfigured($normalizedPlatform, $payload);
         $outletId = (string) $payload['outlet_id'];
         $existingOrder = $this->onlineOrderRepository->findExistingByExternal(
             $outletId,
@@ -111,6 +113,9 @@ class OnlineOrderService
                     'online_order' => [
                         'platform' => $normalizedPlatform,
                         'received_at' => now()->toIso8601String(),
+                        'merchant_id' => $integration->merchant_id,
+                        'external_outlet_id' => $integration->external_outlet_id,
+                        'environment' => $integration->environment,
                     ],
                     'external_payload' => $payload['metadata'] ?? [],
                 ],

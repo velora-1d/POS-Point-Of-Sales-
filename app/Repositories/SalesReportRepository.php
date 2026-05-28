@@ -22,6 +22,7 @@ class SalesReportRepository
     public function getSettledOrdersSnapshot(array $filters = [], ?string $scopeOutletId = null): Collection
     {
         return $this->baseSettledOrdersQuery($filters, $scopeOutletId)
+            ->with(['outlet:id,name', 'cashier:id,name'])
             ->withSum('items as total_items_quantity', 'quantity')
             ->orderBy('created_at')
             ->get();

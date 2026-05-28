@@ -15,6 +15,7 @@ class OrderEditService
 {
     public function __construct(
         protected PromoEngineService $promoEngineService,
+        protected ApprovalRuleService $approvalRuleService,
     ) {
     }
 
@@ -32,10 +33,6 @@ class OrderEditService
             ]);
         }
 
-        if ($order->status === 'in_progress') {
-            $this->validateSupervisorApproval($order->outlet_id, $payload['approval_pin'] ?? null);
-        }
-
         $items = $this->prepareItems($order, $payload['items']);
         $previousPromoIds = $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []);
         $paymentStatus = data_get($order->metadata, 'payment.status');
@@ -49,11 +46,22 @@ class OrderEditService
             $paymentMethod,
             data_get($order->metadata, 'promo.manual_code'),
         );
+        $requiresOwnerApproval = $this->approvalRuleService->assertOrderEditApproval(
+            $order,
+            (float) $pricing['total_amount'],
+            $payload['approval_pin'] ?? null,
+        );
+
+        if ($order->status === 'in_progress' && !$requiresOwnerApproval) {
+            $this->validateSupervisorApproval($order->outlet_id, $payload['approval_pin'] ?? null);
+        }
+
         $metadata = array_merge($order->metadata ?? [], [
             'last_internal_edit' => [
                 'edited_by' => $actor->id,
                 'edited_at' => now()->toIso8601String(),
-                'required_supervisor_approval' => $order->status === 'in_progress',
+                'required_supervisor_approval' => $order->status === 'in_progress' && !$requiresOwnerApproval,
+                'required_owner_approval' => $requiresOwnerApproval,
             ],
         ]);
         $metadata['promo'] = $this->buildPromoMetadata($pricing);

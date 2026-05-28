@@ -8,9 +8,14 @@ use RuntimeException;
 
 class PakasirService
 {
-    public function buildQrisCheckoutUrl(string $orderId, int $amount, string $redirectUrl): string
+    public function __construct(
+        protected PaymentGatewayConfigService $paymentGatewayConfigService,
+    ) {
+    }
+
+    public function buildQrisCheckoutUrl(string $orderId, int $amount, string $redirectUrl, ?string $outletId = null): string
     {
-        $config = $this->getConfig();
+        $config = $this->getConfig($outletId);
 
         return sprintf(
             '%s/pay/%s/%d?%s',
@@ -25,33 +30,33 @@ class PakasirService
         );
     }
 
-    public function getTransactionDetail(string $orderId, int $amount): array
+    public function getTransactionDetail(string $orderId, int $amount, ?string $outletId = null): array
     {
-        $config = $this->getConfig();
+        $config = $this->getConfig($outletId);
 
         return $this->sendJsonRequest('GET', '/api/transactiondetail', [
             'project' => $config['slug'],
             'amount' => $amount,
             'order_id' => $orderId,
             'api_key' => $config['api_key'],
-        ]);
+        ], $outletId);
     }
 
-    public function cancelTransaction(string $orderId, int $amount): array
+    public function cancelTransaction(string $orderId, int $amount, ?string $outletId = null): array
     {
-        $config = $this->getConfig();
+        $config = $this->getConfig($outletId);
 
         return $this->sendJsonRequest('POST', '/api/transactioncancel', [
             'project' => $config['slug'],
             'amount' => $amount,
             'order_id' => $orderId,
             'api_key' => $config['api_key'],
-        ]);
+        ], $outletId);
     }
 
-    protected function sendJsonRequest(string $method, string $path, array $payload): array
+    protected function sendJsonRequest(string $method, string $path, array $payload, ?string $outletId = null): array
     {
-        $config = $this->getConfig();
+        $config = $this->getConfig($outletId);
 
         try {
             $response = Http::acceptJson()
@@ -68,12 +73,13 @@ class PakasirService
         return $response->json() ?? [];
     }
 
-    protected function getConfig(): array
+    protected function getConfig(?string $outletId = null): array
     {
+        $resolved = $this->paymentGatewayConfigService->resolvePakasirConfig($outletId);
         $config = [
-            'api_key' => config('services.pakasir.api_key'),
-            'base_url' => config('services.pakasir.base_url'),
-            'slug' => config('services.pakasir.slug'),
+            'api_key' => $resolved['api_key'] ?? null,
+            'base_url' => $resolved['base_url'] ?? null,
+            'slug' => $resolved['project_slug'] ?? null,
         ];
 
         if (!$config['api_key'] || !$config['slug'] || !$config['base_url']) {

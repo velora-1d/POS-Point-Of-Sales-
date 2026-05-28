@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import {
     ChevronLeft,
     Clock,
@@ -48,6 +48,7 @@ const paymentOption = ref<PaymentOption>('pay_later');
 const newOrderPaymentMethod = ref<PaymentMethod>('cash');
 const newOrderCashReceived = ref('');
 const newOrderPromoCode = ref('');
+const newOrderApprovalPin = ref('');
 
 // Product filtering
 const activeCategory = ref<string>('all');
@@ -88,7 +89,14 @@ const paymentTargetOrder = ref<any>(null);
 const existingPaymentMethod = ref<PaymentMethod>('cash');
 const existingPaymentCashReceived = ref('');
 const existingPaymentPromoCode = ref('');
+const existingPaymentApprovalPin = ref('');
 const isProcessingPayment = ref(false);
+const kasbonModalOpen = ref(false);
+const kasbonTargetOrder = ref<any>(null);
+const kasbonForm = useForm({
+    due_date: '',
+    notes: '',
+});
 const paymentCheckoutModalOpen = ref(Boolean(props.paymentCheckout));
 const activePaymentCheckout = ref<Record<string, any> | null>(
     props.paymentCheckout ?? null,
@@ -438,6 +446,7 @@ const selectTable = (table: any) => {
     resetEditOrderState();
     resetSplitBillState();
     resetMergeBillState();
+    closeKasbonModal();
     closePaymentModal();
 };
 
@@ -457,6 +466,7 @@ const selectTakeawayOrder = () => {
     resetEditOrderState();
     resetSplitBillState();
     resetMergeBillState();
+    closeKasbonModal();
     closePaymentModal();
 };
 
@@ -471,6 +481,7 @@ const resetTableSelection = () => {
     resetEditOrderState();
     resetSplitBillState();
     resetMergeBillState();
+    closeKasbonModal();
     closePaymentModal();
 };
 
@@ -487,6 +498,7 @@ const resetNewOrderPaymentState = () => {
     newOrderPaymentMethod.value = 'cash';
     newOrderCashReceived.value = '';
     newOrderPromoCode.value = '';
+    newOrderApprovalPin.value = '';
 };
 
 const selectCustomer = (customer: any) => {
@@ -605,27 +617,53 @@ const getPaymentActionHint = (order: any) => {
     return 'Settlement akhir transaksi dine in / takeaway yang sudah siap ditutup.';
 };
 
-const openPaymentModal = () => {
-    const activeOrder = selectedManagedOrder.value;
+const canCloseAsKasbon = (order: any) => {
+    if (!order || isOrderPaid(order)) return false;
+    if (!order.customer?.id && !order.customer_id) return false;
 
-    if (!activeOrder) {
+    return ['waiting_bar_approval', 'ready', 'delivered'].includes(order.status);
+};
+
+const getKasbonActionHint = (order: any) => {
+    if (!order?.customer?.id && !order?.customer_id) {
+        return 'Kasbon butuh data customer aktif pada order ini.';
+    }
+
+    if (isOrderPaid(order)) {
+        return 'Order ini sudah lunas, tidak bisa ditutup sebagai kasbon.';
+    }
+
+    if (!['waiting_bar_approval', 'ready', 'delivered'].includes(order?.status)) {
+        return 'Kasbon dipakai setelah layanan siap ditutup dan masih ada sisa tagihan.';
+    }
+
+    return 'Tutup transaksi sebagai piutang customer, lalu cicilan dilanjutkan dari menu transaksi.';
+};
+
+const openPaymentModalForOrder = (order: any) => {
+    if (!order) {
         showLocalToast('Pilih order aktif yang ingin dibayar.');
         return;
     }
 
-    if (!canOpenPaymentModal(activeOrder)) {
+    if (!canOpenPaymentModal(order)) {
         showLocalToast(
             'Order ini belum masuk tahap pembayaran atau sudah lunas.',
         );
         return;
     }
 
-    paymentTargetOrder.value = activeOrder;
+    paymentTargetOrder.value = order;
     existingPaymentMethod.value =
-        activeOrder.status === 'payment_pending' ? 'qris' : 'cash';
+        order.status === 'payment_pending' ? 'qris' : 'cash';
     existingPaymentCashReceived.value = '';
-    existingPaymentPromoCode.value = getPromoMeta(activeOrder).manual_code || '';
+    existingPaymentPromoCode.value = getPromoMeta(order).manual_code || '';
+    existingPaymentApprovalPin.value = '';
     paymentModalOpen.value = true;
+};
+
+const openPaymentModal = () => {
+    openPaymentModalForOrder(selectedManagedOrder.value);
 };
 
 const closePaymentModal = () => {
@@ -634,7 +672,38 @@ const closePaymentModal = () => {
     existingPaymentMethod.value = 'cash';
     existingPaymentCashReceived.value = '';
     existingPaymentPromoCode.value = '';
+    existingPaymentApprovalPin.value = '';
     isProcessingPayment.value = false;
+};
+
+const openKasbonModalForOrder = (order: any) => {
+    if (!order) {
+        showLocalToast('Pilih order aktif yang ingin ditutup sebagai kasbon.');
+        return;
+    }
+
+    if (!canCloseAsKasbon(order)) {
+        showLocalToast(getKasbonActionHint(order));
+        return;
+    }
+
+    kasbonTargetOrder.value = order;
+    kasbonForm.reset();
+    kasbonForm.clearErrors();
+    kasbonForm.due_date = '';
+    kasbonForm.notes = '';
+    kasbonModalOpen.value = true;
+};
+
+const openKasbonModal = () => {
+    openKasbonModalForOrder(selectedManagedOrder.value);
+};
+
+const closeKasbonModal = () => {
+    kasbonModalOpen.value = false;
+    kasbonTargetOrder.value = null;
+    kasbonForm.reset();
+    kasbonForm.clearErrors();
 };
 
 const openEditOrder = () => {
@@ -973,6 +1042,7 @@ const submitExistingPayment = () => {
         {
             payment_method: existingPaymentMethod.value,
             promo_code: existingPaymentPromoCode.value || null,
+            approval_pin: existingPaymentApprovalPin.value || null,
             cash_received:
                 existingPaymentMethod.value === 'cash' &&
                 existingPaymentCashReceived.value
@@ -991,9 +1061,36 @@ const submitExistingPayment = () => {
                 isProcessingPayment.value = false;
                 showLocalToast(
                     errors.promo_code ||
+                        errors.approval_pin ||
                     errors.cash_received ||
                         errors.error ||
                         'Gagal memproses pembayaran order.',
+                );
+            },
+        },
+    );
+};
+
+const submitKasbon = () => {
+    if (!kasbonTargetOrder.value) return;
+
+    kasbonForm.post(
+        route('transactions.kasbon.close', kasbonTargetOrder.value.id),
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeKasbonModal();
+                resetTableSelection();
+                showLocalToast('Order berhasil ditutup sebagai kasbon.');
+            },
+            onError: (errors) => {
+                showLocalToast(
+                    errors.customer ||
+                        errors.order ||
+                        errors.due_date ||
+                        errors.notes ||
+                        errors.error ||
+                        'Gagal menutup order sebagai kasbon.',
                 );
             },
         },
@@ -1017,6 +1114,7 @@ const submitOrder = () => {
         customer_phone: customerPhone.value || null,
         customer_email: customerEmail.value || null,
         promo_code: newOrderPromoCode.value || null,
+        approval_pin: newOrderApprovalPin.value || null,
         payment_option: paymentOption.value,
         payment_method:
             paymentOption.value === 'pay_now'
@@ -1051,6 +1149,7 @@ const submitOrder = () => {
             } else {
                 showLocalToast(
                     errors.promo_code ||
+                        errors.approval_pin ||
                     'Gagal menyimpan pesanan. Silakan periksa isian.',
                 );
             }
@@ -2221,6 +2320,23 @@ const openPaymentCheckout = () => {
                                 <p class="text-[11px] leading-5 text-slate-500">
                                     Promo otomatis, tier member, happy hour, dan voucher diverifikasi server saat order disimpan.
                                 </p>
+                                <div class="pt-1">
+                                    <label
+                                        class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-400"
+                                    >
+                                        PIN Owner (Opsional)
+                                    </label>
+                                    <input
+                                        v-model="newOrderApprovalPin"
+                                        type="password"
+                                        inputmode="numeric"
+                                        placeholder="Isi jika diskon manual melewati threshold"
+                                        class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-200 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    />
+                                    <p class="mt-2 text-[11px] leading-5 text-slate-500">
+                                        Hanya diperlukan jika voucher atau diskon manual memicu approval owner.
+                                    </p>
+                                </div>
                             </div>
                             <div class="flex justify-between text-slate-400">
                                 <span>Subtotal:</span>
@@ -2505,6 +2621,24 @@ const openPaymentCheckout = () => {
 
                         <div class="group relative">
                             <button
+                                @click="openKasbonModal"
+                                :disabled="!canCloseAsKasbon(selectedManagedOrder)"
+                                class="flex w-full items-center justify-between rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs font-bold text-amber-300 transition duration-150 hover:bg-amber-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                <span>Tutup Sebagai Kasbon</span>
+                                <span
+                                    class="rounded border border-amber-500/20 bg-slate-900 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-amber-300"
+                                >
+                                    Menu #7 - Live
+                                </span>
+                            </button>
+                            <p class="mt-1 px-1 text-[10px] text-slate-500">
+                                {{ getKasbonActionHint(selectedManagedOrder) }}
+                            </p>
+                        </div>
+
+                        <div class="group relative">
+                            <button
                                 @click="openEditOrder"
                                 class="flex w-full items-center justify-between rounded-xl border border-sky-500/20 bg-sky-500/5 p-3.5 text-xs font-bold text-sky-300 transition duration-150 hover:bg-sky-500/10"
                             >
@@ -2679,6 +2813,34 @@ const openPaymentCheckout = () => {
                                         {{ getOrderCustomerSecondary(order) }}
                                     </p>
                                 </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2">
+                                <button
+                                    v-if="canOpenPaymentModal(order)"
+                                    type="button"
+                                    @click="openPaymentModalForOrder(order)"
+                                    class="rounded-xl border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-orange-300 transition hover:bg-orange-500/15"
+                                >
+                                    {{ getPaymentActionLabel(order) }}
+                                </button>
+                                <button
+                                    v-if="canCloseAsKasbon(order)"
+                                    type="button"
+                                    @click="openKasbonModalForOrder(order)"
+                                    class="rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-amber-300 transition hover:bg-amber-500/15"
+                                >
+                                    Tutup Kasbon
+                                </button>
+                                <span
+                                    v-else-if="
+                                        !canCloseAsKasbon(order) &&
+                                        !isOrderPaid(order)
+                                    "
+                                    class="rounded-xl border border-slate-800 bg-slate-900/70 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500"
+                                >
+                                    {{ getKasbonActionHint(order) }}
+                                </span>
                             </div>
 
                             <!-- Footer detail items counter -->
@@ -3450,6 +3612,151 @@ const openPaymentCheckout = () => {
             leave-to-class="opacity-0"
         >
             <div
+                v-if="kasbonModalOpen && kasbonTargetOrder"
+                class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/85 p-4 backdrop-blur-sm"
+            >
+                <div
+                    class="w-full max-w-xl rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl"
+                >
+                    <div
+                        class="flex items-start justify-between gap-4 border-b border-slate-800/80 px-6 py-5"
+                    >
+                        <div>
+                            <span
+                                class="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-amber-300"
+                            >
+                                Menu #7 • Kasbon
+                            </span>
+                            <h3 class="mt-3 text-xl font-black text-white">
+                                {{ kasbonTargetOrder.order_number }}
+                            </h3>
+                            <p class="mt-1 text-xs text-slate-400">
+                                Tutup transaksi sebagai piutang pelanggan dan lanjutkan cicilan dari menu transaksi.
+                            </p>
+                        </div>
+                        <button
+                            @click="closeKasbonModal"
+                            class="text-slate-500 transition hover:text-slate-200"
+                        >
+                            <X class="h-5 w-5" />
+                        </button>
+                    </div>
+
+                    <div class="space-y-4 px-6 py-5">
+                        <div
+                            class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+                        >
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                    >
+                                        Customer
+                                    </p>
+                                    <p class="mt-2 text-sm font-bold text-white">
+                                        {{
+                                            kasbonTargetOrder.customer?.name ||
+                                            'Customer tidak ditemukan'
+                                        }}
+                                    </p>
+                                    <p class="mt-1 text-xs text-slate-400">
+                                        {{
+                                            kasbonTargetOrder.customer?.phone ||
+                                            'Tanpa nomor HP'
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                    >
+                                        Sisa Tagihan
+                                    </p>
+                                    <p class="mt-2 text-lg font-black text-amber-300">
+                                        {{
+                                            formatPrice(
+                                                Number(
+                                                    kasbonTargetOrder.total_amount,
+                                                ) -
+                                                    Number(
+                                                        kasbonTargetOrder.paid_amount ||
+                                                            0,
+                                                    ),
+                                            )
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label
+                                    class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-400"
+                                >
+                                    Jatuh Tempo
+                                </label>
+                                <input
+                                    v-model="kasbonForm.due_date"
+                                    type="date"
+                                    class="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-slate-200 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                                />
+                                <p class="mt-2 text-[11px] text-slate-500">
+                                    Opsional. Jika diisi, tanggal akan dipakai di daftar kasbon dan struk.
+                                </p>
+                            </div>
+
+                            <div>
+                                <label
+                                    class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-400"
+                                >
+                                    Catatan Kasbon
+                                </label>
+                                <textarea
+                                    v-model="kasbonForm.notes"
+                                    rows="4"
+                                    placeholder="Contoh: pelanggan bayar 3 hari lagi"
+                                    class="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-slate-200 placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-center justify-end gap-3 border-t border-slate-800/80 px-6 py-4"
+                    >
+                        <button
+                            @click="closeKasbonModal"
+                            type="button"
+                            class="rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs font-bold text-slate-300"
+                        >
+                            Batal
+                        </button>
+                        <button
+                            @click="submitKasbon"
+                            :disabled="kasbonForm.processing"
+                            class="rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-3 text-xs font-bold text-white disabled:pointer-events-none disabled:opacity-50"
+                        >
+                            {{
+                                kasbonForm.processing
+                                    ? 'Menyimpan Kasbon...'
+                                    : 'Tutup Sebagai Kasbon'
+                            }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Transition>
+
+        <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+        >
+            <div
                 v-if="paymentModalOpen && paymentTargetOrder"
                 class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/85 p-4 backdrop-blur-sm"
             >
@@ -3633,6 +3940,23 @@ const openPaymentCheckout = () => {
                             <p class="mt-2 text-[11px] leading-relaxed text-slate-500">
                                 Total tagihan akan divalidasi ulang dengan promo otomatis, metode bayar, tier member, dan voucher sebelum settlement diproses.
                             </p>
+                            <div class="mt-4">
+                                <label
+                                    class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-400"
+                                >
+                                    PIN Owner (Opsional)
+                                </label>
+                                <input
+                                    v-model="existingPaymentApprovalPin"
+                                    type="password"
+                                    inputmode="numeric"
+                                    placeholder="Isi jika diskon manual melewati threshold"
+                                    class="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-slate-200 placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                />
+                                <p class="mt-2 text-[11px] leading-relaxed text-slate-500">
+                                    Approval owner hanya dipakai bila promo manual menghasilkan diskon di atas batas outlet.
+                                </p>
+                            </div>
                         </div>
                     </div>
 

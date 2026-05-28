@@ -17,8 +17,8 @@ use App\Models\User;
 use App\Services\OrderBillService;
 use App\Services\OrderEditService;
 use App\Services\OrderPaymentService;
+use App\Services\TableQrConfigService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -27,6 +27,7 @@ class OrderController extends Controller
         protected OrderEditService $orderEditService,
         protected OrderBillService $orderBillService,
         protected OrderPaymentService $orderPaymentService,
+        protected TableQrConfigService $tableQrConfigService,
     ) {
     }
 
@@ -196,6 +197,8 @@ class OrderController extends Controller
 
     protected function loadOutletTables(string $outletId)
     {
+        $this->tableQrConfigService->ensureOutletTablesReady($outletId);
+
         $tables = Table::where('outlet_id', $outletId)
             ->where('is_active', true)
             ->with([
@@ -211,16 +214,13 @@ class OrderController extends Controller
             ])
             ->orderBy('name')
             ->get();
+        $qrConfig = $this->tableQrConfigService->getConfigForOutlet($outletId);
 
-        $tables->each(function (Table $table): void {
-            if ($table->qr_session_token && $table->qr_code) {
-                return;
-            }
-
-            $table->forceFill([
-                'qr_session_token' => $table->qr_session_token ?: (string) Str::ulid(),
-                'qr_code' => $table->qr_code ?: 'QR-' . strtoupper(Str::random(10)),
-            ])->save();
+        $tables->each(function (Table $table) use ($qrConfig): void {
+            $table->setAttribute(
+                'public_qr_url',
+                $this->tableQrConfigService->buildPublicMenuUrlForTable($table, $qrConfig),
+            );
         });
 
         return $tables;

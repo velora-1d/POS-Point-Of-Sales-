@@ -108,4 +108,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderStatusLog::class, 'order_id');
     }
+
+    public function paymentLogs()
+    {
+        return $this->hasMany(OrderPaymentLog::class, 'order_id')
+            ->latest('created_at');
+    }
 }

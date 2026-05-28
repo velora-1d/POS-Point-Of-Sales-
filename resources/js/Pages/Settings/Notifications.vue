@@ -1,0 +1,657 @@
+<script setup lang="ts">
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import {
+    BellRing,
+    Box,
+    CheckCircle2,
+    Mail,
+    ShoppingBag,
+    Store,
+    Wallet,
+} from '@lucide/vue';
+import { computed, watch } from 'vue';
+
+interface OutletOption {
+    id: string;
+    name: string;
+    is_active: boolean;
+    has_config: boolean;
+}
+
+interface ChannelOption {
+    value: 'in_app' | 'whatsapp' | 'email';
+    label: string;
+    description: string;
+}
+
+type ChannelValue = ChannelOption['value'];
+
+const props = defineProps<{
+    outlets: OutletOption[];
+    selectedOutlet: {
+        id: string;
+        name: string;
+        is_active: boolean;
+    } | null;
+    summary: {
+        total_outlets: number;
+        configured_outlets: number;
+        whatsapp_enabled: number;
+        email_enabled: number;
+    };
+    formDefaults: {
+        outlet_id: string | null;
+        low_stock_enabled: boolean;
+        low_stock_channels: ChannelValue[];
+        kasbon_due_enabled: boolean;
+        kasbon_due_channels: ChannelValue[];
+        kasbon_due_threshold_days: number;
+        online_order_enabled: boolean;
+        online_order_channels: ChannelValue[];
+        has_config: boolean;
+    };
+    alertOptions: {
+        channels: ChannelOption[];
+    };
+    snapshots: {
+        low_stock: {
+            count: number;
+            critical: number;
+            items: Array<{
+                id: string;
+                type: string;
+                name: string;
+                context: string;
+                current_stock: number;
+                minimum_stock: number;
+                unit: string;
+            }>;
+        };
+        kasbon_due: {
+            count: number;
+            total_outstanding: number;
+            items: Array<{
+                id: string;
+                order_number: string;
+                customer_name: string;
+                customer_phone?: string | null;
+                outstanding_amount: number;
+                age_days: number;
+                created_at?: string | null;
+            }>;
+        };
+        online_order: {
+            count: number;
+            today_orders: number;
+            items: Array<{
+                id: string;
+                order_number: string;
+                platform: string;
+                status: string;
+                customer_name?: string | null;
+                total_amount: number;
+                created_at?: string | null;
+            }>;
+        };
+    };
+    filters: {
+        outlet_id?: string | null;
+    };
+    success?: string | null;
+}>();
+
+const form = useForm({
+    outlet_id: props.formDefaults.outlet_id || props.selectedOutlet?.id || '',
+    low_stock_enabled: Boolean(props.formDefaults.low_stock_enabled),
+    low_stock_channels: [...props.formDefaults.low_stock_channels],
+    kasbon_due_enabled: Boolean(props.formDefaults.kasbon_due_enabled),
+    kasbon_due_channels: [...props.formDefaults.kasbon_due_channels],
+    kasbon_due_threshold_days: String(props.formDefaults.kasbon_due_threshold_days || 3),
+    online_order_enabled: Boolean(props.formDefaults.online_order_enabled),
+    online_order_channels: [...props.formDefaults.online_order_channels],
+});
+
+watch(
+    () => props.formDefaults,
+    (defaults) => {
+        form.defaults({
+            outlet_id: defaults.outlet_id || props.selectedOutlet?.id || '',
+            low_stock_enabled: Boolean(defaults.low_stock_enabled),
+            low_stock_channels: [...defaults.low_stock_channels],
+            kasbon_due_enabled: Boolean(defaults.kasbon_due_enabled),
+            kasbon_due_channels: [...defaults.kasbon_due_channels],
+            kasbon_due_threshold_days: String(defaults.kasbon_due_threshold_days || 3),
+            online_order_enabled: Boolean(defaults.online_order_enabled),
+            online_order_channels: [...defaults.online_order_channels],
+        });
+
+        form.reset();
+        form.clearErrors();
+    },
+    { deep: true },
+);
+
+const summaryCards = computed(() => [
+    {
+        label: 'Total Outlet',
+        value: props.summary.total_outlets,
+        helper: `${props.summary.configured_outlets} outlet sudah punya setting notifikasi`,
+        tone: 'text-white',
+        surface: 'border-white/10 bg-white/[0.03]',
+        icon: Store,
+    },
+    {
+        label: 'WhatsApp Ready',
+        value: props.summary.whatsapp_enabled,
+        helper: 'Outlet yang mengaktifkan channel WhatsApp',
+        tone: 'text-emerald-300',
+        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        icon: BellRing,
+    },
+    {
+        label: 'Email Ready',
+        value: props.summary.email_enabled,
+        helper: 'Outlet yang mengaktifkan channel email',
+        tone: 'text-sky-300',
+        surface: 'border-sky-400/15 bg-sky-500/10',
+        icon: Mail,
+    },
+    {
+        label: 'Threshold Kasbon',
+        value: `${form.kasbon_due_threshold_days || 3} hari`,
+        helper: 'Batas umur kasbon untuk masuk alert overdue',
+        tone: 'text-amber-300',
+        surface: 'border-amber-400/15 bg-amber-500/10',
+        icon: Wallet,
+    },
+]);
+
+const selectedOutletOption = computed(() => {
+    return props.outlets.find((outlet) => outlet.id === form.outlet_id) || null;
+});
+
+function formatCurrency(value: number | string) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0,
+    }).format(Number(value || 0));
+}
+
+function formatDateTime(value?: string | null) {
+    if (!value) return '-';
+
+    return new Intl.DateTimeFormat('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+    }).format(new Date(value));
+}
+
+function formatChannelLabel(value: ChannelValue) {
+    if (value === 'in_app') return 'In-app';
+    if (value === 'whatsapp') return 'WhatsApp';
+    return 'Email';
+}
+
+function formatOrderStatus(value: string) {
+    switch (value) {
+        case 'in_progress':
+            return 'Diproses';
+        case 'waiting_bar_approval':
+            return 'Menunggu bar';
+        case 'ready':
+            return 'Siap';
+        default:
+            return 'Pending';
+    }
+}
+
+function openSelectedOutlet(outletId: string) {
+    router.get(
+        route('settings.notifications.index'),
+        {
+            outlet_id: outletId || undefined,
+        },
+        {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+        },
+    );
+}
+
+function toggleChannel(field: 'low_stock_channels' | 'kasbon_due_channels' | 'online_order_channels', channel: ChannelValue, checked: boolean) {
+    const next = new Set(form[field]);
+
+    if (checked) {
+        next.add(channel);
+    } else {
+        next.delete(channel);
+    }
+
+    form[field] = Array.from(next.values()) as ChannelValue[];
+}
+
+function submitSave() {
+    form.put(route('settings.notifications.update'), {
+        preserveScroll: true,
+        preserveState: true,
+    });
+}
+</script>
+
+<template>
+    <Head title="Notifikasi & Alert" />
+
+    <AuthenticatedLayout>
+        <template #header>
+            <div class="flex flex-col gap-2">
+                <div
+                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
+                >
+                    <BellRing class="h-3.5 w-3.5" />
+                    Menu #59 Notifikasi & Alert
+                </div>
+                <div>
+                    <h2 class="text-2xl font-black tracking-tight text-white">
+                        Notifikasi & Alert
+                    </h2>
+                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                        Kelola kanal notifikasi untuk alert stok menipis, kasbon overdue, dan order online baru
+                        berdasarkan outlet aktif.
+                    </p>
+                </div>
+            </div>
+        </template>
+
+        <div class="space-y-5">
+            <div
+                v-if="success"
+                class="rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
+            >
+                {{ success }}
+            </div>
+
+            <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <article
+                    v-for="card in summaryCards"
+                    :key="card.label"
+                    class="rounded-[24px] border p-4"
+                    :class="card.surface"
+                >
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                                {{ card.label }}
+                            </p>
+                            <p class="mt-3 text-2xl font-black" :class="card.tone">{{ card.value }}</p>
+                            <p class="mt-2 text-xs text-slate-400">{{ card.helper }}</p>
+                        </div>
+                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+                            <component :is="card.icon" class="h-5 w-5 text-white" />
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <div class="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
+                <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <div class="grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
+                        <div>
+                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                Outlet aktif
+                            </label>
+                            <select
+                                :value="form.outlet_id"
+                                @change="openSelectedOutlet(($event.target as HTMLSelectElement).value)"
+                                class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                            >
+                                <option
+                                    v-for="outlet in outlets"
+                                    :key="outlet.id"
+                                    :value="outlet.id"
+                                >
+                                    {{ outlet.name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+                            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                Ringkasan outlet
+                            </p>
+                            <div class="mt-3 space-y-2 text-sm text-slate-200">
+                                <div class="flex items-center justify-between gap-3">
+                                    <span>Status outlet</span>
+                                    <span
+                                        class="rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                                        :class="selectedOutlet?.is_active
+                                            ? 'border border-emerald-400/20 bg-emerald-500/10 text-emerald-300'
+                                            : 'border border-amber-400/20 bg-amber-500/10 text-amber-300'"
+                                    >
+                                        {{ selectedOutlet?.is_active ? 'Aktif' : 'Nonaktif' }}
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between gap-3">
+                                    <span>Setting tersimpan</span>
+                                    <span class="text-slate-400">
+                                        {{ formDefaults.has_config ? 'Sudah ada override' : 'Masih default' }}
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between gap-3">
+                                    <span>Channel aktif</span>
+                                    <span class="text-right text-slate-400">
+                                        {{ [
+                                            ...new Set([
+                                                ...form.low_stock_channels,
+                                                ...form.kasbon_due_channels,
+                                                ...form.online_order_channels,
+                                            ]),
+                                        ].map((value) => formatChannelLabel(value as ChannelValue)).join(', ') || '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="mt-5 space-y-4" @submit.prevent="submitSave">
+                        <article class="rounded-[24px] border border-slate-800 bg-slate-950/55 p-4">
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-3">
+                                        <Box class="h-5 w-5 text-amber-300" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-black text-white">Low Stock Notifications</h3>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            Alert saat stok produk jadi atau bahan baku turun di bawah minimum.
+                                        </p>
+                                    </div>
+                                </div>
+                                <label class="inline-flex cursor-pointer items-center">
+                                    <input v-model="form.low_stock_enabled" type="checkbox" class="peer sr-only" />
+                                    <div class="relative h-6 w-11 rounded-full bg-slate-700 transition peer-checked:bg-orange-500 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-full"></div>
+                                </label>
+                            </div>
+                            <div class="mt-4 border-t border-slate-800 pt-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                    Channels
+                                </p>
+                                <div class="mt-3 grid gap-3 sm:grid-cols-3">
+                                    <label
+                                        v-for="channel in alertOptions.channels"
+                                        :key="`low-${channel.value}`"
+                                        class="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                    >
+                                        <input
+                                            :checked="form.low_stock_channels.includes(channel.value)"
+                                            type="checkbox"
+                                            class="mt-1 h-4 w-4 rounded border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                            @change="toggleChannel('low_stock_channels', channel.value, ($event.target as HTMLInputElement).checked)"
+                                        />
+                                        <div>
+                                            <p class="text-sm font-semibold text-white">{{ channel.label }}</p>
+                                            <p class="mt-1 text-xs text-slate-400">{{ channel.description }}</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="rounded-[24px] border border-slate-800 bg-slate-950/55 p-4">
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-3">
+                                        <Wallet class="h-5 w-5 text-rose-300" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-black text-white">Customer Debt Due</h3>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            Karena schema aktif belum punya `due_date`, overdue kasbon dihitung dari umur order belum lunas.
+                                        </p>
+                                    </div>
+                                </div>
+                                <label class="inline-flex cursor-pointer items-center">
+                                    <input v-model="form.kasbon_due_enabled" type="checkbox" class="peer sr-only" />
+                                    <div class="relative h-6 w-11 rounded-full bg-slate-700 transition peer-checked:bg-orange-500 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-full"></div>
+                                </label>
+                            </div>
+                            <div class="mt-4 grid gap-4 border-t border-slate-800 pt-4 md:grid-cols-[180px_minmax(0,1fr)]">
+                                <div>
+                                    <label class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                        Threshold overdue
+                                    </label>
+                                    <input
+                                        v-model="form.kasbon_due_threshold_days"
+                                        type="number"
+                                        min="1"
+                                        max="30"
+                                        class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                    />
+                                    <p v-if="form.errors.kasbon_due_threshold_days" class="mt-2 text-xs text-rose-300">
+                                        {{ form.errors.kasbon_due_threshold_days }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                        Channels
+                                    </p>
+                                    <div class="mt-3 grid gap-3 sm:grid-cols-3">
+                                        <label
+                                            v-for="channel in alertOptions.channels"
+                                            :key="`kasbon-${channel.value}`"
+                                            class="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                        >
+                                            <input
+                                                :checked="form.kasbon_due_channels.includes(channel.value)"
+                                                type="checkbox"
+                                                class="mt-1 h-4 w-4 rounded border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                                @change="toggleChannel('kasbon_due_channels', channel.value, ($event.target as HTMLInputElement).checked)"
+                                            />
+                                            <div>
+                                                <p class="text-sm font-semibold text-white">{{ channel.label }}</p>
+                                                <p class="mt-1 text-xs text-slate-400">{{ channel.description }}</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="rounded-[24px] border border-slate-800 bg-slate-950/55 p-4">
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="rounded-2xl border border-sky-500/20 bg-sky-500/10 p-3">
+                                        <ShoppingBag class="h-5 w-5 text-sky-300" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-black text-white">New Online Order</h3>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            Alert untuk order GoFood/GrabFood yang masuk dan masih aktif hari ini.
+                                        </p>
+                                    </div>
+                                </div>
+                                <label class="inline-flex cursor-pointer items-center">
+                                    <input v-model="form.online_order_enabled" type="checkbox" class="peer sr-only" />
+                                    <div class="relative h-6 w-11 rounded-full bg-slate-700 transition peer-checked:bg-orange-500 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-full"></div>
+                                </label>
+                            </div>
+                            <div class="mt-4 border-t border-slate-800 pt-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                    Channels
+                                </p>
+                                <div class="mt-3 grid gap-3 sm:grid-cols-3">
+                                    <label
+                                        v-for="channel in alertOptions.channels"
+                                        :key="`online-${channel.value}`"
+                                        class="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                    >
+                                        <input
+                                            :checked="form.online_order_channels.includes(channel.value)"
+                                            type="checkbox"
+                                            class="mt-1 h-4 w-4 rounded border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                            @change="toggleChannel('online_order_channels', channel.value, ($event.target as HTMLInputElement).checked)"
+                                        />
+                                        <div>
+                                            <p class="text-sm font-semibold text-white">{{ channel.label }}</p>
+                                            <p class="mt-1 text-xs text-slate-400">{{ channel.description }}</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </article>
+
+                        <div class="flex justify-end border-t border-slate-800 pt-5">
+                            <button
+                                type="submit"
+                                class="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                                :disabled="form.processing"
+                            >
+                                {{ form.processing ? 'Menyimpan...' : 'Simpan setting notifikasi' }}
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <aside class="space-y-5">
+                    <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-300">
+                                    Alert Snapshot
+                                </p>
+                                <h3 class="mt-1 text-lg font-black text-white">
+                                    Kondisi alert outlet saat ini
+                                </h3>
+                            </div>
+                            <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
+                                <CheckCircle2 class="h-5 w-5 text-slate-200" />
+                            </div>
+                        </div>
+
+                        <div class="mt-4 space-y-3">
+                            <div class="rounded-2xl border border-amber-500/20 bg-amber-500/8 p-4">
+                                <div class="flex items-center justify-between gap-3">
+                                    <div>
+                                        <p class="text-sm font-bold text-amber-300">Low Stock</p>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            {{ snapshots.low_stock.count }} item di bawah minimum, {{ snapshots.low_stock.critical }} kritikal.
+                                        </p>
+                                    </div>
+                                    <span class="text-xl font-black text-white">{{ snapshots.low_stock.count }}</span>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-rose-500/20 bg-rose-500/8 p-4">
+                                <div class="flex items-center justify-between gap-3">
+                                    <div>
+                                        <p class="text-sm font-bold text-rose-300">Kasbon Overdue</p>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            {{ snapshots.kasbon_due.count }} order, total outstanding {{ formatCurrency(snapshots.kasbon_due.total_outstanding) }}.
+                                        </p>
+                                    </div>
+                                    <span class="text-xl font-black text-white">{{ snapshots.kasbon_due.count }}</span>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-sky-500/20 bg-sky-500/8 p-4">
+                                <div class="flex items-center justify-between gap-3">
+                                    <div>
+                                        <p class="text-sm font-bold text-sky-300">Online Order Aktif</p>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            {{ snapshots.online_order.count }} order aktif dari {{ snapshots.online_order.today_orders }} order online hari ini.
+                                        </p>
+                                    </div>
+                                    <span class="text-xl font-black text-white">{{ snapshots.online_order.count }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300">
+                                    Preview Feed
+                                </p>
+                                <h3 class="mt-1 text-lg font-black text-white">
+                                    Contoh alert terdekat
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 space-y-3">
+                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                    Low stock teratas
+                                </p>
+                                <div v-if="snapshots.low_stock.items.length === 0" class="mt-3 text-sm text-slate-500">
+                                    Belum ada alert stok menipis di outlet ini.
+                                </div>
+                                <div v-else class="mt-3 space-y-3">
+                                    <div
+                                        v-for="item in snapshots.low_stock.items"
+                                        :key="item.id"
+                                        class="rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                    >
+                                        <p class="text-sm font-semibold text-white">{{ item.name }}</p>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            {{ item.context }} • {{ item.current_stock }}/{{ item.minimum_stock }} {{ item.unit }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                    Kasbon overdue teratas
+                                </p>
+                                <div v-if="snapshots.kasbon_due.items.length === 0" class="mt-3 text-sm text-slate-500">
+                                    Belum ada kasbon melewati threshold {{ form.kasbon_due_threshold_days }} hari.
+                                </div>
+                                <div v-else class="mt-3 space-y-3">
+                                    <div
+                                        v-for="item in snapshots.kasbon_due.items"
+                                        :key="item.id"
+                                        class="rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                    >
+                                        <p class="text-sm font-semibold text-white">{{ item.order_number }} • {{ item.customer_name }}</p>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            {{ formatCurrency(item.outstanding_amount) }} • umur {{ item.age_days }} hari • {{ formatDateTime(item.created_at) }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                    Order online terbaru
+                                </p>
+                                <div v-if="snapshots.online_order.items.length === 0" class="mt-3 text-sm text-slate-500">
+                                    Belum ada order online aktif hari ini.
+                                </div>
+                                <div v-else class="mt-3 space-y-3">
+                                    <div
+                                        v-for="item in snapshots.online_order.items"
+                                        :key="item.id"
+                                        class="rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                    >
+                                        <p class="text-sm font-semibold text-white">
+                                            {{ item.order_number }} • {{ item.platform?.toUpperCase() }}
+                                        </p>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            {{ formatOrderStatus(item.status) }} • {{ formatCurrency(item.total_amount) }} • {{ formatDateTime(item.created_at) }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </aside>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>

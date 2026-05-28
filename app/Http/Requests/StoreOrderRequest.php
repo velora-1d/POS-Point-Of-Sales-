@@ -33,6 +33,7 @@ class StoreOrderRequest extends FormRequest
             'customer_phone' => ['nullable', 'string', 'max:20'],
             'customer_email' => ['nullable', 'email', 'max:100'],
             'promo_code' => ['nullable', 'string', 'max:50'],
+            'approval_pin' => ['nullable', 'string', 'max:20'],
             'reservation_id' => ['nullable', 'exists:table_reservations,id'],
             'payment_option' => ['required', Rule::in(['pay_later', 'pay_now'])],
             'payment_method' => [
