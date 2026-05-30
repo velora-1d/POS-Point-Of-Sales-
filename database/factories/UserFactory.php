@@ -42,6 +42,14 @@ class UserFactory extends Factory
             'approval_pin' => Hash::make('123456'),
             'is_active' => true,
             'join_date' => now(),
+            'email_verified_at' => now(),
         ];
+    }
+
+    public function unverified(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'email_verified_at' => null,
+        ]);
     }
 }

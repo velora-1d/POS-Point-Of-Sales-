@@ -33,6 +33,11 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Test environment sekarang sudah diarahkan ke PostgreSQL/Neon, bukan lagi `sqlite :memory:`, lewat koneksi `pgsql_testing` di [config/database.php](/home/pak-hakim/Pak-Hakim/Project/POS/config/database.php) dan override [phpunit.xml](/home/pak-hakim/Pak-Hakim/Project/POS/phpunit.xml).
+- Auth bawaan Laravel sudah diselaraskan dengan schema POS: register, update password, reset password, model user, dan factory sekarang memakai `password_hash`, `outlet_id`, `role_id`, serta state `unverified()` untuk user test.
+- Migration baru [2026_05_28_000024_add_email_verified_at_to_users_table.php](/home/pak-hakim/Pak-Hakim/Project/POS/database/migrations/2026_05_28_000024_add_email_verified_at_to_users_table.php) sudah diterapkan ke Neon; `php artisan migrate:status` sekarang `Ran` sampai batch `9`.
+- Verifikasi yang confirmed di Neon: `AuthenticationTest`, `RegistrationTest`, `PasswordResetTest`, dan `PasswordUpdateTest` lulus secara isolated; `npm run build` juga lulus setelah perapihan auth/testing.
+- Catatan verifikasi: full `php artisan test` sebelum dua fix terakhir sudah tinggal sisa 2 error auth, lalu dua file test sisa itu sudah hijau setelah patch; rerun full suite terakhir di koneksi Neon butuh waktu sangat lama di sesi CLI sehingga tidak saya klaim sebagai full-pass final tanpa output penutup eksplisit.
 - Sidebar utama sudah diringkas di [resources/js/Layouts/AuthenticatedLayout.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Layouts/AuthenticatedLayout.vue) agar tampil per halaman/route, bukan lagi menampilkan seluruh 62 fitur sebagai item terpisah; progress 62 fitur tetap dipertahankan lewat mapping `menuIds` ke halaman ringkas.
 - Duplikasi active state sidebar untuk route yang sama sudah dihilangkan, termasuk duplikasi `dashboard`, sehingga satu route sekarang hanya punya satu entry navigasi utama.
 - Pencarian sidebar sekarang mencari `halaman atau fitur`, bukan lagi placeholder `62 menu`, dan badge kategori/halaman menampilkan jumlah fitur yang terwakili per halaman.
