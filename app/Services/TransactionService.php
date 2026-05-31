@@ -348,7 +348,7 @@ class TransactionService
         }
 
         $order->loadMissing([
-            'outlet',
+            'outlet.printerConfig',
             'table',
             'customer',
             'cashier',
@@ -412,6 +412,13 @@ class TransactionService
                 'name' => $order->outlet?->name,
                 'address' => $order->outlet?->address,
                 'phone' => $order->outlet?->phone,
+                'receipt_metadata' => array_merge([
+                    'receipt_template' => 'classic',
+                    'receipt_font' => 'sans',
+                    'receipt_color' => 'mono',
+                    'receipt_footer' => 'Terima kasih atas kunjungan Anda!',
+                    'receipt_logo' => null
+                ], $order->outlet?->printerConfig?->metadata ?? []),
             ],
             'whatsappLink' => $this->buildWhatsappReceiptLink($order, $remainingAmount),
         ];

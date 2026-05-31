@@ -43,6 +43,7 @@ const props = defineProps<{
         port: number | null;
         default_receipt_method: 'print' | 'whatsapp' | 'skip';
         has_config: boolean;
+        metadata?: any;
     };
     printerOptions: {
         types: PrinterOption[];
@@ -56,6 +57,7 @@ const props = defineProps<{
         device_label: string;
         receipt_method: 'print' | 'whatsapp' | 'skip';
         has_config: boolean;
+        metadata?: any;
     };
     filters: {
         outlet_id?: string | null;
@@ -75,6 +77,13 @@ const printerForm = useForm({
     ip_address: props.formDefaults.ip_address || '',
     port: props.formDefaults.port ? String(props.formDefaults.port) : '',
     default_receipt_method: props.formDefaults.default_receipt_method || 'print',
+    metadata: {
+        receipt_template: props.formDefaults.metadata?.receipt_template || 'classic',
+        receipt_font: props.formDefaults.metadata?.receipt_font || 'sans',
+        receipt_color: props.formDefaults.metadata?.receipt_color || 'mono',
+        receipt_footer: props.formDefaults.metadata?.receipt_footer || 'Terima kasih atas kunjungan Anda!',
+        receipt_logo: props.formDefaults.metadata?.receipt_logo || null,
+    }
 });
 
 watch(
@@ -88,6 +97,13 @@ watch(
             ip_address: defaults.ip_address || '',
             port: defaults.port ? String(defaults.port) : '',
             default_receipt_method: defaults.default_receipt_method || 'print',
+            metadata: {
+                receipt_template: defaults.metadata?.receipt_template || 'classic',
+                receipt_font: defaults.metadata?.receipt_font || 'sans',
+                receipt_color: defaults.metadata?.receipt_color || 'mono',
+                receipt_footer: defaults.metadata?.receipt_footer || 'Terima kasih atas kunjungan Anda!',
+                receipt_logo: defaults.metadata?.receipt_logo || null,
+            }
         });
 
         printerForm.reset();
@@ -180,6 +196,64 @@ function openTestPrint() {
     if (!outletId) return;
 
     window.open(route('settings.printer.preview', { outlet_id: outletId }), '_blank', 'noopener');
+}
+
+const liveFontFamily = computed(() => {
+    const font = printerForm.metadata.receipt_font;
+    if (font === 'serif') return 'font-serif';
+    if (font === 'mono') return 'font-mono';
+    return 'font-sans';
+});
+
+const liveAccentColorText = computed(() => {
+    const color = printerForm.metadata.receipt_color;
+    if (color === 'orange') return 'text-orange-500';
+    if (color === 'rose') return 'text-rose-500';
+    if (color === 'emerald') return 'text-emerald-500';
+    return 'text-slate-900';
+});
+
+const liveAccentBg = computed(() => {
+    const color = printerForm.metadata.receipt_color;
+    if (color === 'orange') return 'bg-orange-500';
+    if (color === 'rose') return 'bg-rose-500';
+    if (color === 'emerald') return 'bg-emerald-500';
+    return 'bg-slate-900';
+});
+
+const liveTemplateClass = computed(() => {
+    const template = printerForm.metadata.receipt_template;
+    if (template === 'modern') return 'rounded-[20px] border-slate-200 p-6 shadow-md bg-white text-slate-900';
+    if (template === 'compact') return 'rounded-none border-dashed border-slate-300 p-3 max-w-[240px] text-[11px] bg-white text-slate-900 mx-auto';
+    return 'rounded-none border-dashed border-slate-300 p-4 bg-white text-slate-900'; // classic
+});
+
+function handleLogoUpload(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files[0]) {
+        const file = target.files[0];
+        
+        if (file.size > 1024 * 1024) {
+            alert('Ukuran file logo terlalu besar. Maksimal 1MB.');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (e.target?.result) {
+                printerForm.metadata.receipt_logo = e.target.result as string;
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function clearLogo() {
+    printerForm.metadata.receipt_logo = null;
+    const input = document.getElementById('receipt_logo_input') as HTMLInputElement;
+    if (input) {
+        input.value = '';
+    }
 }
 </script>
 
@@ -462,6 +536,135 @@ function openTestPrint() {
                             </p>
                         </div>
 
+                        <!-- Visual Receipt Customizer -->
+                        <div class="border-t border-slate-800 pt-5 space-y-5">
+                            <div>
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300">
+                                    Kustomisasi Visual Struk (Menu #10 & #57)
+                                </p>
+                                <h3 class="mt-1 text-sm font-bold text-white">Desain & Format Struk</h3>
+                                <p class="text-xs text-slate-400 mt-1">Atur logo, template, font, warna aksen, dan teks footer struk belanja secara kustom.</p>
+                            </div>
+
+                            <div class="grid gap-5 md:grid-cols-2">
+                                <!-- Logo Upload -->
+                                <div>
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                        Logo Struk (Upload)
+                                    </label>
+                                    <div class="flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+                                        <div v-if="printerForm.metadata.receipt_logo" class="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-slate-700 bg-white p-1">
+                                            <img :src="printerForm.metadata.receipt_logo" class="h-full w-full object-contain filter grayscale" />
+                                            <button 
+                                                type="button" 
+                                                @click="clearLogo" 
+                                                class="absolute -right-1 -top-1 rounded-full bg-rose-500 p-0.5 text-white hover:bg-rose-400 shadow-md flex items-center justify-center"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div v-else class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border border-dashed border-slate-700 bg-slate-950/50">
+                                            <Printer class="h-6 w-6 text-slate-600" />
+                                        </div>
+                                        <div class="flex-1">
+                                            <input 
+                                                type="file" 
+                                                id="receipt_logo_input" 
+                                                accept="image/*" 
+                                                class="hidden" 
+                                                @change="handleLogoUpload"
+                                            />
+                                            <label 
+                                                for="receipt_logo_input" 
+                                                class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-slate-500 hover:text-white"
+                                            >
+                                                Pilih Gambar
+                                            </label>
+                                            <p class="mt-1 text-[10px] text-slate-500">Maks. 1MB. Format PNG/JPG. Otomatis dikonversi ke base64.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Template Struk -->
+                                <div>
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                        Template Layout
+                                    </label>
+                                    <select
+                                        v-model="printerForm.metadata.receipt_template"
+                                        class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                    >
+                                        <option value="classic">Classic (Sharp / 80mm-92mm)</option>
+                                        <option value="modern">Modern (Rounded / Elegant)</option>
+                                        <option value="compact">Compact (Minimalist / 58mm Thermal)</option>
+                                    </select>
+                                    <p class="mt-1.5 text-xs text-slate-500">
+                                        Template menentukan lebar struk, padding, dan bentuk border struk.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-5 md:grid-cols-2">
+                                <!-- Font Dropdown -->
+                                <div>
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                        Gaya Huruf (Font)
+                                    </label>
+                                    <select
+                                        v-model="printerForm.metadata.receipt_font"
+                                        class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                    >
+                                        <option value="sans">Sans-serif (Modern & Bersih)</option>
+                                        <option value="serif">Serif (Klasik & Elegan)</option>
+                                        <option value="mono">Monospace (Tipe Mesin Kasir / Kasir Jadul)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Color Accent Selector -->
+                                <div>
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                        Warna Aksen Teks (Preview Digital)
+                                    </label>
+                                    <div class="flex items-center gap-3 mt-1.5">
+                                        <button
+                                            v-for="colorOpt in [
+                                                { value: 'mono', bg: 'bg-slate-950 border-slate-700', label: 'Hitam' },
+                                                { value: 'orange', bg: 'bg-orange-500 border-orange-400', label: 'Oranye' },
+                                                { value: 'rose', bg: 'bg-rose-500 border-rose-400', label: 'Merah Muda' },
+                                                { value: 'emerald', bg: 'bg-emerald-500 border-emerald-400', label: 'Hijau' }
+                                            ]"
+                                            :key="colorOpt.value"
+                                            type="button"
+                                            @click="printerForm.metadata.receipt_color = colorOpt.value"
+                                            class="h-9 w-9 rounded-full border-2 transition focus:outline-none"
+                                            :class="[
+                                                colorOpt.bg,
+                                                printerForm.metadata.receipt_color === colorOpt.value ? 'ring-2 ring-white scale-110' : 'opacity-70 hover:opacity-100'
+                                            ]"
+                                            :title="colorOpt.label"
+                                        />
+                                    </div>
+                                    <p class="mt-2 text-xs text-slate-500">Aksen warna untuk elemen penonjol teks struk.</p>
+                                </div>
+                            </div>
+
+                            <!-- Custom Footer Text -->
+                            <div>
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                    Teks Kaki Struk (Footer)
+                                </label>
+                                <textarea
+                                    v-model="printerForm.metadata.receipt_footer"
+                                    rows="2"
+                                    placeholder="Contoh: Terima kasih atas kunjungan Anda! Barang yang sudah dibeli tidak dapat ditukar."
+                                    class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                ></textarea>
+                                <p class="mt-1 text-xs text-slate-500">Pesan penutup di bagian paling bawah struk fisik atau digital.</p>
+                            </div>
+                        </div>
+
                         <div class="flex flex-col gap-3 border-t border-slate-800 pt-5 sm:flex-row sm:items-center sm:justify-between">
                             <div class="text-xs text-slate-500">
                                 Preview test print memakai dialog print browser untuk simulasi layout struk.
@@ -487,6 +690,115 @@ function openTestPrint() {
                 </article>
 
                 <aside class="space-y-5">
+                    <!-- Live Visual Receipt Preview -->
+                    <article class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300">
+                                    Live Receipt Preview
+                                </p>
+                                <h3 class="mt-1 text-lg font-black text-white">
+                                    Simulasi desain struk live
+                                </h3>
+                                <p class="text-xs text-slate-400 mt-1">Perubahan pada form sebelah kiri akan langsung direfleksikan di bawah ini secara instan.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 rounded-2xl bg-slate-950/80 p-4 border border-slate-800 flex items-center justify-center">
+                            <!-- Paper sheet simulation -->
+                            <div 
+                                :class="[liveFontFamily, liveTemplateClass]" 
+                                class="w-full transition-all duration-300 shadow-xl"
+                            >
+                                <div class="text-center">
+                                    <img 
+                                        v-if="printerForm.metadata.receipt_logo" 
+                                        :src="printerForm.metadata.receipt_logo" 
+                                        class="mx-auto max-h-12 max-w-full object-contain filter grayscale mb-2.5" 
+                                    />
+                                    <h4 class="font-black text-sm uppercase tracking-wider" :class="liveAccentColorText">
+                                        {{ selectedOutlet?.name || 'Outlet Mentai' }}
+                                    </h4>
+                                    <p class="text-[9px] text-slate-500 mt-0.5">Jalan Raya Restoran Mentai No. 123</p>
+                                    <p class="text-[9px] text-slate-500">Telp: 0812-3456-789</p>
+                                </div>
+
+                                <div class="my-3 border-t" :class="printerForm.metadata.receipt_template === 'compact' ? 'border-dotted border-slate-300' : 'border-dashed border-slate-400'"></div>
+
+                                <div class="space-y-1.5 text-[11px] text-slate-700">
+                                    <div class="flex justify-between">
+                                        <span>No. Order</span>
+                                        <span class="font-semibold text-slate-900">TRX-2026-0001</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Waktu</span>
+                                        <span>01 Jun 2026 12:00</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Kasir</span>
+                                        <span>Kasir Utama</span>
+                                    </div>
+                                </div>
+
+                                <div class="my-3 border-t" :class="printerForm.metadata.receipt_template === 'compact' ? 'border-dotted border-slate-300' : 'border-dashed border-slate-400'"></div>
+
+                                <div class="space-y-2 text-[11px]">
+                                    <div class="flex justify-between items-start gap-4">
+                                        <div class="text-slate-800">
+                                            <span class="font-semibold">Mentai Rice Original</span>
+                                            <p class="text-[9px] text-slate-500">Varian: Pedas Sedang</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-slate-500">1x</span>
+                                            <span class="font-semibold text-slate-900 ml-2">28.000</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-start gap-4">
+                                        <div class="text-slate-800">
+                                            <span class="font-semibold">Chicken Katsu Mentai</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-slate-500">1x</span>
+                                            <span class="font-semibold text-slate-900 ml-2">32.000</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-start gap-4">
+                                        <div class="text-slate-800">
+                                            <span class="font-semibold">Ocha Ice (Free Refill)</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-slate-500">2x</span>
+                                            <span class="font-semibold text-slate-900 ml-2">16.000</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="my-3 border-t" :class="printerForm.metadata.receipt_template === 'compact' ? 'border-dotted border-slate-300' : 'border-dashed border-slate-400'"></div>
+
+                                <div class="space-y-1.5 text-[11px]">
+                                    <div class="flex justify-between text-slate-700">
+                                        <span>Subtotal</span>
+                                        <span>76.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-slate-700">
+                                        <span>Pajak (11%)</span>
+                                        <span>8.360</span>
+                                    </div>
+                                    <div class="flex justify-between font-black text-xs pt-1.5 border-t border-slate-100">
+                                        <span :class="liveAccentColorText">Total Akhir</span>
+                                        <span :class="liveAccentColorText">84.360</span>
+                                    </div>
+                                </div>
+
+                                <div class="my-3 border-t" :class="printerForm.metadata.receipt_template === 'compact' ? 'border-dotted border-slate-300' : 'border-dashed border-slate-400'"></div>
+
+                                <div class="text-center text-[10px] text-slate-500 italic leading-relaxed">
+                                    {{ printerForm.metadata.receipt_footer || 'Terima kasih atas kunjungan Anda!' }}
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
                     <article class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                         <div class="flex items-start justify-between gap-4">
                             <div>

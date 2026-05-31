@@ -22,6 +22,7 @@ class UpsertPrinterConfigRequest extends FormRequest
             'ip_address' => ['nullable', 'ip', 'max:100'],
             'port' => ['nullable', 'integer', 'between:1,65535'],
             'default_receipt_method' => ['required', Rule::in(['print', 'whatsapp', 'skip'])],
+            'metadata' => ['nullable', 'array'],
         ];
     }
 

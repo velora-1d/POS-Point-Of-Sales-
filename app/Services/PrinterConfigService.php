@@ -137,14 +137,57 @@ class PrinterConfigService
             : ($storedConfig?->device_name ?: 'Belum diatur');
         $receiptMethod = $storedConfig?->default_receipt_method
             ?? (($selectedOutlet['settings']['default_receipt_method'] ?? 'print'));
-        $fontFamily = $printerType === 'dot_matrix' ? '"Courier New", monospace' : '"Inter", "Segoe UI", sans-serif';
+
+        // Load visual metadata
+        $metadata = $storedConfig?->metadata ?? [];
+        $template = $metadata['receipt_template'] ?? 'classic';
+        $font = $metadata['receipt_font'] ?? 'sans';
+        $color = $metadata['receipt_color'] ?? 'mono';
+        $footerText = htmlspecialchars((string) ($metadata['receipt_footer'] ?? 'Terima kasih atas kunjungan Anda!'), ENT_QUOTES, 'UTF-8');
+        $logoBase64 = $metadata['receipt_logo'] ?? null;
+
+        // Font Family mapping
+        $fontFamily = '"Inter", "Segoe UI", sans-serif';
+        if ($font === 'serif') {
+            $fontFamily = 'Georgia, "Times New Roman", serif';
+        } elseif ($font === 'mono' || $printerType === 'dot_matrix') {
+            $fontFamily = '"Courier New", Courier, monospace';
+        }
+
+        // Color mapping
+        $accentColor = '#111827';
+        if ($color === 'orange') {
+            $accentColor = '#f97316';
+        } elseif ($color === 'rose') {
+            $accentColor = '#f43f5e';
+        } elseif ($color === 'emerald') {
+            $accentColor = '#10b981';
+        }
+
+        // Paper width & styling based on template
         $paperWidth = $printerType === 'dot_matrix' ? '92mm' : '80mm';
+        $sheetStyle = 'padding: 18px 16px; border: 1px dashed #94a3b8; border-radius: 0;';
+        $lineStyle = 'border-top: 1px dashed #cbd5e1;';
+        
+        if ($template === 'modern') {
+            $sheetStyle = 'padding: 24px 20px; border: 1px solid #e2e8f0; border-radius: 20px;';
+            $lineStyle = 'border-top: 2px solid #f1f5f9;';
+        } elseif ($template === 'compact') {
+            $paperWidth = '58mm';
+            $sheetStyle = 'padding: 12px 10px; border: 1px dotted #cbd5e1; border-radius: 0; font-size: 11px;';
+            $lineStyle = 'border-top: 1px dotted #cbd5e1;';
+        }
+
         $outletName = htmlspecialchars((string) ($selectedOutlet['name'] ?? 'Outlet'), ENT_QUOTES, 'UTF-8');
         $printerTypeLabel = htmlspecialchars($printerType === 'dot_matrix' ? 'Dot Matrix' : 'Thermal', ENT_QUOTES, 'UTF-8');
         $connectionLabel = htmlspecialchars($connectionType === 'network' ? 'Network' : 'USB', ENT_QUOTES, 'UTF-8');
         $deviceText = htmlspecialchars($deviceLabel, ENT_QUOTES, 'UTF-8');
         $receiptText = htmlspecialchars(strtoupper((string) $receiptMethod), ENT_QUOTES, 'UTF-8');
         $printedAt = now()->timezone('Asia/Jakarta')->format('d M Y H:i:s');
+
+        $logoHtml = $logoBase64 
+            ? '<img src="' . $logoBase64 . '" style="max-height: 48px; max-width: 100%; margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto; filter: grayscale(100%);" />'
+            : '';
 
         return <<<HTML
 <!DOCTYPE html>
@@ -167,14 +210,13 @@ class PrinterConfigService
             width: min(100%, {$paperWidth});
             margin: 0 auto;
             background: white;
-            border: 1px dashed #94a3b8;
-            padding: 18px 16px;
             box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+            {$sheetStyle}
         }
         .center { text-align: center; }
         .muted { color: #64748b; font-size: 11px; }
         .line {
-            border-top: 1px dashed #94a3b8;
+            {$lineStyle}
             margin: 12px 0;
         }
         .row {
@@ -184,13 +226,13 @@ class PrinterConfigService
             font-size: 12px;
             line-height: 1.5;
         }
-        .row strong { font-size: 13px; }
+        .row strong { font-size: 13px; color: {$accentColor}; }
         .meta {
             margin-top: 16px;
             padding-top: 12px;
-            border-top: 1px dashed #94a3b8;
+            border-top: 1px dashed #cbd5e1;
             font-size: 11px;
-            color: #334155;
+            color: #475569;
         }
         @media print {
             body { background: white; padding: 0; }
@@ -201,7 +243,8 @@ class PrinterConfigService
 <body>
     <div class="sheet">
         <div class="center">
-            <strong style="font-size:16px;">{$outletName}</strong>
+            {$logoHtml}
+            <strong style="font-size:16px; color: {$accentColor};">{$outletName}</strong>
             <div class="muted">Preview test print konfigurasi printer menu #57</div>
         </div>
 
@@ -224,6 +267,11 @@ class PrinterConfigService
         <div class="row"><span>Service</span><span>6.800</span></div>
         <div class="row"><span>Pajak</span><span>7.480</span></div>
         <div class="row"><strong>Total</strong><strong>82.280</strong></div>
+
+        <div class="line"></div>
+        <div class="center" style="font-size: 11px; color: #475569; font-style: italic;">
+            {$footerText}
+        </div>
 
         <div class="meta">
             <div>Tipe printer: {$printerTypeLabel}</div>
@@ -263,6 +311,14 @@ HTML;
         $defaultReceiptMethod = $storedConfig?->default_receipt_method
             ?? ($selectedOutlet['settings']['default_receipt_method'] ?? 'print');
 
+        $defaultMetadata = [
+            'receipt_template' => 'classic',
+            'receipt_font' => 'sans',
+            'receipt_color' => 'mono',
+            'receipt_footer' => 'Terima kasih atas kunjungan Anda!',
+            'receipt_logo' => null
+        ];
+
         return [
             'outlet_id' => $outletId,
             'printer_type' => $storedConfig?->printer_type ?? 'thermal',
@@ -272,6 +328,7 @@ HTML;
             'port' => $storedConfig?->port,
             'default_receipt_method' => $defaultReceiptMethod,
             'has_config' => $storedConfig !== null,
+            'metadata' => array_merge($defaultMetadata, $storedConfig?->metadata ?? []),
         ];
     }
 
@@ -283,6 +340,14 @@ HTML;
             ? (($storedConfig?->ip_address ?? 'Belum diatur') . ($storedConfig?->port ? ':' . $storedConfig->port : ''))
             : ($storedConfig?->device_name ?? 'Belum diatur');
 
+        $defaultMetadata = [
+            'receipt_template' => 'classic',
+            'receipt_font' => 'sans',
+            'receipt_color' => 'mono',
+            'receipt_footer' => 'Terima kasih atas kunjungan Anda!',
+            'receipt_logo' => null
+        ];
+
         return [
             'outlet_name' => $selectedOutlet['name'] ?? '-',
             'printer_type' => $printerType,
@@ -291,6 +356,7 @@ HTML;
             'receipt_method' => $storedConfig?->default_receipt_method
                 ?? ($selectedOutlet['settings']['default_receipt_method'] ?? 'print'),
             'has_config' => $storedConfig !== null,
+            'metadata' => array_merge($defaultMetadata, $storedConfig?->metadata ?? []),
         ];
     }
 
@@ -378,7 +444,7 @@ HTML;
                 ? (int) ($payload['port'] ?? 9100)
                 : null,
             'default_receipt_method' => $this->sanitizeReceiptMethod($payload['default_receipt_method'] ?? 'print'),
-            'metadata' => null,
+            'metadata' => is_array($payload['metadata'] ?? null) ? $payload['metadata'] : null,
         ];
     }
 

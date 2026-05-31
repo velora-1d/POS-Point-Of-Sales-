@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { CheckCircle2, MessageSquare, Printer } from '@lucide/vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
     order: {
@@ -48,10 +49,61 @@ const props = defineProps<{
         name?: string | null;
         address?: string | null;
         phone?: string | null;
+        receipt_metadata?: {
+            receipt_template?: 'classic' | 'modern' | 'compact' | null;
+            receipt_font?: 'sans' | 'serif' | 'mono' | null;
+            receipt_color?: 'mono' | 'orange' | 'rose' | 'emerald' | null;
+            receipt_footer?: string | null;
+            receipt_logo?: string | null;
+        } | null;
     };
     whatsappLink: string;
     success?: string | null;
 }>();
+
+const receiptTemplate = computed(() => props.outlet.receipt_metadata?.receipt_template || 'classic');
+const receiptFont = computed(() => props.outlet.receipt_metadata?.receipt_font || 'sans');
+const receiptColor = computed(() => props.outlet.receipt_metadata?.receipt_color || 'mono');
+const receiptFooterText = computed(() => props.outlet.receipt_metadata?.receipt_footer || 'Terima kasih atas kunjungan Anda!');
+const receiptLogo = computed(() => props.outlet.receipt_metadata?.receipt_logo || null);
+
+const receiptFontClass = computed(() => {
+    if (receiptFont.value === 'serif') return 'font-serif';
+    if (receiptFont.value === 'mono') return 'font-mono';
+    return 'font-sans';
+});
+
+const receiptAccentColorText = computed(() => {
+    if (receiptColor.value === 'orange') return 'text-orange-600';
+    if (receiptColor.value === 'rose') return 'text-rose-600';
+    if (receiptColor.value === 'emerald') return 'text-emerald-600';
+    return 'text-slate-900';
+});
+
+const receiptAccentBg = computed(() => {
+    if (receiptColor.value === 'orange') return 'bg-orange-500 text-white';
+    if (receiptColor.value === 'rose') return 'bg-rose-500 text-white';
+    if (receiptColor.value === 'emerald') return 'bg-emerald-500 text-white';
+    return 'bg-slate-900 text-white';
+});
+
+const receiptPaperClass = computed(() => {
+    if (receiptTemplate.value === 'modern') {
+        return 'rounded-[24px] border border-slate-200 bg-white text-slate-900 shadow-2xl p-8';
+    }
+    if (receiptTemplate.value === 'compact') {
+        return 'rounded-none border border-dotted border-slate-300 bg-white text-slate-900 max-w-[400px] mx-auto p-4 text-[11px]';
+    }
+    // classic
+    return 'rounded-none border border-dashed border-slate-200 bg-white text-slate-900 p-8';
+});
+
+const receiptDividerClass = computed(() => {
+    if (receiptTemplate.value === 'compact') {
+        return 'border-t border-dotted border-slate-300';
+    }
+    return 'border-t border-dashed border-slate-200';
+});
 
 function formatCurrency(value: number | string) {
     return new Intl.NumberFormat('id-ID', {
@@ -139,15 +191,22 @@ function skipReceipt() {
             </div>
 
             <div class="grid gap-6 xl:grid-cols-[0.72fr_0.28fr]">
-                <div class="rounded-[28px] border border-slate-800 bg-white text-slate-900 shadow-2xl print:border-0 print:shadow-none">
-                    <div class="border-b border-dashed border-slate-200 px-8 py-8 text-center">
-                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-                            <CheckCircle2 class="h-8 w-8" />
+                <div :class="[receiptFontClass, receiptPaperClass]" class="shadow-2xl print:border-0 print:shadow-none transition-all duration-300">
+                    <div :class="receiptDividerClass" class="pb-6 text-center">
+                        <!-- Logo kustom outlet -->
+                        <img
+                            v-if="receiptLogo"
+                            :src="receiptLogo"
+                            class="mx-auto mb-4 max-h-16 max-w-[160px] object-contain filter grayscale print:filter-none"
+                            alt="Logo Outlet"
+                        />
+                        <div v-else class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                            <CheckCircle2 class="h-7 w-7" />
                         </div>
-                        <h2 class="mt-4 text-2xl font-black text-slate-900">{{ outlet.name || 'POS Mentai' }}</h2>
-                        <p class="mt-2 text-sm text-slate-500">{{ outlet.address || '-' }}</p>
-                        <p class="mt-1 text-sm text-slate-500">{{ outlet.phone || '-' }}</p>
-                        <p class="mt-4 text-xs font-bold uppercase tracking-[0.22em] text-slate-400">
+                        <h2 class="text-xl font-black" :class="receiptAccentColorText">{{ outlet.name || 'POS Mentai' }}</h2>
+                        <p class="mt-1.5 text-sm text-slate-500">{{ outlet.address || '-' }}</p>
+                        <p class="mt-0.5 text-sm text-slate-500">{{ outlet.phone || '-' }}</p>
+                        <p class="mt-3 text-xs font-bold uppercase tracking-[0.22em] text-slate-400">
                             {{ order.order_number }} · {{ formatDateTime(order.updated_at || order.created_at) }}
                         </p>
                     </div>
@@ -203,7 +262,7 @@ function skipReceipt() {
                                 <span>Diskon</span>
                                 <span>{{ formatCurrency(order.discount_amount) }}</span>
                             </div>
-                            <div class="mt-3 flex justify-between border-t border-slate-200 pt-3 text-base font-black text-slate-900">
+                            <div class="mt-3 flex justify-between border-t border-slate-200 pt-3 text-base font-black" :class="receiptAccentColorText">
                                 <span>Total</span>
                                 <span>{{ formatCurrency(order.total_amount) }}</span>
                             </div>
@@ -256,6 +315,11 @@ function skipReceipt() {
                                     Status {{ order.kasbon.is_active ? 'masih aktif' : 'sudah lunas' }}
                                 </p>
                             </div>
+                        </div>
+
+                        <!-- Footer kustom struk dari konfigurasi printer outlet -->
+                        <div class="pt-4 mt-2 text-center text-xs text-slate-500 italic leading-relaxed" :class="receiptDividerClass">
+                            {{ receiptFooterText }}
                         </div>
                     </div>
                 </div>
