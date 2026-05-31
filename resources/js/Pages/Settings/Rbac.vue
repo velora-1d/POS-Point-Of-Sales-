@@ -2,16 +2,49 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
+    CheckCircle2,
+    Eye,
     KeyRound,
+    PenLine,
     Pencil,
     Plus,
+    RotateCcw,
+    Save,
     Search,
     ShieldCheck,
+    Trash2,
     UserCog,
     Users,
     X,
 } from '@lucide/vue';
-import { computed, ref } from 'vue';
+import { type Component, computed, ref } from 'vue';
+
+// ─── Permission icon + color helpers ──────────────────────────────────────────
+
+const READ_ACTIONS = ['read','login','logout','clock_in','clock_out','sales','stock','finance','employee'];
+const CREATE_ACTIONS = ['create','register','open','add','request','redeem','pay','export'];
+const UPDATE_ACTIONS = ['update','update_status','approve_edit','approve','correct','adjust','toggle','apply','toggle_availability','manage','close'];
+const DELETE_ACTIONS = ['delete','cancel','void','refund','reject','write_off','split_bill','rules_manage','qr_generate'];
+
+function getPermissionIcon(permName: string): Component {
+    const action = permName.split(':')[1] ?? '';
+    if (READ_ACTIONS.includes(action)) return Eye;
+    if (CREATE_ACTIONS.includes(action)) return Plus;
+    if (UPDATE_ACTIONS.includes(action)) return Pencil;
+    if (DELETE_ACTIONS.includes(action)) return Trash2;
+    return CheckCircle2;
+}
+
+function getPermissionActiveClass(permName: string): string {
+    const action = permName.split(':')[1] ?? '';
+    if (READ_ACTIONS.includes(action)) return 'border-sky-400/30 bg-sky-500/20 text-sky-300';
+    if (CREATE_ACTIONS.includes(action)) return 'border-emerald-400/30 bg-emerald-500/20 text-emerald-300';
+    if (UPDATE_ACTIONS.includes(action)) return 'border-amber-400/30 bg-amber-500/20 text-amber-300';
+    if (DELETE_ACTIONS.includes(action)) return 'border-rose-400/30 bg-rose-500/20 text-rose-300';
+    return 'border-orange-400/30 bg-orange-500/20 text-orange-300';
+}
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface OutletOption {
     id: string;
@@ -67,22 +100,34 @@ const props = defineProps<{
     roles: RoleRow[];
     employees: EmployeeRow[];
     permissionGroups: PermissionGroup[];
-    roleTypeOptions: Array<{
-        value: string;
-        label: string;
-    }>;
+    roleTypeOptions: Array<{ value: string; label: string }>;
     defaultPermissionMatrix: Record<string, string[]>;
-    filters: {
-        outlet_id?: string | null;
-    };
+    permissionMatrix: Record<string, string[]>;
+    filters: { outlet_id?: string | null };
     success?: string | null;
 }>();
 
+// ─── State ─────────────────────────────────────────────────────────────────────
+
+const activeTab = ref<'accounts' | 'matrix'>('accounts');
 const outletId = ref(props.filters.outlet_id || props.selectedOutlet?.id || '');
-const roleSearch = ref('');
 const employeeSearch = ref('');
 const modalMode = ref<'create' | 'edit' | null>(null);
 const selectedRole = ref<RoleRow | null>(null);
+const savingMatrix = ref(false);
+const matrixSaved = ref(false);
+
+// Matriks lokal: { role_id: Set<permissionName> }
+const localMatrix = ref<Record<string, Set<string>>>(
+    Object.fromEntries(
+        Object.entries(props.permissionMatrix).map(([roleId, perms]) => [
+            roleId,
+            new Set(perms),
+        ])
+    )
+);
+
+// ─── Role Form ─────────────────────────────────────────────────────────────────
 
 const roleForm = useForm<{
     outlet_id: string;
@@ -98,87 +143,139 @@ const roleForm = useForm<{
     is_active: true,
 });
 
-const summaryCards = computed(() => [
-    {
-        label: 'Total Role',
-        value: props.summary.total_roles,
-        helper: `${props.summary.active_roles} aktif`,
-        tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
-        icon: ShieldCheck,
-    },
-    {
-        label: 'Role Custom',
-        value: props.summary.custom_roles,
-        helper: 'Role turunan di outlet aktif',
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
-        icon: KeyRound,
-    },
-    {
-        label: 'User Terkait',
-        value: props.summary.total_users,
-        helper: 'Karyawan di outlet terpilih',
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
-        icon: Users,
-    },
-    {
-        label: 'Permission Catalog',
-        value: props.summary.permission_catalog_count,
-        helper: 'Permission tersimpan untuk RBAC',
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
-        icon: UserCog,
-    },
-]);
-
-const filteredRoles = computed(() => {
-    const keyword = roleSearch.value.trim().toLowerCase();
-
-    if (!keyword) return props.roles;
-
-    return props.roles.filter((role) => {
-        return role.name.toLowerCase().includes(keyword)
-            || role.type_label.toLowerCase().includes(keyword);
-    });
-});
+// ─── Computed ──────────────────────────────────────────────────────────────────
 
 const filteredEmployees = computed(() => {
-    const keyword = employeeSearch.value.trim().toLowerCase();
-
-    if (!keyword) return props.employees;
-
-    return props.employees.filter((employee) => {
-        return employee.name.toLowerCase().includes(keyword)
-            || employee.email.toLowerCase().includes(keyword)
-            || (employee.role_name || '').toLowerCase().includes(keyword);
-    });
+    const kw = employeeSearch.value.trim().toLowerCase();
+    if (!kw) return props.employees;
+    return props.employees.filter(
+        (e) =>
+            e.name.toLowerCase().includes(kw) ||
+            e.email.toLowerCase().includes(kw) ||
+            (e.role_name || '').toLowerCase().includes(kw),
+    );
 });
 
-const isModalOpen = computed(() => modalMode.value !== null);
-const modalTitle = computed(() => modalMode.value === 'edit' ? 'Edit Role' : 'Tambah Role Custom');
-const activeRoleOptions = computed(() => props.roles.filter((role) => role.is_active));
+const editableRoles = computed(() => props.roles.filter((r) => !r.is_locked));
+const activeRoleOptions = computed(() => props.roles.filter((r) => r.is_active));
 
-function statusBadgeClass(isActive: boolean) {
-    return isActive
-        ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300'
-        : 'border-amber-400/20 bg-amber-500/10 text-amber-300';
+const isModalOpen = computed(() => modalMode.value !== null);
+const modalTitle = computed(() => (modalMode.value === 'edit' ? 'Edit Role' : 'Tambah Role Baru'));
+
+const summaryCards = computed(() => [
+    { label: 'Total Role', value: props.summary.total_roles, helper: `${props.summary.active_roles} aktif`, tone: 'text-white', surface: 'border-white/10 bg-white/[0.03]', icon: ShieldCheck },
+    { label: 'Role Custom', value: props.summary.custom_roles, helper: 'Role turunan per outlet', tone: 'text-amber-300', surface: 'border-amber-400/15 bg-amber-500/10', icon: KeyRound },
+    { label: 'Karyawan', value: props.summary.total_users, helper: 'Di outlet terpilih', tone: 'text-sky-300', surface: 'border-sky-400/15 bg-sky-500/10', icon: Users },
+    { label: 'Permission', value: props.summary.permission_catalog_count, helper: 'Jenis akses tersedia', tone: 'text-emerald-300', surface: 'border-emerald-400/15 bg-emerald-500/10', icon: UserCog },
+]);
+
+// ─── Role badge color ──────────────────────────────────────────────────────────
+
+const roleColorMap: Record<string, string> = {
+    owner:      'bg-amber-500/15 text-amber-200 border-amber-400/20',
+    supervisor: 'bg-sky-500/15 text-sky-200 border-sky-400/20',
+    kasir:      'bg-emerald-500/15 text-emerald-200 border-emerald-400/20',
+    bar:        'bg-purple-500/15 text-purple-200 border-purple-400/20',
+    kitchen:    'bg-rose-500/15 text-rose-200 border-rose-400/20',
+};
+function roleBadgeClass(type?: string | null) {
+    return roleColorMap[type || ''] ?? 'bg-slate-500/15 text-slate-200 border-slate-400/20';
 }
+
+// ─── Matrix helpers ─────────────────────────────────────────────────────────────
+
+function hasPermission(roleId: string, permissionName: string): boolean {
+    return localMatrix.value[roleId]?.has(permissionName) ?? false;
+}
+
+function togglePermissionInMatrix(roleId: string, permissionName: string) {
+    const role = props.roles.find((r) => r.id === roleId);
+    if (!role || role.is_locked) return;
+
+    const set = localMatrix.value[roleId] ?? new Set<string>();
+    if (set.has(permissionName)) {
+        set.delete(permissionName);
+    } else {
+        set.add(permissionName);
+    }
+    localMatrix.value = { ...localMatrix.value, [roleId]: new Set(set) };
+    matrixSaved.value = false;
+}
+
+function toggleGroupForRole(roleId: string, group: PermissionGroup) {
+    const role = props.roles.find((r) => r.id === roleId);
+    if (!role || role.is_locked) return;
+
+    const set = localMatrix.value[roleId] ?? new Set<string>();
+    const groupNames = group.permissions.map((p) => p.name);
+    const allActive = groupNames.every((n) => set.has(n));
+
+    if (allActive) {
+        groupNames.forEach((n) => set.delete(n));
+    } else {
+        groupNames.forEach((n) => set.add(n));
+    }
+    localMatrix.value = { ...localMatrix.value, [roleId]: new Set(set) };
+    matrixSaved.value = false;
+}
+
+function isGroupAllActive(roleId: string, group: PermissionGroup): boolean {
+    const set = localMatrix.value[roleId];
+    if (!set) return false;
+    return group.permissions.every((p) => set.has(p.name));
+}
+
+function isGroupPartialActive(roleId: string, group: PermissionGroup): boolean {
+    const set = localMatrix.value[roleId];
+    if (!set) return false;
+    const names = group.permissions.map((p) => p.name);
+    return names.some((n) => set.has(n)) && !names.every((n) => set.has(n));
+}
+
+function resetRoleToDefault(roleId: string, roleType: string) {
+    const defaults = props.defaultPermissionMatrix[roleType] ?? [];
+    localMatrix.value = { ...localMatrix.value, [roleId]: new Set(defaults) };
+    matrixSaved.value = false;
+}
+
+function saveMatrix() {
+    savingMatrix.value = true;
+    matrixSaved.value = false;
+
+    const roles = props.roles
+        .filter((r) => !r.is_locked)
+        .map((r) => ({
+            role_id: r.id,
+            permissions: Array.from(localMatrix.value[r.id] ?? []),
+        }));
+
+    router.put(
+        route('settings.rbac.matrix.save'),
+        { outlet_id: outletId.value, roles },
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                matrixSaved.value = true;
+                savingMatrix.value = false;
+            },
+            onError: () => {
+                savingMatrix.value = false;
+            },
+        },
+    );
+}
+
+// ─── Outlet filter ──────────────────────────────────────────────────────────────
 
 function submitOutletFilter() {
     router.get(
         route('settings.rbac.index'),
-        {
-            outlet_id: outletId.value || undefined,
-        },
-        {
-            preserveScroll: true,
-            preserveState: true,
-            replace: true,
-        },
+        { outlet_id: outletId.value || undefined },
+        { preserveScroll: true, preserveState: true, replace: true },
     );
 }
+
+// ─── Role modal ─────────────────────────────────────────────────────────────────
 
 function resetRoleForm() {
     roleForm.clearErrors();
@@ -189,10 +286,6 @@ function resetRoleForm() {
     roleForm.is_active = true;
 }
 
-function applyDefaultPermissions() {
-    roleForm.permissions = [...(props.defaultPermissionMatrix[roleForm.type] || [])];
-}
-
 function openCreateModal() {
     selectedRole.value = null;
     modalMode.value = 'create';
@@ -201,7 +294,6 @@ function openCreateModal() {
 
 function openEditModal(role: RoleRow) {
     if (role.is_locked) return;
-
     selectedRole.value = role;
     modalMode.value = 'edit';
     roleForm.clearErrors();
@@ -218,66 +310,33 @@ function closeModal() {
     resetRoleForm();
 }
 
-function togglePermission(permissionName: string, checked: boolean) {
-    const next = new Set(roleForm.permissions);
-
-    if (checked) {
-        next.add(permissionName);
-    } else {
-        next.delete(permissionName);
-    }
-
-    roleForm.permissions = Array.from(next.values());
-}
-
-function handlePermissionChange(permissionName: string, event: Event) {
-    const target = event.target as HTMLInputElement;
-    togglePermission(permissionName, target.checked);
-}
-
 function submitRole() {
     roleForm.outlet_id = outletId.value || props.selectedOutlet?.id || '';
-
-    const options = {
-        preserveScroll: true,
-        onSuccess: () => closeModal(),
-    };
-
+    const options = { preserveScroll: true, onSuccess: () => closeModal() };
     if (modalMode.value === 'edit' && selectedRole.value) {
         roleForm.patch(route('settings.rbac.update', selectedRole.value.id), options);
         return;
     }
-
     roleForm.post(route('settings.rbac.store'), options);
 }
+
+// ─── Employee role assign ───────────────────────────────────────────────────────
 
 function updateEmployeeRole(employee: EmployeeRow, event: Event) {
     const target = event.target as HTMLSelectElement;
     const nextRoleId = target.value;
+    if (!nextRoleId || nextRoleId === employee.role_id) return;
 
-    if (!nextRoleId || nextRoleId === employee.role_id) {
-        return;
-    }
-
-    const selectedOption = activeRoleOptions.value.find((role) => role.id === nextRoleId);
+    const selectedOption = activeRoleOptions.value.find((r) => r.id === nextRoleId);
     const confirmed = window.confirm(
-        `Ubah role ${employee.name} menjadi ${selectedOption?.name || 'role baru'}? User perlu login ulang agar akses baru sinkron.`,
+        `Ubah role ${employee.name} menjadi "${selectedOption?.name ?? 'role baru'}"?\nUser perlu login ulang agar akses baru aktif.`,
     );
-
-    if (!confirmed) {
-        target.value = employee.role_id;
-        return;
-    }
+    if (!confirmed) { target.value = employee.role_id; return; }
 
     router.patch(
         route('settings.rbac.users.assign-role', employee.id),
-        {
-            outlet_id: outletId.value || props.selectedOutlet?.id || '',
-            role_id: nextRoleId,
-        },
-        {
-            preserveScroll: true,
-        },
+        { outlet_id: outletId.value || props.selectedOutlet?.id || '', role_id: nextRoleId },
+        { preserveScroll: true },
     );
 }
 </script>
@@ -288,96 +347,37 @@ function updateEmployeeRole(employee: EmployeeRow, event: Event) {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
+                <div class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300">
                     <ShieldCheck class="h-3.5 w-3.5" />
                     Menu #55 User & RBAC
                 </div>
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        User & RBAC
-                    </h2>
+                    <h2 class="text-2xl font-black tracking-tight text-white">Role & Hak Akses</h2>
                     <p class="mt-1 max-w-3xl text-xs text-slate-400">
-                        Kelola role custom per outlet, atur permission matrix, dan reassign role user aktif
-                        dari satu dashboard owner.
+                        Kelola akun karyawan per outlet dan atur hak akses CRUD setiap role secara visual dari satu dashboard.
                     </p>
                 </div>
             </div>
         </template>
 
         <div class="space-y-5">
-            <div
-                v-if="success"
-                class="rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
-            >
+            <!-- Success alert -->
+            <div v-if="success" class="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-300">
                 {{ success }}
             </div>
 
-            <section class="rounded-[26px] border border-sky-500/15 bg-sky-500/[0.08] p-4 text-sm text-sky-100">
-                <p class="font-semibold">
-                    Permission di halaman ini mendefinisikan permukaan akses role.
-                </p>
-                <p class="mt-1 text-xs text-sky-100/80">
-                    Beberapa aksi seperti refund, void, dan cancel order tetap bisa memerlukan approval flow
-                    walaupun permission role-nya aktif. Detail threshold approval dilanjutkan di menu `#61`.
-                </p>
-            </section>
-
-            <section class="rounded-[26px] border border-white/10 bg-slate-950/40 p-4">
-                <div class="grid gap-3 md:grid-cols-[minmax(0,1fr),auto]">
-                    <div>
-                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                            Outlet Scope
-                        </p>
-                        <p class="mt-1 text-xs text-slate-400">
-                            Role dan assignment user di halaman ini selalu mengikuti outlet yang dipilih.
-                        </p>
-                    </div>
-                    <div class="flex gap-2">
-                        <select
-                            v-model="outletId"
-                            class="w-full min-w-[260px] rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                            @change="submitOutletFilter"
-                        >
-                            <option
-                                v-for="outlet in outlets"
-                                :key="outlet.id"
-                                :value="outlet.id"
-                            >
-                                {{ outlet.name }}{{ outlet.is_active ? '' : ' (nonaktif)' }}
-                            </option>
-                        </select>
-                        <Link
-                            :href="route('employees.index', { outlet_id: outletId || undefined })"
-                            class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/[0.05]"
-                        >
-                            Buka Karyawan
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
+            <!-- Summary cards -->
             <section class="grid gap-3 lg:grid-cols-4">
                 <article
                     v-for="stat in summaryCards"
                     :key="stat.label"
-                    :class="[
-                        'rounded-[22px] border px-4 py-4 shadow-lg shadow-slate-950/10',
-                        stat.surface,
-                    ]"
+                    :class="['rounded-[22px] border px-4 py-4', stat.surface]"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                                {{ stat.label }}
-                            </p>
-                            <p :class="['mt-2 text-3xl font-black', stat.tone]">
-                                {{ stat.value }}
-                            </p>
-                            <p class="mt-1 text-xs text-slate-400">
-                                {{ stat.helper }}
-                            </p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">{{ stat.label }}</p>
+                            <p :class="['mt-2 text-3xl font-black', stat.tone]">{{ stat.value }}</p>
+                            <p class="mt-1 text-xs text-slate-400">{{ stat.helper }}</p>
                         </div>
                         <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
                             <component :is="stat.icon" class="h-5 w-5 text-slate-200" />
@@ -386,239 +386,381 @@ function updateEmployeeRole(employee: EmployeeRow, event: Event) {
                 </article>
             </section>
 
-            <section class="grid gap-5 xl:grid-cols-[1.15fr,0.85fr]">
-                <div class="rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
-                    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                                Role & Permissions
-                            </p>
-                            <h3 class="mt-1 text-xl font-black text-white">
-                                Role outlet {{ selectedOutlet?.name || '-' }}
-                            </h3>
-                        </div>
-                        <button
-                            type="button"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-orange-400"
-                            @click="openCreateModal"
-                        >
-                            <Plus class="h-4 w-4" />
-                            Tambah Role
-                        </button>
+            <!-- Outlet selector -->
+            <section class="flex flex-col gap-3 rounded-[24px] border border-white/10 bg-slate-950/40 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">Outlet</p>
+                    <p class="mt-0.5 text-xs text-slate-400">Semua pengaturan di bawah mengikuti outlet yang dipilih.</p>
+                </div>
+                <select
+                    v-model="outletId"
+                    class="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-orange-400/40 sm:w-[280px]"
+                    @change="submitOutletFilter"
+                >
+                    <option v-for="outlet in outlets" :key="outlet.id" :value="outlet.id">
+                        {{ outlet.name }}{{ outlet.is_active ? '' : ' (nonaktif)' }}
+                    </option>
+                </select>
+            </section>
+
+            <!-- Tab navigation -->
+            <div class="flex items-center gap-1 rounded-2xl border border-white/10 bg-slate-950/40 p-1.5">
+                <button
+                    type="button"
+                    :class="[
+                        'flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition',
+                        activeTab === 'accounts'
+                            ? 'bg-white text-slate-900 shadow-md'
+                            : 'text-slate-400 hover:text-white',
+                    ]"
+                    @click="activeTab = 'accounts'"
+                >
+                    <Users class="h-4 w-4" />
+                    Akun Karyawan
+                    <span class="rounded-full bg-slate-200/20 px-2 py-0.5 text-[11px] font-bold" :class="activeTab === 'accounts' ? 'bg-slate-900/10 text-slate-900' : ''">
+                        {{ employees.length }}
+                    </span>
+                </button>
+                <button
+                    type="button"
+                    :class="[
+                        'flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition',
+                        activeTab === 'matrix'
+                            ? 'bg-white text-slate-900 shadow-md'
+                            : 'text-slate-400 hover:text-white',
+                    ]"
+                    @click="activeTab = 'matrix'"
+                >
+                    <ShieldCheck class="h-4 w-4" />
+                    Hak Akses Peran (RBAC)
+                    <span class="rounded-full px-2 py-0.5 text-[11px] font-bold" :class="activeTab === 'matrix' ? 'bg-slate-900/10 text-slate-900' : 'bg-slate-200/20'">
+                        {{ roles.length }} role
+                    </span>
+                </button>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <!-- TAB 1: Akun Karyawan                                    -->
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <section v-if="activeTab === 'accounts'" class="rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">Akun Karyawan</p>
+                        <h3 class="mt-1 text-lg font-black text-white">Daftar karyawan & role aktif</h3>
+                        <p class="mt-0.5 text-xs text-slate-400">Ubah role karyawan langsung dari dropdown. Karyawan perlu login ulang agar akses baru aktif.</p>
                     </div>
-
-                    <label class="relative mt-4 block">
-                        <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                        <input
-                            v-model="roleSearch"
-                            type="text"
-                            placeholder="Cari role..."
-                            class="w-full rounded-2xl border border-white/10 bg-white/[0.03] py-3 pl-10 pr-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-orange-400/40"
-                        >
-                    </label>
-
-                    <div
-                        v-if="filteredRoles.length"
-                        class="mt-4 space-y-3"
+                    <button
+                        type="button"
+                        class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-orange-400"
+                        @click="openCreateModal"
                     >
-                        <article
-                            v-for="role in filteredRoles"
-                            :key="role.id"
-                            class="rounded-[24px] border border-white/10 bg-white/[0.03] p-4"
-                        >
-                            <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                                <div>
-                                    <div class="flex flex-wrap items-center gap-2">
-                                        <h4 class="text-lg font-black text-white">
-                                            {{ role.name }}
-                                        </h4>
-                                        <span
-                                            class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
-                                            :class="statusBadgeClass(role.is_active)"
-                                        >
-                                            {{ role.is_active ? 'Aktif' : 'Nonaktif' }}
-                                        </span>
-                                        <span class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
-                                            Base {{ role.type_label }}
-                                        </span>
-                                        <span
-                                            v-if="role.is_locked"
-                                            class="rounded-full border border-sky-400/20 bg-sky-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-sky-200"
-                                        >
-                                            System
-                                        </span>
-                                    </div>
-                                    <p class="mt-2 text-xs text-slate-400">
-                                        {{ role.users_count }} user • {{ role.permission_count }} permission aktif
-                                    </p>
+                        <Plus class="h-4 w-4" />
+                        Tambah Role
+                    </button>
+                </div>
+
+                <!-- Search -->
+                <label class="relative mt-4 block">
+                    <Search class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                    <input
+                        v-model="employeeSearch"
+                        type="text"
+                        placeholder="Cari nama, email, atau role karyawan..."
+                        class="w-full rounded-2xl border border-white/10 bg-white/[0.03] py-3 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-orange-400/40"
+                    />
+                </label>
+
+                <!-- Employee list -->
+                <div class="mt-4 space-y-2.5">
+                    <div
+                        v-for="employee in filteredEmployees"
+                        :key="employee.id"
+                        class="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:bg-white/[0.05] sm:flex-row sm:items-center sm:justify-between"
+                    >
+                        <!-- Avatar + info -->
+                        <div class="flex items-center gap-3.5">
+                            <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-slate-700 text-sm font-black text-white">
+                                {{ employee.name.charAt(0).toUpperCase() }}
+                            </div>
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <p class="text-sm font-black text-white">{{ employee.name }}</p>
+                                    <span
+                                        class="rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em]"
+                                        :class="employee.is_active
+                                            ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300'
+                                            : 'border-amber-400/20 bg-amber-500/10 text-amber-300'"
+                                    >
+                                        {{ employee.is_active ? 'Aktif' : 'Nonaktif' }}
+                                    </span>
+                                    <span
+                                        v-if="employee.role_type"
+                                        class="rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em]"
+                                        :class="roleBadgeClass(employee.role_type)"
+                                    >
+                                        {{ employee.role_name || employee.role_type }}
+                                    </span>
                                 </div>
-
-                                <button
-                                    v-if="!role.is_locked"
-                                    type="button"
-                                    class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/[0.05]"
-                                    @click="openEditModal(role)"
-                                >
-                                    <Pencil class="h-3.5 w-3.5" />
-                                    Edit
-                                </button>
+                                <p class="mt-0.5 text-xs text-slate-400">
+                                    {{ employee.email }}
+                                    <span v-if="employee.phone"> · {{ employee.phone }}</span>
+                                </p>
                             </div>
+                        </div>
 
-                            <div class="mt-3 flex flex-wrap gap-2">
-                                <span
-                                    v-for="permissionName in role.permission_names.slice(0, 8)"
-                                    :key="`${role.id}-${permissionName}`"
-                                    class="rounded-full border border-orange-400/20 bg-orange-500/10 px-2.5 py-1 text-[11px] font-medium text-orange-100"
-                                >
-                                    {{ permissionName }}
-                                </span>
-                                <span
-                                    v-if="role.permission_names.length > 8"
-                                    class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-slate-300"
-                                >
-                                    +{{ role.permission_names.length - 8 }} permission
-                                </span>
-                            </div>
-                        </article>
+                        <!-- Role dropdown -->
+                        <div class="flex items-center gap-2 sm:flex-shrink-0">
+                            <PenLine class="h-3.5 w-3.5 flex-shrink-0 text-slate-500" />
+                            <select
+                                :value="employee.role_id"
+                                class="rounded-2xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                @change="updateEmployeeRole(employee, $event)"
+                            >
+                                <option v-for="role in activeRoleOptions" :key="role.id" :value="role.id">
+                                    {{ role.name }}
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div
-                        v-else
-                        class="mt-4 rounded-[24px] border border-dashed border-white/10 bg-white/[0.02] px-5 py-10 text-center"
-                    >
-                        <p class="text-lg font-semibold text-white">
-                            Belum ada role untuk outlet ini.
-                        </p>
+                    <div v-if="!filteredEmployees.length" class="rounded-[24px] border border-dashed border-white/10 bg-white/[0.02] py-10 text-center">
+                        <Users class="mx-auto h-8 w-8 text-slate-600" />
+                        <p class="mt-3 text-sm font-semibold text-slate-400">Tidak ada karyawan ditemukan.</p>
                     </div>
                 </div>
 
-                <div class="space-y-5">
-                    <section class="rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
-                        <div>
-                            <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                                Permission Catalog
-                            </p>
-                            <h3 class="mt-1 text-xl font-black text-white">
-                                Modul akses yang tersedia
-                            </h3>
-                        </div>
-
-                        <div class="mt-4 space-y-3">
-                            <article
-                                v-for="group in permissionGroups"
-                                :key="group.key"
-                                class="rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+                <!-- Role list -->
+                <div class="mt-6 border-t border-white/10 pt-5">
+                    <div class="flex items-center justify-between gap-3">
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">Role yang Tersedia</p>
+                        <span class="text-xs text-slate-500">{{ roles.length }} role terdaftar</span>
+                    </div>
+                    <div class="mt-3 flex flex-wrap gap-2.5">
+                        <div
+                            v-for="role in roles"
+                            :key="role.id"
+                            class="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5"
+                        >
+                            <span
+                                class="h-2 w-2 rounded-full"
+                                :class="role.is_active ? 'bg-emerald-400' : 'bg-slate-600'"
+                            />
+                            <span class="text-sm font-semibold text-white">{{ role.name }}</span>
+                            <span class="text-[10px] text-slate-500">{{ role.users_count }} user</span>
+                            <button
+                                v-if="!role.is_locked"
+                                type="button"
+                                class="ml-1 rounded-lg p-1 text-slate-500 transition hover:bg-white/[0.06] hover:text-orange-300"
+                                title="Edit role"
+                                @click="openEditModal(role)"
                             >
-                                <div class="flex items-center justify-between gap-3">
-                                    <h4 class="text-sm font-black text-white">
-                                        {{ group.label }}
-                                    </h4>
-                                    <span class="text-xs text-slate-500">
-                                        {{ group.permissions.length }} permission
-                                    </span>
-                                </div>
-                                <div class="mt-3 space-y-2">
-                                    <div
-                                        v-for="permission in group.permissions.slice(0, 3)"
-                                        :key="permission.id"
-                                        class="rounded-xl border border-white/10 bg-slate-950/35 px-3 py-2"
-                                    >
-                                        <p class="text-xs font-semibold text-orange-200">
-                                            {{ permission.name }}
-                                        </p>
-                                        <p class="mt-1 text-[11px] text-slate-400">
-                                            {{ permission.description }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
+                                <Pencil class="h-3.5 w-3.5" />
+                            </button>
                         </div>
-                    </section>
+                    </div>
+                </div>
+            </section>
 
-                    <section class="rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                                    Assign Role User
-                                </p>
-                                <h3 class="mt-1 text-xl font-black text-white">
-                                    Reassign akses outlet
-                                </h3>
-                            </div>
-                            <span class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] text-slate-300">
-                                Login ulang diperlukan
-                            </span>
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <!-- TAB 2: Matriks RBAC                                     -->
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <section v-if="activeTab === 'matrix'" class="rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
+                <!-- Header matrix -->
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">Matriks Hak Akses Peran</p>
+                        <h3 class="mt-1 text-lg font-black text-white">Atur akses per fitur untuk setiap role</h3>
+                        <p class="mt-1 text-xs text-slate-400">
+                            Klik ikon untuk mengaktifkan atau menonaktifkan akses. Setelah selesai klik <strong class="text-white">Simpan Hak Akses</strong>.
+                        </p>
+                    </div>
+                    <div class="flex flex-shrink-0 items-center gap-2">
+                        <div v-if="matrixSaved" class="flex items-center gap-1.5 text-xs text-emerald-300">
+                            <CheckCircle2 class="h-3.5 w-3.5" />
+                            Tersimpan
                         </div>
+                        <button
+                            type="button"
+                            class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                            :disabled="savingMatrix"
+                            @click="saveMatrix"
+                        >
+                            <Save class="h-4 w-4" />
+                            {{ savingMatrix ? 'Menyimpan...' : 'Simpan Hak Akses' }}
+                        </button>
+                    </div>
+                </div>
 
-                        <label class="relative mt-4 block">
-                            <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                            <input
-                                v-model="employeeSearch"
-                                type="text"
-                                placeholder="Cari user..."
-                                class="w-full rounded-2xl border border-white/10 bg-white/[0.03] py-3 pl-10 pr-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-orange-400/40"
-                            >
-                        </label>
+                <!-- Legend chips -->
+                <div class="mt-4 flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-400">Legenda aksi:</span>
+                    <span class="inline-flex items-center gap-1 rounded-full border border-sky-400/20 bg-sky-500/10 px-2.5 py-1 text-[11px] font-semibold text-sky-200">
+                        <Eye class="h-3 w-3" /> Lihat
+                    </span>
+                    <span class="inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-200">
+                        <Plus class="h-3 w-3" /> Tambah
+                    </span>
+                    <span class="inline-flex items-center gap-1 rounded-full border border-amber-400/20 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-200">
+                        <Pencil class="h-3 w-3" /> Ubah
+                    </span>
+                    <span class="inline-flex items-center gap-1 rounded-full border border-rose-400/20 bg-rose-500/10 px-2.5 py-1 text-[11px] font-semibold text-rose-200">
+                        <Trash2 class="h-3 w-3" /> Hapus/Aksi Kritis
+                    </span>
+                    <span class="ml-2 text-[11px] text-slate-500">Ikon berwarna = aktif · abu-abu = nonaktif</span>
+                </div>
 
-                        <div class="mt-4 space-y-3">
-                            <article
-                                v-for="employee in filteredEmployees"
-                                :key="employee.id"
-                                class="rounded-2xl border border-white/10 bg-white/[0.03] p-4"
-                            >
-                                <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                                    <div>
-                                        <div class="flex flex-wrap items-center gap-2">
-                                            <h4 class="text-sm font-black text-white">
-                                                {{ employee.name }}
-                                            </h4>
-                                            <span
-                                                class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
-                                                :class="statusBadgeClass(employee.is_active)"
-                                            >
-                                                {{ employee.is_active ? 'Aktif' : 'Nonaktif' }}
-                                            </span>
-                                        </div>
-                                        <p class="mt-1 text-xs text-slate-400">
-                                            {{ employee.email }} • {{ employee.role_name || '-' }}
-                                        </p>
-                                    </div>
+                <!-- Info owner -->
+                <div class="mt-4 rounded-2xl border border-amber-400/15 bg-amber-500/8 px-4 py-3 text-xs text-amber-200">
+                    <strong>Role Owner</strong> selalu memiliki semua akses penuh dan tidak bisa diubah dari halaman ini.
+                </div>
 
-                                    <select
-                                        :value="employee.role_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2.5 text-sm text-white outline-none transition focus:border-orange-400/40 md:w-[220px]"
-                                        @change="updateEmployeeRole(employee, $event)"
-                                    >
-                                        <option
-                                            v-for="role in activeRoleOptions"
-                                            :key="role.id"
-                                            :value="role.id"
+                <!-- Matrix table -->
+                <div class="mt-5 overflow-x-auto rounded-2xl border border-white/10">
+                    <table class="w-full min-w-max border-collapse text-sm">
+                        <!-- Role column headers -->
+                        <thead>
+                            <tr class="border-b border-white/10 bg-slate-950/60">
+                                <th class="sticky left-0 z-10 min-w-[200px] bg-slate-950/90 px-4 py-4 text-left text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                                    Fitur / Menu
+                                </th>
+                                <th
+                                    v-for="role in roles"
+                                    :key="role.id"
+                                    class="min-w-[130px] px-3 py-4 text-center"
+                                >
+                                    <div class="flex flex-col items-center gap-1.5">
+                                        <span
+                                            class="rounded-full border px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em]"
+                                            :class="roleBadgeClass(role.type)"
                                         >
-                                            {{ role.name }} ({{ role.type_label }})
-                                        </option>
-                                    </select>
-                                </div>
-                            </article>
-                        </div>
-                    </section>
+                                            {{ role.name }}
+                                        </span>
+                                        <span class="text-[10px] text-slate-500">{{ role.users_count }} user</span>
+                                        <button
+                                            v-if="!role.is_locked"
+                                            type="button"
+                                            class="mt-0.5 inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2 py-0.5 text-[10px] text-slate-400 transition hover:border-orange-400/30 hover:text-orange-300"
+                                            :title="`Reset ${role.name} ke default`"
+                                            @click="resetRoleToDefault(role.id, role.type)"
+                                        >
+                                            <RotateCcw class="h-2.5 w-2.5" />
+                                            Reset
+                                        </button>
+                                        <span v-else class="text-[10px] text-slate-600">— terkunci —</span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <template v-for="group in permissionGroups" :key="group.key">
+                                <!-- Group header row -->
+                                <tr class="border-b border-white/5 bg-slate-900/60">
+                                    <td class="sticky left-0 z-10 bg-slate-900/80 px-4 py-2.5">
+                                        <span class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-300">
+                                            {{ group.label }}
+                                        </span>
+                                    </td>
+                                    <td
+                                        v-for="role in roles"
+                                        :key="role.id"
+                                        class="px-3 py-2 text-center"
+                                    >
+                                        <!-- Toggle semua permission dalam group ini -->
+                                        <button
+                                            v-if="!role.is_locked"
+                                            type="button"
+                                            :title="`Toggle semua ${group.label} untuk ${role.name}`"
+                                            class="mx-auto flex h-5 w-5 items-center justify-center rounded-md transition"
+                                            :class="isGroupAllActive(role.id, group)
+                                                ? 'bg-orange-500 text-white'
+                                                : isGroupPartialActive(role.id, group)
+                                                    ? 'bg-orange-500/30 text-orange-200'
+                                                    : 'border border-white/10 bg-white/[0.03] text-slate-600 hover:border-orange-400/30'"
+                                            @click="toggleGroupForRole(role.id, group)"
+                                        >
+                                            <CheckCircle2 class="h-3 w-3" />
+                                        </button>
+                                        <span v-else class="mx-auto block h-5 w-5" />
+                                    </td>
+                                </tr>
+
+                                <!-- Permission rows dalam group -->
+                                <tr
+                                    v-for="permission in group.permissions"
+                                    :key="permission.id"
+                                    class="border-b border-white/5 transition hover:bg-white/[0.02]"
+                                >
+                                    <!-- Permission name (frozen left) -->
+                                    <td class="sticky left-0 z-10 bg-slate-950/90 px-4 py-3">
+                                        <p class="text-xs font-semibold text-slate-200">{{ permission.description }}</p>
+                                        <p class="mt-0.5 font-mono text-[10px] text-slate-500">{{ permission.name }}</p>
+                                    </td>
+
+                                    <!-- Toggle per role -->
+                                    <td
+                                        v-for="role in roles"
+                                        :key="role.id"
+                                        class="px-3 py-3 text-center"
+                                    >
+                                        <template v-if="role.is_locked">
+                                            <!-- Owner: semua aktif, tidak bisa diubah -->
+                                            <div class="mx-auto flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/20">
+                                                <CheckCircle2 class="h-4 w-4 text-amber-300" />
+                                            </div>
+                                        </template>
+                                        <template v-else>
+                                            <!-- Toggle button dengan warna berdasarkan action type -->
+                                            <button
+                                                type="button"
+                                                class="mx-auto flex h-8 w-8 items-center justify-center rounded-xl border transition"
+                                                :class="hasPermission(role.id, permission.name)
+                                                    ? getPermissionActiveClass(permission.name)
+                                                    : 'border-white/10 bg-white/[0.02] text-slate-600 hover:border-slate-500/40 hover:text-slate-400'"
+                                                :title="`${hasPermission(role.id, permission.name) ? 'Nonaktifkan' : 'Aktifkan'}: ${permission.description} untuk ${role.name}`"
+                                                @click="togglePermissionInMatrix(role.id, permission.name)"
+                                            >
+                                                <component
+                                                    :is="getPermissionIcon(permission.name)"
+                                                    class="h-3.5 w-3.5"
+                                                />
+                                            </button>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bottom save button -->
+                <div class="mt-5 flex justify-end">
+                    <button
+                        type="button"
+                        class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                        :disabled="savingMatrix"
+                        @click="saveMatrix"
+                    >
+                        <Save class="h-4 w-4" />
+                        {{ savingMatrix ? 'Menyimpan...' : 'Simpan Hak Akses' }}
+                    </button>
                 </div>
             </section>
         </div>
 
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- Modal Tambah/Edit Role                                          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
         <teleport to="body">
             <div
                 v-if="isModalOpen"
-                class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 px-4 py-8 backdrop-blur-sm"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 py-8 backdrop-blur-sm"
             >
-                <div class="w-full max-w-5xl rounded-[28px] border border-white/10 bg-slate-900 shadow-2xl shadow-black/40">
+                <div class="w-full max-w-lg rounded-[28px] border border-white/10 bg-slate-900 shadow-2xl shadow-black/50">
                     <div class="flex items-start justify-between border-b border-white/10 px-6 py-5">
                         <div>
-                            <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                                Role Builder
-                            </p>
-                            <h3 class="mt-1 text-xl font-black text-white">
-                                {{ modalTitle }}
-                            </h3>
+                            <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">Role Builder</p>
+                            <h3 class="mt-1 text-xl font-black text-white">{{ modalTitle }}</h3>
                         </div>
                         <button
                             type="button"
@@ -629,137 +771,58 @@ function updateEmployeeRole(employee: EmployeeRow, event: Event) {
                         </button>
                     </div>
 
-                    <form
-                        class="space-y-5 px-6 py-5"
-                        @submit.prevent="submitRole"
-                    >
-                        <div class="grid gap-4 md:grid-cols-[1.1fr,0.9fr]">
-                            <label class="block">
-                                <span class="text-xs font-semibold text-slate-300">Nama role</span>
-                                <input
-                                    v-model="roleForm.name"
-                                    type="text"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                    placeholder="Kasir Senior"
-                                >
-                                <p
-                                    v-if="roleForm.errors.name"
-                                    class="mt-2 text-xs text-rose-300"
-                                >
-                                    {{ roleForm.errors.name }}
-                                </p>
-                            </label>
+                    <form class="space-y-4 px-6 py-5" @submit.prevent="submitRole">
+                        <!-- Nama role -->
+                        <label class="block">
+                            <span class="text-xs font-semibold text-slate-300">Nama Role</span>
+                            <input
+                                v-model="roleForm.name"
+                                type="text"
+                                placeholder="Contoh: Kasir Senior, Supervisor Malam"
+                                class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                            />
+                            <p v-if="roleForm.errors.name" class="mt-1.5 text-xs text-rose-300">{{ roleForm.errors.name }}</p>
+                        </label>
 
-                            <div class="space-y-4">
-                                <label class="block">
-                                    <span class="text-xs font-semibold text-slate-300">Base role type</span>
-                                    <select
-                                        v-model="roleForm.type"
-                                        class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                    >
-                                        <option
-                                            v-for="option in roleTypeOptions"
-                                            :key="option.value"
-                                            :value="option.value"
-                                        >
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
-                                    <p
-                                        v-if="roleForm.errors.type"
-                                        class="mt-2 text-xs text-rose-300"
-                                    >
-                                        {{ roleForm.errors.type }}
-                                    </p>
-                                </label>
-
-                                <label class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                                    <input
-                                        v-model="roleForm.is_active"
-                                        type="checkbox"
-                                        class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
-                                    >
-                                    <span class="text-sm text-slate-200">Role aktif dan bisa dipakai assign user</span>
-                                </label>
-
-                                <button
-                                    type="button"
-                                    class="w-full rounded-2xl border border-orange-400/30 bg-orange-500/10 px-4 py-3 text-sm font-semibold text-orange-200 transition hover:bg-orange-500/15"
-                                    @click="applyDefaultPermissions"
-                                >
-                                    Reset ke default permission base role
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="rounded-[24px] border border-white/10 bg-slate-950/35 p-4">
-                            <div class="flex items-center justify-between gap-3">
-                                <div>
-                                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                                        Permission Matrix
-                                    </p>
-                                    <p class="mt-1 text-xs text-slate-400">
-                                        Centang permission yang ingin aktif pada role ini.
-                                    </p>
-                                </div>
-                                <span class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-300">
-                                    {{ roleForm.permissions.length }} terpilih
-                                </span>
-                            </div>
-
-                            <p
-                                v-if="roleForm.errors.permissions"
-                                class="mt-3 text-xs text-rose-300"
+                        <!-- Base role type -->
+                        <label class="block">
+                            <span class="text-xs font-semibold text-slate-300">Base Tipe Role</span>
+                            <p class="mt-0.5 text-[11px] text-slate-500">Menentukan hak akses default yang langsung diterapkan saat role dibuat.</p>
+                            <select
+                                v-model="roleForm.type"
+                                class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
                             >
-                                {{ roleForm.errors.permissions }}
-                            </p>
+                                <option v-for="option in roleTypeOptions" :key="option.value" :value="option.value">
+                                    {{ option.label }}
+                                </option>
+                            </select>
+                            <p v-if="roleForm.errors.type" class="mt-1.5 text-xs text-rose-300">{{ roleForm.errors.type }}</p>
+                        </label>
 
-                            <div class="mt-4 grid gap-4 xl:grid-cols-2">
-                                <section
-                                    v-for="group in permissionGroups"
-                                    :key="group.key"
-                                    class="rounded-2xl border border-white/10 bg-white/[0.03] p-4"
-                                >
-                                    <h4 class="text-sm font-black text-white">
-                                        {{ group.label }}
-                                    </h4>
-                                    <div class="mt-3 space-y-3">
-                                        <label
-                                            v-for="permission in group.permissions"
-                                            :key="permission.id"
-                                            class="flex items-start gap-3 rounded-xl border border-white/10 bg-slate-950/35 px-3 py-3"
-                                        >
-                                            <input
-                                                :checked="roleForm.permissions.includes(permission.name)"
-                                                type="checkbox"
-                                                class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
-                                                @change="handlePermissionChange(permission.name, $event)"
-                                            >
-                                            <span>
-                                                <span class="block text-sm font-semibold text-white">
-                                                    {{ permission.name }}
-                                                </span>
-                                                <span class="mt-1 block text-xs text-slate-400">
-                                                    {{ permission.description }}
-                                                </span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                </section>
+                        <!-- Status aktif -->
+                        <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                            <input
+                                v-model="roleForm.is_active"
+                                type="checkbox"
+                                class="mt-0.5 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                            />
+                            <div>
+                                <span class="text-sm font-semibold text-slate-200">Role aktif</span>
+                                <p class="mt-0.5 text-xs text-slate-400">Role aktif bisa langsung diassign ke karyawan.</p>
                             </div>
-                        </div>
+                        </label>
 
-                        <div class="flex flex-col-reverse gap-3 border-t border-white/10 pt-5 sm:flex-row sm:justify-end">
-                            <button
-                                type="button"
-                                class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/[0.05]"
-                                @click="closeModal"
-                            >
+                        <p class="text-[11px] text-slate-500">
+                            Setelah role dibuat, atur permission detailnya secara visual di tab <strong class="text-slate-300">Hak Akses Peran (RBAC)</strong>.
+                        </p>
+
+                        <div class="flex flex-col-reverse gap-3 border-t border-white/10 pt-4 sm:flex-row sm:justify-end">
+                            <button type="button" class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/[0.05]" @click="closeModal">
                                 Batal
                             </button>
                             <button
                                 type="submit"
-                                class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                                class="rounded-2xl bg-orange-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
                                 :disabled="roleForm.processing"
                             >
                                 {{ roleForm.processing ? 'Menyimpan...' : 'Simpan Role' }}

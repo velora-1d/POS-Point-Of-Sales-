@@ -98,6 +98,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/rbac/roles', [RbacController::class, 'store'])->name('settings.rbac.store');
     Route::patch('/settings/rbac/roles/{role}', [RbacController::class, 'update'])->name('settings.rbac.update');
     Route::patch('/settings/rbac/users/{employee}/role', [RbacController::class, 'assignUserRole'])->name('settings.rbac.users.assign-role');
+    Route::put('/settings/rbac/matrix', [RbacController::class, 'saveMatrix'])->name('settings.rbac.matrix.save');
     Route::get('/settings/payment-gateway', [PaymentGatewayController::class, 'index'])->name('settings.payment-gateway.index');
     Route::put('/settings/payment-gateway', [PaymentGatewayController::class, 'update'])->name('settings.payment-gateway.update');
     Route::post('/settings/payment-gateway/test', [PaymentGatewayController::class, 'test'])->name('settings.payment-gateway.test');

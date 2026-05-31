@@ -36,6 +36,7 @@ class RbacController extends Controller
             'permissionGroups' => $data['permissionGroups'],
             'roleTypeOptions' => $data['roleTypeOptions'],
             'defaultPermissionMatrix' => $data['defaultPermissionMatrix'],
+            'permissionMatrix' => $data['permissionMatrix'],
             'filters' => $data['filters'],
             'success' => session('success'),
         ]);
@@ -77,5 +78,21 @@ class RbacController extends Controller
         return redirect()
             ->route('settings.rbac.index', ['outlet_id' => $request->validated('outlet_id')])
             ->with('success', 'Role user berhasil diperbarui.');
+    }
+
+    public function saveMatrix(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'outlet_id'              => ['required', 'string'],
+            'roles'                  => ['required', 'array'],
+            'roles.*.role_id'        => ['required', 'string'],
+            'roles.*.permissions'    => ['sometimes', 'array'],
+        ]);
+
+        $this->rbacService->saveMatrix($request->validated(), $request->user());
+
+        return redirect()
+            ->route('settings.rbac.index', ['outlet_id' => $request->validated('outlet_id')])
+            ->with('success', 'Matriks permission berhasil disimpan.');
     }
 }

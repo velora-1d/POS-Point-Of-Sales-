@@ -57,6 +57,7 @@ class RbacService
             'defaultPermissionMatrix' => collect(RbacPermissionMatrix::roleTypeLabels())
                 ->mapWithKeys(fn ($label, $type) => [$type => RbacPermissionMatrix::defaultsForRoleType($type)])
                 ->all(),
+            'permissionMatrix' => $this->buildPermissionMatrix($roles, $permissionCatalog),
             'filters' => [
                 'outlet_id' => $selectedOutletId,
             ],
@@ -153,6 +154,32 @@ class RbacService
         $this->rbacRepository->updateUserRole($scopedEmployee, $targetRole->id);
     }
 
+    public function saveMatrix(array $payload, User $actor): void
+    {
+        $this->assertCanManage($actor);
+        $this->ensureRbacSchemaReady();
+
+        DB::transaction(function () use ($payload) {
+            foreach ($payload['roles'] as $item) {
+                $roleId    = $item['role_id'];
+                $outletId  = $payload['outlet_id'];
+
+                $role = $this->rbacRepository->findRoleInOutlet($roleId, $outletId);
+
+                if (!$role || $role->type === 'owner') {
+                    continue;
+                }
+
+                $permissionIds = $this->resolvePermissionIds(
+                    $item['permissions'] ?? [],
+                    $role->type,
+                );
+
+                $this->rbacRepository->syncRolePermissions($role, $permissionIds);
+            }
+        });
+    }
+
     protected function transformRoles(Collection $roles): array
     {
         return $roles->map(function (Role $role) {
@@ -210,6 +237,19 @@ class RbacService
             })
             ->values()
             ->all();
+    }
+
+    protected function buildPermissionMatrix(Collection $roles, Collection $catalog): array
+    {
+        $matrix = [];
+        foreach ($roles as $role) {
+            $names = $role->relationLoaded('permissions')
+                ? $role->permissions->pluck('name')->values()->all()
+                : [];
+            $matrix[$role->id] = $names;
+        }
+
+        return $matrix;
     }
 
     protected function buildSummary(Collection $roles, Collection $employees, Collection $permissionCatalog): array
