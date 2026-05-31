@@ -163,7 +163,7 @@ class OrderPaymentService
                 'discount_amount' => $pricing['discount_amount'],
                 'total_amount' => $pricing['total_amount'],
                 'paid_amount' => 0,
-                'status' => 'payment_pending',
+                'status' => 'pending',
                 'source' => 'qr_meja',
                 'type' => 'dine_in',
                 'notes' => $payload['notes'] ?? null,
@@ -335,7 +335,7 @@ class OrderPaymentService
         );
 
         $order->update([
-            'status' => $context === 'before_kitchen' ? 'payment_pending' : $order->status,
+            'status' => $context === 'before_kitchen' ? 'pending' : $order->status,
             'pay_later' => false,
             'metadata' => $this->mergePaymentMeta($order, [
                 'provider' => 'pakasir',
@@ -365,7 +365,7 @@ class OrderPaymentService
 
     protected function settleExistingOrderWithCash(Order $order, array $payload, string $context): array
     {
-        if ($order->status === 'payment_pending') {
+        if ($order->hasPendingBeforeKitchenPayment()) {
             $this->cancelPendingGatewayIfNeeded($order);
         }
 
@@ -614,7 +614,7 @@ class OrderPaymentService
             ]);
         }
 
-        if ($order->status === 'payment_pending') {
+        if ($order->hasPendingBeforeKitchenPayment()) {
             return 'before_kitchen';
         }
 

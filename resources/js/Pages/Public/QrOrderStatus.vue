@@ -46,6 +46,12 @@ const formatPrice = (value: any) => {
 const paymentMeta = computed(() => props.order?.metadata?.payment || {});
 const promoMeta = computed(() => props.order?.metadata?.promo || {});
 const appliedPromos = computed(() => promoMeta.value?.applied_promos || []);
+const hasPendingBeforeKitchenPayment = computed(() => {
+    return (
+        paymentMeta.value?.status === 'pending' &&
+        paymentMeta.value?.context === 'before_kitchen'
+    );
+});
 
 const orderStatusLabel = computed(() => {
     switch (props.order.status) {
@@ -98,7 +104,7 @@ const checkoutUrl = computed(() => {
 
 const paymentStatusLabel = computed(() => {
     if (paymentMeta.value?.status === 'paid') return 'Lunas';
-    if (props.order.status === 'payment_pending') return 'Belum selesai bayar';
+    if (hasPendingBeforeKitchenPayment.value) return 'Belum selesai bayar';
     return 'Menunggu konfirmasi';
 });
 
@@ -398,7 +404,7 @@ const refreshPage = () => {
                             <button
                                 v-if="
                                     checkoutUrl &&
-                                    order.status === 'payment_pending'
+                                    hasPendingBeforeKitchenPayment
                                 "
                                 type="button"
                                 @click="openCheckout"

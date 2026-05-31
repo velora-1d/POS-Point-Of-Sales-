@@ -874,26 +874,6 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                     </Link>
                 </div>
 
-                <!-- Divider -->
-                <div class="mx-2 h-px bg-slate-800/40"></div>
-
-                <div class="px-2">
-                    <div
-                        class="rounded-xl border border-slate-800/60 bg-slate-950/40 px-4 py-3"
-                    >
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
-                        >
-                            Sidebar Ringkas
-                        </p>
-                        <p class="mt-1 text-xs leading-relaxed text-slate-400">
-                            Sidebar sekarang tampil per halaman. Progress 62
-                            fitur tetap dihitung dari modul yang ada di dalam
-                            tiap halaman.
-                        </p>
-                    </div>
-                </div>
-
                 <!-- Dynamic Categories -->
                 <div
                     v-for="category in filteredSidebar"
@@ -913,17 +893,10 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                                 class="h-4.5 w-4.5 shrink-0"
                             />
                             <div class="min-w-0">
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-orange-300"
-                                    >
-                                        {{ category.phase }}
-                                    </span>
-                                    <span
-                                        class="truncate text-xs font-bold uppercase tracking-wider"
-                                        >{{ category.name }}</span
-                                    >
-                                </div>
+                                <span
+                                    class="truncate text-xs font-bold uppercase tracking-[0.18em] text-slate-300"
+                                    >{{ category.name }}</span
+                                >
                                 <p class="mt-0.5 text-[10px] text-slate-500">
                                     {{ category.flow }}
                                 </p>

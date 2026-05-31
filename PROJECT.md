@@ -33,6 +33,16 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Bug PostgreSQL enum `order_status` untuk nilai `payment_pending` diperbaiki dengan menyelaraskan runtime ke model status baru: order tetap memakai status operasional `pending`, sedangkan status checkout QRIS dibaca dari `metadata.payment.status` + `metadata.payment.context`.
+- Backend yang terdampak di [app/Models/Order.php](/home/pak-hakim/Pak-Hakim/Project/POS/app/Models/Order.php), [app/Http/Controllers/OrderController.php](/home/pak-hakim/Pak-Hakim/Project/POS/app/Http/Controllers/OrderController.php), [app/Http/Controllers/QrSelfServiceController.php](/home/pak-hakim/Pak-Hakim/Project/POS/app/Http/Controllers/QrSelfServiceController.php), [app/Services/OrderPaymentService.php](/home/pak-hakim/Pak-Hakim/Project/POS/app/Services/OrderPaymentService.php), [app/Services/OrderEditService.php](/home/pak-hakim/Pak-Hakim/Project/POS/app/Services/OrderEditService.php), [app/Services/OrderBillService.php](/home/pak-hakim/Pak-Hakim/Project/POS/app/Services/OrderBillService.php), [app/Services/TransactionService.php](/home/pak-hakim/Pak-Hakim/Project/POS/app/Services/TransactionService.php), dan [app/Services/DashboardService.php](/home/pak-hakim/Pak-Hakim/Project/POS/app/Services/DashboardService.php) sekarang tidak lagi mengirim atau membandingkan enum `payment_pending` ke PostgreSQL.
+- UI kasir dan QR self-service di [resources/js/Pages/Kasir/Order.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Kasir/Order.vue) serta [resources/js/Pages/Public/QrOrderStatus.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Public/QrOrderStatus.vue) tetap menampilkan state `Menunggu QRIS` berdasarkan metadata pembayaran agar perilaku user-facing tidak berubah.
+- Verifikasi sesi ini: `php -l` untuk seluruh file PHP yang diubah dan `npm run build` berhasil pada `2026-05-31`.
+- Task lanjutan jika dibutuhkan: audit data order lama bila masih ada record historis/logic lain yang mengasumsikan `payment_pending` sebagai status order tekstual di luar flow yang sudah dipatch.
+- Dashboard dan sidebar operasional dibersihkan dari indikator development internal seperti badge `Fase X`, `Progress 62 fitur`, `Modul Terimplementasi`, dan `Coming Soon`, sehingga tampilan user sekarang fokus ke aktivitas operasional.
+- Quick action di [resources/js/Pages/Dashboard.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Dashboard.vue) dirancang ulang menjadi kartu aksi untuk `Buka Buat Order Baru`, `Kitchen Display`, `Alert Stok Menipis`, dan `Reminder Expired` dengan deskripsi singkat agar lebih mudah dipahami user outlet.
+- Sidebar di [resources/js/Layouts/AuthenticatedLayout.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Layouts/AuthenticatedLayout.vue) disederhanakan supaya kategori tampil dalam bahasa area kerja, bukan bahasa fase development.
+- Verifikasi sesi ini: `npm run build` dijalankan setelah perapihan UI dashboard/sidebar.
+- Task lanjutan jika dibutuhkan: tambahkan widget `approval pending` dan `kasbon jatuh tempo` ke dashboard agar brief laporan dashboard sepenuhnya terpenuhi.
 - Test environment sekarang sudah diarahkan ke PostgreSQL/Neon, bukan lagi `sqlite :memory:`, lewat koneksi `pgsql_testing` di [config/database.php](/home/pak-hakim/Pak-Hakim/Project/POS/config/database.php) dan override [phpunit.xml](/home/pak-hakim/Pak-Hakim/Project/POS/phpunit.xml).
 - Auth bawaan Laravel sudah diselaraskan dengan schema POS: register, update password, reset password, model user, dan factory sekarang memakai `password_hash`, `outlet_id`, `role_id`, serta state `unverified()` untuk user test.
 - Migration baru [2026_05_28_000024_add_email_verified_at_to_users_table.php](/home/pak-hakim/Pak-Hakim/Project/POS/database/migrations/2026_05_28_000024_add_email_verified_at_to_users_table.php) sudah diterapkan ke Neon; `php artisan migrate:status` sekarang `Ran` sampai batch `9`.
@@ -251,4 +261,4 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Verifikasi sesi ini: `php -l` untuk file PHP baru/yang diubah, `php artisan route:list` untuk route customer/meja/reservasi/kasir, dan `npm run build` berhasil.
 
 ## Last Updated
-2026-05-28
+2026-05-31

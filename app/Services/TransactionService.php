@@ -35,7 +35,7 @@ class TransactionService
         $outletId = $this->resolveActorOutletId($actor);
         $resolvedFilters = [
             'search' => trim((string) ($filters['search'] ?? '')),
-            'status' => (string) ($filters['status'] ?? 'all'),
+            'status' => $this->normalizeHistoryStatusFilter($filters['status'] ?? 'all'),
             'payment_method' => (string) ($filters['payment_method'] ?? 'all'),
             'start_date' => $filters['start_date'] ?? now()->startOfMonth()->toDateString(),
             'end_date' => $filters['end_date'] ?? now()->toDateString(),
@@ -110,7 +110,7 @@ class TransactionService
                 'discount_amount' => $pricing['discount_amount'],
                 'total_amount' => $pricing['total_amount'],
                 'paid_amount' => $downPaymentAmount,
-                'status' => 'scheduled',
+                'status' => 'pending',
                 'source' => 'kasir',
                 'type' => 'takeaway',
                 'notes' => $payload['notes'] ?? null,
@@ -133,6 +133,8 @@ class TransactionService
                         'down_payment_amount' => $downPaymentAmount,
                         'remaining_amount' => round(max(0, $pricing['total_amount'] - $downPaymentAmount), 2),
                         'created_by' => $actor->id,
+                        'activated_at' => null,
+                        'activated_by' => null,
                     ],
                 ],
             ]);
@@ -171,7 +173,7 @@ class TransactionService
             ]);
         }
 
-        if (in_array($order->status, ['payment_pending', 'completed', 'cancelled', 'scheduled'], true)) {
+        if ($order->hasPendingBeforeKitchenPayment() || $order->hasActivePreOrder() || in_array($order->status, ['completed', 'cancelled'], true)) {
             throw ValidationException::withMessages([
                 'order' => 'Status order ini tidak bisa ditutup sebagai kasbon.',
             ]);
@@ -296,7 +298,7 @@ class TransactionService
             abort(404);
         }
 
-        if ($order->status !== 'scheduled') {
+        if (!$order->hasActivePreOrder()) {
             throw ValidationException::withMessages([
                 'order' => 'Pre-order ini sudah aktif atau tidak valid lagi.',
             ]);
@@ -528,6 +530,15 @@ class TransactionService
         }
 
         return $actor->outlet_id;
+    }
+
+    protected function normalizeHistoryStatusFilter(mixed $status): string
+    {
+        $value = (string) $status;
+
+        return in_array($value, ['all', 'completed', 'cancelled'], true)
+            ? $value
+            : 'all';
     }
 
     protected function resolveCustomer(

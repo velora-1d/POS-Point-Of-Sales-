@@ -16,7 +16,7 @@ class TransactionIndexRequest extends FormRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:100'],
-            'status' => ['nullable', Rule::in(['all', 'completed', 'cancelled', 'scheduled'])],
+            'status' => ['nullable', Rule::in(['all', 'completed', 'cancelled'])],
             'payment_method' => ['nullable', Rule::in(['all', 'cash', 'qris', 'debit', 'ewallet', 'kasbon'])],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date'],

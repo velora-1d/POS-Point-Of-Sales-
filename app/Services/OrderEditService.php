@@ -27,7 +27,7 @@ class OrderEditService
             ]);
         }
 
-        if (in_array($order->status, ['payment_pending', 'ready', 'waiting_bar_approval', 'delivered', 'completed', 'cancelled'], true)) {
+        if ($order->hasPendingBeforeKitchenPayment() || in_array($order->status, ['ready', 'waiting_bar_approval', 'delivered', 'completed', 'cancelled'], true)) {
             throw ValidationException::withMessages([
                 'error' => 'Order dengan status ini tidak bisa diedit lagi.',
             ]);

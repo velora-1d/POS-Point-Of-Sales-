@@ -103,7 +103,7 @@ const props = defineProps<{
     }>;
     filters: {
         search: string;
-        status: 'all' | 'completed' | 'cancelled' | 'scheduled';
+        status: 'all' | 'completed' | 'cancelled';
         payment_method: 'all' | 'cash' | 'qris' | 'debit' | 'ewallet' | 'kasbon';
         start_date: string;
         end_date: string;

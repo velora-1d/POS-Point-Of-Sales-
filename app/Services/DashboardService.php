@@ -150,10 +150,6 @@ class DashboardService
 
     protected function isSettledOrder(Order $order): bool
     {
-        return ($order->status !== 'payment_pending')
-            && (
-                data_get($order->metadata, 'payment.status') === 'paid'
-                || (float) $order->paid_amount >= (float) $order->total_amount
-            );
+        return $order->isPaidInFull();
     }
 }

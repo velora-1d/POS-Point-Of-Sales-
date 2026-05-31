@@ -2,11 +2,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import {
+    ArrowUpRight,
     AlertTriangle,
     BellRing,
-    CheckCircle2,
-    Clock,
-    Layers,
     ShoppingCart,
     TrendingUp,
     Utensils,
@@ -101,20 +99,6 @@ const props = defineProps<{
     };
 }>();
 const user = computed(() => page.props.auth.user);
-const menuProgress = computed(() => {
-    const progress = page.props.menuProgress ?? {};
-
-    return {
-        totalMenus: progress.totalMenus ?? 62,
-        readyCount: progress.readyCount ?? 0,
-        progressPercentage: progress.progressPercentage ?? 0,
-    };
-});
-
-// Calculate stats for menu tracking
-const totalMenu = computed(() => menuProgress.value.totalMenus);
-const readyMenuCount = computed(() => menuProgress.value.readyCount);
-const progressPercentage = computed(() => menuProgress.value.progressPercentage);
 const lowStockSummary = computed(() => props.alerts?.lowStock?.summary ?? {
     total: 0,
     products: 0,
@@ -136,6 +120,56 @@ const sourceBreakdowns = computed(() => props.finance?.breakdowns?.sources ?? []
 const financeOutletOptions = computed(() => props.referenceData?.outlets ?? []);
 const canChooseFinanceOutlet = computed(() => financeOutletOptions.value.length > 1);
 const financeOutletFilter = ref(props.filters?.outlet_id || '');
+const quickActions = [
+    {
+        key: 'new-order',
+        href: route('kasir.order'),
+        icon: ShoppingCart,
+        badge: 'Kasir',
+        title: 'Buka Buat Order Baru',
+        description: 'Masuk ke flow order meja, takeaway, dan settlement kasir.',
+        actionText: 'Buka modul',
+        cardClass: 'border-orange-500/20 bg-gradient-to-br from-orange-500/20 via-orange-500/5 to-slate-950/80 hover:border-orange-400/40 hover:from-orange-500/25 hover:via-orange-500/10',
+        iconClass: 'border-orange-400/20 bg-orange-500/15 text-orange-200',
+        accentClass: 'text-orange-200',
+    },
+    {
+        key: 'kitchen-display',
+        href: route('kitchen.display'),
+        icon: Utensils,
+        badge: 'Kitchen',
+        title: 'Kitchen Display',
+        description: 'Pantau antrian masak, update status tiket, dan ritme dapur.',
+        actionText: 'Pantau antrian',
+        cardClass: 'border-sky-500/20 bg-gradient-to-br from-sky-500/20 via-sky-500/5 to-slate-950/80 hover:border-sky-400/40 hover:from-sky-500/25 hover:via-sky-500/10',
+        iconClass: 'border-sky-400/20 bg-sky-500/15 text-sky-200',
+        accentClass: 'text-sky-200',
+    },
+    {
+        key: 'stock-alerts',
+        href: route('stock-alerts.index'),
+        icon: AlertTriangle,
+        badge: 'Inventori',
+        title: 'Alert Stok Menipis',
+        description: 'Lihat item kritis dan lanjutkan replenishment lebih cepat.',
+        actionText: 'Lihat alert',
+        cardClass: 'border-amber-500/20 bg-gradient-to-br from-amber-500/20 via-amber-500/5 to-slate-950/80 hover:border-amber-400/40 hover:from-amber-500/25 hover:via-amber-500/10',
+        iconClass: 'border-amber-400/20 bg-amber-500/15 text-amber-200',
+        accentClass: 'text-amber-200',
+    },
+    {
+        key: 'expired-tracking',
+        href: route('expired-tracking.index'),
+        icon: BellRing,
+        badge: 'Expired',
+        title: 'Reminder Expired',
+        description: 'Cek batch yang mendekati expired sebelum jadi loss operasional.',
+        actionText: 'Cek batch',
+        cardClass: 'border-rose-500/20 bg-gradient-to-br from-rose-500/20 via-rose-500/5 to-slate-950/80 hover:border-rose-400/40 hover:from-rose-500/25 hover:via-rose-500/10',
+        iconClass: 'border-rose-400/20 bg-rose-500/15 text-rose-200',
+        accentClass: 'text-rose-200',
+    },
+] as const;
 
 const formatPrice = (value: number | string | null | undefined) => {
     const amount = Number(value || 0);
@@ -240,22 +274,24 @@ const submitFinanceFilters = () => {
         </template>
 
         <div class="space-y-8">
-            <!-- Top Section: Welcome Banner & Quick Menu Tracker -->
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <!-- Welcome Banner Card -->
+            <div
+                class="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 p-6 shadow-xl shadow-slate-950/20 lg:p-8"
+            >
                 <div
-                    class="relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 p-6 shadow-xl shadow-slate-950/20 lg:col-span-2 lg:p-8"
+                    class="grid gap-8 xl:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] xl:items-end"
                 >
-                    <!-- Glow decoration -->
                     <div
                         class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-orange-500/10 blur-3xl"
                     ></div>
+                    <div
+                        class="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                    ></div>
 
-                    <div>
+                    <div class="relative flex min-h-[220px] flex-col justify-between">
                         <span
                             class="mb-4 inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400"
                         >
-                            🔥 POS Mentai Suite v1.0
+                            Dashboard Operasional
                         </span>
                         <h3
                             class="text-2xl font-black leading-tight text-white lg:text-3xl"
@@ -266,113 +302,96 @@ const submitFinanceFilters = () => {
                         <p
                             class="mt-2 max-w-md text-sm leading-relaxed text-slate-400"
                         >
-                            Akses cepat flow operasional dari meja, buat order,
-                            antrian dapur, sampai tracking progress sistem
-                            langsung dari sidebar kiri.
+                            Akses cepat untuk mulai transaksi, memantau kitchen,
+                            mengecek stok kritis, dan menindak item expired dari
+                            satu layar yang ringkas.
                         </p>
-                    </div>
 
-                    <div
-                        class="mt-6 flex flex-wrap items-center gap-4 border-t border-slate-800/50 pt-4"
-                    >
-                        <Link
-                            :href="route('kasir.order')"
-                            class="to-red-650 hover:to-red-750 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-orange-500/20 transition duration-200 hover:from-orange-600 active:scale-[0.98]"
+                        <div
+                            class="mt-6 flex flex-wrap items-center gap-3 border-t border-slate-800/50 pt-4"
                         >
-                            <ShoppingCart class="h-4 w-4" />
-                            <span>Buka Buat Order Baru</span>
-                        </Link>
-                        <Link
-                            :href="route('kitchen.display')"
-                            class="inline-flex items-center gap-2 rounded-xl border border-slate-700/60 bg-slate-800 px-5 py-2.5 text-xs font-semibold text-slate-200 transition duration-200 hover:bg-slate-700 active:scale-[0.98]"
-                        >
-                            <Utensils class="h-4 w-4 text-orange-400" />
-                            <span>Kitchen Display</span>
-                        </Link>
-                        <Link
-                            :href="route('stock-alerts.index')"
-                            class="inline-flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-5 py-2.5 text-xs font-semibold text-amber-300 transition duration-200 hover:bg-amber-500/15 active:scale-[0.98]"
-                        >
-                            <AlertTriangle class="h-4 w-4" />
-                            <span>Alert Stok Menipis</span>
-                        </Link>
-                        <Link
-                            :href="route('expired-tracking.index')"
-                            class="inline-flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/10 px-5 py-2.5 text-xs font-semibold text-rose-300 transition duration-200 hover:bg-rose-500/15 active:scale-[0.98]"
-                        >
-                            <BellRing class="h-4 w-4" />
-                            <span>Reminder Expired</span>
-                        </Link>
-                    </div>
-                </div>
-
-                <!-- Progress Tracker Card -->
-                <div
-                    class="relative flex flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl shadow-slate-950/20 lg:p-8"
-                >
-                    <div
-                        class="pointer-events-none absolute -bottom-6 -right-6 h-32 w-32 rounded-full bg-orange-600/5 blur-2xl"
-                    ></div>
-
-                    <div>
-                        <h4
-                            class="text-sm font-bold uppercase tracking-wider text-slate-400"
-                        >
-                            Progress Pengerjaan Menu
-                        </h4>
-                        <div class="mt-4 flex items-baseline gap-2">
                             <span
-                                class="text-4xl font-black leading-none text-white lg:text-5xl"
+                                v-if="canViewFinance"
+                                class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-slate-200"
                             >
-                                {{ progressPercentage }}%
+                                {{ financeSummary.orders ?? 0 }} order hari ini
                             </span>
-                            <span class="text-xs text-slate-500">
-                                Selesai
+                            <span
+                                class="rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-200"
+                            >
+                                {{ lowStockSummary.total }} alert stok
                             </span>
-                        </div>
-
-                        <!-- Progress Bar -->
-                        <div
-                            class="border-slate-850 mt-4 h-2.5 w-full overflow-hidden rounded-full border bg-slate-950"
-                        >
-                            <div
-                                class="h-full rounded-full bg-gradient-to-r from-orange-500 to-emerald-500 transition-all duration-500"
-                                :style="{ width: `${progressPercentage}%` }"
-                            ></div>
-                        </div>
-
-                        <div
-                            class="mt-6 grid grid-cols-2 gap-4 border-t border-slate-800/50 pt-4 text-xs"
-                        >
-                            <div>
-                                <p
-                                    class="font-semibold uppercase tracking-wider text-slate-500"
-                                >
-                                    Ready / Aktif
-                                </p>
-                                <p
-                                    class="mt-1 text-lg font-bold text-emerald-400"
-                                >
-                                    {{ readyMenuCount }} Menu
-                                </p>
-                            </div>
-                            <div>
-                                <p
-                                    class="font-semibold uppercase tracking-wider text-slate-500"
-                                >
-                                    Coming Soon
-                                </p>
-                                <p
-                                    class="mt-1 text-lg font-bold text-slate-400"
-                                >
-                                    {{ totalMenu - readyMenuCount }} Menu
-                                </p>
-                            </div>
+                            <span
+                                class="rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-200"
+                            >
+                                {{ expiredSummary.critical }} batch perlu tindakan
+                            </span>
                         </div>
                     </div>
 
-                    <div class="mt-4 text-[10px] text-slate-500">
-                        * Total 62 menu berdasarkan dokumen analisis RBAC
+                    <div
+                        class="relative rounded-2xl border border-slate-800/80 bg-slate-950/45 p-5 backdrop-blur-sm"
+                    >
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <h4 class="text-sm font-bold uppercase tracking-[0.2em] text-slate-300">
+                                    Akses Cepat
+                                </h4>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-500">
+                                    Empat modul yang paling sering dipakai untuk
+                                    kontrol operasional harian.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 grid gap-3 sm:grid-cols-2">
+                            <Link
+                                v-for="action in quickActions"
+                                :key="action.key"
+                                :href="action.href"
+                                :class="[
+                                    'group rounded-2xl border p-4 transition duration-200 hover:-translate-y-0.5',
+                                    action.cardClass,
+                                ]"
+                            >
+                                <div class="flex items-start justify-between gap-3">
+                                    <span
+                                        :class="[
+                                            'flex h-11 w-11 items-center justify-center rounded-2xl border',
+                                            action.iconClass,
+                                        ]"
+                                    >
+                                        <component :is="action.icon" class="h-5 w-5" />
+                                    </span>
+                                    <span class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500 transition group-hover:text-slate-300">
+                                        {{ action.badge }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-6">
+                                    <p class="text-sm font-bold text-white">
+                                        {{ action.title }}
+                                    </p>
+                                    <p class="mt-1 text-xs leading-relaxed text-slate-400">
+                                        {{ action.description }}
+                                    </p>
+                                </div>
+
+                                <div class="mt-4 flex items-center justify-between">
+                                    <span
+                                        :class="[
+                                            'text-xs font-semibold',
+                                            action.accentClass,
+                                        ]"
+                                    >
+                                        {{ action.actionText }}
+                                    </span>
+                                    <span class="rounded-full border border-white/10 bg-white/5 p-1.5 text-slate-300 transition group-hover:border-white/20 group-hover:text-white">
+                                        <ArrowUpRight class="h-3.5 w-3.5" />
+                                    </span>
+                                </div>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -773,160 +792,6 @@ const submitFinanceFilters = () => {
                 </section>
             </div>
 
-            <!-- Lower Section: Implemented Modules & Coming Soon Highlight -->
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <!-- Implemented Features Card -->
-                <div
-                    class="rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl shadow-slate-950/20 lg:p-8"
-                >
-                    <h4
-                        class="mb-6 flex items-center gap-2 text-base font-bold text-white"
-                    >
-                        <CheckCircle2 class="h-5 w-5 text-emerald-400" />
-                        <span>Modul Terimplementasi (Ready)</span>
-                    </h4>
-                    <div class="space-y-4">
-                        <div
-                            class="border-slate-850 flex items-start gap-3 rounded-xl border bg-slate-950/50 p-3"
-                        >
-                            <span
-                                class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10 text-xs font-bold text-emerald-400"
-                                >✓</span
-                            >
-                            <div>
-                                <p class="text-xs font-bold text-slate-200">
-                                    Sistem Autentikasi Pengguna & Sesi
-                                </p>
-                                <p class="text-slate-450 mt-0.5 text-xs">
-                                    Login multi-role, logout aman, logout
-                                    session di Neon PostgreSQL, override
-                                    remember token, and penambahan penampil
-                                    password (eye icon toggle).
-                                </p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="border-slate-850 flex items-start gap-3 rounded-xl border bg-slate-950/50 p-3"
-                        >
-                            <span
-                                class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10 text-xs font-bold text-emerald-400"
-                                >✓</span
-                            >
-                            <div>
-                                <p class="text-xs font-bold text-slate-200">
-                                    Kategori 1: Order & Transaksi (Dasar)
-                                </p>
-                                <p class="text-slate-450 mt-0.5 text-xs">
-                                    Menu *Buat Order Baru*, *Daftar Order
-                                    Aktif*, dan *Detail Order per Meja* sudah
-                                    berjalan dalam satu flow di rute `/order`.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="border-slate-850 flex items-start gap-3 rounded-xl border bg-slate-950/50 p-3"
-                        >
-                            <span
-                                class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10 text-xs font-bold text-emerald-400"
-                                >✓</span
-                            >
-                            <div>
-                                <p class="text-xs font-bold text-slate-200">
-                                    Kategori 2: Kitchen Display (Dasar)
-                                </p>
-                                <p class="text-slate-450 mt-0.5 text-xs">
-                                    Menu *Antrian Order Real-time* sudah terarah
-                                    ke `/kitchen` dan `/bar` display berdasarkan
-                                    route yang sesuai.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Next Development Goals Card -->
-                <div
-                    class="flex flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl shadow-slate-950/20 lg:p-8"
-                >
-                    <div>
-                        <h4
-                            class="mb-6 flex items-center gap-2 text-base font-bold text-white"
-                        >
-                            <Clock
-                                class="animate-pulse-subtle h-5 w-5 text-orange-400"
-                            />
-                            <span>Pengembangan Selanjutnya (Coming Soon)</span>
-                        </h4>
-                        <p class="text-xs leading-relaxed text-slate-400">
-                            Kami sedang mengerjakan modul-modul berikut untuk
-                            mengintegrasikan fungsionalitas penuh restoran:
-                        </p>
-
-                        <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-                            <div
-                                class="border-slate-850 flex items-center gap-2 rounded-lg border bg-slate-950/30 p-2.5"
-                            >
-                                <div
-                                    class="h-2 w-2 rounded-full bg-orange-400"
-                                ></div>
-                                <span class="text-xs text-slate-300"
-                                    >Sistem Integrasi Pembayaran</span
-                                >
-                            </div>
-                            <div
-                                class="border-slate-850 flex items-center gap-2 rounded-lg border bg-slate-950/30 p-2.5"
-                            >
-                                <div
-                                    class="h-2 w-2 rounded-full bg-orange-400"
-                                ></div>
-                                <span class="text-xs text-slate-300"
-                                    >Visual Layout Meja</span
-                                >
-                            </div>
-                            <div
-                                class="border-slate-850 flex items-center gap-2 rounded-lg border bg-slate-950/30 p-2.5"
-                            >
-                                <div
-                                    class="h-2 w-2 rounded-full bg-orange-400"
-                                ></div>
-                                <span class="text-xs text-slate-300"
-                                    >Loyalty & Membership</span
-                                >
-                            </div>
-                            <div
-                                class="border-slate-850 flex items-center gap-2 rounded-lg border bg-slate-950/30 p-2.5"
-                            >
-                                <div
-                                    class="h-2 w-2 rounded-full bg-orange-400"
-                                ></div>
-                                <span class="text-xs text-slate-300"
-                                    >HPP & Resep Otomatis</span
-                                >
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="mt-6 flex items-center gap-3 rounded-xl border border-orange-500/10 bg-orange-500/5 p-4"
-                    >
-                        <span class="text-xl">💡</span>
-                        <p class="text-slate-350 text-[11px] leading-normal">
-                            Menu sidebar kiri akan terus memutakhirkan statusnya
-                            dari
-                            <span class="font-semibold text-slate-400"
-                                >Soon</span
-                            >
-                            menjadi
-                            <span class="font-semibold text-emerald-400"
-                                >Ready</span
-                            >
-                            secara dinamis seiring pengerjaan modul.
-                        </p>
-                    </div>
-                </div>
-            </div>
         </div>
     </AuthenticatedLayout>
 </template>

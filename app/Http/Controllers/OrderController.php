@@ -64,8 +64,20 @@ class OrderController extends Controller
         $activeOrders = Order::where('outlet_id', $outletId)
             ->whereNotIn('status', ['completed', 'cancelled'])
             ->where(function ($query) {
-                $query->where('status', '!=', 'payment_pending')
-                    ->orWhere('source', 'kasir');
+                $query->where('source', 'kasir')
+                    ->orWhere(function ($nonKasirQuery) {
+                        $nonKasirQuery
+                            ->where(function ($paymentStatusQuery) {
+                                $paymentStatusQuery
+                                    ->where('metadata->payment->status', '!=', 'pending')
+                                    ->orWhereNull('metadata->payment->status');
+                            })
+                            ->orWhere(function ($paymentContextQuery) {
+                                $paymentContextQuery
+                                    ->where('metadata->payment->context', '!=', 'before_kitchen')
+                                    ->orWhereNull('metadata->payment->context');
+                            });
+                    });
             })
             ->with(['table', 'cashier', 'customer.membership.tier', 'items.product', 'items.variant'])
             ->latest()

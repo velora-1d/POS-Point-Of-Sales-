@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Order extends Model
@@ -113,5 +114,35 @@ class Order extends Model
     {
         return $this->hasMany(OrderPaymentLog::class, 'order_id')
             ->latest('created_at');
+    }
+
+    public function getPaymentMeta(): array
+    {
+        return Arr::get($this->metadata ?? [], 'payment', []);
+    }
+
+    public function hasPendingBeforeKitchenPayment(): bool
+    {
+        $paymentMeta = $this->getPaymentMeta();
+
+        return ($paymentMeta['status'] ?? null) === 'pending'
+            && ($paymentMeta['context'] ?? null) === 'before_kitchen';
+    }
+
+    public function isPaidInFull(): bool
+    {
+        $paymentMeta = $this->getPaymentMeta();
+
+        return ($paymentMeta['status'] ?? null) === 'paid'
+            || (float) $this->paid_amount >= (float) $this->total_amount;
+    }
+
+    public function hasActivePreOrder(): bool
+    {
+        $preOrderMeta = Arr::get($this->metadata ?? [], 'pre_order', []);
+
+        return $preOrderMeta !== []
+            && empty($preOrderMeta['activated_at'])
+            && !in_array($this->status, ['completed', 'cancelled'], true);
     }
 }

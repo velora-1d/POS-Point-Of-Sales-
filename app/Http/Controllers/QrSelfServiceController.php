@@ -76,7 +76,7 @@ class QrSelfServiceController extends Controller
             ->firstOrFail();
 
         $paymentCheckout = session('paymentCheckout');
-        if (!$paymentCheckout && ($order->metadata['payment']['checkout_url'] ?? null) && $order->status === 'payment_pending') {
+        if (!$paymentCheckout && ($order->metadata['payment']['checkout_url'] ?? null) && $order->hasPendingBeforeKitchenPayment()) {
             $paymentCheckout = [
                 'provider' => 'pakasir',
                 'method' => 'qris',

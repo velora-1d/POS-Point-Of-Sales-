@@ -569,11 +569,17 @@ const isOrderPaid = (order: any) => {
     );
 };
 
+const hasPendingBeforeKitchenPayment = (order: any) => {
+    const payment = getPaymentMeta(order);
+
+    return payment.status === 'pending' && payment.context === 'before_kitchen';
+};
+
 const getPaymentStatusLabel = (order: any) => {
     const payment = getPaymentMeta(order);
 
     if (isOrderPaid(order)) return 'Lunas';
-    if (order?.status === 'payment_pending') return 'Menunggu QRIS';
+    if (hasPendingBeforeKitchenPayment(order)) return 'Menunggu QRIS';
     if (payment.status === 'pending') return 'Checkout aktif';
     return 'Belum bayar';
 };
@@ -583,7 +589,7 @@ const getPaymentStatusClass = (order: any) => {
         return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300';
     }
 
-    if (order?.status === 'payment_pending') {
+    if (hasPendingBeforeKitchenPayment(order)) {
         return 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-300';
     }
 
@@ -594,15 +600,14 @@ const canOpenPaymentModal = (order: any) => {
     if (!order || isOrderPaid(order)) return false;
 
     return [
-        'payment_pending',
         'waiting_bar_approval',
         'ready',
         'delivered',
-    ].includes(order.status);
+    ].includes(order.status) || hasPendingBeforeKitchenPayment(order);
 };
 
 const getPaymentActionLabel = (order: any) => {
-    if (order?.status === 'payment_pending') {
+    if (hasPendingBeforeKitchenPayment(order)) {
         return 'Lanjutkan Pembayaran';
     }
 
@@ -610,7 +615,7 @@ const getPaymentActionLabel = (order: any) => {
 };
 
 const getPaymentActionHint = (order: any) => {
-    if (order?.status === 'payment_pending') {
+    if (hasPendingBeforeKitchenPayment(order)) {
         return 'Order belum masuk dapur. Lunasi dulu agar lanjut ke proses kitchen.';
     }
 
@@ -655,7 +660,7 @@ const openPaymentModalForOrder = (order: any) => {
 
     paymentTargetOrder.value = order;
     existingPaymentMethod.value =
-        order.status === 'payment_pending' ? 'qris' : 'cash';
+        hasPendingBeforeKitchenPayment(order) ? 'qris' : 'cash';
     existingPaymentCashReceived.value = '';
     existingPaymentPromoCode.value = getPromoMeta(order).manual_code || '';
     existingPaymentApprovalPin.value = '';
@@ -1931,8 +1936,9 @@ const openPaymentCheckout = () => {
                                             selectedManagedOrder.order_number,
                                         amount: selectedManagedOrder.total_amount,
                                         context:
-                                            selectedManagedOrder.status ===
-                                            'payment_pending'
+                                            hasPendingBeforeKitchenPayment(
+                                                selectedManagedOrder,
+                                            )
                                                 ? 'before_kitchen'
                                                 : 'after_service',
                                     };
@@ -3915,8 +3921,9 @@ const openPaymentCheckout = () => {
                                 class="mt-1 text-xs leading-relaxed text-fuchsia-100/80"
                             >
                                 {{
-                                    paymentTargetOrder.status ===
-                                    'payment_pending'
+                                    hasPendingBeforeKitchenPayment(
+                                        paymentTargetOrder,
+                                    )
                                         ? 'Setelah QRIS lunas, order otomatis pindah ke lane pending agar bisa diproses kitchen.'
                                         : 'Setelah QRIS lunas, order otomatis ditutup sebagai completed.'
                                 }}

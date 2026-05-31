@@ -11,6 +11,14 @@ use Illuminate\Support\Collection;
 
 class TransactionRepository
 {
+    protected function applyActivePreOrderScope(Builder $query): Builder
+    {
+        return $query
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->whereNotNull('metadata->pre_order')
+            ->whereNull('metadata->pre_order->activated_at');
+    }
+
     public function getHistoryOrders(string $outletId, array $filters = [], int $limit = 18): Collection
     {
         return Order::query()
@@ -72,9 +80,9 @@ class TransactionRepository
 
     public function getPreOrders(string $outletId, int $limit = 12): Collection
     {
-        return Order::query()
-            ->where('outlet_id', $outletId)
-            ->where('status', 'scheduled')
+        return $this->applyActivePreOrderScope(
+            Order::query()->where('outlet_id', $outletId)
+        )
             ->with([
                 'customer:id,name,phone,email',
                 'cashier:id,name',
@@ -98,9 +106,9 @@ class TransactionRepository
             ->where('status', 'completed')
             ->whereColumn('paid_amount', '<', 'total_amount');
 
-        $preOrderBase = Order::query()
-            ->where('outlet_id', $outletId)
-            ->where('status', 'scheduled');
+        $preOrderBase = $this->applyActivePreOrderScope(
+            Order::query()->where('outlet_id', $outletId)
+        );
 
         return [
             'history_count' => (clone $historyBase)->count(),
