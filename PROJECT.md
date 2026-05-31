@@ -33,6 +33,7 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Pembuatan dan integrasi Dockerfile multi-stage production-ready serta script [docker-entrypoint.sh](/home/pak-hakim/Pak-Hakim/Project/POS/docker-entrypoint.sh) untuk otomatisasi deployment dan auto-migration database di platform PaaS seperti Dokploy tanpa risiko menghapus data lama.
 - Penyempurnaan alur UI/UX pada Kitchen Display:
   - Kontrol volume mandiri lokal (mute toggle & volume slider) ditambahkan pada header [resources/js/Pages/Kitchen/Display.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Kitchen/Display.vue) untuk tablet dapur, tersimpan secara persisten di `localStorage`.
   - Banner peringatan / interaksi autoplay suara disematkan jika browser memblokir AudioContext, yang dapat langsung diaktifkan dengan sekali klik di atas layar.
