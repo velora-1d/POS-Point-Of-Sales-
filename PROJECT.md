@@ -33,6 +33,12 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Penyempurnaan alur UI/UX pada Kitchen Display:
+  - Kontrol volume mandiri lokal (mute toggle & volume slider) ditambahkan pada header [resources/js/Pages/Kitchen/Display.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Kitchen/Display.vue) untuk tablet dapur, tersimpan secara persisten di `localStorage`.
+  - Banner peringatan / interaksi autoplay suara disematkan jika browser memblokir AudioContext, yang dapat langsung diaktifkan dengan sekali klik di atas layar.
+- Penyempurnaan alur UI/UX pada Kasir:
+  - Box monitoring QRIS real-time disematkan di dalam modal pembayaran [resources/js/Pages/Kasir/Order.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Kasir/Order.vue) jika state pembayaran "Menunggu QRIS" terdeteksi aktif.
+  - Tombol cek status manual "Cek Status" ditambahkan untuk memperbarui status transaksi secara mandiri, lengkap dengan tautan visual "Tampilkan QR Code" untuk menampilkan ulang kode bayar.
 - Implementasi fitur pengumuman pesanan berbasis suara (Text-to-Speech) di Kitchen Display telah selesai. Sistem sekarang membunyikan bel ganda (double-tone chime) menggunakan Web Audio API, diikuti pengumuman nama pelanggan serta detail item pesanan dalam bahasa Indonesia secara native tanpa dependensi audio eksternal maupun API key.
 - Pengaturan volume, kecepatan, dan pengaktifan fitur TTS ini telah diintegrasikan langsung pada halaman pengaturan notifikasi [resources/js/Pages/Settings/Notifications.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Settings/Notifications.vue) dengan opsi uji coba suara bawaan.
 - Perbaikan compiler TypeScript untuk type cast `router.reload` di [resources/js/Pages/Kitchen/Display.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Kitchen/Display.vue) dan definisi prop `metadata` di `Notifications.vue` telah diselesaikan.
