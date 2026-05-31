@@ -60,9 +60,21 @@ class KitchenDisplayService
             })
             ->values();
 
+        $settings = \App\Models\NotificationSetting::query()
+            ->where('outlet_id', $user->outlet_id)
+            ->first();
+        $metadata = $settings ? ($settings->metadata ?? []) : [];
+
         return [
             'orders' => $orders,
-            'boardConfig' => $this->getBoardConfig(),
+            'boardConfig' => array_merge($this->getBoardConfig(), [
+                'voiceSettings' => array_merge([
+                    'enabled' => true,
+                    'volume' => 1.0,
+                    'rate' => 0.9,
+                    'pitch' => 1.05,
+                ], $metadata['kitchen_voice'] ?? [])
+            ]),
             'history' => $this->getRecentHistory($user->outlet_id),
             'success' => session('success'),
         ];

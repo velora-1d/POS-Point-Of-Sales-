@@ -124,6 +124,14 @@ class NotificationSettingService
             'kasbon_due_threshold_days' => $storedSetting?->kasbon_due_threshold_days ?? 3,
             'online_order_enabled' => $storedSetting?->online_order_enabled ?? true,
             'online_order_channels' => $this->normalizeChannels($storedSetting?->online_order_channels ?? ['in_app']),
+            'metadata' => $storedSetting?->metadata ?? [
+                'kitchen_voice' => [
+                    'enabled' => true,
+                    'volume' => 1.0,
+                    'rate' => 0.9,
+                    'pitch' => 1.05,
+                ]
+            ],
             'has_config' => $storedSetting !== null,
         ];
     }
@@ -186,7 +194,7 @@ class NotificationSettingService
             'kasbon_due_threshold_days' => max(1, min(30, (int) ($payload['kasbon_due_threshold_days'] ?? 3))),
             'online_order_enabled' => (bool) ($payload['online_order_enabled'] ?? false),
             'online_order_channels' => $this->normalizeChannels($payload['online_order_channels'] ?? []),
-            'metadata' => null,
+            'metadata' => $payload['metadata'] ?? null,
         ];
     }
 

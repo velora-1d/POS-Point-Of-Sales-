@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { BellRing, CheckCheck, Flame, ScanSearch } from '@lucide/vue';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 type KitchenOrderStatus =
     | 'pending'
@@ -41,6 +41,12 @@ interface BoardConfig {
     waitingAlertSeconds: number;
     cookingWarningSeconds: number;
     defaultEstimatedMinutes: number;
+    voiceSettings?: {
+        enabled: boolean;
+        volume: number;
+        rate: number;
+        pitch: number;
+    };
 }
 
 interface KitchenHistoryEntry {
@@ -94,18 +100,109 @@ const submittingOrderId = ref<string | null>(null);
 const selectedCategoryId = ref<string>('all');
 
 let clockInterval: number | undefined;
+let pollInterval: number | undefined;
+const knownOrderIds = ref<Set<string>>(new Set());
 
 onMounted(() => {
     clockInterval = window.setInterval(() => {
         now.value = Date.now();
     }, 1000);
+
+    // Populate initial orders
+    props.orders.forEach((o) => knownOrderIds.value.add(o.id));
+
+    // Start auto polling reload every 8 seconds
+    pollInterval = window.setInterval(() => {
+        router.reload({ only: ['orders', 'history'], preserveScroll: true } as any);
+    }, 8000);
 });
 
 onBeforeUnmount(() => {
     if (clockInterval) {
         window.clearInterval(clockInterval);
     }
+    if (pollInterval) {
+        window.clearInterval(pollInterval);
+    }
 });
+
+const announceNewOrder = (order: KitchenOrderPayload) => {
+    const voiceConfig = props.boardConfig.voiceSettings;
+    if (voiceConfig && !voiceConfig.enabled) return;
+
+    const customer = order.customerName || (order.source === 'qr_meja' ? 'Pelanggan Meja' : 'Pelanggan');
+    const tableInfo = order.tableLabel && order.tableLabel !== 'Takeaway' ? `Meja ${order.tableLabel}` : 'Takeaway';
+    
+    const itemsText = order.items.map(item => `${item.quantity} ${item.name}`).join(', ');
+    const text = `Pesanan baru atas nama ${customer}, ${tableInfo}. Menu: ${itemsText}.`;
+    
+    playChimeAndSpeak(text, voiceConfig);
+};
+
+const playChimeAndSpeak = (text: string, voiceConfig: any) => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const playTone = (freq: number, start: number, duration: number) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(freq, start);
+            gain.gain.setValueAtTime(0, start);
+            gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(start);
+            osc.stop(start + duration);
+        };
+        playTone(587.33, audioCtx.currentTime, 0.4);
+        playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+    } catch (e) {
+        console.error(e);
+    }
+
+    setTimeout(() => {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'id-ID';
+        
+        if (voiceConfig) {
+            utterance.volume = Number(voiceConfig.volume ?? 1.0);
+            utterance.rate = Number(voiceConfig.rate ?? 0.9);
+            utterance.pitch = Number(voiceConfig.pitch ?? 1.05);
+        }
+        
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id'));
+        if (idVoice) utterance.voice = idVoice;
+        
+        window.speechSynthesis.speak(utterance);
+    }, 450);
+};
+
+watch(
+    () => props.orders,
+    (newOrders) => {
+        if (!newOrders) return;
+        const newItems = newOrders.filter(o => !knownOrderIds.value.has(o.id));
+        if (newItems.length > 0) {
+            newItems.forEach((order) => {
+                announceNewOrder(order);
+                knownOrderIds.value.add(order.id);
+            });
+        }
+        
+        // Clean up knownOrderIds that are no longer in props.orders to save memory
+        const currentIds = new Set(newOrders.map(o => o.id));
+        knownOrderIds.value.forEach((id) => {
+            if (!currentIds.has(id)) {
+                knownOrderIds.value.delete(id);
+            }
+        });
+    },
+    { deep: true },
+);
 
 const toTimestamp = (value?: string | null) => {
     if (!value) return null;

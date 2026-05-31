@@ -26,6 +26,7 @@ class UpsertNotificationSettingRequest extends FormRequest
             'online_order_enabled' => ['nullable', 'boolean'],
             'online_order_channels' => ['nullable', 'array'],
             'online_order_channels.*' => ['string', Rule::in(['in_app', 'whatsapp', 'email'])],
+            'metadata' => ['nullable', 'array'],
         ];
     }
 

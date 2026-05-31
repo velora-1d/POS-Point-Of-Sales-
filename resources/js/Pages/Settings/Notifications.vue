@@ -9,6 +9,7 @@ import {
     ShoppingBag,
     Store,
     Wallet,
+    Volume2,
 } from '@lucide/vue';
 import { computed, watch } from 'vue';
 
@@ -50,6 +51,7 @@ const props = defineProps<{
         online_order_enabled: boolean;
         online_order_channels: ChannelValue[];
         has_config: boolean;
+        metadata?: any;
     };
     alertOptions: {
         channels: ChannelOption[];
@@ -110,6 +112,14 @@ const form = useForm({
     kasbon_due_threshold_days: String(props.formDefaults.kasbon_due_threshold_days || 3),
     online_order_enabled: Boolean(props.formDefaults.online_order_enabled),
     online_order_channels: [...props.formDefaults.online_order_channels],
+    metadata: {
+        kitchen_voice: {
+            enabled: props.formDefaults.metadata?.kitchen_voice?.enabled ?? true,
+            volume: props.formDefaults.metadata?.kitchen_voice?.volume ?? 1.0,
+            rate: props.formDefaults.metadata?.kitchen_voice?.rate ?? 0.9,
+            pitch: props.formDefaults.metadata?.kitchen_voice?.pitch ?? 1.05,
+        }
+    },
 });
 
 watch(
@@ -124,6 +134,14 @@ watch(
             kasbon_due_threshold_days: String(defaults.kasbon_due_threshold_days || 3),
             online_order_enabled: Boolean(defaults.online_order_enabled),
             online_order_channels: [...defaults.online_order_channels],
+            metadata: {
+                kitchen_voice: {
+                    enabled: defaults.metadata?.kitchen_voice?.enabled ?? true,
+                    volume: defaults.metadata?.kitchen_voice?.volume ?? 1.0,
+                    rate: defaults.metadata?.kitchen_voice?.rate ?? 0.9,
+                    pitch: defaults.metadata?.kitchen_voice?.pitch ?? 1.05,
+                }
+            },
         });
 
         form.reset();
@@ -131,6 +149,47 @@ watch(
     },
     { deep: true },
 );
+
+const testVoiceNotification = () => {
+    if (!('speechSynthesis' in window)) {
+        alert('Browser Anda tidak mendukung Text-to-Speech.');
+        return;
+    }
+    
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const playTone = (freq: number, start: number, duration: number) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(freq, start);
+            gain.gain.setValueAtTime(0, start);
+            gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(start);
+            osc.stop(start + duration);
+        };
+        playTone(587.33, audioCtx.currentTime, 0.4);
+        playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+    } catch (e) {
+        console.error(e);
+    }
+
+    setTimeout(() => {
+        const utterance = new SpeechSynthesisUtterance("Uji coba pengeras suara dapur. Halo mentai restoran.");
+        utterance.lang = 'id-ID';
+        utterance.volume = Number(form.metadata.kitchen_voice.volume);
+        utterance.rate = Number(form.metadata.kitchen_voice.rate);
+        utterance.pitch = Number(form.metadata.kitchen_voice.pitch);
+        
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id'));
+        if (idVoice) utterance.voice = idVoice;
+        
+        window.speechSynthesis.speak(utterance);
+    }, 400);
+};
 
 const summaryCards = computed(() => [
     {
@@ -500,6 +559,64 @@ function submitSave() {
                                             <p class="mt-1 text-xs text-slate-400">{{ channel.description }}</p>
                                         </div>
                                     </label>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="rounded-[24px] border border-slate-800 bg-slate-950/55 p-4">
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="rounded-2xl border border-fuchsia-500/20 bg-fuchsia-500/10 p-3">
+                                        <Volume2 class="h-5 w-5 text-fuchsia-300" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-black text-white">Notifikasi Suara Dapur (TTS)</h3>
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            Browser di Kitchen Display System akan membunyikan bel dan membaca pesanan baru secara otomatis.
+                                        </p>
+                                    </div>
+                                </div>
+                                <label class="inline-flex cursor-pointer items-center">
+                                    <input v-model="form.metadata.kitchen_voice.enabled" type="checkbox" class="peer sr-only" />
+                                    <div class="relative h-6 w-11 rounded-full bg-slate-700 transition peer-checked:bg-orange-500 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-full"></div>
+                                </label>
+                            </div>
+                            
+                            <div v-if="form.metadata.kitchen_voice.enabled" class="mt-4 border-t border-slate-800 pt-4 grid gap-4 sm:grid-cols-3">
+                                <div>
+                                    <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-500">
+                                        Volume Suara ({{ Math.round(form.metadata.kitchen_voice.volume * 100) }}%)
+                                    </label>
+                                    <input
+                                        v-model.number="form.metadata.kitchen_voice.volume"
+                                        type="range"
+                                        min="0"
+                                        max="1"
+                                        step="0.1"
+                                        class="w-full accent-orange-500 bg-slate-800"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-500">
+                                        Kecepatan Bicara ({{ form.metadata.kitchen_voice.rate }}x)
+                                    </label>
+                                    <input
+                                        v-model.number="form.metadata.kitchen_voice.rate"
+                                        type="range"
+                                        min="0.5"
+                                        max="1.5"
+                                        step="0.1"
+                                        class="w-full accent-orange-500 bg-slate-800"
+                                    />
+                                </div>
+                                <div class="flex items-end">
+                                    <button
+                                        type="button"
+                                        @click="testVoiceNotification"
+                                        class="w-full rounded-xl border border-slate-800 bg-slate-900/60 py-2.5 text-xs font-semibold text-white transition hover:bg-slate-800"
+                                    >
+                                        Uji Coba Suara
+                                    </button>
                                 </div>
                             </div>
                         </article>
