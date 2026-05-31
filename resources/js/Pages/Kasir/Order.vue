@@ -1076,6 +1076,30 @@ const submitExistingPayment = () => {
     );
 };
 
+const isRefreshingOrder = ref(false);
+const refreshCurrentOrder = () => {
+    if (isRefreshingOrder.value || !paymentTargetOrder.value) return;
+    isRefreshingOrder.value = true;
+    router.reload({
+        only: ['activeOrders', 'tables'],
+        preserveScroll: true,
+        onFinish: () => {
+            isRefreshingOrder.value = false;
+            showLocalToast('Status pembayaran berhasil diperbarui.');
+            
+            if (paymentTargetOrder.value) {
+                const updated = props.activeOrders.find(o => o.id === paymentTargetOrder.value.id);
+                if (updated) {
+                    paymentTargetOrder.value = updated;
+                    if (isOrderPaid(updated)) {
+                        closePaymentModal();
+                    }
+                }
+            }
+        }
+    } as any);
+};
+
 const submitKasbon = () => {
     if (!kasbonTargetOrder.value) return;
 
@@ -3830,6 +3854,50 @@ const openPaymentCheckout = () => {
                                         )
                                     }}
                                 </span>
+                            </div>
+                        </div>
+
+                        <!-- Box Informasi QRIS Aktif (Menunggu Pembayaran) -->
+                        <div
+                            v-if="hasPendingBeforeKitchenPayment(paymentTargetOrder)"
+                            class="rounded-2xl border border-fuchsia-500/25 bg-fuchsia-500/10 p-4 space-y-3"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-fuchsia-500/20 text-fuchsia-300">
+                                    <svg class="h-4 w-4 animate-spin text-fuchsia-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-xs font-black text-white">QRIS Gateway Sedang Aktif</h4>
+                                    <p class="text-[10px] text-slate-400 mt-0.5 leading-normal">
+                                        Sistem sedang memantau pembayaran dari pelanggan secara real-time. Halaman ini akan otomatis berganti ke proses berikutnya setelah pembayaran lunas.
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    @click="refreshCurrentOrder"
+                                    :disabled="isRefreshingOrder"
+                                    class="rounded-xl border border-slate-800 bg-slate-900 px-3 py-1.5 text-[10px] font-bold text-slate-300 hover:bg-slate-800 disabled:opacity-50 transition"
+                                >
+                                    {{ isRefreshingOrder ? 'Checking...' : 'Cek Status' }}
+                                </button>
+                            </div>
+                            <div v-if="getPaymentMeta(paymentTargetOrder).checkout_url" class="pt-2 border-t border-fuchsia-500/20 flex justify-between items-center text-[10px]">
+                                <span class="text-slate-400">QR Code dapat ditunjukkan kembali via:</span>
+                                <button
+                                    type="button"
+                                    @click="activePaymentCheckout = {
+                                        payment_url: getPaymentMeta(paymentTargetOrder).checkout_url,
+                                        order_number: paymentTargetOrder.order_number,
+                                        amount: paymentTargetOrder.total_amount,
+                                        context: 'before_kitchen'
+                                    }; paymentCheckoutModalOpen = true;"
+                                    class="font-extrabold text-fuchsia-300 hover:text-fuchsia-200 transition"
+                                >
+                                    Tampilkan QR Code &rarr;
+                                </button>
                             </div>
                         </div>
 

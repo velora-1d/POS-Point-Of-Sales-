@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { BellRing, CheckCheck, Flame, ScanSearch } from '@lucide/vue';
+import { BellRing, CheckCheck, Flame, ScanSearch, Volume2, VolumeX } from '@lucide/vue';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 type KitchenOrderStatus =
@@ -103,6 +103,48 @@ let clockInterval: number | undefined;
 let pollInterval: number | undefined;
 const knownOrderIds = ref<Set<string>>(new Set());
 
+// State Audio Lokal
+const isAudioBlocked = ref(false);
+const localMute = ref(localStorage.getItem('kds_local_mute') === 'true');
+const localVolume = ref(localStorage.getItem('kds_local_volume') !== null ? Number(localStorage.getItem('kds_local_volume')) : 1.0);
+
+const toggleLocalMute = () => {
+    localMute.value = !localMute.value;
+    localStorage.setItem('kds_local_mute', String(localMute.value));
+};
+
+const handleVolumeChange = (e: Event) => {
+    const val = Number((e.target as HTMLInputElement).value);
+    localVolume.value = val;
+    localStorage.setItem('kds_local_volume', String(val));
+    if (val > 0 && localMute.value) {
+        localMute.value = false;
+        localStorage.setItem('kds_local_mute', 'false');
+    }
+};
+
+const initAudioAndDismiss = () => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+    } catch (e) {
+        console.error(e);
+    }
+    isAudioBlocked.value = false;
+};
+
 onMounted(() => {
     clockInterval = window.setInterval(() => {
         now.value = Date.now();
@@ -110,6 +152,16 @@ onMounted(() => {
 
     // Populate initial orders
     props.orders.forEach((o) => knownOrderIds.value.add(o.id));
+
+    // Cek autoplay terblokir
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        if (audioCtx.state === 'suspended') {
+            isAudioBlocked.value = true;
+        }
+    } catch (e) {
+        console.warn('AudioContext not supported or blocked:', e);
+    }
 
     // Start auto polling reload every 8 seconds
     pollInterval = window.setInterval(() => {
@@ -140,14 +192,21 @@ const announceNewOrder = (order: KitchenOrderPayload) => {
 };
 
 const playChimeAndSpeak = (text: string, voiceConfig: any) => {
+    if (localMute.value) return;
+
     try {
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        if (audioCtx.state === 'suspended') {
+            isAudioBlocked.value = true;
+            return;
+        }
         const playTone = (freq: number, start: number, duration: number) => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.frequency.setValueAtTime(freq, start);
             gain.gain.setValueAtTime(0, start);
-            gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
+            const targetGain = 0.2 * localVolume.value;
+            gain.gain.linearRampToValueAtTime(targetGain, start + 0.05);
             gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
@@ -167,8 +226,10 @@ const playChimeAndSpeak = (text: string, voiceConfig: any) => {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'id-ID';
         
+        const baseVolume = voiceConfig ? Number(voiceConfig.volume ?? 1.0) : 1.0;
+        utterance.volume = baseVolume * localVolume.value;
+        
         if (voiceConfig) {
-            utterance.volume = Number(voiceConfig.volume ?? 1.0);
             utterance.rate = Number(voiceConfig.rate ?? 0.9);
             utterance.pitch = Number(voiceConfig.pitch ?? 1.05);
         }
@@ -626,7 +687,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between w-full">
                 <div>
                     <div
                         class="bg-orange-500/8 mb-2 inline-flex items-center gap-2 rounded-full border border-orange-500/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
@@ -648,10 +709,59 @@ const updateEstimate = (orderId: string, minutes: number) => {
                         real-time.
                     </p>
                 </div>
+
+                <!-- Kontrol Volume Lokal -->
+                <div class="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-950/45 p-3 md:self-end">
+                    <button
+                        type="button"
+                        @click="toggleLocalMute"
+                        class="rounded-xl border border-slate-800 bg-slate-900 p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition"
+                        title="Toggle Mute Dapur"
+                    >
+                        <VolumeX v-if="localMute || localVolume === 0" class="h-4.5 w-4.5 text-rose-400 animate-pulse" />
+                        <Volume2 v-else class="h-4.5 w-4.5 text-fuchsia-400" />
+                    </button>
+                    <div class="flex flex-col gap-1 w-28 md:w-36">
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-slate-500">
+                            Volume Lokal ({{ localMute ? 'Muted' : Math.round(localVolume * 100) + '%' }})
+                        </span>
+                        <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.1"
+                            :value="localMute ? 0 : localVolume"
+                            @input="handleVolumeChange"
+                            class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                        />
+                    </div>
+                </div>
             </div>
         </template>
 
         <div class="space-y-4">
+            <!-- Banner Autoplay Terblokir -->
+            <div
+                v-if="isAudioBlocked"
+                @click="initAudioAndDismiss"
+                class="bg-amber-500/12 hover:bg-amber-500/18 flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-amber-500/25 px-5 py-4 text-amber-300 shadow-lg shadow-amber-950/10 transition group"
+            >
+                <div class="flex items-center gap-3">
+                    <div class="rounded-xl border border-amber-500/20 bg-amber-500/10 p-2 group-hover:scale-105 transition duration-200">
+                        <VolumeX class="h-5 w-5 text-amber-400 animate-bounce" />
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">Notifikasi Suara Terblokir Browser</h4>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Silakan klik area ini untuk mengaktifkan notifikasi suara bel dan pembacaan pesanan secara otomatis.
+                        </p>
+                    </div>
+                </div>
+                <span class="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-black uppercase tracking-wider hover:bg-amber-500/20 transition">
+                    Aktifkan
+                </span>
+            </div>
+
             <div
                 v-if="success"
                 class="bg-emerald-500/12 flex items-center gap-2 rounded-xl border border-emerald-500/20 px-4 py-3 text-sm font-medium text-emerald-300"
