@@ -2384,7 +2384,7 @@ const openPaymentCheckout = () => {
                                     :class="[
                                         'rounded-xl border p-3 text-left transition',
                                         paymentOption === 'pay_later'
-                                            ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200'
+                                            ? 'border-emerald-500 bg-emerald-500/10 text-emerald-200 ring-2 ring-emerald-500/20 font-semibold'
                                             : 'border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700',
                                     ]"
                                 >
@@ -2400,7 +2400,7 @@ const openPaymentCheckout = () => {
                                     :class="[
                                         'rounded-xl border p-3 text-left transition',
                                         paymentOption === 'pay_now'
-                                            ? 'border-orange-500/30 bg-orange-500/10 text-orange-100'
+                                            ? 'border-orange-500 bg-orange-500/10 text-orange-100 ring-2 ring-orange-500/20 font-semibold'
                                             : 'border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700',
                                     ]"
                                 >
@@ -2425,7 +2425,7 @@ const openPaymentCheckout = () => {
                                         :class="[
                                             'rounded-xl border p-3 text-left transition',
                                             newOrderPaymentMethod === 'cash'
-                                                ? 'border-orange-500/30 bg-slate-950 text-white'
+                                                ? 'border-orange-500 bg-orange-500/10 text-white ring-2 ring-orange-500/20 font-semibold'
                                                 : 'border-slate-800 bg-slate-950/70 text-slate-300',
                                         ]"
                                     >
@@ -2443,7 +2443,7 @@ const openPaymentCheckout = () => {
                                         :class="[
                                             'rounded-xl border p-3 text-left transition',
                                             newOrderPaymentMethod === 'qris'
-                                                ? 'border-fuchsia-500/30 bg-slate-950 text-white'
+                                                ? 'border-fuchsia-500 bg-fuchsia-500/10 text-white ring-2 ring-fuchsia-500/20 font-semibold'
                                                 : 'border-slate-800 bg-slate-950/70 text-slate-300',
                                         ]"
                                     >
@@ -3840,7 +3840,7 @@ const openPaymentCheckout = () => {
                                 :class="[
                                     'rounded-2xl border p-4 text-left transition',
                                     existingPaymentMethod === 'cash'
-                                        ? 'border-orange-500/30 bg-orange-500/10 text-white'
+                                        ? 'border-orange-500 bg-orange-500/10 text-white ring-2 ring-orange-500/20 font-semibold'
                                         : 'border-slate-800 bg-slate-950/70 text-slate-300',
                                 ]"
                             >
@@ -3856,7 +3856,7 @@ const openPaymentCheckout = () => {
                                 :class="[
                                     'rounded-2xl border p-4 text-left transition',
                                     existingPaymentMethod === 'qris'
-                                        ? 'border-fuchsia-500/30 bg-fuchsia-500/10 text-white'
+                                        ? 'border-fuchsia-500 bg-fuchsia-500/10 text-white ring-2 ring-fuchsia-500/20 font-semibold'
                                         : 'border-slate-800 bg-slate-950/70 text-slate-300',
                                 ]"
                             >
