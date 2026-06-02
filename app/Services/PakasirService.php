@@ -6,6 +6,8 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
+use Illuminate\Validation\ValidationException;
+
 class PakasirService
 {
     public function __construct(
@@ -83,7 +85,9 @@ class PakasirService
         ];
 
         if (!$config['api_key'] || !$config['slug'] || !$config['base_url']) {
-            throw new RuntimeException('Konfigurasi Pakasir belum lengkap.');
+            throw ValidationException::withMessages([
+                'payment_gateway' => 'Konfigurasi Pakasir belum lengkap.',
+            ]);
         }
 
         return $config;

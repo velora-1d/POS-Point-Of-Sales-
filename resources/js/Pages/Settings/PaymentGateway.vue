@@ -11,6 +11,7 @@ import {
     Power,
     Store,
     Wifi,
+    Zap,
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 
@@ -153,19 +154,26 @@ const summaryCards = computed(() => [
     },
 ]);
 
-const selectedOutletOption = computed(() => {
-    return props.outlets.find((outlet) => outlet.id === gatewayForm.outlet_id) || null;
-});
-const testConnectionError = computed(() => {
-    return ((gatewayForm.errors as Record<string, string>)['test_connection']) || '';
-});
+const selectedMethodSet = computed(() => new Set(gatewayForm.active_payment_methods));
+
+function sourceHint() {
+    if (props.effectiveConfig.source === 'outlet') {
+        return 'Runtime checkout outlet ini memakai override yang tersimpan di database.';
+    }
+
+    if (props.effectiveConfig.source === 'env') {
+        return 'Runtime checkout outlet ini masih fallback ke env global project.';
+    }
+
+    return 'Outlet ini belum punya konfigurasi gateway yang siap dipakai.';
+}
 
 const effectiveSourceLabel = computed(() => {
     switch (props.effectiveConfig.source) {
         case 'outlet':
             return 'Override outlet';
         case 'env':
-            return 'Fallback env';
+            return 'Default Sistem (.env)';
         default:
             return 'Belum siap';
     }
@@ -182,50 +190,41 @@ const effectiveSourceClass = computed(() => {
     }
 });
 
-const selectedMethodSet = computed(() => new Set(gatewayForm.active_payment_methods));
-
-function sourceHint() {
-    if (props.effectiveConfig.source === 'outlet') {
-        return 'Runtime checkout outlet ini memakai override yang tersimpan di database.';
-    }
-
-    if (props.effectiveConfig.source === 'env') {
-        return 'Runtime checkout outlet ini masih fallback ke env global project.';
-    }
-
-    return 'Outlet ini belum punya konfigurasi gateway yang siap dipakai.';
-}
-
-function toggleMethod(method: string, checked: boolean) {
-    const next = new Set(gatewayForm.active_payment_methods);
-
+function handleMethodChange(value: string, event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
     if (checked) {
-        next.add(method);
+        gatewayForm.active_payment_methods.push(value);
     } else {
-        next.delete(method);
+        const idx = gatewayForm.active_payment_methods.indexOf(value);
+        if (idx > -1) {
+            gatewayForm.active_payment_methods.splice(idx, 1);
+        }
     }
-
-    gatewayForm.active_payment_methods = Array.from(next.values());
-}
-
-function handleMethodChange(method: string, event: Event) {
-    const target = event.target as HTMLInputElement;
-    toggleMethod(method, target.checked);
 }
 
 function submitSave() {
     gatewayForm.put(route('settings.payment-gateway.update'), {
         preserveScroll: true,
-        preserveState: true,
+        onSuccess: () => {
+            gatewayForm.api_key = '';
+            gatewayForm.api_secret = '';
+        },
     });
 }
 
 function submitTest() {
     gatewayForm.post(route('settings.payment-gateway.test'), {
         preserveScroll: true,
-        preserveState: true,
     });
 }
+
+const selectedOutletOption = computed(() => {
+    return props.outlets.find((outlet) => outlet.id === gatewayForm.outlet_id) || null;
+});
+
+const testConnectionError = computed(() => {
+    return ((gatewayForm.errors as Record<string, string>)['test_connection']) || '';
+});
 </script>
 
 <template>

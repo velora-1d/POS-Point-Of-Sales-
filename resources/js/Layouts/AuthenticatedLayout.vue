@@ -866,21 +866,21 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                     isSidebarCollapsed ? 'justify-center px-4' : 'px-6'
                 ]"
             >
-                <div
-                    class="to-red-650 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-orange-500 text-lg font-black text-white shadow-lg shadow-orange-500/20"
-                >
-                    M
+                <div v-if="isSidebarCollapsed" class="h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-white/10 p-1 backdrop-blur-sm">
+                    <img src="/images/pos_logo.png" class="h-full w-full object-contain" alt="Logo" />
                 </div>
-                <div v-if="!isSidebarCollapsed">
-                    <h1
-                        class="text-base font-extrabold leading-none tracking-wider text-white"
-                    >
-                        POS MENTAI
-                    </h1>
-                    <span
-                        class="mt-1 block text-[10px] font-semibold uppercase tracking-widest text-orange-400"
-                        >Management Suite</span
-                    >
+                <div v-else class="flex items-center gap-3">
+                    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-white p-1 shadow-lg shadow-orange-500/10">
+                        <img src="/images/pos_logo.png" class="h-full w-full object-contain" alt="Logo" />
+                    </div>
+                    <div>
+                        <h1 class="text-base font-extrabold leading-none tracking-wider text-white">
+                            POS MENTAI
+                        </h1>
+                        <span class="mt-1 block text-[10px] font-semibold uppercase tracking-widest text-orange-400">
+                            Management Suite
+                        </span>
+                    </div>
                 </div>
             </div>
 

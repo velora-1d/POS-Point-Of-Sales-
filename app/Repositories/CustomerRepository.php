@@ -27,9 +27,7 @@ class CustomerRepository
             })
             ->with([
                 'membership.tier',
-                'latestOrder.table',
                 'recentOrders.table',
-                'latestKasbonOrder.table',
             ])
             ->withCount('orders')
             ->withCount([
@@ -41,6 +39,18 @@ class CustomerRepository
                 },
             ], 'total_amount')
             ->addSelect([
+                'latest_order_number' => DB::table('orders')
+                    ->select('order_number')
+                    ->whereColumn('customer_id', 'customers.id')
+                    ->latest('created_at')
+                    ->limit(1),
+                'latest_kasbon_order_number' => DB::table('orders')
+                    ->select('order_number')
+                    ->whereColumn('customer_id', 'customers.id')
+                    ->whereColumn('paid_amount', '<', 'total_amount')
+                    ->where('status', '!=', 'cancelled')
+                    ->latest('created_at')
+                    ->limit(1),
                 'kasbon_total_due' => DB::table('orders')
                     ->selectRaw('COALESCE(SUM(total_amount - paid_amount), 0)')
                     ->whereColumn('orders.customer_id', 'customers.id')
@@ -117,7 +127,6 @@ class CustomerRepository
             ->whereHas('membership', fn (Builder $query) => $query->where('is_active', true))
             ->with([
                 'membership.tier',
-                'latestOrder.table',
             ])
             ->withCount('orders')
             ->orderByDesc(
@@ -153,7 +162,6 @@ class CustomerRepository
             ->where('outlet_id', $outletId)
             ->whereHas('kasbonOrders')
             ->with([
-                'latestKasbonOrder.table',
             ])
             ->withCount([
                 'kasbonOrders as kasbon_orders_count',

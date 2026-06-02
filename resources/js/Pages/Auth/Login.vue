@@ -79,9 +79,11 @@ const submit = () => {
             </div>
             
             <!-- Subtle corner brand light -->
-            <div class="absolute top-8 left-8 z-10 flex items-center gap-2">
-                <div class="h-8 w-8 rounded-lg bg-gradient-to-tr from-orange-500 to-red-600 flex items-center justify-center font-black text-white shadow-lg shadow-orange-500/20">M</div>
-                <span class="font-bold text-lg tracking-wider text-white">MENTAI</span>
+            <div class="absolute top-8 left-8 z-10 flex items-center gap-3">
+                <div class="h-10 w-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg shadow-orange-500/20">
+                    <img src="/images/pos_logo.png" class="h-full w-full object-contain" alt="Logo" />
+                </div>
+                <span class="font-bold text-xl tracking-wider text-white">POS MENTAI</span>
             </div>
         </div>
 
@@ -93,8 +95,10 @@ const submit = () => {
 
             <div class="w-full max-w-md relative z-10">
                 <!-- Mobile brand logo (visible only on mobile) -->
-                <div class="flex items-center gap-2 mb-8 md:hidden justify-center">
-                    <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-orange-500 to-red-600 flex items-center justify-center font-black text-white shadow-lg">M</div>
+                <div class="flex items-center gap-3 mb-8 md:hidden justify-center">
+                    <div class="h-12 w-12 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg">
+                        <img src="/images/pos_logo.png" class="h-full w-full object-contain" alt="Logo" />
+                    </div>
                     <span class="font-bold text-2xl tracking-wider text-white">POS MENTAI</span>
                 </div>
 

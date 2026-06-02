@@ -70,7 +70,7 @@ class Order extends Model
             if (empty($order->order_number)) {
                 $dateStr = now()->format('Ymd');
                 $count = static::whereDate('created_at', now()->toDateString())->count() + 1;
-                $order->order_number = 'ORD-' . $dateStr . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+                $order->order_number = 'ORD-' . $dateStr . '-' . str_pad((string) $count, 4, '0', STR_PAD_LEFT);
             }
         });
     }

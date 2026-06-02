@@ -157,7 +157,9 @@ class PaymentGatewayConfigService
 
             if ($storedConfig) {
                 if (!$storedConfig->is_active) {
-                    throw new \RuntimeException('Gateway payment outlet sedang nonaktif.');
+                    throw ValidationException::withMessages([
+                        'payment_gateway' => 'Gateway payment outlet sedang nonaktif.',
+                    ]);
                 }
 
                 $resolved = $this->normalizeForRuntime([
@@ -192,7 +194,9 @@ class PaymentGatewayConfigService
             ];
         }
 
-        throw new \RuntimeException('Konfigurasi Pakasir belum lengkap.');
+        throw ValidationException::withMessages([
+            'payment_gateway' => 'Konfigurasi Pakasir belum lengkap (Environment Variables MISSING).',
+        ]);
     }
 
     public function assertMethodEnabledForOutlet(?string $outletId, string $method): void
@@ -442,7 +446,12 @@ class PaymentGatewayConfigService
         $apiSecret = config('services.pakasir.api_secret');
         $baseUrl = config('services.pakasir.base_url');
         $projectSlug = config('services.pakasir.slug');
-        $callbackUrl = config('services.pakasir.callback_url') ?: route('payments.webhook.pakasir');
+        
+        $callbackUrl = config('services.pakasir.callback_url');
+        if ($callbackUrl && str_contains($callbackUrl, '${APP_URL}')) {
+            $callbackUrl = str_replace('${APP_URL}', config('app.url'), $callbackUrl);
+        }
+        $callbackUrl = $callbackUrl ?: route('payments.webhook.pakasir');
 
         return [
             'api_key' => $apiKey,

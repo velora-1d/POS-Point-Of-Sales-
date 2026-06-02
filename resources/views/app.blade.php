@@ -6,6 +6,22 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="/images/pos_logo.png">
+
+        <!-- Open Graph / Link Preview -->
+        <meta property="og:title" content="House Of Mentai">
+        <meta property="og:description" content="Sistem Point of Sale (POS) terintegrasi untuk House Of Mentai dengan dukungan multi-outlet, real-time kitchen display, dan pemesanan mandiri.">
+        <meta property="og:image" content="{{ asset('images/og_bg_mentai.png') }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:type" content="website">
+
+        <!-- Twitter Card (Untuk kompatibilitas) -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="House Of Mentai">
+        <meta name="twitter:description" content="Sistem Point of Sale (POS) terintegrasi untuk House Of Mentai dengan dukungan multi-outlet, real-time kitchen display, dan pemesanan mandiri.">
+        <meta name="twitter:image" content="{{ asset('images/og_bg_mentai.png') }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
