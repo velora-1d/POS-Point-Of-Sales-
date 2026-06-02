@@ -52,33 +52,57 @@ class DashboardService
     {
         $orders = $this->dashboardRepository->getTodayOrders($scopeOutletId, $date);
         $settledOrders = $orders->filter(fn (Order $order) => $this->isSettledOrder($order))->values();
+        $pendingOrders = $orders->filter(fn (Order $order) => !$this->isSettledOrder($order))->values();
         $totalRevenue = (float) $settledOrders->sum(fn (Order $order) => (float) $order->total_amount);
         $totalDiscount = (float) $settledOrders->sum(fn (Order $order) => (float) $order->discount_amount);
         $settledCount = $settledOrders->count();
 
+        // Yesterday comparison
+        $yesterdayOrders = $this->dashboardRepository->getYesterdayOrders($scopeOutletId, $date);
+        $yesterdaySettled = $yesterdayOrders->filter(fn (Order $order) => $this->isSettledOrder($order))->values();
+        $yesterdayRevenue = (float) $yesterdaySettled->sum(fn (Order $order) => (float) $order->total_amount);
+        $yesterdayCount = $yesterdaySettled->count();
+        $revenueGrowth = $yesterdayRevenue > 0
+            ? round((($totalRevenue - $yesterdayRevenue) / $yesterdayRevenue) * 100, 1)
+            : ($totalRevenue > 0 ? 100.0 : 0.0);
+
+        $settledOrderIds = $settledOrders->pluck('id')->all();
+
+        // Top 5 products
+        $topProductsRaw = $this->dashboardRepository->getTopProductsForOrders($settledOrderIds, 5);
+        $topProducts = $topProductsRaw->map(fn ($item) => [
+            'name'     => $item->product?->name ?? 'Produk tidak ditemukan',
+            'quantity' => (int) $item->total_quantity,
+            'revenue'  => (float) $item->total_revenue,
+        ])->values()->all();
+
         return [
             'can_view' => true,
-            'summary' => [
-                'revenue' => $totalRevenue,
-                'orders' => $orders->count(),
-                'settled_orders' => $settledCount,
-                'avg_order_value' => $settledCount > 0 ? $totalRevenue / $settledCount : 0,
-                'total_discount' => $totalDiscount,
-                'top_product' => $this->dashboardRepository->getTopProductForOrders(
-                    $settledOrders->pluck('id')->all(),
-                ),
-                'active_shift' => $this->transformActiveShift(
+            'summary'  => [
+                'revenue'          => $totalRevenue,
+                'orders'           => $orders->count(),
+                'settled_orders'   => $settledCount,
+                'pending_orders'   => $pendingOrders->count(),
+                'avg_order_value'  => $settledCount > 0 ? $totalRevenue / $settledCount : 0,
+                'total_discount'   => $totalDiscount,
+                'yesterday_revenue' => $yesterdayRevenue,
+                'yesterday_orders'  => $yesterdayCount,
+                'revenue_growth'    => $revenueGrowth,
+                'top_product'      => $topProducts[0] ?? null,
+                'top_products'     => $topProducts,
+                'active_shift'     => $this->transformActiveShift(
                     $this->dashboardRepository->findActiveShift($scopeOutletId),
                 ),
             ],
             'breakdowns' => [
                 'payments' => $this->buildPaymentBreakdown($settledOrders),
-                'sources' => $this->buildSourceBreakdown($settledOrders),
+                'sources'  => $this->buildSourceBreakdown($settledOrders),
+                'hourly'   => $this->dashboardRepository->getHourlyRevenueForOrders($settledOrders),
             ],
             'scope' => [
-                'outlet_id' => $scopeOutletId,
+                'outlet_id'   => $scopeOutletId,
                 'viewer_role' => $actor->role?->type,
-                'date' => $date->toDateString(),
+                'date'        => $date->toDateString(),
             ],
         ];
     }

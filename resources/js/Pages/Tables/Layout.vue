@@ -137,18 +137,10 @@ const hasManualPositions = computed(() =>
 );
 
 const generatedSlots = [
-    [8, 10],
-    [34, 8],
-    [62, 12],
-    [16, 38],
-    [46, 34],
-    [76, 40],
-    [10, 68],
-    [38, 72],
-    [68, 70],
-    [24, 86],
-    [54, 86],
-    [82, 82],
+    [12, 12], [37, 12], [62, 12], [87, 12],
+    [12, 38], [37, 38], [62, 38], [87, 38],
+    [12, 64], [37, 64], [62, 64], [87, 64],
+    [12, 90], [37, 90], [62, 90], [87, 90],
 ];
 
 const tableCoordinates = computed(() => {
@@ -558,12 +550,6 @@ const cancelReservation = (reservationId: string) => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <div
-                        class="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                    >
-                        <Sparkles class="h-3.5 w-3.5" />
-                        Menu #12 + #19-#21 Reservasi, Layout, Live, dan QR
-                    </div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
                         Peta Meja Outlet
                     </h2>
@@ -639,6 +625,13 @@ const cancelReservation = (reservationId: string) => {
                                 </h3>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
+                                <Link
+                                    :href="route('settings.tables.index')"
+                                    class="inline-flex items-center gap-1 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300 transition hover:bg-orange-500/20"
+                                >
+                                    <Settings class="h-3.5 w-3.5" />
+                                    Manajemen Meja
+                                </Link>
                                 <button
                                     type="button"
                                     @click="refreshTableStatuses"
@@ -702,19 +695,33 @@ const cancelReservation = (reservationId: string) => {
                             ></div>
 
                             <div
-                                v-for="table in tableCards"
-                                :key="table.id"
                                 :class="[
-                                    'absolute w-[170px] -translate-x-1/2 -translate-y-1/2 transition duration-300',
-                                    isTableChanged(table.id)
-                                        ? 'scale-[1.03]'
-                                        : '',
+                                    hasManualPositions
+                                        ? 'absolute inset-0'
+                                        : 'relative z-10 grid h-full content-start gap-6 overflow-y-auto p-6 grid-cols-[repeat(auto-fill,minmax(180px,1fr))]',
                                 ]"
-                                :style="{
-                                    left: `${table.x}%`,
-                                    top: `${table.y}%`,
-                                }"
                             >
+                                <div
+                                    v-for="table in tableCards"
+                                    :key="table.id"
+                                    :class="[
+                                        'transition duration-300',
+                                        hasManualPositions
+                                            ? 'absolute w-[170px] -translate-x-1/2 -translate-y-1/2'
+                                            : 'w-full',
+                                        isTableChanged(table.id)
+                                            ? 'scale-[1.03]'
+                                            : '',
+                                    ]"
+                                    :style="
+                                        hasManualPositions
+                                            ? {
+                                                  left: `${table.x}%`,
+                                                  top: `${table.y}%`,
+                                              }
+                                            : {}
+                                    "
+                                >
                                 <div
                                     :class="[
                                         'rounded-[22px] border border-slate-700/80 bg-slate-950/90 p-3 shadow-[0_20px_50px_rgba(2,6,23,0.45)] backdrop-blur transition duration-300',
@@ -874,6 +881,7 @@ const cancelReservation = (reservationId: string) => {
                                         Book Meja
                                     </button>
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>

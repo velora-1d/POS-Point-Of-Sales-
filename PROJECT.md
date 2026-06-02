@@ -33,6 +33,11 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Kustomisasi visual struk belanja (Menu #10 & #57) selesai sepenuhnya: logo outlet base64, pilihan template (classic/modern/compact), dropdown font (sans/serif/mono), color accent selector (4 warna), dan textarea footer kustom tersimpan di kolom `metadata` tabel `printer_configs` tanpa migrasi baru.
+- Live receipt preview interaktif ditambahkan di sidebar kanan halaman [Settings/Printer.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Settings/Printer.vue) — perubahan template, font, warna, logo, dan footer langsung direfleksikan ke mockup struk secara instan.
+- [Transactions/Receipt.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Transactions/Receipt.vue) kini memuat data `receipt_metadata` dari `outlet.printerConfig` dan menerapkan template/font/warna/logo/footer kustom secara reaktif pada struk belanja nyata.
+- `TransactionService.php` diperbaiki untuk eager load `outlet.printerConfig` dan menyertakan `receipt_metadata` pada data outlet.
+- Verifikasi sesi ini: `php -l` kedua file PHP lulus bersih, `npm run build` sukses 100% dalam 9.33s pada `2026-06-01`, commit `31f17a0` sudah di-push ke GitHub.
 - Pembuatan dan integrasi Dockerfile multi-stage production-ready serta script [docker-entrypoint.sh](/home/pak-hakim/Pak-Hakim/Project/POS/docker-entrypoint.sh) untuk otomatisasi deployment dan auto-migration database di platform PaaS seperti Dokploy tanpa risiko menghapus data lama.
 - Penyempurnaan alur UI/UX pada Kitchen Display:
   - Kontrol volume mandiri lokal (mute toggle & volume slider) ditambahkan pada header [resources/js/Pages/Kitchen/Display.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Kitchen/Display.vue) untuk tablet dapur, tersimpan secara persisten di `localStorage`.

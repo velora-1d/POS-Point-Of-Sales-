@@ -59,7 +59,7 @@ class EmployeeRepository
     public function getRoleBreakdown(?string $scopeOutletId = null): Collection
     {
         return Role::query()
-            ->select(['type', 'name'])
+            ->select(['roles.type', 'roles.name'])
             ->selectRaw('COUNT(users.id) as total_users')
             ->leftJoin('users', 'users.role_id', '=', 'roles.id')
             ->when($scopeOutletId, function (Builder $query) use ($scopeOutletId) {
@@ -96,6 +96,11 @@ class EmployeeRepository
     public function update(User $user, array $payload): void
     {
         $user->update($payload);
+    }
+
+    public function delete(User $user): void
+    {
+        $user->delete();
     }
 
     public function findRoleForOutlet(string $roleId, string $outletId): ?Role

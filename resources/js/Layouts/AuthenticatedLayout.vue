@@ -675,6 +675,7 @@ const sidebarData: SidebarCategory[] = [
             { key: 'settings-rbac', title: 'User & RBAC', route: 'settings.rbac.index', menuIds: [55] },
             { key: 'settings-payment', title: 'Payment Gateway', route: 'settings.payment-gateway.index', menuIds: [56] },
             { key: 'settings-printer', title: 'Printer', route: 'settings.printer.index', menuIds: [57] },
+            { key: 'settings-tables', title: 'Daftar Meja', route: 'settings.tables.index', menuIds: [19] },
             { key: 'settings-table-qr', title: 'QR Meja', route: 'settings.table-qr.index', menuIds: [58] },
             { key: 'settings-notifications', title: 'Notifikasi & Alert', route: 'settings.notifications.index', menuIds: [59] },
             { key: 'settings-backup', title: 'Backup & Keamanan', route: 'settings.backup-security.index', menuIds: [60] },
@@ -863,11 +864,6 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                         <LayoutDashboard class="h-4 w-4 shrink-0" />
                         <span>Dashboard Utama</span>
                         <span
-                            class="ms-auto scale-90 rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-400"
-                        >
-                            {{ getPageStatusLabel(dashboardPage) }}
-                        </span>
-                        <span
                             v-if="route().current('dashboard')"
                             class="h-1.5 w-1.5 rounded-full bg-orange-500"
                         ></span>
@@ -903,11 +899,6 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span
-                                class="rounded-full border border-slate-700/60 bg-slate-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-400"
-                            >
-                                {{ getCategoryStatusLabel(category) }}
-                            </span>
                             <span class="group-hover:text-slate-350 text-slate-500">
                             <ChevronDown
                                 v-if="
@@ -954,11 +945,6 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                                         class="truncate"
                                         >{{ pageItem.title }}</span
                                     >
-                                </span>
-                                <span
-                                    class="scale-90 rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-400"
-                                >
-                                    {{ getPageStatusLabel(pageItem) }}
                                 </span>
                             </Link>
                         </template>

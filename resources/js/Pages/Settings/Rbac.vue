@@ -17,6 +17,7 @@ import {
     Users,
     X,
 } from '@lucide/vue';
+import AlertDialog from '@/Components/AlertDialog.vue';
 import { type Component, computed, ref } from 'vue';
 
 // ─── Permission icon + color helpers ──────────────────────────────────────────
@@ -109,8 +110,26 @@ const props = defineProps<{
 
 // ─── State ─────────────────────────────────────────────────────────────────────
 
-const activeTab = ref<'accounts' | 'matrix'>('accounts');
+const activeTab = ref<'accounts' | 'matrix'>('matrix'); // Default to matrix for better focus on role config
+
+const alertDialog = ref({
+    show: false,
+    title: '',
+    message: '',
+    type: 'confirm' as 'info' | 'success' | 'warning' | 'danger' | 'confirm',
+    onConfirm: () => {},
+});
+
+const closeAlertDialog = () => {
+    alertDialog.value.show = false;
+};
+const selectedMatrixRoleId = ref(props.roles[0]?.id || '');
 const outletId = ref(props.filters.outlet_id || props.selectedOutlet?.id || '');
+
+const selectedMatrixRole = computed(() => {
+    return props.roles.find(r => r.id === selectedMatrixRoleId.value) || props.roles[0];
+});
+
 const employeeSearch = ref('');
 const modalMode = ref<'create' | 'edit' | null>(null);
 const selectedRole = ref<RoleRow | null>(null);
@@ -182,8 +201,6 @@ function roleBadgeClass(type?: string | null) {
     return roleColorMap[type || ''] ?? 'bg-slate-500/15 text-slate-200 border-slate-400/20';
 }
 
-// ─── Matrix helpers ─────────────────────────────────────────────────────────────
-
 function hasPermission(roleId: string, permissionName: string): boolean {
     return localMatrix.value[roleId]?.has(permissionName) ?? false;
 }
@@ -233,9 +250,31 @@ function isGroupPartialActive(roleId: string, group: PermissionGroup): boolean {
 }
 
 function resetRoleToDefault(roleId: string, roleType: string) {
-    const defaults = props.defaultPermissionMatrix[roleType] ?? [];
-    localMatrix.value = { ...localMatrix.value, [roleId]: new Set(defaults) };
-    matrixSaved.value = false;
+    alertDialog.value = {
+        show: true,
+        title: 'Reset Hak Akses',
+        message: 'Apakah Anda yakin ingin me-reset semua hak akses role ini ke pengaturan standar sistem?',
+        type: 'warning',
+        onConfirm: () => {
+            const defaults = props.defaultPermissionMatrix[roleType] ?? [];
+            localMatrix.value = { ...localMatrix.value, [roleId]: new Set(defaults) };
+            matrixSaved.value = false;
+            closeAlertDialog();
+        },
+    };
+}
+
+// Map permission name to short label for CRUD columns
+function getActionLabel(permName: string): string {
+    const action = permName.split(':')[1] ?? '';
+    switch (action) {
+        case 'read': return 'Lihat';
+        case 'create': return 'Tambah';
+        case 'update': return 'Edit';
+        case 'delete': return 'Hapus';
+        case 'manage': return 'Kelola';
+        default: return action.replace('_', ' ');
+    }
 }
 
 function saveMatrix() {
@@ -322,22 +361,24 @@ function submitRole() {
 
 // ─── Employee role assign ───────────────────────────────────────────────────────
 
-function updateEmployeeRole(employee: EmployeeRow, event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const nextRoleId = target.value;
-    if (!nextRoleId || nextRoleId === employee.role_id) return;
+function deleteEmployee(employee: EmployeeRow) {
+    alertDialog.value = {
+        show: true,
+        title: 'Hapus Akun Karyawan',
+        message: `Apakah Anda yakin ingin menghapus akun ${employee.name}? Data historis transaksi mungkin akan terpengaruh.`,
+        type: 'danger',
+        onConfirm: () => {
+            router.delete(route('employees.destroy', employee.id), {
+                preserveScroll: true,
+                onSuccess: () => closeAlertDialog(),
+                onFinish: () => closeAlertDialog(),
+            });
+        },
+    };
+}
 
-    const selectedOption = activeRoleOptions.value.find((r) => r.id === nextRoleId);
-    const confirmed = window.confirm(
-        `Ubah role ${employee.name} menjadi "${selectedOption?.name ?? 'role baru'}"?\nUser perlu login ulang agar akses baru aktif.`,
-    );
-    if (!confirmed) { target.value = employee.role_id; return; }
-
-    router.patch(
-        route('settings.rbac.users.assign-role', employee.id),
-        { outlet_id: outletId.value || props.selectedOutlet?.id || '', role_id: nextRoleId },
-        { preserveScroll: true },
-    );
+function openEmployeeManager() {
+    router.get(route('employees.index'), { outlet_id: outletId.value || undefined });
 }
 </script>
 
@@ -347,10 +388,6 @@ function updateEmployeeRole(employee: EmployeeRow, event: Event) {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300">
-                    <ShieldCheck class="h-3.5 w-3.5" />
-                    Menu #55 User & RBAC
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">Role & Hak Akses</h2>
                     <p class="mt-1 max-w-3xl text-xs text-slate-400">
@@ -452,10 +489,10 @@ function updateEmployeeRole(employee: EmployeeRow, event: Event) {
                     <button
                         type="button"
                         class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-orange-400"
-                        @click="openCreateModal"
+                        @click="openEmployeeManager"
                     >
                         <Plus class="h-4 w-4" />
-                        Tambah Role
+                        Kelola Karyawan Baru
                     </button>
                 </div>
 
@@ -501,25 +538,34 @@ function updateEmployeeRole(employee: EmployeeRow, event: Event) {
                                         {{ employee.role_name || employee.role_type }}
                                     </span>
                                 </div>
-                                <p class="mt-0.5 text-xs text-slate-400">
-                                    {{ employee.email }}
-                                    <span v-if="employee.phone"> · {{ employee.phone }}</span>
-                                </p>
+                                <div class="mt-1 flex flex-col gap-0.5">
+                                    <p class="text-xs text-slate-400">{{ employee.email }}</p>
+                                    <p v-if="employee.phone" class="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400/90">
+                                        <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                        WhatsApp: {{ employee.phone }}
+                                    </p>
+                                    <p v-else class="text-[10px] italic text-rose-400/70">Nomor WA belum diisi</p>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Role dropdown -->
+                        <!-- Actions -->
                         <div class="flex items-center gap-2 sm:flex-shrink-0">
-                            <PenLine class="h-3.5 w-3.5 flex-shrink-0 text-slate-500" />
-                            <select
-                                :value="employee.role_id"
-                                class="rounded-2xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                @change="updateEmployeeRole(employee, $event)"
+                            <Link
+                                :href="route('employees.index', { search: employee.email })"
+                                class="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-slate-300 transition hover:bg-white/10"
                             >
-                                <option v-for="role in activeRoleOptions" :key="role.id" :value="role.id">
-                                    {{ role.name }}
-                                </option>
-                            </select>
+                                <Pencil class="h-3.5 w-3.5" />
+                                Edit Data
+                            </Link>
+                            <button
+                                type="button"
+                                @click="deleteEmployee(employee)"
+                                class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-400 transition hover:bg-rose-500/20"
+                                title="Hapus Karyawan"
+                            >
+                                <Trash2 class="h-4 w-4" />
+                            </button>
                         </div>
                     </div>
 
@@ -562,188 +608,162 @@ function updateEmployeeRole(employee: EmployeeRow, event: Event) {
             </section>
 
             <!-- ═══════════════════════════════════════════════════════ -->
-            <!-- TAB 2: Matriks RBAC                                     -->
+            <!-- TAB 2: Matriks Hak Akses Peran                          -->
             <!-- ═══════════════════════════════════════════════════════ -->
-            <section v-if="activeTab === 'matrix'" class="rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
-                <!-- Header matrix -->
+            <section v-if="activeTab === 'matrix'" class="rounded-[28px] border border-white/10 bg-slate-950/45 p-6 shadow-xl">
+                <!-- Header Controls -->
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">Matriks Hak Akses Peran</p>
-                        <h3 class="mt-1 text-lg font-black text-white">Atur akses per fitur untuk setiap role</h3>
+                        <h3 class="text-lg font-black text-white">Matriks Hak Akses Peran</h3>
                         <p class="mt-1 text-xs text-slate-400">
-                            Klik ikon untuk mengaktifkan atau menonaktifkan akses. Setelah selesai klik <strong class="text-white">Simpan Hak Akses</strong>.
+                            Atur sub-akses CRUD tiap menu per peran. Read = lihat, Create = tambah, Update = ubah, Delete = hapus.
                         </p>
                     </div>
-                    <div class="flex flex-shrink-0 items-center gap-2">
-                        <div v-if="matrixSaved" class="flex items-center gap-1.5 text-xs text-emerald-300">
-                            <CheckCircle2 class="h-3.5 w-3.5" />
-                            Tersimpan
-                        </div>
+                    <div class="flex flex-shrink-0 items-center gap-3">
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                            @click="Object.keys(localMatrix).forEach(id => resetRoleToDefault(id, props.roles.find(r => r.id === id)?.type || ''))"
+                            class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
+                        >
+                            <RotateCcw class="h-4 w-4" />
+                            RESET
+                        </button>
+                        <button
+                            type="button"
+                            class="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-black text-slate-950 shadow-[0_0_20px_rgba(249,115,22,0.3)] transition hover:bg-orange-400 disabled:opacity-50"
                             :disabled="savingMatrix"
                             @click="saveMatrix"
                         >
                             <Save class="h-4 w-4" />
-                            {{ savingMatrix ? 'Menyimpan...' : 'Simpan Hak Akses' }}
+                            {{ savingMatrix ? 'MENYIMPAN...' : 'SIMPAN HAK AKSES' }}
                         </button>
                     </div>
                 </div>
 
-                <!-- Legend chips -->
-                <div class="mt-4 flex flex-wrap items-center gap-2">
-                    <span class="text-xs font-semibold text-slate-400">Legenda aksi:</span>
-                    <span class="inline-flex items-center gap-1 rounded-full border border-sky-400/20 bg-sky-500/10 px-2.5 py-1 text-[11px] font-semibold text-sky-200">
-                        <Eye class="h-3 w-3" /> Lihat
+                <!-- Legends -->
+                <div class="mt-6 flex flex-wrap items-center gap-3 border-b border-white/10 pb-6">
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-sky-400/30 bg-sky-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-sky-400">
+                        <Eye class="h-3 w-3" /> READ
                     </span>
-                    <span class="inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-200">
-                        <Plus class="h-3 w-3" /> Tambah
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-emerald-400">
+                        <Plus class="h-3 w-3" /> CREATE
                     </span>
-                    <span class="inline-flex items-center gap-1 rounded-full border border-amber-400/20 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-200">
-                        <Pencil class="h-3 w-3" /> Ubah
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-amber-400">
+                        <Pencil class="h-3 w-3" /> UPDATE
                     </span>
-                    <span class="inline-flex items-center gap-1 rounded-full border border-rose-400/20 bg-rose-500/10 px-2.5 py-1 text-[11px] font-semibold text-rose-200">
-                        <Trash2 class="h-3 w-3" /> Hapus/Aksi Kritis
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-400/30 bg-rose-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-rose-400">
+                        <Trash2 class="h-3 w-3" /> DELETE
                     </span>
-                    <span class="ml-2 text-[11px] text-slate-500">Ikon berwarna = aktif · abu-abu = nonaktif</span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-600 bg-slate-800 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400">
+                        <KeyRound class="h-3 w-3" /> DIKUNCI
+                    </span>
                 </div>
 
-                <!-- Info owner -->
-                <div class="mt-4 rounded-2xl border border-amber-400/15 bg-amber-500/8 px-4 py-3 text-xs text-amber-200">
-                    <strong>Role Owner</strong> selalu memiliki semua akses penuh dan tidak bisa diubah dari halaman ini.
-                </div>
-
-                <!-- Matrix table -->
-                <div class="mt-5 overflow-x-auto rounded-2xl border border-white/10">
-                    <table class="w-full min-w-max border-collapse text-sm">
-                        <!-- Role column headers -->
+                <!-- Matrix Table -->
+                <div class="mt-6 overflow-x-auto rounded-2xl border border-white/5 bg-slate-900/50">
+                    <table class="w-full min-w-max border-collapse">
                         <thead>
-                            <tr class="border-b border-white/10 bg-slate-950/60">
-                                <th class="sticky left-0 z-10 min-w-[200px] bg-slate-950/90 px-4 py-4 text-left text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">
-                                    Fitur / Menu
+                            <tr>
+                                <th class="sticky left-0 z-10 min-w-[240px] bg-slate-900 px-5 py-5 text-left text-xs font-black text-slate-300">
+                                    Menu / Fitur Sidebar
                                 </th>
                                 <th
                                     v-for="role in roles"
                                     :key="role.id"
-                                    class="min-w-[130px] px-3 py-4 text-center"
+                                    class="min-w-[160px] border-l border-white/5 px-3 py-5 text-center"
                                 >
-                                    <div class="flex flex-col items-center gap-1.5">
-                                        <span
-                                            class="rounded-full border px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em]"
-                                            :class="roleBadgeClass(role.type)"
-                                        >
-                                            {{ role.name }}
-                                        </span>
-                                        <span class="text-[10px] text-slate-500">{{ role.users_count }} user</span>
-                                        <button
-                                            v-if="!role.is_locked"
-                                            type="button"
-                                            class="mt-0.5 inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2 py-0.5 text-[10px] text-slate-400 transition hover:border-orange-400/30 hover:text-orange-300"
-                                            :title="`Reset ${role.name} ke default`"
-                                            @click="resetRoleToDefault(role.id, role.type)"
-                                        >
-                                            <RotateCcw class="h-2.5 w-2.5" />
-                                            Reset
-                                        </button>
-                                        <span v-else class="text-[10px] text-slate-600">— terkunci —</span>
-                                    </div>
+                                    <p class="text-sm font-black text-white">{{ role.name }}</p>
+                                    <p class="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">R C U D</p>
                                 </th>
                             </tr>
                         </thead>
-
                         <tbody>
                             <template v-for="group in permissionGroups" :key="group.key">
-                                <!-- Group header row -->
-                                <tr class="border-b border-white/5 bg-slate-900/60">
-                                    <td class="sticky left-0 z-10 bg-slate-900/80 px-4 py-2.5">
-                                        <span class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-300">
-                                            {{ group.label }}
-                                        </span>
-                                    </td>
+                                <!-- Group Header / Pembatas -->
+                                <tr class="bg-indigo-950/20">
                                     <td
-                                        v-for="role in roles"
-                                        :key="role.id"
-                                        class="px-3 py-2 text-center"
+                                        :colspan="roles.length + 1"
+                                        class="sticky left-0 z-10 px-5 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-indigo-400"
                                     >
-                                        <!-- Toggle semua permission dalam group ini -->
-                                        <button
-                                            v-if="!role.is_locked"
-                                            type="button"
-                                            :title="`Toggle semua ${group.label} untuk ${role.name}`"
-                                            class="mx-auto flex h-5 w-5 items-center justify-center rounded-md transition"
-                                            :class="isGroupAllActive(role.id, group)
-                                                ? 'bg-orange-500 text-white'
-                                                : isGroupPartialActive(role.id, group)
-                                                    ? 'bg-orange-500/30 text-orange-200'
-                                                    : 'border border-white/10 bg-white/[0.03] text-slate-600 hover:border-orange-400/30'"
-                                            @click="toggleGroupForRole(role.id, group)"
-                                        >
-                                            <CheckCircle2 class="h-3 w-3" />
-                                        </button>
-                                        <span v-else class="mx-auto block h-5 w-5" />
+                                        {{ group.label }}
                                     </td>
                                 </tr>
 
-                                <!-- Permission rows dalam group -->
+                                <!-- Menu Items in Group -->
                                 <tr
-                                    v-for="permission in group.permissions"
+                                    v-for="permission in group.permissions.filter(p => p.name.endsWith(':read') || (!group.permissions.some(xp => xp.name.endsWith(':read')) && p === group.permissions[0]))"
                                     :key="permission.id"
-                                    class="border-b border-white/5 transition hover:bg-white/[0.02]"
+                                    class="border-t border-white/5 hover:bg-white/[0.02]"
                                 >
-                                    <!-- Permission name (frozen left) -->
-                                    <td class="sticky left-0 z-10 bg-slate-950/90 px-4 py-3">
-                                        <p class="text-xs font-semibold text-slate-200">{{ permission.description }}</p>
-                                        <p class="mt-0.5 font-mono text-[10px] text-slate-500">{{ permission.name }}</p>
+                                    <!-- Sidebar Menu Name -->
+                                    <td class="sticky left-0 z-10 bg-slate-900 px-5 py-4">
+                                        <p class="text-sm font-bold text-white">{{ permission.description.split(' ').slice(1).join(' ') || group.label }}</p>
+                                        <p class="mt-0.5 text-xs text-slate-500">{{ group.key }}</p>
                                     </td>
 
-                                    <!-- Toggle per role -->
+                                    <!-- Action Buttons per Role -->
                                     <td
                                         v-for="role in roles"
                                         :key="role.id"
-                                        class="px-3 py-3 text-center"
+                                        class="border-l border-white/5 px-2 py-4 text-center"
                                     >
-                                        <template v-if="role.is_locked">
-                                            <!-- Owner: semua aktif, tidak bisa diubah -->
-                                            <div class="mx-auto flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/20">
-                                                <CheckCircle2 class="h-4 w-4 text-amber-300" />
-                                            </div>
-                                        </template>
-                                        <template v-else>
-                                            <!-- Toggle button dengan warna berdasarkan action type -->
+                                        <div class="flex items-center justify-center gap-1.5">
+                                            <!-- R, C, U, D Buttons -->
+                                            <template v-for="action in ['read', 'create', 'update', 'delete']" :key="action">
+                                                <button
+                                                    v-if="group.permissions.find(p => p.name.endsWith(':' + action) || (action === 'delete' && p.name.endsWith(':cancel')))"
+                                                    type="button"
+                                                    :disabled="role.is_locked"
+                                                    @click="togglePermissionInMatrix(role.id, group.permissions.find(p => p.name.endsWith(':' + action) || (action === 'delete' && p.name.endsWith(':cancel')))!.name)"
+                                                    :class="[
+                                                        'flex h-7 w-7 items-center justify-center rounded border transition',
+                                                        role.is_locked
+                                                            ? 'border-slate-700 bg-slate-800 text-slate-500 cursor-not-allowed opacity-50'
+                                                            : hasPermission(role.id, group.permissions.find(p => p.name.endsWith(':' + action) || (action === 'delete' && p.name.endsWith(':cancel')))!.name)
+                                                                ? getPermissionActiveClass(group.permissions.find(p => p.name.endsWith(':' + action) || (action === 'delete' && p.name.endsWith(':cancel')))!.name)
+                                                                : 'border-white/10 bg-white/5 text-slate-600 hover:border-slate-500 hover:text-slate-400'
+                                                    ]"
+                                                >
+                                                    <component
+                                                        :is="getPermissionIcon(group.permissions.find(p => p.name.endsWith(':' + action) || (action === 'delete' && p.name.endsWith(':cancel')))!.name)"
+                                                        class="h-3.5 w-3.5"
+                                                    />
+                                                </button>
+                                                <!-- Placeholder if action doesn't exist for this module -->
+                                                <div v-else class="h-7 w-7 flex items-center justify-center">
+                                                    <div class="h-1 w-2 rounded-full bg-slate-800/50"></div>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <!-- Extra specific actions (e.g. approve, refund) rendered as small chips below if they exist -->
+                                        <div
+                                            v-if="group.permissions.filter(p => !['read','create','update','delete','cancel'].includes(p.name.split(':')[1])).length > 0"
+                                            class="mt-2 flex flex-wrap justify-center gap-1"
+                                        >
                                             <button
+                                                v-for="extraPerm in group.permissions.filter(p => !['read','create','update','delete','cancel'].includes(p.name.split(':')[1]))"
+                                                :key="extraPerm.id"
                                                 type="button"
-                                                class="mx-auto flex h-8 w-8 items-center justify-center rounded-xl border transition"
-                                                :class="hasPermission(role.id, permission.name)
-                                                    ? getPermissionActiveClass(permission.name)
-                                                    : 'border-white/10 bg-white/[0.02] text-slate-600 hover:border-slate-500/40 hover:text-slate-400'"
-                                                :title="`${hasPermission(role.id, permission.name) ? 'Nonaktifkan' : 'Aktifkan'}: ${permission.description} untuk ${role.name}`"
-                                                @click="togglePermissionInMatrix(role.id, permission.name)"
+                                                :disabled="role.is_locked"
+                                                @click="togglePermissionInMatrix(role.id, extraPerm.name)"
+                                                :class="[
+                                                    'rounded px-1.5 py-0.5 text-[9px] font-bold uppercase transition',
+                                                    role.is_locked
+                                                        ? 'bg-slate-800 text-slate-500'
+                                                        : hasPermission(role.id, extraPerm.name)
+                                                            ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
+                                                            : 'bg-white/5 text-slate-500 hover:bg-white/10'
+                                                ]"
                                             >
-                                                <component
-                                                    :is="getPermissionIcon(permission.name)"
-                                                    class="h-3.5 w-3.5"
-                                                />
+                                                {{ extraPerm.name.split(':')[1] }}
                                             </button>
-                                        </template>
+                                        </div>
                                     </td>
                                 </tr>
                             </template>
                         </tbody>
                     </table>
-                </div>
-
-                <!-- Bottom save button -->
-                <div class="mt-5 flex justify-end">
-                    <button
-                        type="button"
-                        class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
-                        :disabled="savingMatrix"
-                        @click="saveMatrix"
-                    >
-                        <Save class="h-4 w-4" />
-                        {{ savingMatrix ? 'Menyimpan...' : 'Simpan Hak Akses' }}
-                    </button>
                 </div>
             </section>
         </div>
@@ -832,5 +852,14 @@ function updateEmployeeRole(employee: EmployeeRow, event: Event) {
                 </div>
             </div>
         </teleport>
+
+        <AlertDialog
+            :show="alertDialog.show"
+            :title="alertDialog.title"
+            :message="alertDialog.message"
+            :type="alertDialog.type"
+            @confirm="alertDialog.onConfirm"
+            @cancel="closeAlertDialog"
+        />
     </AuthenticatedLayout>
 </template>

@@ -263,15 +263,9 @@ function clearLogo() {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <Printer class="h-3.5 w-3.5" />
-                    Menu #57 Konfigurasi Printer
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
-                        Konfigurasi Printer
+                        Konfigurasi Printer & Struk
                     </h2>
                     <p class="mt-1 max-w-3xl text-xs text-slate-400">
                         Simpan pengaturan printer per outlet, tentukan jalur koneksi, dan sinkronkan default metode
@@ -540,7 +534,7 @@ function clearLogo() {
                         <div class="border-t border-slate-800 pt-5 space-y-5">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300">
-                                    Kustomisasi Visual Struk (Menu #10 & #57)
+                                    Kustomisasi Visual Struk
                                 </p>
                                 <h3 class="mt-1 text-sm font-bold text-white">Desain & Format Struk</h3>
                                 <p class="text-xs text-slate-400 mt-1">Atur logo, template, font, warna aksen, dan teks footer struk belanja secara kustom.</p>

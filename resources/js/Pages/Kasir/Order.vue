@@ -2002,9 +2002,9 @@ const openPaymentCheckout = () => {
                             class="rounded-xl border border-slate-800/80 bg-slate-950/80 p-3"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                             >
-                                Tipe Layanan
+                                Split Bill
                             </p>
                             <p class="mt-2 text-sm font-extrabold text-white">
                                 {{
@@ -2023,9 +2023,9 @@ const openPaymentCheckout = () => {
                             class="rounded-xl border border-slate-800/80 bg-slate-950/80 p-3"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                             >
-                                Tujuan Order
+                                Split Bill
                             </p>
                             <p class="mt-2 text-sm font-extrabold text-white">
                                 {{ selectedTable.name }}
@@ -2042,9 +2042,9 @@ const openPaymentCheckout = () => {
                             class="rounded-xl border border-slate-800/80 bg-slate-950/80 p-3"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                             >
-                                Item Keranjang
+                                Split Bill
                             </p>
                             <p class="mt-2 text-sm font-extrabold text-white">
                                 {{ cartItemCount }} item
@@ -2061,9 +2061,9 @@ const openPaymentCheckout = () => {
                         <div class="flex items-center justify-between gap-3">
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                 >
-                                    Langkah 1 • Data Pelanggan
+                                    Split Bill
                                 </p>
                                 <p class="mt-1 text-xs text-slate-400">
                                     Input nomor HP terlebih dulu, lalu pilih
@@ -2304,9 +2304,9 @@ const openPaymentCheckout = () => {
                     >
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                             >
-                                Langkah 3 • Review & Kirim
+                                Split Bill
                             </p>
                             <p class="mt-1 text-xs text-slate-400">
                                 Tambahkan catatan dapur, lalu tentukan order
@@ -2391,9 +2391,9 @@ const openPaymentCheckout = () => {
                         >
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                 >
-                                    Langkah 4 • Opsi Pembayaran
+                                    Split Bill
                                 </p>
                                 <p class="mt-1 text-xs text-slate-400">
                                     Kasir manual bisa langsung lunas atau tetap
@@ -2592,9 +2592,9 @@ const openPaymentCheckout = () => {
                         class="rounded-xl border border-slate-800/80 bg-slate-950/60 p-3"
                     >
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                         >
-                            Order Aktif Dipilih
+                            Split Bill
                         </p>
                         <div
                             class="mt-2 flex items-center justify-between gap-3 text-xs"
@@ -2632,11 +2632,6 @@ const openPaymentCheckout = () => {
                                 <span>{{
                                     getPaymentActionLabel(selectedManagedOrder)
                                 }}</span>
-                                <span
-                                    class="rounded border border-orange-500/20 bg-slate-900 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-orange-300"
-                                >
-                                    Menu #6 - Live
-                                </span>
                             </button>
                             <p class="mt-1 px-1 text-[10px] text-slate-500">
                                 {{
@@ -2656,11 +2651,6 @@ const openPaymentCheckout = () => {
                                 class="flex w-full items-center justify-between rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs font-bold text-amber-300 transition duration-150 hover:bg-amber-500/10 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 <span>Tutup Sebagai Kasbon</span>
-                                <span
-                                    class="rounded border border-amber-500/20 bg-slate-900 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-amber-300"
-                                >
-                                    Menu #7 - Live
-                                </span>
                             </button>
                             <p class="mt-1 px-1 text-[10px] text-slate-500">
                                 {{ getKasbonActionHint(selectedManagedOrder) }}
@@ -2673,11 +2663,6 @@ const openPaymentCheckout = () => {
                                 class="flex w-full items-center justify-between rounded-xl border border-sky-500/20 bg-sky-500/5 p-3.5 text-xs font-bold text-sky-300 transition duration-150 hover:bg-sky-500/10"
                             >
                                 <span>Edit Order (Approval Flow)</span>
-                                <span
-                                    class="rounded border border-sky-500/20 bg-slate-900 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-sky-300"
-                                >
-                                    Menu #4 - Live
-                                </span>
                             </button>
                             <p class="mt-1 px-1 text-[10px] text-slate-500">
                                 Status `pending` bisa diedit langsung. Status
@@ -2691,11 +2676,7 @@ const openPaymentCheckout = () => {
                                 class="flex w-full items-center justify-between rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-3.5 text-xs font-bold text-fuchsia-300 transition duration-150 hover:bg-fuchsia-500/10"
                             >
                                 <span>Split Bill</span>
-                                <span
-                                    class="rounded border border-fuchsia-500/20 bg-slate-900 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-fuchsia-300"
-                                >
-                                    Menu #5 - Live
-                                </span>
+
                             </button>
                             <p class="mt-1 px-1 text-[10px] text-slate-500">
                                 Pisahkan item tertentu ke bill kedua dari order
@@ -2705,7 +2686,7 @@ const openPaymentCheckout = () => {
                     </div>
                 </div>
 
-                <!-- VIEW 3: List of Active Orders (when no table selected - Menu #2) -->
+                <!-- VIEW 3: List of Active Orders (when no table selected) -->
                 <div
                     v-else
                     class="flex min-h-[500px] flex-col rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl"
@@ -2714,7 +2695,7 @@ const openPaymentCheckout = () => {
                         class="mb-4 flex items-center gap-2 border-b border-slate-800/60 pb-4 text-lg font-bold text-white"
                     >
                         <CookingPot class="h-5 w-5 text-orange-500" />
-                        <span>Daftar Order Aktif (Menu #2)</span>
+                        <span>Daftar Order Aktif</span>
                     </h3>
 
                     <div
@@ -2725,7 +2706,7 @@ const openPaymentCheckout = () => {
                                 <p
                                     class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                 >
-                                    Menu #5 • Gabung Bill
+                                    Split Bill
                                 </p>
                                 <p class="mt-1 text-xs text-slate-400">
                                     Pilih minimal dua order aktif dari meja yang
@@ -2931,7 +2912,7 @@ const openPaymentCheckout = () => {
                                 <span
                                     class="rounded-full border border-sky-500/20 bg-sky-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-sky-300"
                                 >
-                                    Menu #4
+                                    Edit Order
                                 </span>
                                 <span
                                     :class="[
@@ -2973,9 +2954,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-xl border border-slate-800 bg-slate-950/60 p-3"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                     >
-                                        Layanan
+                                        Split Bill
                                     </p>
                                     <p
                                         class="mt-2 text-sm font-extrabold text-white"
@@ -2987,9 +2968,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-xl border border-slate-800 bg-slate-950/60 p-3"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                     >
-                                        Pelanggan
+                                        Split Bill
                                     </p>
                                     <p
                                         class="mt-2 text-sm font-extrabold text-white"
@@ -3005,9 +2986,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-xl border border-slate-800 bg-slate-950/60 p-3"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                     >
-                                        Ringkasan
+                                        Split Bill
                                     </p>
                                     <p
                                         class="mt-2 text-sm font-extrabold text-white"
@@ -3026,9 +3007,9 @@ const openPaymentCheckout = () => {
                                 >
                                     <div>
                                         <p
-                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                         >
-                                            Tambah Menu
+                                            Split Bill
                                         </p>
                                         <p class="mt-1 text-xs text-slate-400">
                                             Pilih kategori, cari menu, lalu
@@ -3136,9 +3117,9 @@ const openPaymentCheckout = () => {
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <p
-                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                         >
-                                            Draft Perubahan
+                                            Split Bill
                                         </p>
                                         <p class="mt-1 text-xs text-slate-400">
                                             Ubah jumlah, hapus item, atau revisi
@@ -3237,9 +3218,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                     >
-                                        Review Edit
+                                        Split Bill
                                     </p>
                                     <p class="mt-1 text-xs text-slate-400">
                                         Setelah disimpan, order akan kembali ke
@@ -3266,9 +3247,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                     >
-                                        Approval Supervisor
+                                        Split Bill
                                     </p>
                                     <p
                                         class="mt-1 text-xs leading-relaxed text-amber-100/75"
@@ -3363,7 +3344,7 @@ const openPaymentCheckout = () => {
                             <span
                                 class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-fuchsia-300"
                             >
-                                Menu #5 • Split Bill
+                                Split Bill
                             </span>
                             <h3 class="mt-3 text-xl font-black text-white">
                                 Split {{ selectedManagedOrder?.order_number }}
@@ -3422,9 +3403,9 @@ const openPaymentCheckout = () => {
                                 >
                                     <div>
                                         <p
-                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                         >
-                                            Pindah ke Bill 2
+                                            Split Bill
                                         </p>
                                         <p
                                             class="mt-1 text-[11px] text-slate-400"
@@ -3474,9 +3455,9 @@ const openPaymentCheckout = () => {
                             class="mt-5 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                             >
-                                Approval Supervisor
+                                Split Bill
                             </p>
                             <p class="mt-1 text-xs text-amber-100/75">
                                 Order sedang dimasak. Split bill butuh PIN
@@ -3545,7 +3526,7 @@ const openPaymentCheckout = () => {
                         <span
                             class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-fuchsia-300"
                         >
-                            Menu #5 • Gabung Bill
+                            Gabung Bill
                         </span>
                         <h3 class="mt-3 text-xl font-black text-white">
                             Konfirmasi Gabung Bill
@@ -3587,9 +3568,9 @@ const openPaymentCheckout = () => {
                             class="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                             >
-                                Approval Supervisor
+                                Split Bill
                             </p>
                             <p class="mt-1 text-xs text-amber-100/75">
                                 Ada order `in_progress` di pilihan ini. Gabung
@@ -3655,7 +3636,7 @@ const openPaymentCheckout = () => {
                             <span
                                 class="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-amber-300"
                             >
-                                Menu #7 • Kasbon
+                                Kasbon / Piutang
                             </span>
                             <h3 class="mt-3 text-xl font-black text-white">
                                 {{ kasbonTargetOrder.order_number }}
@@ -3679,9 +3660,9 @@ const openPaymentCheckout = () => {
                             <div class="flex items-start justify-between gap-3">
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                     >
-                                        Customer
+                                        Split Bill
                                     </p>
                                     <p class="mt-2 text-sm font-bold text-white">
                                         {{
@@ -3698,9 +3679,9 @@ const openPaymentCheckout = () => {
                                 </div>
                                 <div class="text-right">
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                     >
-                                        Sisa Tagihan
+                                        Split Bill
                                     </p>
                                     <p class="mt-2 text-lg font-black text-amber-300">
                                         {{
@@ -3800,7 +3781,7 @@ const openPaymentCheckout = () => {
                             <span
                                 class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
                             >
-                                Menu #6 • Pembayaran
+                                Pembayaran Pesanan
                             </span>
                             <h3 class="mt-3 text-xl font-black text-white">
                                 {{ paymentTargetOrder.order_number }}
@@ -3826,9 +3807,9 @@ const openPaymentCheckout = () => {
                             >
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                                     >
-                                        Total Tagihan
+                                        Split Bill
                                     </p>
                                     <p
                                         class="mt-2 text-xl font-black text-white"
@@ -3983,7 +3964,7 @@ const openPaymentCheckout = () => {
                             <p
                                 class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                             >
-                                Catatan QRIS
+                                Split Bill
                             </p>
                             <p
                                 class="mt-1 text-xs leading-relaxed text-fuchsia-100/80"
@@ -4112,9 +4093,9 @@ const openPaymentCheckout = () => {
                             class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
                             >
-                                Total Checkout
+                                Split Bill
                             </p>
                             <p class="mt-2 text-2xl font-black text-white">
                                 {{ formatPrice(activePaymentCheckout.amount) }}

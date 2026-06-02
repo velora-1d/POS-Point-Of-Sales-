@@ -165,18 +165,12 @@ const submitAction = () => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <CalendarClock class="h-3.5 w-3.5" />
-                    Menu #31 Reminder Expired Product
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
-                        Reminder Expired
+                        Product Expired
                     </h2>
                     <p class="mt-1 max-w-2xl text-xs text-slate-400">
-                        Pantau batch stok yang mendekati tanggal expired, tandai tindakan admin, dan cek item yang sudah lewat masa aman.
+                        Manajemen barang yang mendekati atau sudah melewati tanggal kedaluwarsa untuk memastikan kualitas produk tetap terjaga.
                     </p>
                 </div>
             </div>

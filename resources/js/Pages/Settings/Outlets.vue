@@ -11,6 +11,7 @@ import {
     Users,
     X,
 } from '@lucide/vue';
+import AlertDialog from '@/Components/AlertDialog.vue';
 import { computed, ref } from 'vue';
 
 interface PaginationLink {
@@ -92,6 +93,18 @@ const props = defineProps<{
     };
     success?: string | null;
 }>();
+
+const alertDialog = ref({
+    show: false,
+    title: '',
+    message: '',
+    type: 'confirm' as 'info' | 'success' | 'warning' | 'danger' | 'confirm',
+    onConfirm: () => {},
+});
+
+const closeAlertDialog = () => {
+    alertDialog.value.show = false;
+};
 
 const defaultWorkflowStatuses = [
     'pending',
@@ -251,21 +264,26 @@ function submitOutlet() {
 
 function toggleOutletStatus(outlet: OutletRow) {
     const nextStatus = !outlet.is_active;
-    const confirmed = window.confirm(
-        nextStatus
-            ? `Aktifkan kembali outlet ${outlet.name}?`
-            : `Nonaktifkan outlet ${outlet.name}?`,
-    );
 
-    if (!confirmed) return;
-
-    router.patch(
-        route('settings.outlets.update-status', outlet.id),
-        { is_active: nextStatus },
-        {
-            preserveScroll: true,
+    alertDialog.value = {
+        show: true,
+        title: nextStatus ? 'Aktifkan Outlet' : 'Nonaktifkan Outlet',
+        message: nextStatus
+            ? `Aktifkan kembali outlet "${outlet.name}"?`
+            : `Nonaktifkan outlet "${outlet.name}"?`,
+        type: nextStatus ? 'success' : 'warning',
+        onConfirm: () => {
+            router.patch(
+                route('settings.outlets.update-status', outlet.id),
+                { is_active: nextStatus },
+                {
+                    preserveScroll: true,
+                    onSuccess: () => closeAlertDialog(),
+                    onFinish: () => closeAlertDialog(),
+                },
+            );
         },
-    );
+    };
 }
 </script>
 
@@ -275,12 +293,6 @@ function toggleOutletStatus(outlet: OutletRow) {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <Settings class="h-3.5 w-3.5" />
-                    Menu #54 Manajemen Outlet & Cabang
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
                         Manajemen Outlet & Cabang
@@ -819,5 +831,14 @@ function toggleOutletStatus(outlet: OutletRow) {
                 </div>
             </div>
         </teleport>
+
+        <AlertDialog
+            :show="alertDialog.show"
+            :title="alertDialog.title"
+            :message="alertDialog.message"
+            :type="alertDialog.type"
+            @confirm="alertDialog.onConfirm"
+            @cancel="closeAlertDialog"
+        />
     </AuthenticatedLayout>
 </template>

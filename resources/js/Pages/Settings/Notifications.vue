@@ -308,15 +308,9 @@ function submitSave() {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <BellRing class="h-3.5 w-3.5" />
-                    Menu #59 Notifikasi & Alert
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
-                        Notifikasi & Alert
+                        Notifikasi & Alert Sistem
                     </h2>
                     <p class="mt-1 max-w-3xl text-xs text-slate-400">
                         Kelola kanal notifikasi untuk alert stok menipis, kasbon overdue, dan order online baru

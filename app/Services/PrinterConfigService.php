@@ -245,7 +245,7 @@ class PrinterConfigService
         <div class="center">
             {$logoHtml}
             <strong style="font-size:16px; color: {$accentColor};">{$outletName}</strong>
-            <div class="muted">Preview test print konfigurasi printer menu #57</div>
+            <div class="muted">Preview test print konfigurasi printer</div>
         </div>
 
         <div class="line"></div>

@@ -129,16 +129,17 @@ class TableQrConfigService
 
         DB::transaction(function () use ($tables, $config, &$count) {
             foreach ($tables as $table) {
-                $this->ensureTableIdentity($table);
-                $table->forceFill([
+                Table::where('id', $table->id)->update([
                     'qr_code' => $this->generateTableCode($table),
-                ])->save();
+                    'qr_session_token' => $table->qr_session_token ?: (string) Str::ulid(),
+                    'updated_at' => now(),
+                ]);
                 $count++;
             }
 
-            $config->forceFill([
+            $config->update([
                 'bulk_regenerated_at' => now(),
-            ])->save();
+            ]);
         });
 
         return [
@@ -149,19 +150,18 @@ class TableQrConfigService
 
     public function buildPublicMenuUrlForTable(Table $table, ?TableQrConfig $config = null): ?string
     {
-        $this->ensureTableIdentity($table);
+        // Don't auto-save here during build, just use what's there
+        if (!$table->qr_code || !$table->qr_session_token) {
+            return null;
+        }
 
         $config ??= $this->tableQrConfigRepository->findByOutletId($table->outlet_id);
 
-        if ($config && $table->qr_code) {
+        if ($config) {
             return route('self-service.menu.alias', [
                 'storeSlug' => $config->store_slug,
                 'tableCode' => $table->qr_code,
             ]);
-        }
-
-        if (!$table->qr_session_token) {
-            return null;
         }
 
         return route('self-service.menu', $table->qr_session_token);
@@ -186,8 +186,6 @@ class TableQrConfigService
             abort(404);
         }
 
-        $this->ensureTableIdentity($table);
-
         return $table->fresh(['outlet']) ?? $table->load('outlet');
     }
 
@@ -195,9 +193,22 @@ class TableQrConfigService
     {
         $tables = $this->tableQrConfigRepository->getActiveTables($outletId);
 
-        foreach ($tables as $table) {
-            $this->ensureTableIdentity($table);
+        // Filter only tables that actually need updates to avoid unnecessary writes
+        $tablesToUpdate = $tables->filter(fn (Table $table) => empty($table->qr_code) || empty($table->qr_session_token));
+
+        if ($tablesToUpdate->isEmpty()) {
+            return;
         }
+
+        DB::transaction(function () use ($tablesToUpdate) {
+            foreach ($tablesToUpdate as $table) {
+                Table::where('id', $table->id)->update([
+                    'qr_session_token' => $table->qr_session_token ?: (string) Str::ulid(),
+                    'qr_code' => $table->qr_code ?: $this->generateTableCode($table),
+                    'updated_at' => now(),
+                ]);
+            }
+        });
     }
 
     protected function buildSummary(Collection $outlets): array
@@ -321,18 +332,6 @@ class TableQrConfigService
             $suffix++;
             $candidate = $base . '-' . $suffix;
         }
-    }
-
-    protected function ensureTableIdentity(Table $table): void
-    {
-        if ($table->qr_session_token && $table->qr_code) {
-            return;
-        }
-
-        $table->forceFill([
-            'qr_session_token' => $table->qr_session_token ?: (string) Str::ulid(),
-            'qr_code' => $table->qr_code ?: $this->generateTableCode($table),
-        ])->save();
     }
 
     protected function generateTableCode(Table $table): string

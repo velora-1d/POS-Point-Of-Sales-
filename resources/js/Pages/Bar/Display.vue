@@ -324,7 +324,7 @@ const approveReady = (orderId: string) => {
                             </button>
                         </div>
                         <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                            Menu #16 • Filter kategori pesanan untuk board bar.
+                            Filter kategori pesanan untuk board bar.
                         </p>
                     </div>
 
@@ -370,11 +370,6 @@ const approveReady = (orderId: string) => {
                 >
                     <div class="mb-4 flex items-center justify-between gap-3">
                         <div>
-                            <p
-                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-200"
-                            >
-                                Menu #15
-                            </p>
                             <h3 class="mt-1 text-lg font-black text-white">
                                 Approval Order Selesai
                             </h3>
@@ -590,11 +585,6 @@ const approveReady = (orderId: string) => {
                     class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
                 >
                     <div>
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-200"
-                        >
-                            Menu #17
-                        </p>
                         <h3 class="mt-1 text-lg font-black text-white">
                             Riwayat Order Dapur
                         </h3>

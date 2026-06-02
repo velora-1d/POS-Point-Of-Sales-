@@ -60,4 +60,13 @@ class EmployeeController extends Controller
             ->route('employees.index')
             ->with('success', 'Data karyawan berhasil diperbarui.');
     }
+
+    public function destroy(User $employee): RedirectResponse
+    {
+        $this->employeeService->delete($employee, auth()->user());
+
+        return redirect()
+            ->route('employees.index')
+            ->with('success', 'Akun karyawan berhasil dihapus.');
+    }
 }

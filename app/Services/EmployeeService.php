@@ -37,9 +37,9 @@ class EmployeeService
             'roleBreakdown' => $this->employeeRepository->getRoleBreakdown($scopeOutletId),
             'filters' => [
                 'search' => (string) ($resolvedFilters['search'] ?? ''),
-                'status' => $resolvedFilters['status'] ?: '',
-                'role_type' => $resolvedFilters['role_type'] ?: '',
-                'outlet_id' => $resolvedFilters['outlet_id'] ?: '',
+                'status' => $resolvedFilters['status'] ?? '',
+                'role_type' => $resolvedFilters['role_type'] ?? '',
+                'outlet_id' => $resolvedFilters['outlet_id'] ?? '',
                 'per_page' => (int) ($resolvedFilters['per_page'] ?? 12),
             ],
             'referenceData' => [
@@ -70,6 +70,19 @@ class EmployeeService
         });
     }
 
+    public function delete(User $employee, User $actor): void
+    {
+        $this->assertCanManage($actor);
+
+        if ($employee->id === $actor->id) {
+            throw ValidationException::withMessages([
+                'id' => 'Anda tidak bisa menghapus akun Anda sendiri.',
+            ]);
+        }
+
+        $this->employeeRepository->delete($employee);
+    }
+
     protected function normalizePayload(array $payload, bool $isCreate): array
     {
         $outletId = $payload['outlet_id'];
@@ -78,6 +91,12 @@ class EmployeeService
         if (!$role) {
             throw ValidationException::withMessages([
                 'role_id' => 'Role tidak valid untuk outlet yang dipilih.',
+            ]);
+        }
+
+        if (empty($payload['phone'])) {
+            throw ValidationException::withMessages([
+                'phone' => 'Nomor WhatsApp wajib diisi untuk koordinasi operasional.',
             ]);
         }
 

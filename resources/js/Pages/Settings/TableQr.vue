@@ -8,8 +8,10 @@ import {
     QrCode,
     RefreshCw,
     Store,
+    X,
 } from '@lucide/vue';
-import { computed, watch } from 'vue';
+import AlertDialog from '@/Components/AlertDialog.vue';
+import { computed, ref, watch } from 'vue';
 
 interface OutletOption {
     id: string;
@@ -67,6 +69,18 @@ const props = defineProps<{
     };
     success?: string | null;
 }>();
+
+const alertDialog = ref({
+    show: false,
+    title: '',
+    message: '',
+    type: 'confirm' as 'info' | 'success' | 'warning' | 'danger' | 'confirm',
+    onConfirm: () => {},
+});
+
+const closeAlertDialog = () => {
+    alertDialog.value.show = false;
+};
 
 const qrForm = useForm({
     outlet_id: props.formDefaults.outlet_id || props.selectedOutlet?.id || '',
@@ -181,16 +195,20 @@ function submitSave() {
 }
 
 function submitRegenerate() {
-    const confirmed = window.confirm(
-        'Bulk regenerate akan mengganti kode QR meja aktif untuk scan baru. Lanjutkan?',
-    );
-
-    if (!confirmed) return;
-
-    regenerateForm.post(route('settings.table-qr.regenerate'), {
-        preserveScroll: true,
-        preserveState: true,
-    });
+    alertDialog.value = {
+        show: true,
+        title: 'Regenerate Kode QR',
+        message: 'Bulk regenerate akan mengganti kode QR meja aktif untuk scan baru. Lanjutkan?',
+        type: 'warning',
+        onConfirm: () => {
+            regenerateForm.post(route('settings.table-qr.regenerate'), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => closeAlertDialog(),
+                onFinish: () => closeAlertDialog(),
+            });
+        },
+    };
 }
 </script>
 
@@ -200,12 +218,6 @@ function submitRegenerate() {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <QrCode class="h-3.5 w-3.5" />
-                    Menu #58 Konfigurasi QR Meja
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
                         Konfigurasi QR Meja
@@ -499,5 +511,14 @@ function submitRegenerate() {
                 </aside>
             </div>
         </div>
+
+        <AlertDialog
+            :show="alertDialog.show"
+            :title="alertDialog.title"
+            :message="alertDialog.message"
+            :type="alertDialog.type"
+            @confirm="alertDialog.onConfirm"
+            @cancel="closeAlertDialog"
+        />
     </AuthenticatedLayout>
 </template>

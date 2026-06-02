@@ -12,6 +12,7 @@ import {
     Users,
     X,
 } from '@lucide/vue';
+import AlertDialog from '@/Components/AlertDialog.vue';
 import { computed, ref } from 'vue';
 
 interface OutletOption {
@@ -253,6 +254,36 @@ const closeModal = () => {
     resetEmployeeForm();
 };
 
+const alertDialog = ref({
+    show: false,
+    title: '',
+    message: '',
+    type: 'confirm' as 'info' | 'success' | 'warning' | 'danger' | 'confirm',
+    onConfirm: () => {},
+});
+
+const closeAlertDialog = () => {
+    alertDialog.value.show = false;
+};
+
+const deleteEmployee = (employee: EmployeeRow) => {
+    if (!props.canManage) return;
+
+    alertDialog.value = {
+        show: true,
+        title: 'Hapus Akun Karyawan',
+        message: `Apakah Anda yakin ingin menghapus akun ${employee.name}? Data historis transaksi mungkin akan terpengaruh.`,
+        type: 'danger',
+        onConfirm: () => {
+            router.delete(route('employees.destroy', employee.id), {
+                preserveScroll: true,
+                onSuccess: () => closeAlertDialog(),
+                onFinish: () => closeAlertDialog(),
+            });
+        },
+    };
+};
+
 const submitEmployee = () => {
     if (modalMode.value === 'edit' && selectedEmployee.value) {
         employeeForm.patch(route('employees.update', selectedEmployee.value.id), {
@@ -282,12 +313,6 @@ const getStatusClass = (isActive: boolean) => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <Users class="h-3.5 w-3.5" />
-                    Menu #36 Data Karyawan
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
                         Data Karyawan
@@ -456,7 +481,11 @@ const getStatusClass = (isActive: boolean) => {
                                     </span>
                                 </div>
                                 <p class="text-sm text-slate-300">{{ employee.email }}</p>
-                                <p class="text-xs text-slate-500">{{ employee.phone || '-' }}</p>
+                                <p v-if="employee.phone" class="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                                    <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                    WA: {{ employee.phone }}
+                                </p>
+                                <p v-else class="text-[10px] italic text-rose-400/70">No. WA belum diisi</p>
                             </div>
 
                             <div class="space-y-2 text-sm text-slate-300">
@@ -475,7 +504,7 @@ const getStatusClass = (isActive: boolean) => {
                                 <p class="text-slate-500">PIN approval tersimpan aman</p>
                             </div>
 
-                            <div v-if="canManage" class="flex items-start justify-end">
+                            <div v-if="canManage" class="flex items-start justify-end gap-2">
                                 <button
                                     type="button"
                                     class="inline-flex items-center gap-2 rounded-2xl border border-white/10 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-orange-400/30 hover:bg-orange-500/10 hover:text-orange-100"
@@ -483,6 +512,14 @@ const getStatusClass = (isActive: boolean) => {
                                 >
                                     <Pencil class="h-4 w-4" />
                                     Edit
+                                </button>
+                                <button
+                                    type="button"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-2xl border border-rose-500/20 bg-rose-500/10 text-rose-400 transition hover:bg-rose-500/20"
+                                    @click="deleteEmployee(employee)"
+                                    title="Hapus Akun Karyawan"
+                                >
+                                    <Trash2 class="h-4 w-4" />
                                 </button>
                             </div>
                         </article>
@@ -588,11 +625,15 @@ const getStatusClass = (isActive: boolean) => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">No. HP</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                No. HP / WhatsApp <span class="text-rose-400">*</span>
+                            </span>
                             <input
                                 v-model="employeeForm.phone"
                                 type="text"
+                                placeholder="Wajib untuk koordinasi (Contoh: 0812...)"
                                 class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                required
                             />
                             <p v-if="employeeForm.errors.phone" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.phone }}</p>
                         </label>
@@ -706,5 +747,14 @@ const getStatusClass = (isActive: boolean) => {
                 </form>
             </div>
         </div>
+
+        <AlertDialog
+            :show="alertDialog.show"
+            :title="alertDialog.title"
+            :message="alertDialog.message"
+            :type="alertDialog.type"
+            @confirm="alertDialog.onConfirm"
+            @cancel="closeAlertDialog"
+        />
     </AuthenticatedLayout>
 </template>

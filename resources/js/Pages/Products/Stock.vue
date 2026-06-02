@@ -197,15 +197,9 @@ const submitStockUpdate = () => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <Boxes class="h-3.5 w-3.5" />
-                    Menu #28 Manajemen Stok Produk Jadi
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
-                        Stok Produk Jadi
+                        Manajemen Stok Produk Jadi
                     </h2>
                     <p class="mt-1 max-w-2xl text-xs text-slate-400">
                         Pantau stok produk yang memakai tracking stock, lihat

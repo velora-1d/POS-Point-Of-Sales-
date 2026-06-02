@@ -821,10 +821,8 @@ const updateEstimate = (orderId: string, minutes: number) => {
                             <div
                                 class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500"
                             >
-                                <span
-                                    class="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-orange-300"
-                                >
-                                    Menu #16 Filter Kategori
+                                <span class="text-slate-300 font-bold">
+                                    Filter Kategori Menu
                                 </span>
                                 <span class="text-slate-500">
                                     Tampilkan tiket berdasarkan kategori menu
@@ -1084,12 +1082,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                         >
                                             <div>
                                                 <p
-                                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-200"
-                                                >
-                                                    Menu #18
-                                                </p>
-                                                <p
-                                                    class="mt-1 text-[11px] text-slate-400"
+                                                    class="text-[11px] text-slate-400"
                                                 >
                                                     Estimasi waktu masak per
                                                     order.
@@ -1177,11 +1170,6 @@ const updateEstimate = (orderId: string, minutes: number) => {
                     class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
                 >
                     <div>
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-300"
-                        >
-                            Menu #17
-                        </p>
                         <h3 class="mt-1 text-lg font-black text-white">
                             Riwayat Order Dapur
                         </h3>

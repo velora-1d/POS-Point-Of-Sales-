@@ -143,15 +143,9 @@ const clearSearch = () => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <Boxes class="h-3.5 w-3.5" />
-                    Menu #26-#27 Katalog Produk, Varian, & Multi Harga
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
-                        Katalog Produk
+                        Katalog Produk & Varian
                     </h2>
                     <p class="mt-1 max-w-2xl text-xs text-slate-400">
                         Pantau produk aktif, kategori, varian, dan multi harga

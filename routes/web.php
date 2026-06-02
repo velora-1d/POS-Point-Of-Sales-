@@ -33,6 +33,7 @@ use App\Http\Controllers\RbacController;
 use App\Http\Controllers\ReportExportController;
 use App\Http\Controllers\SalesReportController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\TableController;
 use App\Http\Controllers\TableReservationController;
 use App\Http\Controllers\TableQrConfigController;
 use App\Http\Controllers\TransactionController;
@@ -90,6 +91,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
     Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
     Route::patch('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
+    Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     Route::get('/settings/outlets', [OutletManagementController::class, 'index'])->name('settings.outlets.index');
     Route::post('/settings/outlets', [OutletManagementController::class, 'store'])->name('settings.outlets.store');
     Route::patch('/settings/outlets/{outlet}', [OutletManagementController::class, 'update'])->name('settings.outlets.update');
@@ -159,6 +161,12 @@ Route::middleware('auth')->group(function () {
         ->name('table-reservations.store');
     Route::patch('/table-reservations/{tableReservation}/status', [TableReservationController::class, 'updateStatus'])
         ->name('table-reservations.update-status');
+
+    Route::get('/settings/tables', [TableController::class, 'index'])->name('settings.tables.index');
+    Route::post('/settings/tables', [TableController::class, 'store'])->name('settings.tables.store');
+    Route::patch('/settings/tables/{table}', [TableController::class, 'update'])->name('settings.tables.update');
+    Route::delete('/settings/tables/{table}', [TableController::class, 'destroy'])->name('settings.tables.destroy');
+
     Route::get('/order', [OrderController::class, 'index'])->name('kasir.order');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order/{order}/pay', [OrderController::class, 'pay'])->name('order.pay');

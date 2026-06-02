@@ -174,7 +174,7 @@ function skipReceipt() {
 
             <div class="flex items-center justify-between gap-4 print:hidden">
                 <div>
-                    <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">Menu #10 Struk</p>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">Struk Transaksi</p>
                     <h1 class="mt-2 text-2xl font-black text-white">
                         Struk {{ order.order_number }}
                     </h1>

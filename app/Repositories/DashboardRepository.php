@@ -40,6 +40,47 @@ class DashboardRepository
             ]);
     }
 
+    public function getYesterdayOrders(?string $scopeOutletId, CarbonImmutable $date): Collection
+    {
+        return Order::query()
+            ->whereDate('created_at', $date->subDay()->toDateString())
+            ->when($scopeOutletId, fn (Builder $query) => $query->where('outlet_id', $scopeOutletId))
+            ->where('status', '!=', 'cancelled')
+            ->get(['id', 'outlet_id', 'status', 'total_amount', 'paid_amount', 'metadata', 'created_at']);
+    }
+
+    public function getTopProductsForOrders(array $orderIds, int $limit = 5): Collection
+    {
+        if ($orderIds === []) {
+            return collect();
+        }
+
+        return OrderItem::query()
+            ->selectRaw('product_id, SUM(quantity) as total_quantity, SUM(total_price) as total_revenue')
+            ->whereIn('order_id', $orderIds)
+            ->whereNotNull('product_id')
+            ->groupBy('product_id')
+            ->orderByDesc('total_quantity')
+            ->orderByDesc('total_revenue')
+            ->with('product:id,name')
+            ->limit($limit)
+            ->get();
+    }
+
+    public function getHourlyRevenueForOrders(Collection $settledOrders): array
+    {
+        $hourly = array_fill(0, 24, 0.0);
+        foreach ($settledOrders as $order) {
+            $hour = (int) \Carbon\Carbon::parse($order->created_at)->format('G');
+            $hourly[$hour] += (float) $order->total_amount;
+        }
+        $result = [];
+        for ($h = 0; $h < 24; $h++) {
+            $result[] = ['hour' => $h, 'revenue' => $hourly[$h]];
+        }
+        return $result;
+    }
+
     public function getTopProductForOrders(array $orderIds): ?array
     {
         if ($orderIds === []) {

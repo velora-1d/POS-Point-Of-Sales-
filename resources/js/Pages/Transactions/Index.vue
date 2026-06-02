@@ -388,15 +388,9 @@ function openReceipt(orderId: string) {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col gap-2">
-                <div
-                    class="inline-flex items-center gap-2 self-start rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
-                >
-                    <Receipt class="h-3.5 w-3.5" />
-                    Menu #7, #8, #10, #11
-                </div>
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
-                        Kasbon, Pre-Order, dan Riwayat Transaksi
+                        Transaksi & Histori Order
                     </h2>
                     <p class="mt-1 text-sm text-slate-400">
                         Kelola cicilan kasbon, pre-order dengan DP, preview struk, dan riwayat transaksi outlet.
@@ -450,7 +444,7 @@ function openReceipt(orderId: string) {
                             Transaksi Selesai & Dokumen Struk
                         </h3>
                         <p class="mt-1 text-sm text-slate-400">
-                            Menu #11 untuk riwayat transaksi dan Menu #10 untuk preview/cetak struk dari transaksi yang sudah selesai.
+                            <span>Shortcut riwayat transaksi dan preview/cetak struk dari transaksi yang sudah selesai.</span>
                         </p>
                     </div>
 
@@ -537,7 +531,7 @@ function openReceipt(orderId: string) {
                     <div class="flex items-center justify-between gap-4 border-b border-slate-800/80 px-6 py-5">
                         <div>
                             <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                                Menu #7
+                                Kasbon
                             </p>
                             <h3 class="mt-2 text-lg font-black text-white">
                                 Kasbon & Cicilan
@@ -625,7 +619,7 @@ function openReceipt(orderId: string) {
                     <div class="flex items-center justify-between gap-4 border-b border-slate-800/80 px-6 py-5">
                         <div>
                             <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                                Menu #8
+                                Pre-Order
                             </p>
                             <h3 class="mt-2 text-lg font-black text-white">
                                 Pre-Order / Down Payment
@@ -708,9 +702,7 @@ function openReceipt(orderId: string) {
             <section class="rounded-3xl border border-slate-800/80 bg-slate-900/80">
                 <div class="flex items-center justify-between gap-4 border-b border-slate-800/80 px-6 py-5">
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">
-                            Menu #10 & #11
-                        </p>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">Struk & Histori</p>
                         <h3 class="mt-2 text-lg font-black text-white">
                             Riwayat Transaksi & Struk
                         </h3>
@@ -897,7 +889,7 @@ function openReceipt(orderId: string) {
             <div class="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl">
                 <div class="flex items-start justify-between gap-4 border-b border-slate-800/80 px-6 py-5">
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">Menu #8</p>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">Pre-Order Baru</p>
                         <h3 class="mt-2 text-xl font-black text-white">Buat Pre-Order / Down Payment</h3>
                         <p class="mt-1 text-xs text-slate-400">
                             Flow ini menyimpan order pickup/delivery future dengan DP cash dan aktivasi manual saat siap dikirim ke dapur.

@@ -2,55 +2,37 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import {
-    ArrowUpRight,
     AlertTriangle,
+    ArrowDownRight,
+    ArrowUpRight,
     BellRing,
+    ChevronRight,
+    Clock,
+    CreditCard,
+    Minus,
+    ShoppingBag,
     ShoppingCart,
+    Star,
+    TrendingDown,
     TrendingUp,
     Utensils,
+    Wallet,
+    Zap,
 } from '@lucide/vue';
 import { computed, ref } from 'vue';
 
 const page = usePage<any>();
+const user = computed(() => page.props.auth.user);
+
 const props = defineProps<{
     alerts?: {
         lowStock?: {
-            summary?: {
-                total?: number;
-                products?: number;
-                raw_materials?: number;
-                critical?: number;
-            };
-            items?: Array<{
-                id: string;
-                type: 'product' | 'raw_material';
-                name: string;
-                context?: string | null;
-                current_stock: number;
-                minimum_stock: number;
-                unit?: string | null;
-                route: string;
-                severity: number;
-            }>;
+            summary?: { total?: number; products?: number; raw_materials?: number; critical?: number };
+            items?: Array<{ id: string; type: string; name: string; context?: string | null; current_stock: number; minimum_stock: number; unit?: string | null; route: string; severity: number }>;
         };
         expired?: {
-            summary?: {
-                upcoming?: number;
-                today?: number;
-                expired?: number;
-                critical?: number;
-            };
-            items?: Array<{
-                id: string;
-                trackable_type: 'product' | 'raw_material';
-                name: string;
-                context?: string | null;
-                quantity: number;
-                expired_at: string;
-                days_left: number;
-                status: 'upcoming' | 'today' | 'expired';
-                route: string;
-            }>;
+            summary?: { upcoming?: number; today?: number; expired?: number; critical?: number };
+            items?: Array<{ id: string; trackable_type: string; name: string; context?: string | null; quantity: number; expired_at: string; days_left: number; status: string; route: string }>;
         };
     };
     finance?: {
@@ -59,735 +41,488 @@ const props = defineProps<{
             revenue?: number;
             orders?: number;
             settled_orders?: number;
+            pending_orders?: number;
             avg_order_value?: number;
             total_discount?: number;
-            top_product?: {
-                name?: string;
-                quantity?: number;
-                revenue?: number;
-            } | null;
-            active_shift?: {
-                cashier?: string | null;
-                outlet?: string | null;
-                opened_at?: string | null;
-                opening_cash?: number;
-                status?: string;
-            } | null;
+            yesterday_revenue?: number;
+            yesterday_orders?: number;
+            revenue_growth?: number;
+            top_product?: { name?: string; quantity?: number; revenue?: number } | null;
+            top_products?: Array<{ name: string; quantity: number; revenue: number }>;
+            active_shift?: { cashier?: string | null; outlet?: string | null; opened_at?: string | null; opening_cash?: number; status?: string } | null;
         };
         breakdowns?: {
-            payments?: Array<{
-                method: string;
-                orders: number;
-                amount: number;
-            }>;
-            sources?: Array<{
-                source: string;
-                orders: number;
-                amount: number;
-            }>;
+            payments?: Array<{ method: string; orders: number; amount: number }>;
+            sources?: Array<{ source: string; orders: number; amount: number }>;
+            hourly?: Array<{ hour: number; revenue: number }>;
         };
     } | null;
-    filters?: {
-        outlet_id?: string;
-        as_of_date?: string;
-    };
-    referenceData?: {
-        outlets?: Array<{
-            id: string;
-            name: string;
-        }>;
-    };
+    filters?: { outlet_id?: string; as_of_date?: string };
+    referenceData?: { outlets?: Array<{ id: string; name: string }> };
 }>();
-const user = computed(() => page.props.auth.user);
-const lowStockSummary = computed(() => props.alerts?.lowStock?.summary ?? {
-    total: 0,
-    products: 0,
-    raw_materials: 0,
-    critical: 0,
-});
+
+// ─── Computed ──────────────────────────────────────────────────────────────────
+
+const lowStockSummary = computed(() => props.alerts?.lowStock?.summary ?? { total: 0, products: 0, raw_materials: 0, critical: 0 });
 const lowStockItems = computed(() => props.alerts?.lowStock?.items ?? []);
-const expiredSummary = computed(() => props.alerts?.expired?.summary ?? {
-    upcoming: 0,
-    today: 0,
-    expired: 0,
-    critical: 0,
-});
+const expiredSummary = computed(() => props.alerts?.expired?.summary ?? { upcoming: 0, today: 0, expired: 0, critical: 0 });
 const expiredItems = computed(() => props.alerts?.expired?.items ?? []);
 const canViewFinance = computed(() => Boolean(props.finance?.can_view));
-const financeSummary = computed(() => props.finance?.summary ?? {});
+const fs = computed(() => props.finance?.summary ?? {});
 const paymentBreakdowns = computed(() => props.finance?.breakdowns?.payments ?? []);
 const sourceBreakdowns = computed(() => props.finance?.breakdowns?.sources ?? []);
-const financeOutletOptions = computed(() => props.referenceData?.outlets ?? []);
-const canChooseFinanceOutlet = computed(() => financeOutletOptions.value.length > 1);
-const financeOutletFilter = ref(props.filters?.outlet_id || '');
-const quickActions = [
-    {
-        key: 'new-order',
-        href: route('kasir.order'),
-        icon: ShoppingCart,
-        badge: 'Kasir',
-        title: 'Buka Buat Order Baru',
-        description: 'Masuk ke flow order meja, takeaway, dan settlement kasir.',
-        actionText: 'Buka modul',
-        cardClass: 'border-orange-500/20 bg-gradient-to-br from-orange-500/20 via-orange-500/5 to-slate-950/80 hover:border-orange-400/40 hover:from-orange-500/25 hover:via-orange-500/10',
-        iconClass: 'border-orange-400/20 bg-orange-500/15 text-orange-200',
-        accentClass: 'text-orange-200',
-    },
-    {
-        key: 'kitchen-display',
-        href: route('kitchen.display'),
-        icon: Utensils,
-        badge: 'Kitchen',
-        title: 'Kitchen Display',
-        description: 'Pantau antrian masak, update status tiket, dan ritme dapur.',
-        actionText: 'Pantau antrian',
-        cardClass: 'border-sky-500/20 bg-gradient-to-br from-sky-500/20 via-sky-500/5 to-slate-950/80 hover:border-sky-400/40 hover:from-sky-500/25 hover:via-sky-500/10',
-        iconClass: 'border-sky-400/20 bg-sky-500/15 text-sky-200',
-        accentClass: 'text-sky-200',
-    },
-    {
-        key: 'stock-alerts',
-        href: route('stock-alerts.index'),
-        icon: AlertTriangle,
-        badge: 'Inventori',
-        title: 'Alert Stok Menipis',
-        description: 'Lihat item kritis dan lanjutkan replenishment lebih cepat.',
-        actionText: 'Lihat alert',
-        cardClass: 'border-amber-500/20 bg-gradient-to-br from-amber-500/20 via-amber-500/5 to-slate-950/80 hover:border-amber-400/40 hover:from-amber-500/25 hover:via-amber-500/10',
-        iconClass: 'border-amber-400/20 bg-amber-500/15 text-amber-200',
-        accentClass: 'text-amber-200',
-    },
-    {
-        key: 'expired-tracking',
-        href: route('expired-tracking.index'),
-        icon: BellRing,
-        badge: 'Expired',
-        title: 'Reminder Expired',
-        description: 'Cek batch yang mendekati expired sebelum jadi loss operasional.',
-        actionText: 'Cek batch',
-        cardClass: 'border-rose-500/20 bg-gradient-to-br from-rose-500/20 via-rose-500/5 to-slate-950/80 hover:border-rose-400/40 hover:from-rose-500/25 hover:via-rose-500/10',
-        iconClass: 'border-rose-400/20 bg-rose-500/15 text-rose-200',
-        accentClass: 'text-rose-200',
-    },
-] as const;
+const hourlyData = computed(() => props.finance?.breakdowns?.hourly ?? []);
+const topProducts = computed(() => fs.value.top_products ?? []);
+const outlets = computed(() => props.referenceData?.outlets ?? []);
+const canChooseOutlet = computed(() => outlets.value.length > 1);
 
-const formatPrice = (value: number | string | null | undefined) => {
-    const amount = Number(value || 0);
+const outletFilter = ref(props.filters?.outlet_id || '');
 
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        maximumFractionDigits: 0,
-    }).format(amount);
+// Hourly chart: only show hours 06-23
+const chartHours = computed(() => {
+    const data = hourlyData.value;
+    if (!data.length) return [];
+    const visible = data.filter((d) => d.hour >= 6);
+    const maxRev = Math.max(...visible.map((d) => d.revenue), 1);
+    return visible.map((d) => ({
+        ...d,
+        pct: Math.round((d.revenue / maxRev) * 100),
+        label: `${String(d.hour).padStart(2, '0')}:00`,
+    }));
+});
+
+const totalPayments = computed(() => paymentBreakdowns.value.reduce((s, p) => s + p.amount, 0) || 1);
+
+// ─── Formatters ────────────────────────────────────────────────────────────────
+
+const fmt = (v: number | string | null | undefined) =>
+    new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(v || 0));
+
+const fmtShort = (v: number) => {
+    if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}jt`;
+    if (v >= 1_000) return `${(v / 1_000).toFixed(0)}rb`;
+    return String(v);
 };
 
-const formatDateTime = (value?: string | null) => {
-    if (!value) return '-';
-
-    return new Intl.DateTimeFormat('id-ID', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-    }).format(new Date(value));
+const fmtTime = (v?: string | null) => {
+    if (!v) return '-';
+    return new Intl.DateTimeFormat('id-ID', { timeStyle: 'short' }).format(new Date(v));
 };
 
-const paymentMethodLabel = (method: string) => {
-    switch (method) {
-        case 'cash':
-            return 'Cash';
-        case 'qris':
-            return 'QRIS';
-        case 'debit':
-            return 'Debit';
-        case 'ewallet':
-            return 'E-Wallet';
-        case 'kasbon':
-            return 'Kasbon';
-        default:
-            return method;
-    }
-};
+const payLabel: Record<string, string> = { cash: 'Cash', qris: 'QRIS', debit: 'Debit', ewallet: 'E-Wallet', kasbon: 'Kasbon' };
+const srcLabel: Record<string, string> = { kasir: 'Kasir', qr_meja: 'QR Meja', gofood: 'GoFood', grabfood: 'GrabFood' };
+const payIcon: Record<string, typeof Wallet> = { cash: Wallet, qris: ShoppingBag, debit: CreditCard, ewallet: Zap, kasbon: Clock };
 
-const sourceLabel = (source: string) => {
-    switch (source) {
-        case 'kasir':
-            return 'Kasir';
-        case 'qr_meja':
-            return 'QR Meja';
-        case 'gofood':
-            return 'GoFood';
-        case 'grabfood':
-            return 'GrabFood';
-        default:
-            return source;
-    }
-};
+// ─── Growth badge ───────────────────────────────────────────────────────────────
 
-const submitFinanceFilters = () => {
-    router.get(
-        route('dashboard'),
-        {
-            outlet_id: financeOutletFilter.value || undefined,
-        },
-        {
-            preserveScroll: true,
-            preserveState: true,
-            replace: true,
-        },
-    );
-};
+const growthPct = computed(() => fs.value.revenue_growth ?? 0);
+const growthClass = computed(() => growthPct.value > 0 ? 'text-emerald-300 bg-emerald-500/10 border-emerald-400/20'
+    : growthPct.value < 0 ? 'text-rose-300 bg-rose-500/10 border-rose-400/20'
+    : 'text-slate-400 bg-white/[0.03] border-white/10');
+const GrowthIcon = computed(() => growthPct.value > 0 ? TrendingUp : growthPct.value < 0 ? TrendingDown : Minus);
+
+// ─── Actions ────────────────────────────────────────────────────────────────────
+
+function applyFilter() {
+    router.get(route('dashboard'), { outlet_id: outletFilter.value || undefined }, { preserveScroll: true, preserveState: true, replace: true });
+}
+
+const NOW = new Date();
+const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Selamat siang' : 'Selamat malam';
 </script>
 
 <template>
-    <Head title="Dashboard Utama" />
+    <Head title="Dashboard" />
 
     <AuthenticatedLayout>
         <template #header>
-            <div
-                class="flex flex-col justify-between gap-4 md:flex-row md:items-center"
-            >
+            <div class="flex flex-col justify-between gap-3 md:flex-row md:items-center">
                 <div>
+                    <p class="text-xs text-slate-500">{{ greet }},</p>
                     <h2 class="text-2xl font-black tracking-tight text-white">
-                        Dashboard Utama
+                        {{ user?.name }}
+                        <span class="ml-2 text-sm font-normal text-slate-400">· {{ user?.outlet || 'Semua Outlet' }}</span>
                     </h2>
-                    <p class="mt-1 text-xs text-slate-400">
-                        Selamat datang kembali,
-                        <span class="font-semibold text-orange-400">{{
-                            user?.name
-                        }}</span>
-                        &bull; Cabang:
-                        <span class="text-slate-300">{{
-                            user?.outlet || 'Tidak Terikat Outlet'
-                        }}</span>
-                    </p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span
-                        class="h-2.5 w-2.5 animate-ping rounded-full bg-emerald-500"
-                    ></span>
-                    <span
-                        class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-400"
-                    >
-                        Sistem Online
+                <div class="flex items-center gap-3">
+                    <!-- Outlet filter -->
+                    <div v-if="canChooseOutlet && canViewFinance" class="flex items-center gap-2">
+                        <select
+                            v-model="outletFilter"
+                            class="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none transition focus:border-orange-400/40"
+                            @change="applyFilter"
+                        >
+                            <option value="">Semua Outlet</option>
+                            <option v-for="o in outlets" :key="o.id" :value="o.id">{{ o.name }}</option>
+                        </select>
+                    </div>
+                    <span class="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400">
+                        <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                        Live
                     </span>
                 </div>
             </div>
         </template>
 
-        <div class="space-y-8">
-            <div
-                class="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 p-6 shadow-xl shadow-slate-950/20 lg:p-8"
-            >
-                <div
-                    class="grid gap-8 xl:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] xl:items-end"
-                >
-                    <div
-                        class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-orange-500/10 blur-3xl"
-                    ></div>
-                    <div
-                        class="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                    ></div>
+        <div class="space-y-5">
 
-                    <div class="relative flex min-h-[220px] flex-col justify-between">
-                        <span
-                            class="mb-4 inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400"
-                        >
-                            Dashboard Operasional
-                        </span>
-                        <h3
-                            class="text-2xl font-black leading-tight text-white lg:text-3xl"
-                        >
-                            Kelola Operasional <br />
-                            Restoran Lebih Efisien
-                        </h3>
-                        <p
-                            class="mt-2 max-w-md text-sm leading-relaxed text-slate-400"
-                        >
-                            Akses cepat untuk mulai transaksi, memantau kitchen,
-                            mengecek stok kritis, dan menindak item expired dari
-                            satu layar yang ringkas.
-                        </p>
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <!-- KPI ROW — Finance (owner/supervisor)                    -->
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <section v-if="canViewFinance">
+                <!-- 6-card KPI grid -->
+                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
 
-                        <div
-                            class="mt-6 flex flex-wrap items-center gap-3 border-t border-slate-800/50 pt-4"
-                        >
-                            <span
-                                v-if="canViewFinance"
-                                class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-slate-200"
-                            >
-                                {{ financeSummary.orders ?? 0 }} order hari ini
-                            </span>
-                            <span
-                                class="rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-200"
-                            >
-                                {{ lowStockSummary.total }} alert stok
-                            </span>
-                            <span
-                                class="rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-200"
-                            >
-                                {{ expiredSummary.critical }} batch perlu tindakan
+                    <!-- Revenue hari ini (besar) -->
+                    <article class="relative col-span-2 overflow-hidden rounded-[24px] border border-emerald-400/20 bg-gradient-to-br from-emerald-500/20 via-emerald-500/8 to-slate-950 p-5 xl:col-span-2">
+                        <div class="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-emerald-500/15 blur-2xl" />
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">Revenue Hari Ini</p>
+                        <p class="mt-2 text-3xl font-black text-white">{{ fmt(fs.revenue) }}</p>
+                        <div class="mt-2 flex items-center gap-2">
+                            <span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold" :class="growthClass">
+                                <component :is="GrowthIcon" class="h-3 w-3" />
+                                {{ Math.abs(growthPct) }}% vs kemarin
                             </span>
                         </div>
-                    </div>
+                        <p class="mt-2 text-xs text-slate-400">Kemarin {{ fmt(fs.yesterday_revenue) }}</p>
+                    </article>
 
-                    <div
-                        class="relative rounded-2xl border border-slate-800/80 bg-slate-950/45 p-5 backdrop-blur-sm"
+                    <!-- Total Order -->
+                    <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Total Order</p>
+                        <p class="mt-2 text-3xl font-black text-white">{{ fs.orders ?? 0 }}</p>
+                        <div class="mt-2 flex flex-wrap gap-1.5">
+                            <span class="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+                                {{ fs.settled_orders ?? 0 }} selesai
+                            </span>
+                            <span v-if="(fs.pending_orders ?? 0) > 0" class="rounded-full border border-amber-400/20 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-300">
+                                {{ fs.pending_orders }} pending
+                            </span>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-500">Kemarin {{ fs.yesterday_orders ?? 0 }} order</p>
+                    </article>
+
+                    <!-- Avg Ticket -->
+                    <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Avg Ticket</p>
+                        <p class="mt-2 text-2xl font-black text-white">{{ fmt(fs.avg_order_value) }}</p>
+                        <p class="mt-2 text-xs text-slate-500">Per transaksi selesai</p>
+                        <p class="mt-1 text-xs text-rose-300">Diskon {{ fmt(fs.total_discount) }}</p>
+                    </article>
+
+                    <!-- Produk terlaris -->
+                    <article class="rounded-[24px] border border-sky-400/15 bg-sky-500/8 p-5">
+                        <div class="flex items-start justify-between gap-2">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-sky-300">Top Produk</p>
+                            <Star class="h-3.5 w-3.5 text-sky-400" />
+                        </div>
+                        <p class="mt-2 text-base font-black text-white leading-tight">{{ fs.top_product?.name || '–' }}</p>
+                        <p class="mt-2 text-xs text-sky-100/80">{{ fs.top_product?.quantity ?? 0 }} terjual · {{ fmt(fs.top_product?.revenue) }}</p>
+                    </article>
+
+                    <!-- Shift aktif -->
+                    <article class="rounded-[24px] border p-5"
+                        :class="fs.active_shift ? 'border-orange-400/20 bg-orange-500/8' : 'border-white/10 bg-white/[0.03]'"
                     >
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em]" :class="fs.active_shift ? 'text-orange-300' : 'text-slate-400'">Shift Aktif</p>
+                        <p class="mt-2 text-base font-black text-white leading-tight">
+                            {{ fs.active_shift?.cashier || 'Tidak Ada' }}
+                        </p>
+                        <p class="mt-2 text-xs" :class="fs.active_shift ? 'text-orange-100/80' : 'text-slate-500'">
+                            {{ fs.active_shift ? `Buka ${fmtTime(fs.active_shift.opened_at)}` : 'Shift belum dibuka' }}
+                        </p>
+                    </article>
+                </div>
+
+                <!-- ─── Baris Chart + Breakdown ─────────────────────────── -->
+                <div class="mt-4 grid gap-4 lg:grid-cols-[1.6fr_1fr_1fr]">
+
+                    <!-- Hourly Revenue Chart (CSS bar chart) -->
+                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
                         <div class="flex items-center justify-between gap-3">
                             <div>
-                                <h4 class="text-sm font-bold uppercase tracking-[0.2em] text-slate-300">
-                                    Akses Cepat
-                                </h4>
-                                <p class="mt-1 text-xs leading-relaxed text-slate-500">
-                                    Empat modul yang paling sering dipakai untuk
-                                    kontrol operasional harian.
-                                </p>
+                                <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Revenue per Jam</p>
+                                <p class="mt-0.5 text-xs text-slate-500">Hari ini · transaksi selesai</p>
+                            </div>
+                            <TrendingUp class="h-4 w-4 text-emerald-400" />
+                        </div>
+                        <div v-if="chartHours.length" class="mt-4">
+                            <!-- Bar chart -->
+                            <div class="flex h-24 items-end gap-px">
+                                <div
+                                    v-for="h in chartHours"
+                                    :key="h.hour"
+                                    class="group relative flex-1 cursor-default"
+                                    :title="`${h.label}: ${fmt(h.revenue)}`"
+                                >
+                                    <div
+                                        class="w-full rounded-t-sm transition-all duration-300"
+                                        :class="h.revenue > 0 ? 'bg-emerald-500/70 group-hover:bg-emerald-400' : 'bg-white/5'"
+                                        :style="`height: ${Math.max(h.pct, h.revenue > 0 ? 4 : 2)}%`"
+                                    />
+                                </div>
+                            </div>
+                            <!-- Hour labels (setiap 3 jam) -->
+                            <div class="mt-1 flex justify-between px-0.5">
+                                <span v-for="h in chartHours.filter((_, i) => i % 3 === 0)" :key="h.hour" class="text-[9px] text-slate-600">
+                                    {{ String(h.hour).padStart(2, '0') }}
+                                </span>
                             </div>
                         </div>
+                        <div v-else class="mt-6 text-center text-xs text-slate-500">Belum ada transaksi hari ini.</div>
+                    </div>
 
-                        <div class="mt-5 grid gap-3 sm:grid-cols-2">
-                            <Link
-                                v-for="action in quickActions"
-                                :key="action.key"
-                                :href="action.href"
-                                :class="[
-                                    'group rounded-2xl border p-4 transition duration-200 hover:-translate-y-0.5',
-                                    action.cardClass,
-                                ]"
+                    <!-- Payment breakdown -->
+                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Metode Bayar</p>
+                        <div v-if="paymentBreakdowns.length" class="mt-4 space-y-2.5">
+                            <div v-for="item in paymentBreakdowns" :key="item.method" class="space-y-1">
+                                <div class="flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-1.5">
+                                        <component :is="payIcon[item.method] ?? Wallet" class="h-3 w-3 text-slate-400" />
+                                        <span class="text-xs font-semibold text-slate-200">{{ payLabel[item.method] ?? item.method }}</span>
+                                    </div>
+                                    <span class="text-[11px] font-black text-emerald-300">{{ fmtShort(item.amount) }}</span>
+                                </div>
+                                <div class="h-1.5 overflow-hidden rounded-full bg-white/5">
+                                    <div
+                                        class="h-full rounded-full bg-emerald-500/70 transition-all duration-500"
+                                        :style="`width: ${Math.round((item.amount / totalPayments) * 100)}%`"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <p v-else class="mt-4 text-xs text-slate-500">Belum ada pembayaran.</p>
+                    </div>
+
+                    <!-- Top 5 Products -->
+                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                        <div class="flex items-center justify-between gap-2">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">5 Produk Terlaris</p>
+                            <Star class="h-3.5 w-3.5 text-amber-400" />
+                        </div>
+                        <div v-if="topProducts.length" class="mt-4 space-y-2.5">
+                            <div v-for="(p, i) in topProducts" :key="i" class="flex items-center gap-2.5">
+                                <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-black"
+                                    :class="i === 0 ? 'bg-amber-500/20 text-amber-300' : 'bg-white/5 text-slate-500'"
+                                >{{ i + 1 }}</span>
+                                <div class="min-w-0 flex-1">
+                                    <p class="truncate text-xs font-semibold text-slate-200">{{ p.name }}</p>
+                                    <p class="text-[10px] text-slate-500">{{ p.quantity }} terjual</p>
+                                </div>
+                                <span class="flex-shrink-0 text-[11px] font-black text-sky-300">{{ fmtShort(p.revenue) }}</span>
+                            </div>
+                        </div>
+                        <p v-else class="mt-4 text-xs text-slate-500">Belum ada penjualan.</p>
+                    </div>
+                </div>
+
+                <!-- Channel source + Quick actions -->
+                <div class="mt-4 grid gap-4 lg:grid-cols-[1fr_1.8fr]">
+                    <!-- Source breakdown -->
+                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Channel Penjualan</p>
+                        <div v-if="sourceBreakdowns.length" class="mt-4 grid gap-2">
+                            <div
+                                v-for="item in sourceBreakdowns"
+                                :key="item.source"
+                                class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5"
                             >
-                                <div class="flex items-start justify-between gap-3">
-                                    <span
-                                        :class="[
-                                            'flex h-11 w-11 items-center justify-center rounded-2xl border',
-                                            action.iconClass,
-                                        ]"
-                                    >
-                                        <component :is="action.icon" class="h-5 w-5" />
-                                    </span>
-                                    <span class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500 transition group-hover:text-slate-300">
-                                        {{ action.badge }}
-                                    </span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">{{ srcLabel[item.source] ?? item.source }}</p>
+                                    <p class="text-[11px] text-slate-500">{{ item.orders }} order</p>
                                 </div>
+                                <p class="text-sm font-black text-sky-300">{{ fmt(item.amount) }}</p>
+                            </div>
+                        </div>
+                        <p v-else class="mt-4 text-xs text-slate-500">Belum ada channel tercatat.</p>
+                    </div>
 
-                                <div class="mt-6">
-                                    <p class="text-sm font-bold text-white">
-                                        {{ action.title }}
-                                    </p>
-                                    <p class="mt-1 text-xs leading-relaxed text-slate-400">
-                                        {{ action.description }}
-                                    </p>
-                                </div>
-
-                                <div class="mt-4 flex items-center justify-between">
-                                    <span
-                                        :class="[
-                                            'text-xs font-semibold',
-                                            action.accentClass,
-                                        ]"
-                                    >
-                                        {{ action.actionText }}
-                                    </span>
-                                    <span class="rounded-full border border-white/10 bg-white/5 p-1.5 text-slate-300 transition group-hover:border-white/20 group-hover:text-white">
-                                        <ArrowUpRight class="h-3.5 w-3.5" />
-                                    </span>
-                                </div>
+                    <!-- Quick Access -->
+                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Akses Cepat</p>
+                        <div class="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+                            <Link
+                                :href="route('kasir.order')"
+                                class="group flex flex-col items-center gap-2 rounded-2xl border border-orange-400/20 bg-orange-500/10 p-4 text-center transition hover:-translate-y-0.5 hover:border-orange-400/40 hover:bg-orange-500/15"
+                            >
+                                <ShoppingCart class="h-6 w-6 text-orange-300" />
+                                <span class="text-[11px] font-bold text-orange-200">Buat Order</span>
+                            </Link>
+                            <Link
+                                :href="route('kitchen.display')"
+                                class="group flex flex-col items-center gap-2 rounded-2xl border border-sky-400/20 bg-sky-500/10 p-4 text-center transition hover:-translate-y-0.5 hover:border-sky-400/40 hover:bg-sky-500/15"
+                            >
+                                <Utensils class="h-6 w-6 text-sky-300" />
+                                <span class="text-[11px] font-bold text-sky-200">Kitchen</span>
+                            </Link>
+                            <Link
+                                :href="route('stock-alerts.index')"
+                                class="group flex flex-col items-center gap-2 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-center transition hover:-translate-y-0.5 hover:border-amber-400/40 hover:bg-amber-500/15"
+                            >
+                                <AlertTriangle class="h-6 w-6 text-amber-300" />
+                                <span class="text-[11px] font-bold text-amber-200">Alert Stok</span>
+                            </Link>
+                            <Link
+                                :href="route('expired-tracking.index')"
+                                class="group flex flex-col items-center gap-2 rounded-2xl border border-rose-400/20 bg-rose-500/10 p-4 text-center transition hover:-translate-y-0.5 hover:border-rose-400/40 hover:bg-rose-500/15"
+                            >
+                                <BellRing class="h-6 w-6 text-rose-300" />
+                                <span class="text-[11px] font-bold text-rose-200">Expired</span>
                             </Link>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <section
-                v-if="canViewFinance"
-                class="rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl shadow-slate-950/20 lg:p-8"
-            >
-                <div class="flex flex-col gap-4 border-b border-slate-800/60 pb-5 lg:flex-row lg:items-end lg:justify-between">
-                    <div>
-                        <h4 class="flex items-center gap-2 text-base font-bold text-white">
-                            <TrendingUp class="h-5 w-5 text-emerald-400" />
-                            Dashboard Keuangan Hari Ini
-                        </h4>
-                        <p class="mt-1 text-xs text-slate-400">
-                            Ringkasan revenue, order, rata-rata transaksi, produk terlaris, dan shift aktif per {{ props.filters?.as_of_date || '-' }}.
-                        </p>
-                    </div>
-
-                    <div v-if="canChooseFinanceOutlet" class="flex flex-wrap items-end gap-3">
-                        <label class="block">
-                            <span class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                                Outlet
-                            </span>
-                            <select
-                                v-model="financeOutletFilter"
-                                class="w-56 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
-                            >
-                                <option value="">Semua outlet owner</option>
-                                <option
-                                    v-for="outlet in financeOutletOptions"
-                                    :key="outlet.id"
-                                    :value="outlet.id"
-                                >
-                                    {{ outlet.name }}
-                                </option>
-                            </select>
-                        </label>
-                        <button
-                            type="button"
-                            class="rounded-xl bg-orange-500 px-4 py-2.5 text-xs font-bold text-slate-950 transition hover:bg-orange-400"
-                            @click="submitFinanceFilters"
-                        >
-                            Terapkan
-                        </button>
-                    </div>
-                </div>
-
-                <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-                    <article class="rounded-xl border border-emerald-500/15 bg-emerald-500/8 p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">
-                            Total Revenue
-                        </p>
-                        <p class="mt-2 text-2xl font-black text-white">
-                            {{ formatPrice(financeSummary.revenue) }}
-                        </p>
-                        <p class="mt-2 text-xs text-emerald-100/80">
-                            Diskon hari ini {{ formatPrice(financeSummary.total_discount) }}
-                        </p>
-                    </article>
-
-                    <article class="rounded-xl border border-slate-800 bg-slate-950/50 p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                            Total Order
-                        </p>
-                        <p class="mt-2 text-2xl font-black text-white">
-                            {{ financeSummary.orders ?? 0 }}
-                        </p>
-                        <p class="mt-2 text-xs text-slate-400">
-                            {{ financeSummary.settled_orders ?? 0 }} order sudah settle
-                        </p>
-                    </article>
-
-                    <article class="rounded-xl border border-slate-800 bg-slate-950/50 p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                            Average Ticket
-                        </p>
-                        <p class="mt-2 text-2xl font-black text-white">
-                            {{ formatPrice(financeSummary.avg_order_value) }}
-                        </p>
-                        <p class="mt-2 text-xs text-slate-400">
-                            Rata-rata per order yang sudah dibayar
-                        </p>
-                    </article>
-
-                    <article class="rounded-xl border border-sky-500/15 bg-sky-500/8 p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-sky-300">
-                            Produk Terlaris
-                        </p>
-                        <p class="mt-2 text-lg font-black text-white">
-                            {{ financeSummary.top_product?.name || 'Belum ada data' }}
-                        </p>
-                        <p class="mt-2 text-xs text-sky-100/80">
-                            {{ financeSummary.top_product?.quantity || 0 }} item • {{ formatPrice(financeSummary.top_product?.revenue) }}
-                        </p>
-                    </article>
-
-                    <article class="rounded-xl border border-orange-500/15 bg-orange-500/8 p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
-                            Shift Aktif
-                        </p>
-                        <p class="mt-2 text-lg font-black text-white">
-                            {{ financeSummary.active_shift?.cashier || 'Tidak ada shift aktif' }}
-                        </p>
-                        <p class="mt-2 text-xs text-orange-100/80">
-                            {{ financeSummary.active_shift?.opened_at ? `Buka ${formatDateTime(financeSummary.active_shift?.opened_at)}` : 'Shift belum dibuka hari ini' }}
-                        </p>
-                    </article>
-                </div>
-
-                <div class="mt-6 grid gap-4 lg:grid-cols-2">
-                    <section class="rounded-xl border border-slate-800 bg-slate-950/50 p-5">
-                        <h5 class="text-sm font-bold text-white">Breakdown Metode Bayar</h5>
-                        <div v-if="!paymentBreakdowns.length" class="mt-4 text-sm text-slate-400">
-                            Belum ada pembayaran tercatat hari ini.
-                        </div>
-                        <div v-else class="mt-4 space-y-3">
-                            <div
-                                v-for="item in paymentBreakdowns"
-                                :key="item.method"
-                                class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-3"
-                            >
-                                <div>
-                                    <p class="text-sm font-bold text-white">{{ paymentMethodLabel(item.method) }}</p>
-                                    <p class="text-xs text-slate-500">{{ item.orders }} order</p>
-                                </div>
-                                <p class="text-sm font-black text-emerald-300">
-                                    {{ formatPrice(item.amount) }}
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="rounded-xl border border-slate-800 bg-slate-950/50 p-5">
-                        <h5 class="text-sm font-bold text-white">Breakdown Channel</h5>
-                        <div v-if="!sourceBreakdowns.length" class="mt-4 text-sm text-slate-400">
-                            Belum ada channel penjualan tercatat hari ini.
-                        </div>
-                        <div v-else class="mt-4 space-y-3">
-                            <div
-                                v-for="item in sourceBreakdowns"
-                                :key="item.source"
-                                class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-3"
-                            >
-                                <div>
-                                    <p class="text-sm font-bold text-white">{{ sourceLabel(item.source) }}</p>
-                                    <p class="text-xs text-slate-500">{{ item.orders }} order</p>
-                                </div>
-                                <p class="text-sm font-black text-sky-300">
-                                    {{ formatPrice(item.amount) }}
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-                </div>
             </section>
 
-            <div
-                v-else
-                class="rounded-2xl border border-slate-800/80 bg-slate-900 p-5 text-sm text-slate-400 shadow-xl shadow-slate-950/20"
-            >
-                Ringkasan keuangan harian tersedia untuk role supervisor dan owner.
-            </div>
+            <!-- Kasir/bar/kitchen: hanya tampilkan quick actions -->
+            <section v-else class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <Link :href="route('kasir.order')" class="flex flex-col items-center gap-3 rounded-[24px] border border-orange-400/20 bg-orange-500/10 py-6 text-center transition hover:bg-orange-500/15">
+                    <ShoppingCart class="h-7 w-7 text-orange-300" />
+                    <span class="text-sm font-bold text-orange-200">Buat Order</span>
+                </Link>
+                <Link :href="route('kitchen.display')" class="flex flex-col items-center gap-3 rounded-[24px] border border-sky-400/20 bg-sky-500/10 py-6 text-center transition hover:bg-sky-500/15">
+                    <Utensils class="h-7 w-7 text-sky-300" />
+                    <span class="text-sm font-bold text-sky-200">Kitchen</span>
+                </Link>
+                <Link :href="route('stock-alerts.index')" class="flex flex-col items-center gap-3 rounded-[24px] border border-amber-400/20 bg-amber-500/10 py-6 text-center transition hover:bg-amber-500/15">
+                    <AlertTriangle class="h-7 w-7 text-amber-300" />
+                    <span class="text-sm font-bold text-amber-200">Alert Stok</span>
+                </Link>
+                <Link :href="route('expired-tracking.index')" class="flex flex-col items-center gap-3 rounded-[24px] border border-rose-400/20 bg-rose-500/10 py-6 text-center transition hover:bg-rose-500/15">
+                    <BellRing class="h-7 w-7 text-rose-300" />
+                    <span class="text-sm font-bold text-rose-200">Expired</span>
+                </Link>
+            </section>
 
-            <div
-                class="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_0.8fr]"
-            >
-                <section
-                    class="rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl shadow-slate-950/20"
-                >
-                    <div class="flex items-center justify-between gap-4">
-                        <div>
-                            <h4 class="flex items-center gap-2 text-base font-bold text-white">
-                                <AlertTriangle class="h-5 w-5 text-amber-400" />
-                                Alert Stok Menipis
-                            </h4>
-                            <p class="mt-1 text-xs text-slate-400">
-                                Alert live untuk produk jadi dan bahan baku yang sudah menyentuh minimum stock.
-                            </p>
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <!-- ALERT SECTION — Stok + Expired                         -->
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <div class="grid gap-4 lg:grid-cols-2">
+
+                <!-- Stok Menipis -->
+                <section class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/15">
+                                <AlertTriangle class="h-4 w-4 text-amber-300" />
+                            </div>
+                            <div>
+                                <p class="text-sm font-black text-white">Stok Menipis</p>
+                                <p class="text-[11px] text-slate-500">{{ lowStockSummary.total }} alert · {{ lowStockSummary.critical }} kritis</p>
+                            </div>
                         </div>
-                        <Link
-                            :href="route('stock-alerts.index')"
-                            class="text-xs font-semibold text-orange-300 transition hover:text-orange-200"
-                        >
-                            Lihat semua
+                        <Link :href="route('stock-alerts.index')" class="flex items-center gap-1 text-[11px] font-semibold text-orange-300 hover:text-orange-200">
+                            Lihat semua <ChevronRight class="h-3 w-3" />
                         </Link>
                     </div>
 
-                    <div v-if="!lowStockItems.length" class="mt-6 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-4 text-sm text-emerald-300">
-                        Belum ada alert stok menipis. Semua stok utama masih aman.
+                    <!-- Mini summary pills -->
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="rounded-full border border-amber-400/20 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-200">
+                            {{ lowStockSummary.products }} produk jadi
+                        </span>
+                        <span class="rounded-full border border-sky-400/20 bg-sky-500/10 px-2.5 py-1 text-[11px] font-semibold text-sky-200">
+                            {{ lowStockSummary.raw_materials }} bahan baku
+                        </span>
+                        <span class="rounded-full border border-rose-400/20 bg-rose-500/10 px-2.5 py-1 text-[11px] font-semibold text-rose-200">
+                            {{ lowStockSummary.critical }} kritis/habis
+                        </span>
                     </div>
 
-                    <div v-else class="mt-6 space-y-3">
+                    <div v-if="!lowStockItems.length" class="mt-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-300">
+                        ✓ Semua stok masih aman.
+                    </div>
+                    <div v-else class="mt-3 space-y-2">
                         <article
-                            v-for="item in lowStockItems"
+                            v-for="item in lowStockItems.slice(0, 5)"
                             :key="`${item.type}-${item.id}`"
-                            class="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/50 p-4 sm:flex-row sm:items-center sm:justify-between"
+                            class="flex items-center justify-between gap-3 rounded-2xl border border-white/5 bg-white/[0.02] px-3.5 py-2.5 transition hover:bg-white/[0.04]"
                         >
-                            <div>
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <p class="text-sm font-bold text-white">{{ item.name }}</p>
-                                    <span
-                                        :class="[
-                                            'rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider',
-                                            item.severity >= 2
-                                                ? 'border-rose-500/20 bg-rose-500/10 text-rose-300'
-                                                : 'border-amber-500/20 bg-amber-500/10 text-amber-300',
-                                        ]"
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-1.5">
+                                    <p class="truncate text-xs font-bold text-white">{{ item.name }}</p>
+                                    <span class="flex-shrink-0 rounded-full border px-1.5 py-0.5 text-[9px] font-bold"
+                                        :class="item.severity >= 2 ? 'border-rose-400/20 bg-rose-500/10 text-rose-300' : 'border-amber-400/20 bg-amber-500/10 text-amber-300'"
                                     >
-                                        {{ item.severity >= 2 ? 'Kritis' : 'Menipis' }}
+                                        {{ item.severity >= 2 ? 'KRITIS' : 'TIPIS' }}
                                     </span>
                                 </div>
-                                <p class="mt-1 text-xs text-slate-400">
-                                    {{ item.type === 'product' ? 'Produk jadi' : 'Bahan baku' }}
-                                    <span v-if="item.context">• {{ item.context }}</span>
-                                </p>
+                                <p class="text-[11px] text-slate-500">{{ item.current_stock }}/{{ item.minimum_stock }} {{ item.unit || 'pcs' }}</p>
                             </div>
-                            <div class="flex items-center gap-4">
-                                <p class="text-xs font-semibold text-slate-300">
-                                    {{ item.current_stock }}/{{ item.minimum_stock }} {{ item.unit || 'pcs' }}
-                                </p>
-                                <Link
-                                    :href="route(item.route)"
-                                    class="rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-300"
-                                >
-                                    Tindak lanjuti
-                                </Link>
-                            </div>
+                            <Link :href="route(item.route)" class="flex-shrink-0 rounded-xl border border-orange-400/20 bg-orange-500/10 px-2.5 py-1.5 text-[10px] font-bold text-orange-300 hover:bg-orange-500/15">
+                                Tindak
+                            </Link>
                         </article>
+                        <p v-if="lowStockItems.length > 5" class="mt-1 text-center text-[11px] text-slate-500">
+                            +{{ lowStockItems.length - 5 }} item lainnya
+                        </p>
                     </div>
                 </section>
 
-                <section
-                    class="rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl shadow-slate-950/20"
-                >
-                    <h4 class="text-base font-bold text-white">
-                        Ringkasan Alert
-                    </h4>
-                    <div class="mt-6 space-y-4">
-                        <div class="rounded-xl border border-slate-800 bg-slate-950/50 p-4">
-                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                                Total Alert
-                            </p>
-                            <p class="mt-2 text-3xl font-black text-white">
-                                {{ lowStockSummary.total }}
-                            </p>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="rounded-xl border border-amber-500/15 bg-amber-500/8 p-4">
-                                <p class="text-[10px] font-bold uppercase tracking-wider text-amber-300">
-                                    Produk Jadi
-                                </p>
-                                <p class="mt-2 text-2xl font-black text-white">
-                                    {{ lowStockSummary.products }}
-                                </p>
+                <!-- Expired -->
+                <section class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-rose-500/15">
+                                <BellRing class="h-4 w-4 text-rose-300" />
                             </div>
-                            <div class="rounded-xl border border-sky-500/15 bg-sky-500/8 p-4">
-                                <p class="text-[10px] font-bold uppercase tracking-wider text-sky-300">
-                                    Bahan Baku
-                                </p>
-                                <p class="mt-2 text-2xl font-black text-white">
-                                    {{ lowStockSummary.raw_materials }}
-                                </p>
+                            <div>
+                                <p class="text-sm font-black text-white">Reminder Expired</p>
+                                <p class="text-[11px] text-slate-500">{{ expiredSummary.critical }} perlu tindakan segera</p>
                             </div>
                         </div>
-                        <div class="rounded-xl border border-rose-500/15 bg-rose-500/8 p-4">
-                            <p class="text-[10px] font-bold uppercase tracking-wider text-rose-300">
-                                Kritis / Habis
-                            </p>
-                            <p class="mt-2 text-2xl font-black text-white">
-                                {{ lowStockSummary.critical }}
-                            </p>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <div
-                class="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_0.8fr]"
-            >
-                <section
-                    class="rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl shadow-slate-950/20"
-                >
-                    <div class="flex items-center justify-between gap-4">
-                        <div>
-                            <h4 class="flex items-center gap-2 text-base font-bold text-white">
-                                <BellRing class="h-5 w-5 text-rose-400" />
-                                Reminder Expired
-                            </h4>
-                            <p class="mt-1 text-xs text-slate-400">
-                                Daftar produk jadi dan bahan baku yang mendekati atau melewati tanggal expired.
-                            </p>
-                        </div>
-                        <Link
-                            :href="route('expired-tracking.index')"
-                            class="text-xs font-semibold text-orange-300 transition hover:text-orange-200"
-                        >
-                            Lihat semua
+                        <Link :href="route('expired-tracking.index')" class="flex items-center gap-1 text-[11px] font-semibold text-orange-300 hover:text-orange-200">
+                            Lihat semua <ChevronRight class="h-3 w-3" />
                         </Link>
                     </div>
 
-                    <div v-if="!expiredItems.length" class="mt-6 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-4 text-sm text-emerald-300">
-                        Belum ada reminder expired dalam 7 hari ke depan.
+                    <!-- Mini summary pills -->
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="rounded-full border border-amber-400/20 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-200">
+                            {{ expiredSummary.upcoming }} upcoming
+                        </span>
+                        <span class="rounded-full border border-orange-400/20 bg-orange-500/10 px-2.5 py-1 text-[11px] font-semibold text-orange-200">
+                            {{ expiredSummary.today }} hari ini
+                        </span>
+                        <span class="rounded-full border border-rose-400/20 bg-rose-500/10 px-2.5 py-1 text-[11px] font-semibold text-rose-200">
+                            {{ expiredSummary.expired }} sudah expired
+                        </span>
                     </div>
 
-                    <div v-else class="mt-6 space-y-3">
+                    <div v-if="!expiredItems.length" class="mt-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-300">
+                        ✓ Tidak ada batch mendekati expired dalam 7 hari.
+                    </div>
+                    <div v-else class="mt-3 space-y-2">
                         <article
-                            v-for="item in expiredItems"
+                            v-for="item in expiredItems.slice(0, 5)"
                             :key="item.id"
-                            class="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/50 p-4 sm:flex-row sm:items-center sm:justify-between"
+                            class="flex items-center justify-between gap-3 rounded-2xl border border-white/5 bg-white/[0.02] px-3.5 py-2.5 transition hover:bg-white/[0.04]"
                         >
-                            <div>
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <p class="text-sm font-bold text-white">{{ item.name }}</p>
-                                    <span
-                                        :class="[
-                                            'rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider',
-                                            item.status === 'expired'
-                                                ? 'border-rose-500/20 bg-rose-500/10 text-rose-300'
-                                                : item.status === 'today'
-                                                  ? 'border-orange-500/20 bg-orange-500/10 text-orange-300'
-                                                  : 'border-amber-500/20 bg-amber-500/10 text-amber-300',
-                                        ]"
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-1.5">
+                                    <p class="truncate text-xs font-bold text-white">{{ item.name }}</p>
+                                    <span class="flex-shrink-0 rounded-full border px-1.5 py-0.5 text-[9px] font-bold"
+                                        :class="item.status === 'expired'
+                                            ? 'border-rose-400/20 bg-rose-500/10 text-rose-300'
+                                            : item.status === 'today'
+                                              ? 'border-orange-400/20 bg-orange-500/10 text-orange-300'
+                                              : 'border-amber-400/20 bg-amber-500/10 text-amber-300'"
                                     >
-                                        {{
-                                            item.status === 'expired'
-                                                ? `Lewat ${Math.abs(item.days_left)} hari`
-                                                : item.status === 'today'
-                                                  ? 'Expired hari ini'
-                                                  : `H-${item.days_left}`
-                                        }}
+                                        {{ item.status === 'expired' ? `+${Math.abs(item.days_left)}hr` : item.status === 'today' ? 'HARI INI' : `H-${item.days_left}` }}
                                     </span>
                                 </div>
-                                <p class="mt-1 text-xs text-slate-400">
-                                    {{ item.trackable_type === 'product' ? 'Produk jadi' : 'Bahan baku' }}
-                                    <span v-if="item.context">• {{ item.context }}</span>
+                                <p class="text-[11px] text-slate-500">
+                                    {{ item.trackable_type === 'product' ? 'Produk' : 'Bahan baku' }} · qty {{ item.quantity }}
                                 </p>
                             </div>
-                            <div class="flex items-center gap-4">
-                                <p class="text-xs font-semibold text-slate-300">
-                                    Qty batch {{ item.quantity }}
-                                </p>
-                                <Link
-                                    :href="route(item.route)"
-                                    class="rounded-lg border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-300"
-                                >
-                                    Tindak lanjuti
-                                </Link>
-                            </div>
+                            <Link :href="route(item.route)" class="flex-shrink-0 rounded-xl border border-orange-400/20 bg-orange-500/10 px-2.5 py-1.5 text-[10px] font-bold text-orange-300 hover:bg-orange-500/15">
+                                Tindak
+                            </Link>
                         </article>
-                    </div>
-                </section>
-
-                <section
-                    class="rounded-2xl border border-slate-800/80 bg-slate-900 p-6 shadow-xl shadow-slate-950/20"
-                >
-                    <h4 class="text-base font-bold text-white">
-                        Ringkasan Expired
-                    </h4>
-                    <div class="mt-6 space-y-4">
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="rounded-xl border border-amber-500/15 bg-amber-500/8 p-4">
-                                <p class="text-[10px] font-bold uppercase tracking-wider text-amber-300">
-                                    Upcoming
-                                </p>
-                                <p class="mt-2 text-2xl font-black text-white">
-                                    {{ expiredSummary.upcoming }}
-                                </p>
-                            </div>
-                            <div class="rounded-xl border border-orange-500/15 bg-orange-500/8 p-4">
-                                <p class="text-[10px] font-bold uppercase tracking-wider text-orange-300">
-                                    Hari Ini
-                                </p>
-                                <p class="mt-2 text-2xl font-black text-white">
-                                    {{ expiredSummary.today }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="rounded-xl border border-rose-500/15 bg-rose-500/8 p-4">
-                                <p class="text-[10px] font-bold uppercase tracking-wider text-rose-300">
-                                    Sudah Expired
-                                </p>
-                                <p class="mt-2 text-2xl font-black text-white">
-                                    {{ expiredSummary.expired }}
-                                </p>
-                            </div>
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                    Butuh Tindakan
-                                </p>
-                                <p class="mt-2 text-2xl font-black text-white">
-                                    {{ expiredSummary.critical }}
-                                </p>
-                            </div>
-                        </div>
+                        <p v-if="expiredItems.length > 5" class="mt-1 text-center text-[11px] text-slate-500">
+                            +{{ expiredItems.length - 5 }} item lainnya
+                        </p>
                     </div>
                 </section>
             </div>
