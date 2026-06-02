@@ -159,15 +159,15 @@ class ShiftRepository
     public function getCarryOverOrders(string $outletId): Collection
     {
         return Order::query()
-            ->where('outlet_id', $outletId)
-            ->where('source', 'kasir')
-            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->where('orders.outlet_id', $outletId)
+            ->where('orders.source', 'kasir')
+            ->whereNotIn('orders.status', ['completed', 'cancelled'])
             ->where(function (Builder $query) {
                 $query
-                    ->whereNull('shift_id')
-                    ->orWhereHas('shift', fn (Builder $shiftQuery) => $shiftQuery->where('status', 'closed'));
+                    ->whereNull('orders.shift_id')
+                    ->orWhereHas('shift', fn (Builder $shiftQuery) => $shiftQuery->where('shifts.status', 'closed'));
             })
-            ->get(['id', 'shift_id', 'metadata']);
+            ->get(['orders.id', 'orders.shift_id', 'orders.metadata']);
     }
 
     public function create(array $payload): Shift
