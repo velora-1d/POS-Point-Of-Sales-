@@ -50,70 +50,32 @@ class PaymentGatewayConfigService
     ) {
     }
 
-    public function getDashboard(User $actor, array $filters = []): array
+    public function getGlobalDashboard(): array
     {
-        $this->assertCanManage($actor);
-
-        $outlets = $this->paymentGatewayConfigRepository->getOutlets();
-        $selectedOutlet = $this->resolveSelectedOutlet($outlets, $filters['outlet_id'] ?? null);
-        $selectedOutletId = $selectedOutlet['id'] ?? null;
-        $storedConfig = $selectedOutletId
-            ? $this->paymentGatewayConfigRepository->findByOutletId($selectedOutletId)
-            : null;
-        $effectiveConfig = $selectedOutletId
-            ? $this->buildEffectiveConfig($selectedOutletId, $storedConfig)
-            : $this->emptyEffectiveConfig();
+        $env = $this->resolveEnvFallback();
 
         return [
-            'outlets' => $outlets->map(function ($outlet) {
-                return [
-                    'id' => $outlet->id,
-                    'name' => $outlet->name,
-                    'is_active' => (bool) $outlet->is_active,
-                    'has_override' => (bool) $outlet->paymentGatewayConfig,
-                    'gateway_active' => (bool) ($outlet->paymentGatewayConfig?->is_active ?? false),
-                ];
-            })->values()->all(),
-            'selectedOutlet' => $selectedOutlet,
-            'summary' => $this->buildSummary($outlets),
-            'formDefaults' => $this->buildFormDefaults($selectedOutletId, $storedConfig, $effectiveConfig),
-            'effectiveConfig' => $effectiveConfig,
-            'gatewayOptions' => [
-                'providers' => self::PROVIDERS,
-                'methods' => self::GATEWAY_METHODS,
-            ],
-            'filters' => [
-                'outlet_id' => $selectedOutletId,
+            'effectiveConfig' => [
+                'source' => 'env',
+                'provider' => 'pakasir',
+                'is_active' => $env['is_ready'],
+                'base_url' => $env['base_url'],
+                'project_slug' => $env['project_slug'],
+                'callback_url' => $env['callback_url'],
+                'active_payment_methods' => ['qris', 'ewallet', 'debit', 'transfer'],
+                'has_api_key' => filled($env['api_key']),
+                'has_api_secret' => filled($env['api_secret']),
             ],
         ];
     }
 
-    public function saveConfig(array $payload, User $actor): void
+    public function testGlobalConnection(): string
     {
-        $this->assertCanManage($actor);
+        $env = $this->resolveEnvFallback();
 
-        $existingConfig = $this->paymentGatewayConfigRepository->findByOutletId($payload['outlet_id']);
-        $normalized = $this->normalizeForPersistence($payload, $existingConfig);
-
-        $this->paymentGatewayConfigRepository->upsertByOutlet($payload['outlet_id'], $normalized);
-    }
-
-    public function testConnection(array $payload, User $actor): string
-    {
-        $this->assertCanManage($actor);
-
-        $existingConfig = $this->paymentGatewayConfigRepository->findByOutletId($payload['outlet_id']);
-        $normalized = $this->normalizeForRuntime($payload, $existingConfig, true);
-
-        if (($normalized['provider'] ?? null) !== 'pakasir') {
+        if (!$env['is_ready'] || !$env['api_key']) {
             throw ValidationException::withMessages([
-                'provider' => 'Provider gateway belum didukung untuk test koneksi.',
-            ]);
-        }
-
-        if (!$normalized['base_url'] || !$normalized['project_slug'] || !$normalized['api_key']) {
-            throw ValidationException::withMessages([
-                'test_connection' => 'Base URL, project slug, dan API key wajib diisi untuk uji koneksi.',
+                'test_connection' => 'Konfigurasi .env belum lengkap (API Key, Base URL, atau Slug kosong).',
             ]);
         }
 
@@ -121,12 +83,12 @@ class PaymentGatewayConfigService
             $response = Http::acceptJson()
                 ->timeout(10)
                 ->get(
-                    rtrim((string) $normalized['base_url'], '/') . '/api/transactiondetail',
+                    rtrim((string) $env['base_url'], '/') . '/api/transactiondetail',
                     [
-                        'project' => $normalized['project_slug'],
+                        'project' => $env['project_slug'],
                         'amount' => 1,
                         'order_id' => 'connection-test-' . Str::lower(Str::random(6)),
-                        'api_key' => $normalized['api_key'],
+                        'api_key' => $env['api_key'],
                     ],
                 );
         } catch (ConnectionException) {
