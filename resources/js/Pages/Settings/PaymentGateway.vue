@@ -5,12 +5,14 @@ import {
     Activity,
     BadgeCheck,
     CreditCard,
+    Eye,
+    EyeOff,
     Globe,
     Power,
     Store,
     Wifi,
 } from '@lucide/vue';
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 interface OutletOption {
     id: string;
@@ -112,6 +114,9 @@ watch(
     },
     { deep: true },
 );
+
+const showApiKey = ref(false);
+const showApiSecret = ref(false);
 
 const summaryCards = computed(() => [
     {
@@ -549,12 +554,21 @@ function submitTest() {
                         <div class="grid gap-4 md:grid-cols-2">
                             <label class="block">
                                 <span class="text-xs font-semibold text-slate-300">API key</span>
-                                <input
-                                    v-model="gatewayForm.api_key"
-                                    type="password"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                    placeholder="Isi untuk menyimpan / mengganti API key"
-                                >
+                                <div class="relative mt-2">
+                                    <input
+                                        v-model="gatewayForm.api_key"
+                                        :type="showApiKey ? 'text' : 'password'"
+                                        class="w-full rounded-2xl border border-white/10 bg-white/[0.03] pl-4 pr-12 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                        placeholder="Isi untuk menyimpan / mengganti API key"
+                                    >
+                                    <button
+                                        type="button"
+                                        @click="showApiKey = !showApiKey"
+                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                    >
+                                        <component :is="showApiKey ? EyeOff : Eye" class="h-4 w-4" />
+                                    </button>
+                                </div>
                                 <p class="mt-2 text-xs text-slate-500">
                                     {{ formDefaults.has_stored_api_key ? 'API key terenkripsi sudah tersimpan. Kosongkan jika tidak ingin mengganti.' : 'Belum ada API key terenkripsi tersimpan di DB.' }}
                                 </p>
@@ -565,12 +579,21 @@ function submitTest() {
 
                             <label class="block">
                                 <span class="text-xs font-semibold text-slate-300">API secret</span>
-                                <input
-                                    v-model="gatewayForm.api_secret"
-                                    type="password"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                    placeholder="Opsional, disimpan terenkripsi"
-                                >
+                                <div class="relative mt-2">
+                                    <input
+                                        v-model="gatewayForm.api_secret"
+                                        :type="showApiSecret ? 'text' : 'password'"
+                                        class="w-full rounded-2xl border border-white/10 bg-white/[0.03] pl-4 pr-12 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                        placeholder="Opsional, disimpan terenkripsi"
+                                    >
+                                    <button
+                                        type="button"
+                                        @click="showApiSecret = !showApiSecret"
+                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                    >
+                                        <component :is="showApiSecret ? EyeOff : Eye" class="h-4 w-4" />
+                                    </button>
+                                </div>
                                 <p class="mt-2 text-xs text-slate-500">
                                     {{ formDefaults.has_stored_api_secret ? 'API secret terenkripsi sudah tersimpan. Kosongkan jika tidak ingin mengganti.' : 'Belum ada API secret terenkripsi tersimpan di DB.' }}
                                 </p>

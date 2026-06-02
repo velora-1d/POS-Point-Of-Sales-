@@ -9,7 +9,7 @@ import {
     LogOut,
     Wallet,
 } from '@lucide/vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 interface OutletOption {
     id: string;
@@ -149,6 +149,24 @@ const closeShiftForm = useForm<{
     actual_cash: props.activeShift?.summary.expected_cash ?? props.activeShift?.opening_cash ?? 0,
     notes: '',
 });
+
+const actualQris = ref<number | string>('');
+const actualDebit = ref<number | string>('');
+const actualEwallet = ref<number | string>('');
+const userNotes = ref('');
+
+watch(
+    () => props.activeShift,
+    (newShift: ShiftRow | null | undefined) => {
+        if (newShift) {
+            closeShiftForm.actual_cash = newShift.summary.expected_cash ?? newShift.opening_cash ?? 0;
+            actualQris.value = newShift.summary.breakdown.qris ?? 0;
+            actualDebit.value = newShift.summary.breakdown.debit ?? 0;
+            actualEwallet.value = newShift.summary.breakdown.ewallet ?? 0;
+        }
+    },
+    { immediate: true }
+);
 
 const summaryCards = computed(() => {
     const active = props.activeShift;
@@ -318,6 +336,25 @@ const submitOpenShift = () => {
 const submitCloseShift = () => {
     if (!props.activeShift) return;
 
+    const expectedQris = Number(props.activeShift.summary.breakdown.qris || 0);
+    const expectedDebit = Number(props.activeShift.summary.breakdown.debit || 0);
+    const expectedEwallet = Number(props.activeShift.summary.breakdown.ewallet || 0);
+
+    const diffQris = Number(actualQris.value || 0) - expectedQris;
+    const diffDebit = Number(actualDebit.value || 0) - expectedDebit;
+    const diffEwallet = Number(actualEwallet.value || 0) - expectedEwallet;
+
+    let verificationText = `[Verifikasi Non-Cash]\n`;
+    verificationText += `- QRIS: Aktual Rp ${Number(actualQris.value || 0).toLocaleString('id-ID')} vs Ekspektasi Rp ${expectedQris.toLocaleString('id-ID')} (Selisih: Rp ${diffQris.toLocaleString('id-ID')})\n`;
+    verificationText += `- Debit: Aktual Rp ${Number(actualDebit.value || 0).toLocaleString('id-ID')} vs Ekspektasi Rp ${expectedDebit.toLocaleString('id-ID')} (Selisih: Rp ${diffDebit.toLocaleString('id-ID')})\n`;
+    verificationText += `- E-Wallet: Aktual Rp ${Number(actualEwallet.value || 0).toLocaleString('id-ID')} vs Ekspektasi Rp ${expectedEwallet.toLocaleString('id-ID')} (Selisih: Rp ${diffEwallet.toLocaleString('id-ID')})\n`;
+
+    if (userNotes.value.trim()) {
+        closeShiftForm.notes = `${verificationText}\nCatatan Tambahan:\n${userNotes.value.trim()}`;
+    } else {
+        closeShiftForm.notes = verificationText;
+    }
+
     closeShiftForm.post(route('shifts.close', props.activeShift.id), {
         preserveScroll: true,
     });
@@ -347,6 +384,31 @@ const submitCloseShift = () => {
                 class="rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
             >
                 {{ success }}
+            </div>
+
+            <!-- Tab Navigation Global -->
+            <div class="flex border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
+                <Link
+                    :href="route('shifts.index')"
+                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Shift Kasir (Laci Kas)
+                </Link>
+                <Link
+                    :href="route('attendance.index')"
+                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('attendance.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Absensi Karyawan
+                </Link>
+                <Link
+                    :href="route('schedules.index')"
+                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('schedules.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Jadwal Shift Kerja
+                </Link>
             </div>
 
             <section class="grid gap-3 lg:grid-cols-4">
@@ -477,39 +539,112 @@ const submitCloseShift = () => {
                                 <p class="text-sm font-bold">Tutup Shift</p>
                             </div>
 
-                            <div class="mt-4 grid gap-4 md:grid-cols-2">
-                                <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Cash Aktual di Laci</span>
-                                    <input
-                                        v-model="closeShiftForm.actual_cash"
-                                        type="number"
-                                        min="0"
-                                        step="1000"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-sky-400 focus:outline-none focus:ring-0"
-                                    />
-                                    <p v-if="closeShiftForm.errors.actual_cash" class="mt-2 text-xs text-rose-300">{{ closeShiftForm.errors.actual_cash }}</p>
-                                </label>
+                            <!-- Verification Grid for Cash and Payments -->
+                            <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                <!-- Cash -->
+                                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">Uang Tunai (Cash)</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.expected_cash) }}</p>
+                                    </div>
+                                    <label class="block">
+                                        <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual di Laci</span>
+                                        <input
+                                            v-model="closeShiftForm.actual_cash"
+                                            type="number"
+                                            min="0"
+                                            step="1000"
+                                            class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
+                                        />
+                                        <p v-if="closeShiftForm.errors.actual_cash" class="mt-1 text-[10px] text-rose-300">{{ closeShiftForm.errors.actual_cash }}</p>
+                                    </label>
+                                    <div>
+                                        <span class="text-[9px] font-bold uppercase text-slate-500">Selisih Cash</span>
+                                        <p class="text-sm font-black mt-0.5" :class="differenceClass(Number(closeShiftForm.actual_cash || 0) - Number(activeShift.summary.expected_cash || 0))">
+                                            {{ formatPrice(Number(closeShiftForm.actual_cash || 0) - Number(activeShift.summary.expected_cash || 0)) }}
+                                        </p>
+                                    </div>
+                                </div>
 
-                                <div class="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Estimasi Selisih</p>
-                                    <p
-                                        class="mt-2 text-2xl font-black"
-                                        :class="differenceClass(Number(closeShiftForm.actual_cash || 0) - Number(activeShift.summary.expected_cash || 0))"
-                                    >
-                                        {{ formatPrice(Number(closeShiftForm.actual_cash || 0) - Number(activeShift.summary.expected_cash || 0)) }}
-                                    </p>
-                                    <p class="mt-1 text-xs text-slate-500">
-                                        Formula: aktual - ekspektasi cash.
-                                    </p>
+                                <!-- QRIS -->
+                                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">QRIS</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.qris) }}</p>
+                                    </div>
+                                    <label class="block">
+                                        <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual EDC</span>
+                                        <input
+                                            v-model="actualQris"
+                                            type="number"
+                                            min="0"
+                                            step="1000"
+                                            class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
+                                        />
+                                    </label>
+                                    <div>
+                                        <span class="text-[9px] font-bold uppercase text-slate-500">Selisih QRIS</span>
+                                        <p class="text-sm font-black mt-0.5" :class="differenceClass(Number(actualQris || 0) - Number(activeShift.summary.breakdown.qris || 0))">
+                                            {{ formatPrice(Number(actualQris || 0) - Number(activeShift.summary.breakdown.qris || 0)) }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Debit -->
+                                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">Debit (EDC)</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.debit) }}</p>
+                                    </div>
+                                    <label class="block">
+                                        <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual Kartu</span>
+                                        <input
+                                            v-model="actualDebit"
+                                            type="number"
+                                            min="0"
+                                            step="1000"
+                                            class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
+                                        />
+                                    </label>
+                                    <div>
+                                        <span class="text-[9px] font-bold uppercase text-slate-500">Selisih Debit</span>
+                                        <p class="text-sm font-black mt-0.5" :class="differenceClass(Number(actualDebit || 0) - Number(activeShift.summary.breakdown.debit || 0))">
+                                            {{ formatPrice(Number(actualDebit || 0) - Number(activeShift.summary.breakdown.debit || 0)) }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- E-Wallet -->
+                                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">E-Wallet</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.ewallet) }}</p>
+                                    </div>
+                                    <label class="block">
+                                        <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual Dompet</span>
+                                        <input
+                                            v-model="actualEwallet"
+                                            type="number"
+                                            min="0"
+                                            step="1000"
+                                            class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
+                                        />
+                                    </label>
+                                    <div>
+                                        <span class="text-[9px] font-bold uppercase text-slate-500">Selisih E-Wallet</span>
+                                        <p class="text-sm font-black mt-0.5" :class="differenceClass(Number(actualEwallet || 0) - Number(activeShift.summary.breakdown.ewallet || 0))">
+                                            {{ formatPrice(Number(actualEwallet || 0) - Number(activeShift.summary.breakdown.ewallet || 0)) }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
                             <label class="mt-4 block">
-                                <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Catatan Shift</span>
+                                <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Catatan Tambahan Shift</span>
                                 <textarea
-                                    v-model="closeShiftForm.notes"
+                                    v-model="userNotes"
                                     rows="3"
-                                    placeholder="Catatan serah terima atau kondisi shift"
+                                    placeholder="Catatan kendala, kondisi mesin kasir, atau selisih uang jika ada"
                                     class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-0"
                                 />
                                 <p v-if="closeShiftForm.errors.notes" class="mt-2 text-xs text-rose-300">{{ closeShiftForm.errors.notes }}</p>

@@ -5,6 +5,8 @@ import {
     ChevronLeft,
     Clock,
     CookingPot,
+    Eye,
+    EyeOff,
     Layers,
     Minus,
     Package,
@@ -19,15 +21,42 @@ import {
 } from '@lucide/vue';
 import { computed, onMounted, ref, watch } from 'vue';
 
-// Define Props passed from OrderController
 const props = defineProps<{
     tables: any[];
     categories: any[];
     activeOrders: any[];
     customers: any[];
+    promos: any[];
     success?: string | null;
     paymentCheckout?: Record<string, any> | null;
 }>();
+
+const selectedNewOrderPromoCode = ref('');
+const selectedExistingPaymentPromoCode = ref('');
+const isCustomNewOrderPromo = ref(false);
+const isCustomExistingPaymentPromo = ref(false);
+
+const handleNewOrderPromoChange = (e: Event) => {
+    const val = (e.target as HTMLSelectElement).value;
+    if (val === 'custom') {
+        isCustomNewOrderPromo.value = true;
+        newOrderPromoCode.value = '';
+    } else {
+        isCustomNewOrderPromo.value = false;
+        newOrderPromoCode.value = val;
+    }
+};
+
+const handleExistingPaymentPromoChange = (e: Event) => {
+    const val = (e.target as HTMLSelectElement).value;
+    if (val === 'custom') {
+        isCustomExistingPaymentPromo.value = true;
+        existingPaymentPromoCode.value = '';
+    } else {
+        isCustomExistingPaymentPromo.value = false;
+        existingPaymentPromoCode.value = val;
+    }
+};
 
 type PaymentOption = 'pay_later' | 'pay_now';
 type PaymentMethod = 'cash' | 'qris';
@@ -44,6 +73,7 @@ const selectedCustomer = ref<any>(null);
 const customerName = ref('');
 const customerPhone = ref('');
 const customerEmail = ref('');
+const isForcedNewCustomer = ref(false);
 const paymentOption = ref<PaymentOption>('pay_later');
 const newOrderPaymentMethod = ref<PaymentMethod>('cash');
 const newOrderCashReceived = ref('');
@@ -90,6 +120,11 @@ const existingPaymentMethod = ref<PaymentMethod>('cash');
 const existingPaymentCashReceived = ref('');
 const existingPaymentPromoCode = ref('');
 const existingPaymentApprovalPin = ref('');
+const showNewOrderApprovalPin = ref(false);
+const showEditApprovalPin = ref(false);
+const showSplitApprovalPin = ref(false);
+const showMergeApprovalPin = ref(false);
+const showExistingPaymentApprovalPin = ref(false);
 const isProcessingPayment = ref(false);
 const kasbonModalOpen = ref(false);
 const kasbonTargetOrder = ref<any>(null);
@@ -224,8 +259,50 @@ const cartSubtotal = computed(() => {
     );
 });
 
+const cartDiscount = computed(() => {
+    if (!newOrderPromoCode.value) return 0;
+
+    const promo = props.promos?.find(
+        (p) => p.code.toUpperCase() === newOrderPromoCode.value.toUpperCase()
+    );
+
+    if (!promo) return 0;
+
+    // VALIDASI MINIMAL TRANSAKSI
+    const minTransaction = Number(promo.min_transaction_amount || 0);
+    if (cartSubtotal.value < minTransaction) {
+        return 0;
+    }
+
+    let discount = 0;
+    const sub = cartSubtotal.value;
+
+    if (Number(promo.discount_percent) > 0) {
+        discount = (sub * Number(promo.discount_percent)) / 100;
+    } else if (Number(promo.discount_amount) > 0) {
+        discount = Number(promo.discount_amount);
+    }
+
+    return Math.min(discount, sub);
+});
+
+const newOrderPromoWarning = computed(() => {
+    if (!newOrderPromoCode.value) return '';
+    const promo = props.promos?.find(
+        (p) => p.code.toUpperCase() === newOrderPromoCode.value.toUpperCase()
+    );
+    if (!promo) return 'Kode voucher tidak valid';
+
+    const minTransaction = Number(promo.min_transaction_amount || 0);
+    if (cartSubtotal.value < minTransaction) {
+        const gap = minTransaction - cartSubtotal.value;
+        return `Min. transaksi untuk voucher ini adalah Rp ${minTransaction.toLocaleString('id-ID')}. Kurang Rp ${gap.toLocaleString('id-ID')} lagi.`;
+    }
+    return '';
+});
+
 const cartTotal = computed(() => {
-    return cartSubtotal.value; // Discount can be added in the future
+    return Math.max(0, cartSubtotal.value - cartDiscount.value);
 });
 
 const cartItemCount = computed(() => {
@@ -278,7 +355,8 @@ const filteredCustomers = computed(() => {
 
 const showNewCustomerForm = computed(() => {
     return (
-        customerSearchQuery.value.trim().length > 0 && !selectedCustomer.value
+        isForcedNewCustomer.value ||
+        (customerSearchQuery.value.trim().length > 0 && !selectedCustomer.value)
     );
 });
 
@@ -412,6 +490,57 @@ const mergeNeedsApproval = computed(() => {
     );
 });
 
+const existingPaymentDiscount = computed(() => {
+    if (!paymentTargetOrder.value) return 0;
+    if (!existingPaymentPromoCode.value) return 0;
+
+    const promo = props.promos?.find(
+        (p) => p.code.toUpperCase() === existingPaymentPromoCode.value.toUpperCase()
+    );
+
+    if (!promo) return 0;
+
+    const sub = Number(paymentTargetOrder.value.subtotal || 0);
+
+    // VALIDASI MINIMAL TRANSAKSI
+    const minTransaction = Number(promo.min_transaction_amount || 0);
+    if (sub < minTransaction) {
+        return 0;
+    }
+
+    let discount = 0;
+
+    if (Number(promo.discount_percent) > 0) {
+        discount = (sub * Number(promo.discount_percent)) / 100;
+    } else if (Number(promo.discount_amount) > 0) {
+        discount = Number(promo.discount_amount);
+    }
+
+    return Math.min(discount, sub);
+});
+
+const existingPaymentPromoWarning = computed(() => {
+    if (!paymentTargetOrder.value || !existingPaymentPromoCode.value) return '';
+    const promo = props.promos?.find(
+        (p) => p.code.toUpperCase() === existingPaymentPromoCode.value.toUpperCase()
+    );
+    if (!promo) return 'Kode voucher tidak valid';
+
+    const sub = Number(paymentTargetOrder.value.subtotal || 0);
+    const minTransaction = Number(promo.min_transaction_amount || 0);
+    if (sub < minTransaction) {
+        const gap = minTransaction - sub;
+        return `Min. transaksi untuk voucher ini adalah Rp ${minTransaction.toLocaleString('id-ID')}. Total belanja Rp ${sub.toLocaleString('id-ID')} (kurang Rp ${gap.toLocaleString('id-ID')}).`;
+    }
+    return '';
+});
+
+const existingPaymentTotal = computed(() => {
+    if (!paymentTargetOrder.value) return 0;
+    const sub = Number(paymentTargetOrder.value.subtotal || 0);
+    return Math.max(0, sub - existingPaymentDiscount.value);
+});
+
 const existingPaymentCashChange = computed(() => {
     if (!paymentTargetOrder.value || existingPaymentMethod.value !== 'cash') {
         return 0;
@@ -420,7 +549,7 @@ const existingPaymentCashChange = computed(() => {
     const received = Number(existingPaymentCashReceived.value || 0);
     return Math.max(
         0,
-        received - Number(paymentTargetOrder.value.total_amount),
+        received - existingPaymentTotal.value,
     );
 });
 
@@ -491,6 +620,7 @@ const resetCustomerSelection = () => {
     customerName.value = '';
     customerPhone.value = '';
     customerEmail.value = '';
+    isForcedNewCustomer.value = false;
 };
 
 const resetNewOrderPaymentState = () => {
@@ -499,6 +629,8 @@ const resetNewOrderPaymentState = () => {
     newOrderCashReceived.value = '';
     newOrderPromoCode.value = '';
     newOrderApprovalPin.value = '';
+    selectedNewOrderPromoCode.value = '';
+    isCustomNewOrderPromo.value = false;
 };
 
 const selectCustomer = (customer: any) => {
@@ -662,7 +794,21 @@ const openPaymentModalForOrder = (order: any) => {
     existingPaymentMethod.value =
         hasPendingBeforeKitchenPayment(order) ? 'qris' : 'cash';
     existingPaymentCashReceived.value = '';
-    existingPaymentPromoCode.value = getPromoMeta(order).manual_code || '';
+    const code = getPromoMeta(order).manual_code || '';
+    existingPaymentPromoCode.value = code;
+    if (code) {
+        const match = props.promos?.some(p => p.code === code);
+        if (match) {
+            selectedExistingPaymentPromoCode.value = code;
+            isCustomExistingPaymentPromo.value = false;
+        } else {
+            selectedExistingPaymentPromoCode.value = 'custom';
+            isCustomExistingPaymentPromo.value = true;
+        }
+    } else {
+        selectedExistingPaymentPromoCode.value = '';
+        isCustomExistingPaymentPromo.value = false;
+    }
     existingPaymentApprovalPin.value = '';
     paymentModalOpen.value = true;
 };
@@ -677,6 +823,8 @@ const closePaymentModal = () => {
     existingPaymentMethod.value = 'cash';
     existingPaymentCashReceived.value = '';
     existingPaymentPromoCode.value = '';
+    selectedExistingPaymentPromoCode.value = '';
+    isCustomExistingPaymentPromo.value = false;
     existingPaymentApprovalPin.value = '';
     isProcessingPayment.value = false;
 };
@@ -2002,9 +2150,9 @@ const openPaymentCheckout = () => {
                             class="rounded-xl border border-slate-800/80 bg-slate-950/80 p-3"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                             >
-                                Split Bill
+                                Tipe Order
                             </p>
                             <p class="mt-2 text-sm font-extrabold text-white">
                                 {{
@@ -2023,9 +2171,9 @@ const openPaymentCheckout = () => {
                             class="rounded-xl border border-slate-800/80 bg-slate-950/80 p-3"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                             >
-                                Split Bill
+                                Meja
                             </p>
                             <p class="mt-2 text-sm font-extrabold text-white">
                                 {{ selectedTable.name }}
@@ -2042,9 +2190,9 @@ const openPaymentCheckout = () => {
                             class="rounded-xl border border-slate-800/80 bg-slate-950/80 p-3"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                             >
-                                Split Bill
+                                Menu
                             </p>
                             <p class="mt-2 text-sm font-extrabold text-white">
                                 {{ cartItemCount }} item
@@ -2061,28 +2209,39 @@ const openPaymentCheckout = () => {
                         <div class="flex items-center justify-between gap-3">
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                 >
-                                    Split Bill
+                                    Pelanggan (WhatsApp)
                                 </p>
                                 <p class="mt-1 text-xs text-slate-400">
                                     Input nomor HP terlebih dulu, lalu pilih
                                     customer atau daftar singkat jika belum ada.
                                 </p>
                             </div>
-                            <button
-                                v-if="
-                                    selectedCustomer ||
-                                    customerName ||
-                                    customerPhone ||
-                                    customerEmail
-                                "
-                                type="button"
-                                @click="resetCustomerSelection"
-                                class="rounded-lg border border-slate-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 transition hover:border-slate-600 hover:text-slate-200"
-                            >
-                                Reset
-                            </button>
+                            <div class="flex gap-2">
+                                <button
+                                    v-if="!selectedCustomer && !showNewCustomerForm"
+                                    type="button"
+                                    @click="isForcedNewCustomer = true"
+                                    class="rounded-lg border border-orange-500/20 bg-orange-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-300 transition hover:bg-orange-500/20"
+                                >
+                                    + Tambah Baru
+                                </button>
+                                <button
+                                    v-if="
+                                        selectedCustomer ||
+                                        customerSearchQuery ||
+                                        customerName ||
+                                        customerPhone ||
+                                        isForcedNewCustomer
+                                    "
+                                    type="button"
+                                    @click="resetCustomerSelection"
+                                    class="rounded-lg border border-slate-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 transition hover:border-slate-600 hover:text-slate-200"
+                                >
+                                    Reset / Batal
+                                </button>
+                            </div>
                         </div>
 
                         <div class="relative">
@@ -2304,9 +2463,9 @@ const openPaymentCheckout = () => {
                     >
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                             >
-                                Split Bill
+                                Catatan & Ringkasan
                             </p>
                             <p class="mt-1 text-xs text-slate-400">
                                 Tambahkan catatan dapur, lalu tentukan order
@@ -2341,28 +2500,63 @@ const openPaymentCheckout = () => {
                                 >
                                     Voucher / Promo Code
                                 </label>
+                                <select
+                                    v-model="selectedNewOrderPromoCode"
+                                    @change="handleNewOrderPromoChange"
+                                    class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-200 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                                >
+                                    <option value="" class="bg-slate-950 text-slate-100">
+                                        Tidak Ada Voucher
+                                    </option>
+                                    <option
+                                        v-for="promo in promos"
+                                        :key="promo.id"
+                                        :value="promo.code"
+                                        class="bg-slate-950 text-slate-100"
+                                    >
+                                        {{ promo.name }} ({{ promo.code }})
+                                    </option>
+                                    <option value="custom" class="bg-slate-950 text-slate-100">
+                                        -- Ketik Kode Manual --
+                                    </option>
+                                </select>
+
                                 <input
+                                    v-if="isCustomNewOrderPromo"
                                     v-model="newOrderPromoCode"
                                     type="text"
-                                    placeholder="Contoh: MENTAI10"
-                                    class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs uppercase text-slate-200 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    placeholder="Ketik kode voucher manual..."
+                                    class="mt-2 w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs uppercase text-slate-200 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                                 />
+                                <p v-if="newOrderPromoWarning" class="text-[11px] leading-5 text-rose-400 font-bold mt-1.5">
+                                    {{ newOrderPromoWarning }}
+                                </p>
                                 <p class="text-[11px] leading-5 text-slate-500">
                                     Promo otomatis, tier member, happy hour, dan voucher diverifikasi server saat order disimpan.
                                 </p>
+
                                 <div class="pt-1">
                                     <label
                                         class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-400"
                                     >
                                         PIN Owner (Opsional)
                                     </label>
-                                    <input
-                                        v-model="newOrderApprovalPin"
-                                        type="password"
-                                        inputmode="numeric"
-                                        placeholder="Isi jika diskon manual melewati threshold"
-                                        class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-200 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                                    />
+                                    <div class="relative">
+                                        <input
+                                            v-model="newOrderApprovalPin"
+                                            :type="showNewOrderApprovalPin ? 'text' : 'password'"
+                                            inputmode="numeric"
+                                            placeholder="Isi jika diskon manual melewati threshold"
+                                            class="w-full rounded-xl border border-slate-800 bg-slate-950 pl-3 pr-10 py-2 text-xs text-slate-200 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        />
+                                        <button
+                                            type="button"
+                                            @click="showNewOrderApprovalPin = !showNewOrderApprovalPin"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-350"
+                                        >
+                                            <component :is="showNewOrderApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
+                                        </button>
+                                    </div>
                                     <p class="mt-2 text-[11px] leading-5 text-slate-500">
                                         Hanya diperlukan jika voucher atau diskon manual memicu approval owner.
                                     </p>
@@ -2372,15 +2566,15 @@ const openPaymentCheckout = () => {
                                 <span>Subtotal:</span>
                                 <span>{{ formatPrice(cartSubtotal) }}</span>
                             </div>
-                            <div class="flex justify-between text-slate-500">
-                                <span>Estimasi diskon:</span>
-                                <span>Dihitung saat submit</span>
+                            <div v-if="cartDiscount > 0" class="flex justify-between text-emerald-400">
+                                <span>Diskon Voucher:</span>
+                                <span>-{{ formatPrice(cartDiscount) }}</span>
                             </div>
                             <div
                                 class="flex justify-between border-t border-slate-800 pt-2 text-sm font-black text-white"
                             >
-                                <span>Total sebelum promo final:</span>
-                                <span class="text-orange-400">{{
+                                <span>Total Tagihan:</span>
+                                <span class="text-orange-400 font-extrabold text-base">{{
                                     formatPrice(cartTotal)
                                 }}</span>
                             </div>
@@ -2391,9 +2585,9 @@ const openPaymentCheckout = () => {
                         >
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                 >
-                                    Split Bill
+                                    Opsi Pembayaran
                                 </p>
                                 <p class="mt-1 text-xs text-slate-400">
                                     Kasir manual bisa langsung lunas atau tetap
@@ -2592,9 +2786,9 @@ const openPaymentCheckout = () => {
                         class="rounded-xl border border-slate-800/80 bg-slate-950/60 p-3"
                     >
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                         >
-                            Split Bill
+                            Pesanan Aktif
                         </p>
                         <div
                             class="mt-2 flex items-center justify-between gap-3 text-xs"
@@ -2704,9 +2898,9 @@ const openPaymentCheckout = () => {
                         <div class="flex items-center justify-between gap-3">
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                 >
-                                    Split Bill
+                                    Gabung Bill
                                 </p>
                                 <p class="mt-1 text-xs text-slate-400">
                                     Pilih minimal dua order aktif dari meja yang
@@ -2954,9 +3148,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-xl border border-slate-800 bg-slate-950/60 p-3"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                     >
-                                        Split Bill
+                                        Tipe Order
                                     </p>
                                     <p
                                         class="mt-2 text-sm font-extrabold text-white"
@@ -2968,9 +3162,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-xl border border-slate-800 bg-slate-950/60 p-3"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                     >
-                                        Split Bill
+                                        Pelanggan
                                     </p>
                                     <p
                                         class="mt-2 text-sm font-extrabold text-white"
@@ -2986,9 +3180,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-xl border border-slate-800 bg-slate-950/60 p-3"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                     >
-                                        Split Bill
+                                        Jumlah Item
                                     </p>
                                     <p
                                         class="mt-2 text-sm font-extrabold text-white"
@@ -3007,9 +3201,9 @@ const openPaymentCheckout = () => {
                                 >
                                     <div>
                                         <p
-                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                         >
-                                            Split Bill
+                                            Tambah Menu
                                         </p>
                                         <p class="mt-1 text-xs text-slate-400">
                                             Pilih kategori, cari menu, lalu
@@ -3117,9 +3311,9 @@ const openPaymentCheckout = () => {
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <p
-                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                         >
-                                            Split Bill
+                                            Draft Edit Menu
                                         </p>
                                         <p class="mt-1 text-xs text-slate-400">
                                             Ubah jumlah, hapus item, atau revisi
@@ -3218,9 +3412,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                     >
-                                        Split Bill
+                                        Informasi Dapur
                                     </p>
                                     <p class="mt-1 text-xs text-slate-400">
                                         Setelah disimpan, order akan kembali ke
@@ -3247,9 +3441,9 @@ const openPaymentCheckout = () => {
                                     class="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-450"
                                     >
-                                        Split Bill
+                                        Persetujuan Supervisor
                                     </p>
                                     <p
                                         class="mt-1 text-xs leading-relaxed text-amber-100/75"
@@ -3258,13 +3452,22 @@ const openPaymentCheckout = () => {
                                         supervisor atau owner untuk melanjutkan
                                         edit.
                                     </p>
-                                    <input
-                                        v-model="editApprovalPin"
-                                        type="password"
-                                        inputmode="numeric"
-                                        placeholder="Masukkan PIN approval"
-                                        class="mt-3 w-full rounded-xl border border-amber-500/20 bg-slate-950 px-4 py-3 text-xs text-slate-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
-                                    />
+                                    <div class="relative mt-3">
+                                        <input
+                                            v-model="editApprovalPin"
+                                            :type="showEditApprovalPin ? 'text' : 'password'"
+                                            inputmode="numeric"
+                                            placeholder="Masukkan PIN approval"
+                                            class="w-full rounded-xl border border-amber-500/20 bg-slate-950 pl-4 pr-12 py-3 text-xs text-slate-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                                        />
+                                        <button
+                                            type="button"
+                                            @click="showEditApprovalPin = !showEditApprovalPin"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                        >
+                                            <component :is="showEditApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div
@@ -3463,13 +3666,22 @@ const openPaymentCheckout = () => {
                                 Order sedang dimasak. Split bill butuh PIN
                                 supervisor atau owner.
                             </p>
-                            <input
-                                v-model="splitApprovalPin"
-                                type="password"
-                                inputmode="numeric"
-                                placeholder="Masukkan PIN approval"
-                                class="mt-3 w-full rounded-xl border border-amber-500/20 bg-slate-950 px-4 py-3 text-xs text-slate-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
-                            />
+                            <div class="relative mt-3">
+                                <input
+                                    v-model="splitApprovalPin"
+                                    :type="showSplitApprovalPin ? 'text' : 'password'"
+                                    inputmode="numeric"
+                                    placeholder="Masukkan PIN approval"
+                                    class="w-full rounded-xl border border-amber-500/20 bg-slate-950 pl-4 pr-12 py-3 text-xs text-slate-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                                />
+                                <button
+                                    type="button"
+                                    @click="showSplitApprovalPin = !showSplitApprovalPin"
+                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                >
+                                    <component :is="showSplitApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -3568,21 +3780,30 @@ const openPaymentCheckout = () => {
                             class="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-450"
                             >
-                                Split Bill
+                                Gabung Bill
                             </p>
                             <p class="mt-1 text-xs text-amber-100/75">
                                 Ada order `in_progress` di pilihan ini. Gabung
                                 bill butuh PIN supervisor atau owner.
                             </p>
-                            <input
-                                v-model="mergeApprovalPin"
-                                type="password"
-                                inputmode="numeric"
-                                placeholder="Masukkan PIN approval"
-                                class="mt-3 w-full rounded-xl border border-amber-500/20 bg-slate-950 px-4 py-3 text-xs text-slate-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
-                            />
+                            <div class="relative mt-3">
+                                <input
+                                    v-model="mergeApprovalPin"
+                                    :type="showMergeApprovalPin ? 'text' : 'password'"
+                                    inputmode="numeric"
+                                    placeholder="Masukkan PIN approval"
+                                    class="w-full rounded-xl border border-amber-500/20 bg-slate-950 pl-4 pr-12 py-3 text-xs text-slate-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                                />
+                                <button
+                                    type="button"
+                                    @click="showMergeApprovalPin = !showMergeApprovalPin"
+                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                >
+                                    <component :is="showMergeApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -3660,9 +3881,9 @@ const openPaymentCheckout = () => {
                             <div class="flex items-start justify-between gap-3">
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                     >
-                                        Split Bill
+                                        Nama Pelanggan
                                     </p>
                                     <p class="mt-2 text-sm font-bold text-white">
                                         {{
@@ -3679,9 +3900,9 @@ const openPaymentCheckout = () => {
                                 </div>
                                 <div class="text-right">
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                     >
-                                        Split Bill
+                                        Sisa Tagihan
                                     </p>
                                     <p class="mt-2 text-lg font-black text-amber-300">
                                         {{
@@ -3800,23 +4021,23 @@ const openPaymentCheckout = () => {
 
                     <div class="space-y-4 px-6 py-5">
                         <div
-                            class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+                            class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 space-y-3"
                         >
                             <div
                                 class="flex items-center justify-between gap-3"
                             >
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400"
                                     >
-                                        Split Bill
+                                        Total Tagihan
                                     </p>
                                     <p
-                                        class="mt-2 text-xl font-black text-white"
+                                        class="mt-2 text-2xl font-black text-white"
                                     >
                                         {{
                                             formatPrice(
-                                                paymentTargetOrder.total_amount,
+                                                existingPaymentTotal,
                                             )
                                         }}
                                     </p>
@@ -3835,6 +4056,16 @@ const openPaymentCheckout = () => {
                                         )
                                     }}
                                 </span>
+                            </div>
+                            <div v-if="existingPaymentDiscount > 0" class="border-t border-slate-800/80 pt-2 space-y-1 text-[11px]">
+                                <div class="flex justify-between text-slate-400">
+                                    <span>Subtotal:</span>
+                                    <span>{{ formatPrice(Number(paymentTargetOrder.subtotal || 0)) }}</span>
+                                </div>
+                                <div class="flex justify-between text-emerald-400 font-medium">
+                                    <span>Diskon Voucher:</span>
+                                    <span>-{{ formatPrice(existingPaymentDiscount) }}</span>
+                                </div>
                             </div>
                         </div>
 
@@ -3962,9 +4193,9 @@ const openPaymentCheckout = () => {
                             class="rounded-2xl border border-fuchsia-500/15 bg-fuchsia-500/5 p-4"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-450"
                             >
-                                Split Bill
+                                Info Pembayaran QRIS
                             </p>
                             <p
                                 class="mt-1 text-xs leading-relaxed text-fuchsia-100/80"
@@ -3987,12 +4218,37 @@ const openPaymentCheckout = () => {
                             >
                                 Voucher / Promo Code
                             </label>
+                            <select
+                                v-model="selectedExistingPaymentPromoCode"
+                                @change="handleExistingPaymentPromoChange"
+                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-slate-200 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                            >
+                                <option value="" class="bg-slate-950 text-slate-100">
+                                    Tidak Ada Voucher
+                                </option>
+                                <option
+                                    v-for="promo in promos"
+                                    :key="promo.id"
+                                    :value="promo.code"
+                                    class="bg-slate-950 text-slate-100"
+                                >
+                                    {{ promo.name }} ({{ promo.code }})
+                                </option>
+                                <option value="custom" class="bg-slate-950 text-slate-100">
+                                    -- Ketik Kode Manual --
+                                </option>
+                            </select>
+
                             <input
+                                v-if="isCustomExistingPaymentPromo"
                                 v-model="existingPaymentPromoCode"
                                 type="text"
-                                placeholder="Kosongkan jika tidak pakai voucher"
-                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs uppercase text-slate-200 placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                placeholder="Ketik kode voucher manual..."
+                                class="mt-2 w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs uppercase text-slate-200 placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                             />
+                            <p v-if="existingPaymentPromoWarning" class="text-[11px] leading-relaxed text-rose-400 font-bold mt-1.5">
+                                {{ existingPaymentPromoWarning }}
+                            </p>
                             <p class="mt-2 text-[11px] leading-relaxed text-slate-500">
                                 Total tagihan akan divalidasi ulang dengan promo otomatis, metode bayar, tier member, dan voucher sebelum settlement diproses.
                             </p>
@@ -4002,13 +4258,22 @@ const openPaymentCheckout = () => {
                                 >
                                     PIN Owner (Opsional)
                                 </label>
-                                <input
-                                    v-model="existingPaymentApprovalPin"
-                                    type="password"
-                                    inputmode="numeric"
-                                    placeholder="Isi jika diskon manual melewati threshold"
-                                    class="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-slate-200 placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                                />
+                                <div class="relative">
+                                    <input
+                                        v-model="existingPaymentApprovalPin"
+                                        :type="showExistingPaymentApprovalPin ? 'text' : 'password'"
+                                        inputmode="numeric"
+                                        placeholder="Isi jika diskon manual melewati threshold"
+                                        class="w-full rounded-xl border border-slate-800 bg-slate-950 pl-4 pr-12 py-3 text-xs text-slate-200 placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    />
+                                    <button
+                                        type="button"
+                                        @click="showExistingPaymentApprovalPin = !showExistingPaymentApprovalPin"
+                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                    >
+                                        <component :is="showExistingPaymentApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
+                                    </button>
+                                </div>
                                 <p class="mt-2 text-[11px] leading-relaxed text-slate-500">
                                     Approval owner hanya dipakai bila promo manual menghasilkan diskon di atas batas outlet.
                                 </p>

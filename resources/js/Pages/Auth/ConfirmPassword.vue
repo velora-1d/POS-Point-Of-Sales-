@@ -5,10 +5,14 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { Eye, EyeOff } from '@lucide/vue';
 
 const form = useForm({
     password: '',
 });
+
+const showPassword = ref(false);
 
 const submit = () => {
     form.post(route('password.confirm'), {
@@ -31,15 +35,24 @@ const submit = () => {
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                    autofocus
-                />
+                <div class="relative">
+                    <TextInput
+                        id="password"
+                        :type="showPassword ? 'text' : 'password'"
+                        class="mt-1 block w-full pr-10"
+                        v-model="form.password"
+                        required
+                        autocomplete="current-password"
+                        autofocus
+                    />
+                    <button
+                        type="button"
+                        @click="showPassword = !showPassword"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-350"
+                    >
+                        <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
+                    </button>
+                </div>
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 

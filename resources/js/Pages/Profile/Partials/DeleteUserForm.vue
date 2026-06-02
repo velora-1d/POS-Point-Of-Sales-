@@ -7,9 +7,11 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { nextTick, ref } from 'vue';
+import { Eye, EyeOff } from '@lucide/vue';
 
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref<HTMLInputElement | null>(null);
+const showPassword = ref(false);
 
 const form = useForm({
     password: '',
@@ -77,15 +79,24 @@ const closeModal = () => {
                         class="sr-only"
                     />
 
-                    <TextInput
-                        id="password"
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
-                        class="mt-1 block w-3/4"
-                        placeholder="Password"
-                        @keyup.enter="deleteUser"
-                    />
+                    <div class="relative w-3/4 mt-1">
+                        <TextInput
+                            id="password"
+                            ref="passwordInput"
+                            v-model="form.password"
+                            :type="showPassword ? 'text' : 'password'"
+                            class="block w-full pr-10"
+                            placeholder="Password"
+                            @keyup.enter="deleteUser"
+                        />
+                        <button
+                            type="button"
+                            @click="showPassword = !showPassword"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-350"
+                        >
+                            <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
+                        </button>
+                    </div>
 
                     <InputError :message="form.errors.password" class="mt-2" />
                 </div>

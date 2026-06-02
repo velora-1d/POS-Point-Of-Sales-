@@ -90,11 +90,18 @@ class OrderController extends Controller
             ->limit(50)
             ->get();
 
+        $promos = \App\Models\Promo::where('outlet_id', $outletId)
+            ->where('status', 'active')
+            ->whereIn('apply_method', ['manual', 'both'])
+            ->orderBy('name')
+            ->get(['id', 'name', 'code', 'discount_percent', 'discount_amount']);
+
         return Inertia::render('Kasir/Order', [
             'tables' => $tables,
             'categories' => $categories,
             'activeOrders' => $activeOrders,
             'customers' => $customers,
+            'promos' => $promos,
             'success' => session('success'),
             'paymentCheckout' => session('paymentCheckout'),
         ]);

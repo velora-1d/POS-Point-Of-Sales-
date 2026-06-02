@@ -39,6 +39,7 @@ use App\Http\Controllers\TableQrConfigController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TopProductReportController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MembershipTierController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -166,6 +167,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/tables', [TableController::class, 'store'])->name('settings.tables.store');
     Route::patch('/settings/tables/{table}', [TableController::class, 'update'])->name('settings.tables.update');
     Route::delete('/settings/tables/{table}', [TableController::class, 'destroy'])->name('settings.tables.destroy');
+
+    Route::get('/settings/membership-tiers', [MembershipTierController::class, 'index'])->name('settings.membership-tiers.index');
+    Route::post('/settings/membership-tiers', [MembershipTierController::class, 'store'])->name('settings.membership-tiers.store');
+    Route::patch('/settings/membership-tiers/{membershipTier}', [MembershipTierController::class, 'update'])->name('settings.membership-tiers.update');
+    Route::delete('/settings/membership-tiers/{membershipTier}', [MembershipTierController::class, 'destroy'])->name('settings.membership-tiers.destroy');
 
     Route::get('/order', [OrderController::class, 'index'])->name('kasir.order');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');

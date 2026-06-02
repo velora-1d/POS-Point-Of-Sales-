@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
     AlertTriangle,
     CheckCircle2,
@@ -220,6 +220,24 @@ function downloadBackup() {
         </template>
 
         <div class="space-y-6">
+            <!-- Tab Navigation Keamanan & Notifikasi -->
+            <div class="flex border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-md">
+                <Link
+                    :href="route('settings.notifications.index')"
+                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('settings.notifications.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Notifikasi & Alert
+                </Link>
+                <Link
+                    :href="route('settings.backup-security.index')"
+                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('settings.backup-security.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Backup & Keamanan
+                </Link>
+            </div>
+
             <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <div
                     v-for="card in summaryCards"

@@ -369,6 +369,45 @@ const deleteExpense = (expense: ExpenseRow) => {
         </template>
 
         <div class="space-y-6">
+            <!-- Tab Navigation Laporan Transaksi & Kas -->
+            <div class="flex flex-wrap border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-4xl">
+                <Link
+                    :href="route('reports.sales.index')"
+                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('reports.sales.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Penjualan & Kas
+                </Link>
+                <Link
+                    :href="route('reports.outlets.index')"
+                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('reports.outlets.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Per Outlet
+                </Link>
+                <Link
+                    :href="route('reports.cashiers.index')"
+                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('reports.cashiers.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Per Kasir
+                </Link>
+                <Link
+                    :href="route('reports.top-products.index')"
+                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('reports.top-products.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Produk Terlaris
+                </Link>
+                <Link
+                    :href="route('reports.expenses.index')"
+                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('reports.expenses.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Pengeluaran
+                </Link>
+            </div>
+
             <div
                 v-if="success"
                 class="rounded-2xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"

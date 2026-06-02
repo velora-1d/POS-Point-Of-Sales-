@@ -83,17 +83,17 @@ class RbacController extends Controller
 
     public function saveMatrix(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'outlet_id'              => ['required', 'string'],
             'roles'                  => ['required', 'array'],
             'roles.*.role_id'        => ['required', 'string'],
             'roles.*.permissions'    => ['sometimes', 'array'],
         ]);
 
-        $this->rbacService->saveMatrix($request->validated(), $request->user());
+        $this->rbacService->saveMatrix($validated, $request->user());
 
         return redirect()
-            ->route('settings.rbac.index', ['outlet_id' => $request->validated('outlet_id')])
+            ->route('settings.rbac.index', ['outlet_id' => $validated['outlet_id']])
             ->with('success', 'Matriks permission berhasil disimpan.');
     }
 }

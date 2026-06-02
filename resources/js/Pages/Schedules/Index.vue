@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
     CalendarDays,
     ChevronLeft,
@@ -442,6 +442,31 @@ const submitWeekly = () => {
                 class="rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
             >
                 {{ success }}
+            </div>
+
+            <!-- Tab Navigation Global -->
+            <div class="flex border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
+                <Link
+                    :href="route('shifts.index')"
+                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Shift Kasir (Laci Kas)
+                </Link>
+                <Link
+                    :href="route('attendance.index')"
+                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('attendance.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Absensi Karyawan
+                </Link>
+                <Link
+                    :href="route('schedules.index')"
+                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('schedules.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Jadwal Shift Kerja
+                </Link>
             </div>
 
             <section class="grid gap-3 lg:grid-cols-4">

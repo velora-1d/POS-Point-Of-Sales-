@@ -90,6 +90,38 @@ const getItemLabel = (item: AlertItem) => {
         </template>
 
         <div class="space-y-5">
+            <!-- Tab Navigation Global -->
+            <div class="flex border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-3xl">
+                <Link
+                    :href="route('products.stock')"
+                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('products.stock') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Stok Produk Jadi
+                </Link>
+                <Link
+                    :href="route('products.hpp')"
+                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('products.hpp') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    HPP & Resep
+                </Link>
+                <Link
+                    :href="route('stock-alerts.index')"
+                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('stock-alerts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Alert Stok Menipis
+                </Link>
+                <Link
+                    :href="route('expired-tracking.index')"
+                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('expired-tracking.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Reminder Expired
+                </Link>
+            </div>
+
             <section class="grid gap-3 lg:grid-cols-4">
                 <article
                     v-for="stat in summaryCards"

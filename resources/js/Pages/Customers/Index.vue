@@ -12,6 +12,8 @@ import {
     Users,
     Wallet,
     X,
+    Info,
+    Eye,
 } from '@lucide/vue';
 import { computed, ref } from 'vue';
 
@@ -118,89 +120,11 @@ const props = defineProps<{
 }>();
 
 const search = ref(props.filters.search || '');
-
-const summaryCards = computed(() => [
-    {
-        label: 'Total Customer',
-        value: props.summary.total,
-        tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
-        icon: Users,
-    },
-    {
-        label: 'Member Aktif',
-        value: props.summary.members,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/8',
-        icon: BadgeCheck,
-    },
-    {
-        label: 'Pernah Order',
-        value: props.summary.withOrders,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/8',
-        icon: ReceiptText,
-    },
-    {
-        label: 'Baru Bulan Ini',
-        value: props.summary.registeredThisMonth,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
-        icon: Clock3,
-    },
-]);
-
-const loyaltyCards = computed(() => [
-    {
-        label: 'Poin Aktif',
-        value: props.loyalty.totalPoints,
-        tone: 'text-fuchsia-300',
-        surface: 'border-fuchsia-400/15 bg-fuchsia-500/8',
-        icon: Gem,
-    },
-    {
-        label: 'Lifetime Points',
-        value: props.loyalty.lifetimePoints,
-        tone: 'text-cyan-300',
-        surface: 'border-cyan-400/15 bg-cyan-500/8',
-        icon: Crown,
-    },
-    {
-        label: 'Tier Aktif',
-        value: props.loyalty.activeTiers,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
-        icon: BadgeCheck,
-    },
-]);
-
-const kasbonCards = computed(() => [
-    {
-        label: 'Customer Berhutang',
-        value: props.kasbon.customersWithDebt,
-        tone: 'text-rose-300',
-        surface: 'border-rose-400/15 bg-rose-500/8',
-        icon: Users,
-    },
-    {
-        label: 'Kasbon Aktif',
-        value: props.kasbon.openKasbonOrders,
-        tone: 'text-orange-300',
-        surface: 'border-orange-400/15 bg-orange-500/8',
-        icon: ReceiptText,
-    },
-    {
-        label: 'Total Piutang',
-        value: formatPrice(props.kasbon.totalOutstanding),
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
-        icon: HandCoins,
-    },
-]);
+const isTierModalOpen = ref(false);
+const selectedCustomerForDetail = ref<CustomerRow | null>(null);
 
 const formatPrice = (value: unknown) => {
     const num = Number(value || 0);
-
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
@@ -210,7 +134,6 @@ const formatPrice = (value: unknown) => {
 
 const formatDate = (value: string | null | undefined) => {
     if (!value) return '-';
-
     return new Intl.DateTimeFormat('id-ID', {
         day: '2-digit',
         month: 'short',
@@ -220,7 +143,6 @@ const formatDate = (value: string | null | undefined) => {
 
 const formatDateTime = (value: string | null | undefined) => {
     if (!value) return '-';
-
     return new Intl.DateTimeFormat('id-ID', {
         day: '2-digit',
         month: 'short',
@@ -251,13 +173,11 @@ const clearSearch = () => {
 
 const getChannelLabel = (value: string | null | undefined) => {
     if (!value) return 'manual';
-
     return value.replaceAll('_', ' ');
 };
 
 const getOrderStatusLabel = (value: string | null | undefined) => {
     if (!value) return 'unknown';
-
     return value.replaceAll('_', ' ');
 };
 
@@ -281,351 +201,127 @@ const getOrderStatusClass = (value: string | null | undefined) => {
 
 const getOrderTypeLabel = (value: string | null | undefined) => {
     if (!value) return 'order';
-
     if (value === 'dine_in') return 'dine in';
     if (value === 'takeaway') return 'takeaway';
-
     return value.replaceAll('_', ' ');
 };
 </script>
 
 <template>
-    <Head title="Customer Database" />
+    <Head title="Database Pelanggan - POS Mentai" />
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 class="text-2xl font-black tracking-tight text-white">
                         Database Pelanggan
                     </h2>
                     <p class="mt-1 max-w-2xl text-xs text-slate-400">
-                        Pantau daftar pelanggan, membership, channel registrasi,
-                        loyalty points, kasbon aktif, tier aktif, dan histori transaksi
-                        pelanggan dari satu halaman.
+                        Kelola data keanggotaan member, akumulasi loyalty points, status limit kasbon, serta riwayat belanja pelanggan outlet secara terpusat.
                     </p>
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        @click="isTierModalOpen = true"
+                        class="inline-flex items-center gap-2 rounded-2xl border border-orange-500/20 bg-orange-500/10 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-orange-300 transition hover:bg-orange-500/15"
+                    >
+                        <Crown class="h-4 w-4" />
+                        Benefit & Info Tier
+                    </button>
                 </div>
             </div>
         </template>
 
-        <div class="space-y-5">
-            <section class="grid gap-3 lg:grid-cols-4">
-                <article
-                    v-for="stat in summaryCards"
-                    :key="stat.label"
-                    :class="[
-                        'rounded-[22px] border px-4 py-4 shadow-lg shadow-slate-950/10',
-                        stat.surface,
-                    ]"
-                >
+        <div class="space-y-6">
+            <!-- Simplified KPI Statistics Grid -->
+            <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <!-- Total Customer -->
+                <article class="rounded-3xl border border-white/10 bg-slate-950/40 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.16)]">
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
-                            >
-                                {{ stat.label }}
-                            </p>
-                            <p :class="['mt-2 text-3xl font-black', stat.tone]">
-                                {{ stat.value }}
-                            </p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Total Pelanggan</p>
+                            <p class="mt-3 text-3xl font-black text-white">{{ summary.total }}</p>
+                            <p class="mt-1 text-[11px] text-slate-400">Tercatat di semua cabang</p>
                         </div>
-                        <component
-                            :is="stat.icon"
-                            class="h-5 w-5 text-slate-500"
-                        />
+                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3 text-slate-300">
+                            <Users class="h-5 w-5" />
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Top Tier / Level Teraktif -->
+                <article class="rounded-3xl border border-white/10 bg-slate-950/40 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.16)]">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Tier Teraktif</p>
+                            <p class="mt-3 text-2xl font-black text-amber-300 truncate max-w-[170px]">{{ loyalty.topTierName || 'Belum Ada' }}</p>
+                            <p class="mt-1.5 text-[11px] text-slate-400">{{ loyalty.activeMembers }} member berstatus aktif</p>
+                        </div>
+                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3 text-amber-400">
+                            <Crown class="h-5 w-5" />
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Kasbon Customers count -->
+                <article class="rounded-3xl border border-white/10 bg-slate-950/40 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.16)]">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Pelanggan Kasbon</p>
+                            <p class="mt-3 text-3xl font-black text-rose-300">{{ kasbon.customersWithDebt }}</p>
+                            <p class="mt-1 text-[11px] text-slate-400">{{ kasbon.openKasbonOrders }} bill kasbon berjalan</p>
+                        </div>
+                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3 text-rose-400">
+                            <Wallet class="h-5 w-5" />
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Total Outstanding kasbon -->
+                <article class="rounded-3xl border border-rose-500/15 bg-rose-500/[0.04] p-5 shadow-[0_18px_50px_rgba(15,23,42,0.16)]">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-400">Total Piutang Toko</p>
+                            <p class="mt-3 text-2xl font-black text-rose-300">{{ formatPrice(kasbon.totalOutstanding) }}</p>
+                            <p class="mt-1.5 text-[11px] text-slate-400">Menunggu pelunasan kasir</p>
+                        </div>
+                        <div class="rounded-2xl border border-rose-500/15 bg-rose-950/60 p-3 text-rose-300">
+                            <HandCoins class="h-5 w-5" />
+                        </div>
                     </div>
                 </article>
             </section>
 
-            <section class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-                <div class="grid gap-3 md:grid-cols-3">
-                    <article
-                        v-for="stat in loyaltyCards"
-                        :key="stat.label"
-                        :class="[
-                            'rounded-[22px] border px-4 py-4 shadow-lg shadow-slate-950/10',
-                            stat.surface,
-                        ]"
-                    >
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
-                                >
-                                    {{ stat.label }}
-                                </p>
-                                <p :class="['mt-2 text-2xl font-black', stat.tone]">
-                                    {{ stat.value }}
-                                </p>
-                            </div>
-                            <component
-                                :is="stat.icon"
-                                class="h-5 w-5 text-slate-500"
-                            />
-                        </div>
-                    </article>
-                </div>
-
-                <article
-                    class="rounded-[22px] border border-amber-400/15 bg-amber-500/8 px-4 py-4 shadow-lg shadow-slate-950/10"
-                >
-                    <p
-                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300"
-                    >
-                        Tier Tertinggi Outlet
-                    </p>
-                    <p class="mt-2 text-2xl font-black text-white">
-                        {{ loyalty.topTierName || 'Belum ada tier aktif' }}
-                    </p>
-                    <p class="mt-2 text-xs text-slate-400">
-                        Member aktif saat ini: {{ loyalty.activeMembers }} customer
-                    </p>
-                </article>
-            </section>
-
-            <section class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-                <div class="grid gap-3 md:grid-cols-3">
-                    <article
-                        v-for="stat in kasbonCards"
-                        :key="stat.label"
-                        :class="[
-                            'rounded-[22px] border px-4 py-4 shadow-lg shadow-slate-950/10',
-                            stat.surface,
-                        ]"
-                    >
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
-                                >
-                                    {{ stat.label }}
-                                </p>
-                                <p :class="['mt-2 text-2xl font-black', stat.tone]">
-                                    {{ stat.value }}
-                                </p>
-                            </div>
-                            <component
-                                :is="stat.icon"
-                                class="h-5 w-5 text-slate-500"
-                            />
-                        </div>
-                    </article>
-                </div>
-
-                <article
-                    class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
-                >
-                    <p
-                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
-                    >
-                        Customer Dengan Kasbon
-                    </p>
-                    <div class="mt-4 space-y-3">
-                        <div
-                            v-if="topKasbonCustomers.length === 0"
-                            class="rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 px-4 py-4 text-[11px] text-slate-500"
-                        >
-                            Belum ada customer dengan kasbon aktif.
-                        </div>
-                        <article
-                            v-for="customer in topKasbonCustomers"
-                            :key="customer.id"
-                            class="rounded-2xl border border-rose-500/15 bg-rose-500/6 px-4 py-3"
-                        >
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="min-w-0">
-                                    <p class="truncate text-sm font-bold text-white">
-                                        {{ customer.name || 'Pelanggan POS' }}
-                                    </p>
-                                    <p class="mt-1 text-[11px] text-slate-400">
-                                        {{ customer.phone || '-' }}
-                                    </p>
-                                </div>
-                                <span
-                                    class="rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-300"
-                                >
-                                    {{ customer.kasbon_orders_count || 0 }} kasbon
-                                </span>
-                            </div>
-                            <p class="mt-3 text-sm font-bold text-amber-300">
-                                {{ formatPrice(customer.kasbon_total_due) }}
-                            </p>
-                            <p
-                                v-if="customer.latest_kasbon_order?.order_number"
-                                class="mt-1 text-[11px] text-slate-400"
-                            >
-                                Terakhir:
-                                {{ customer.latest_kasbon_order.order_number }}
-                            </p>
-                        </article>
-                    </div>
-                </article>
-            </section>
-
-            <section class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-                <article
-                    class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 shadow-xl shadow-slate-950/15"
-                >
-                    <div class="border-b border-slate-800/80 px-5 py-4">
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
-                        >
-                            Tier Membership
-                        </p>
-                        <p class="mt-1 text-xs text-slate-400">
-                            Lihat threshold, diskon, dan jumlah member aktif per tier.
-                        </p>
-                    </div>
-
-                    <div class="grid gap-4 p-5 lg:grid-cols-2">
-                        <article
-                            v-for="tier in tiers"
-                            :key="tier.id"
-                            class="rounded-[24px] border border-slate-800 bg-slate-950/70 p-4"
-                        >
-                            <div class="flex items-start justify-between gap-3">
-                                <div>
-                                    <h3 class="text-lg font-black text-white">
-                                        {{ tier.name }}
-                                    </h3>
-                                    <p class="mt-1 text-xs text-slate-400">
-                                        {{ tier.description || 'Tier loyalty aktif outlet.' }}
-                                    </p>
-                                </div>
-                                <span
-                                    class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-300"
-                                >
-                                    {{ tier.active_members_count || 0 }} member
-                                </span>
-                            </div>
-
-                            <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                                <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
-                                        Threshold
-                                    </p>
-                                    <p class="mt-2 text-sm font-bold text-white">
-                                        {{ tier.point_threshold || 0 }} poin
-                                    </p>
-                                </div>
-                                <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
-                                        Diskon
-                                    </p>
-                                    <p class="mt-2 text-sm font-bold text-white">
-                                        {{ Number(tier.discount_percent || 0) }}%
-                                    </p>
-                                </div>
-                                <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
-                                        Rate Poin
-                                    </p>
-                                    <p class="mt-2 text-sm font-bold text-white">
-                                        {{ tier.point_rate_per_amount || 0 }}
-                                    </p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                </article>
-
-                <article
-                    class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
-                >
-                    <p
-                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
-                    >
-                        Member Paling Loyal
-                    </p>
-                    <div class="mt-4 space-y-3">
-                        <div
-                            v-if="topMembers.length === 0"
-                            class="rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 px-4 py-4 text-[11px] text-slate-500"
-                        >
-                            Belum ada member aktif yang bisa dirangking.
-                        </div>
-                        <article
-                            v-for="member in topMembers"
-                            :key="member.id"
-                            class="rounded-2xl border border-fuchsia-500/15 bg-fuchsia-500/6 px-4 py-3"
-                        >
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="min-w-0">
-                                    <p class="truncate text-sm font-bold text-white">
-                                        {{ member.name || 'Pelanggan POS' }}
-                                    </p>
-                                    <p class="mt-1 text-[11px] text-slate-400">
-                                        {{ member.membership?.tier?.name || 'Member' }}
-                                        • {{ member.phone || '-' }}
-                                    </p>
-                                </div>
-                                <span
-                                    class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-fuchsia-300"
-                                >
-                                    {{ member.membership?.lifetime_points || 0 }} pts
-                                </span>
-                            </div>
-                            <div class="mt-3 grid grid-cols-2 gap-2 text-[11px] text-slate-400">
-                                <div class="rounded-xl border border-slate-800 bg-slate-950/60 px-3 py-2">
-                                    Order:
-                                    <span class="font-bold text-white">
-                                        {{ member.orders_count || 0 }}
-                                    </span>
-                                </div>
-                                <div class="rounded-xl border border-slate-800 bg-slate-950/60 px-3 py-2">
-                                    Poin aktif:
-                                    <span class="font-bold text-white">
-                                        {{ member.membership?.total_points || 0 }}
-                                    </span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                </article>
-            </section>
-
-            <section
-                class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
-            >
-                <div
-                    class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
-                >
+            <!-- Search Filter Bar -->
+            <section class="rounded-3xl border border-white/10 bg-slate-950/50 p-4 shadow-xl">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
-                        >
-                            Filter Customer
-                        </p>
-                        <p class="mt-1 text-xs text-slate-400">
-                            Cari berdasarkan nama, telepon, atau email.
-                        </p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-orange-400">Cari Pelanggan</p>
+                        <p class="mt-0.5 text-[11px] text-slate-400">Temukan member berdasar nama, telepon, atau alamat email.</p>
                     </div>
-                    <form
-                        class="flex w-full max-w-xl items-center gap-2"
-                        @submit.prevent="submitSearch"
-                    >
+                    <form class="flex w-full max-w-lg items-center gap-2" @submit.prevent="submitSearch">
                         <div class="relative flex-1">
-                            <Search
-                                class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
-                            />
+                            <Search class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                             <input
                                 v-model="search"
                                 type="text"
-                                placeholder="Cari customer..."
-                                class="w-full rounded-2xl border border-slate-800 bg-slate-950 py-3 pl-10 pr-10 text-sm text-white placeholder:text-slate-500 focus:border-orange-500 focus:outline-none"
+                                placeholder="Cari nama atau nomor HP..."
+                                class="w-full rounded-2xl border border-white/10 bg-slate-900 py-2.5 pl-10 pr-9 text-xs text-white placeholder:text-slate-500 focus:border-orange-500 focus:outline-none focus:ring-0"
                             />
                             <button
                                 v-if="search"
                                 type="button"
                                 @click="clearSearch"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-white"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition"
                             >
-                                <X class="h-4 w-4" />
+                                <X class="h-3.5 w-3.5" />
                             </button>
                         </div>
                         <button
                             type="submit"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-white"
+                            class="rounded-2xl bg-orange-500 px-4 py-2.5 text-xs font-bold text-slate-950 hover:bg-orange-400 transition"
                         >
                             Cari
                         </button>
@@ -633,199 +329,283 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                 </div>
             </section>
 
-            <section
-                class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 shadow-xl shadow-slate-950/15"
-            >
-                <div
-                    class="flex flex-col gap-2 border-b border-slate-800/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
-                >
+            <!-- Database Main Data Table -->
+            <section class="rounded-3xl border border-white/10 bg-slate-950/30 overflow-hidden shadow-2xl">
+                <div class="border-b border-white/10 bg-slate-950/40 px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
-                        >
-                            Daftar Customer
-                        </p>
-                        <p class="mt-1 text-xs text-slate-400">
-                            Menampilkan
-                            {{ customers.from ?? 0 }}-{{ customers.to ?? 0 }}
-                            dari {{ customers.total }} customer.
-                        </p>
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200">Database & Registrasi Member</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Menampilkan {{ customers.from ?? 0 }} - {{ customers.to ?? 0 }} dari {{ customers.total }} pelanggan.</p>
                     </div>
-                    <div class="rounded-full border border-slate-800 bg-slate-950/70 px-3 py-1 text-[11px] font-semibold text-slate-400">
-                        Data hidup dari outlet aktif
+                    <div class="rounded-full border border-white/10 bg-slate-900/60 px-3 py-1 text-[10px] text-slate-400">
+                        Data sinkron dari seluruh outlet aktif
                     </div>
                 </div>
 
-                <div v-if="customers.data.length === 0" class="px-5 py-10">
-                    <div
-                        class="rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 px-4 py-8 text-center text-sm text-slate-500"
-                    >
-                        Belum ada customer yang cocok dengan filter saat ini.
-                    </div>
+                <div v-if="customers.data.length === 0" class="px-5 py-12 text-center">
+                    <p class="text-sm text-slate-500">Tidak ada pelanggan yang cocok dengan pencarian Anda.</p>
                 </div>
 
-                <div v-else class="grid gap-4 p-5 lg:grid-cols-2">
-                    <article
-                        v-for="customer in customers.data"
-                        :key="customer.id"
-                        class="rounded-[24px] border border-slate-800 bg-slate-950/70 p-4"
-                    >
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="min-w-0">
-                                <h3 class="truncate text-lg font-black text-white">
-                                    {{ customer.name || 'Pelanggan POS' }}
-                                </h3>
-                                <p class="mt-1 text-xs text-slate-400">
-                                    {{ customer.phone || '-' }}
-                                    <span v-if="customer.email">
-                                        • {{ customer.email }}
-                                    </span>
-                                </p>
-                            </div>
-                            <span
-                                class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-300"
+                <div v-else class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-white/10 bg-slate-950/20 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                <th class="px-5 py-3">Pelanggan / Kontak</th>
+                                <th class="px-5 py-3">Membership Tier</th>
+                                <th class="px-5 py-3">Status Kasbon</th>
+                                <th class="px-5 py-3 text-right">Pembelian</th>
+                                <th class="px-5 py-3 text-right">Total Belanja</th>
+                                <th class="px-5 py-3">Join Date</th>
+                                <th class="px-5 py-3 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 text-xs text-slate-300">
+                            <tr
+                                v-for="customer in customers.data"
+                                :key="customer.id"
+                                class="hover:bg-white/[0.02] transition"
                             >
-                                {{ getChannelLabel(customer.registered_via) }}
-                            </span>
-                        </div>
+                                <!-- Name & Contact -->
+                                <td class="px-5 py-3.5">
+                                    <div class="font-bold text-white text-sm">{{ customer.name || 'Pelanggan POS' }}</div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">{{ customer.phone || '-' }}</div>
+                                    <div class="text-[10px] text-slate-500" v-if="customer.email">{{ customer.email }}</div>
+                                </td>
 
-                        <div
-                            v-if="Number(customer.kasbon_total_due || 0) > 0"
-                            class="mt-4 rounded-2xl border border-rose-500/20 bg-rose-500/8 px-4 py-3"
-                        >
-                            <div class="flex items-center justify-between gap-3">
-                                <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-rose-300">
-                                        Kasbon Aktif
-                                    </p>
-                                    <p class="mt-1 text-sm font-bold text-white">
-                                        {{ customer.kasbon_orders_count || 0 }} transaksi belum lunas
-                                    </p>
-                                </div>
-                                <p class="text-sm font-black text-amber-300">
-                                    {{ formatPrice(customer.kasbon_total_due) }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
-                                    Membership
-                                </p>
-                                <p class="mt-2 text-sm font-bold text-white">
-                                    {{ customer.membership?.tier?.name || 'Belum Member' }}
-                                </p>
-                                <p class="mt-1 text-[11px] text-slate-400">
-                                    {{ customer.membership?.total_points || 0 }} poin
-                                </p>
-                            </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
-                                    Total Order
-                                </p>
-                                <p class="mt-2 text-sm font-bold text-white">
-                                    {{ customer.orders_count || 0 }} transaksi
-                                </p>
-                                <p class="mt-1 text-[11px] text-slate-400">
-                                    Join {{ formatDate(customer.created_at) }}
-                                </p>
-                            </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
-                                    Total Belanja
-                                </p>
-                                <p class="mt-2 text-sm font-bold text-white">
-                                    {{ formatPrice(customer.total_spent) }}
-                                </p>
-                                <p class="mt-1 text-[11px] text-slate-400">
-                                    Lifetime spend
-                                </p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="mt-4 rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-3"
-                        >
-                            <div class="flex items-center gap-2">
-                                <Wallet class="h-4 w-4 text-emerald-300" />
-                                <p class="text-sm font-bold text-white">
-                                    Riwayat Transaksi
-                                </p>
-                            </div>
-                            <div
-                                v-if="customer.recent_orders && customer.recent_orders.length > 0"
-                                class="mt-3 space-y-2"
-                            >
-                                <article
-                                    v-for="order in customer.recent_orders"
-                                    :key="order.id"
-                                    class="rounded-2xl border border-slate-800 bg-slate-950/70 px-3 py-3"
-                                >
-                                    <div class="flex items-start justify-between gap-3">
-                                        <div class="min-w-0">
-                                            <p class="truncate text-sm font-bold text-white">
-                                                {{ order.order_number }}
-                                            </p>
-                                            <p class="mt-1 text-[11px] text-slate-400">
-                                                {{ formatDateTime(order.created_at) }}
-                                                <span v-if="order.table?.name">
-                                                    • {{ order.table.name }}
-                                                </span>
-                                                <span v-else>
-                                                    • {{ getOrderTypeLabel(order.type) }}
-                                                </span>
-                                            </p>
-                                        </div>
+                                <!-- Membership Tier & Points -->
+                                <td class="px-5 py-3.5">
+                                    <div class="flex items-center gap-1.5">
                                         <span
-                                            :class="[
-                                                'rounded-full border px-2 py-1 text-[9px] font-bold uppercase tracking-wider',
-                                                getOrderStatusClass(order.status),
-                                            ]"
+                                            class="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                                            :class="customer.membership?.tier?.name ? 'bg-orange-500/10 text-orange-300 border border-orange-500/20' : 'bg-slate-800 text-slate-400'"
                                         >
-                                            {{ getOrderStatusLabel(order.status) }}
+                                            {{ customer.membership?.tier?.name || 'Walk-In' }}
                                         </span>
                                     </div>
-                                    <p class="mt-2 text-sm font-bold text-emerald-300">
-                                        {{ formatPrice(order.total_amount) }}
-                                    </p>
-                                </article>
-                            </div>
-                            <p v-else class="mt-3 text-[11px] text-slate-500">
-                                Customer ini belum punya transaksi.
-                            </p>
-                        </div>
-                    </article>
+                                    <div class="text-[11px] text-slate-400 mt-1" v-if="customer.membership">
+                                        {{ customer.membership?.total_points || 0 }} poin aktif
+                                    </div>
+                                </td>
+
+                                <!-- Kasbon Status -->
+                                <td class="px-5 py-3.5">
+                                    <div v-if="Number(customer.kasbon_total_due || 0) > 0">
+                                        <span class="rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-300">
+                                            {{ formatPrice(customer.kasbon_total_due) }}
+                                        </span>
+                                        <div class="text-[10px] text-slate-400 mt-1">
+                                            {{ customer.kasbon_orders_count }} bill belum lunas
+                                        </div>
+                                    </div>
+                                    <span v-else class="text-[11px] text-slate-500">Lunas / Tidak ada</span>
+                                </td>
+
+                                <!-- Total Orders -->
+                                <td class="px-5 py-3.5 text-right font-semibold text-white">
+                                    {{ customer.orders_count || 0 }}x order
+                                </td>
+
+                                <!-- Total Spent -->
+                                <td class="px-5 py-3.5 text-right font-bold text-emerald-300">
+                                    {{ formatPrice(customer.total_spent) }}
+                                </td>
+
+                                <!-- Join Date -->
+                                <td class="px-5 py-3.5 text-slate-400">
+                                    {{ formatDate(customer.created_at) }}
+                                </td>
+
+                                <!-- Action Buttons -->
+                                <td class="px-5 py-3.5 text-center">
+                                    <button
+                                        type="button"
+                                        @click="selectedCustomerForDetail = customer"
+                                        class="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 text-[11px] font-bold text-slate-200 hover:border-slate-600 hover:text-white transition"
+                                    >
+                                        <Eye class="h-3.5 w-3.5 text-slate-400" />
+                                        Detail Riwayat
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
+                <!-- Pagination Footer -->
                 <div
                     v-if="customers.links.length > 3"
-                    class="flex flex-wrap items-center justify-center gap-2 border-t border-slate-800/80 px-5 py-4"
+                    class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-5 py-4 bg-slate-950/20"
                 >
-                    <template
-                        v-for="link in customers.links"
-                        :key="`${link.label}-${link.url}`"
-                    >
-                        <Link
-                            v-if="link.url"
-                            :href="link.url"
-                            preserve-scroll
-                            :class="[
-                                'rounded-xl border px-3 py-2 text-xs font-bold transition',
-                                link.active
-                                    ? 'border-orange-500/20 bg-orange-500/10 text-orange-300'
-                                    : 'border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700',
-                            ]"
-                            v-html="link.label"
-                        />
-                        <span
-                            v-else
-                            class="rounded-xl border border-slate-900 bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-600"
-                            v-html="link.label"
-                        />
-                    </template>
+                    <p class="text-[11px] text-slate-500">
+                        Gunakan tombol paginasi untuk melihat lebih banyak data pelanggan.
+                    </p>
+                    <div class="flex flex-wrap gap-1.5">
+                        <template
+                            v-for="link in customers.links"
+                            :key="`${link.label}-${link.url}`"
+                        >
+                            <Link
+                                v-if="link.url"
+                                :href="link.url"
+                                preserve-scroll
+                                class="rounded-xl border px-3 py-2 text-xs font-bold transition"
+                                :class="link.active
+                                    ? 'border-orange-500/30 bg-orange-500/10 text-orange-300'
+                                    : 'border-white/10 text-slate-300 hover:bg-white/5'"
+                                v-html="link.label"
+                            />
+                            <span
+                                v-else
+                                class="rounded-xl border border-white/5 bg-white/[0.01] px-3 py-2 text-xs font-bold text-slate-600 cursor-not-allowed"
+                                v-html="link.label"
+                            />
+                        </template>
+                    </div>
                 </div>
             </section>
         </div>
+
+        <!-- POPUP MODAL 1: Benefit & Info Tier Membership -->
+        <teleport to="body">
+            <Transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0 scale-95"
+                enter-to-class="opacity-100 scale-100"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="opacity-100 scale-100"
+                leave-to-class="opacity-0 scale-95"
+            >
+                <div
+                    v-if="isTierModalOpen"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+                >
+                    <div class="w-full max-w-2xl rounded-3xl border border-white/10 bg-slate-900 shadow-2xl p-6">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+                            <div class="flex items-center gap-2">
+                                <Crown class="h-5 w-5 text-orange-400" />
+                                <h3 class="text-lg font-black text-white">Benefit & Aturan Tier Membership</h3>
+                            </div>
+                            <button @click="isTierModalOpen = false" class="text-slate-500 hover:text-white transition">
+                                <X class="h-5 w-5" />
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-1 custom-scrollbar">
+                            <div
+                                v-for="tier in tiers"
+                                :key="tier.id"
+                                class="rounded-2xl border border-white/10 bg-slate-950/50 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+                            >
+                                <div>
+                                    <h4 class="text-base font-extrabold text-white flex items-center gap-2">
+                                        <BadgeCheck class="h-4.5 w-4.5 text-orange-400" />
+                                        {{ tier.name }}
+                                    </h4>
+                                    <p class="text-xs text-slate-400 mt-1">{{ tier.description || 'Tier loyalty aktif untuk diskon pembelian pelanggan.' }}</p>
+                                </div>
+                                <div class="flex gap-4 text-xs">
+                                    <div class="bg-slate-900/60 rounded-xl px-3 py-2 border border-white/5 text-right min-w-[80px]">
+                                        <p class="text-slate-500 uppercase font-semibold text-[8px] tracking-wider">Syarat Poin</p>
+                                        <p class="text-white font-bold mt-0.5">{{ tier.point_threshold }} pts</p>
+                                    </div>
+                                    <div class="bg-slate-900/60 rounded-xl px-3 py-2 border border-white/5 text-right min-w-[80px]">
+                                        <p class="text-slate-500 uppercase font-semibold text-[8px] tracking-wider">Diskon</p>
+                                        <p class="text-emerald-400 font-bold mt-0.5">{{ Number(tier.discount_percent || 0) }}%</p>
+                                    </div>
+                                    <div class="bg-slate-900/60 rounded-xl px-3 py-2 border border-white/5 text-right min-w-[80px]">
+                                        <p class="text-slate-500 uppercase font-semibold text-[8px] tracking-wider">Member</p>
+                                        <p class="text-amber-300 font-bold mt-0.5">{{ tier.active_members_count || 0 }} orang</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </teleport>
+
+        <!-- POPUP MODAL 2: Detail Transaksi & Kasbon Pelanggan -->
+        <teleport to="body">
+            <Transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0 scale-95"
+                enter-to-class="opacity-100 scale-100"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="opacity-100 scale-100"
+                leave-to-class="opacity-0 scale-95"
+            >
+                <div
+                    v-if="selectedCustomerForDetail"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+                >
+                    <div class="w-full max-w-3xl rounded-3xl border border-white/10 bg-slate-900 shadow-2xl p-6 flex flex-col max-h-[85vh]">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4 shrink-0">
+                            <div>
+                                <h3 class="text-lg font-black text-white">{{ selectedCustomerForDetail.name || 'Pelanggan POS' }}</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">
+                                    {{ selectedCustomerForDetail.phone || '-' }}
+                                    <span v-if="selectedCustomerForDetail.email"> • {{ selectedCustomerForDetail.email }}</span>
+                                </p>
+                            </div>
+                            <button @click="selectedCustomerForDetail = null" class="text-slate-500 hover:text-white transition">
+                                <X class="h-5 w-5" />
+                            </button>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto space-y-5 pr-1 custom-scrollbar">
+                            <!-- Detail Info Grid -->
+                            <div class="grid gap-3 sm:grid-cols-3">
+                                <div class="rounded-2xl border border-white/10 bg-slate-950/50 p-3">
+                                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Level Keanggotaan</p>
+                                    <p class="text-sm font-extrabold text-white mt-1">{{ selectedCustomerForDetail.membership?.tier?.name || 'Walk-in / Walk-in' }}</p>
+                                    <p class="text-xs text-slate-400 mt-0.5" v-if="selectedCustomerForDetail.membership">{{ selectedCustomerForDetail.membership?.total_points || 0 }} poin aktif</p>
+                                </div>
+                                <div class="rounded-2xl border border-white/10 bg-slate-950/50 p-3">
+                                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Volume Transaksi</p>
+                                    <p class="text-sm font-extrabold text-white mt-1">{{ selectedCustomerForDetail.orders_count || 0 }} kali belanja</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">Total spent: {{ formatPrice(selectedCustomerForDetail.total_spent) }}</p>
+                                </div>
+                                <div class="rounded-2xl border p-3 bg-slate-950/50" :class="Number(selectedCustomerForDetail.kasbon_total_due || 0) > 0 ? 'border-rose-500/20 bg-rose-500/5' : 'border-white/10'">
+                                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Saldo Kasbon Aktif</p>
+                                    <p class="text-sm font-extrabold mt-1" :class="Number(selectedCustomerForDetail.kasbon_total_due || 0) > 0 ? 'text-rose-300' : 'text-white'">
+                                        {{ formatPrice(selectedCustomerForDetail.kasbon_total_due) }}
+                                    </p>
+                                    <p class="text-xs text-slate-400 mt-0.5">{{ selectedCustomerForDetail.kasbon_orders_count || 0 }} bill kasbon berjalan</p>
+                                </div>
+                            </div>
+
+                            <!-- Detail Riwayat Order -->
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Histori Transaksi Terakhir</h4>
+                                <div v-if="selectedCustomerForDetail.recent_orders && selectedCustomerForDetail.recent_orders.length > 0" class="space-y-2">
+                                    <div
+                                        v-for="order in selectedCustomerForDetail.recent_orders"
+                                        :key="order.id"
+                                        class="rounded-2xl border border-white/5 bg-slate-950/30 p-3.5 flex justify-between items-center gap-3 hover:border-white/10 transition"
+                                    >
+                                        <div>
+                                            <p class="text-xs font-bold text-white">{{ order.order_number }}</p>
+                                            <p class="text-[10px] text-slate-500 mt-1.5">
+                                                {{ formatDateTime(order.created_at) }}
+                                                <span v-if="order.table?.name"> • {{ order.table.name }}</span>
+                                                <span v-else> • {{ getOrderTypeLabel(order.type) }}</span>
+                                            </p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-xs font-black text-emerald-300">{{ formatPrice(order.total_amount) }}</p>
+                                            <span :class="[getOrderStatusClass(order.status), 'inline-block mt-1.5 px-2 py-0.5 text-[8px] font-black uppercase rounded-md border tracking-wider']">
+                                                {{ getOrderStatusLabel(order.status) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else class="text-xs text-slate-500 italic py-6 text-center border border-dashed border-white/10 rounded-2xl">
+                                    Belum ada catatan transaksi untuk pelanggan ini.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </teleport>
     </AuthenticatedLayout>
 </template>

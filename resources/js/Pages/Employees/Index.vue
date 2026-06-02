@@ -4,6 +4,8 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
     BadgeCheck,
     CalendarDays,
+    Eye,
+    EyeOff,
     Pencil,
     Plus,
     Search,
@@ -91,6 +93,8 @@ const roleType = ref(props.filters.role_type || '');
 const outletId = ref(props.filters.outlet_id || '');
 const modalMode = ref<'create' | 'edit' | null>(null);
 const selectedEmployee = ref<EmployeeRow | null>(null);
+const showPassword = ref(false);
+const showPin = ref(false);
 
 const employeeForm = useForm<{
     name: string;
@@ -689,12 +693,21 @@ const getStatusClass = (isActive: boolean) => {
                             <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
                                 {{ modalMode === 'edit' ? 'Password Baru' : 'Password Awal' }}
                             </span>
-                            <input
-                                v-model="employeeForm.password"
-                                type="password"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
-                                :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : 'Minimal 8 karakter'"
-                            />
+                            <div class="relative">
+                                <input
+                                    v-model="employeeForm.password"
+                                    :type="showPassword ? 'text' : 'password'"
+                                    class="w-full rounded-2xl border border-white/10 bg-slate-900 pl-4 pr-12 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                    :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : 'Minimal 8 karakter'"
+                                />
+                                <button
+                                    type="button"
+                                    @click="showPassword = !showPassword"
+                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                >
+                                    <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
+                                </button>
+                            </div>
                             <p v-if="employeeForm.errors.password" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.password }}</p>
                         </label>
 
@@ -702,14 +715,23 @@ const getStatusClass = (isActive: boolean) => {
                             <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
                                 {{ modalMode === 'edit' ? 'Reset PIN Approval' : 'PIN Approval' }}
                             </span>
-                            <input
-                                v-model="employeeForm.approval_pin"
-                                type="password"
-                                inputmode="numeric"
-                                maxlength="6"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
-                                :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : '6 digit angka'"
-                            />
+                            <div class="relative">
+                                <input
+                                    v-model="employeeForm.approval_pin"
+                                    :type="showPin ? 'text' : 'password'"
+                                    inputmode="numeric"
+                                    maxlength="6"
+                                    class="w-full rounded-2xl border border-white/10 bg-slate-900 pl-4 pr-12 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                    :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : '6 digit angka'"
+                                />
+                                <button
+                                    type="button"
+                                    @click="showPin = !showPin"
+                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                >
+                                    <component :is="showPin ? EyeOff : Eye" class="h-4 w-4" />
+                                </button>
+                            </div>
                             <p v-if="employeeForm.errors.approval_pin" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.approval_pin }}</p>
                         </label>
                     </section>

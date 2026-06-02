@@ -238,7 +238,7 @@ const submitCheckout = () => {
     <Head :title="`QR Order ${table.name} - ${outlet.name}`" />
 
     <div
-        class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),linear-gradient(180deg,#020617_0%,#0f172a_100%)] text-slate-100"
+        class="h-screen overflow-y-auto bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),linear-gradient(180deg,#020617_0%,#0f172a_100%)] text-slate-100"
     >
         <div
             class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8"

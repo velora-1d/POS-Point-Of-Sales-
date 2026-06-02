@@ -18,8 +18,10 @@ import {
     TableProperties,
     Users,
     X,
+    ChevronsLeft,
+    ChevronsRight,
 } from '@lucide/vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 interface MenuItem {
     id: number;
@@ -69,6 +71,16 @@ const menuProgress = computed(() => {
 
 const isMobileOpen = ref(false);
 const searchQuery = ref('');
+
+const isSidebarCollapsed = ref(false);
+if (typeof window !== 'undefined') {
+    isSidebarCollapsed.value = localStorage.getItem('sidebar_collapsed') === 'true';
+}
+
+const toggleSidebarCollapse = () => {
+    isSidebarCollapsed.value = !isSidebarCollapsed.value;
+    localStorage.setItem('sidebar_collapsed', isSidebarCollapsed.value ? 'true' : 'false');
+};
 
 // List of all 62 menu items categorized into 10 categories matching menu-per-role.md
 const menuData: MenuCategory[] = [
@@ -437,18 +449,7 @@ const menuData: MenuCategory[] = [
 ];
 
 // Reactive states for collapsed categories
-const collapsedCategories = ref<Record<string, boolean>>({
-    Meja: false,
-    'Order & Transaksi': false,
-    'Kitchen Display': false,
-    Pelanggan: true,
-    'Produk & Stok': true,
-    'Promo & Diskon': true,
-    'Karyawan & Shift': true,
-    'Order Online': true,
-    'Laporan & ERP': true,
-    Pengaturan: true,
-});
+const collapsedCategories = ref<Record<string, boolean>>({});
 
 const toggleCategory = (name: string) => {
     collapsedCategories.value[name] = !collapsedCategories.value[name];
@@ -480,6 +481,20 @@ const sidebarData: SidebarCategory[] = [
                 menuIds: [19, 20, 21, 12],
                 aliases: ['layout meja', 'status meja', 'reservasi', 'qr meja'],
             },
+            {
+                key: 'settings-tables',
+                title: 'Daftar Meja',
+                route: 'settings.tables.index',
+                menuIds: [19],
+                aliases: ['kelola meja', 'daftar meja'],
+            },
+            {
+                key: 'settings-table-qr',
+                title: 'QR Meja',
+                route: 'settings.table-qr.index',
+                menuIds: [58],
+                aliases: ['qr code meja', 'download qr'],
+            },
         ],
     },
     {
@@ -501,6 +516,20 @@ const sidebarData: SidebarCategory[] = [
                 route: 'transactions.index',
                 menuIds: [7, 8, 10, 11],
                 aliases: ['kasbon', 'cicilan', 'down payment', 'struk', 'riwayat transaksi'],
+            },
+            {
+                key: 'settings-payment',
+                title: 'Payment Gateway',
+                route: 'settings.payment-gateway.index',
+                menuIds: [56],
+                aliases: ['payment gateway', 'midtrans', 'qris', 'gateway pembayaran'],
+            },
+            {
+                key: 'settings-printer',
+                title: 'Konfigurasi Printer',
+                route: 'settings.printer.index',
+                menuIds: [57],
+                aliases: ['setting printer', 'printer bluetooth', 'cetak struk'],
             },
         ],
     },
@@ -539,6 +568,13 @@ const sidebarData: SidebarCategory[] = [
                 menuIds: [22, 23, 24, 25],
                 aliases: ['customer', 'loyalty', 'kasbon pelanggan', 'riwayat pelanggan'],
             },
+            {
+                key: 'membership-tiers',
+                title: 'Kelola Tier Member',
+                route: 'settings.membership-tiers.index',
+                menuIds: [23],
+                aliases: ['tier member', 'atur poin', 'level member', 'membership tier'],
+            },
         ],
     },
     {
@@ -556,33 +592,16 @@ const sidebarData: SidebarCategory[] = [
             },
             {
                 key: 'products-stock',
-                title: 'Stok Produk Jadi',
+                title: 'Stok & HPP',
                 route: 'products.stock',
-                menuIds: [28],
+                menuIds: [28, 30, 31, 32],
+                aliases: ['hpp', 'expired', 'alert stok', 'resep'],
             },
             {
                 key: 'raw-materials',
                 title: 'Bahan Baku',
                 route: 'raw-materials.index',
                 menuIds: [29],
-            },
-            {
-                key: 'products-hpp',
-                title: 'HPP Produk',
-                route: 'products.hpp',
-                menuIds: [30],
-            },
-            {
-                key: 'expired-tracking',
-                title: 'Tracking Expired',
-                route: 'expired-tracking.index',
-                menuIds: [31],
-            },
-            {
-                key: 'stock-alerts',
-                title: 'Alert Stok',
-                route: 'stock-alerts.index',
-                menuIds: [32],
             },
         ],
     },
@@ -607,30 +626,38 @@ const sidebarData: SidebarCategory[] = [
         icon: CalendarDays,
         pages: [
             {
+                key: 'settings-outlets',
+                title: 'Outlet & Cabang',
+                route: 'settings.outlets.index',
+                menuIds: [54],
+                aliases: ['kelola cabang', 'tambah outlet'],
+            },
+            {
                 key: 'employees',
                 title: 'Data Karyawan',
                 route: 'employees.index',
                 menuIds: [36],
             },
             {
-                key: 'schedules',
-                title: 'Jadwal Shift',
-                route: 'schedules.index',
-                menuIds: [37],
-            },
-            {
-                key: 'attendance',
-                title: 'Absensi & Kehadiran',
-                route: 'attendance.index',
-                menuIds: [38, 41],
-                aliases: ['clock in', 'clock out', 'laporan kehadiran'],
+                key: 'settings-rbac',
+                title: 'User & RBAC',
+                route: 'settings.rbac.index',
+                menuIds: [55],
+                aliases: ['hak akses', 'role permission', 'kelola user'],
             },
             {
                 key: 'shifts',
-                title: 'Shift Kasir',
+                title: 'Shift & Absensi',
                 route: 'shifts.index',
-                menuIds: [39, 40],
-                aliases: ['buka shift', 'tutup shift', 'rekap kas'],
+                menuIds: [37, 38, 39, 40, 41],
+                aliases: ['buka shift', 'tutup shift', 'rekap kas', 'clock in', 'clock out', 'laporan kehadiran', 'jadwal shift'],
+            },
+            {
+                key: 'settings-approval',
+                title: 'Approval Rules',
+                route: 'settings.approval-rules.index',
+                menuIds: [61],
+                aliases: ['aturan approval', 'spv approval'],
             },
         ],
     },
@@ -647,6 +674,13 @@ const sidebarData: SidebarCategory[] = [
                 menuIds: [42, 43, 44],
                 aliases: ['gofood', 'grabfood', 'riwayat order online'],
             },
+            {
+                key: 'settings-online',
+                title: 'Integrasi Online',
+                route: 'settings.online-integrations.index',
+                menuIds: [62],
+                aliases: ['integrasi gofood', 'integrasi grabfood', 'grab merchant', 'go merchant'],
+            },
         ],
     },
     {
@@ -655,32 +689,27 @@ const sidebarData: SidebarCategory[] = [
         name: 'Laporan & ERP',
         icon: BarChart3,
         pages: [
-            { key: 'report-sales', title: 'Laporan Penjualan', route: 'reports.sales.index', menuIds: [46] },
-            { key: 'report-outlets', title: 'Laporan Per Outlet', route: 'reports.outlets.index', menuIds: [47] },
-            { key: 'report-cashiers', title: 'Laporan Per Kasir', route: 'reports.cashiers.index', menuIds: [48] },
-            { key: 'report-top-products', title: 'Produk Terlaris', route: 'reports.top-products.index', menuIds: [49] },
-            { key: 'report-inventory', title: 'Stok & Inventori', route: 'reports.inventory.index', menuIds: [50] },
-            { key: 'report-attendance', title: 'Absensi & Shift', route: 'reports.attendance-shifts.index', menuIds: [51] },
-            { key: 'report-expenses', title: 'Pengeluaran Operasional', route: 'reports.expenses.index', menuIds: [52] },
-            { key: 'report-exports', title: 'Export PDF & Excel', route: 'reports.exports.index', menuIds: [53] },
-        ],
-    },
-    {
-        phase: 'Fase 10',
-        flow: 'Pengaturan',
-        name: 'Pengaturan',
-        icon: Settings,
-        pages: [
-            { key: 'settings-outlets', title: 'Outlet & Cabang', route: 'settings.outlets.index', menuIds: [54] },
-            { key: 'settings-rbac', title: 'User & RBAC', route: 'settings.rbac.index', menuIds: [55] },
-            { key: 'settings-payment', title: 'Payment Gateway', route: 'settings.payment-gateway.index', menuIds: [56] },
-            { key: 'settings-printer', title: 'Printer', route: 'settings.printer.index', menuIds: [57] },
-            { key: 'settings-tables', title: 'Daftar Meja', route: 'settings.tables.index', menuIds: [19] },
-            { key: 'settings-table-qr', title: 'QR Meja', route: 'settings.table-qr.index', menuIds: [58] },
-            { key: 'settings-notifications', title: 'Notifikasi & Alert', route: 'settings.notifications.index', menuIds: [59] },
-            { key: 'settings-backup', title: 'Backup & Keamanan', route: 'settings.backup-security.index', menuIds: [60] },
-            { key: 'settings-approval', title: 'Approval Rules', route: 'settings.approval-rules.index', menuIds: [61] },
-            { key: 'settings-online', title: 'Integrasi Online', route: 'settings.online-integrations.index', menuIds: [62] },
+            {
+                key: 'report-sales',
+                title: 'Laporan Transaksi & Kas',
+                route: 'reports.sales.index',
+                menuIds: [46, 47, 48, 49, 52],
+                aliases: ['penjualan', 'outlet', 'kasir', 'produk terlaris', 'pengeluaran'],
+            },
+            {
+                key: 'report-inventory',
+                title: 'Laporan Sumber Daya',
+                route: 'reports.inventory.index',
+                menuIds: [50, 51, 53],
+                aliases: ['inventori', 'stok', 'kehadiran', 'rekap shift', 'export data'],
+            },
+            {
+                key: 'settings-notifications',
+                title: 'Keamanan & Notifikasi',
+                route: 'settings.notifications.index',
+                menuIds: [59, 60],
+                aliases: ['notifikasi', 'alert whatsapp', 'backup database', 'security log'],
+            },
         ],
     },
 ];
@@ -752,6 +781,36 @@ const resolveSidebarRoute = (pageItem: SidebarPage): string => {
     return pageItem.route ?? 'dashboard';
 };
 
+// Initialize categories as collapsed (true) by default
+sidebarData.forEach((category) => {
+    collapsedCategories.value[category.name] = true;
+});
+
+// Watch for route/url changes to auto-expand the category containing the active page
+watch(
+    () => page.url,
+    () => {
+        sidebarData.forEach((category) => {
+            const hasActivePage = category.pages.some((pageItem) => {
+                const resolved = resolveSidebarRoute(pageItem);
+                return route().current(resolved);
+            });
+            if (hasActivePage) {
+                collapsedCategories.value[category.name] = false;
+            }
+        });
+    },
+    { immediate: true }
+);
+
+// Helper to check if a category is active (has an active page inside it)
+const isCategoryActive = (category: SidebarCategory) => {
+    return category.pages.some((pageItem) => {
+        const resolved = resolveSidebarRoute(pageItem);
+        return route().current(resolved);
+    });
+};
+
 const getReadyCount = (menuIds: number[]) => {
     return menuIds.filter((menuId) => isMenuReady(menuId)).length;
 };
@@ -795,20 +854,24 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
         <!-- Sidebar Navigation -->
         <aside
             :class="[
-                'fixed bottom-0 left-0 top-0 z-40 flex w-80 flex-col border-r border-slate-800/80 bg-slate-900/90 backdrop-blur-xl transition-transform duration-300 lg:translate-x-0',
+                'fixed bottom-0 left-0 top-0 z-40 flex flex-col border-r border-slate-800/80 bg-slate-900/90 backdrop-blur-xl transition-all duration-300 lg:translate-x-0',
+                isSidebarCollapsed ? 'w-20' : 'w-80',
                 isMobileOpen ? 'translate-x-0' : '-translate-x-full',
             ]"
         >
             <!-- Logo Section -->
             <div
-                class="flex shrink-0 items-center gap-3 border-b border-slate-800/60 px-6 py-6"
+                :class="[
+                    'flex shrink-0 items-center gap-3 border-b border-slate-800/60 py-6 transition-all duration-300',
+                    isSidebarCollapsed ? 'justify-center px-4' : 'px-6'
+                ]"
             >
                 <div
-                    class="to-red-650 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-orange-500 text-lg font-black text-white shadow-lg shadow-orange-500/20"
+                    class="to-red-650 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-orange-500 text-lg font-black text-white shadow-lg shadow-orange-500/20"
                 >
                     M
                 </div>
-                <div>
+                <div v-if="!isSidebarCollapsed">
                     <h1
                         class="text-base font-extrabold leading-none tracking-wider text-white"
                     >
@@ -822,7 +885,7 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
             </div>
 
             <!-- Search Area -->
-            <div class="border-slate-850 shrink-0 border-b px-4 py-4">
+            <div v-if="!isSidebarCollapsed" class="border-slate-850 shrink-0 border-b px-4 py-4">
                 <div class="relative">
                     <span
                         class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"
@@ -854,17 +917,19 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                     <Link
                         :href="route('dashboard')"
                         @click="isMobileOpen = false"
+                        :title="isSidebarCollapsed ? 'Dashboard Utama' : undefined"
                         :class="[
                             'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition duration-150',
+                            isSidebarCollapsed ? 'justify-center' : '',
                             route().current('dashboard')
                                 ? 'border border-orange-500/20 bg-gradient-to-r from-orange-500/10 to-red-500/5 text-orange-400'
                                 : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200',
                         ]"
                     >
                         <LayoutDashboard class="h-4 w-4 shrink-0" />
-                        <span>Dashboard Utama</span>
+                        <span v-if="!isSidebarCollapsed">Dashboard Utama</span>
                         <span
-                            v-if="route().current('dashboard')"
+                            v-if="route().current('dashboard') && !isSidebarCollapsed"
                             class="h-1.5 w-1.5 rounded-full bg-orange-500"
                         ></span>
                     </Link>
@@ -876,21 +941,38 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                     :key="category.name"
                     class="space-y-1.5"
                 >
-                    <!-- Category Header Accordion -->
+                    <!-- Category Header Accordion (if multi page and sidebar is not collapsed) -->
                     <div
+                        v-if="category.pages.length > 1 && !isSidebarCollapsed"
                         @click="toggleCategory(category.name)"
-                        class="group flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 transition duration-150 hover:bg-slate-800/30"
+                        :class="[
+                            'group flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 transition duration-150',
+                            isCategoryActive(category)
+                                ? 'bg-slate-800/20 text-slate-100'
+                                : 'hover:bg-slate-800/30 text-slate-400'
+                        ]"
                     >
                         <div
-                            class="flex min-w-0 items-center gap-2.5 text-slate-400 transition duration-150 group-hover:text-slate-200"
+                            :class="[
+                                'flex min-w-0 items-center gap-2.5 transition duration-150',
+                                isCategoryActive(category)
+                                    ? 'text-orange-400'
+                                    : 'text-slate-400 group-hover:text-slate-200'
+                            ]"
                         >
                             <component
                                 :is="category.icon"
-                                class="h-4.5 w-4.5 shrink-0"
+                                :class="[
+                                    'h-4.5 w-4.5 shrink-0 transition duration-150',
+                                    isCategoryActive(category) ? 'text-orange-400' : 'text-slate-400'
+                                ]"
                             />
                             <div class="min-w-0">
                                 <span
-                                    class="truncate text-xs font-bold uppercase tracking-[0.18em] text-slate-300"
+                                    :class="[
+                                        'truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-150',
+                                        isCategoryActive(category) ? 'text-orange-400' : 'text-slate-300'
+                                    ]"
                                     >{{ category.name }}</span
                                 >
                                 <p class="mt-0.5 text-[10px] text-slate-500">
@@ -899,7 +981,12 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="group-hover:text-slate-350 text-slate-500">
+                            <span
+                                :class="[
+                                    'transition duration-150',
+                                    isCategoryActive(category) ? 'text-orange-400' : 'text-slate-500 group-hover:text-slate-350'
+                                ]"
+                            >
                             <ChevronDown
                                 v-if="
                                     isCategoryExpanded(
@@ -914,8 +1001,77 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                         </div>
                     </div>
 
-                    <!-- Category Pages -->
+                    <!-- Category Link (if multi page and sidebar is collapsed) -->
+                    <Link
+                        v-else-if="category.pages.length > 1 && isSidebarCollapsed"
+                        :href="route(resolveSidebarRoute(category.pages[0]))"
+                        @click="isMobileOpen = false"
+                        :title="`${category.name} (${category.pages.map(p => p.title).join(', ')})`"
+                        :class="[
+                            'group flex items-center justify-center rounded-lg p-3 transition duration-150',
+                            isCategoryActive(category)
+                                ? 'bg-orange-500/10 font-bold text-orange-400'
+                                : 'hover:bg-slate-800/30 text-slate-400'
+                        ]"
+                    >
+                        <component
+                            :is="category.icon"
+                            :class="[
+                                'h-5 w-5 shrink-0 transition duration-150',
+                                isCategoryActive(category) ? 'text-orange-400' : 'text-slate-400 group-hover:text-slate-205'
+                            ]"
+                        />
+                    </Link>
+
+                    <!-- Category Header Link (if single page) -->
+                    <Link
+                        v-else
+                        :href="route(resolveSidebarRoute(category.pages[0]))"
+                        @click="isMobileOpen = false"
+                        :title="isSidebarCollapsed ? category.name : undefined"
+                        :class="[
+                            'group flex items-center rounded-lg transition duration-150',
+                            isSidebarCollapsed ? 'justify-center p-3' : 'justify-between px-3 py-2',
+                            route().current(resolveSidebarRoute(category.pages[0]))
+                                ? 'bg-orange-500/10 font-bold text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
+                                : 'hover:bg-slate-800/30 text-slate-400'
+                        ]"
+                    >
+                        <div
+                            :class="[
+                                'flex min-w-0 items-center gap-2.5 transition duration-150',
+                                isSidebarCollapsed ? 'justify-center' : '',
+                                route().current(resolveSidebarRoute(category.pages[0]))
+                                    ? 'text-orange-400'
+                                    : 'text-slate-400 group-hover:text-slate-200'
+                            ]"
+                        >
+                            <component
+                                :is="category.icon"
+                                :class="[
+                                    'h-4.5 w-4.5 shrink-0 transition duration-150',
+                                    isSidebarCollapsed ? 'h-5 w-5' : '',
+                                    route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-400' : 'text-slate-400'
+                                ]"
+                            />
+                            <div v-if="!isSidebarCollapsed" class="min-w-0">
+                                <span
+                                    :class="[
+                                        'truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-150',
+                                        route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-400' : 'text-slate-300'
+                                    ]"
+                                    >{{ category.name }}</span
+                                >
+                                <p class="mt-0.5 text-[10px] text-slate-500">
+                                    {{ category.flow }}
+                                </p>
+                            </div>
+                        </div>
+                    </Link>
+
+                    <!-- Category Pages (only if multi page and sidebar is not collapsed) -->
                     <div
+                        v-if="category.pages.length > 1 && !isSidebarCollapsed"
                         v-show="
                             isCategoryExpanded(
                                 category.name,
@@ -932,12 +1088,12 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                                 :href="route(resolveSidebarRoute(pageItem))"
                                 @click="isMobileOpen = false"
                                 :class="[
-                                    'group/item flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition duration-150',
+                                    'group/item flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition duration-150 relative overflow-hidden',
                                     route().current(
                                         resolveSidebarRoute(pageItem),
                                     )
-                                        ? 'bg-orange-500/10 font-semibold text-orange-400'
-                                        : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200',
+                                        ? 'bg-orange-500/10 font-bold text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
+                                        : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 pl-3',
                                 ]"
                             >
                                 <span class="flex min-w-0 items-center gap-2 truncate">
@@ -952,19 +1108,38 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                 </div>
             </nav>
 
+            <!-- Toggle Collapse Button (Desktop only) -->
+            <div class="hidden border-t border-slate-800/60 px-4 py-3 lg:block">
+                <button
+                    @click="toggleSidebarCollapse"
+                    class="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 py-2.5 text-xs font-semibold text-slate-400 transition duration-150 hover:bg-slate-800/60 hover:text-slate-200"
+                    :title="isSidebarCollapsed ? 'Buka Sidebar' : 'Tutup Sidebar'"
+                >
+                    <component :is="isSidebarCollapsed ? ChevronsRight : ChevronsLeft" class="h-4 w-4" />
+                    <span v-if="!isSidebarCollapsed">Tutup Menu</span>
+                </button>
+            </div>
+
             <!-- User Profile & Session Section -->
             <div
-                class="shrink-0 border-t border-slate-800/60 bg-slate-950/20 p-4"
+                :class="[
+                    'shrink-0 border-t border-slate-800/60 bg-slate-950/20 p-4 transition-all duration-300',
+                    isSidebarCollapsed ? 'flex flex-col items-center gap-3' : ''
+                ]"
             >
                 <div
-                    class="mb-3 flex items-center gap-3 rounded-xl border border-slate-800/60 bg-slate-900 p-2"
+                    :class="[
+                        'flex items-center gap-3 border border-slate-800/60 bg-slate-900 transition-all duration-300',
+                        isSidebarCollapsed ? 'w-12 h-12 justify-center rounded-xl p-0' : 'w-full rounded-xl p-2'
+                    ]"
+                    :title="isSidebarCollapsed ? `${user?.name || 'Staff'} (${user?.role || 'Guest'})` : undefined"
                 >
                     <div
-                        class="flex h-10 w-10 items-center justify-center rounded-lg border border-orange-500/20 bg-gradient-to-tr from-orange-500/20 to-red-500/25 font-bold text-orange-400 shadow-inner"
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-orange-500/20 bg-gradient-to-tr from-orange-500/20 to-red-500/25 font-bold text-orange-400 shadow-inner"
                     >
                         {{ getInitials(user?.name) }}
                     </div>
-                    <div class="min-w-0 flex-1">
+                    <div v-if="!isSidebarCollapsed" class="min-w-0 flex-1">
                         <p
                             class="truncate text-sm font-bold leading-snug text-white"
                         >
@@ -988,17 +1163,24 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                     :href="route('logout')"
                     method="post"
                     as="button"
-                    class="flex w-full items-center justify-center gap-2 rounded-xl border border-red-900/35 bg-red-950/30 px-4 py-3 text-xs font-bold text-red-400 transition duration-150 hover:border-red-900/50 hover:bg-red-900/20 active:scale-[0.98]"
+                    :title="isSidebarCollapsed ? 'Keluar Sesi' : undefined"
+                    :class="[
+                        'flex items-center justify-center gap-2 rounded-xl border border-red-900/35 bg-red-950/30 text-xs font-bold text-red-400 transition duration-150 hover:border-red-900/50 hover:bg-red-900/20 active:scale-[0.98]',
+                        isSidebarCollapsed ? 'w-12 h-12 p-0' : 'w-full px-4 py-3'
+                    ]"
                 >
-                    <LogOut class="h-4 w-4" />
-                    <span>Keluar Sesi (Logout)</span>
+                    <LogOut class="h-4 w-4 shrink-0" />
+                    <span v-if="!isSidebarCollapsed">Keluar Sesi (Logout)</span>
                 </Link>
             </div>
         </aside>
 
         <!-- Main Content Area -->
         <div
-            class="flex h-screen min-w-0 flex-1 flex-col overflow-hidden lg:pl-80"
+            :class="[
+                'flex h-screen min-w-0 flex-1 flex-col overflow-hidden transition-all duration-300',
+                isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-80'
+            ]"
         >
             <!-- Mobile Sticky Navigation Header -->
             <div

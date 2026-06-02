@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { CheckCircle2, Copy, Globe, Link2, Store } from '@lucide/vue';
-import { computed, watch } from 'vue';
+import { CheckCircle2, Copy, Eye, EyeOff, Globe, Link2, Store } from '@lucide/vue';
+import { computed, ref, watch } from 'vue';
 
 interface MappingRow {
     outlet_id: string;
@@ -89,6 +89,16 @@ watch(
     },
     { deep: true },
 );
+
+const showApiKeys = ref<Record<string, boolean>>({});
+const showApiSecrets = ref<Record<string, boolean>>({});
+
+const toggleApiKey = (key: string) => {
+    showApiKeys.value[key] = !showApiKeys.value[key];
+};
+const toggleApiSecret = (key: string) => {
+    showApiSecrets.value[key] = !showApiSecrets.value[key];
+};
 
 const summaryCards = computed(() => [
     {
@@ -302,12 +312,21 @@ function submitPlatform(platform: 'gofood' | 'grabfood') {
                                 <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
                                     API Key
                                 </label>
-                                <input
-                                    v-model="entry.form.api_key"
-                                    type="password"
-                                    placeholder="Kosongkan jika tetap pakai credential tersimpan"
-                                    class="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                                />
+                                <div class="relative">
+                                    <input
+                                        v-model="entry.form.api_key"
+                                        :type="showApiKeys[entry.key] ? 'text' : 'password'"
+                                        placeholder="Kosongkan jika tetap pakai credential tersimpan"
+                                        class="w-full rounded-2xl border border-slate-800 bg-slate-950 pl-4 pr-12 py-3 text-sm text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    />
+                                    <button
+                                        type="button"
+                                        @click="toggleApiKey(entry.key)"
+                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                    >
+                                        <component :is="showApiKeys[entry.key] ? EyeOff : Eye" class="h-4 w-4" />
+                                    </button>
+                                </div>
                                 <p class="mt-2 text-[11px] text-slate-500">
                                     {{ entry.config.formDefaults.has_stored_api_key ? 'Credential tersimpan tersedia.' : 'Belum ada API key tersimpan.' }}
                                 </p>
@@ -317,12 +336,21 @@ function submitPlatform(platform: 'gofood' | 'grabfood') {
                                 <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
                                     API Secret
                                 </label>
-                                <input
-                                    v-model="entry.form.api_secret"
-                                    type="password"
-                                    placeholder="Opsional, isi jika provider memerlukan secret"
-                                    class="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                                />
+                                <div class="relative">
+                                    <input
+                                        v-model="entry.form.api_secret"
+                                        :type="showApiSecrets[entry.key] ? 'text' : 'password'"
+                                        placeholder="Opsional, isi jika provider memerlukan secret"
+                                        class="w-full rounded-2xl border border-slate-800 bg-slate-950 pl-4 pr-12 py-3 text-sm text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    />
+                                    <button
+                                        type="button"
+                                        @click="toggleApiSecret(entry.key)"
+                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                    >
+                                        <component :is="showApiSecrets[entry.key] ? EyeOff : Eye" class="h-4 w-4" />
+                                    </button>
+                                </div>
                                 <p class="mt-2 text-[11px] text-slate-500">
                                     {{ entry.config.formDefaults.has_stored_api_secret ? 'Secret tersimpan tersedia.' : 'Belum ada secret tersimpan.' }}
                                 </p>

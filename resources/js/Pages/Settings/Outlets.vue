@@ -120,6 +120,46 @@ const status = ref(props.filters.status || '');
 const modalMode = ref<'create' | 'edit' | null>(null);
 const selectedOutlet = ref<OutletRow | null>(null);
 
+const activeTab = ref<'info' | 'system'>('info');
+const workflowArray = ref<string[]>([...defaultWorkflowStatuses]);
+const newStatusInput = ref('');
+
+const addWorkflowStatus = () => {
+    const val = newStatusInput.value.trim().toLowerCase().replace(/\s+/g, '_');
+    if (!val) return;
+    if (workflowArray.value.includes(val)) {
+        newStatusInput.value = '';
+        return;
+    }
+    if (workflowArray.value.length >= 10) {
+        return;
+    }
+    workflowArray.value.push(val);
+    newStatusInput.value = '';
+};
+
+const removeWorkflowStatus = (index: number) => {
+    workflowArray.value.splice(index, 1);
+};
+
+const moveStatusUp = (index: number) => {
+    if (index === 0) return;
+    const temp = workflowArray.value[index];
+    workflowArray.value[index] = workflowArray.value[index - 1];
+    workflowArray.value[index - 1] = temp;
+};
+
+const moveStatusDown = (index: number) => {
+    if (index === workflowArray.value.length - 1) return;
+    const temp = workflowArray.value[index];
+    workflowArray.value[index] = workflowArray.value[index + 1];
+    workflowArray.value[index + 1] = temp;
+};
+
+const resetWorkflowToDefault = () => {
+    workflowArray.value = [...defaultWorkflowStatuses];
+};
+
 const outletForm = useForm<OutletFormPayload>({
     name: '',
     address: '',
@@ -220,6 +260,9 @@ function resetOutletForm() {
     outletForm.bar_approval_enabled = false;
     outletForm.customer_can_view_status = true;
     outletForm.customer_can_edit_order = false;
+    workflowArray.value = [...defaultWorkflowStatuses];
+    newStatusInput.value = '';
+    activeTab.value = 'info';
 }
 
 function openCreateModal() {
@@ -240,6 +283,9 @@ function openEditModal(outlet: OutletRow) {
     outletForm.bar_approval_enabled = outlet.settings.bar_approval_enabled;
     outletForm.customer_can_view_status = outlet.settings.customer_can_view_status;
     outletForm.customer_can_edit_order = outlet.settings.customer_can_edit_order;
+    workflowArray.value = [...outlet.settings.workflow_statuses];
+    newStatusInput.value = '';
+    activeTab.value = 'info';
 }
 
 function closeModal() {
@@ -249,6 +295,8 @@ function closeModal() {
 }
 
 function submitOutlet() {
+    outletForm.workflow_statuses = workflowArray.value.join('\n');
+    
     const options = {
         preserveScroll: true,
         onSuccess: () => closeModal(),
@@ -386,16 +434,17 @@ function toggleOutletStatus(outlet: OutletRow) {
 
                         <select
                             v-model="status"
-                            class="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                            class="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                            style="color-scheme: dark;"
                             @change="submitFilters"
                         >
-                            <option value="">
+                            <option value="" class="bg-slate-950 text-slate-100">
                                 Semua status
                             </option>
-                            <option value="active">
+                            <option value="active" class="bg-slate-950 text-slate-100">
                                 Aktif
                             </option>
-                            <option value="inactive">
+                            <option value="inactive" class="bg-slate-950 text-slate-100">
                                 Nonaktif
                             </option>
                         </select>
@@ -683,134 +732,239 @@ function toggleOutletStatus(outlet: OutletRow) {
                         </button>
                     </div>
 
+                    <!-- Tab Headers -->
+                    <div class="flex border-b border-white/10 px-6 bg-slate-950/20">
+                        <button
+                            type="button"
+                            @click="activeTab = 'info'"
+                            class="border-b-2 px-4 py-3.5 text-xs font-bold uppercase tracking-wider transition duration-150"
+                            :class="activeTab === 'info' ? 'border-orange-500 text-orange-400' : 'border-transparent text-slate-400 hover:text-slate-200'"
+                        >
+                            Informasi Cabang
+                        </button>
+                        <button
+                            type="button"
+                            @click="activeTab = 'system'"
+                            class="border-b-2 px-4 py-3.5 text-xs font-bold uppercase tracking-wider transition duration-150"
+                            :class="activeTab === 'system' ? 'border-orange-500 text-orange-400' : 'border-transparent text-slate-400 hover:text-slate-200'"
+                        >
+                            Alur & Aturan Operasional
+                        </button>
+                    </div>
+
                     <form
                         class="space-y-5 px-6 py-5"
                         @submit.prevent="submitOutlet"
                     >
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <label class="block">
-                                <span class="text-xs font-semibold text-slate-300">Nama outlet</span>
-                                <input
-                                    v-model="outletForm.name"
-                                    type="text"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                    placeholder="Mentai Sudirman"
-                                >
-                                <p
-                                    v-if="outletForm.errors.name"
-                                    class="mt-2 text-xs text-rose-300"
-                                >
-                                    {{ outletForm.errors.name }}
-                                </p>
-                            </label>
+                        <!-- Tab 1: Informasi Cabang -->
+                        <div v-show="activeTab === 'info'" class="space-y-5">
+                            <div class="grid gap-4 md:grid-cols-2">
+                                <label class="block">
+                                    <span class="text-xs font-semibold text-slate-300">Nama outlet</span>
+                                    <input
+                                        v-model="outletForm.name"
+                                        type="text"
+                                        class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                        placeholder="Mentai Sudirman"
+                                    >
+                                    <p
+                                        v-if="outletForm.errors.name"
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ outletForm.errors.name }}
+                                    </p>
+                                </label>
+
+                                <label class="block">
+                                    <span class="text-xs font-semibold text-slate-300">Nomor telepon</span>
+                                    <input
+                                        v-model="outletForm.phone"
+                                        type="text"
+                                        class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                        placeholder="08xxxxxxxxxx"
+                                    >
+                                    <p
+                                        v-if="outletForm.errors.phone"
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ outletForm.errors.phone }}
+                                    </p>
+                                </label>
+                            </div>
 
                             <label class="block">
-                                <span class="text-xs font-semibold text-slate-300">Nomor telepon</span>
-                                <input
-                                    v-model="outletForm.phone"
-                                    type="text"
+                                <span class="text-xs font-semibold text-slate-300">Alamat outlet</span>
+                                <textarea
+                                    v-model="outletForm.address"
+                                    rows="4"
                                     class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                    placeholder="08xxxxxxxxxx"
-                                >
+                                    placeholder="Alamat lengkap cabang"
+                                />
                                 <p
-                                    v-if="outletForm.errors.phone"
+                                    v-if="outletForm.errors.address"
                                     class="mt-2 text-xs text-rose-300"
                                 >
-                                    {{ outletForm.errors.phone }}
+                                    {{ outletForm.errors.address }}
                                 </p>
                             </label>
                         </div>
 
-                        <label class="block">
-                            <span class="text-xs font-semibold text-slate-300">Alamat outlet</span>
-                            <textarea
-                                v-model="outletForm.address"
-                                rows="3"
-                                class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                placeholder="Alamat lengkap cabang"
-                            />
-                            <p
-                                v-if="outletForm.errors.address"
-                                class="mt-2 text-xs text-rose-300"
-                            >
-                                {{ outletForm.errors.address }}
-                            </p>
-                        </label>
+                        <!-- Tab 2: Sistem & Operasional -->
+                        <div v-show="activeTab === 'system'" class="space-y-5">
+                            <div class="grid gap-5 md:grid-cols-[1.1fr,0.9fr]">
+                                <!-- Left side: Visual Workflow Statuses -->
+                                <div class="block">
+                                    <span class="text-xs font-semibold text-slate-300">Workflow status outlet</span>
+                                    
+                                    <!-- Tag list -->
+                                    <div class="mt-2 flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-slate-950/40 p-3 min-h-[120px] align-content-start">
+                                        <div
+                                            v-for="(statusItem, index) in workflowArray"
+                                            :key="index"
+                                            class="inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-1 text-xs font-medium text-orange-100"
+                                        >
+                                            <span>{{ statusItem }}</span>
+                                            <div class="flex items-center gap-1 ml-1 border-l border-orange-500/20 pl-1.5 text-[9px] text-slate-400">
+                                                <button
+                                                    v-if="index > 0"
+                                                    type="button"
+                                                    @click="moveStatusUp(index)"
+                                                    class="hover:text-orange-400 transition"
+                                                    title="Naikkan"
+                                                >
+                                                    ▲
+                                                </button>
+                                                <button
+                                                    v-if="index < workflowArray.length - 1"
+                                                    type="button"
+                                                    @click="moveStatusDown(index)"
+                                                    class="hover:text-orange-400 transition"
+                                                    title="Turunkan"
+                                                >
+                                                    ▼
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    @click="removeWorkflowStatus(index)"
+                                                    class="text-xs font-bold text-orange-500 hover:text-rose-400 transition"
+                                                    title="Hapus"
+                                                >
+                                                    &times;
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p v-if="workflowArray.length === 0" class="text-xs text-slate-500 p-2 italic">
+                                            Belum ada status workflow. Tambahkan di bawah.
+                                        </p>
+                                    </div>
 
-                        <div class="grid gap-4 md:grid-cols-[1.1fr,0.9fr]">
-                            <label class="block">
-                                <span class="text-xs font-semibold text-slate-300">Workflow status outlet</span>
-                                <textarea
-                                    v-model="outletForm.workflow_statuses"
-                                    rows="6"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 font-mono text-sm text-white outline-none transition focus:border-orange-400/40"
-                                    placeholder="Satu baris satu status"
-                                />
-                                <p class="mt-2 text-xs text-slate-500">
-                                    Satu baris satu status. Maksimal 10 status.
-                                </p>
-                                <p
-                                    v-if="outletForm.errors.workflow_statuses"
-                                    class="mt-2 text-xs text-rose-300"
-                                >
-                                    {{ outletForm.errors.workflow_statuses }}
-                                </p>
-                            </label>
+                                    <!-- Add tag input -->
+                                    <div class="mt-3 flex gap-2">
+                                        <input
+                                            v-model="newStatusInput"
+                                            type="text"
+                                            @keyup.enter.prevent="addWorkflowStatus"
+                                            placeholder="Nama status (contoh: dimasak)"
+                                            class="flex-1 rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-xs text-white outline-none focus:border-orange-500"
+                                            :disabled="workflowArray.length >= 10"
+                                        />
+                                        <button
+                                            type="button"
+                                            @click="addWorkflowStatus"
+                                            class="rounded-xl bg-orange-500 px-3 py-2 text-xs font-bold text-slate-950 hover:bg-orange-400 transition disabled:opacity-50"
+                                            :disabled="workflowArray.length >= 10"
+                                        >
+                                            + Tambah
+                                        </button>
+                                    </div>
 
-                            <div class="space-y-4">
-                                <label class="block">
-                                    <span class="text-xs font-semibold text-slate-300">Default struk</span>
-                                    <select
-                                        v-model="outletForm.default_receipt_method"
-                                        class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
-                                    >
-                                        <option value="print">
-                                            Print
-                                        </option>
-                                        <option value="whatsapp">
-                                            WhatsApp
-                                        </option>
-                                        <option value="skip">
-                                            Skip
-                                        </option>
-                                    </select>
+                                    <div class="mt-2 flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-500">
+                                            Maksimal 10 status ({{ workflowArray.length }}/10)
+                                        </span>
+                                        <button
+                                            type="button"
+                                            @click="resetWorkflowToDefault"
+                                            class="text-orange-400 hover:text-orange-300 font-semibold transition"
+                                        >
+                                            Reset ke Default
+                                        </button>
+                                    </div>
                                     <p
-                                        v-if="outletForm.errors.default_receipt_method"
+                                        v-if="outletForm.errors.workflow_statuses"
                                         class="mt-2 text-xs text-rose-300"
                                     >
-                                        {{ outletForm.errors.default_receipt_method }}
+                                        {{ outletForm.errors.workflow_statuses }}
                                     </p>
-                                </label>
+                                </div>
 
-                                <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-3">
-                                    <label class="flex items-start gap-3">
-                                        <input
-                                            v-model="outletForm.bar_approval_enabled"
-                                            type="checkbox"
-                                            class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                                <!-- Right side: Config settings -->
+                                <div class="space-y-4">
+                                    <label class="block">
+                                        <span class="text-xs font-semibold text-slate-300">Default struk</span>
+                                        <select
+                                            v-model="outletForm.default_receipt_method"
+                                            class="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                            style="color-scheme: dark;"
                                         >
-                                        <span class="text-sm text-slate-200">Aktifkan bar approval</span>
-                                    </label>
-                                    <label class="flex items-start gap-3">
-                                        <input
-                                            v-model="outletForm.customer_can_view_status"
-                                            type="checkbox"
-                                            class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                                            <option value="print" class="bg-slate-950 text-slate-100">
+                                                Print
+                                            </option>
+                                            <option value="whatsapp" class="bg-slate-950 text-slate-100">
+                                                WhatsApp
+                                            </option>
+                                            <option value="skip" class="bg-slate-950 text-slate-100">
+                                                Skip
+                                            </option>
+                                        </select>
+                                        <p
+                                            v-if="outletForm.errors.default_receipt_method"
+                                            class="mt-2 text-xs text-rose-300"
                                         >
-                                        <span class="text-sm text-slate-200">Customer bisa lihat status order</span>
+                                            {{ outletForm.errors.default_receipt_method }}
+                                        </p>
                                     </label>
-                                    <label class="flex items-start gap-3">
-                                        <input
-                                            v-model="outletForm.customer_can_edit_order"
-                                            type="checkbox"
-                                            class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
-                                        >
-                                        <span class="text-sm text-slate-200">Customer bisa edit pesanan</span>
-                                    </label>
+
+                                    <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-3.5">
+                                        <label class="flex items-start gap-3 cursor-pointer select-none">
+                                            <input
+                                                v-model="outletForm.bar_approval_enabled"
+                                                type="checkbox"
+                                                class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                                            >
+                                            <span class="text-xs text-slate-200 leading-snug">
+                                                <span class="block font-bold">Bar approval</span>
+                                                <span class="text-[10px] text-slate-500">Order bar butuh approval manual untuk siap</span>
+                                            </span>
+                                        </label>
+                                        <label class="flex items-start gap-3 cursor-pointer select-none">
+                                            <input
+                                                v-model="outletForm.customer_can_view_status"
+                                                type="checkbox"
+                                                class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                                            >
+                                            <span class="text-xs text-slate-200 leading-snug">
+                                                <span class="block font-bold">Customer view status</span>
+                                                <span class="text-[10px] text-slate-500">Pelanggan bisa melacak status masak pesanan</span>
+                                            </span>
+                                        </label>
+                                        <label class="flex items-start gap-3 cursor-pointer select-none">
+                                            <input
+                                                v-model="outletForm.customer_can_edit_order"
+                                                type="checkbox"
+                                                class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                                            >
+                                            <span class="text-xs text-slate-200 leading-snug">
+                                                <span class="block font-bold">Customer edit order</span>
+                                                <span class="text-[10px] text-slate-500">Pelanggan boleh edit pesanan (sebelum dimasak)</span>
+                                            </span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Footer buttons -->
                         <div class="flex flex-col-reverse gap-3 border-t border-white/10 pt-5 sm:flex-row sm:justify-end">
                             <button
                                 type="button"

@@ -319,6 +319,31 @@ const summaryCards = computed(() => [
         </template>
 
         <div class="space-y-6">
+            <!-- Tab Navigation Laporan Sumber Daya -->
+            <div class="flex flex-wrap border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
+                <Link
+                    :href="route('reports.inventory.index')"
+                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('reports.inventory.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Stok & Inventori
+                </Link>
+                <Link
+                    :href="route('reports.attendance-shifts.index')"
+                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('reports.attendance-shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Absensi & Shift
+                </Link>
+                <Link
+                    :href="route('reports.exports.index')"
+                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
+                    :class="route().current('reports.exports.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                >
+                    Export Data
+                </Link>
+            </div>
+
             <section class="grid gap-4 lg:grid-cols-[1.8fr_1fr]">
                 <div class="rounded-[28px] border border-white/10 bg-slate-950/75 p-5 shadow-2xl shadow-slate-950/40">
                     <div class="flex items-start justify-between gap-4">

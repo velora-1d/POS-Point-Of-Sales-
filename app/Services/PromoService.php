@@ -45,9 +45,9 @@ class PromoService
             'summary' => $this->promoRepository->getSummary($outletId),
             'filters' => [
                 'search' => (string) ($filters['search'] ?? ''),
-                'status' => $filters['status'] ?: '',
-                'type' => $filters['type'] ?: '',
-                'apply_method' => $filters['apply_method'] ?: '',
+                'status' => $filters['status'] ?? '',
+                'type' => $filters['type'] ?? '',
+                'apply_method' => $filters['apply_method'] ?? '',
                 'per_page' => (int) ($filters['per_page'] ?? 12),
             ],
             'referenceData' => [

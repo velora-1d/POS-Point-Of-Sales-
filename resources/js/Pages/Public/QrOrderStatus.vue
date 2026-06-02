@@ -133,7 +133,7 @@ const refreshPage = () => {
     <Head :title="`Status ${order.order_number} - ${outlet.name}`" />
 
     <div
-        class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(217,70,239,0.18),_transparent_30%),linear-gradient(180deg,#020617_0%,#111827_100%)] text-slate-100"
+        class="h-screen overflow-y-auto bg-[radial-gradient(circle_at_top,_rgba(217,70,239,0.18),_transparent_30%),linear-gradient(180deg,#020617_0%,#111827_100%)] text-slate-100"
     >
         <div
             class="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8"

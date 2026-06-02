@@ -62,7 +62,7 @@ class Customer extends Model
     public function latestOrder()
     {
         return $this->hasOne(Order::class, 'customer_id')
-            ->ofMany('created_at', 'max');
+            ->latest('created_at');
     }
 
     public function recentOrders()
@@ -85,7 +85,7 @@ class Customer extends Model
         return $this->hasOne(Order::class, 'customer_id')
             ->whereColumn('paid_amount', '<', 'total_amount')
             ->where('status', '!=', 'cancelled')
-            ->ofMany('created_at', 'max');
+            ->latest('created_at');
     }
 
     public function reservations()
