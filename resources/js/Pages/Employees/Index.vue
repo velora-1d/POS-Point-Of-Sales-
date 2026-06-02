@@ -13,6 +13,8 @@ import {
     UserCog,
     Users,
     X,
+    Trash2,
+    Save,
 } from '@lucide/vue';
 import AlertDialog from '@/Components/AlertDialog.vue';
 import { computed, ref } from 'vue';
@@ -36,6 +38,7 @@ interface EmployeeRow {
     phone?: string | null;
     join_date?: string | null;
     is_active: boolean;
+    photo_url?: string | null;
     role?: {
         id: string;
         name: string;
@@ -97,6 +100,7 @@ const showPassword = ref(false);
 const showPin = ref(false);
 
 const employeeForm = useForm<{
+    _method?: string;
     name: string;
     email: string;
     phone: string;
@@ -106,6 +110,7 @@ const employeeForm = useForm<{
     password: string;
     approval_pin: string;
     is_active: boolean;
+    photo: File | string | null;
 }>({
     name: '',
     email: '',
@@ -116,7 +121,24 @@ const employeeForm = useForm<{
     password: '',
     approval_pin: '',
     is_active: true,
+    photo: null,
 });
+
+const photoPreview = ref<string | null>(null);
+
+const handlePhotoChange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    if (target.files && target.files[0]) {
+        const file = target.files[0];
+        employeeForm.photo = file;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            photoPreview.value = event.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+    }
+};
 
 const summaryCards = computed(() => [
     {
@@ -224,6 +246,8 @@ const resetEmployeeForm = () => {
     employeeForm.password = '';
     employeeForm.approval_pin = '';
     employeeForm.is_active = true;
+    employeeForm.photo = null;
+    photoPreview.value = null;
     employeeForm.clearErrors();
 };
 
@@ -250,6 +274,7 @@ const openEditModal = (employee: EmployeeRow) => {
     employeeForm.is_active = Boolean(employee.is_active);
     employeeForm.password = '';
     employeeForm.approval_pin = '';
+    photoPreview.value = null;
 };
 
 const closeModal = () => {
@@ -290,7 +315,8 @@ const deleteEmployee = (employee: EmployeeRow) => {
 
 const submitEmployee = () => {
     if (modalMode.value === 'edit' && selectedEmployee.value) {
-        employeeForm.patch(route('employees.update', selectedEmployee.value.id), {
+        employeeForm._method = 'PATCH';
+        employeeForm.post(route('employees.update', selectedEmployee.value.id), {
             preserveScroll: true,
             onSuccess: () => closeModal(),
         });
@@ -474,22 +500,28 @@ const getStatusClass = (isActive: boolean) => {
                             :key="employee.id"
                             class="grid gap-4 px-5 py-5 xl:grid-cols-[1fr_0.8fr_0.9fr_auto]"
                         >
-                            <div class="space-y-2">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <h3 class="text-base font-black text-white">{{ employee.name }}</h3>
-                                    <span
-                                        class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
-                                        :class="getStatusClass(employee.is_active)"
-                                    >
-                                        {{ employee.is_active ? 'Aktif' : 'Nonaktif' }}
-                                    </span>
+                            <div class="flex gap-4">
+                                <div class="h-16 w-12 flex-shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-900 aspect-[3/4]">
+                                    <img v-if="employee.photo_url" :src="employee.photo_url" class="h-full w-full object-cover" />
+                                    <div v-else class="flex h-full w-full items-center justify-center text-[9px] text-slate-500 font-bold bg-slate-900">NO PIC</div>
                                 </div>
-                                <p class="text-sm text-slate-300">{{ employee.email }}</p>
-                                <p v-if="employee.phone" class="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
-                                    <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                    WA: {{ employee.phone }}
-                                </p>
-                                <p v-else class="text-[10px] italic text-rose-400/70">No. WA belum diisi</p>
+                                <div class="space-y-1">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <h3 class="text-base font-black text-white">{{ employee.name }}</h3>
+                                        <span
+                                            class="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.18em]"
+                                            :class="getStatusClass(employee.is_active)"
+                                        >
+                                            {{ employee.is_active ? 'Aktif' : 'Nonaktif' }}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-slate-400">{{ employee.email }}</p>
+                                    <p v-if="employee.phone" class="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                                        <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                        WA: {{ employee.phone }}
+                                    </p>
+                                    <p v-else class="text-[10px] italic text-rose-400/70">No. WA belum diisi</p>
+                                </div>
                             </div>
 
                             <div class="space-y-2 text-sm text-slate-300">
@@ -607,134 +639,155 @@ const getStatusClass = (isActive: boolean) => {
                 </div>
 
                 <form class="mt-6 space-y-5" @submit.prevent="submitEmployee">
-                    <section class="grid gap-4 md:grid-cols-2">
-                        <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Nama</span>
-                            <input
-                                v-model="employeeForm.name"
-                                type="text"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
-                            />
-                            <p v-if="employeeForm.errors.name" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.name }}</p>
-                        </label>
-
-                        <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Email Login</span>
-                            <input
-                                v-model="employeeForm.email"
-                                type="email"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
-                            />
-                            <p v-if="employeeForm.errors.email" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.email }}</p>
-                        </label>
-
-                        <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                                No. HP / WhatsApp <span class="text-rose-400">*</span>
-                            </span>
-                            <input
-                                v-model="employeeForm.phone"
-                                type="text"
-                                placeholder="Wajib untuk koordinasi (Contoh: 0812...)"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
-                                required
-                            />
-                            <p v-if="employeeForm.errors.phone" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.phone }}</p>
-                        </label>
-
-                        <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Tanggal Bergabung</span>
-                            <input
-                                v-model="employeeForm.join_date"
-                                type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
-                            />
-                            <p v-if="employeeForm.errors.join_date" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.join_date }}</p>
-                        </label>
-                    </section>
-
-                    <section class="grid gap-4 md:grid-cols-2">
-                        <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
-                            <select
-                                v-model="employeeForm.outlet_id"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
-                            >
-                                <option
-                                    v-for="outlet in referenceData.outlets"
-                                    :key="outlet.id"
-                                    :value="outlet.id"
-                                >
-                                    {{ outlet.name }}
-                                </option>
-                            </select>
-                            <p v-if="employeeForm.errors.outlet_id" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.outlet_id }}</p>
-                        </label>
-
-                        <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Role</span>
-                            <select
-                                v-model="employeeForm.role_id"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
-                            >
-                                <option value="">Pilih role</option>
-                                <option
-                                    v-for="role in filteredRoleOptions"
-                                    :key="role.id"
-                                    :value="role.id"
-                                >
-                                    {{ role.name }}
-                                </option>
-                            </select>
-                            <p v-if="employeeForm.errors.role_id" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.role_id }}</p>
-                        </label>
-
-                        <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                                {{ modalMode === 'edit' ? 'Password Baru' : 'Password Awal' }}
-                            </span>
-                            <div class="relative">
-                                <input
-                                    v-model="employeeForm.password"
-                                    :type="showPassword ? 'text' : 'password'"
-                                    class="w-full rounded-2xl border border-white/10 bg-slate-900 pl-4 pr-12 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
-                                    :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : 'Minimal 8 karakter'"
-                                />
-                                <button
-                                    type="button"
-                                    @click="showPassword = !showPassword"
-                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
-                                >
-                                    <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
-                                </button>
+                    <div class="grid gap-6 md:grid-cols-[180px_1fr]">
+                        <!-- Kolom Kiri: Upload Foto 3:4 -->
+                        <div class="space-y-2">
+                            <span class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Foto Karyawan</span>
+                            <div class="relative flex aspect-[3/4] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-slate-900 transition hover:border-orange-500/50 overflow-hidden">
+                                <img v-if="photoPreview" :src="photoPreview" class="absolute inset-0 h-full w-full object-cover" />
+                                <img v-else-if="selectedEmployee?.photo_url" :src="selectedEmployee.photo_url" class="absolute inset-0 h-full w-full object-cover" />
+                                <div v-else class="flex flex-col items-center justify-center p-4 text-center text-slate-500">
+                                    <Plus class="h-6 w-6 mb-2" />
+                                    <span class="text-xs font-bold">Pilih Foto</span>
+                                </div>
+                                <input type="file" accept="image/*" class="absolute inset-0 cursor-pointer opacity-0" @change="handlePhotoChange" />
                             </div>
-                            <p v-if="employeeForm.errors.password" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.password }}</p>
-                        </label>
+                            <p class="text-[9px] text-slate-500 text-center uppercase tracking-wider">Format JPG/PNG (3:4)</p>
+                            <p v-if="employeeForm.errors.photo" class="mt-2 text-xs text-rose-300 text-center">{{ employeeForm.errors.photo }}</p>
+                        </div>
 
-                        <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                                {{ modalMode === 'edit' ? 'Reset PIN Approval' : 'PIN Approval' }}
-                            </span>
-                            <div class="relative">
-                                <input
-                                    v-model="employeeForm.approval_pin"
-                                    :type="showPin ? 'text' : 'password'"
-                                    inputmode="numeric"
-                                    maxlength="6"
-                                    class="w-full rounded-2xl border border-white/10 bg-slate-900 pl-4 pr-12 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
-                                    :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : '6 digit angka'"
-                                />
-                                <button
-                                    type="button"
-                                    @click="showPin = !showPin"
-                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
-                                >
-                                    <component :is="showPin ? EyeOff : Eye" class="h-4 w-4" />
-                                </button>
-                            </div>
-                            <p v-if="employeeForm.errors.approval_pin" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.approval_pin }}</p>
-                        </label>
-                    </section>
+                        <!-- Kolom Kanan: Form input -->
+                        <div class="space-y-5">
+                            <section class="grid gap-4 md:grid-cols-2">
+                                <label class="block">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Nama</span>
+                                    <input
+                                        v-model="employeeForm.name"
+                                        type="text"
+                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                    />
+                                    <p v-if="employeeForm.errors.name" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.name }}</p>
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Email Login</span>
+                                    <input
+                                        v-model="employeeForm.email"
+                                        type="email"
+                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                    />
+                                    <p v-if="employeeForm.errors.email" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.email }}</p>
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                        No. HP / WhatsApp <span class="text-rose-400">*</span>
+                                    </span>
+                                    <input
+                                        v-model="employeeForm.phone"
+                                        type="text"
+                                        placeholder="Wajib untuk koordinasi (Contoh: 0812...)"
+                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        required
+                                    />
+                                    <p v-if="employeeForm.errors.phone" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.phone }}</p>
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Tanggal Bergabung</span>
+                                    <input
+                                        v-model="employeeForm.join_date"
+                                        type="date"
+                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                    />
+                                    <p v-if="employeeForm.errors.join_date" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.join_date }}</p>
+                                </label>
+                            </section>
+
+                            <section class="grid gap-4 md:grid-cols-2">
+                                <label class="block">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                                    <select
+                                        v-model="employeeForm.outlet_id"
+                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                    >
+                                        <option
+                                            v-for="outlet in referenceData.outlets"
+                                            :key="outlet.id"
+                                            :value="outlet.id"
+                                        >
+                                            {{ outlet.name }}
+                                        </option>
+                                    </select>
+                                    <p v-if="employeeForm.errors.outlet_id" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.outlet_id }}</p>
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Role</span>
+                                    <select
+                                        v-model="employeeForm.role_id"
+                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                    >
+                                        <option value="">Pilih role</option>
+                                        <option
+                                            v-for="role in filteredRoleOptions"
+                                            :key="role.id"
+                                            :value="role.id"
+                                        >
+                                            {{ role.name }}
+                                        </option>
+                                    </select>
+                                    <p v-if="employeeForm.errors.role_id" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.role_id }}</p>
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                        {{ modalMode === 'edit' ? 'Password Baru' : 'Password Awal' }}
+                                    </span>
+                                    <div class="relative">
+                                        <input
+                                            v-model="employeeForm.password"
+                                            :type="showPassword ? 'text' : 'password'"
+                                            class="w-full rounded-2xl border border-white/10 bg-slate-900 pl-4 pr-12 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                            :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : 'Minimal 8 karakter'"
+                                        />
+                                        <button
+                                            type="button"
+                                            @click="showPassword = !showPassword"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                        >
+                                            <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                    <p v-if="employeeForm.errors.password" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.password }}</p>
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                        {{ modalMode === 'edit' ? 'Reset PIN Approval' : 'PIN Approval' }}
+                                    </span>
+                                    <div class="relative">
+                                        <input
+                                            v-model="employeeForm.approval_pin"
+                                            :type="showPin ? 'text' : 'password'"
+                                            inputmode="numeric"
+                                            maxlength="6"
+                                            class="w-full rounded-2xl border border-white/10 bg-slate-900 pl-4 pr-12 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                            :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : '6 digit angka'"
+                                        />
+                                        <button
+                                            type="button"
+                                            @click="showPin = !showPin"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                        >
+                                            <component :is="showPin ? EyeOff : Eye" class="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                    <p v-if="employeeForm.errors.approval_pin" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.approval_pin }}</p>
+                                </label>
+                            </section>
+                        </div>
+                    </div>
 
                     <label class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
                         <input

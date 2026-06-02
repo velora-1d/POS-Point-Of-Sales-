@@ -97,6 +97,17 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
+        $paymentMethods = ['qris'];
+
+        if ($user) {
+            try {
+                $service = app(\App\Services\PaymentGatewayConfigService::class);
+                $config = $service->resolvePakasirConfig($user->outlet_id);
+                $paymentMethods = $config['active_payment_methods'] ?? ['qris'];
+            } catch (\Exception $e) {
+                // Keep default 'qris' if config fails/missing
+            }
+        }
 
         return [
             ...parent::share($request),
@@ -107,7 +118,9 @@ class HandleInertiaRequests extends Middleware
                     'email' => $user->email,
                     'role' => $user->role ? $user->role->name : null,
                     'outlet' => $user->outlet ? $user->outlet->name : null,
+                    'outlet_id' => $user->outlet_id,
                 ] : null,
+                'payment_methods' => $paymentMethods,
             ],
             'menuProgress' => [
                 'totalMenus' => self::TOTAL_BRIEF_MENUS,

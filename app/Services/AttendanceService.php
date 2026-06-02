@@ -75,9 +75,7 @@ class AttendanceService
                 'outlets' => $this->attendanceRepository->getOutlets(
                     $actor->role?->type === 'owner' ? null : $actor->outlet_id,
                 ),
-                'employees' => $canManage
-                    ? $this->attendanceRepository->getEmployees($scopeOutletId)
-                    : collect(),
+                'employees' => $this->attendanceRepository->getEmployees($scopeOutletId),
             ],
             'canManage' => $canManage,
             'canClock' => true,

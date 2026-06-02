@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import {
     Activity,
     CheckCircle2,
@@ -10,6 +10,7 @@ import {
     ShieldCheck,
     Wifi,
     Zap,
+    CreditCard,
 } from '@lucide/vue';
 import { ref } from 'vue';
 
@@ -31,10 +32,45 @@ const props = defineProps<{
 }>();
 
 const isTesting = ref(false);
+const page = usePage<any>();
+const userOutletId = page.props.auth.user?.outlet_id;
+
+const form = useForm({
+    outlet_id: userOutletId || '',
+    provider: 'pakasir',
+    is_active: true,
+    active_payment_methods: [...props.effectiveConfig.active_payment_methods],
+});
+
+const availableMethods = [
+    { value: 'qris', label: 'QRIS', description: 'Pembayaran instan kode QR' },
+    { value: 'ewallet', label: 'E-Wallet', description: 'OVO, GoPay, Dana, dll.' },
+    { value: 'debit', label: 'Debit / Kartu', description: 'GPN, Visa, Mastercard' },
+    { value: 'transfer', label: 'Transfer Bank', description: 'VA & Transfer Manual' },
+];
+
+function toggleMethod(methodValue: string) {
+    const idx = form.active_payment_methods.indexOf(methodValue);
+    if (idx >= 0) {
+        if (form.active_payment_methods.length > 1) {
+            form.active_payment_methods.splice(idx, 1);
+        }
+    } else {
+        form.active_payment_methods.push(methodValue);
+    }
+}
+
+function submitSave() {
+    form.put(route('settings.payment-gateway.update'), {
+        preserveScroll: true,
+    });
+}
 
 function submitTest() {
     isTesting.value = true;
-    router.post(route('settings.payment-gateway.test'), {}, {
+    router.post(route('settings.payment-gateway.test'), {
+        outlet_id: userOutletId,
+    }, {
         preserveScroll: true,
         onFinish: () => {
             isTesting.value = false;
@@ -157,27 +193,48 @@ function submitTest() {
 
             <!-- Action Area -->
             <div class="grid gap-6 lg:grid-cols-[1fr,320px]">
-                <!-- Methods -->
-                <div class="rounded-[28px] border border-white/10 bg-slate-950/45 p-6 shadow-xl">
-                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-400">Supported Methods</p>
-                    <h3 class="mt-1 text-xl font-black text-white">Metode Bayar Digital</h3>
-                    <p class="mt-2 text-xs text-slate-400">
-                        Metode berikut otomatis aktif secara global jika gateway berhasil terhubung.
-                    </p>
+                <!-- Methods Settings Form -->
+                <form @submit.prevent="submitSave" class="flex flex-col justify-between rounded-[28px] border border-white/10 bg-slate-950/45 p-6 shadow-xl">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-400">Active Methods</p>
+                        <h3 class="mt-1 text-xl font-black text-white">Metode Bayar Digital Aktif</h3>
+                        <p class="mt-2 text-xs text-slate-400">
+                            Centang metode pembayaran digital yang ingin diaktifkan di halaman kasir/order.
+                        </p>
 
-                    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                        <div 
-                            v-for="method in effectiveConfig.active_payment_methods" 
-                            :key="method"
-                            class="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-white/[0.02] p-6 transition-all hover:bg-white/[0.04]"
-                        >
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 text-orange-400">
-                                <CreditCard class="h-5 w-5" />
-                            </div>
-                            <span class="text-[11px] font-black uppercase tracking-widest text-white">{{ method }}</span>
+                        <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <label 
+                                v-for="method in availableMethods" 
+                                :key="method.value"
+                                class="flex items-start gap-4 rounded-2xl border p-4 cursor-pointer transition-all duration-200"
+                                :class="form.active_payment_methods.includes(method.value)
+                                    ? 'border-orange-500/35 bg-orange-500/5 hover:bg-orange-500/10'
+                                    : 'border-white/5 bg-white/[0.01] hover:bg-white/[0.03]'"
+                            >
+                                <input
+                                    type="checkbox"
+                                    :checked="form.active_payment_methods.includes(method.value)"
+                                    @change="toggleMethod(method.value)"
+                                    class="mt-1 h-4 w-4 rounded border-slate-700 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                />
+                                <div>
+                                    <span class="text-xs font-black uppercase tracking-wider text-white block">{{ method.label }}</span>
+                                    <span class="text-[11px] text-slate-400 block mt-0.5">{{ method.description }}</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
-                </div>
+
+                    <div class="mt-8 flex justify-end border-t border-white/5 pt-4">
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            class="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:opacity-50"
+                        >
+                            {{ form.processing ? 'Menyimpan...' : 'Simpan Metode Pembayaran' }}
+                        </button>
+                    </div>
+                </form>
 
                 <!-- Big Test Button -->
                 <div class="flex flex-col justify-between rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-xl ring-1 ring-white/5">

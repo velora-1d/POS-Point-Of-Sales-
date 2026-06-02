@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import {
     ChevronLeft,
     Clock,
@@ -31,6 +31,110 @@ const props = defineProps<{
     paymentCheckout?: Record<string, any> | null;
 }>();
 
+const page = usePage<any>();
+const activePaymentMethods = computed<PaymentMethod[]>(() => {
+    return (page.props.auth?.payment_methods as PaymentMethod[]) ?? ['qris'];
+});
+
+const getPaymentMethodConfig = (method: string) => {
+    switch (method) {
+        case 'qris':
+            return {
+                method: 'qris',
+                label: 'QRIS',
+                desc: 'Buat checkout gateway. Order baru masuk dapur setelah webhook lunas diterima.',
+                existingDesc: 'Buat atau buka checkout QRIS. Status akan berubah otomatis saat webhook pembayaran masuk.',
+                colorClass: 'border-fuchsia-500 bg-fuchsia-500/10 text-white ring-2 ring-fuchsia-500/20 font-semibold',
+                textClass: 'text-fuchsia-300 hover:text-fuchsia-200',
+                textRawClass: 'text-fuchsia-300',
+                borderClass: 'border-fuchsia-500/25 bg-fuchsia-500/10',
+                borderInnerClass: 'border-fuchsia-500/20',
+                iconBgClass: 'bg-fuchsia-500/10 text-fuchsia-300',
+                spinnerClass: 'text-fuchsia-400',
+                activeLabel: 'QRIS Gateway Sedang Aktif',
+                showText: 'Tampilkan QR Code',
+                gradientClass: 'bg-gradient-to-r from-fuchsia-500 to-pink-500',
+                buttonClass: 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-200 hover:bg-fuchsia-500/15'
+            };
+        case 'ewallet':
+            return {
+                method: 'ewallet',
+                label: 'E-Wallet',
+                desc: 'Bayar menggunakan e-wallet (OVO, GoPay, Dana, dll) via gateway.',
+                existingDesc: 'Bayar menggunakan e-wallet. Status akan berubah otomatis saat webhook pembayaran masuk.',
+                colorClass: 'border-blue-500 bg-blue-500/10 text-white ring-2 ring-blue-500/20 font-semibold',
+                textClass: 'text-blue-300 hover:text-blue-200',
+                textRawClass: 'text-blue-300',
+                borderClass: 'border-blue-500/25 bg-blue-500/10',
+                borderInnerClass: 'border-blue-500/20',
+                iconBgClass: 'bg-blue-500/10 text-blue-300',
+                spinnerClass: 'text-blue-400',
+                activeLabel: 'E-Wallet Gateway Sedang Aktif',
+                showText: 'Tampilkan QR / Link',
+                gradientClass: 'bg-gradient-to-r from-blue-500 to-indigo-500',
+                buttonClass: 'border-blue-500/20 bg-blue-500/10 text-blue-200 hover:bg-blue-500/15'
+            };
+        case 'debit':
+            return {
+                method: 'debit',
+                label: 'Debit Card',
+                desc: 'Bayar menggunakan kartu debit/kredit via gateway.',
+                existingDesc: 'Bayar menggunakan kartu debit/kredit. Status akan berubah otomatis saat webhook pembayaran masuk.',
+                colorClass: 'border-emerald-500 bg-emerald-500/10 text-white ring-2 ring-emerald-500/20 font-semibold',
+                textClass: 'text-emerald-300 hover:text-emerald-200',
+                textRawClass: 'text-emerald-300',
+                borderClass: 'border-emerald-500/25 bg-emerald-500/10',
+                borderInnerClass: 'border-emerald-500/20',
+                iconBgClass: 'bg-emerald-500/10 text-emerald-300',
+                spinnerClass: 'text-emerald-400',
+                activeLabel: 'Debit Gateway Sedang Aktif',
+                showText: 'Tampilkan QR / Link',
+                gradientClass: 'bg-gradient-to-r from-emerald-500 to-teal-500',
+                buttonClass: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-200 hover:bg-emerald-500/15'
+            };
+        case 'transfer':
+            return {
+                method: 'transfer',
+                label: 'Transfer / VA',
+                desc: 'Bayar menggunakan Virtual Account bank transfer via gateway.',
+                existingDesc: 'Bayar menggunakan Virtual Account bank transfer. Status akan berubah otomatis saat webhook pembayaran masuk.',
+                colorClass: 'border-indigo-500 bg-indigo-500/10 text-white ring-2 ring-indigo-500/20 font-semibold',
+                textClass: 'text-indigo-300 hover:text-indigo-200',
+                textRawClass: 'text-indigo-300',
+                borderClass: 'border-indigo-500/25 bg-indigo-500/10',
+                borderInnerClass: 'border-indigo-500/20',
+                iconBgClass: 'bg-indigo-500/10 text-indigo-300',
+                spinnerClass: 'text-indigo-400',
+                activeLabel: 'Transfer Gateway Sedang Aktif',
+                showText: 'Tampilkan QR / Link',
+                gradientClass: 'bg-gradient-to-r from-indigo-500 to-violet-500',
+                buttonClass: 'border-indigo-500/20 bg-indigo-500/10 text-indigo-200 hover:bg-indigo-500/15'
+            };
+        default:
+            return {
+                method: 'qris',
+                label: 'Digital Payment',
+                desc: 'Buat checkout digital via gateway.',
+                existingDesc: 'Buat checkout digital via gateway.',
+                colorClass: 'border-slate-500 bg-slate-500/10 text-white ring-2 ring-slate-500/20 font-semibold',
+                textClass: 'text-slate-300 hover:text-slate-200',
+                textRawClass: 'text-slate-300',
+                borderClass: 'border-slate-500/25 bg-slate-500/10',
+                borderInnerClass: 'border-slate-500/20',
+                iconBgClass: 'bg-slate-500/10 text-slate-300',
+                spinnerClass: 'text-slate-400',
+                activeLabel: 'Gateway Sedang Aktif',
+                showText: 'Tampilkan QR / Link',
+                gradientClass: 'bg-gradient-to-r from-slate-500 to-slate-600',
+                buttonClass: 'border-slate-500/20 bg-slate-500/10 text-slate-200 hover:bg-slate-500/15'
+            };
+    }
+};
+
+const activePaymentConfig = computed(() => {
+    return getPaymentMethodConfig(activePaymentCheckout.value?.method ?? 'qris');
+});
+
 const selectedNewOrderPromoCode = ref('');
 const selectedExistingPaymentPromoCode = ref('');
 const isCustomNewOrderPromo = ref(false);
@@ -59,7 +163,7 @@ const handleExistingPaymentPromoChange = (e: Event) => {
 };
 
 type PaymentOption = 'pay_later' | 'pay_now';
-type PaymentMethod = 'cash' | 'qris';
+type PaymentMethod = 'cash' | 'qris' | 'ewallet' | 'debit' | 'transfer';
 
 // Page state
 const selectedTable = ref<any>(null);
@@ -711,7 +815,10 @@ const getPaymentStatusLabel = (order: any) => {
     const payment = getPaymentMeta(order);
 
     if (isOrderPaid(order)) return 'Lunas';
-    if (hasPendingBeforeKitchenPayment(order)) return 'Menunggu QRIS';
+    if (hasPendingBeforeKitchenPayment(order)) {
+        const method = payment.method ? payment.method.toUpperCase() : 'QRIS';
+        return `Menunggu ${method}`;
+    }
     if (payment.status === 'pending') return 'Checkout aktif';
     return 'Belum bayar';
 };
@@ -722,6 +829,14 @@ const getPaymentStatusClass = (order: any) => {
     }
 
     if (hasPendingBeforeKitchenPayment(order)) {
+        const payment = getPaymentMeta(order);
+        if (payment.method === 'ewallet') {
+            return 'border-blue-500/20 bg-blue-500/10 text-blue-300';
+        } else if (payment.method === 'debit') {
+            return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300';
+        } else if (payment.method === 'transfer') {
+            return 'border-indigo-500/20 bg-indigo-500/10 text-indigo-300';
+        }
         return 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-300';
     }
 
@@ -792,7 +907,9 @@ const openPaymentModalForOrder = (order: any) => {
 
     paymentTargetOrder.value = order;
     existingPaymentMethod.value =
-        hasPendingBeforeKitchenPayment(order) ? 'qris' : 'cash';
+        hasPendingBeforeKitchenPayment(order)
+            ? (getPaymentMeta(order).method || 'qris')
+            : 'cash';
     existingPaymentCashReceived.value = '';
     const code = getPromoMeta(order).manual_code || '';
     existingPaymentPromoCode.value = code;
@@ -1673,7 +1790,7 @@ const openPaymentCheckout = () => {
                         >
                             <!-- Product Image Area -->
                             <div
-                                class="relative h-28 w-full overflow-hidden border-b border-slate-800 bg-slate-900"
+                                class="relative aspect-square w-full overflow-hidden border-b border-slate-800 bg-slate-900"
                             >
                                 <img
                                     :src="getProductImage(product)"
@@ -2113,12 +2230,16 @@ const openPaymentCheckout = () => {
                                             )
                                                 ? 'before_kitchen'
                                                 : 'after_service',
+                                        method:
+                                            getPaymentMeta(selectedManagedOrder)
+                                                .method || 'qris',
                                     };
                                     paymentCheckoutModalOpen = true;
                                 "
-                                class="w-full rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/10 px-3 py-2 text-[11px] font-bold text-fuchsia-200 transition hover:bg-fuchsia-500/15"
+                                class="w-full rounded-xl border px-3 py-2 text-[11px] font-bold transition"
+                                :class="getPaymentMethodConfig(getPaymentMeta(selectedManagedOrder).method || 'qris').buttonClass"
                             >
-                                Buka Checkout QRIS Aktif
+                                Buka Checkout {{ getPaymentMethodConfig(getPaymentMeta(selectedManagedOrder).method || 'qris').label }} Aktif
                             </button>
                         </div>
                     </div>
@@ -2656,22 +2777,22 @@ const openPaymentCheckout = () => {
                                         </p>
                                     </button>
                                     <button
+                                        v-for="method in activePaymentMethods"
+                                        :key="method"
                                         type="button"
-                                        @click="newOrderPaymentMethod = 'qris'"
+                                        @click="newOrderPaymentMethod = method"
                                         :class="[
                                             'rounded-xl border p-3 text-left transition',
-                                            newOrderPaymentMethod === 'qris'
-                                                ? 'border-fuchsia-500 bg-fuchsia-500/10 text-white ring-2 ring-fuchsia-500/20 font-semibold'
+                                            newOrderPaymentMethod === method
+                                                ? getPaymentMethodConfig(method).colorClass
                                                 : 'border-slate-800 bg-slate-950/70 text-slate-300',
                                         ]"
                                     >
-                                        <p class="text-xs font-bold">QRIS</p>
+                                        <p class="text-xs font-bold">{{ getPaymentMethodConfig(method).label }}</p>
                                         <p
                                             class="mt-1 text-[11px] text-slate-400"
                                         >
-                                            Buat checkout gateway. Order baru
-                                            masuk dapur setelah webhook lunas
-                                            diterima.
+                                            {{ getPaymentMethodConfig(method).desc }}
                                         </p>
                                     </button>
                                 </div>
@@ -2756,7 +2877,7 @@ const openPaymentCheckout = () => {
                                       ? 'Kirim Order ke Dapur (Bayar Nanti)'
                                       : newOrderPaymentMethod === 'cash'
                                         ? 'Bayar Tunai & Kirim ke Dapur'
-                                        : 'Buat Checkout QRIS'
+                                        : 'Buat Checkout ' + (newOrderPaymentMethod ? newOrderPaymentMethod.toUpperCase() : 'QRIS')
                             }}</span>
                         </button>
                     </div>
@@ -4072,17 +4193,17 @@ const openPaymentCheckout = () => {
                         <!-- Box Informasi QRIS Aktif (Menunggu Pembayaran) -->
                         <div
                             v-if="hasPendingBeforeKitchenPayment(paymentTargetOrder)"
-                            class="rounded-2xl border border-fuchsia-500/25 bg-fuchsia-500/10 p-4 space-y-3"
+                            :class="['rounded-2xl border p-4 space-y-3', getPaymentMethodConfig(getPaymentMeta(paymentTargetOrder).method || 'qris').borderClass]"
                         >
                             <div class="flex items-center gap-3">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-fuchsia-500/20 text-fuchsia-300">
-                                    <svg class="h-4 w-4 animate-spin text-fuchsia-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <div :class="['flex h-8 w-8 items-center justify-center rounded-xl', getPaymentMethodConfig(getPaymentMeta(paymentTargetOrder).method || 'qris').iconBgClass]">
+                                    <svg :class="['h-4 w-4 animate-spin', getPaymentMethodConfig(getPaymentMeta(paymentTargetOrder).method || 'qris').spinnerClass]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-xs font-black text-white">QRIS Gateway Sedang Aktif</h4>
+                                    <h4 class="text-xs font-black text-white">{{ getPaymentMethodConfig(getPaymentMeta(paymentTargetOrder).method || 'qris').activeLabel }}</h4>
                                     <p class="text-[10px] text-slate-400 mt-0.5 leading-normal">
                                         Sistem sedang memantau pembayaran dari pelanggan secara real-time. Halaman ini akan otomatis berganti ke proses berikutnya setelah pembayaran lunas.
                                     </p>
@@ -4096,19 +4217,20 @@ const openPaymentCheckout = () => {
                                     {{ isRefreshingOrder ? 'Checking...' : 'Cek Status' }}
                                 </button>
                             </div>
-                            <div v-if="getPaymentMeta(paymentTargetOrder).checkout_url" class="pt-2 border-t border-fuchsia-500/20 flex justify-between items-center text-[10px]">
-                                <span class="text-slate-400">QR Code dapat ditunjukkan kembali via:</span>
+                            <div v-if="getPaymentMeta(paymentTargetOrder).checkout_url" :class="['pt-2 border-t flex justify-between items-center text-[10px]', getPaymentMethodConfig(getPaymentMeta(paymentTargetOrder).method || 'qris').borderInnerClass]">
+                                <span class="text-slate-400">Link pembayaran dapat ditunjukkan kembali via:</span>
                                 <button
                                     type="button"
                                     @click="activePaymentCheckout = {
                                         payment_url: getPaymentMeta(paymentTargetOrder).checkout_url,
                                         order_number: paymentTargetOrder.order_number,
                                         amount: paymentTargetOrder.total_amount,
-                                        context: 'before_kitchen'
+                                        context: 'before_kitchen',
+                                        method: getPaymentMeta(paymentTargetOrder).method || 'qris'
                                     }; paymentCheckoutModalOpen = true;"
-                                    class="font-extrabold text-fuchsia-300 hover:text-fuchsia-200 transition"
+                                    :class="['font-extrabold transition', getPaymentMethodConfig(getPaymentMeta(paymentTargetOrder).method || 'qris').textClass]"
                                 >
-                                    Tampilkan QR Code &rarr;
+                                    {{ getPaymentMethodConfig(getPaymentMeta(paymentTargetOrder).method || 'qris').showText }} &rarr;
                                 </button>
                             </div>
                         </div>
@@ -4131,20 +4253,20 @@ const openPaymentCheckout = () => {
                                 </p>
                             </button>
                             <button
+                                v-for="method in activePaymentMethods"
+                                :key="method"
                                 type="button"
-                                @click="existingPaymentMethod = 'qris'"
+                                @click="existingPaymentMethod = method"
                                 :class="[
                                     'rounded-2xl border p-4 text-left transition',
-                                    existingPaymentMethod === 'qris'
-                                        ? 'border-fuchsia-500 bg-fuchsia-500/10 text-white ring-2 ring-fuchsia-500/20 font-semibold'
+                                    existingPaymentMethod === method
+                                        ? getPaymentMethodConfig(method).colorClass
                                         : 'border-slate-800 bg-slate-950/70 text-slate-300',
                                 ]"
                             >
-                                <p class="text-sm font-bold">QRIS Gateway</p>
+                                <p class="text-sm font-bold">{{ getPaymentMethodConfig(method).label }} Gateway</p>
                                 <p class="mt-1 text-[11px] text-slate-400">
-                                    Buat atau buka checkout QRIS. Status akan
-                                    berubah otomatis saat webhook pembayaran
-                                    masuk.
+                                    {{ getPaymentMethodConfig(method).existingDesc }}
                                 </p>
                             </button>
                         </div>
@@ -4190,22 +4312,30 @@ const openPaymentCheckout = () => {
 
                         <div
                             v-else
-                            class="rounded-2xl border border-fuchsia-500/15 bg-fuchsia-500/5 p-4"
+                            :class="['rounded-2xl border p-4', getPaymentMethodConfig(existingPaymentMethod).method === 'ewallet' ? 'border-blue-500/15 bg-blue-500/5' :
+                                                               getPaymentMethodConfig(existingPaymentMethod).method === 'debit' ? 'border-emerald-500/15 bg-emerald-500/5' :
+                                                               getPaymentMethodConfig(existingPaymentMethod).method === 'transfer' ? 'border-indigo-500/15 bg-indigo-500/5' :
+                                                               'border-fuchsia-500/15 bg-fuchsia-500/5']"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-450"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em]"
+                                :class="getPaymentMethodConfig(existingPaymentMethod).textRawClass"
                             >
-                                Info Pembayaran QRIS
+                                Info Pembayaran {{ getPaymentMethodConfig(existingPaymentMethod).label }}
                             </p>
                             <p
-                                class="mt-1 text-xs leading-relaxed text-fuchsia-100/80"
+                                class="mt-1 text-xs leading-relaxed"
+                                :class="getPaymentMethodConfig(existingPaymentMethod).method === 'ewallet' ? 'text-blue-100/80' :
+                                        getPaymentMethodConfig(existingPaymentMethod).method === 'debit' ? 'text-emerald-100/80' :
+                                        getPaymentMethodConfig(existingPaymentMethod).method === 'transfer' ? 'text-indigo-100/80' :
+                                        'text-fuchsia-100/80'"
                             >
                                 {{
                                     hasPendingBeforeKitchenPayment(
                                         paymentTargetOrder,
                                     )
-                                        ? 'Setelah QRIS lunas, order otomatis pindah ke lane pending agar bisa diproses kitchen.'
-                                        : 'Setelah QRIS lunas, order otomatis ditutup sebagai completed.'
+                                        ? `Setelah ${getPaymentMethodConfig(existingPaymentMethod).label} lunas, order otomatis pindah ke lane pending agar bisa diproses kitchen.`
+                                        : `Setelah ${getPaymentMethodConfig(existingPaymentMethod).label} lunas, order otomatis ditutup sebagai completed.`
                                 }}
                             </p>
                         </div>
@@ -4301,7 +4431,7 @@ const openPaymentCheckout = () => {
                                     ? 'Memproses Pembayaran...'
                                     : existingPaymentMethod === 'cash'
                                       ? 'Simpan Pembayaran Cash'
-                                      : 'Buat Checkout QRIS'
+                                      : 'Buat Checkout ' + (existingPaymentMethod ? existingPaymentMethod.toUpperCase() : 'QRIS')
                             }}
                         </button>
                     </div>
@@ -4329,9 +4459,10 @@ const openPaymentCheckout = () => {
                     >
                         <div>
                             <span
-                                class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-fuchsia-300"
+                                class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em]"
+                                :class="[activePaymentConfig.borderInnerClass, activePaymentConfig.iconBgClass]"
                             >
-                                Checkout QRIS Aktif
+                                Checkout {{ activePaymentConfig.label }} Aktif
                             </span>
                             <h3 class="mt-3 text-xl font-black text-white">
                                 {{ activePaymentCheckout.order_number }}
@@ -4358,9 +4489,10 @@ const openPaymentCheckout = () => {
                             class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em]"
+                                :class="activePaymentConfig.textRawClass"
                             >
-                                Split Bill
+                                Total Bayar
                             </p>
                             <p class="mt-2 text-2xl font-black text-white">
                                 {{ formatPrice(activePaymentCheckout.amount) }}
@@ -4375,9 +4507,10 @@ const openPaymentCheckout = () => {
                         <button
                             type="button"
                             @click="openPaymentCheckout"
-                            class="w-full rounded-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-5 py-3 text-sm font-bold text-white"
+                            class="w-full rounded-2xl px-5 py-3 text-sm font-bold text-white transition hover:brightness-110"
+                            :class="activePaymentConfig.gradientClass"
                         >
-                            Buka Checkout QRIS
+                            Buka Checkout {{ activePaymentConfig.label }}
                         </button>
 
                         <p class="text-center text-[11px] text-slate-500">

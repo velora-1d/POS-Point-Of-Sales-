@@ -22,6 +22,7 @@ interface OutletOption {
 interface EmployeeOption {
     id: string;
     name: string;
+    photo_url?: string | null;
     outlet_id?: string | null;
     role?: {
         id: string;
@@ -400,6 +401,39 @@ const submitCorrection = () => {
         onSuccess: () => closeCorrectionModal(),
     });
 };
+
+const employeeStatusMap = computed(() => {
+    const map = new Map<string, { status: string; record?: AttendanceRow }>();
+
+    props.referenceData.employees.forEach((emp) => {
+        map.set(emp.id, { status: 'absent' });
+    });
+
+    props.todayEntries.forEach((entry) => {
+        if (entry.user?.id) {
+            const status = entry.clock_out ? 'completed' : 'active';
+            map.set(entry.user.id, { status, record: entry });
+        }
+    });
+
+    return map;
+});
+
+const quickClockIn = (employeeId: string) => {
+    router.post(route('attendance.clock-in'), {
+        user_id: employeeId,
+    }, {
+        preserveScroll: true,
+    });
+};
+
+const quickClockOut = (employeeId: string) => {
+    router.post(route('attendance.clock-out'), {
+        user_id: employeeId,
+    }, {
+        preserveScroll: true,
+    });
+};
 </script>
 
 <template>
@@ -480,10 +514,10 @@ const submitCorrection = () => {
                     <div class="flex items-start justify-between gap-4">
                         <div>
                             <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
-                                Status Absensi Saya
+                                Absensi Cepat Karyawan
                             </h3>
                             <p class="mt-1 text-xs text-slate-500">
-                                Gunakan panel ini untuk clock in dan clock out hari ini.
+                                Pilih karyawan di bawah untuk menandai kehadiran harian mereka secara cepat.
                             </p>
                         </div>
                         <div class="rounded-2xl border border-white/10 bg-slate-950/50 p-3 text-orange-200">
@@ -491,104 +525,71 @@ const submitCorrection = () => {
                         </div>
                     </div>
 
-                    <div class="mt-5 grid gap-4 lg:grid-cols-[1fr_0.95fr]">
-                        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                                Jadwal Hari Ini
-                            </p>
-
-                            <div v-if="todaySchedule" class="mt-3 space-y-2">
-                                <p class="text-base font-black text-white">
-                                    {{ todaySchedule.shift_template_name }}
-                                </p>
-                                <p class="text-sm text-slate-300">
-                                    {{ todaySchedule.start_time?.slice(0, 5) }} - {{ todaySchedule.end_time?.slice(0, 5) }}
-                                </p>
-                                <p class="text-xs text-slate-500">
-                                    {{ formatDate(todaySchedule.schedule_date) }}
-                                </p>
+                    <div class="mt-5 grid gap-3 max-h-[500px] overflow-y-auto pr-1">
+                        <div
+                            v-for="employee in referenceData.employees"
+                            :key="employee.id"
+                            class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-3 hover:bg-white/[0.04] transition duration-150"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div class="h-16 w-12 flex-shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-900 aspect-[3/4]">
+                                    <img v-if="employee.photo_url" :src="employee.photo_url" class="h-full w-full object-cover" />
+                                    <div v-else class="flex h-full w-full items-center justify-center text-[9px] text-slate-500 font-bold bg-slate-900">3:4</div>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">{{ employee.name }}</h4>
+                                    <p class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">{{ employee.role?.name || '-' }}</p>
+                                    <div class="mt-1 flex items-center gap-1.5">
+                                        <span
+                                            v-if="employeeStatusMap.get(employee.id)?.status === 'active'"
+                                            class="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse"
+                                        ></span>
+                                        <span class="text-[10px] text-slate-400 font-medium">
+                                            {{
+                                                employeeStatusMap.get(employee.id)?.status === 'completed'
+                                                    ? 'Sudah Pulang'
+                                                    : employeeStatusMap.get(employee.id)?.status === 'active'
+                                                    ? 'Sedang Bekerja'
+                                                    : 'Belum Hadir'
+                                            }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div v-else class="mt-3 rounded-2xl border border-amber-400/15 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-                                Belum ada jadwal shift hari ini. Clock in tetap bisa dicatat sebagai absensi tanpa jadwal.
-                            </div>
-                        </div>
-
-                        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                             <div class="flex items-center gap-2">
-                                <span
-                                    class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
-                                    :class="statusClass(selfAttendance?.status || 'present')"
+                                <!-- Tombol Hadir (Absent -> Active) -->
+                                <button
+                                    v-if="employeeStatusMap.get(employee.id)?.status === 'absent'"
+                                    type="button"
+                                    class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/20 transition duration-150"
+                                    @click="quickClockIn(employee.id)"
                                 >
-                                    {{ selfAttendance?.status === 'late' ? 'Terlambat' : hasClockedIn ? 'Hadir' : 'Belum Clock In' }}
-                                </span>
-                            </div>
+                                    <LogIn class="h-3.5 w-3.5" />
+                                    Hadir
+                                </button>
 
-                            <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                                <div class="rounded-2xl border border-white/10 bg-slate-950/50 px-3 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Clock In</p>
-                                    <p class="mt-1 text-sm font-bold text-white">{{ formatTime(selfAttendance?.clock_in) }}</p>
-                                </div>
-                                <div class="rounded-2xl border border-white/10 bg-slate-950/50 px-3 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Clock Out</p>
-                                    <p class="mt-1 text-sm font-bold text-white">{{ formatTime(selfAttendance?.clock_out) }}</p>
-                                </div>
-                            </div>
+                                <!-- Tombol Pulang (Active -> Completed) -->
+                                <button
+                                    v-else-if="employeeStatusMap.get(employee.id)?.status === 'active'"
+                                    type="button"
+                                    class="inline-flex items-center gap-1.5 rounded-xl bg-rose-500/10 border border-rose-500/25 px-3 py-2 text-xs font-bold text-rose-300 hover:bg-rose-500/20 transition duration-150"
+                                    @click="quickClockOut(employee.id)"
+                                >
+                                    <LogOut class="h-3.5 w-3.5" />
+                                    Pulang
+                                </button>
 
-                            <div class="mt-3 rounded-2xl border border-white/10 bg-slate-950/50 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Durasi Kerja</p>
-                                <p class="mt-1 text-sm font-bold text-white">{{ selfAttendance?.work_duration_label || '-' }}</p>
+                                <!-- Status Selesai -->
+                                <div
+                                    v-else
+                                    class="inline-flex items-center gap-1 rounded-xl bg-slate-900 border border-white/5 px-3 py-2 text-xs font-semibold text-slate-500"
+                                >
+                                    <CheckCircle2 class="h-3.5 w-3.5 text-emerald-500" />
+                                    Selesai
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="mt-5 grid gap-4 lg:grid-cols-2">
-                        <form class="rounded-2xl border border-white/10 bg-slate-950/50 p-4" @submit.prevent="submitClockIn">
-                            <div class="flex items-center gap-2 text-orange-200">
-                                <LogIn class="h-4 w-4" />
-                                <p class="text-sm font-bold">Clock In</p>
-                            </div>
-                            <textarea
-                                v-model="clockInForm.notes"
-                                rows="3"
-                                placeholder="Catatan kedatangan opsional"
-                                class="mt-3 w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
-                            />
-                            <p v-if="clockInForm.errors.notes" class="mt-2 text-xs text-rose-300">{{ clockInForm.errors.notes }}</p>
-                            <p v-if="clockInForm.errors.schedule_id" class="mt-2 text-xs text-rose-300">{{ clockInForm.errors.schedule_id }}</p>
-                            <p v-if="clockInGeneralError" class="mt-2 text-xs text-rose-300">{{ clockInGeneralError }}</p>
-                            <button
-                                type="submit"
-                                class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
-                                :disabled="clockInForm.processing || hasClockedIn"
-                            >
-                                <LogIn class="h-4 w-4" />
-                                {{ clockInForm.processing ? 'Menyimpan...' : 'Clock In Sekarang' }}
-                            </button>
-                        </form>
-
-                        <form class="rounded-2xl border border-white/10 bg-slate-950/50 p-4" @submit.prevent="submitClockOut">
-                            <div class="flex items-center gap-2 text-sky-200">
-                                <LogOut class="h-4 w-4" />
-                                <p class="text-sm font-bold">Clock Out</p>
-                            </div>
-                            <textarea
-                                v-model="clockOutForm.notes"
-                                rows="3"
-                                placeholder="Catatan pulang / serah terima opsional"
-                                class="mt-3 w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-0"
-                            />
-                            <p v-if="clockOutForm.errors.notes" class="mt-2 text-xs text-rose-300">{{ clockOutForm.errors.notes }}</p>
-                            <p v-if="clockOutGeneralError" class="mt-2 text-xs text-rose-300">{{ clockOutGeneralError }}</p>
-                            <button
-                                type="submit"
-                                class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-sky-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60"
-                                :disabled="clockOutForm.processing || !hasClockedIn || hasClockedOut"
-                            >
-                                <LogOut class="h-4 w-4" />
-                                {{ clockOutForm.processing ? 'Menyimpan...' : 'Clock Out Sekarang' }}
-                            </button>
-                        </form>
                     </div>
                 </article>
 

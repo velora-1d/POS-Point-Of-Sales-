@@ -214,6 +214,54 @@ class OrderController extends Controller
         return $user?->outlet_id ?? Outlet::first()?->id;
     }
 
+    public function audioUpdates(): \Illuminate\Http\JsonResponse
+    {
+        $user = auth()->user();
+        $outletId = $this->resolveOutletId($user);
+
+        if (!$outletId) {
+            return response()->json([
+                'orders' => [],
+                'voiceSettings' => null
+            ]);
+        }
+
+        $orders = Order::where('outlet_id', $outletId)
+            ->where(function ($query) {
+                $query->whereNotIn('status', ['completed', 'cancelled'])
+                    ->orWhere(function ($q) {
+                        $q->where('status', 'completed')
+                            ->where('updated_at', '>=', now()->subMinutes(2));
+                    });
+            })
+            ->select(['id', 'order_number', 'status', 'source', 'customer_id', 'table_id', 'metadata', 'updated_at'])
+            ->with(['customer:id,name', 'table:id,name'])
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'orderNumber' => $order->order_number,
+                    'status' => $order->status,
+                    'customerName' => $order->customer?->name,
+                    'tableLabel' => $order->table?->name ?? 'Takeaway',
+                    'source' => data_get($order->metadata, 'self_service.channel') ?? $order->source,
+                ];
+            });
+
+        $settings = \App\Models\NotificationSetting::where('outlet_id', $outletId)->first();
+        $voiceSettings = $settings ? ($settings->metadata['kitchen_voice'] ?? null) : null;
+
+        return response()->json([
+            'orders' => $orders,
+            'voiceSettings' => array_merge([
+                'enabled' => true,
+                'volume' => 1.0,
+                'rate' => 0.9,
+                'pitch' => 1.05,
+            ], $voiceSettings ?? [])
+        ]);
+    }
+
     protected function loadOutletTables(string $outletId)
     {
         $this->tableQrConfigService->ensureOutletTablesReady($outletId);

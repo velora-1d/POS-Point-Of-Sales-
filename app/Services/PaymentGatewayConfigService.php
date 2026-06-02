@@ -53,6 +53,8 @@ class PaymentGatewayConfigService
     public function getGlobalDashboard(): array
     {
         $env = $this->resolveEnvFallback();
+        $storedConfig = PaymentGatewayConfig::first();
+        $activeMethods = $storedConfig ? ($storedConfig->active_payment_methods ?? ['qris']) : ['qris', 'ewallet', 'debit', 'transfer'];
 
         return [
             'effectiveConfig' => [
@@ -62,11 +64,43 @@ class PaymentGatewayConfigService
                 'base_url' => $env['base_url'],
                 'project_slug' => $env['project_slug'],
                 'callback_url' => $env['callback_url'],
-                'active_payment_methods' => ['qris', 'ewallet', 'debit', 'transfer'],
+                'active_payment_methods' => $activeMethods,
                 'has_api_key' => filled($env['api_key']),
                 'has_api_secret' => filled($env['api_secret']),
             ],
         ];
+    }
+
+    public function saveConfig(array $payload, User $actor): void
+    {
+        $this->assertCanManage($actor);
+
+        $activeMethods = collect($payload['active_payment_methods'] ?? [])
+            ->map(fn ($value) => strtolower(trim((string) $value)))
+            ->filter(fn ($value) => in_array($value, ['qris', 'ewallet', 'debit', 'transfer'], true))
+            ->unique()
+            ->values()
+            ->all();
+
+        if (empty($activeMethods)) {
+            throw ValidationException::withMessages([
+                'active_payment_methods' => 'Pilih minimal satu metode pembayaran.',
+            ]);
+        }
+
+        $outlet = \App\Models\Outlet::first();
+        if (!$outlet) {
+            throw new \RuntimeException('Belum ada outlet terdaftar.');
+        }
+
+        PaymentGatewayConfig::updateOrCreate(
+            ['outlet_id' => $outlet->id],
+            [
+                'provider' => 'pakasir',
+                'is_active' => true,
+                'active_payment_methods' => $activeMethods,
+            ]
+        );
     }
 
     public function testGlobalConnection(): string
@@ -114,33 +148,9 @@ class PaymentGatewayConfigService
 
     public function resolvePakasirConfig(?string $outletId = null): array
     {
-        if ($outletId) {
-            $storedConfig = $this->paymentGatewayConfigRepository->findByOutletId($outletId);
-
-            if ($storedConfig) {
-                if (!$storedConfig->is_active) {
-                    throw ValidationException::withMessages([
-                        'payment_gateway' => 'Gateway payment outlet sedang nonaktif.',
-                    ]);
-                }
-
-                $resolved = $this->normalizeForRuntime([
-                    'provider' => $storedConfig->provider,
-                    'is_active' => $storedConfig->is_active,
-                    'base_url' => $storedConfig->base_url,
-                    'project_slug' => $storedConfig->project_slug,
-                    'callback_url' => $storedConfig->callback_url,
-                    'active_payment_methods' => $storedConfig->active_payment_methods ?? [],
-                ], $storedConfig, false);
-
-                return [
-                    ...$resolved,
-                    'source' => 'outlet',
-                ];
-            }
-        }
-
         $envConfig = $this->resolveEnvFallback();
+        $storedConfig = PaymentGatewayConfig::first();
+        $activeMethods = $storedConfig ? ($storedConfig->active_payment_methods ?? ['qris']) : ['qris', 'ewallet', 'debit', 'transfer'];
 
         if ($envConfig['is_ready']) {
             return [
@@ -151,7 +161,7 @@ class PaymentGatewayConfigService
                 'callback_url' => $envConfig['callback_url'],
                 'api_key' => $envConfig['api_key'],
                 'api_secret' => $envConfig['api_secret'],
-                'active_payment_methods' => ['qris'],
+                'active_payment_methods' => $activeMethods,
                 'source' => 'env',
             ];
         }

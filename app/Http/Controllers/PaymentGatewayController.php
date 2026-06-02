@@ -27,6 +27,18 @@ class PaymentGatewayController extends Controller
         ]);
     }
 
+    public function update(UpsertPaymentGatewayConfigRequest $request): RedirectResponse
+    {
+        $this->paymentGatewayConfigService->saveConfig(
+            $request->validated(),
+            $request->user(),
+        );
+
+        return redirect()
+            ->route('settings.payment-gateway.index')
+            ->with('success', 'Pengaturan metode pembayaran gateway berhasil disimpan.');
+    }
+
     public function test(): RedirectResponse
     {
         $message = $this->paymentGatewayConfigService->testGlobalConnection();

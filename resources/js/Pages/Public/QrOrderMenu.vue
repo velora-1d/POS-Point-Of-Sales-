@@ -440,7 +440,7 @@ const submitCheckout = () => {
                                 class="group overflow-hidden rounded-[24px] border border-white/10 bg-slate-900/70 text-left transition hover:-translate-y-0.5 hover:border-orange-500/30"
                             >
                                 <div
-                                    class="relative h-36 overflow-hidden border-b border-white/10 bg-slate-950"
+                                    class="relative aspect-square w-full overflow-hidden border-b border-white/10 bg-slate-950"
                                 >
                                     <img
                                         :src="getProductImage(product)"

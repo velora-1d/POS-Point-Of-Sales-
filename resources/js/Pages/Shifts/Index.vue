@@ -154,6 +154,7 @@ const actualQris = ref<number | string>('');
 const actualDebit = ref<number | string>('');
 const actualEwallet = ref<number | string>('');
 const userNotes = ref('');
+const hasNonCashDiff = ref(false);
 
 watch(
     () => props.activeShift,
@@ -339,6 +340,12 @@ const submitCloseShift = () => {
     const expectedQris = Number(props.activeShift.summary.breakdown.qris || 0);
     const expectedDebit = Number(props.activeShift.summary.breakdown.debit || 0);
     const expectedEwallet = Number(props.activeShift.summary.breakdown.ewallet || 0);
+
+    if (!hasNonCashDiff.value) {
+        actualQris.value = expectedQris;
+        actualDebit.value = expectedDebit;
+        actualEwallet.value = expectedEwallet;
+    }
 
     const diffQris = Number(actualQris.value || 0) - expectedQris;
     const diffDebit = Number(actualDebit.value || 0) - expectedDebit;
@@ -538,103 +545,143 @@ const submitCloseShift = () => {
                                 <LogOut class="h-4 w-4" />
                                 <p class="text-sm font-bold">Tutup Shift</p>
                             </div>
-
                             <!-- Verification Grid for Cash and Payments -->
-                            <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                                <!-- Cash -->
-                                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
-                                    <div>
-                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">Uang Tunai (Cash)</p>
-                                        <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.expected_cash) }}</p>
+                            <div class="mt-4 space-y-4">
+                                <div class="grid gap-4 md:grid-cols-2">
+                                    <!-- Cash -->
+                                    <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Uang Tunai (Cash)</p>
+                                            <span class="text-[10px] text-slate-500 font-bold uppercase bg-slate-950 px-2 py-0.5 rounded border border-white/5">Tunai</span>
+                                        </div>
+                                        <div class="grid gap-3 sm:grid-cols-2">
+                                            <div>
+                                                <span class="text-[10px] text-slate-500 font-medium">Ekspektasi Sistem</span>
+                                                <p class="text-sm font-black text-white mt-1">{{ formatPrice(activeShift.summary.expected_cash) }}</p>
+                                            </div>
+                                            <label class="block">
+                                                <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-450">Aktual di Laci</span>
+                                                <input
+                                                    v-model="closeShiftForm.actual_cash"
+                                                    type="number"
+                                                    min="0"
+                                                    step="1000"
+                                                    class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
+                                                />
+                                                <p v-if="closeShiftForm.errors.actual_cash" class="mt-1 text-[10px] text-rose-300">{{ closeShiftForm.errors.actual_cash }}</p>
+                                            </label>
+                                        </div>
+                                        <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+                                            <span class="text-[9px] font-bold uppercase text-slate-500">Selisih Cash</span>
+                                            <p class="text-sm font-black" :class="differenceClass(Number(closeShiftForm.actual_cash || 0) - Number(activeShift.summary.expected_cash || 0))">
+                                                {{ formatPrice(Number(closeShiftForm.actual_cash || 0) - Number(activeShift.summary.expected_cash || 0)) }}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <label class="block">
-                                        <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual di Laci</span>
-                                        <input
-                                            v-model="closeShiftForm.actual_cash"
-                                            type="number"
-                                            min="0"
-                                            step="1000"
-                                            class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
-                                        />
-                                        <p v-if="closeShiftForm.errors.actual_cash" class="mt-1 text-[10px] text-rose-300">{{ closeShiftForm.errors.actual_cash }}</p>
-                                    </label>
-                                    <div>
-                                        <span class="text-[9px] font-bold uppercase text-slate-500">Selisih Cash</span>
-                                        <p class="text-sm font-black mt-0.5" :class="differenceClass(Number(closeShiftForm.actual_cash || 0) - Number(activeShift.summary.expected_cash || 0))">
-                                            {{ formatPrice(Number(closeShiftForm.actual_cash || 0) - Number(activeShift.summary.expected_cash || 0)) }}
-                                        </p>
+
+                                    <!-- Quick Summary Non-Cash Info -->
+                                    <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 flex flex-col justify-between">
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Total Pembayaran Digital</p>
+                                            <span class="text-[10px] text-slate-500 font-bold uppercase bg-slate-950 px-2 py-0.5 rounded border border-white/5">Digital</span>
+                                        </div>
+                                        <div class="grid grid-cols-3 gap-2 py-2">
+                                            <div>
+                                                <span class="text-[9px] text-slate-500 font-bold uppercase">QRIS</span>
+                                                <p class="text-xs font-bold text-white mt-0.5">{{ formatPrice(activeShift.summary.breakdown.qris) }}</p>
+                                            </div>
+                                            <div>
+                                                <span class="text-[9px] text-slate-500 font-bold uppercase">Debit</span>
+                                                <p class="text-xs font-bold text-white mt-0.5">{{ formatPrice(activeShift.summary.breakdown.debit) }}</p>
+                                            </div>
+                                            <div>
+                                                <span class="text-[9px] text-slate-500 font-bold uppercase">E-Wallet</span>
+                                                <p class="text-xs font-bold text-white mt-0.5">{{ formatPrice(activeShift.summary.breakdown.ewallet) }}</p>
+                                            </div>
+                                        </div>
+                                        <label class="flex items-center gap-2 pt-2 border-t border-white/5 cursor-pointer">
+                                            <input
+                                                v-model="hasNonCashDiff"
+                                                type="checkbox"
+                                                class="rounded border-white/20 bg-slate-900 text-sky-500 focus:ring-sky-400"
+                                            />
+                                            <span class="text-[10px] font-semibold text-slate-350">Ada selisih pada mesin EDC/QRIS</span>
+                                        </label>
                                     </div>
                                 </div>
 
-                                <!-- QRIS -->
-                                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
-                                    <div>
-                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">QRIS</p>
-                                        <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.qris) }}</p>
+                                <!-- Grid Input Non-Cash (Hanya muncul jika checkbox dicentang) -->
+                                <div v-if="hasNonCashDiff" class="grid gap-4 sm:grid-cols-3 border-t border-white/5 pt-4">
+                                    <!-- QRIS -->
+                                    <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
+                                        <div>
+                                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">QRIS</p>
+                                            <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.qris) }}</p>
+                                        </div>
+                                        <label class="block">
+                                            <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual EDC</span>
+                                            <input
+                                                v-model="actualQris"
+                                                type="number"
+                                                min="0"
+                                                step="1000"
+                                                class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none"
+                                            />
+                                        </label>
+                                        <div class="flex items-center justify-between pt-2 border-t border-white/5">
+                                            <span class="text-[9px] font-bold uppercase text-slate-500">Selisih QRIS</span>
+                                            <p class="text-xs font-black" :class="differenceClass(Number(actualQris || 0) - Number(activeShift.summary.breakdown.qris || 0))">
+                                                {{ formatPrice(Number(actualQris || 0) - Number(activeShift.summary.breakdown.qris || 0)) }}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <label class="block">
-                                        <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual EDC</span>
-                                        <input
-                                            v-model="actualQris"
-                                            type="number"
-                                            min="0"
-                                            step="1000"
-                                            class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
-                                        />
-                                    </label>
-                                    <div>
-                                        <span class="text-[9px] font-bold uppercase text-slate-500">Selisih QRIS</span>
-                                        <p class="text-sm font-black mt-0.5" :class="differenceClass(Number(actualQris || 0) - Number(activeShift.summary.breakdown.qris || 0))">
-                                            {{ formatPrice(Number(actualQris || 0) - Number(activeShift.summary.breakdown.qris || 0)) }}
-                                        </p>
-                                    </div>
-                                </div>
 
-                                <!-- Debit -->
-                                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
-                                    <div>
-                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">Debit (EDC)</p>
-                                        <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.debit) }}</p>
+                                    <!-- Debit -->
+                                    <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
+                                        <div>
+                                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">Debit (EDC)</p>
+                                            <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.debit) }}</p>
+                                        </div>
+                                        <label class="block">
+                                            <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual Kartu</span>
+                                            <input
+                                                v-model="actualDebit"
+                                                type="number"
+                                                min="0"
+                                                step="1000"
+                                                class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none"
+                                            />
+                                        </label>
+                                        <div class="flex items-center justify-between pt-2 border-t border-white/5">
+                                            <span class="text-[9px] font-bold uppercase text-slate-500">Selisih Debit</span>
+                                            <p class="text-xs font-black" :class="differenceClass(Number(actualDebit || 0) - Number(activeShift.summary.breakdown.debit || 0))">
+                                                {{ formatPrice(Number(actualDebit || 0) - Number(activeShift.summary.breakdown.debit || 0)) }}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <label class="block">
-                                        <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual Kartu</span>
-                                        <input
-                                            v-model="actualDebit"
-                                            type="number"
-                                            min="0"
-                                            step="1000"
-                                            class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
-                                        />
-                                    </label>
-                                    <div>
-                                        <span class="text-[9px] font-bold uppercase text-slate-500">Selisih Debit</span>
-                                        <p class="text-sm font-black mt-0.5" :class="differenceClass(Number(actualDebit || 0) - Number(activeShift.summary.breakdown.debit || 0))">
-                                            {{ formatPrice(Number(actualDebit || 0) - Number(activeShift.summary.breakdown.debit || 0)) }}
-                                        </p>
-                                    </div>
-                                </div>
 
-                                <!-- E-Wallet -->
-                                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
-                                    <div>
-                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">E-Wallet</p>
-                                        <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.ewallet) }}</p>
-                                    </div>
-                                    <label class="block">
-                                        <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual Dompet</span>
-                                        <input
-                                            v-model="actualEwallet"
-                                            type="number"
-                                            min="0"
-                                            step="1000"
-                                            class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none focus:ring-0"
-                                        />
-                                    </label>
-                                    <div>
-                                        <span class="text-[9px] font-bold uppercase text-slate-500">Selisih E-Wallet</span>
-                                        <p class="text-sm font-black mt-0.5" :class="differenceClass(Number(actualEwallet || 0) - Number(activeShift.summary.breakdown.ewallet || 0))">
-                                            {{ formatPrice(Number(actualEwallet || 0) - Number(activeShift.summary.breakdown.ewallet || 0)) }}
-                                        </p>
+                                    <!-- E-Wallet -->
+                                    <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
+                                        <div>
+                                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">E-Wallet</p>
+                                            <p class="text-[11px] text-slate-400 mt-0.5">Sistem: {{ formatPrice(activeShift.summary.breakdown.ewallet) }}</p>
+                                        </div>
+                                        <label class="block">
+                                            <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500">Aktual Dompet</span>
+                                            <input
+                                                v-model="actualEwallet"
+                                                type="number"
+                                                min="0"
+                                                step="1000"
+                                                class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white focus:border-sky-400 focus:outline-none"
+                                            />
+                                        </label>
+                                        <div class="flex items-center justify-between pt-2 border-t border-white/5">
+                                            <span class="text-[9px] font-bold uppercase text-slate-500">Selisih E-Wallet</span>
+                                            <p class="text-xs font-black" :class="differenceClass(Number(actualEwallet || 0) - Number(activeShift.summary.breakdown.ewallet || 0))">
+                                                {{ formatPrice(Number(actualEwallet || 0) - Number(activeShift.summary.breakdown.ewallet || 0)) }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

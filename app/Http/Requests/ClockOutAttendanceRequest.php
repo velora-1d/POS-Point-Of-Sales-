@@ -15,6 +15,7 @@ class ClockOutAttendanceRequest extends FormRequest
     {
         return [
             'notes' => ['nullable', 'string', 'max:500'],
+            'user_id' => ['nullable', 'exists:users,id'],
         ];
     }
 }

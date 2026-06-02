@@ -69,4 +69,34 @@ class EmployeeScheduleController extends Controller
             ])
             ->with('success', 'Bulk assign jadwal mingguan berhasil disimpan.');
     }
+
+    public function updateShiftTimes(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'pagi_start' => ['required', 'string'],
+            'pagi_end' => ['required', 'string'],
+            'malam_start' => ['required', 'string'],
+            'malam_end' => ['required', 'string'],
+            'outlet_id' => ['required', 'exists:outlets,id'],
+        ]);
+
+        $templates = \App\Models\ShiftTemplate::where('outlet_id', $request->input('outlet_id'))->get();
+        foreach ($templates as $template) {
+            if (str_contains(strtolower($template->name), 'pagi')) {
+                $template->update([
+                    'start_time' => $request->input('pagi_start') . ':00',
+                    'end_time' => $request->input('pagi_end') . ':00',
+                ]);
+            } elseif (str_contains(strtolower($template->name), 'malam')) {
+                $template->update([
+                    'start_time' => $request->input('malam_start') . ':00',
+                    'end_time' => $request->input('malam_end') . ':00',
+                ]);
+            }
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', 'Waktu shift berhasil diperbarui secara global.');
+    }
 }

@@ -52,8 +52,9 @@ class OrderPaymentService
             $payload['table_id'] ?? null,
         );
         [, $items] = $this->prepareItems($outletId, $payload['items']);
-        if (($payload['payment_option'] ?? 'pay_later') === 'pay_now' && ($payload['payment_method'] ?? null) === 'qris') {
-            $this->paymentGatewayConfigService->assertMethodEnabledForOutlet($outletId, 'qris');
+        $digitalMethods = ['qris', 'ewallet', 'debit', 'transfer'];
+        if (($payload['payment_option'] ?? 'pay_later') === 'pay_now' && in_array($payload['payment_method'] ?? null, $digitalMethods, true)) {
+            $this->paymentGatewayConfigService->assertMethodEnabledForOutlet($outletId, $payload['payment_method']);
         }
         $pricing = $this->promoEngineService->calculate(
             $outletId,
@@ -119,13 +120,14 @@ class OrderPaymentService
         );
         $this->applyExistingOrderPricing($order, $pricing);
 
-        if (($payload['payment_method'] ?? null) === 'qris') {
-            $this->paymentGatewayConfigService->assertMethodEnabledForOutlet($order->outlet_id, 'qris');
+        $digitalMethods = ['qris', 'ewallet', 'debit', 'transfer'];
+        if (in_array($payload['payment_method'] ?? null, $digitalMethods, true)) {
+            $this->paymentGatewayConfigService->assertMethodEnabledForOutlet($order->outlet_id, $payload['payment_method']);
         }
 
         return $payload['payment_method'] === 'cash'
             ? $this->settleExistingOrderWithCash($order, $payload, $context)
-            : $this->settleExistingOrderWithQris($order, $context);
+            : $this->settleExistingOrderWithGateway($order, $context, $payload['payment_method']);
     }
 
     public function createSelfServiceOrder(string $tableToken, array $payload): array
@@ -294,7 +296,7 @@ class OrderPaymentService
 
         return $payload['payment_method'] === 'cash'
             ? $this->markOrderPaidBeforeKitchen($order, $payload['cash_received'] ?? null)
-            : $this->startQrisCheckout($order, 'before_kitchen');
+            : $this->startGatewayCheckout($order, 'before_kitchen', $payload['payment_method']);
     }
 
     protected function markOrderPaidBeforeKitchen(Order $order, mixed $cashReceived): array
@@ -325,12 +327,13 @@ class OrderPaymentService
         ];
     }
 
-    protected function startQrisCheckout(Order $order, string $context): array
+    protected function startGatewayCheckout(Order $order, string $context, string $method): array
     {
-        $checkoutUrl = $this->pakasirService->buildQrisCheckoutUrl(
+        $checkoutUrl = $this->pakasirService->buildGatewayCheckoutUrl(
             $order->order_number,
             $this->resolveGatewayAmount($order),
             route('kasir.order'),
+            $method,
             $order->outlet_id,
         );
 
@@ -339,7 +342,7 @@ class OrderPaymentService
             'pay_later' => false,
             'metadata' => $this->mergePaymentMeta($order, [
                 'provider' => 'pakasir',
-                'method' => 'qris',
+                'method' => $method,
                 'status' => 'pending',
                 'context' => $context,
                 'requested_at' => now()->toIso8601String(),
@@ -350,11 +353,11 @@ class OrderPaymentService
 
         return [
             'message' => $context === 'before_kitchen'
-                ? 'Checkout QRIS dibuat. Order akan masuk ke dapur setelah pembayaran terkonfirmasi.'
-                : 'Checkout QRIS dibuat. Order akan selesai otomatis setelah pembayaran terkonfirmasi.',
+                ? 'Checkout ' . strtoupper($method) . ' dibuat. Order akan masuk ke dapur setelah pembayaran terkonfirmasi.'
+                : 'Checkout ' . strtoupper($method) . ' dibuat. Order akan selesai otomatis setelah pembayaran terkonfirmasi.',
             'paymentCheckout' => [
                 'provider' => 'pakasir',
-                'method' => 'qris',
+                'method' => $method,
                 'order_number' => $order->order_number,
                 'amount' => $this->resolveGatewayAmount($order),
                 'context' => $context,
@@ -406,16 +409,17 @@ class OrderPaymentService
         ];
     }
 
-    protected function settleExistingOrderWithQris(Order $order, string $context): array
+    protected function settleExistingOrderWithGateway(Order $order, string $context, string $method): array
     {
-        return $this->startQrisCheckout($order, $context);
+        return $this->startGatewayCheckout($order, $context, $method);
     }
 
     protected function cancelPendingGatewayIfNeeded(Order $order): void
     {
         $paymentMeta = $this->getPaymentMeta($order);
+        $digitalMethods = ['qris', 'ewallet', 'debit', 'transfer'];
 
-        if (($paymentMeta['method'] ?? null) !== 'qris' || ($paymentMeta['status'] ?? null) !== 'pending') {
+        if (!in_array($paymentMeta['method'] ?? null, $digitalMethods, true) || ($paymentMeta['status'] ?? null) !== 'pending') {
             return;
         }
 
@@ -424,7 +428,7 @@ class OrderPaymentService
 
         if (($transaction['status'] ?? null) === 'completed') {
             throw ValidationException::withMessages([
-                'error' => 'Transaksi QRIS sudah dibayar. Refresh data order terlebih dahulu.',
+                'error' => 'Transaksi ' . strtoupper($paymentMeta['method']) . ' sudah dibayar. Refresh data order terlebih dahulu.',
             ]);
         }
 

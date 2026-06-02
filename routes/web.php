@@ -9,6 +9,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeScheduleController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\InventoryAlertController;
 use App\Http\Controllers\InventoryExpiryController;
 use App\Http\Controllers\InventoryReportController;
@@ -103,6 +105,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/settings/rbac/users/{employee}/role', [RbacController::class, 'assignUserRole'])->name('settings.rbac.users.assign-role');
     Route::put('/settings/rbac/matrix', [RbacController::class, 'saveMatrix'])->name('settings.rbac.matrix.save');
     Route::get('/settings/payment-gateway', [PaymentGatewayController::class, 'index'])->name('settings.payment-gateway.index');
+    Route::put('/settings/payment-gateway', [PaymentGatewayController::class, 'update'])->name('settings.payment-gateway.update');
     Route::post('/settings/payment-gateway/test', [PaymentGatewayController::class, 'test'])->name('settings.payment-gateway.test');
     Route::get('/settings/printer', [PrinterConfigController::class, 'index'])->name('settings.printer.index');
     Route::put('/settings/printer', [PrinterConfigController::class, 'update'])->name('settings.printer.update');
@@ -122,6 +125,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/schedules', [EmployeeScheduleController::class, 'index'])->name('schedules.index');
     Route::post('/schedules', [EmployeeScheduleController::class, 'store'])->name('schedules.store');
     Route::post('/schedules/bulk', [EmployeeScheduleController::class, 'bulkStore'])->name('schedules.bulk-store');
+    Route::post('/schedules/update-times', [EmployeeScheduleController::class, 'updateShiftTimes'])->name('schedules.update-times');
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clock-in');
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clock-out');
@@ -135,12 +139,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/top-products', [TopProductReportController::class, 'index'])->name('reports.top-products.index');
     Route::get('/reports/inventory', [InventoryReportController::class, 'index'])->name('reports.inventory.index');
     Route::get('/reports/attendance-shifts', [AttendanceShiftReportController::class, 'index'])->name('reports.attendance-shifts.index');
-    Route::get('/reports/expenses', [ExpenseController::class, 'index'])->name('reports.expenses.index');
+    Route::get('/reports/expenses', [FinanceController::class, 'index'])->name('reports.expenses.index');
     Route::get('/reports/export', [ReportExportController::class, 'index'])->name('reports.exports.index');
     Route::get('/reports/export/download', [ReportExportController::class, 'download'])->name('reports.exports.download');
     Route::post('/reports/expenses', [ExpenseController::class, 'store'])->name('reports.expenses.store');
     Route::patch('/reports/expenses/{expense}', [ExpenseController::class, 'update'])->name('reports.expenses.update');
     Route::delete('/reports/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('reports.expenses.destroy');
+    Route::post('/reports/incomes', [IncomeController::class, 'store'])->name('reports.incomes.store');
+    Route::patch('/reports/incomes/{income}', [IncomeController::class, 'update'])->name('reports.incomes.update');
+    Route::delete('/reports/incomes/{income}', [IncomeController::class, 'destroy'])->name('reports.incomes.destroy');
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
     Route::patch('/products/{product}', [ProductController::class, 'update'])->name('products.update');
@@ -176,6 +183,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/settings/membership-tiers/{membershipTier}', [MembershipTierController::class, 'destroy'])->name('settings.membership-tiers.destroy');
 
     Route::get('/order', [OrderController::class, 'index'])->name('kasir.order');
+    Route::get('/orders/audio-updates', [OrderController::class, 'audioUpdates'])->name('orders.audio-updates');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order/{order}/pay', [OrderController::class, 'pay'])->name('order.pay');
     Route::patch('/order/{order}', [OrderController::class, 'update'])->name('order.update');

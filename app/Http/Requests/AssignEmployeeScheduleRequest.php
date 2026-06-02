@@ -18,6 +18,7 @@ class AssignEmployeeScheduleRequest extends FormRequest
             'user_id' => ['required', 'exists:users,id'],
             'shift_template_id' => ['required', 'exists:shift_templates,id'],
             'schedule_date' => ['required', 'date'],
+            'takeover_from_user_id' => ['nullable', 'exists:users,id'],
         ];
     }
 }

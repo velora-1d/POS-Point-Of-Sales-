@@ -20,8 +20,10 @@ import {
     X,
     ChevronsLeft,
     ChevronsRight,
+    Volume2,
 } from '@lucide/vue';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import axios from 'axios';
 
 interface MenuItem {
     id: number;
@@ -838,6 +840,148 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
 
     return `${readyCount}/${totalCount}`;
 };
+
+// --- GLOBAL ORDER AUDIO NOTIFICATIONS ---
+const knownOrders = ref<Map<string, string>>(new Map());
+const isInitialLoad = ref(true);
+let orderAudioPollInterval: number | undefined;
+
+const playChimeAndSpeakGlobal = (text: string, volume = 1.0, rate = 0.9, pitch = 1.05) => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        const playTone = (freq: number, start: number, duration: number) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(freq, start);
+            gain.gain.setValueAtTime(0, start);
+            const targetGain = 0.2 * volume;
+            gain.gain.linearRampToValueAtTime(targetGain, start + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(start);
+            osc.stop(start + duration);
+        };
+        playTone(587.33, audioCtx.currentTime, 0.4);
+        playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+    } catch (e) {
+        console.error('Error playing global audio chime:', e);
+    }
+
+    setTimeout(() => {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'id-ID';
+        utterance.volume = volume;
+        utterance.rate = rate;
+        utterance.pitch = pitch;
+        
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id'));
+        if (idVoice) utterance.voice = idVoice;
+        
+        window.speechSynthesis.speak(utterance);
+    }, 450);
+};
+
+const testVoiceGlobal = () => {
+    playChimeAndSpeakGlobal("Uji coba pengeras suara global. Halo mentai restoran.");
+};
+
+interface AudioUpdateOrder {
+    id: string;
+    orderNumber: string;
+    status: string;
+    customerName?: string | null;
+    tableLabel: string;
+    source: string;
+}
+
+interface AudioUpdateResponse {
+    orders: AudioUpdateOrder[];
+    voiceSettings: {
+        enabled: boolean;
+        volume: number;
+        rate: number;
+        pitch: number;
+    } | null;
+}
+
+const checkOrderAudioUpdates = async () => {
+    try {
+        const response = await axios.get<AudioUpdateResponse>(route('orders.audio-updates'));
+        const { orders, voiceSettings } = response.data;
+        if (!voiceSettings || !voiceSettings.enabled) {
+            return;
+        }
+
+        const isKitchenPage = route().current('kitchen.display') || route().current('bar.display');
+
+        orders.forEach((order) => {
+            const previousStatus = knownOrders.value.get(order.id);
+
+            if (previousStatus === undefined) {
+                knownOrders.value.set(order.id, order.status);
+                if (!isInitialLoad.value && !isKitchenPage) {
+                    const customer = order.customerName || (order.source === 'qr_meja' ? 'Pelanggan Meja' : 'Pelanggan');
+                    const tableInfo = order.tableLabel && order.tableLabel !== 'Takeaway' ? `Meja ${order.tableLabel}` : 'Takeaway';
+                    const msg = `Pesanan baru masuk atas nama ${customer}, ${tableInfo}.`;
+                    playChimeAndSpeakGlobal(msg, voiceSettings.volume, voiceSettings.rate, voiceSettings.pitch);
+                }
+            } else if (previousStatus !== order.status) {
+                knownOrders.value.set(order.id, order.status);
+
+                if (!isInitialLoad.value) {
+                    let msg = '';
+                    if (order.status === 'in_progress') {
+                        msg = `Pesanan nomor ${order.orderNumber} mulai dimasak.`;
+                    } else if (order.status === 'waiting_bar_approval' || order.status === 'ready') {
+                        if (previousStatus !== 'waiting_bar_approval' && previousStatus !== 'ready') {
+                            msg = `Pesanan nomor ${order.orderNumber} selesai dimasak.`;
+                        }
+                    } else if (order.status === 'completed') {
+                        msg = `Pesanan nomor ${order.orderNumber} telah diterima pelanggan.`;
+                    }
+
+                    if (msg) {
+                        playChimeAndSpeakGlobal(msg, voiceSettings.volume, voiceSettings.rate, voiceSettings.pitch);
+                    }
+                }
+            }
+        });
+
+        const currentIds = new Set(orders.map((o) => o.id));
+        knownOrders.value.forEach((_, id) => {
+            if (!currentIds.has(id)) {
+                knownOrders.value.delete(id);
+            }
+        });
+
+        if (isInitialLoad.value) {
+            isInitialLoad.value = false;
+        }
+    } catch (e) {
+        console.error('Error fetching order audio updates:', e);
+    }
+};
+
+onMounted(() => {
+    if (user.value && user.value.outlet_id) {
+        checkOrderAudioUpdates();
+        orderAudioPollInterval = window.setInterval(checkOrderAudioUpdates, 10000);
+    }
+});
+
+onBeforeUnmount(() => {
+    if (orderAudioPollInterval) {
+        window.clearInterval(orderAudioPollInterval);
+    }
+});
 </script>
 
 <template>
@@ -1158,6 +1302,20 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                     </div>
                 </div>
 
+                <!-- Test Suara Button -->
+                <button
+                    @click="testVoiceGlobal"
+                    type="button"
+                    :title="isSidebarCollapsed ? 'Test Suara' : undefined"
+                    :class="[
+                        'flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 transition duration-150 hover:bg-slate-800/60 hover:text-slate-200 active:scale-[0.98] mb-2',
+                        isSidebarCollapsed ? 'w-12 h-12 p-0' : 'w-full px-4 py-2.5'
+                    ]"
+                >
+                    <Volume2 class="h-4 w-4 shrink-0 text-fuchsia-400" />
+                    <span v-if="!isSidebarCollapsed">Test Suara</span>
+                </button>
+
                 <!-- Logout Link -->
                 <Link
                     :href="route('logout')"
@@ -1196,13 +1354,23 @@ const getCategoryStatusLabel = (category: SidebarCategory) => {
                         >POS MENTAI</span
                     >
                 </div>
-                <button
-                    @click="isMobileOpen = !isMobileOpen"
-                    class="rounded-lg p-1 text-slate-400 transition duration-150 hover:bg-slate-800 hover:text-white focus:outline-none"
-                >
-                    <Menu v-if="!isMobileOpen" class="h-6 w-6" />
-                    <X v-else class="h-6 w-6" />
-                </button>
+                <div class="flex items-center gap-2">
+                    <button
+                        @click="testVoiceGlobal"
+                        type="button"
+                        class="rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition"
+                        title="Uji coba suara"
+                    >
+                        <Volume2 class="h-5 w-5 text-fuchsia-400" />
+                    </button>
+                    <button
+                        @click="isMobileOpen = !isMobileOpen"
+                        class="rounded-lg p-1 text-slate-400 transition duration-150 hover:bg-slate-800 hover:text-white focus:outline-none"
+                    >
+                        <Menu v-if="!isMobileOpen" class="h-6 w-6" />
+                        <X v-else class="h-6 w-6" />
+                    </button>
+                </div>
             </div>
 
             <!-- Page Title Header (Slot) -->

@@ -9,6 +9,9 @@ import {
     Layers3,
     Plus,
     Users,
+    ArrowLeftRight,
+    Save,
+    X,
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 
@@ -22,6 +25,7 @@ interface EmployeeRow {
     name: string;
     email: string;
     is_active: boolean;
+    outlet_id?: string | null;
     role?: {
         id: string;
         name: string;
@@ -417,6 +421,56 @@ const submitWeekly = () => {
         preserveScroll: true,
     });
 };
+
+const pagiTemplate = computed(() => props.shiftTemplates.find(t => t.name.toLowerCase().includes('pagi')));
+const malamTemplate = computed(() => props.shiftTemplates.find(t => t.name.toLowerCase().includes('malam')));
+
+const shiftTimesForm = useForm({
+    pagi_start: pagiTemplate.value?.start_time?.slice(0, 5) || '08:00',
+    pagi_end: pagiTemplate.value?.end_time?.slice(0, 5) || '17:00',
+    malam_start: malamTemplate.value?.start_time?.slice(0, 5) || '15:00',
+    malam_end: malamTemplate.value?.end_time?.slice(0, 5) || '24:00',
+    outlet_id: props.filters.outlet_id || props.referenceData.outlets[0]?.id || '',
+});
+
+const submitUpdateShiftTimes = () => {
+    shiftTimesForm.post(route('schedules.update-times'), {
+        preserveScroll: true,
+    });
+};
+
+const takeoverForm = useForm({
+    outlet_id: '',
+    user_id: '',
+    shift_template_id: '',
+    schedule_date: '',
+    takeover_from_user_id: '',
+});
+
+const isTakeoverOpen = ref(false);
+const activeTakeoverSchedule = ref<ScheduleRow | null>(null);
+
+const openTakeoverModal = (schedule: ScheduleRow | null) => {
+    if (!schedule) return;
+    activeTakeoverSchedule.value = schedule;
+    takeoverForm.outlet_id = schedule.user?.outlet?.id || schedule.user?.outlet_id || props.filters.outlet_id || props.referenceData.outlets[0]?.id || '';
+    takeoverForm.schedule_date = schedule.schedule_date;
+    takeoverForm.shift_template_id = schedule.shift_template?.id || schedule.shift_template_id || '';
+    takeoverForm.takeover_from_user_id = schedule.user?.id || schedule.user_id || '';
+    takeoverForm.user_id = '';
+    isTakeoverOpen.value = true;
+};
+
+const submitTakeover = () => {
+    takeoverForm.post(route('schedules.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            isTakeoverOpen.value = false;
+            activeTakeoverSchedule.value = null;
+            takeoverForm.reset();
+        }
+    });
+};
 </script>
 
 <template>
@@ -468,6 +522,68 @@ const submitWeekly = () => {
                     Jadwal Shift Kerja
                 </Link>
             </div>
+
+            <!-- Panel Set Jam Shift Sederhana -->
+            <article v-if="canManage" class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <div class="flex items-center gap-3">
+                    <div class="rounded-2xl border border-white/10 bg-slate-950/50 p-3 text-orange-200">
+                        <Clock3 class="h-5 w-5" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                            Pengaturan Waktu Kerja Shift
+                        </h3>
+                        <p class="mt-1 text-xs text-slate-500">
+                            Atur jam mulai dan jam selesai untuk shift pagi dan shift malam secara instan.
+                        </p>
+                    </div>
+                </div>
+
+                <form class="mt-5 flex flex-wrap items-end gap-4" @submit.prevent="submitUpdateShiftTimes">
+                    <div class="flex flex-wrap gap-4 flex-1">
+                        <!-- Shift Pagi -->
+                        <div class="flex gap-2 items-center rounded-2xl border border-white/10 bg-white/[0.02] p-3 flex-1 min-w-[240px]">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider w-20">Shift Pagi</span>
+                            <input
+                                v-model="shiftTimesForm.pagi_start"
+                                type="time"
+                                class="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-xs text-white focus:border-orange-400 focus:outline-none"
+                            />
+                            <span class="text-slate-500 text-xs">s/d</span>
+                            <input
+                                v-model="shiftTimesForm.pagi_end"
+                                type="time"
+                                class="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-xs text-white focus:border-orange-400 focus:outline-none"
+                            />
+                        </div>
+
+                        <!-- Shift Malam -->
+                        <div class="flex gap-2 items-center rounded-2xl border border-white/10 bg-white/[0.02] p-3 flex-1 min-w-[240px]">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider w-20">Shift Malam</span>
+                            <input
+                                v-model="shiftTimesForm.malam_start"
+                                type="time"
+                                class="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-xs text-white focus:border-orange-400 focus:outline-none"
+                            />
+                            <span class="text-slate-500 text-xs">s/d</span>
+                            <input
+                                v-model="shiftTimesForm.malam_end"
+                                type="time"
+                                class="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-xs text-white focus:border-orange-400 focus:outline-none"
+                            />
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400"
+                        :disabled="shiftTimesForm.processing"
+                    >
+                        <Save class="h-4 w-4" />
+                        {{ shiftTimesForm.processing ? 'Menyimpan...' : 'Simpan Waktu' }}
+                    </button>
+                </form>
+            </article>
 
             <section class="grid gap-3 lg:grid-cols-4">
                 <article
@@ -939,7 +1055,7 @@ const submitWeekly = () => {
                                 >
                                     <div
                                         v-if="getScheduleForCell(employee.id, day.date)"
-                                        class="rounded-2xl border px-3 py-3"
+                                        class="rounded-2xl border px-3 py-3 group relative"
                                         :class="getShiftTone(getShiftTemplate(getScheduleForCell(employee.id, day.date)))"
                                     >
                                         <p class="text-sm font-black">
@@ -948,6 +1064,15 @@ const submitWeekly = () => {
                                         <p class="mt-1 text-[11px] font-semibold uppercase tracking-[0.16em] opacity-80">
                                             {{ formatTimeRange(getShiftTemplate(getScheduleForCell(employee.id, day.date))) }}
                                         </p>
+                                        <button
+                                            v-if="canManage"
+                                            type="button"
+                                            class="mt-2 inline-flex items-center gap-1 w-full justify-center rounded-xl bg-white/10 hover:bg-white/20 px-2 py-1 text-[10px] font-bold text-white transition duration-150"
+                                            @click="openTakeoverModal(getScheduleForCell(employee.id, day.date))"
+                                        >
+                                            <ArrowLeftRight class="h-3 w-3" />
+                                            Ambil Alih
+                                        </button>
                                     </div>
                                     <div
                                         v-else
@@ -961,6 +1086,92 @@ const submitWeekly = () => {
                     </table>
                 </div>
             </section>
+        </div>
+
+        <!-- Modal Takeover Shift -->
+        <div
+            v-if="isTakeoverOpen && activeTakeoverSchedule"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
+        >
+            <div class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-white/10 bg-slate-950 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)]">
+                <div class="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
+                    <div>
+                        <h3 class="text-lg font-black text-white flex items-center gap-2">
+                            <ArrowLeftRight class="h-5 w-5 text-orange-400" />
+                            Ambil Alih Shift Kerja
+                        </h3>
+                        <p class="mt-1 text-xs text-slate-400">
+                            Pindahkan tanggung jawab shift hari ini ke karyawan pengganti.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        class="rounded-xl border border-white/10 p-1.5 text-slate-400 transition hover:border-white/20 hover:text-white"
+                        @click="isTakeoverOpen = false"
+                    >
+                        <X class="h-4 w-4" />
+                    </button>
+                </div>
+
+                <div class="mt-4 space-y-4">
+                    <!-- Info Shift Asal -->
+                    <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-4 space-y-2">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Karyawan Terjadwal</span>
+                            <p class="text-sm font-black text-white">{{ activeTakeoverSchedule?.user?.name }}</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-white/5">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Shift</span>
+                                <p class="text-xs font-bold text-orange-200">{{ activeTakeoverSchedule?.shift_template?.name || activeTakeoverSchedule?.shiftTemplate?.name }}</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Tanggal</span>
+                                <p class="text-xs font-bold text-slate-300">{{ activeTakeoverSchedule ? formatDate(activeTakeoverSchedule.schedule_date) : '' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pilihan Karyawan Pengganti -->
+                    <form @submit.prevent="submitTakeover" class="space-y-4">
+                        <label class="block">
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Pilih Karyawan Pengganti</span>
+                            <select
+                                v-model="takeoverForm.user_id"
+                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                required
+                            >
+                                <option value="">Pilih karyawan pengganti</option>
+                                <option
+                                    v-for="employee in employees.filter(e => e.id !== activeTakeoverSchedule?.user?.id)"
+                                    :key="employee.id"
+                                    :value="employee.id"
+                                >
+                                    {{ employee.name }} ({{ employee.role?.name || '-' }})
+                                </option>
+                            </select>
+                        </label>
+
+                        <div class="flex items-center justify-end gap-3 border-t border-white/10 pt-4">
+                            <button
+                                type="button"
+                                class="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-slate-300 transition hover:bg-white/5"
+                                @click="isTakeoverOpen = false"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                type="submit"
+                                class="inline-flex items-center gap-1.5 rounded-xl bg-orange-500 px-4 py-2.5 text-xs font-bold text-slate-950 transition hover:bg-orange-400"
+                                :disabled="takeoverForm.processing"
+                            >
+                                <Save class="h-3.5 w-3.5" />
+                                {{ takeoverForm.processing ? 'Menyimpan...' : 'Konfirmasi' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>

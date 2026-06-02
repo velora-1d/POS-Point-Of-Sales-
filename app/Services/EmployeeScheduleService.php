@@ -69,6 +69,13 @@ class EmployeeScheduleService
         $scheduleDate = CarbonImmutable::parse($payload['schedule_date']);
 
         DB::transaction(function () use ($payload, $scheduleDate, $outletId) {
+            if (filled($payload['takeover_from_user_id'] ?? null)) {
+                \App\Models\EmployeeSchedule::query()
+                    ->where('user_id', $payload['takeover_from_user_id'])
+                    ->whereDate('schedule_date', $scheduleDate->toDateString())
+                    ->delete();
+            }
+
             $this->employeeScheduleRepository->upsertSchedule(
                 $outletId,
                 $payload['user_id'],

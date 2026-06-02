@@ -33,6 +33,10 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Redesign UI/UX pada menu **Jadwal Shift** (fitur Ambil Alih instan dan setup jam minimalis), **Absensi Karyawan** (mode grid foto profil 3:4 dengan preview detail, serta tombol cepat Hadir/Pulang), dan **Shift Kasir** (nominal tunai fisik mandiri) sukses diintegrasikan.
+- Implementasi dashboard **Keuangan & Arus Kas terpadu** (Incomes & Expenses) yang mengonsolidasikan total penjualan (otomatis), pemasukan non-penjualan operasional lainnya (manual), dan biaya pengeluaran (manual), lengkap dengan menu navigasi horizontal, tabs terpisah, dan database schema tabel `incomes` yang baru.
+- Redesign **Laporan Penjualan (Sales.vue)** agar clean, minimalis, dan powerful dengan visual progress bar kontribusi harian/metode pembayaran/channel order, serta panel filter yang collapsible.
+- Verifikasi build `npm run build` sukses 100% dan syntax check PHP bersih pada tanggal `2026-06-02`.
 - `.env` production disesuaikan untuk domain `https://pos-mentai.ve-lora.my.id` dengan `APP_URL` dan `SESSION_SECURE_COOKIE=true`, lalu variabel yang tidak dipakai pada setup ini dibersihkan dari `.env` seperti `MAIL_*`, `AWS_*`, `BROADCAST_CONNECTION`, `REVERB_*`, dan `VITE_REVERB_*`.
 - Kustomisasi visual struk belanja (Menu #10 & #57) selesai sepenuhnya: logo outlet base64, pilihan template (classic/modern/compact), dropdown font (sans/serif/mono), color accent selector (4 warna), dan textarea footer kustom tersimpan di kolom `metadata` tabel `printer_configs` tanpa migrasi baru.
 - Live receipt preview interaktif ditambahkan di sidebar kanan halaman [Settings/Printer.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Settings/Printer.vue) — perubahan template, font, warna, logo, dan footer langsung direfleksikan ke mockup struk secara instan.

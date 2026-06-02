@@ -44,9 +44,14 @@ class AttendanceController extends Controller
 
     public function clockIn(ClockInAttendanceRequest $request): RedirectResponse
     {
+        $targetUser = $request->user();
+        if ($request->filled('user_id') && $this->attendanceService->canManage($request->user())) {
+            $targetUser = \App\Models\User::findOrFail($request->input('user_id'));
+        }
+
         $this->attendanceService->clockIn(
             $request->validated(),
-            $request->user(),
+            $targetUser,
         );
 
         return redirect()
@@ -56,9 +61,14 @@ class AttendanceController extends Controller
 
     public function clockOut(ClockOutAttendanceRequest $request): RedirectResponse
     {
+        $targetUser = $request->user();
+        if ($request->filled('user_id') && $this->attendanceService->canManage($request->user())) {
+            $targetUser = \App\Models\User::findOrFail($request->input('user_id'));
+        }
+
         $this->attendanceService->clockOut(
             $request->validated(),
-            $request->user(),
+            $targetUser,
         );
 
         return redirect()

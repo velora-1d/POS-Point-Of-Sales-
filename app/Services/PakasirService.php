@@ -15,20 +15,25 @@ class PakasirService
     ) {
     }
 
-    public function buildQrisCheckoutUrl(string $orderId, int $amount, string $redirectUrl, ?string $outletId = null): string
+    public function buildGatewayCheckoutUrl(string $orderId, int $amount, string $redirectUrl, string $method, ?string $outletId = null): string
     {
         $config = $this->getConfig($outletId);
+
+        $params = [
+            'order_id' => $orderId,
+            'redirect' => $redirectUrl,
+        ];
+
+        if ($method === 'qris') {
+            $params['qris_only'] = 1;
+        }
 
         return sprintf(
             '%s/pay/%s/%d?%s',
             rtrim($config['base_url'], '/'),
             $config['slug'],
             $amount,
-            http_build_query([
-                'order_id' => $orderId,
-                'redirect' => $redirectUrl,
-                'qris_only' => 1,
-            ]),
+            http_build_query($params),
         );
     }
 
