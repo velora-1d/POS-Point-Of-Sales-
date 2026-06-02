@@ -187,6 +187,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order/{order}/pay', [OrderController::class, 'pay'])->name('order.pay');
     Route::patch('/order/{order}', [OrderController::class, 'update'])->name('order.update');
+    Route::post('/order/{order}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
     Route::post('/order/{order}/split-bill', [OrderController::class, 'splitBill'])->name('order.split-bill');
     Route::post('/orders/merge-bills', [OrderController::class, 'mergeBills'])->name('orders.merge-bills');
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');

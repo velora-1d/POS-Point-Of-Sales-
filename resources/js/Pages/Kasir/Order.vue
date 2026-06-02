@@ -1002,6 +1002,26 @@ const closeEditOrder = () => {
     resetEditOrderState();
 };
 
+const cancelActiveOrder = (order: any) => {
+    if (!order) {
+        showLocalToast('Order tidak ditemukan.');
+        return;
+    }
+
+    if (confirm(`Apakah Anda yakin ingin membatalkan order ${order.order_number}?`)) {
+        router.post(route('order.cancel', order.id), {}, {
+            preserveScroll: true,
+            onSuccess: () => {
+                showLocalToast('Order berhasil dibatalkan.');
+                selectedManagedOrderId.value = null;
+            },
+            onError: (errors: any) => {
+                showLocalToast(errors.error || 'Gagal membatalkan order.');
+            }
+        });
+    }
+};
+
 const openSplitBill = () => {
     const activeOrder = selectedManagedOrder.value;
 
@@ -2991,11 +3011,22 @@ const openPaymentCheckout = () => {
                                 class="flex w-full items-center justify-between rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-3.5 text-xs font-bold text-fuchsia-300 transition duration-150 hover:bg-fuchsia-500/10"
                             >
                                 <span>Split Bill</span>
-
                             </button>
                             <p class="mt-1 px-1 text-[10px] text-slate-500">
                                 Pisahkan item tertentu ke bill kedua dari order
                                 aktif yang dipilih.
+                            </p>
+                        </div>
+
+                        <div class="group relative">
+                            <button
+                                @click="cancelActiveOrder(selectedManagedOrder)"
+                                class="flex w-full items-center justify-between rounded-xl border border-rose-500/20 bg-rose-500/5 p-3.5 text-xs font-bold text-rose-300 transition duration-150 hover:bg-rose-500/10"
+                            >
+                                <span>Batalkan Order</span>
+                            </button>
+                            <p class="mt-1 px-1 text-[10px] text-slate-500">
+                                Batalkan seluruh pesanan ini secara permanen dari sistem.
                             </p>
                         </div>
                     </div>

@@ -193,4 +193,29 @@ class OrderEditService
             'evaluated_at' => now()->toIso8601String(),
         ];
     }
+
+    public function cancelOrder(Order $order, User $actor): void
+    {
+        if ($order->outlet_id !== $actor->outlet_id) {
+            throw ValidationException::withMessages([
+                'error' => 'Order ini tidak berada di outlet aktif Anda.',
+            ]);
+        }
+
+        if (in_array($order->status, ['completed', 'cancelled'], true)) {
+            throw ValidationException::withMessages([
+                'error' => 'Order dengan status ini tidak bisa dibatalkan.',
+            ]);
+        }
+
+        DB::transaction(function () use ($order, $actor) {
+            $order->update([
+                'status' => 'cancelled',
+                'metadata' => array_merge($order->metadata ?? [], [
+                    'cancelled_by' => $actor->id,
+                    'cancelled_at' => now()->toIso8601String(),
+                ]),
+            ]);
+        });
+    }
 }

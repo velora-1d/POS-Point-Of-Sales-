@@ -101,7 +101,7 @@ const selectedCategoryId = ref<string>('all');
 
 let clockInterval: number | undefined;
 let pollInterval: number | undefined;
-const knownOrderIds = ref<Set<string>>(new Set());
+const knownOrderKeys = ref<Set<string>>(new Set());
 
 // State Audio Lokal
 const isAudioBlocked = ref(false);
@@ -151,7 +151,7 @@ onMounted(() => {
     }, 1000);
 
     // Populate initial orders
-    props.orders.forEach((o) => knownOrderIds.value.add(o.id));
+    props.orders.forEach((o) => knownOrderKeys.value.add(`${o.id}-${o.updatedAt || ''}`));
 
     // Cek autoplay terblokir
     try {
@@ -178,7 +178,7 @@ onBeforeUnmount(() => {
     }
 });
 
-const announceNewOrder = (order: KitchenOrderPayload) => {
+const announceNewOrder = (order: KitchenOrderPayload, isUpdate: boolean = false) => {
     const voiceConfig = props.boardConfig.voiceSettings;
     if (voiceConfig && !voiceConfig.enabled) return;
 
@@ -186,7 +186,8 @@ const announceNewOrder = (order: KitchenOrderPayload) => {
     const tableInfo = order.tableLabel && order.tableLabel !== 'Takeaway' ? `Meja ${order.tableLabel}` : 'Takeaway';
     
     const itemsText = order.items.map(item => `${item.quantity} ${item.name}`).join(', ');
-    const text = `Pesanan baru atas nama ${customer}, ${tableInfo}. Menu: ${itemsText}.`;
+    const prefix = isUpdate ? 'Perhatian, ada perubahan pesanan atas nama' : 'Pesanan baru atas nama';
+    const text = `${prefix} ${customer}, ${tableInfo}. Menu menjadi: ${itemsText}.`;
     
     playChimeAndSpeak(text, voiceConfig);
 };
@@ -246,19 +247,33 @@ watch(
     () => props.orders,
     (newOrders) => {
         if (!newOrders) return;
-        const newItems = newOrders.filter(o => !knownOrderIds.value.has(o.id));
-        if (newItems.length > 0) {
-            newItems.forEach((order) => {
-                announceNewOrder(order);
-                knownOrderIds.value.add(order.id);
-            });
-        }
         
-        // Clean up knownOrderIds that are no longer in props.orders to save memory
-        const currentIds = new Set(newOrders.map(o => o.id));
-        knownOrderIds.value.forEach((id) => {
-            if (!currentIds.has(id)) {
-                knownOrderIds.value.delete(id);
+        newOrders.forEach((order) => {
+            const key = `${order.id}-${order.updatedAt || ''}`;
+            
+            if (!knownOrderKeys.value.has(key)) {
+                // Cek apakah order ID sudah ada dengan timestamp berbeda (artinya ini update)
+                const isUpdate = Array.from(knownOrderKeys.value).some(k => k.startsWith(order.id));
+                
+                announceNewOrder(order, isUpdate);
+                
+                // Hapus key lama untuk order ID yang sama
+                Array.from(knownOrderKeys.value).forEach(k => {
+                    if (k.startsWith(order.id)) {
+                        knownOrderKeys.value.delete(k);
+                    }
+                });
+                
+                knownOrderKeys.value.add(key);
+            }
+        });
+        
+        // Bersihkan data order yang sudah tidak aktif
+        const activeIds = new Set(newOrders.map(o => o.id));
+        knownOrderKeys.value.forEach((key) => {
+            const orderId = key.split('-')[0];
+            if (!activeIds.has(orderId)) {
+                knownOrderKeys.value.delete(key);
             }
         });
     },

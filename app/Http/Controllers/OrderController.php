@@ -169,6 +169,15 @@ class OrderController extends Controller
             ->with('success', 'Perubahan order berhasil disimpan dan status kembali ke pending.');
     }
 
+    public function cancel(Order $order): RedirectResponse
+    {
+        $this->orderEditService->cancelOrder($order, auth()->user());
+
+        return redirect()
+            ->route('kasir.order')
+            ->with('success', 'Order berhasil dibatalkan.');
+    }
+
     public function splitBill(SplitOrderBillRequest $request, Order $order): RedirectResponse
     {
         $this->orderBillService->splitOrder(
