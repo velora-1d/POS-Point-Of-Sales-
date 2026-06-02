@@ -33,6 +33,7 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Perbaikan hak akses Nginx temporary directories (`/var/lib/nginx` dan `/var/log/nginx`) di [Dockerfile](file:///home/pak-hakim/Pak-Hakim/Project/POS/Dockerfile) agar user `www-data` dapat menulis request body sementara berukuran besar (upload file/foto karyawan) di production.
 - Redesign UI/UX pada menu **Jadwal Shift** (fitur Ambil Alih instan dan setup jam minimalis), **Absensi Karyawan** (mode grid foto profil 3:4 dengan preview detail, serta tombol cepat Hadir/Pulang), dan **Shift Kasir** (nominal tunai fisik mandiri) sukses diintegrasikan.
 - Implementasi dashboard **Keuangan & Arus Kas terpadu** (Incomes & Expenses) yang mengonsolidasikan total penjualan (otomatis), pemasukan non-penjualan operasional lainnya (manual), dan biaya pengeluaran (manual), lengkap dengan menu navigasi horizontal, tabs terpisah, dan database schema tabel `incomes` yang baru.
 - Redesign **Laporan Penjualan (Sales.vue)** agar clean, minimalis, dan powerful dengan visual progress bar kontribusi harian/metode pembayaran/channel order, serta panel filter yang collapsible.

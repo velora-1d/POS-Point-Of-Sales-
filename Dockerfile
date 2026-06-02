@@ -44,8 +44,8 @@ COPY --from=assets-builder /app/public/build ./public/build
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Set permissions untuk storage & bootstrap/cache
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+# Set permissions untuk storage, bootstrap/cache, dan Nginx temporary paths
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/lib/nginx /var/log/nginx \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Salin dan siapkan entrypoint
