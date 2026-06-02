@@ -897,6 +897,9 @@ const testVoiceGlobal = () => {
 const testAlarmGlobal = () => {
     try {
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
         const playTone = (freq: number, start: number, duration: number) => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
