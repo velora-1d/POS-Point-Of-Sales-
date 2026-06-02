@@ -185,7 +185,14 @@ const announceNewOrder = (order: KitchenOrderPayload, isUpdate: boolean = false)
     const customer = order.customerName || (order.source === 'qr_meja' ? 'Pelanggan Meja' : 'Pelanggan');
     const tableInfo = order.tableLabel && order.tableLabel !== 'Takeaway' ? `Meja ${order.tableLabel}` : 'Takeaway';
     
-    const itemsText = order.items.map(item => `${item.quantity} ${item.name}`).join(', ');
+    const itemsText = order.items && order.items.length > 0
+        ? order.items.map(item => {
+            const qty = item.quantity || 1;
+            const cleanName = item.name ? item.name.replace(/\s*-\s*/g, ', ') : 'Menu';
+            return `${qty} porsi ${cleanName}`;
+        }).join(', ')
+        : 'Detail menu dapat dilihat di layar';
+
     const prefix = isUpdate ? 'Perhatian, ada perubahan pesanan atas nama' : 'Pesanan baru atas nama';
     const text = `${prefix} ${customer}, ${tableInfo}. Menu menjadi: ${itemsText}.`;
     

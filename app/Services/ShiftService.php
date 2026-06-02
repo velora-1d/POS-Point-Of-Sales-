@@ -42,7 +42,7 @@ class ShiftService
         return [
             'activeShift' => $activeShift ? array_merge(
                 $this->transformShift($activeShift, true),
-                ['can_close' => $actor->role?->type === 'supervisor' || $activeShift->user_id === $actor->id],
+                ['can_close' => $actor->role?->type === 'owner' || $actor->role?->type === 'supervisor' || $activeShift->user_id === $actor->id],
             ) : null,
             'lastClosedShift' => $lastClosedShift ? $this->transformShift($lastClosedShift, false) : null,
             'todaySchedule' => $todaySchedule ? [
@@ -64,7 +64,7 @@ class ShiftService
                 ),
                 'cashiers' => $this->shiftRepository->getCashierUsers($scopeOutletId),
             ],
-            'canManage' => in_array($actor->role?->type, ['kasir', 'supervisor'], true),
+            'canManage' => in_array($actor->role?->type, ['owner', 'kasir', 'supervisor'], true),
             'canRead' => in_array($actor->role?->type, ['owner', 'kasir', 'supervisor'], true),
         ];
     }
@@ -408,8 +408,8 @@ class ShiftService
 
     protected function assertCanManage(User $actor): void
     {
-        if (!in_array($actor->role?->type, ['kasir', 'supervisor'], true)) {
-            abort(403, 'Menu shift kasir hanya tersedia untuk kasir atau supervisor.');
+        if (!in_array($actor->role?->type, ['owner', 'kasir', 'supervisor'], true)) {
+            abort(403, 'Menu shift kasir hanya tersedia untuk owner, kasir, atau supervisor.');
         }
     }
 

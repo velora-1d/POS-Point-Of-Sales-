@@ -91,6 +91,12 @@ const checkShiftStatus = () => {
 let shiftInterval: any = null;
 
 const submitTakeover = () => {
+    const isOwner = page.props.auth?.user?.role?.type === 'owner';
+    if (isOwner) {
+        if (!confirm('Anda login sebagai Owner. Apakah Anda yakin ingin melakukan serah terima & ambil alih shift ini secara manual?')) {
+            return;
+        }
+    }
     takeoverForm.active_shift_id = props.activeShift?.id || '';
     takeoverForm.post(route('shifts.takeover'), {
         onSuccess: () => {

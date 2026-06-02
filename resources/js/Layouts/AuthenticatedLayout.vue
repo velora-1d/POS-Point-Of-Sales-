@@ -21,6 +21,7 @@ import {
     ChevronsLeft,
     ChevronsRight,
     Volume2,
+    Bell,
 } from '@lucide/vue';
 import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import axios from 'axios';
@@ -893,6 +894,28 @@ const testVoiceGlobal = () => {
     playChimeAndSpeakGlobal("Uji coba pengeras suara global. Halo mentai restoran.");
 };
 
+const testAlarmGlobal = () => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const playTone = (freq: number, start: number, duration: number) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(freq, start);
+            gain.gain.setValueAtTime(0, start);
+            gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(start);
+            osc.stop(start + duration);
+        };
+        playTone(587.33, audioCtx.currentTime, 0.4);
+        playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+    } catch (e) {
+        console.error(e);
+    }
+};
+
 interface AudioUpdateOrder {
     id: string;
     orderNumber: string;
@@ -1302,19 +1325,35 @@ onBeforeUnmount(() => {
                     </div>
                 </div>
 
-                <!-- Test Suara Button -->
-                <button
-                    @click="testVoiceGlobal"
-                    type="button"
-                    :title="isSidebarCollapsed ? 'Test Suara' : undefined"
-                    :class="[
-                        'flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 transition duration-150 hover:bg-slate-800/60 hover:text-slate-200 active:scale-[0.98] mb-2',
-                        isSidebarCollapsed ? 'w-12 h-12 p-0' : 'w-full px-4 py-2.5'
-                    ]"
-                >
-                    <Volume2 class="h-4 w-4 shrink-0 text-fuchsia-400" />
-                    <span v-if="!isSidebarCollapsed">Test Suara</span>
-                </button>
+                <!-- Test Suara & Alarm Buttons -->
+                <div :class="['flex gap-2 mb-2', isSidebarCollapsed ? 'flex-col items-center' : 'w-full']">
+                    <!-- Test Alarm Button -->
+                    <button
+                        @click="testAlarmGlobal"
+                        type="button"
+                        :title="isSidebarCollapsed ? 'Test Alarm' : undefined"
+                        :class="[
+                            'flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 transition duration-150 hover:bg-slate-800/60 hover:text-slate-200 active:scale-[0.98]',
+                            isSidebarCollapsed ? 'w-12 h-12 p-0' : 'flex-1 px-3 py-2.5'
+                        ]"
+                    >
+                        <Bell class="h-4 w-4 shrink-0 text-orange-400" />
+                        <span v-if="!isSidebarCollapsed">Test Alarm</span>
+                    </button>
+                    <!-- Test Suara Button -->
+                    <button
+                        @click="testVoiceGlobal"
+                        type="button"
+                        :title="isSidebarCollapsed ? 'Test Suara' : undefined"
+                        :class="[
+                            'flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 transition duration-150 hover:bg-slate-800/60 hover:text-slate-200 active:scale-[0.98]',
+                            isSidebarCollapsed ? 'w-12 h-12 p-0' : 'flex-1 px-3 py-2.5'
+                        ]"
+                    >
+                        <Volume2 class="h-4 w-4 shrink-0 text-fuchsia-400" />
+                        <span v-if="!isSidebarCollapsed">Test Suara</span>
+                    </button>
+                </div>
 
                 <!-- Logout Link -->
                 <Link
@@ -1355,6 +1394,14 @@ onBeforeUnmount(() => {
                     >
                 </div>
                 <div class="flex items-center gap-2">
+                    <button
+                        @click="testAlarmGlobal"
+                        type="button"
+                        class="rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition"
+                        title="Uji coba alarm"
+                    >
+                        <Bell class="h-5 w-5 text-orange-400" />
+                    </button>
                     <button
                         @click="testVoiceGlobal"
                         type="button"

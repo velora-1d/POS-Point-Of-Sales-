@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import {
     CalendarDays,
     CheckCircle2,
@@ -10,6 +10,9 @@ import {
     Wallet,
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
+
+const page = usePage<any>();
+const isOwner = computed(() => page.props.auth?.user?.role?.type === 'owner');
 
 interface OutletOption {
     id: string;
@@ -329,6 +332,11 @@ const clearFilters = () => {
 };
 
 const submitOpenShift = () => {
+    if (isOwner.value) {
+        if (!confirm('Anda masuk sebagai Owner. Apakah Anda yakin ingin membuka shift kasir baru secara manual?')) {
+            return;
+        }
+    }
     openShiftForm.post(route('shifts.open'), {
         preserveScroll: true,
     });
@@ -336,6 +344,12 @@ const submitOpenShift = () => {
 
 const submitCloseShift = () => {
     if (!props.activeShift) return;
+
+    if (isOwner.value) {
+        if (!confirm('Anda masuk sebagai Owner. Apakah Anda yakin ingin menutup shift kasir aktif ini secara manual?')) {
+            return;
+        }
+    }
 
     const expectedQris = Number(props.activeShift.summary.breakdown.qris || 0);
     const expectedDebit = Number(props.activeShift.summary.breakdown.debit || 0);
