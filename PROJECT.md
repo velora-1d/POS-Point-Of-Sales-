@@ -33,6 +33,7 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- `.env` production disesuaikan untuk domain `https://pos-mentai.ve-lora.my.id` dengan `APP_URL` dan `SESSION_SECURE_COOKIE=true`, lalu variabel yang tidak dipakai pada setup ini dibersihkan dari `.env` seperti `MAIL_*`, `AWS_*`, `BROADCAST_CONNECTION`, `REVERB_*`, dan `VITE_REVERB_*`.
 - Kustomisasi visual struk belanja (Menu #10 & #57) selesai sepenuhnya: logo outlet base64, pilihan template (classic/modern/compact), dropdown font (sans/serif/mono), color accent selector (4 warna), dan textarea footer kustom tersimpan di kolom `metadata` tabel `printer_configs` tanpa migrasi baru.
 - Live receipt preview interaktif ditambahkan di sidebar kanan halaman [Settings/Printer.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Settings/Printer.vue) — perubahan template, font, warna, logo, dan footer langsung direfleksikan ke mockup struk secara instan.
 - [Transactions/Receipt.vue](/home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Transactions/Receipt.vue) kini memuat data `receipt_metadata` dari `outlet.printerConfig` dan menerapkan template/font/warna/logo/footer kustom secara reaktif pada struk belanja nyata.

@@ -121,6 +121,7 @@ const isProductModalOpen = ref(false);
 const editingProduct = ref<ProductRow | null>(null);
 const activeTab = ref<'basic' | 'variants' | 'prices' | 'recipe'>('basic');
 const imagePreview = ref<string | null>(null);
+const fileInput = ref<HTMLInputElement | null>(null);
 
 const productForm = useForm({
     category_id: '',
@@ -291,6 +292,10 @@ const onFileChange = (e: Event) => {
         };
         reader.readAsDataURL(file);
     }
+};
+
+const openFilePicker = () => {
+    fileInput.value?.click();
 };
 
 const addVariantRow = () => {
@@ -779,7 +784,7 @@ const deleteProduct = (product: ProductRow) => {
                                     </label>
                                     <div
                                         class="group relative h-40 w-40 overflow-hidden rounded-3xl border-2 border-dashed border-slate-800 bg-slate-900 transition hover:border-orange-500/50"
-                                        @click="$refs.fileInput.click()"
+                                        @click="openFilePicker"
                                     >
                                         <img
                                             v-if="imagePreview"
