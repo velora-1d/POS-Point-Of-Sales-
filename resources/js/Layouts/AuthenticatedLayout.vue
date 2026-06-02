@@ -850,24 +850,30 @@ let orderAudioPollInterval: number | undefined;
 const playChimeAndSpeakGlobal = (text: string, volume = 1.0, rate = 0.9, pitch = 1.05) => {
     try {
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-        const playTone = (freq: number, start: number, duration: number) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(freq, start);
-            gain.gain.setValueAtTime(0, start);
-            const targetGain = 0.2 * volume;
-            gain.gain.linearRampToValueAtTime(targetGain, start + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(start);
-            osc.stop(start + duration);
+        
+        const runChime = () => {
+            const playTone = (freq: number, start: number, duration: number) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.frequency.setValueAtTime(freq, start);
+                gain.gain.setValueAtTime(0, start);
+                const targetGain = 0.2 * volume;
+                gain.gain.linearRampToValueAtTime(targetGain, start + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(start);
+                osc.stop(start + duration);
+            };
+            playTone(587.33, audioCtx.currentTime, 0.4);
+            playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
         };
-        playTone(587.33, audioCtx.currentTime, 0.4);
-        playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().then(runChime).catch(() => runChime());
+        } else {
+            runChime();
+        }
     } catch (e) {
         console.error('Error playing global audio chime:', e);
     }
@@ -897,23 +903,29 @@ const testVoiceGlobal = () => {
 const testAlarmGlobal = () => {
     try {
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-        const playTone = (freq: number, start: number, duration: number) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(freq, start);
-            gain.gain.setValueAtTime(0, start);
-            gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(start);
-            osc.stop(start + duration);
+        
+        const runAlarm = () => {
+            const playTone = (freq: number, start: number, duration: number) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.frequency.setValueAtTime(freq, start);
+                gain.gain.setValueAtTime(0, start);
+                gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(start);
+                osc.stop(start + duration);
+            };
+            playTone(587.33, audioCtx.currentTime, 0.4);
+            playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
         };
-        playTone(587.33, audioCtx.currentTime, 0.4);
-        playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().then(runAlarm).catch(() => runAlarm());
+        } else {
+            runAlarm();
+        }
     } catch (e) {
         console.error(e);
     }
