@@ -2,7 +2,7 @@
   "name": "pos-mentai",
   "description": "Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, real-time kitchen display, dan integrasi desktop.",
   "version": "1.0.0",
-  "lastUpdated": "2026-06-01",
+  "lastUpdated": "2026-06-02",
   "stack": {
     "frontend": "Vue 3 (Composition API) + Pinia + TailwindCSS + shadcn/vue + Tauri",
     "backend": "Laravel 13 + Inertia.js (Laravel Sanctum, Horizon + Redis, Reverb)",

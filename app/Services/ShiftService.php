@@ -9,6 +9,8 @@ use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class ShiftService
@@ -165,6 +167,99 @@ class ShiftService
 
             return $updatedShift->load(['user.role', 'user.outlet', 'shiftTemplate', 'opener', 'closer', 'cashReport']);
         });
+     }
+
+    public function takeover(array $payload, User $actor): void
+    {
+        $nextUser = User::findOrFail($payload['next_user_id']);
+
+        // Verifikasi PIN / Password
+        $verified = false;
+        if ($nextUser->approval_pin && $payload['next_password_or_pin'] === $nextUser->approval_pin) {
+            $verified = true;
+        } elseif (Hash::check($payload['next_password_or_pin'], $nextUser->password_hash)) {
+            $verified = true;
+        }
+
+        if (!$verified) {
+            throw ValidationException::withMessages([
+                'next_password_or_pin' => 'PIN atau Password kasir berikutnya tidak valid.',
+            ]);
+        }
+
+        $activeShift = Shift::findOrFail($payload['active_shift_id']);
+
+        if ($activeShift->status !== 'active') {
+            throw ValidationException::withMessages([
+                'shift' => 'Shift aktif tidak ditemukan atau sudah ditutup.',
+            ]);
+        }
+
+        DB::transaction(function () use ($activeShift, $payload, $actor, $nextUser) {
+            // 1. Tutup shift kasir saat ini
+            $summary = $this->calculateSummary($activeShift);
+            $actualCash = (float) $payload['actual_cash'];
+            $expectedCash = $summary['expected_cash'];
+            $cashDifference = $actualCash - $expectedCash;
+
+            $updatedShift = $this->shiftRepository->update($activeShift, [
+                'status' => 'closed',
+                'closed_by' => $actor->id,
+                'closed_at' => now(),
+                'expected_cash' => $expectedCash,
+                'actual_cash' => $actualCash,
+                'cash_difference' => $cashDifference,
+                'notes' => filled($payload['notes'] ?? null) ? trim((string) $payload['notes']) : $activeShift->notes,
+            ]);
+
+            $this->shiftRepository->upsertCashReport($updatedShift, [
+                'total_orders' => $summary['total_orders'],
+                'total_revenue' => $summary['total_revenue'],
+                'total_cash' => $summary['breakdown']['cash'],
+                'total_qris' => $summary['breakdown']['qris'],
+                'total_debit' => $summary['breakdown']['debit'],
+                'total_ewallet' => $summary['breakdown']['ewallet'],
+                'total_kasbon' => $summary['breakdown']['kasbon'],
+                'total_discount' => $summary['total_discount'],
+                'total_refund' => 0,
+            ]);
+
+            // 2. Buka shift baru untuk kasir berikutnya
+            $todaySchedule = $this->shiftRepository->getTodayScheduleForUser($nextUser->id, CarbonImmutable::today());
+            $shiftTemplateId = $todaySchedule?->shift_template_id;
+
+            if (!$shiftTemplateId) {
+                $shiftTemplateId = $activeShift->shift_template_id;
+            }
+
+            $newShift = $this->shiftRepository->create([
+                'outlet_id' => $activeShift->outlet_id,
+                'user_id' => $nextUser->id,
+                'shift_template_id' => $shiftTemplateId,
+                'opened_by' => $nextUser->id,
+                'closed_by' => null,
+                'opened_at' => now(),
+                'closed_at' => null,
+                'status' => 'active',
+                'opening_cash' => $actualCash,
+                'expected_cash' => $actualCash,
+                'actual_cash' => null,
+                'cash_difference' => null,
+                'notes' => 'Ambil alih shift dari ' . $actor->name,
+            ]);
+
+            // Pindahkan pesanan aktif ke shift baru
+            $carryOverOrders = $this->shiftRepository->getCarryOverOrders($activeShift->outlet_id);
+            if ($carryOverOrders->isNotEmpty()) {
+                $this->shiftRepository->assignOrdersToShift($carryOverOrders, $newShift->id);
+            }
+
+            // 3. Login-kan user baru ke session
+            Auth::login($nextUser);
+        });
+
+        // Regenerate session token setelah login user baru
+        request()->session()->regenerate();
     }
 
     public function requireActiveShiftForOutlet(string $outletId): Shift

@@ -64,4 +64,24 @@ class ShiftController extends Controller
             ->route('shifts.index')
             ->with('success', 'Shift kasir berhasil ditutup.');
     }
+
+    public function takeover(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'active_shift_id' => 'required|string|exists:shifts,id',
+            'actual_cash' => 'required|numeric|min:0',
+            'notes' => 'nullable|string',
+            'next_user_id' => 'required|string|exists:users,id',
+            'next_password_or_pin' => 'required|string',
+        ]);
+
+        $this->shiftService->takeover(
+            $request->all(),
+            $request->user()
+        );
+
+        return redirect()
+            ->route('kasir.order')
+            ->with('success', 'Serah terima shift berhasil. Shift dialihkan ke kasir baru.');
+    }
 }

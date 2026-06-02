@@ -33,6 +33,10 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- Implementasi ganti shift / serah terima kasir instan dan auto-blocker ketika shift selesai di Menu Order (`Kasir/Order.vue`). Kasir dapat melakukan serah terima nominal uang fisik laci, memilih kasir penerus, dan mengotentikasi kasir penerus via PIN/password secara langsung tanpa logout-login manual.
+- Penambahan tombol **Uji Coba Alarm** di halaman pengaturan notifikasi dapur (`Settings/Notifications.vue`) untuk membunyikan bel dapur tunggal (chime) secara terpisah dari suara pelafalan Text-to-Speech.
+- Integrasi data shift aktif (`activeShift`) dan daftar kasir (`cashiers`) dari `ShiftService` ke props Halaman Order (`OrderController` & `Order.vue`) untuk menampilkan identitas kasir bertugas secara visual dan realtime di header.
+- Penghapusan validasi PIN supervisor/owner pada flow edit/ubah pesanan oleh kasir, baik di frontend maupun backend, sehingga kasir dapat melakukan modifikasi order secara mandiri secara instan.
 - Perbaikan hak akses Nginx temporary directories (`/var/lib/nginx` dan `/var/log/nginx`) di [Dockerfile](file:///home/pak-hakim/Pak-Hakim/Project/POS/Dockerfile) agar user `www-data` dapat menulis request body sementara berukuran besar (upload file/foto karyawan) di production.
 - Redesign UI/UX pada menu **Jadwal Shift** (fitur Ambil Alih instan dan setup jam minimalis), **Absensi Karyawan** (mode grid foto profil 3:4 dengan preview detail, serta tombol cepat Hadir/Pulang), dan **Shift Kasir** (nominal tunai fisik mandiri) sukses diintegrasikan.
 - Implementasi dashboard **Keuangan & Arus Kas terpadu** (Incomes & Expenses) yang mengonsolidasikan total penjualan (otomatis), pemasukan non-penjualan operasional lainnya (manual), dan biaya pengeluaran (manual), lengkap dengan menu navigasi horizontal, tabs terpisah, dan database schema tabel `incomes` yang baru.

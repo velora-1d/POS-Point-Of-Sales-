@@ -133,6 +133,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/shifts', [ShiftController::class, 'index'])->name('shifts.index');
     Route::post('/shifts/open', [ShiftController::class, 'open'])->name('shifts.open');
     Route::post('/shifts/{shift}/close', [ShiftController::class, 'close'])->name('shifts.close');
+    Route::post('/shifts/takeover', [ShiftController::class, 'takeover'])->name('shifts.takeover');
     Route::get('/reports/sales', [SalesReportController::class, 'index'])->name('reports.sales.index');
     Route::get('/reports/outlets', [OutletReportController::class, 'index'])->name('reports.outlets.index');
     Route::get('/reports/cashiers', [CashierReportController::class, 'index'])->name('reports.cashiers.index');

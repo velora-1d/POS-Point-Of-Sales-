@@ -150,6 +150,28 @@ watch(
     { deep: true },
 );
 
+const testAlarmNotification = () => {
+    try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const playTone = (freq: number, start: number, duration: number) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(freq, start);
+            gain.gain.setValueAtTime(0, start);
+            gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(start);
+            osc.stop(start + duration);
+        };
+        playTone(587.33, audioCtx.currentTime, 0.4);
+        playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+    } catch (e) {
+        console.error(e);
+    }
+};
+
 const testVoiceNotification = () => {
     if (!('speechSynthesis' in window)) {
         alert('Browser Anda tidak mendukung Text-to-Speech.');
@@ -621,7 +643,14 @@ function submitSave() {
                                         class="w-full accent-orange-500 bg-slate-800"
                                     />
                                 </div>
-                                <div class="flex items-end">
+                                <div class="flex items-end gap-2">
+                                    <button
+                                        type="button"
+                                        @click="testAlarmNotification"
+                                        class="w-full rounded-xl border border-slate-850 bg-slate-900/40 py-2.5 text-xs font-semibold text-slate-300 transition hover:bg-slate-800 hover:text-white"
+                                    >
+                                        Uji Coba Alarm
+                                    </button>
                                     <button
                                         type="button"
                                         @click="testVoiceNotification"

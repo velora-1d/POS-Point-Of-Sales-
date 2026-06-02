@@ -18,6 +18,7 @@ use App\Services\OrderBillService;
 use App\Services\OrderEditService;
 use App\Services\OrderPaymentService;
 use App\Services\TableQrConfigService;
+use App\Services\ShiftService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
@@ -28,6 +29,7 @@ class OrderController extends Controller
         protected OrderBillService $orderBillService,
         protected OrderPaymentService $orderPaymentService,
         protected TableQrConfigService $tableQrConfigService,
+        protected ShiftService $shiftService,
     ) {
     }
 
@@ -96,12 +98,22 @@ class OrderController extends Controller
             ->orderBy('name')
             ->get(['id', 'name', 'code', 'discount_percent', 'discount_amount']);
 
+        $activeShift = null;
+        $cashiers = [];
+        if ($outletId) {
+            $shiftData = $this->shiftService->getDashboard($user, ['outlet_id' => $outletId]);
+            $activeShift = $shiftData['activeShift'];
+            $cashiers = $shiftData['referenceData']['cashiers'];
+        }
+
         return Inertia::render('Kasir/Order', [
             'tables' => $tables,
             'categories' => $categories,
             'activeOrders' => $activeOrders,
             'customers' => $customers,
             'promos' => $promos,
+            'activeShift' => $activeShift,
+            'cashiers' => $cashiers,
             'success' => session('success'),
             'paymentCheckout' => session('paymentCheckout'),
         ]);

@@ -18,8 +18,12 @@ import {
     User,
     Utensils,
     X,
+    ArrowLeftRight,
+    ShieldAlert,
+    Coins,
+    LogOut,
 } from '@lucide/vue';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch, onBeforeUnmount } from 'vue';
 
 const props = defineProps<{
     tables: any[];
@@ -27,6 +31,8 @@ const props = defineProps<{
     activeOrders: any[];
     customers: any[];
     promos: any[];
+    activeShift?: any;
+    cashiers?: any[];
     success?: string | null;
     paymentCheckout?: Record<string, any> | null;
 }>();
@@ -35,6 +41,65 @@ const page = usePage<any>();
 const activePaymentMethods = computed<PaymentMethod[]>(() => {
     return (page.props.auth?.payment_methods as PaymentMethod[]) ?? ['qris'];
 });
+
+// Shift & Takeover Management
+const showTakeoverModal = ref(false);
+const isShiftExpired = ref(false);
+const timeRemainingText = ref('');
+const showNoShiftBlocker = computed(() => {
+    const userRole = page.props.auth?.user?.role?.type || 'kasir';
+    return (userRole === 'kasir' || userRole === 'supervisor') && !props.activeShift;
+});
+
+const takeoverForm = useForm({
+    active_shift_id: props.activeShift?.id || '',
+    actual_cash: 0,
+    notes: '',
+    next_user_id: '',
+    next_password_or_pin: '',
+});
+
+const checkShiftStatus = () => {
+    if (!props.activeShift || !props.activeShift.shift_template) {
+        isShiftExpired.value = false;
+        timeRemainingText.value = 'Tidak ada shift aktif';
+        return;
+    }
+
+    const now = new Date();
+    const endTimeStr = props.activeShift.shift_template.end_time;
+    if (!endTimeStr) return;
+
+    const [hours, minutes] = endTimeStr.split(':').map(Number);
+    const endTime = new Date();
+    endTime.setHours(hours, minutes, 0, 0);
+
+    let diff = endTime.getTime() - now.getTime();
+
+    if (diff <= 0) {
+        isShiftExpired.value = true;
+        showTakeoverModal.value = true;
+        timeRemainingText.value = 'Shift Selesai!';
+    } else {
+        const diffMins = Math.floor(diff / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const mins = diffMins % 60;
+        timeRemainingText.value = `${diffHours}j ${mins}m sisa`;
+    }
+};
+
+let shiftInterval: any = null;
+
+const submitTakeover = () => {
+    takeoverForm.active_shift_id = props.activeShift?.id || '';
+    takeoverForm.post(route('shifts.takeover'), {
+        onSuccess: () => {
+            showTakeoverModal.value = false;
+            isShiftExpired.value = false;
+            takeoverForm.reset();
+        },
+    });
+};
 
 const getPaymentMethodConfig = (method: string) => {
     switch (method) {
@@ -487,6 +552,9 @@ watch(customerSearchQuery, (value) => {
 });
 
 onMounted(() => {
+    checkShiftStatus();
+    shiftInterval = setInterval(checkShiftStatus, 15000);
+
     const params = new URLSearchParams(window.location.search);
     const tableId = params.get('table_id');
     const mode = params.get('mode');
@@ -501,6 +569,12 @@ onMounted(() => {
     const matchedTable = props.tables.find((table) => table.id === tableId);
     if (matchedTable) {
         selectTable(matchedTable);
+    }
+});
+
+onBeforeUnmount(() => {
+    if (shiftInterval) {
+        clearInterval(shiftInterval);
     }
 });
 
@@ -534,7 +608,7 @@ const getOrderCustomerSecondary = (order: any) => {
 };
 
 const editOrderNeedsApproval = computed(
-    () => editingOrder.value?.status === 'in_progress',
+    () => false,
 );
 
 const canEditOrderStatus = (status?: string) => {
@@ -1545,6 +1619,36 @@ const openPaymentCheckout = () => {
                         Sistem pembuatan pesanan, pelacakan antrian aktif, dan
                         visualisasi detail meja secara real-time.
                     </p>
+                </div>
+
+                <!-- Info Kasir Bertugas & Shift (Premium Design) -->
+                <div v-if="activeShift" class="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/50 p-3 shadow-sm select-none">
+                    <!-- Foto / Inisial Profile Karyawan -->
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-400 font-black text-sm">
+                        {{ activeShift.user?.name ? activeShift.user.name.charAt(0).toUpperCase() : 'K' }}
+                    </div>
+                    <!-- Detail Nama & Info Shift -->
+                    <div class="flex flex-col min-w-[120px]">
+                        <span class="text-xs font-black tracking-tight text-white line-clamp-1 leading-tight">{{ activeShift.user?.name }}</span>
+                        <div class="flex items-center gap-1.5 mt-1 text-[9px] font-semibold text-slate-400">
+                            <span class="rounded bg-slate-800 px-1 py-0.5 text-slate-300 font-sans tracking-wide">
+                                {{ activeShift.shift_template?.name || 'Shift Aktif' }}
+                            </span>
+                            <span class="flex items-center gap-0.5 text-orange-400">
+                                <Clock class="h-3 w-3 shrink-0" />
+                                <span>{{ timeRemainingText }}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Tombol Ganti Shift -->
+                    <button
+                        @click="showTakeoverModal = true"
+                        type="button"
+                        class="ml-2 flex h-9 items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 text-xs font-bold text-slate-200 transition-all hover:bg-slate-700 hover:text-white"
+                    >
+                        <ArrowLeftRight class="h-3.5 w-3.5 shrink-0" />
+                        <span>Ganti Shift</span>
+                    </button>
                 </div>
             </div>
         </template>
@@ -4726,5 +4830,189 @@ const openPaymentCheckout = () => {
                 </button>
             </div>
         </Transition>
+
+        <!-- BLOCKER: No Active Shift Blocker -->
+        <div
+            v-if="showNoShiftBlocker"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-md"
+        >
+            <div class="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900 p-8 text-center shadow-2xl">
+                <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-orange-500/20 bg-orange-500/10 text-orange-400">
+                    <ShieldAlert class="h-8 w-8 text-orange-500 animate-bounce" />
+                </div>
+                <h3 class="text-xl font-black tracking-tight text-white">Shift Kasir Belum Dibuka</h3>
+                <p class="mt-3 text-sm text-slate-400 leading-relaxed">
+                    Outlet Anda belum memiliki shift aktif yang berjalan saat ini. Kasir wajib membuka shift kasir terlebih dahulu untuk dapat melayani transaksi penjualan.
+                </p>
+                <div class="mt-8 flex flex-col gap-3">
+                    <a
+                        :href="route('shifts.index')"
+                        class="flex w-full items-center justify-center gap-2 rounded-2xl bg-orange-500 px-5 py-4 text-sm font-bold text-white shadow-lg shadow-orange-500/20 transition-all hover:bg-orange-600 hover:shadow-orange-600/35"
+                    >
+                        <Coins class="h-4 w-4" />
+                        <span>Buka Shift Sekarang</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: Ganti Shift / Ambil Alih (Takeover Shift) -->
+        <div
+            v-if="showTakeoverModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm"
+        >
+            <div class="w-full max-w-lg rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
+                <!-- Modal Header -->
+                <div class="mb-5 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20">
+                            <ArrowLeftRight class="h-5 w-5" />
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black tracking-tight text-white">
+                                {{ isShiftExpired ? 'Waktu Shift Selesai (Serah Terima)' : 'Serah Terima / Ganti Shift' }}
+                            </h3>
+                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                                Laci Kas & Login Kasir Baru
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Tampilkan tombol close HANYA jika manual (tidak expired) -->
+                    <button
+                        v-if="!isShiftExpired"
+                        @click="showTakeoverModal = false"
+                        class="rounded-lg p-1 text-slate-500 hover:bg-slate-800 hover:text-white"
+                    >
+                        <X class="h-5 w-5" />
+                    </button>
+                </div>
+
+                <!-- Warning if expired -->
+                <div
+                    v-if="isShiftExpired"
+                    class="mb-6 flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-xs text-red-400"
+                >
+                    <ShieldAlert class="h-5 w-5 shrink-0 text-red-500" />
+                    <div>
+                        <span class="font-bold">Akses Laci Kas Terkunci!</span>
+                        <p class="mt-1 leading-relaxed text-red-400/90">
+                            Jam shift kasir aktif saat ini telah berakhir. Sistem telah mengunci menu transaksi hingga proses serah terima laci kas ke karyawan berikutnya selesai dilakukan.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Form Ganti Shift -->
+                <form @submit.prevent="submitTakeover" class="space-y-4">
+                    <!-- nominal laci kas -->
+                    <div>
+                        <label class="mb-1.5 block text-xs font-bold text-slate-300">
+                            Uang Tunai Fisik Akhir di Laci (IDR) <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative rounded-2xl bg-slate-950 border border-slate-800 focus-within:border-orange-500/50 transition-all">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500">Rp</span>
+                            <input
+                                v-model.number="takeoverForm.actual_cash"
+                                type="number"
+                                required
+                                min="0"
+                                class="w-full bg-transparent py-3.5 pl-11 pr-4 text-sm text-white placeholder-slate-600 focus:outline-none border-none focus:ring-0"
+                                placeholder="Masukkan jumlah uang fisik di laci"
+                            />
+                        </div>
+                        <p class="mt-1 text-[10px] text-slate-400 leading-normal">
+                            Hitung nominal uang cash riil di laci kas saat ini. Selisih dengan ekspektasi sistem akan dicatat di laporan rekap kas.
+                        </p>
+                        <div v-if="takeoverForm.errors.actual_cash" class="mt-1 text-xs text-red-400">
+                            {{ takeoverForm.errors.actual_cash }}
+                        </div>
+                    </div>
+
+                    <!-- Karyawan Penerus -->
+                    <div>
+                        <label class="mb-1.5 block text-xs font-bold text-slate-300">
+                            Pilih Karyawan Shift Berikutnya <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative rounded-2xl bg-slate-950 border border-slate-800 focus-within:border-orange-500/50 transition-all">
+                            <select
+                                v-model="takeoverForm.next_user_id"
+                                required
+                                class="w-full bg-transparent py-3.5 px-4 text-sm text-white border-none focus:outline-none focus:ring-0 appearance-none"
+                            >
+                                <option value="" disabled class="bg-slate-900 text-slate-500">
+                                    -- Pilih Kasir / Karyawan --
+                                </option>
+                                <option
+                                    v-for="cashier in cashiers?.filter(c => c.id !== page.props.auth?.user?.id)"
+                                    :key="cashier.id"
+                                    :value="cashier.id"
+                                    class="bg-slate-900 text-white"
+                                >
+                                    {{ cashier.name }} ({{ cashier.role }})
+                                </option>
+                            </select>
+                        </div>
+                        <div v-if="takeoverForm.errors.next_user_id" class="mt-1 text-xs text-red-400">
+                            {{ takeoverForm.errors.next_user_id }}
+                        </div>
+                    </div>
+
+                    <!-- Password / PIN Verifikasi Kasir Baru -->
+                    <div>
+                        <label class="mb-1.5 block text-xs font-bold text-slate-300">
+                            PIN / Password Verifikasi Kasir Baru <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative rounded-2xl bg-slate-950 border border-slate-800 focus-within:border-orange-500/50 transition-all">
+                            <input
+                                v-model="takeoverForm.next_password_or_pin"
+                                type="password"
+                                required
+                                class="w-full bg-transparent py-3.5 px-4 text-sm text-white placeholder-slate-600 focus:outline-none border-none focus:ring-0"
+                                placeholder="Masukkan PIN atau Password kasir baru"
+                            />
+                        </div>
+                        <p class="mt-1 text-[10px] text-slate-400 leading-normal">
+                            Kasir penerus wajib memasukkan PIN atau Password akun mereka sendiri untuk memvalidasi proses ambil alih shift secara instan.
+                        </p>
+                        <div v-if="takeoverForm.errors.next_password_or_pin" class="mt-1 text-xs text-red-400">
+                            {{ takeoverForm.errors.next_password_or_pin }}
+                        </div>
+                    </div>
+
+                    <!-- Catatan Opsional -->
+                    <div>
+                        <label class="mb-1.5 block text-xs font-bold text-slate-300">
+                            Catatan Serah Terima (Opsional)
+                        </label>
+                        <div class="relative rounded-2xl bg-slate-950 border border-slate-800 focus-within:border-orange-500/50 transition-all">
+                            <textarea
+                                v-model="takeoverForm.notes"
+                                class="w-full bg-transparent py-3 px-4 text-sm text-white placeholder-slate-600 focus:outline-none border-none focus:ring-0 min-h-[70px] resize-none"
+                                placeholder="Tulis catatan jika ada selisih uang, kerusakan alat, atau titipan pesan..."
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mt-6 flex gap-3">
+                        <button
+                            v-if="!isShiftExpired"
+                            type="button"
+                            @click="showTakeoverModal = false"
+                            class="flex-1 rounded-2xl border border-slate-800 bg-transparent py-3.5 text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all"
+                        >
+                            Batal
+                        </button>
+                        <button
+                            type="submit"
+                            :disabled="takeoverForm.processing"
+                            class="flex-[2] flex items-center justify-center gap-2 rounded-2xl bg-orange-500 py-3.5 text-sm font-bold text-white shadow-lg shadow-orange-500/20 hover:bg-orange-600 hover:shadow-orange-600/35 transition-all disabled:opacity-50"
+                        >
+                            <ArrowLeftRight class="h-4 w-4" />
+                            <span>{{ takeoverForm.processing ? 'Memproses...' : 'Serah Terima & Ambil Alih' }}</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </AuthenticatedLayout>
 </template>
