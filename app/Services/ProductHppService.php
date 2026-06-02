@@ -43,7 +43,7 @@ class ProductHppService
             'rawMaterials' => $this->productHppRepository->getActiveRawMaterials($outletId),
             'filters' => [
                 'search' => (string) ($filters['search'] ?? ''),
-                'recipe_status' => $filters['recipe_status'] ?: '',
+                'recipe_status' => $filters['recipe_status'] ?? '',
                 'per_page' => (int) ($filters['per_page'] ?? 12),
             ],
         ];
@@ -105,7 +105,7 @@ class ProductHppService
                 $normalizedIngredients->all(),
             );
 
-            $freshProduct = $product->fresh(['ingredients.rawMaterial']);
+            $freshProduct = $product->load(['ingredients.rawMaterial']);
             $calculatedHpp = $this->productHppRepository->calculateProductHpp($freshProduct);
 
             $this->productHppRepository->updateProductHpp($product, $calculatedHpp);

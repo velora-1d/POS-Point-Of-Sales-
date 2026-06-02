@@ -195,7 +195,7 @@ class OrderPaymentService
             $checkout = $this->startQrisCheckout($order, 'before_kitchen');
 
             return [
-                'order' => $order->fresh([
+                'order' => $order->load([
                     'table',
                     'customer.membership.tier',
                     'items.product',

@@ -179,7 +179,7 @@ class ShiftRepository
     {
         $shift->update($payload);
 
-        return $shift->fresh(['user.role', 'user.outlet', 'shiftTemplate', 'opener', 'closer', 'cashReport']);
+        return $shift->load(['user.role', 'user.outlet', 'shiftTemplate', 'opener', 'closer', 'cashReport']);
     }
 
     public function upsertCashReport(Shift $shift, array $payload): ShiftCashReport

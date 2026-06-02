@@ -163,7 +163,7 @@ class ShiftService
                 'total_refund' => 0,
             ]);
 
-            return $updatedShift->fresh(['user.role', 'user.outlet', 'shiftTemplate', 'opener', 'closer', 'cashReport']);
+            return $updatedShift->load(['user.role', 'user.outlet', 'shiftTemplate', 'opener', 'closer', 'cashReport']);
         });
     }
 

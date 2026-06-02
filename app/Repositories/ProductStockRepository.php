@@ -106,13 +106,15 @@ class ProductStockRepository
             $lastRestockedAt = now();
         }
 
-        $stock->update([
+        $stock->fill([
             'current_stock' => $payload['current_stock'],
             'minimum_stock' => $payload['minimum_stock'],
             'unit' => $payload['unit'] ?: ($stock->unit ?: 'pcs'),
             'last_restocked_at' => $lastRestockedAt,
         ]);
 
-        return $stock->fresh();
+        $stock->save();
+
+        return $stock;
     }
 }

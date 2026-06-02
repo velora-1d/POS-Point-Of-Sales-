@@ -45,7 +45,7 @@ class InventoryExpiryRepository
     {
         $inventoryExpiry->update($payload);
 
-        return $inventoryExpiry->fresh([
+        return $inventoryExpiry->load([
             'product.category',
             'rawMaterial',
         ]);

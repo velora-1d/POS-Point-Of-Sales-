@@ -35,7 +35,7 @@ class ProductStockService
             'summary' => $this->productStockRepository->getSummary($outletId),
             'filters' => [
                 'search' => (string) ($filters['search'] ?? ''),
-                'status' => $filters['status'] ?: '',
+                'status' => $filters['status'] ?? '',
                 'per_page' => (int) ($filters['per_page'] ?? 12),
             ],
         ];

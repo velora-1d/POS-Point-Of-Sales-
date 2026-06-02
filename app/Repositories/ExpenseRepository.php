@@ -66,7 +66,7 @@ class ExpenseRepository
     {
         $expense->update($payload);
 
-        return $expense->fresh(['outlet', 'creator', 'updater']);
+        return $expense->load(['outlet', 'creator', 'updater']);
     }
 
     public function delete(Expense $expense): void

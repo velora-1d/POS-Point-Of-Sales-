@@ -171,7 +171,7 @@ class AttendanceRepository
     {
         $attendance->update($payload);
 
-        return $attendance->fresh(['user.role', 'user.outlet', 'schedule.shiftTemplate', 'correctedBy']);
+        return $attendance->load(['user.role', 'user.outlet', 'schedule.shiftTemplate', 'correctedBy']);
     }
 
     public function findForScope(string $attendanceId, ?string $scopeOutletId = null): ?Attendance

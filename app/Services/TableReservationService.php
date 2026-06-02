@@ -73,7 +73,7 @@ class TableReservationService
 
             $this->syncTableStatus($table->id);
 
-            return $reservation->fresh(['table', 'customer', 'creator']);
+            return $reservation->load(['table', 'customer', 'creator']);
         });
     }
 
@@ -95,7 +95,7 @@ class TableReservationService
 
             $this->syncTableStatus($reservation->table_id);
 
-            return $reservation->fresh(['table', 'customer', 'creator']);
+            return $reservation->load(['table', 'customer', 'creator']);
         });
     }
 

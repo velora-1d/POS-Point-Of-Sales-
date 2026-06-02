@@ -143,6 +143,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/reports/expenses/{expense}', [ExpenseController::class, 'update'])->name('reports.expenses.update');
     Route::delete('/reports/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('reports.expenses.destroy');
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::patch('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::get('/products/hpp', [ProductHppController::class, 'index'])->name('products.hpp');
     Route::get('/products/stocks', [ProductStockController::class, 'index'])->name('products.stock');
     Route::patch('/products/stocks/{product}', [ProductStockController::class, 'update'])->name('products.stock.update');

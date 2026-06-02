@@ -186,7 +186,7 @@ class TableQrConfigService
             abort(404);
         }
 
-        return $table->fresh(['outlet']) ?? $table->load('outlet');
+        return $table->load('outlet');
     }
 
     public function ensureOutletTablesReady(string $outletId): void

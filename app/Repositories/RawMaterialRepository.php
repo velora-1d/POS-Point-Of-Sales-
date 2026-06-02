@@ -73,7 +73,7 @@ class RawMaterialRepository
     {
         $rawMaterial->update($payload);
 
-        return $rawMaterial->fresh();
+        return $rawMaterial;
     }
 
     public function addStock(RawMaterial $rawMaterial, int $quantity): RawMaterial
@@ -83,7 +83,7 @@ class RawMaterialRepository
             'last_restocked_at' => now(),
         ]);
 
-        return $rawMaterial->fresh();
+        return $rawMaterial;
     }
 
     public function adjustStock(RawMaterial $rawMaterial, int $quantity): RawMaterial
@@ -98,6 +98,6 @@ class RawMaterialRepository
 
         $rawMaterial->update($payload);
 
-        return $rawMaterial->fresh();
+        return $rawMaterial;
     }
 }
