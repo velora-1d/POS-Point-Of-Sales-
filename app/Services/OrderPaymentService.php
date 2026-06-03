@@ -194,7 +194,7 @@ class OrderPaymentService
                 $this->promoEngineService->extractPromoIdsFromMetadata($order->metadata ?? []),
             );
 
-            $checkout = $this->startQrisCheckout($order, 'before_kitchen');
+            $checkout = $this->startGatewayCheckout($order, 'before_kitchen', 'qris');
 
             return [
                 'order' => $order->load([
