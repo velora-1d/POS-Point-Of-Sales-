@@ -145,7 +145,7 @@ const summaryCards = computed(() => [
         label: 'Total Karyawan',
         value: props.summary.total,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: Users,
     },
     {
@@ -333,7 +333,7 @@ const submitEmployee = () => {
 const getStatusClass = (isActive: boolean) => {
     return isActive
         ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300'
-        : 'border-slate-500/20 bg-slate-500/10 text-slate-300';
+        : 'border-slate-500/20 bg-slate-500/10 text-stone-600 dark:text-slate-300';
 };
 </script>
 
@@ -344,10 +344,10 @@ const getStatusClass = (isActive: boolean) => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        Data Karyawan
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+Data Karyawan
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Kelola data karyawan, role, outlet, password awal, PIN approval, dan status aktif. Supervisor bisa lihat, owner bisa full manage.
                     </p>
                 </div>
@@ -371,42 +371,42 @@ const getStatusClass = (isActive: boolean) => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-3xl font-black" :class="card.tone">
                                 {{ card.value }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3 text-white">
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3 text-stone-900 dark:text-white">
                             <component :is="card.icon" class="h-5 w-5" />
                         </div>
                     </div>
                 </article>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div class="grid flex-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Cari karyawan</span>
-                            <div class="flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/80 px-3">
-                                <Search class="h-4 w-4 text-slate-500" />
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Cari karyawan</span>
+                            <div class="flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3">
+                                <Search class="h-4 w-4 text-stone-400 dark:text-slate-500" />
                                 <input
                                     v-model="search"
                                     type="text"
                                     placeholder="Nama, email, phone"
-                                    class="w-full border-0 bg-transparent px-0 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-0"
+                                    class="w-full border-0 bg-transparent px-0 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:outline-none focus:ring-0"
                                     @keyup.enter="submitFilters"
                                 />
                             </div>
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Status</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Status</span>
                             <select
                                 v-model="status"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua status</option>
                                 <option value="active">Aktif</option>
@@ -415,10 +415,10 @@ const getStatusClass = (isActive: boolean) => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Role</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Role</span>
                             <select
                                 v-model="roleType"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua role</option>
                                 <option
@@ -432,10 +432,10 @@ const getStatusClass = (isActive: boolean) => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                             <select
                                 v-model="outletId"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua outlet</option>
                                 <option
@@ -452,7 +452,7 @@ const getStatusClass = (isActive: boolean) => {
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/5"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
                             @click="clearFilters"
                         >
                             Reset Filter
@@ -478,19 +478,19 @@ const getStatusClass = (isActive: boolean) => {
             </section>
 
             <section class="grid gap-3 lg:grid-cols-[1.5fr_1fr]">
-                <div class="rounded-3xl border border-white/10 bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                    <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                <div class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 px-5 py-4">
                         <div>
-                            <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                            <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                                 Daftar Karyawan
                             </h3>
-                            <p class="mt-1 text-xs text-slate-500">
+                            <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                 Menampilkan {{ employees.from ?? 0 }} - {{ employees.to ?? 0 }} dari {{ employees.total }} karyawan.
                             </p>
                         </div>
                     </div>
 
-                    <div v-if="!employees.data.length" class="px-5 py-10 text-center text-sm text-slate-400">
+                    <div v-if="!employees.data.length" class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                         Belum ada data karyawan pada filter ini.
                     </div>
 
@@ -501,13 +501,13 @@ const getStatusClass = (isActive: boolean) => {
                             class="grid gap-4 px-5 py-5 xl:grid-cols-[1fr_0.8fr_0.9fr_auto]"
                         >
                             <div class="flex gap-4">
-                                <div class="h-16 w-12 flex-shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-900 aspect-[3/4]">
+                                <div class="h-16 w-12 flex-shrink-0 overflow-hidden rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 aspect-[3/4]">
                                     <img v-if="employee.photo_url" :src="employee.photo_url" class="h-full w-full object-cover" />
-                                    <div v-else class="flex h-full w-full items-center justify-center text-[9px] text-slate-500 font-bold bg-slate-900">NO PIC</div>
+                                    <div v-else class="flex h-full w-full items-center justify-center text-[9px] text-stone-400 dark:text-slate-500 font-bold bg-white dark:bg-slate-900">NO PIC</div>
                                 </div>
                                 <div class="space-y-1">
                                     <div class="flex flex-wrap items-center gap-2">
-                                        <h3 class="text-base font-black text-white">{{ employee.name }}</h3>
+                                        <h3 class="text-base font-black text-stone-900 dark:text-white">{{ employee.name }}</h3>
                                         <span
                                             class="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.18em]"
                                             :class="getStatusClass(employee.is_active)"
@@ -515,7 +515,7 @@ const getStatusClass = (isActive: boolean) => {
                                             {{ employee.is_active ? 'Aktif' : 'Nonaktif' }}
                                         </span>
                                     </div>
-                                    <p class="text-xs text-slate-400">{{ employee.email }}</p>
+                                    <p class="text-xs text-stone-500 dark:text-slate-400">{{ employee.email }}</p>
                                     <p v-if="employee.phone" class="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
                                         <span class="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                                         WA: {{ employee.phone }}
@@ -524,26 +524,26 @@ const getStatusClass = (isActive: boolean) => {
                                 </div>
                             </div>
 
-                            <div class="space-y-2 text-sm text-slate-300">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                            <div class="space-y-2 text-sm text-stone-600 dark:text-slate-300">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                     Role & Outlet
                                 </p>
                                 <p>{{ employee.role?.name || '-' }}</p>
-                                <p class="text-slate-500">{{ employee.outlet?.name || '-' }}</p>
+                                <p class="text-stone-400 dark:text-slate-500">{{ employee.outlet?.name || '-' }}</p>
                             </div>
 
-                            <div class="space-y-2 text-sm text-slate-300">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                            <div class="space-y-2 text-sm text-stone-600 dark:text-slate-300">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                     Join & Approval
                                 </p>
                                 <p>{{ formatDate(employee.join_date) }}</p>
-                                <p class="text-slate-500">PIN approval tersimpan aman</p>
+                                <p class="text-stone-400 dark:text-slate-500">PIN approval tersimpan aman</p>
                             </div>
 
                             <div v-if="canManage" class="flex items-start justify-end gap-2">
                                 <button
                                     type="button"
-                                    class="inline-flex items-center gap-2 rounded-2xl border border-white/10 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-orange-400/30 hover:bg-orange-500/10 hover:text-orange-100"
+                                    class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 px-3 py-2 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-orange-400/30 hover:bg-orange-500/10 hover:text-orange-100"
                                     @click="openEditModal(employee)"
                                 >
                                     <Pencil class="h-4 w-4" />
@@ -563,9 +563,9 @@ const getStatusClass = (isActive: boolean) => {
 
                     <div
                         v-if="employees.links.length > 3"
-                        class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-5 py-4"
+                        class="flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 dark:border-white/10 px-5 py-4"
                     >
-                        <p class="text-xs text-slate-500">
+                        <p class="text-xs text-stone-400 dark:text-slate-500">
                             List karyawan dipaginasi agar data owner tetap ringan.
                         </p>
                         <div class="flex flex-wrap gap-2">
@@ -576,23 +576,23 @@ const getStatusClass = (isActive: boolean) => {
                                 class="rounded-xl border px-3 py-2 text-xs font-semibold transition"
                                 :class="link.active
                                     ? 'border-orange-400/30 bg-orange-500/15 text-orange-100'
-                                    : 'border-white/10 text-slate-300 hover:bg-white/5'"
+                                    : 'border-stone-200 dark:border-white/10 text-stone-600 dark:text-slate-300 hover:bg-stone-100 dark:bg-white/5'"
                                 v-html="link.label"
                             />
                         </div>
                     </div>
                 </div>
 
-                <div class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <div class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                     <div class="flex items-center gap-3">
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/50 p-3 text-orange-200">
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-3 text-orange-200">
                             <CalendarDays class="h-5 w-5" />
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                            <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                                 Breakdown Role
                             </h3>
-                            <p class="mt-1 text-xs text-slate-500">
+                            <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                 Fondasi untuk menu shift, absensi, dan approval berikutnya.
                             </p>
                         </div>
@@ -602,11 +602,11 @@ const getStatusClass = (isActive: boolean) => {
                         <article
                             v-for="role in roleBreakdown"
                             :key="role.type"
-                            class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3"
+                            class="flex items-center justify-between rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-3"
                         >
                             <div>
-                                <p class="text-sm font-bold text-white">{{ role.name }}</p>
-                                <p class="text-[11px] uppercase tracking-[0.18em] text-slate-500">{{ role.type }}</p>
+                                <p class="text-sm font-bold text-stone-900 dark:text-white">{{ role.name }}</p>
+                                <p class="text-[11px] uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">{{ role.type }}</p>
                             </div>
                             <span class="text-lg font-black text-orange-300">
                                 {{ Number(role.total_users || 0) }}
@@ -619,19 +619,19 @@ const getStatusClass = (isActive: boolean) => {
 
         <div
             v-if="isModalOpen && canManage"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
         >
-            <div class="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-white/10 bg-slate-950 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)]">
+            <div class="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)]">
                 <div class="flex items-start justify-between gap-4">
                     <div>
-                        <h3 class="text-xl font-black text-white">{{ modalTitle }}</h3>
-                        <p class="mt-1 text-sm text-slate-400">
+                        <h3 class="text-xl font-black text-stone-900 dark:text-white">{{ modalTitle }}</h3>
+                        <p class="mt-1 text-sm text-stone-500 dark:text-slate-400">
                             Isi data login, role, outlet, dan PIN approval karyawan.
                         </p>
                     </div>
                     <button
                         type="button"
-                        class="rounded-2xl border border-white/10 p-2 text-slate-400 transition hover:border-white/20 hover:text-white"
+                        class="rounded-2xl border border-stone-200 dark:border-white/10 p-2 text-stone-500 dark:text-slate-400 transition hover:border-stone-200 dark:border-white/20 hover:text-stone-900 dark:text-white"
                         @click="closeModal"
                     >
                         <X class="h-5 w-5" />
@@ -642,17 +642,17 @@ const getStatusClass = (isActive: boolean) => {
                     <div class="grid gap-6 md:grid-cols-[180px_1fr]">
                         <!-- Kolom Kiri: Upload Foto 3:4 -->
                         <div class="space-y-2">
-                            <span class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Foto Karyawan</span>
-                            <div class="relative flex aspect-[3/4] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-slate-900 transition hover:border-orange-500/50 overflow-hidden">
+                            <span class="block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Foto Karyawan</span>
+                            <div class="relative flex aspect-[3/4] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-stone-200 dark:border-white/20 bg-white dark:bg-slate-900 transition hover:border-orange-500/50 overflow-hidden">
                                 <img v-if="photoPreview" :src="photoPreview" class="absolute inset-0 h-full w-full object-cover" />
                                 <img v-else-if="selectedEmployee?.photo_url" :src="selectedEmployee.photo_url" class="absolute inset-0 h-full w-full object-cover" />
-                                <div v-else class="flex flex-col items-center justify-center p-4 text-center text-slate-500">
+                                <div v-else class="flex flex-col items-center justify-center p-4 text-center text-stone-400 dark:text-slate-500">
                                     <Plus class="h-6 w-6 mb-2" />
                                     <span class="text-xs font-bold">Pilih Foto</span>
                                 </div>
                                 <input type="file" accept="image/*" class="absolute inset-0 cursor-pointer opacity-0" @change="handlePhotoChange" />
                             </div>
-                            <p class="text-[9px] text-slate-500 text-center uppercase tracking-wider">Format JPG/PNG (3:4)</p>
+                            <p class="text-[9px] text-stone-400 dark:text-slate-500 text-center uppercase tracking-wider">Format JPG/PNG (3:4)</p>
                             <p v-if="employeeForm.errors.photo" class="mt-2 text-xs text-rose-300 text-center">{{ employeeForm.errors.photo }}</p>
                         </div>
 
@@ -660,45 +660,45 @@ const getStatusClass = (isActive: boolean) => {
                         <div class="space-y-5">
                             <section class="grid gap-4 md:grid-cols-2">
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Nama</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Nama</span>
                                     <input
                                         v-model="employeeForm.name"
                                         type="text"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
                                     />
                                     <p v-if="employeeForm.errors.name" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.name }}</p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Email Login</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Email Login</span>
                                     <input
                                         v-model="employeeForm.email"
                                         type="email"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
                                     />
                                     <p v-if="employeeForm.errors.email" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.email }}</p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">
                                         No. HP / WhatsApp <span class="text-rose-400">*</span>
                                     </span>
                                     <input
                                         v-model="employeeForm.phone"
                                         type="text"
                                         placeholder="Wajib untuk koordinasi (Contoh: 0812...)"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
                                         required
                                     />
                                     <p v-if="employeeForm.errors.phone" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.phone }}</p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Tanggal Bergabung</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Tanggal Bergabung</span>
                                     <input
                                         v-model="employeeForm.join_date"
                                         type="date"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     />
                                     <p v-if="employeeForm.errors.join_date" class="mt-2 text-xs text-rose-300">{{ employeeForm.errors.join_date }}</p>
                                 </label>
@@ -706,10 +706,10 @@ const getStatusClass = (isActive: boolean) => {
 
                             <section class="grid gap-4 md:grid-cols-2">
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                                     <select
                                         v-model="employeeForm.outlet_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option
                                             v-for="outlet in referenceData.outlets"
@@ -723,10 +723,10 @@ const getStatusClass = (isActive: boolean) => {
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Role</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Role</span>
                                     <select
                                         v-model="employeeForm.role_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option value="">Pilih role</option>
                                         <option
@@ -741,20 +741,20 @@ const getStatusClass = (isActive: boolean) => {
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">
                                         {{ modalMode === 'edit' ? 'Password Baru' : 'Password Awal' }}
                                     </span>
                                     <div class="relative">
                                         <input
                                             v-model="employeeForm.password"
                                             :type="showPassword ? 'text' : 'password'"
-                                            class="w-full rounded-2xl border border-white/10 bg-slate-900 pl-4 pr-12 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                            class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 pl-4 pr-12 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
                                             :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : 'Minimal 8 karakter'"
                                         />
                                         <button
                                             type="button"
                                             @click="showPassword = !showPassword"
-                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-350"
                                         >
                                             <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
                                         </button>
@@ -763,7 +763,7 @@ const getStatusClass = (isActive: boolean) => {
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">
                                         {{ modalMode === 'edit' ? 'Reset PIN Approval' : 'PIN Approval' }}
                                     </span>
                                     <div class="relative">
@@ -772,13 +772,13 @@ const getStatusClass = (isActive: boolean) => {
                                             :type="showPin ? 'text' : 'password'"
                                             inputmode="numeric"
                                             maxlength="6"
-                                            class="w-full rounded-2xl border border-white/10 bg-slate-900 pl-4 pr-12 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                            class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 pl-4 pr-12 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
                                             :placeholder="modalMode === 'edit' ? 'Kosongkan jika tidak diganti' : '6 digit angka'"
                                         />
                                         <button
                                             type="button"
                                             @click="showPin = !showPin"
-                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-350"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-350"
                                         >
                                             <component :is="showPin ? EyeOff : Eye" class="h-4 w-4" />
                                         </button>
@@ -789,24 +789,25 @@ const getStatusClass = (isActive: boolean) => {
                         </div>
                     </div>
 
-                    <label class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+                    <label class="flex items-start gap-3 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-4">
                         <input
                             v-model="employeeForm.is_active"
                             type="checkbox"
-                            class="mt-1 rounded border-white/20 bg-slate-900 text-orange-500 focus:ring-orange-400"
+                            class="mt-1 rounded border-stone-200 dark:border-white/20 bg-white dark:bg-slate-900 text-orange-500 focus:ring-orange-400"
                         />
                         <span>
-                            <span class="block text-sm font-semibold text-white">Karyawan aktif</span>
-                            <span class="mt-1 block text-xs text-slate-500">
+                            <span class="block text-sm font-semibold text-stone-900 dark:text-white">
+Karyawan aktif</span>
+                            <span class="mt-1 block text-xs text-stone-400 dark:text-slate-500">
                                 Nonaktifkan untuk karyawan resign atau tidak boleh login lagi. Data historis tetap tersimpan.
                             </span>
                         </span>
                     </label>
 
-                    <div class="flex flex-wrap items-center justify-end gap-3 border-t border-white/10 pt-5">
+                    <div class="flex flex-wrap items-center justify-end gap-3 border-t border-stone-200 dark:border-white/10 pt-5">
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/5"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-stone-100 dark:bg-white/5"
                             @click="closeModal"
                         >
                             Batal

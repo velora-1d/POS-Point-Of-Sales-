@@ -122,10 +122,10 @@ function getStatusBadgeClass(status: string) {
                 </div>
                 <div class="flex items-end justify-between gap-4">
                     <div>
-                        <h2 class="text-2xl font-black tracking-tight text-white">
-                            Daftar Meja Outlet
+                        <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+Daftar Meja Outlet
                         </h2>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Tambah, edit, atau hapus daftar meja yang tersedia di outlet Anda.
                         </p>
                     </div>
@@ -152,14 +152,14 @@ function getStatusBadgeClass(status: string) {
                 <article
                     v-for="table in tables"
                     :key="table.id"
-                    class="group relative overflow-hidden rounded-[24px] border border-white/10 bg-slate-900/40 p-5 transition hover:border-orange-500/30"
+                    class="group relative overflow-hidden rounded-[24px] border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/40 p-5 transition hover:border-orange-500/30"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500">
                                 {{ table.id.substring(0, 8) }}
                             </p>
-                            <h3 class="mt-1 text-xl font-black text-white">
+                            <h3 class="mt-1 text-xl font-black text-stone-900 dark:text-white">
                                 {{ table.name }}
                             </h3>
                         </div>
@@ -173,7 +173,7 @@ function getStatusBadgeClass(status: string) {
                         </span>
                     </div>
 
-                    <div class="mt-4 flex items-center gap-2 text-slate-400">
+                    <div class="mt-4 flex items-center gap-2 text-stone-500 dark:text-slate-400">
                         <Users class="h-4 w-4" />
                         <span class="text-sm font-semibold">{{ table.capacity || '-' }} Pax</span>
                     </div>
@@ -181,7 +181,7 @@ function getStatusBadgeClass(status: string) {
                     <div class="mt-6 flex items-center gap-2 opacity-0 transition group-hover:opacity-100">
                         <button
                             @click="openEditModal(table)"
-                            class="flex-1 rounded-xl border border-white/10 bg-white/5 py-2 text-xs font-bold text-slate-200 transition hover:bg-white/10"
+                            class="flex-1 rounded-xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 py-2 text-xs font-bold text-stone-800 dark:text-slate-200 transition hover:bg-stone-200 dark:bg-white/10"
                         >
                             <div class="flex items-center justify-center gap-1.5">
                                 <Pencil class="h-3.5 w-3.5" />
@@ -199,7 +199,7 @@ function getStatusBadgeClass(status: string) {
 
                 <button
                     @click="openCreateModal"
-                    class="flex min-h-[160px] flex-col items-center justify-center rounded-[24px] border border-dashed border-slate-800 bg-slate-950/20 p-5 text-slate-500 transition hover:border-orange-500/40 hover:text-orange-300"
+                    class="flex min-h-[160px] flex-col items-center justify-center rounded-[24px] border border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/20 p-5 text-stone-400 dark:text-slate-500 transition hover:border-orange-500/40 hover:text-orange-300"
                 >
                     <Plus class="mb-2 h-8 w-8" />
                     <span class="text-sm font-bold">Tambah Meja Baru</span>
@@ -211,16 +211,16 @@ function getStatusBadgeClass(status: string) {
         <teleport to="body">
             <div
                 v-if="isModalOpen"
-                class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 px-4 py-8 backdrop-blur-sm"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/75 px-4 py-8 backdrop-blur-sm"
             >
-                <div class="w-full max-w-lg rounded-[28px] border border-white/10 bg-slate-900 shadow-2xl">
-                    <div class="flex items-start justify-between border-b border-white/10 px-6 py-5">
-                        <h3 class="text-xl font-black text-white">
+                <div class="w-full max-w-lg rounded-[28px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-2xl">
+                    <div class="flex items-start justify-between border-b border-stone-200 dark:border-white/10 px-6 py-5">
+                        <h3 class="text-xl font-black text-stone-900 dark:text-white">
                             {{ modalTitle }}
                         </h3>
                         <button
                             @click="closeModal"
-                            class="rounded-xl p-2 text-slate-400 hover:bg-white/5 hover:text-white"
+                            class="rounded-xl p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:bg-white/5 hover:text-stone-900 dark:text-white"
                         >
                             <X class="h-5 w-5" />
                         </button>
@@ -228,14 +228,14 @@ function getStatusBadgeClass(status: string) {
 
                     <form @submit.prevent="submitTable" class="p-6 space-y-5">
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-widest text-slate-500">
+                            <label class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500">
                                 Nama Meja
                             </label>
                             <input
                                 v-model="tableForm.name"
                                 type="text"
                                 placeholder="Contoh: Meja 01, VIP 1"
-                                class="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                 required
                             />
                             <p v-if="tableForm.errors.name" class="mt-1 text-xs text-rose-400">
@@ -244,14 +244,14 @@ function getStatusBadgeClass(status: string) {
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-widest text-slate-500">
+                            <label class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500">
                                 Kapasitas (Pax)
                             </label>
                             <input
                                 v-model="tableForm.capacity"
                                 type="number"
                                 min="1"
-                                class="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                             />
                             <p v-if="tableForm.errors.capacity" class="mt-1 text-xs text-rose-400">
                                 {{ tableForm.errors.capacity }}
@@ -262,7 +262,7 @@ function getStatusBadgeClass(status: string) {
                             <button
                                 type="button"
                                 @click="closeModal"
-                                class="flex-1 rounded-2xl border border-white/10 bg-white/5 py-3 text-sm font-bold text-slate-300 transition hover:bg-white/10"
+                                class="flex-1 rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 py-3 text-sm font-bold text-stone-600 dark:text-slate-300 transition hover:bg-stone-200 dark:bg-white/10"
                             >
                                 Batal
                             </button>

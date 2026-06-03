@@ -183,7 +183,7 @@ import {
                                         <p v-if="item.variant_name" class="mt-1 text-[10px] font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-300">
                                             {{ item.variant_name }}
                                         </p>
-                                        <p class="mt-2 text-[11px] font-extrabold text-stone-750 dark:text-slate-300">
+                                        <p class="mt-2 text-[11px] font-extrabold text-stone-600 dark:text-slate-300">
                                             {{ formatPrice(item.unit_price * item.quantity) }}
                                         </p>
                                     </div>

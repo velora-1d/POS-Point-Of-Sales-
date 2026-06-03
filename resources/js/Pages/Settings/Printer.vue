@@ -118,7 +118,7 @@ const summaryCards = computed(() => [
         value: props.summary.total_outlets,
         helper: props.access.canSelectOutlet ? 'Owner bisa pilih outlet aktif' : 'Supervisor hanya outlet sendiri',
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: Store,
     },
     {
@@ -218,7 +218,7 @@ const liveAccentBg = computed(() => {
     if (color === 'orange') return 'bg-orange-500';
     if (color === 'rose') return 'bg-rose-500';
     if (color === 'emerald') return 'bg-emerald-500';
-    return 'bg-slate-900';
+    return 'bg-white dark:bg-slate-900';
 });
 
 const liveTemplateClass = computed(() => {
@@ -264,10 +264,10 @@ function clearLogo() {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        Konfigurasi Printer & Struk
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+Konfigurasi Printer & Struk
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Simpan pengaturan printer per outlet, tentukan jalur koneksi, dan sinkronkan default metode
                         struk dengan setting outlet yang dipakai flow checkout.
                     </p>
@@ -292,31 +292,31 @@ function clearLogo() {
                 >
                     <div class="flex items-start justify-between gap-4">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-2xl font-black" :class="card.tone">{{ card.value }}</p>
-                            <p class="mt-2 text-xs text-slate-400">{{ card.helper }}</p>
+                            <p class="mt-2 text-xs text-stone-500 dark:text-slate-400">{{ card.helper }}</p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                            <component :is="card.icon" class="h-5 w-5 text-white" />
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3">
+                            <component :is="card.icon" class="h-5 w-5 text-stone-900 dark:text-white" />
                         </div>
                     </div>
                 </article>
             </section>
 
             <section class="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
-                <article class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
-                    <div class="flex flex-col gap-4 border-b border-slate-800 pb-5">
+                <article class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <div class="flex flex-col gap-4 border-b border-stone-200 dark:border-slate-800 pb-5">
                         <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300">
                                     Scope Outlet
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-white">Mapping device printer per outlet</h3>
+                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">Mapping device printer per outlet</h3>
                             </div>
                             <div
-                                class="inline-flex items-center gap-2 self-start rounded-full border border-slate-700 bg-slate-950/70 px-3 py-1 text-[11px] font-semibold text-slate-300"
+                                class="inline-flex items-center gap-2 self-start rounded-full border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/70 px-3 py-1 text-[11px] font-semibold text-stone-600 dark:text-slate-300"
                             >
                                 <Radio class="h-3.5 w-3.5 text-emerald-300" />
                                 {{ access.canSelectOutlet ? 'Owner mode' : 'Supervisor mode' }}
@@ -325,14 +325,14 @@ function clearLogo() {
 
                         <div class="grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                     Outlet aktif
                                 </label>
                                 <select
                                     :value="printerForm.outlet_id"
                                     :disabled="!access.canSelectOutlet"
                                     @change="openSelectedOutlet(($event.target as HTMLSelectElement).value)"
-                                    class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                 >
                                     <option
                                         v-for="outlet in outlets"
@@ -342,16 +342,16 @@ function clearLogo() {
                                         {{ outlet.name }}
                                     </option>
                                 </select>
-                                <p class="mt-2 text-xs text-slate-500">
+                                <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
                                     {{ access.canSelectOutlet ? 'Owner bisa berpindah outlet dari dropdown ini.' : 'Supervisor terkunci pada outlet yang ditugaskan.' }}
                                 </p>
                             </div>
 
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
-                                <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4">
+                                <p class="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                     Ringkasan outlet terpilih
                                 </p>
-                                <div class="mt-3 space-y-2 text-sm text-slate-200">
+                                <div class="mt-3 space-y-2 text-sm text-stone-800 dark:text-slate-200">
                                     <div class="flex items-center justify-between gap-3">
                                         <span>Status outlet</span>
                                         <span
@@ -365,13 +365,13 @@ function clearLogo() {
                                     </div>
                                     <div class="flex items-center justify-between gap-3">
                                         <span>Config printer</span>
-                                        <span class="text-slate-400">
+                                        <span class="text-stone-500 dark:text-slate-400">
                                             {{ props.formDefaults.has_config ? 'Sudah tersimpan' : 'Belum ada override' }}
                                         </span>
                                     </div>
                                     <div class="flex items-center justify-between gap-3">
                                         <span>Default struk</span>
-                                        <span class="text-slate-400">
+                                        <span class="text-stone-500 dark:text-slate-400">
                                             {{ formatReceiptMethod(selectedOutletOption?.receipt_method || 'print') }}
                                         </span>
                                     </div>
@@ -383,14 +383,14 @@ function clearLogo() {
                     <form class="mt-5 space-y-5" @submit.prevent="submitSave">
                         <div class="grid gap-5 md:grid-cols-2">
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                     Tipe printer
                                 </label>
                                 <div class="space-y-3">
                                     <label
                                         v-for="option in printerOptions.types"
                                         :key="option.value"
-                                        class="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+                                        class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4"
                                         :class="printerForm.printer_type === option.value ? 'border-orange-500/40 bg-orange-500/5' : ''"
                                     >
                                         <input
@@ -398,11 +398,11 @@ function clearLogo() {
                                             type="radio"
                                             name="printer_type"
                                             :value="option.value"
-                                            class="mt-1 h-4 w-4 border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                            class="mt-1 h-4 w-4 border-stone-300 dark:border-slate-600 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                         />
                                         <div>
-                                            <p class="text-sm font-semibold text-white">{{ option.label }}</p>
-                                            <p class="mt-1 text-xs text-slate-400">{{ option.description }}</p>
+                                            <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ option.label }}</p>
+                                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">{{ option.description }}</p>
                                         </div>
                                     </label>
                                 </div>
@@ -412,14 +412,14 @@ function clearLogo() {
                             </div>
 
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                     Jalur koneksi
                                 </label>
                                 <div class="space-y-3">
                                     <label
                                         v-for="option in printerOptions.connections"
                                         :key="option.value"
-                                        class="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+                                        class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4"
                                         :class="printerForm.connection_type === option.value ? 'border-sky-500/40 bg-sky-500/5' : ''"
                                     >
                                         <input
@@ -427,11 +427,11 @@ function clearLogo() {
                                             type="radio"
                                             name="connection_type"
                                             :value="option.value"
-                                            class="mt-1 h-4 w-4 border-slate-600 bg-slate-950 text-sky-500 focus:ring-sky-500"
+                                            class="mt-1 h-4 w-4 border-stone-300 dark:border-slate-600 bg-stone-100 dark:bg-slate-950 text-sky-500 focus:ring-sky-500"
                                         />
                                         <div>
-                                            <p class="text-sm font-semibold text-white">{{ option.label }}</p>
-                                            <p class="mt-1 text-xs text-slate-400">{{ option.description }}</p>
+                                            <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ option.label }}</p>
+                                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">{{ option.description }}</p>
                                         </div>
                                     </label>
                                 </div>
@@ -443,16 +443,16 @@ function clearLogo() {
 
                         <div class="grid gap-5 md:grid-cols-2">
                             <div v-if="isUsbConnection">
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                     Nama device / queue printer
                                 </label>
                                 <input
                                     v-model="printerForm.device_name"
                                     type="text"
                                     placeholder="Contoh: EPSON-TM-T82X atau POS-USB-01"
-                                    class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                 />
-                                <p class="mt-2 text-xs text-slate-500">
+                                <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
                                     Dipakai sebagai referensi device printer lokal pada aplikasi desktop.
                                 </p>
                                 <p v-if="printerForm.errors.device_name" class="mt-2 text-xs text-rose-300">
@@ -462,14 +462,14 @@ function clearLogo() {
 
                             <template v-else>
                                 <div>
-                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                         IP address printer
                                     </label>
                                     <input
                                         v-model="printerForm.ip_address"
                                         type="text"
                                         placeholder="Contoh: 192.168.10.25"
-                                        class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                     />
                                     <p v-if="printerForm.errors.ip_address" class="mt-2 text-xs text-rose-300">
                                         {{ printerForm.errors.ip_address }}
@@ -477,7 +477,7 @@ function clearLogo() {
                                 </div>
 
                                 <div>
-                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                         Port printer
                                     </label>
                                     <input
@@ -486,9 +486,9 @@ function clearLogo() {
                                         min="1"
                                         max="65535"
                                         placeholder="9100"
-                                        class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                     />
-                                    <p class="mt-2 text-xs text-slate-500">
+                                    <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
                                         Port RAW printing umum biasanya `9100`.
                                     </p>
                                     <p v-if="printerForm.errors.port" class="mt-2 text-xs text-rose-300">
@@ -499,14 +499,14 @@ function clearLogo() {
                         </div>
 
                         <div>
-                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 Default metode struk
                             </label>
                             <div class="grid gap-3 md:grid-cols-3">
                                 <label
                                     v-for="option in printerOptions.receiptMethods"
                                     :key="option.value"
-                                    class="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+                                    class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4"
                                     :class="printerForm.default_receipt_method === option.value ? 'border-emerald-500/40 bg-emerald-500/5' : ''"
                                 >
                                     <input
@@ -514,15 +514,15 @@ function clearLogo() {
                                         type="radio"
                                         name="default_receipt_method"
                                         :value="option.value"
-                                        class="mt-1 h-4 w-4 border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500"
+                                        class="mt-1 h-4 w-4 border-stone-300 dark:border-slate-600 bg-stone-100 dark:bg-slate-950 text-emerald-500 focus:ring-emerald-500"
                                     />
                                     <div>
-                                        <p class="text-sm font-semibold text-white">{{ option.label }}</p>
-                                        <p class="mt-1 text-xs text-slate-400">{{ option.description }}</p>
+                                        <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ option.label }}</p>
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">{{ option.description }}</p>
                                     </div>
                                 </label>
                             </div>
-                            <p class="mt-2 text-xs text-slate-500">
+                            <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
                                 Nilai ini ikut menyinkronkan `outlets.settings.default_receipt_method`.
                             </p>
                             <p v-if="printerForm.errors.default_receipt_method" class="mt-2 text-xs text-rose-300">
@@ -531,23 +531,23 @@ function clearLogo() {
                         </div>
 
                         <!-- Visual Receipt Customizer -->
-                        <div class="border-t border-slate-800 pt-5 space-y-5">
+                        <div class="border-t border-stone-200 dark:border-slate-800 pt-5 space-y-5">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300">
                                     Kustomisasi Visual Struk
                                 </p>
-                                <h3 class="mt-1 text-sm font-bold text-white">Desain & Format Struk</h3>
-                                <p class="text-xs text-slate-400 mt-1">Atur logo, template, font, warna aksen, dan teks footer struk belanja secara kustom.</p>
+                                <h3 class="mt-1 text-sm font-bold text-stone-900 dark:text-white">Desain & Format Struk</h3>
+                                <p class="text-xs text-stone-500 dark:text-slate-400 mt-1">Atur logo, template, font, warna aksen, dan teks footer struk belanja secara kustom.</p>
                             </div>
 
                             <div class="grid gap-5 md:grid-cols-2">
                                 <!-- Logo Upload -->
                                 <div>
-                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                         Logo Struk (Upload)
                                     </label>
-                                    <div class="flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
-                                        <div v-if="printerForm.metadata.receipt_logo" class="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-slate-700 bg-white p-1">
+                                    <div class="flex items-center gap-4 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4">
+                                        <div v-if="printerForm.metadata.receipt_logo" class="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-stone-200 dark:border-slate-700 bg-white p-1">
                                             <img :src="printerForm.metadata.receipt_logo" class="h-full w-full object-contain filter grayscale" />
                                             <button 
                                                 type="button" 
@@ -559,7 +559,7 @@ function clearLogo() {
                                                 </svg>
                                             </button>
                                         </div>
-                                        <div v-else class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border border-dashed border-slate-700 bg-slate-950/50">
+                                        <div v-else class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border border-dashed border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/50">
                                             <Printer class="h-6 w-6 text-slate-600" />
                                         </div>
                                         <div class="flex-1">
@@ -572,29 +572,29 @@ function clearLogo() {
                                             />
                                             <label 
                                                 for="receipt_logo_input" 
-                                                class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-slate-500 hover:text-white"
+                                                class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs font-semibold text-stone-800 dark:text-slate-200 transition hover:border-slate-500 hover:text-stone-900 dark:text-white"
                                             >
                                                 Pilih Gambar
                                             </label>
-                                            <p class="mt-1 text-[10px] text-slate-500">Maks. 1MB. Format PNG/JPG. Otomatis dikonversi ke base64.</p>
+                                            <p class="mt-1 text-[10px] text-stone-400 dark:text-slate-500">Maks. 1MB. Format PNG/JPG. Otomatis dikonversi ke base64.</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Template Struk -->
                                 <div>
-                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                         Template Layout
                                     </label>
                                     <select
                                         v-model="printerForm.metadata.receipt_template"
-                                        class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                     >
                                         <option value="classic">Classic (Sharp / 80mm-92mm)</option>
                                         <option value="modern">Modern (Rounded / Elegant)</option>
                                         <option value="compact">Compact (Minimalist / 58mm Thermal)</option>
                                     </select>
-                                    <p class="mt-1.5 text-xs text-slate-500">
+                                    <p class="mt-1.5 text-xs text-stone-400 dark:text-slate-500">
                                         Template menentukan lebar struk, padding, dan bentuk border struk.
                                     </p>
                                 </div>
@@ -603,12 +603,12 @@ function clearLogo() {
                             <div class="grid gap-5 md:grid-cols-2">
                                 <!-- Font Dropdown -->
                                 <div>
-                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                         Gaya Huruf (Font)
                                     </label>
                                     <select
                                         v-model="printerForm.metadata.receipt_font"
-                                        class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                     >
                                         <option value="sans">Sans-serif (Modern & Bersih)</option>
                                         <option value="serif">Serif (Klasik & Elegan)</option>
@@ -618,13 +618,13 @@ function clearLogo() {
 
                                 <!-- Color Accent Selector -->
                                 <div>
-                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                    <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                         Warna Aksen Teks (Preview Digital)
                                     </label>
                                     <div class="flex items-center gap-3 mt-1.5">
                                         <button
                                             v-for="colorOpt in [
-                                                { value: 'mono', bg: 'bg-slate-950 border-slate-700', label: 'Hitam' },
+                                                { value: 'mono', bg: 'bg-stone-100 dark:bg-slate-950 border-stone-200 dark:border-slate-700', label: 'Hitam' },
                                                 { value: 'orange', bg: 'bg-orange-500 border-orange-400', label: 'Oranye' },
                                                 { value: 'rose', bg: 'bg-rose-500 border-rose-400', label: 'Merah Muda' },
                                                 { value: 'emerald', bg: 'bg-emerald-500 border-emerald-400', label: 'Hijau' }
@@ -640,33 +640,33 @@ function clearLogo() {
                                             :title="colorOpt.label"
                                         />
                                     </div>
-                                    <p class="mt-2 text-xs text-slate-500">Aksen warna untuk elemen penonjol teks struk.</p>
+                                    <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">Aksen warna untuk elemen penonjol teks struk.</p>
                                 </div>
                             </div>
 
                             <!-- Custom Footer Text -->
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                     Teks Kaki Struk (Footer)
                                 </label>
                                 <textarea
                                     v-model="printerForm.metadata.receipt_footer"
                                     rows="2"
                                     placeholder="Contoh: Terima kasih atas kunjungan Anda! Barang yang sudah dibeli tidak dapat ditukar."
-                                    class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                 ></textarea>
-                                <p class="mt-1 text-xs text-slate-500">Pesan penutup di bagian paling bawah struk fisik atau digital.</p>
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">Pesan penutup di bagian paling bawah struk fisik atau digital.</p>
                             </div>
                         </div>
 
-                        <div class="flex flex-col gap-3 border-t border-slate-800 pt-5 sm:flex-row sm:items-center sm:justify-between">
-                            <div class="text-xs text-slate-500">
+                        <div class="flex flex-col gap-3 border-t border-stone-200 dark:border-slate-800 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="text-xs text-stone-400 dark:text-slate-500">
                                 Preview test print memakai dialog print browser untuk simulasi layout struk.
                             </div>
                             <div class="flex flex-col gap-3 sm:flex-row">
                                 <button
                                     type="button"
-                                    class="inline-flex items-center justify-center rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-slate-500 hover:text-white"
+                                    class="inline-flex items-center justify-center rounded-2xl border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-slate-500 hover:text-stone-900 dark:text-white"
                                     @click="openTestPrint"
                                 >
                                     Test print preview
@@ -685,20 +685,20 @@ function clearLogo() {
 
                 <aside class="space-y-5">
                     <!-- Live Visual Receipt Preview -->
-                    <article class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <article class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300">
                                     Live Receipt Preview
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-white">
+                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                                     Simulasi desain struk live
                                 </h3>
-                                <p class="text-xs text-slate-400 mt-1">Perubahan pada form sebelah kiri akan langsung direfleksikan di bawah ini secara instan.</p>
+                                <p class="text-xs text-stone-500 dark:text-slate-400 mt-1">Perubahan pada form sebelah kiri akan langsung direfleksikan di bawah ini secara instan.</p>
                             </div>
                         </div>
 
-                        <div class="mt-5 rounded-2xl bg-slate-950/80 p-4 border border-slate-800 flex items-center justify-center">
+                        <div class="mt-5 rounded-2xl bg-white dark:bg-slate-950/80 p-4 border border-stone-200 dark:border-slate-800 flex items-center justify-center">
                             <!-- Paper sheet simulation -->
                             <div 
                                 :class="[liveFontFamily, liveTemplateClass]" 
@@ -713,8 +713,8 @@ function clearLogo() {
                                     <h4 class="font-black text-sm uppercase tracking-wider" :class="liveAccentColorText">
                                         {{ selectedOutlet?.name || 'Outlet Mentai' }}
                                     </h4>
-                                    <p class="text-[9px] text-slate-500 mt-0.5">Jalan Raya Restoran Mentai No. 123</p>
-                                    <p class="text-[9px] text-slate-500">Telp: 0812-3456-789</p>
+                                    <p class="text-[9px] text-stone-400 dark:text-slate-500 mt-0.5">Jalan Raya Restoran Mentai No. 123</p>
+                                    <p class="text-[9px] text-stone-400 dark:text-slate-500">Telp: 0812-3456-789</p>
                                 </div>
 
                                 <div class="my-3 border-t" :class="printerForm.metadata.receipt_template === 'compact' ? 'border-dotted border-slate-300' : 'border-dashed border-slate-400'"></div>
@@ -740,10 +740,10 @@ function clearLogo() {
                                     <div class="flex justify-between items-start gap-4">
                                         <div class="text-slate-800">
                                             <span class="font-semibold">Mentai Rice Original</span>
-                                            <p class="text-[9px] text-slate-500">Varian: Pedas Sedang</p>
+                                            <p class="text-[9px] text-stone-400 dark:text-slate-500">Varian: Pedas Sedang</p>
                                         </div>
                                         <div class="text-right">
-                                            <span class="text-slate-500">1x</span>
+                                            <span class="text-stone-400 dark:text-slate-500">1x</span>
                                             <span class="font-semibold text-slate-900 ml-2">28.000</span>
                                         </div>
                                     </div>
@@ -752,7 +752,7 @@ function clearLogo() {
                                             <span class="font-semibold">Chicken Katsu Mentai</span>
                                         </div>
                                         <div class="text-right">
-                                            <span class="text-slate-500">1x</span>
+                                            <span class="text-stone-400 dark:text-slate-500">1x</span>
                                             <span class="font-semibold text-slate-900 ml-2">32.000</span>
                                         </div>
                                     </div>
@@ -761,7 +761,7 @@ function clearLogo() {
                                             <span class="font-semibold">Ocha Ice (Free Refill)</span>
                                         </div>
                                         <div class="text-right">
-                                            <span class="text-slate-500">2x</span>
+                                            <span class="text-stone-400 dark:text-slate-500">2x</span>
                                             <span class="font-semibold text-slate-900 ml-2">16.000</span>
                                         </div>
                                     </div>
@@ -786,59 +786,59 @@ function clearLogo() {
 
                                 <div class="my-3 border-t" :class="printerForm.metadata.receipt_template === 'compact' ? 'border-dotted border-slate-300' : 'border-dashed border-slate-400'"></div>
 
-                                <div class="text-center text-[10px] text-slate-500 italic leading-relaxed">
+                                <div class="text-center text-[10px] text-stone-400 dark:text-slate-500 italic leading-relaxed">
                                     {{ printerForm.metadata.receipt_footer || 'Terima kasih atas kunjungan Anda!' }}
                                 </div>
                             </div>
                         </div>
                     </article>
 
-                    <article class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <article class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300">
                                     Preview Runtime
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-white">
+                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                                     Snapshot konfigurasi outlet
                                 </h3>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
-                                <Printer class="h-5 w-5 text-slate-200" />
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-3">
+                                <Printer class="h-5 w-5 text-stone-800 dark:text-slate-200" />
                             </div>
                         </div>
 
-                        <div class="mt-5 rounded-[24px] border border-slate-800 bg-slate-950/70 p-4">
+                        <div class="mt-5 rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-4">
                             <div class="flex items-center justify-between gap-3">
-                                <span class="text-sm text-slate-400">Outlet</span>
-                                <span class="text-sm font-semibold text-white">{{ preview.outlet_name }}</span>
+                                <span class="text-sm text-stone-500 dark:text-slate-400">Outlet</span>
+                                <span class="text-sm font-semibold text-stone-900 dark:text-white">{{ preview.outlet_name }}</span>
                             </div>
                             <div class="mt-3 flex items-center justify-between gap-3">
-                                <span class="text-sm text-slate-400">Tipe</span>
-                                <span class="text-sm font-semibold text-white">
+                                <span class="text-sm text-stone-500 dark:text-slate-400">Tipe</span>
+                                <span class="text-sm font-semibold text-stone-900 dark:text-white">
                                     {{ preview.printer_type === 'dot_matrix' ? 'Dot Matrix' : 'Thermal' }}
                                 </span>
                             </div>
                             <div class="mt-3 flex items-center justify-between gap-3">
-                                <span class="text-sm text-slate-400">Koneksi</span>
-                                <span class="text-sm font-semibold text-white">
+                                <span class="text-sm text-stone-500 dark:text-slate-400">Koneksi</span>
+                                <span class="text-sm font-semibold text-stone-900 dark:text-white">
                                     {{ formatConnectionLabel(preview.connection_type) }}
                                 </span>
                             </div>
                             <div class="mt-3 flex items-center justify-between gap-3">
-                                <span class="text-sm text-slate-400">Target device</span>
-                                <span class="max-w-[55%] text-right text-sm font-semibold text-white">
+                                <span class="text-sm text-stone-500 dark:text-slate-400">Target device</span>
+                                <span class="max-w-[55%] text-right text-sm font-semibold text-stone-900 dark:text-white">
                                     {{ preview.device_label }}
                                 </span>
                             </div>
                             <div class="mt-3 flex items-center justify-between gap-3">
-                                <span class="text-sm text-slate-400">Default struk</span>
-                                <span class="text-sm font-semibold text-white">{{ previewReceiptMethodLabel }}</span>
+                                <span class="text-sm text-stone-500 dark:text-slate-400">Default struk</span>
+                                <span class="text-sm font-semibold text-stone-900 dark:text-white">{{ previewReceiptMethodLabel }}</span>
                             </div>
                         </div>
 
-                        <div class="mt-4 rounded-[24px] border border-dashed border-slate-700 bg-slate-950/50 p-4 text-xs text-slate-400">
-                            <p class="font-semibold text-slate-200">Catatan implementasi</p>
+                        <div class="mt-4 rounded-[24px] border border-dashed border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/50 p-4 text-xs text-stone-500 dark:text-slate-400">
+                            <p class="font-semibold text-stone-800 dark:text-slate-200">Catatan implementasi</p>
                             <ul class="mt-3 space-y-2">
                                 <li>- Flow ini menyimpan preferensi printer per outlet.</li>
                                 <li>- Direct print device belum dihubungkan; test print masih browser preview.</li>
@@ -847,13 +847,13 @@ function clearLogo() {
                         </div>
                     </article>
 
-                    <article class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <article class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
                                     Status Outlet
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-white">
+                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                                     Distribusi konfigurasi printer
                                 </h3>
                             </div>
@@ -863,12 +863,12 @@ function clearLogo() {
                             <div
                                 v-for="outlet in outlets"
                                 :key="outlet.id"
-                                class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+                                class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4"
                             >
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
-                                        <p class="text-sm font-semibold text-white">{{ outlet.name }}</p>
-                                        <p class="mt-1 text-xs text-slate-500">
+                                        <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ outlet.name }}</p>
+                                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                             {{ outlet.has_config ? 'Sudah ada config printer' : 'Masih pakai setting receipt outlet' }}
                                         </p>
                                     </div>
@@ -881,7 +881,7 @@ function clearLogo() {
                                         {{ outlet.is_active ? 'Aktif' : 'Nonaktif' }}
                                     </span>
                                 </div>
-                                <div class="mt-3 text-xs text-slate-400">
+                                <div class="mt-3 text-xs text-stone-500 dark:text-slate-400">
                                     Default struk: {{ formatReceiptMethod(outlet.receipt_method) }}
                                 </div>
                             </div>

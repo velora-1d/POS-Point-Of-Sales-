@@ -82,7 +82,7 @@ import {
                     'rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
                     selectedTableCategory === 'indoor'
                         ? 'bg-orange-500 text-white shadow-md'
-                        : 'text-slate-400 hover:text-slate-250 dark:hover:text-slate-200',
+                        : 'text-stone-500 dark:text-slate-400 hover:text-slate-250 dark:hover:text-stone-800 dark:text-slate-200',
                 ]"
             >
                 Indoor
@@ -94,7 +94,7 @@ import {
                     'rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
                     selectedTableCategory === 'outdoor'
                         ? 'bg-orange-500 text-white shadow-md'
-                        : 'text-slate-400 hover:text-slate-250 dark:hover:text-slate-200',
+                        : 'text-stone-500 dark:text-slate-400 hover:text-slate-250 dark:hover:text-stone-800 dark:text-slate-200',
                 ]"
             >
                 Outdoor
@@ -179,7 +179,7 @@ import {
             <div class="flex items-center gap-3">
                 <button
                     @click="resetTableSelection"
-                    class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-955 text-stone-600 dark:text-slate-300 transition duration-150 hover:bg-stone-200 dark:hover:bg-slate-800"
+                    class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-955 text-stone-600 dark:text-slate-300 transition duration-150 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800"
                 >
                     <ChevronLeft class="h-5 w-5" />
                 </button>
@@ -214,7 +214,7 @@ import {
                     'whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-semibold transition duration-150',
                     activeCategory === 'all'
                         ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400'
-                        : 'border-stone-200 dark:border-slate-850 bg-stone-100 dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800/40 hover:text-stone-900 dark:hover:text-slate-200',
+                        : 'border-stone-200 dark:border-slate-850 bg-stone-100 dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
                 ]"
             >
                 Semua Menu
@@ -227,7 +227,7 @@ import {
                     'whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-semibold transition duration-150',
                     activeCategory === cat.id
                         ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400'
-                        : 'border-stone-200 dark:border-slate-850 bg-stone-100 dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800/40 hover:text-stone-900 dark:hover:text-slate-200',
+                        : 'border-stone-200 dark:border-slate-850 bg-stone-100 dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
                 ]"
             >
                 {{ cat.name }}
@@ -240,7 +240,7 @@ import {
                 v-for="product in filteredProducts"
                 :key="product.id"
                 @click="handleProductClick(product)"
-                class="hover:shadow-orange-500/5 group flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-stone-200 dark:border-slate-800/60 bg-stone-50 dark:bg-slate-950/60 transition duration-150 hover:bg-white dark:hover:bg-slate-950 hover:border-orange-500/30 hover:shadow-md"
+                class="hover:shadow-orange-500/5 group flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-stone-200 dark:border-slate-800/60 bg-stone-50 dark:bg-slate-950/60 transition duration-150 hover:bg-white dark:hover:bg-stone-100 dark:bg-slate-950 hover:border-orange-500/30 hover:shadow-md"
             >
                 <div class="relative aspect-square w-full overflow-hidden border-b border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900">
                     <img
@@ -281,7 +281,7 @@ import {
         <div class="flex items-center gap-3 border-b border-stone-200 dark:border-slate-800/60 pb-5">
             <button
                 @click="resetTableSelection"
-                class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-955 text-stone-600 dark:text-slate-300 transition duration-150 hover:bg-stone-200 dark:hover:bg-slate-800"
+                class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-955 text-stone-600 dark:text-slate-300 transition duration-150 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800"
             >
                 <ChevronLeft class="h-5 w-5" />
             </button>
@@ -347,7 +347,7 @@ import {
                         'whitespace-nowrap rounded-xl border px-3 py-2 text-[11px] font-bold transition',
                         selectedManagedOrderId === order.id
                             ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-305'
-                            : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/70 text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-slate-200',
+                            : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/70 text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
                     ]"
                 >
                     {{ order.order_number }}

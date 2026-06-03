@@ -153,9 +153,9 @@ const statusClass = (status: string) => {
         case 'out':
             return 'border-rose-500/20 bg-rose-500/10 text-rose-300';
         case 'inactive':
-            return 'border-slate-600/40 bg-slate-800/80 text-slate-300';
+            return 'border-stone-300 dark:border-slate-600/40 bg-stone-100 dark:bg-slate-800/80 text-stone-600 dark:text-slate-300';
         default:
-            return 'border-white/10 bg-white/[0.03] text-slate-300';
+            return 'border-stone-200 dark:border-white/10 bg-white/[0.03] text-stone-600 dark:text-slate-300';
     }
 };
 
@@ -239,10 +239,10 @@ const summaryCards = computed(() => [
         <template #header>
             <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        Laporan Stok & Inventori
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-900 dark:text-white">
+Laporan Stok & Inventori
                     </h2>
-                    <p class="mt-1 text-xs text-slate-400">
+                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                         Snapshot stok saat ini dan exposure expired untuk periode
                         <span class="font-semibold text-orange-300">
                             {{ formatDate(period.start_date) }} - {{ formatDate(period.end_date) }}
@@ -251,12 +251,12 @@ const summaryCards = computed(() => [
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
-                    <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-300">
+                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:text-slate-300">
                         {{ user?.role || '-' }}
                     </span>
                     <Link
                         :href="route('reports.top-products.index')"
-                        class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.05]"
+                        class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-white/[0.05]"
                     >
                         <CalendarRange class="h-4 w-4 text-sky-300" />
                         Lihat Produk Terlaris
@@ -267,25 +267,25 @@ const summaryCards = computed(() => [
 
         <div class="space-y-6">
             <!-- Tab Navigation Laporan Sumber Daya -->
-            <div class="flex flex-wrap border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
+            <div class="flex flex-wrap border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
                 <Link
                     :href="route('reports.inventory.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.inventory.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.inventory.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Stok & Inventori
                 </Link>
                 <Link
                     :href="route('reports.attendance-shifts.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.attendance-shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.attendance-shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Absensi & Shift
                 </Link>
                 <Link
                     :href="route('reports.exports.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.exports.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.exports.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Export Data
                 </Link>
@@ -296,14 +296,14 @@ const summaryCards = computed(() => [
                 <p class="mt-2 text-amber-200/90">{{ limitations.stock_opname }}</p>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div class="grid flex-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
                         <label v-if="canChooseOutlet" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                             <select
                                 v-model="outletFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua outlet</option>
                                 <option
@@ -317,28 +317,28 @@ const summaryCards = computed(() => [
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Dari tanggal</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Dari tanggal</span>
                             <input
                                 v-model="startDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Sampai tanggal</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Sampai tanggal</span>
                             <input
                                 v-model="endDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Tipe inventori</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Tipe inventori</span>
                             <select
                                 v-model="typeFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="all">Semua</option>
                                 <option value="product">Produk</option>
@@ -347,10 +347,10 @@ const summaryCards = computed(() => [
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Status stok</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Status stok</span>
                             <select
                                 v-model="statusFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="all">Semua</option>
                                 <option value="healthy">Sehat</option>
@@ -364,7 +364,7 @@ const summaryCards = computed(() => [
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/5"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
                             @click="clearFilters"
                         >
                             Reset Filter
@@ -389,35 +389,35 @@ const summaryCards = computed(() => [
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-2xl font-black" :class="card.tone">
                                 {{ card.value }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/30 p-3">
-                            <component :is="card.icon" class="h-5 w-5 text-white" />
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/30 p-3">
+                            <component :is="card.icon" class="h-5 w-5 text-stone-900 dark:text-white" />
                         </div>
                     </div>
-                    <p class="mt-3 text-xs text-slate-300">
+                    <p class="mt-3 text-xs text-stone-600 dark:text-slate-300">
                         {{ card.helper }}
                     </p>
                 </article>
             </section>
 
             <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-                <article class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Snapshot Inventori
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Daftar item inventori terurut berdasarkan nilai stok estimasi.
                         </p>
                     </div>
 
-                    <div v-if="!inventory.length" class="mt-5 rounded-2xl border border-dashed border-white/10 px-4 py-10 text-center text-sm text-slate-400">
+                    <div v-if="!inventory.length" class="mt-5 rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-4 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                         Tidak ada item inventori pada filter ini.
                     </div>
 
@@ -425,12 +425,12 @@ const summaryCards = computed(() => [
                         <article
                             v-for="item in inventory.slice(0, 8)"
                             :key="`${item.type}-${item.id}`"
-                            class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-4"
                         >
                             <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                                 <div>
                                     <div class="flex items-center gap-2">
-                                        <p class="text-sm font-black text-white">{{ item.name }}</p>
+                                        <p class="text-sm font-black text-stone-900 dark:text-white">{{ item.name }}</p>
                                         <span
                                             class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
                                             :class="statusClass(item.status)"
@@ -438,13 +438,13 @@ const summaryCards = computed(() => [
                                             {{ statusLabel(item.status) }}
                                         </span>
                                     </div>
-                                    <p class="mt-1 text-xs text-slate-500">
+                                    <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                         {{ typeLabel(item.type) }} • {{ item.context }} • {{ item.outlet?.name || 'Tanpa outlet' }}
                                     </p>
                                 </div>
                                 <div class="md:text-right">
                                     <p class="text-lg font-black text-emerald-300">{{ formatPrice(item.stock_value) }}</p>
-                                    <p class="mt-1 text-xs text-slate-400">
+                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                         {{ item.current_stock }} {{ item.unit }} / min {{ item.minimum_stock }} {{ item.unit }}
                                     </p>
                                 </div>
@@ -453,17 +453,17 @@ const summaryCards = computed(() => [
                     </div>
                 </article>
 
-                <article class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Batch Expired di Periode
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Exposure item expired berdasarkan catatan `inventory_expiries`.
                         </p>
                     </div>
 
-                    <div v-if="!expiries.length" class="mt-5 rounded-2xl border border-dashed border-white/10 px-4 py-10 text-center text-sm text-slate-400">
+                    <div v-if="!expiries.length" class="mt-5 rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-4 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                         Tidak ada batch expired pada periode terpilih.
                     </div>
 
@@ -475,7 +475,7 @@ const summaryCards = computed(() => [
                         >
                             <div class="flex items-center justify-between gap-3">
                                 <div>
-                                    <p class="text-sm font-black text-white">{{ expiry.name }}</p>
+                                    <p class="text-sm font-black text-stone-900 dark:text-white">{{ expiry.name }}</p>
                                     <p class="mt-1 text-xs text-rose-100/80">
                                         {{ typeLabel(expiry.type) }} • {{ expiry.context }} • {{ formatDate(expiry.expired_at) }}
                                     </p>
@@ -492,22 +492,22 @@ const summaryCards = computed(() => [
                 </article>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div class="flex flex-col gap-3 border-b border-white/10 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <div class="flex flex-col gap-3 border-b border-stone-200 dark:border-white/10 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Tabel Inventori
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Snapshot stok live dari produk tracked dan bahan baku aktif/nonaktif yang ada sekarang.
                         </p>
                     </div>
-                    <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-slate-300">
+                    <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-stone-600 dark:text-slate-300">
                         Expired memakai periode {{ formatDate(period.start_date) }} - {{ formatDate(period.end_date) }}
                     </div>
                 </div>
 
-                <div v-if="!inventory.length" class="px-5 py-10 text-center text-sm text-slate-400">
+                <div v-if="!inventory.length" class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                     Tidak ada data inventori pada filter ini.
                 </div>
 
@@ -519,7 +519,7 @@ const summaryCards = computed(() => [
                     >
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
-                                <h3 class="text-base font-black text-white">{{ item.name }}</h3>
+                                <h3 class="text-base font-black text-stone-900 dark:text-white">{{ item.name }}</h3>
                                 <span
                                     class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
                                     :class="statusClass(item.status)"
@@ -527,30 +527,30 @@ const summaryCards = computed(() => [
                                     {{ statusLabel(item.status) }}
                                 </span>
                             </div>
-                            <p class="text-sm text-slate-300">{{ item.context }}</p>
-                            <p class="text-xs text-slate-500">
+                            <p class="text-sm text-stone-600 dark:text-slate-300">{{ item.context }}</p>
+                            <p class="text-xs text-stone-400 dark:text-slate-500">
                                 {{ typeLabel(item.type) }} • {{ item.outlet?.name || 'Tanpa outlet' }}
                             </p>
                         </div>
 
                         <div class="space-y-2">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Stok saat ini</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Stok saat ini</p>
                             <p class="text-lg font-black text-emerald-300">{{ item.current_stock }} {{ item.unit }}</p>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Minimum</p>
-                            <p class="text-sm text-slate-300">{{ item.minimum_stock }} {{ item.unit }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Minimum</p>
+                            <p class="text-sm text-stone-600 dark:text-slate-300">{{ item.minimum_stock }} {{ item.unit }}</p>
                         </div>
 
                         <div class="space-y-2">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Nilai stok</p>
-                            <p class="text-sm font-semibold text-white">{{ formatPrice(item.stock_value) }}</p>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Tracking expired</p>
-                            <p class="text-sm text-slate-300">{{ item.track_expired ? 'Ya' : 'Tidak' }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Nilai stok</p>
+                            <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ formatPrice(item.stock_value) }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Tracking expired</p>
+                            <p class="text-sm text-stone-600 dark:text-slate-300">{{ item.track_expired ? 'Ya' : 'Tidak' }}</p>
                         </div>
 
                         <div class="space-y-2">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Restock terakhir</p>
-                            <p class="text-sm text-slate-300">{{ formatDateTime(item.last_restocked_at) }}</p>
-                            <p class="text-xs text-slate-500">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Restock terakhir</p>
+                            <p class="text-sm text-stone-600 dark:text-slate-300">{{ formatDateTime(item.last_restocked_at) }}</p>
+                            <p class="text-xs text-stone-400 dark:text-slate-500">
                                 Digunakan sebagai indikator restock di periode, bukan log mutasi detail.
                             </p>
                         </div>

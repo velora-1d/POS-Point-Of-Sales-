@@ -19,7 +19,7 @@ const handleTakeoverSubmit = () => {
 <template>
     <div
         v-if="showTakeoverModal"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/85 p-4 backdrop-blur-sm"
     >
         <div class="w-full max-w-lg rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl text-stone-900 dark:text-slate-100">
             <!-- Modal Header -->
@@ -41,7 +41,7 @@ const handleTakeoverSubmit = () => {
                 <button
                     v-if="!isShiftExpired"
                     @click="showTakeoverModal = false"
-                    class="rounded-lg p-1 text-stone-400 dark:text-slate-500 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white"
+                    class="rounded-lg p-1 text-stone-400 dark:text-slate-500 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:hover:text-white"
                 >
                     <X class="h-5 w-5" />
                 </button>
@@ -158,7 +158,7 @@ const handleTakeoverSubmit = () => {
                         v-if="!isShiftExpired"
                         type="button"
                         @click="showTakeoverModal = false"
-                        class="flex-1 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-transparent py-3.5 text-sm font-bold text-stone-700 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-950 dark:hover:text-white transition-all"
+                        class="flex-1 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-transparent py-3.5 text-sm font-bold text-stone-700 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-950 dark:hover:text-white transition-all"
                     >
                         Batal
                     </button>

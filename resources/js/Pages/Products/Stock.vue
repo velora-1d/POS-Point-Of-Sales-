@@ -82,7 +82,7 @@ const summaryCards = computed(() => [
         label: 'Produk Tracked',
         value: props.summary.tracked,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: Boxes,
     },
     {
@@ -198,10 +198,10 @@ const submitStockUpdate = () => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         Manajemen Stok Produk Jadi
                     </h2>
-                    <p class="mt-1 max-w-2xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400">
                         Pantau stok produk yang memakai tracking stock, lihat
                         status sehat/menipis/habis, lalu update stok manual dari
                         dashboard outlet.
@@ -212,32 +212,32 @@ const submitStockUpdate = () => {
 
         <div class="space-y-5">
             <!-- Tab Navigation Global -->
-            <div class="flex border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-3xl">
+            <div class="flex border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-3xl">
                 <Link
                     :href="route('products.stock')"
                     class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('products.stock') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('products.stock') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Stok Produk Jadi
                 </Link>
                 <Link
                     :href="route('products.hpp')"
                     class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('products.hpp') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('products.hpp') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     HPP & Resep
                 </Link>
                 <Link
                     :href="route('stock-alerts.index')"
                     class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('stock-alerts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('stock-alerts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Alert Stok Menipis
                 </Link>
                 <Link
                     :href="route('expired-tracking.index')"
                     class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('expired-tracking.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('expired-tracking.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Reminder Expired
                 </Link>
@@ -261,20 +261,20 @@ const submitStockUpdate = () => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 {{ stat.label }}
                             </p>
                             <p :class="['mt-2 text-3xl font-black', stat.tone]">
                                 {{ stat.value }}
                             </p>
                         </div>
-                        <component :is="stat.icon" class="h-5 w-5 text-slate-500" />
+                        <component :is="stat.icon" class="h-5 w-5 text-stone-400 dark:text-slate-500" />
                     </div>
                 </article>
             </section>
 
             <section
-                class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
             >
                 <form
                     class="grid gap-2 lg:grid-cols-[minmax(0,1fr)_220px_110px]"
@@ -282,19 +282,19 @@ const submitStockUpdate = () => {
                 >
                     <div class="relative">
                         <Search
-                            class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+                            class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-500"
                         />
                         <input
                             v-model="search"
                             type="text"
                             placeholder="Cari produk tracked stock..."
-                            class="w-full rounded-2xl border border-slate-800 bg-slate-950 py-3 pl-10 pr-10 text-sm text-white placeholder:text-slate-500 focus:border-orange-500 focus:outline-none"
+                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 py-3 pl-10 pr-10 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-500 focus:outline-none"
                         />
                         <button
                             v-if="search"
                             type="button"
                             @click="clearSearch"
-                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-white"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 dark:text-slate-500 transition hover:text-stone-900 dark:text-white"
                         >
                             <X class="h-4 w-4" />
                         </button>
@@ -302,7 +302,7 @@ const submitStockUpdate = () => {
 
                     <select
                         v-model="status"
-                        class="rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                     >
                         <option value="">Semua status stok</option>
                         <option value="healthy">Stok sehat</option>
@@ -312,7 +312,7 @@ const submitStockUpdate = () => {
 
                     <button
                         type="submit"
-                        class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-white"
+                        class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
                     >
                         Terapkan
                     </button>
@@ -320,28 +320,28 @@ const submitStockUpdate = () => {
             </section>
 
             <section
-                class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-xl shadow-slate-950/15"
             >
-                <div class="flex flex-col gap-2 border-b border-slate-800/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col gap-2 border-b border-stone-200 dark:border-slate-800/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
                             Daftar Stok Produk
                         </p>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Menampilkan {{ products.from ?? 0 }}-{{ products.to ?? 0 }}
                             dari {{ products.total }} produk tracked stock.
                         </p>
                     </div>
                     <Link
                         :href="route('products.index')"
-                        class="rounded-full border border-slate-800 bg-slate-950/70 px-3 py-1 text-[11px] font-semibold text-slate-400 transition hover:border-slate-700 hover:text-white"
+                        class="rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-1 text-[11px] font-semibold text-stone-500 dark:text-slate-400 transition hover:border-stone-200 dark:border-slate-700 hover:text-stone-900 dark:text-white"
                     >
                         Buka Katalog Produk
                     </Link>
                 </div>
 
                 <div v-if="products.data.length === 0" class="px-5 py-10">
-                    <div class="rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 px-4 py-8 text-center text-sm text-slate-500">
+                    <div class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 px-4 py-8 text-center text-sm text-stone-400 dark:text-slate-500">
                         Belum ada produk tracked stock yang cocok dengan filter saat ini.
                     </div>
                 </div>
@@ -350,19 +350,19 @@ const submitStockUpdate = () => {
                     <article
                         v-for="product in products.data"
                         :key="product.id"
-                        class="rounded-[24px] border border-slate-800 bg-slate-950/70 p-4"
+                        class="rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-4"
                     >
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <h3 class="truncate text-lg font-black text-white">
+                                    <h3 class="truncate text-lg font-black text-stone-900 dark:text-white">
                                         {{ product.name }}
                                     </h3>
                                     <span class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-300">
                                         {{ product.category?.name || 'Tanpa kategori' }}
                                     </span>
                                 </div>
-                                <p class="mt-2 text-xs text-slate-400">
+                                <p class="mt-2 text-xs text-stone-500 dark:text-slate-400">
                                     {{ product.description || 'Produk tracked stock tanpa deskripsi.' }}
                                 </p>
                             </div>
@@ -377,29 +377,29 @@ const submitStockUpdate = () => {
                         </div>
 
                         <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Stok Saat Ini
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-white">
+                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
                                     {{ product.stock?.current_stock ?? 0 }}
                                     {{ product.stock?.unit || 'pcs' }}
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Minimum Stok
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-white">
+                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
                                     {{ product.stock?.minimum_stock ?? 0 }}
                                     {{ product.stock?.unit || 'pcs' }}
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Restock Terakhir
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-white">
+                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
                                     {{ formatDateTime(product.stock?.last_restocked_at) }}
                                 </p>
                             </div>
@@ -408,7 +408,7 @@ const submitStockUpdate = () => {
                         <button
                             type="button"
                             @click="openStockModal(product)"
-                            class="mt-4 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-white"
+                            class="mt-4 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
                         >
                             Update Stok
                         </button>
@@ -417,7 +417,7 @@ const submitStockUpdate = () => {
 
                 <div
                     v-if="products.links.length > 3"
-                    class="flex flex-wrap items-center justify-center gap-2 border-t border-slate-800/80 px-5 py-4"
+                    class="flex flex-wrap items-center justify-center gap-2 border-t border-stone-200 dark:border-slate-800/80 px-5 py-4"
                 >
                     <template
                         v-for="link in products.links"
@@ -431,13 +431,13 @@ const submitStockUpdate = () => {
                                 'rounded-xl border px-3 py-2 text-xs font-bold transition',
                                 link.active
                                     ? 'border-orange-500/20 bg-orange-500/10 text-orange-300'
-                                    : 'border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700',
+                                    : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-300 hover:border-stone-200 dark:border-slate-700',
                             ]"
                             v-html="link.label"
                         />
                         <span
                             v-else
-                            class="rounded-xl border border-slate-900 bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-600"
+                            class="rounded-xl border border-slate-900 bg-white dark:bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-600"
                             v-html="link.label"
                         />
                     </template>
@@ -447,10 +447,10 @@ const submitStockUpdate = () => {
 
         <div
             v-if="selectedProduct"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 px-4 py-6 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/85 px-4 py-6 backdrop-blur-sm"
         >
             <div
-                class="w-full max-w-xl rounded-[28px] border border-slate-800/80 bg-slate-950 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)]"
+                class="w-full max-w-xl rounded-[28px] border border-stone-200 dark:border-slate-800/80 bg-stone-100 dark:bg-slate-950 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)]"
             >
                 <div class="flex items-start justify-between gap-4">
                     <div>
@@ -458,17 +458,17 @@ const submitStockUpdate = () => {
                             <Boxes class="h-3.5 w-3.5" />
                             Update Stok Produk
                         </div>
-                        <h3 class="mt-3 text-2xl font-black text-white">
+                        <h3 class="mt-3 text-2xl font-black text-stone-900 dark:text-white">
                             {{ selectedProduct.name }}
                         </h3>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Ubah stok saat ini, minimum stok, satuan, dan input tanggal expired jika ada stok masuk baru.
                         </p>
                     </div>
                     <button
                         type="button"
                         @click="closeStockModal"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-800 bg-slate-900 text-slate-300 transition hover:border-slate-700 hover:text-white"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-600 dark:text-slate-300 transition hover:border-stone-200 dark:border-slate-700 hover:text-stone-900 dark:text-white"
                     >
                         <X class="h-4 w-4" />
                     </button>
@@ -477,14 +477,14 @@ const submitStockUpdate = () => {
                 <form class="mt-5 space-y-4" @submit.prevent="submitStockUpdate">
                     <div class="grid gap-4 md:grid-cols-3">
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Stok Saat Ini
                             </span>
                             <input
                                 v-model="stockForm.current_stock"
                                 type="number"
                                 min="0"
-                                class="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                             />
                             <p
                                 v-if="stockForm.errors.current_stock"
@@ -495,14 +495,14 @@ const submitStockUpdate = () => {
                         </label>
 
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Minimum Stok
                             </span>
                             <input
                                 v-model="stockForm.minimum_stock"
                                 type="number"
                                 min="0"
-                                class="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                             />
                             <p
                                 v-if="stockForm.errors.minimum_stock"
@@ -513,13 +513,13 @@ const submitStockUpdate = () => {
                         </label>
 
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Satuan
                             </span>
                             <input
                                 v-model="stockForm.unit"
                                 type="text"
-                                class="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                             />
                             <p
                                 v-if="stockForm.errors.unit"
@@ -532,16 +532,16 @@ const submitStockUpdate = () => {
 
                     <div
                         v-if="selectedProduct?.track_expired"
-                        class="grid gap-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 md:grid-cols-2"
+                        class="grid gap-4 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 p-4 md:grid-cols-2"
                     >
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Batch Code
                             </span>
                             <input
                                 v-model="stockForm.batch_code"
                                 type="text"
-                                class="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                             />
                             <p
                                 v-if="stockForm.errors.batch_code"
@@ -552,15 +552,15 @@ const submitStockUpdate = () => {
                         </label>
 
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Tanggal Expired
                             </span>
                             <input
                                 v-model="stockForm.expired_date"
                                 type="date"
-                                class="mt-2 w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                             />
-                            <p class="mt-1 text-[11px] text-slate-500">
+                            <p class="mt-1 text-[11px] text-stone-400 dark:text-slate-500">
                                 {{ needsExpiredDetails ? 'Wajib diisi karena stok produk ini bertambah.' : 'Opsional jika tidak ada stok masuk baru.' }}
                             </p>
                             <p
@@ -576,14 +576,14 @@ const submitStockUpdate = () => {
                         <button
                             type="button"
                             @click="closeStockModal"
-                            class="inline-flex items-center justify-center rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm font-bold text-slate-200"
+                            class="inline-flex items-center justify-center rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-bold text-stone-800 dark:text-slate-200"
                         >
                             Tutup
                         </button>
                         <button
                             type="submit"
                             :disabled="stockForm.processing"
-                            class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                            class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             Simpan Perubahan
                         </button>

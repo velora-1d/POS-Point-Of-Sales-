@@ -122,7 +122,7 @@ const summaryCards = computed(() => [
         value: props.summary.total_orders,
         helper: `${props.summary.pending_orders} order masih aktif`,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: ReceiptText,
     },
     {
@@ -186,7 +186,7 @@ const platformClass = (platform?: string | null) => {
         return 'border-sky-400/20 bg-sky-500/10 text-sky-200';
     }
 
-    return 'border-white/10 bg-white/[0.03] text-slate-300';
+    return 'border-stone-200 dark:border-white/10 bg-white/[0.03] text-stone-600 dark:text-slate-300';
 };
 
 const statusLabel = (status: string) => {
@@ -280,10 +280,10 @@ const clearFilters = () => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         Order Online
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Pantau inbox order online, status sync platform terakhir, dan riwayat perubahan status order GoFood atau GrabFood dalam satu halaman.
                     </p>
                 </div>
@@ -307,31 +307,31 @@ const clearFilters = () => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-2xl font-black" :class="card.tone">
                                 {{ card.value }}
                             </p>
-                            <p class="mt-2 text-xs text-slate-500">
+                            <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
                                 {{ card.helper }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3 text-white">
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3 text-stone-900 dark:text-white">
                             <component :is="card.icon" class="h-5 w-5" />
                         </div>
                     </div>
                 </article>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div class="grid flex-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
                         <label v-if="canChooseOutlet" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                             <select
                                 v-model="outletFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua outlet</option>
                                 <option
@@ -345,10 +345,10 @@ const clearFilters = () => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Platform</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Platform</span>
                             <select
                                 v-model="platformFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua platform</option>
                                 <option value="gofood">GoFood</option>
@@ -357,10 +357,10 @@ const clearFilters = () => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Status</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Status</span>
                             <select
                                 v-model="statusFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua status</option>
                                 <option value="pending">Pending</option>
@@ -373,20 +373,20 @@ const clearFilters = () => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Dari tanggal</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Dari tanggal</span>
                             <input
                                 v-model="startDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Sampai tanggal</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Sampai tanggal</span>
                             <input
                                 v-model="endDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
                     </div>
@@ -394,7 +394,7 @@ const clearFilters = () => {
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/5"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
                             @click="clearFilters"
                         >
                             Reset Filter
@@ -410,19 +410,19 @@ const clearFilters = () => {
                 </div>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 px-5 py-4">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Inbox Order Online
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Menampilkan {{ orders.from ?? 0 }} - {{ orders.to ?? 0 }} dari {{ orders.total }} order online.
                         </p>
                     </div>
                 </div>
 
-                <div v-if="!orders.data.length" class="px-5 py-10 text-center text-sm text-slate-400">
+                <div v-if="!orders.data.length" class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                     Belum ada order online pada filter ini.
                 </div>
 
@@ -434,7 +434,7 @@ const clearFilters = () => {
                     >
                         <div class="space-y-3">
                             <div class="flex flex-wrap items-center gap-2">
-                                <h3 class="text-base font-black text-white">{{ order.order_number }}</h3>
+                                <h3 class="text-base font-black text-stone-900 dark:text-white">{{ order.order_number }}</h3>
                                 <span
                                     class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
                                     :class="platformClass(order.external_platform)"
@@ -449,18 +449,18 @@ const clearFilters = () => {
                                 </span>
                             </div>
 
-                            <div class="space-y-1 text-sm text-slate-300">
+                            <div class="space-y-1 text-sm text-stone-600 dark:text-slate-300">
                                 <p>{{ order.customer?.name || 'Customer Platform' }}</p>
-                                <p class="text-xs text-slate-500">
+                                <p class="text-xs text-stone-400 dark:text-slate-500">
                                     External ID: {{ order.external_order_id || '-' }}
                                 </p>
-                                <p class="text-xs text-slate-500">
+                                <p class="text-xs text-stone-400 dark:text-slate-500">
                                     Outlet: {{ order.outlet?.name || '-' }}
                                 </p>
                             </div>
 
-                            <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-slate-400">
-                                <div class="flex items-center gap-2 text-slate-300">
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-stone-500 dark:text-slate-400">
+                                <div class="flex items-center gap-2 text-stone-600 dark:text-slate-300">
                                     <Timer class="h-3.5 w-3.5" />
                                     Estimasi {{ order.estimated_time }} menit
                                 </div>
@@ -490,16 +490,16 @@ const clearFilters = () => {
                         </div>
 
                         <div class="space-y-3">
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Subtotal</p>
-                                <p class="mt-1 text-sm font-bold text-white">{{ formatPrice(order.subtotal) }}</p>
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 px-4 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Subtotal</p>
+                                <p class="mt-1 text-sm font-bold text-stone-900 dark:text-white">{{ formatPrice(order.subtotal) }}</p>
                             </div>
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Diskon</p>
-                                <p class="mt-1 text-sm font-bold text-white">{{ formatPrice(order.discount_amount) }}</p>
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 px-4 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Diskon</p>
+                                <p class="mt-1 text-sm font-bold text-stone-900 dark:text-white">{{ formatPrice(order.discount_amount) }}</p>
                             </div>
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Total Dibayar Platform</p>
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 px-4 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Total Dibayar Platform</p>
                                 <p class="mt-1 text-sm font-bold text-emerald-300">{{ formatPrice(order.paid_amount) }}</p>
                             </div>
                             <div
@@ -511,24 +511,24 @@ const clearFilters = () => {
                         </div>
 
                         <div class="space-y-3">
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Item Order</p>
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 px-4 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Item Order</p>
                             </div>
 
                             <article
                                 v-for="item in order.items"
                                 :key="item.id"
-                                class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3"
+                                class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-3"
                             >
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <p class="text-sm font-bold text-white">
+                                        <p class="text-sm font-bold text-stone-900 dark:text-white">
                                             {{ item.product_name }}
-                                            <span v-if="item.variant_name" class="text-slate-400">
+                                            <span v-if="item.variant_name" class="text-stone-500 dark:text-slate-400">
                                                 • {{ item.variant_name }}
                                             </span>
                                         </p>
-                                        <p class="mt-1 text-xs text-slate-500">
+                                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                             Qty {{ item.quantity }} × {{ formatPrice(item.unit_price) }}
                                         </p>
                                         <p v-if="item.notes" class="mt-2 text-xs text-amber-200">
@@ -546,9 +546,9 @@ const clearFilters = () => {
 
                 <div
                     v-if="orders.links.length > 3"
-                    class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-5 py-4"
+                    class="flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 dark:border-white/10 px-5 py-4"
                 >
-                    <p class="text-xs text-slate-500">
+                    <p class="text-xs text-stone-400 dark:text-slate-500">
                         Inbox dipaginasi agar monitoring order online tetap ringan.
                     </p>
                     <div class="flex flex-wrap gap-2">
@@ -559,26 +559,26 @@ const clearFilters = () => {
                             class="rounded-xl border px-3 py-2 text-xs font-semibold transition"
                             :class="link.active
                                 ? 'border-orange-400/30 bg-orange-500/15 text-orange-100'
-                                : 'border-white/10 text-slate-300 hover:bg-white/5'"
+                                : 'border-stone-200 dark:border-white/10 text-stone-600 dark:text-slate-300 hover:bg-stone-100 dark:bg-white/5'"
                             v-html="link.label"
                         />
                     </div>
                 </div>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 px-5 py-4">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Riwayat Order Online
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Timeline perubahan status terbaru untuk order GoFood dan GrabFood sesuai filter aktif.
                         </p>
                     </div>
                 </div>
 
-                <div v-if="!history.length" class="px-5 py-10 text-center text-sm text-slate-400">
+                <div v-if="!history.length" class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                     Belum ada riwayat order online pada filter ini.
                 </div>
 
@@ -590,7 +590,7 @@ const clearFilters = () => {
                     >
                         <div class="space-y-2">
                             <div class="flex flex-wrap items-center gap-2">
-                                <p class="text-sm font-black text-white">
+                                <p class="text-sm font-black text-stone-900 dark:text-white">
                                     {{ entry.order_number || '-' }}
                                 </p>
                                 <span
@@ -600,23 +600,23 @@ const clearFilters = () => {
                                     {{ platformLabel(entry.platform) }}
                                 </span>
                             </div>
-                            <p class="text-xs text-slate-500">
+                            <p class="text-xs text-stone-400 dark:text-slate-500">
                                 External ID: {{ entry.external_order_id || '-' }}
                             </p>
-                            <p class="text-xs text-slate-400">
+                            <p class="text-xs text-stone-500 dark:text-slate-400">
                                 {{ entry.customer_name || 'Customer Platform' }} • {{ entry.outlet_name || '-' }}
                             </p>
                         </div>
 
-                        <div class="space-y-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                        <div class="space-y-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-3">
                             <div class="flex flex-wrap items-center gap-2">
                                 <span
                                     v-if="entry.from_status"
-                                    class="rounded-full border border-white/10 bg-slate-900/80 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300"
+                                    class="rounded-full border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-stone-600 dark:text-slate-300"
                                 >
                                     {{ statusLabel(entry.from_status) }}
                                 </span>
-                                <span class="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                                <span class="text-xs font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     ke
                                 </span>
                                 <span
@@ -632,27 +632,27 @@ const clearFilters = () => {
                                     Status kini {{ statusLabel(entry.current_status) }}
                                 </span>
                             </div>
-                            <p class="text-sm text-slate-300">
+                            <p class="text-sm text-stone-600 dark:text-slate-300">
                                 {{ entry.notes || 'Perubahan status order online tercatat tanpa catatan tambahan.' }}
                             </p>
-                            <p class="text-xs text-slate-500">
+                            <p class="text-xs text-stone-400 dark:text-slate-500">
                                 Riwayat sync tersimpan: {{ entry.sync_history_count || 0 }} event
                             </p>
                         </div>
 
                         <div class="space-y-2">
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Diubah oleh</p>
-                                <p class="mt-1 text-sm font-bold text-white">
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 px-4 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Diubah oleh</p>
+                                <p class="mt-1 text-sm font-bold text-stone-900 dark:text-white">
                                     {{ entry.changed_by_name || 'System' }}
                                 </p>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     {{ entry.changed_by_type || 'system' }}
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Waktu</p>
-                                <p class="mt-1 text-sm font-bold text-white">
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 px-4 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Waktu</p>
+                                <p class="mt-1 text-sm font-bold text-stone-900 dark:text-white">
                                     {{ formatDateTime(entry.created_at) }}
                                 </p>
                             </div>

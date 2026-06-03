@@ -148,21 +148,21 @@ const onReportTypeChange = () => {
         <template #header>
             <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         Export PDF & Excel
                     </h2>
-                    <p class="mt-1 text-xs text-slate-400">
+                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                         Export report aktif `#46-#52` ke PDF native backend atau CSV yang kompatibel dibuka di Excel.
                     </p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
-                    <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-300">
+                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:text-slate-300">
                         {{ user?.role || '-' }}
                     </span>
                     <Link
                         :href="route('reports.expenses.index')"
-                        class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.05]"
+                        class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-white/[0.05]"
                     >
                         <CalendarRange class="h-4 w-4" />
                         Laporan Aktif
@@ -173,38 +173,38 @@ const onReportTypeChange = () => {
 
         <div class="space-y-6">
             <!-- Tab Navigation Laporan Sumber Daya -->
-            <div class="flex flex-wrap border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
+            <div class="flex flex-wrap border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
                 <Link
                     :href="route('reports.inventory.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.inventory.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.inventory.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Stok & Inventori
                 </Link>
                 <Link
                     :href="route('reports.attendance-shifts.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.attendance-shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.attendance-shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Absensi & Shift
                 </Link>
                 <Link
                     :href="route('reports.exports.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.exports.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.exports.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Export Data
                 </Link>
             </div>
 
             <section class="grid gap-4 lg:grid-cols-[1.8fr_1fr]">
-                <div class="rounded-[28px] border border-white/10 bg-slate-950/75 p-5 shadow-2xl shadow-slate-950/40">
+                <div class="rounded-[28px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/75 p-5 shadow-2xl shadow-slate-950/40">
                     <div class="flex items-start justify-between gap-4">
                         <div>
                             <p class="text-[11px] font-black uppercase tracking-[0.24em] text-orange-300/85">
                                 Konfigurasi Export
                             </p>
-                            <h3 class="mt-2 text-lg font-black text-white">
+                            <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
                                 Pilih report, format, dan filter yang ingin diunduh
                             </h3>
                         </div>
@@ -214,11 +214,11 @@ const onReportTypeChange = () => {
                     </div>
 
                     <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                        <label class="space-y-2 text-xs font-semibold text-slate-300">
+                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
                             <span>Jenis Report</span>
                             <select
                                 v-model="reportType"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                                 @change="onReportTypeChange"
                             >
                                 <option
@@ -231,11 +231,11 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label class="space-y-2 text-xs font-semibold text-slate-300">
+                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
                             <span>Format</span>
                             <select
                                 v-model="format"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             >
                                 <option
                                     v-for="item in formats"
@@ -247,30 +247,30 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label class="space-y-2 text-xs font-semibold text-slate-300">
+                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
                             <span>Tanggal mulai</span>
                             <input
                                 v-model="startDate"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             />
                         </label>
 
-                        <label class="space-y-2 text-xs font-semibold text-slate-300">
+                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
                             <span>Tanggal akhir</span>
                             <input
                                 v-model="endDate"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             />
                         </label>
 
-                        <label class="space-y-2 text-xs font-semibold text-slate-300">
+                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
                             <span>Outlet</span>
                             <select
                                 v-model="outletId"
                                 :disabled="!canChooseOutlet"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40 disabled:cursor-not-allowed disabled:opacity-60"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40 disabled:cursor-not-allowed disabled:opacity-60"
                             >
                                 <option value="">
                                     {{ canChooseOutlet ? 'Semua outlet' : 'Outlet scope aktif' }}
@@ -287,12 +287,12 @@ const onReportTypeChange = () => {
 
                         <label
                             v-if="hasFilter('user_id')"
-                            class="space-y-2 text-xs font-semibold text-slate-300"
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
                         >
                             <span>Karyawan / Kasir</span>
                             <select
                                 v-model="userId"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             >
                                 <option value="">
                                     Semua
@@ -309,12 +309,12 @@ const onReportTypeChange = () => {
 
                         <label
                             v-if="hasFilter('category_id')"
-                            class="space-y-2 text-xs font-semibold text-slate-300"
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
                         >
                             <span>Kategori Produk</span>
                             <select
                                 v-model="categoryId"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             >
                                 <option value="">
                                     Semua kategori
@@ -331,7 +331,7 @@ const onReportTypeChange = () => {
 
                         <label
                             v-if="hasFilter('category')"
-                            class="space-y-2 text-xs font-semibold text-slate-300"
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
                         >
                             <span>Kategori Pengeluaran</span>
                             <input
@@ -339,18 +339,18 @@ const onReportTypeChange = () => {
                                 type="text"
                                 list="expense-categories"
                                 placeholder="contoh: operasional"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400/40"
                             />
                         </label>
 
                         <label
                             v-if="hasFilter('source')"
-                            class="space-y-2 text-xs font-semibold text-slate-300"
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
                         >
                             <span>Source Penjualan</span>
                             <select
                                 v-model="source"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             >
                                 <option value="">
                                     Semua source
@@ -367,12 +367,12 @@ const onReportTypeChange = () => {
 
                         <label
                             v-if="hasFilter('payment_method')"
-                            class="space-y-2 text-xs font-semibold text-slate-300"
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
                         >
                             <span>Metode Bayar</span>
                             <select
                                 v-model="paymentMethod"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             >
                                 <option value="">
                                     Semua metode
@@ -389,12 +389,12 @@ const onReportTypeChange = () => {
 
                         <label
                             v-if="hasFilter('type')"
-                            class="space-y-2 text-xs font-semibold text-slate-300"
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
                         >
                             <span>Tipe Inventori</span>
                             <select
                                 v-model="inventoryType"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             >
                                 <option
                                     v-for="item in referenceData.inventoryTypes"
@@ -408,12 +408,12 @@ const onReportTypeChange = () => {
 
                         <label
                             v-if="hasFilter('status')"
-                            class="space-y-2 text-xs font-semibold text-slate-300"
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
                         >
                             <span>Status Inventori</span>
                             <select
                                 v-model="inventoryStatus"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
                             >
                                 <option
                                     v-for="item in referenceData.inventoryStatuses"
@@ -427,15 +427,15 @@ const onReportTypeChange = () => {
                     </div>
 
                     <div v-if="hasFilter('search')" class="mt-4">
-                        <label class="space-y-2 text-xs font-semibold text-slate-300">
+                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
                             <span>Pencarian</span>
                             <div class="relative">
-                                <Search class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                                <Search class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-500" />
                                 <input
                                     v-model="search"
                                     type="text"
                                     placeholder="Cari order, catatan, atau deskripsi"
-                                    class="w-full rounded-2xl border border-white/10 bg-slate-900/80 py-3 pl-11 pr-4 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-orange-400/40"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 py-3 pl-11 pr-4 text-sm text-stone-900 dark:text-slate-100 outline-none transition placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400/40"
                                 />
                             </div>
                         </label>

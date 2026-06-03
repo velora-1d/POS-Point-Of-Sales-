@@ -147,7 +147,7 @@ const summaryCards = computed(() => [
         label: 'Total Produk',
         value: props.summary.total,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: Boxes,
     },
     {
@@ -383,10 +383,10 @@ const deleteProduct = (product: ProductRow) => {
         <template #header>
             <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         Katalog Produk & Varian
                     </h2>
-                    <p class="mt-1 max-w-2xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400">
                         Pantau produk aktif, kategori, varian, dan multi harga
                         outlet dari satu halaman katalog internal.
                     </p>
@@ -394,7 +394,7 @@ const deleteProduct = (product: ProductRow) => {
                 <button
                     type="button"
                     @click="openCreateModal"
-                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/20 transition hover:from-orange-600 hover:to-red-600"
+                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white shadow-lg shadow-orange-500/20 transition hover:from-orange-600 hover:to-red-600"
                 >
                     <Plus class="h-4 w-4" />
                     Tambah Produk
@@ -421,27 +421,27 @@ const deleteProduct = (product: ProductRow) => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 {{ stat.label }}
                             </p>
                             <p :class="['mt-2 text-3xl font-black', stat.tone]">
                                 {{ stat.value }}
                             </p>
                         </div>
-                        <component :is="stat.icon" class="h-5 w-5 text-slate-500" />
+                        <component :is="stat.icon" class="h-5 w-5 text-stone-400 dark:text-slate-500" />
                     </div>
                 </article>
             </section>
 
             <section
-                class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
             >
                 <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                     <div>
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
                             Filter Produk
                         </p>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Cari produk berdasarkan nama/deskripsi atau sempitkan per kategori.
                         </p>
                     </div>
@@ -451,19 +451,19 @@ const deleteProduct = (product: ProductRow) => {
                     >
                         <div class="relative">
                             <Search
-                                class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+                                class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-500"
                             />
                             <input
                                 v-model="search"
                                 type="text"
                                 placeholder="Cari nama atau deskripsi produk..."
-                                class="w-full rounded-2xl border border-slate-800 bg-slate-950 py-3 pl-10 pr-10 text-sm text-white placeholder:text-slate-500 focus:border-orange-500 focus:outline-none"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 py-3 pl-10 pr-10 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-500 focus:outline-none"
                             />
                             <button
                                 v-if="search"
                                 type="button"
                                 @click="clearSearch"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-white"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 dark:text-slate-500 transition hover:text-stone-900 dark:text-white"
                             >
                                 <X class="h-4 w-4" />
                             </button>
@@ -471,7 +471,7 @@ const deleteProduct = (product: ProductRow) => {
 
                         <select
                             v-model="categoryId"
-                            class="rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                            class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                         >
                             <option value="">Semua kategori</option>
                             <option
@@ -485,7 +485,7 @@ const deleteProduct = (product: ProductRow) => {
 
                         <button
                             type="submit"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-white"
+                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
                         >
                             Terapkan
                         </button>
@@ -494,25 +494,25 @@ const deleteProduct = (product: ProductRow) => {
             </section>
 
             <section
-                class="rounded-[26px] border border-slate-800/80 bg-slate-900/92 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-xl shadow-slate-950/15"
             >
-                <div class="flex flex-col gap-2 border-b border-slate-800/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col gap-2 border-b border-stone-200 dark:border-slate-800/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
                             Daftar Produk
                         </p>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Menampilkan {{ products.from ?? 0 }}-{{ products.to ?? 0 }}
                             dari {{ products.total }} produk.
                         </p>
                     </div>
-                    <div class="rounded-full border border-slate-800 bg-slate-950/70 px-3 py-1 text-[11px] font-semibold text-slate-400">
+                    <div class="rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-1 text-[11px] font-semibold text-stone-500 dark:text-slate-400">
                         Data katalog outlet aktif
                     </div>
                 </div>
 
                 <div v-if="products.data.length === 0" class="px-5 py-10">
-                    <div class="rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 px-4 py-8 text-center text-sm text-slate-500">
+                    <div class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 px-4 py-8 text-center text-sm text-stone-400 dark:text-slate-500">
                         Belum ada produk yang cocok dengan filter saat ini.
                     </div>
                 </div>
@@ -521,11 +521,11 @@ const deleteProduct = (product: ProductRow) => {
                     <article
                         v-for="product in products.data"
                         :key="product.id"
-                        class="rounded-[24px] border border-slate-800 bg-slate-950/70 p-4"
+                        class="rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-4"
                     >
                         <div class="flex items-start justify-between gap-3">
                             <div class="flex gap-4 min-w-0">
-                                <div class="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+                                <div class="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900">
                                     <img
                                         v-if="product.image_url"
                                         :src="product.image_url"
@@ -538,7 +538,7 @@ const deleteProduct = (product: ProductRow) => {
                                 </div>
                                 <div class="min-w-0">
                                     <div class="flex flex-wrap items-center gap-2">
-                                        <h3 class="truncate text-lg font-black text-white">
+                                        <h3 class="truncate text-lg font-black text-stone-900 dark:text-white">
                                             {{ product.name }}
                                         </h3>
                                         <span
@@ -547,7 +547,7 @@ const deleteProduct = (product: ProductRow) => {
                                             {{ product.category?.name || 'Tanpa kategori' }}
                                         </span>
                                     </div>
-                                    <p class="mt-2 text-xs leading-relaxed text-slate-400 line-clamp-2">
+                                    <p class="mt-2 text-xs leading-relaxed text-stone-500 dark:text-slate-400 line-clamp-2">
                                         {{ product.description || 'Belum ada deskripsi produk.' }}
                                     </p>
                                 </div>
@@ -566,14 +566,14 @@ const deleteProduct = (product: ProductRow) => {
                                 <div class="flex gap-1">
                                     <button
                                         @click="openEditModal(product)"
-                                        class="rounded-lg border border-slate-800 bg-slate-900 p-1.5 text-slate-400 transition hover:border-sky-500/50 hover:text-sky-400"
+                                        class="rounded-lg border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1.5 text-stone-500 dark:text-slate-400 transition hover:border-sky-500/50 hover:text-sky-400"
                                         title="Edit Produk"
                                     >
                                         <Pencil class="h-3.5 w-3.5" />
                                     </button>
                                     <button
                                         @click="deleteProduct(product)"
-                                        class="rounded-lg border border-slate-800 bg-slate-900 p-1.5 text-slate-400 transition hover:border-rose-500/50 hover:text-rose-400"
+                                        class="rounded-lg border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1.5 text-stone-500 dark:text-slate-400 transition hover:border-rose-500/50 hover:text-rose-400"
                                         title="Hapus Produk"
                                     >
                                         <Trash2 class="h-3.5 w-3.5" />
@@ -583,39 +583,39 @@ const deleteProduct = (product: ProductRow) => {
                         </div>
 
                         <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Harga Dasar
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-white">
+                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
                                     {{ formatPrice(product.base_price) }}
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     HPP
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-white">
+                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
                                     {{ formatPrice(product.hpp) }}
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Status Teknis
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-white">
+                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
                                     {{ product.track_stock ? 'Track stock' : 'No stock' }}
                                 </p>
-                                <p class="mt-1 text-[11px] text-slate-400">
+                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
                                     {{ product.track_expired ? 'Track expired' : 'No expired' }}
                                 </p>
                             </div>
                         </div>
 
                         <div class="mt-4 grid gap-4 lg:grid-cols-2">
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-3">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
                                 <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-bold text-white">
+                                    <p class="text-sm font-bold text-stone-900 dark:text-white">
                                         Varian Produk
                                     </p>
                                     <span class="rounded-full border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-300">
@@ -626,9 +626,9 @@ const deleteProduct = (product: ProductRow) => {
                                     <div
                                         v-for="variant in product.variants"
                                         :key="variant.id"
-                                        class="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 px-3 py-2 text-[11px]"
+                                        class="flex items-center justify-between rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-2 text-[11px]"
                                     >
-                                        <span class="font-semibold text-slate-200">
+                                        <span class="font-semibold text-stone-800 dark:text-slate-200">
                                             {{ variant.name }}
                                         </span>
                                         <span class="font-bold text-sky-300">
@@ -636,14 +636,14 @@ const deleteProduct = (product: ProductRow) => {
                                         </span>
                                     </div>
                                 </div>
-                                <p v-else class="mt-3 text-[11px] text-slate-500">
+                                <p v-else class="mt-3 text-[11px] text-stone-400 dark:text-slate-500">
                                     Produk ini belum punya varian aktif.
                                 </p>
                             </div>
 
-                            <div class="rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-3">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
                                 <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-bold text-white">
+                                    <p class="text-sm font-bold text-stone-900 dark:text-white">
                                         Multi Harga
                                     </p>
                                     <span class="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-300">
@@ -654,10 +654,10 @@ const deleteProduct = (product: ProductRow) => {
                                     <div
                                         v-for="price in product.prices"
                                         :key="price.id"
-                                        class="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 px-3 py-2 text-[11px]"
+                                        class="flex items-center justify-between rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-2 text-[11px]"
                                     >
                                         <div>
-                                            <p class="font-semibold text-slate-200">
+                                            <p class="font-semibold text-stone-800 dark:text-slate-200">
                                                 {{ price.tier_label || price.tier || 'Harga' }}
                                             </p>
                                         </div>
@@ -666,7 +666,7 @@ const deleteProduct = (product: ProductRow) => {
                                         </span>
                                     </div>
                                 </div>
-                                <p v-else class="mt-3 text-[11px] text-slate-500">
+                                <p v-else class="mt-3 text-[11px] text-stone-400 dark:text-slate-500">
                                     Produk ini baru memakai satu harga dasar.
                                 </p>
                             </div>
@@ -676,7 +676,7 @@ const deleteProduct = (product: ProductRow) => {
 
                 <div
                     v-if="products.links.length > 3"
-                    class="flex flex-wrap items-center justify-center gap-2 border-t border-slate-800/80 px-5 py-4"
+                    class="flex flex-wrap items-center justify-center gap-2 border-t border-stone-200 dark:border-slate-800/80 px-5 py-4"
                 >
                     <template
                         v-for="link in products.links"
@@ -690,13 +690,13 @@ const deleteProduct = (product: ProductRow) => {
                                 'rounded-xl border px-3 py-2 text-xs font-bold transition',
                                 link.active
                                     ? 'border-orange-500/20 bg-orange-500/10 text-orange-300'
-                                    : 'border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700',
+                                    : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-300 hover:border-stone-200 dark:border-slate-700',
                             ]"
                             v-html="link.label"
                         />
                         <span
                             v-else
-                            class="rounded-xl border border-slate-900 bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-600"
+                            class="rounded-xl border border-slate-900 bg-white dark:bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-600"
                             v-html="link.label"
                         />
                     </template>
@@ -707,31 +707,31 @@ const deleteProduct = (product: ProductRow) => {
         <!-- Create/Edit Modal -->
         <div
             v-if="isProductModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/80 px-4 backdrop-blur-sm"
             @click.self="closeProductModal"
         >
-            <div class="w-full max-w-4xl max-h-[90vh] flex flex-col rounded-[28px] border border-slate-800/80 bg-slate-950 shadow-[0_30px_120px_rgba(2,6,23,0.7)]">
+            <div class="w-full max-w-4xl max-h-[90vh] flex flex-col rounded-[28px] border border-stone-200 dark:border-slate-800/80 bg-stone-100 dark:bg-slate-950 shadow-[0_30px_120px_rgba(2,6,23,0.7)]">
                 <!-- Header Modal -->
-                <div class="flex items-start justify-between gap-4 p-5 border-b border-slate-800/80">
+                <div class="flex items-start justify-between gap-4 p-5 border-b border-stone-200 dark:border-slate-800/80">
                     <div>
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
                             {{ editingProduct ? 'Edit Produk' : 'Tambah Produk Baru' }}
                         </p>
-                        <h3 class="mt-1 text-lg font-black text-white">
+                        <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                             {{ editingProduct ? editingProduct.name : 'Data produk outlet' }}
                         </h3>
                     </div>
                     <button
                         type="button"
                         @click="closeProductModal"
-                        class="rounded-xl border border-slate-800 bg-slate-900 p-2 text-slate-400"
+                        class="rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 text-stone-500 dark:text-slate-400"
                     >
                         <X class="h-4 w-4" />
                     </button>
                 </div>
 
                 <!-- Tabs -->
-                <div class="flex border-b border-slate-800/80 px-5 overflow-x-auto no-scrollbar">
+                <div class="flex border-b border-stone-200 dark:border-slate-800/80 px-5 overflow-x-auto no-scrollbar">
                     <button
                         v-for="tab in [
                             { id: 'basic', label: 'Info Dasar', icon: Boxes },
@@ -745,7 +745,7 @@ const deleteProduct = (product: ProductRow) => {
                             'flex items-center gap-2 border-b-2 px-4 py-4 text-xs font-bold transition whitespace-nowrap',
                             activeTab === tab.id
                                 ? 'border-orange-500 text-orange-500'
-                                : 'border-transparent text-slate-500 hover:text-slate-300'
+                                : 'border-transparent text-stone-400 dark:text-slate-500 hover:text-stone-600 dark:text-slate-300'
                         ]"
                     >
                         <component :is="tab.icon" class="h-4 w-4" />
@@ -779,11 +779,11 @@ const deleteProduct = (product: ProductRow) => {
                             <div class="flex flex-col gap-6 md:flex-row">
                                 <!-- Image Upload Section -->
                                 <div class="flex flex-col items-center gap-3 md:w-48">
-                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 w-full text-center">
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500 w-full text-center">
                                         Gambar Produk
                                     </label>
                                     <div
-                                        class="group relative h-40 w-40 overflow-hidden rounded-3xl border-2 border-dashed border-slate-800 bg-slate-900 transition hover:border-orange-500/50"
+                                        class="group relative h-40 w-40 overflow-hidden rounded-3xl border-2 border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition hover:border-orange-500/50"
                                         @click="openFilePicker"
                                     >
                                         <img
@@ -795,8 +795,8 @@ const deleteProduct = (product: ProductRow) => {
                                             <Camera class="h-8 w-8" />
                                             <span class="text-[10px] font-bold uppercase">Klik Upload</span>
                                         </div>
-                                        <div class="absolute inset-0 flex items-center justify-center bg-slate-950/40 opacity-0 transition group-hover:opacity-100 cursor-pointer">
-                                            <Camera class="h-6 w-6 text-white" />
+                                        <div class="absolute inset-0 flex items-center justify-center bg-white dark:bg-slate-950/40 opacity-0 transition group-hover:opacity-100 cursor-pointer">
+                                            <Camera class="h-6 w-6 text-stone-900 dark:text-white" />
                                         </div>
                                     </div>
                                     <input
@@ -806,7 +806,7 @@ const deleteProduct = (product: ProductRow) => {
                                         accept="image/*"
                                         @change="onFileChange"
                                     />
-                                    <p class="text-center text-[10px] text-slate-500">
+                                    <p class="text-center text-[10px] text-stone-400 dark:text-slate-500">
                                         Format: JPG, PNG, WebP (Max 2MB)
                                     </p>
                                     <p v-if="productForm.errors.image" class="text-center text-[10px] text-rose-300">
@@ -816,14 +816,14 @@ const deleteProduct = (product: ProductRow) => {
 
                                 <div class="flex-1 grid gap-4 md:grid-cols-2">
                                     <div>
-                                        <label class="mb-2 block text-xs font-semibold text-slate-300">
+                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
                                             Nama Produk
                                         </label>
                                         <input
                                             v-model="productForm.name"
                                             type="text"
                                             placeholder="Masukkan nama produk..."
-                                            class="w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                         />
                                         <p v-if="productForm.errors.name" class="mt-1 text-xs text-rose-300">
                                             {{ productForm.errors.name }}
@@ -831,12 +831,12 @@ const deleteProduct = (product: ProductRow) => {
                                     </div>
 
                                     <div>
-                                        <label class="mb-2 block text-xs font-semibold text-slate-300">
+                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
                                             Kategori
                                         </label>
                                         <select
                                             v-model="productForm.category_id"
-                                            class="w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                         >
                                             <option value="" disabled>Pilih kategori...</option>
                                             <option
@@ -853,14 +853,14 @@ const deleteProduct = (product: ProductRow) => {
                                     </div>
 
                                     <div class="md:col-span-2">
-                                        <label class="mb-2 block text-xs font-semibold text-slate-300">
+                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
                                             Deskripsi (Opsional)
                                         </label>
                                         <textarea
                                             v-model="productForm.description"
                                             rows="2"
                                             placeholder="Masukkan deskripsi produk..."
-                                            class="w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                         ></textarea>
                                         <p v-if="productForm.errors.description" class="mt-1 text-xs text-rose-300">
                                             {{ productForm.errors.description }}
@@ -868,14 +868,14 @@ const deleteProduct = (product: ProductRow) => {
                                     </div>
 
                                     <div>
-                                        <label class="mb-2 block text-xs font-semibold text-slate-300">
+                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
                                             Harga Dasar
                                         </label>
                                         <input
                                             v-model="productForm.base_price"
                                             type="number"
                                             min="0"
-                                            class="w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none font-bold text-orange-400"
+                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none font-bold text-orange-400"
                                         />
                                         <p v-if="productForm.errors.base_price" class="mt-1 text-xs text-rose-300">
                                             {{ productForm.errors.base_price }}
@@ -883,7 +883,7 @@ const deleteProduct = (product: ProductRow) => {
                                     </div>
 
                                     <div>
-                                        <label class="mb-2 block text-xs font-semibold text-slate-300">
+                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
                                             HPP Estimasi (Manual)
                                         </label>
                                         <div class="relative">
@@ -891,7 +891,7 @@ const deleteProduct = (product: ProductRow) => {
                                                 v-model="productForm.hpp"
                                                 type="number"
                                                 min="0"
-                                                class="w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                             />
                                             <button
                                                 v-if="productForm.ingredients.length > 0"
@@ -910,38 +910,38 @@ const deleteProduct = (product: ProductRow) => {
                             </div>
 
                             <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-                                <label class="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-[11px] text-slate-200 cursor-pointer">
+                                <label class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-800 dark:text-slate-200 cursor-pointer">
                                     <input
                                         v-model="productForm.is_available"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-slate-700 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                        class="h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                     />
                                     Siap Dijual
                                 </label>
 
-                                <label class="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-[11px] text-slate-200 cursor-pointer">
+                                <label class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-800 dark:text-slate-200 cursor-pointer">
                                     <input
                                         v-model="productForm.is_active"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-slate-700 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                        class="h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                     />
                                     Produk Aktif
                                 </label>
 
-                                <label class="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-[11px] text-slate-200 cursor-pointer">
+                                <label class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-800 dark:text-slate-200 cursor-pointer">
                                     <input
                                         v-model="productForm.track_stock"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-slate-700 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                        class="h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                     />
                                     Track Stok
                                 </label>
 
-                                <label class="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-[11px] text-slate-200 cursor-pointer">
+                                <label class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-800 dark:text-slate-200 cursor-pointer">
                                     <input
                                         v-model="productForm.track_expired"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-slate-700 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                        class="h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                     />
                                     Track Expired
                                 </label>
@@ -949,7 +949,7 @@ const deleteProduct = (product: ProductRow) => {
                                 <div v-if="productForm.track_expired" class="sm:col-span-2">
                                     <select
                                         v-model="productForm.expired_action"
-                                        class="w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-[11px] text-white focus:border-orange-500 focus:outline-none"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                     >
                                         <option value="notify_only">Notify only (Hanya peringatan)</option>
                                         <option value="auto_deactivate">Auto deactivate (Otomatis off)</option>
@@ -961,7 +961,8 @@ const deleteProduct = (product: ProductRow) => {
                         <!-- Variants Tab -->
                         <div v-show="activeTab === 'variants'" class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <h4 class="text-sm font-bold text-white">Kelola Varian Produk</h4>
+                                <h4 class="text-sm font-bold text-stone-900 dark:text-white">
+Kelola Varian Produk</h4>
                                 <button
                                     type="button"
                                     @click="addVariantRow"
@@ -972,7 +973,7 @@ const deleteProduct = (product: ProductRow) => {
                                 </button>
                             </div>
 
-                            <div v-if="productForm.variants.length === 0" class="rounded-2xl border border-dashed border-slate-800 p-8 text-center text-xs text-slate-500">
+                            <div v-if="productForm.variants.length === 0" class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 p-8 text-center text-xs text-stone-400 dark:text-slate-500">
                                 Belum ada varian ditambahkan. Produk ini akan dijual sebagai item tunggal.
                             </div>
 
@@ -980,40 +981,40 @@ const deleteProduct = (product: ProductRow) => {
                                 <div
                                     v-for="(variant, index) in productForm.variants"
                                     :key="index"
-                                    class="group relative rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition hover:border-slate-700"
+                                    class="group relative rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/50 p-4 transition hover:border-stone-200 dark:border-slate-700"
                                 >
                                     <div class="grid gap-4 sm:grid-cols-[1fr_200px_100px_40px]">
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Nama Varian
                                             </label>
                                             <input
                                                 v-model="variant.name"
                                                 type="text"
                                                 placeholder="Contoh: Pedas, Large, Topping..."
-                                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                             />
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Tambahan Harga (Rp)
                                             </label>
                                             <input
                                                 v-model="variant.additional_price"
                                                 type="number"
                                                 min="0"
-                                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                             />
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Status
                                             </label>
-                                            <label class="flex items-center h-[34px] gap-2 text-[10px] text-slate-300 cursor-pointer">
+                                            <label class="flex items-center h-[34px] gap-2 text-[10px] text-stone-600 dark:text-slate-300 cursor-pointer">
                                                 <input
                                                     v-model="variant.is_active"
                                                     type="checkbox"
-                                                    class="h-3.5 w-3.5 rounded border-slate-700 bg-slate-950 text-sky-500 focus:ring-sky-500"
+                                                    class="h-3.5 w-3.5 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-sky-500 focus:ring-sky-500"
                                                 />
                                                 Aktif
                                             </label>
@@ -1035,7 +1036,8 @@ const deleteProduct = (product: ProductRow) => {
                         <!-- Multi Price Tab -->
                         <div v-show="activeTab === 'prices'" class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <h4 class="text-sm font-bold text-white">Kelola Multi Harga & Tier</h4>
+                                <h4 class="text-sm font-bold text-stone-900 dark:text-white">
+Kelola Multi Harga & Tier</h4>
                                 <button
                                     type="button"
                                     @click="addPriceRow"
@@ -1046,7 +1048,7 @@ const deleteProduct = (product: ProductRow) => {
                                 </button>
                             </div>
 
-                            <div v-if="productForm.prices.length === 0" class="rounded-2xl border border-dashed border-slate-800 p-8 text-center text-xs text-slate-500">
+                            <div v-if="productForm.prices.length === 0" class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 p-8 text-center text-xs text-stone-400 dark:text-slate-500">
                                 Belum ada multi harga. Produk hanya menggunakan Harga Dasar.
                             </div>
 
@@ -1054,16 +1056,16 @@ const deleteProduct = (product: ProductRow) => {
                                 <div
                                     v-for="(price, index) in productForm.prices"
                                     :key="index"
-                                    class="group relative rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition hover:border-slate-700"
+                                    class="group relative rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/50 p-4 transition hover:border-stone-200 dark:border-slate-700"
                                 >
                                     <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-[160px_1fr_160px_100px_40px]">
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Tier
                                             </label>
                                             <select
                                                 v-model="price.tier"
-                                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                             >
                                                 <option
                                                     v-for="tier in priceTiers"
@@ -1075,36 +1077,36 @@ const deleteProduct = (product: ProductRow) => {
                                             </select>
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Label Kustom (Opsional)
                                             </label>
                                             <input
                                                 v-model="price.tier_label"
                                                 type="text"
                                                 placeholder="Contoh: Member Gold, Promo Jumat..."
-                                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                             />
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Harga Final (Rp)
                                             </label>
                                             <input
                                                 v-model="price.price"
                                                 type="number"
                                                 min="0"
-                                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-orange-500 focus:outline-none font-bold text-amber-300"
+                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none font-bold text-amber-300"
                                             />
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Status
                                             </label>
-                                            <label class="flex items-center h-[34px] gap-2 text-[10px] text-slate-300 cursor-pointer">
+                                            <label class="flex items-center h-[34px] gap-2 text-[10px] text-stone-600 dark:text-slate-300 cursor-pointer">
                                                 <input
                                                     v-model="price.is_active"
                                                     type="checkbox"
-                                                    class="h-3.5 w-3.5 rounded border-slate-700 bg-slate-950 text-amber-500 focus:ring-amber-500"
+                                                    class="h-3.5 w-3.5 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-amber-500 focus:ring-amber-500"
                                                 />
                                                 Aktif
                                             </label>
@@ -1121,7 +1123,7 @@ const deleteProduct = (product: ProductRow) => {
 
                                         <!-- Happy Hour Row -->
                                         <div class="sm:col-span-2 md:col-span-5 flex flex-wrap items-center gap-4 mt-1">
-                                            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                            <div class="flex items-center gap-2 text-[10px] font-bold text-stone-400 dark:text-slate-500">
                                                 <Clock class="h-3 w-3" />
                                                 SET HAPPY HOUR:
                                             </div>
@@ -1129,13 +1131,13 @@ const deleteProduct = (product: ProductRow) => {
                                                 <input
                                                     v-model="price.happy_hour_start"
                                                     type="time"
-                                                    class="rounded-lg border border-slate-800 bg-slate-950 px-2 py-1 text-[10px] text-white focus:border-orange-500 focus:outline-none"
+                                                    class="rounded-lg border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-2 py-1 text-[10px] text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                                 />
                                                 <span class="text-[10px] text-slate-600">S/D</span>
                                                 <input
                                                     v-model="price.happy_hour_end"
                                                     type="time"
-                                                    class="rounded-lg border border-slate-800 bg-slate-950 px-2 py-1 text-[10px] text-white focus:border-orange-500 focus:outline-none"
+                                                    class="rounded-lg border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-2 py-1 text-[10px] text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                                 />
                                                 <button
                                                     v-if="price.happy_hour_start || price.happy_hour_end"
@@ -1146,7 +1148,7 @@ const deleteProduct = (product: ProductRow) => {
                                                     Hapus
                                                 </button>
                                             </div>
-                                            <p class="text-[10px] text-slate-500 italic">
+                                            <p class="text-[10px] text-stone-400 dark:text-slate-500 italic">
                                                 *Kosongkan jika berlaku 24 jam.
                                             </p>
                                         </div>
@@ -1159,8 +1161,9 @@ const deleteProduct = (product: ProductRow) => {
                         <div v-show="activeTab === 'recipe'" class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h4 class="text-sm font-bold text-white">Bahan Baku (Resep)</h4>
-                                    <p class="text-[10px] text-slate-500 mt-0.5">
+                                    <h4 class="text-sm font-bold text-stone-900 dark:text-white">
+Bahan Baku (Resep)</h4>
+                                    <p class="text-[10px] text-stone-400 dark:text-slate-500 mt-0.5">
                                         Tentukan pemakaian bahan baku untuk menghitung HPP otomatis.
                                     </p>
                                 </div>
@@ -1174,7 +1177,7 @@ const deleteProduct = (product: ProductRow) => {
                                 </button>
                             </div>
 
-                            <div v-if="productForm.ingredients.length === 0" class="rounded-2xl border border-dashed border-slate-800 p-8 text-center text-xs text-slate-500">
+                            <div v-if="productForm.ingredients.length === 0" class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 p-8 text-center text-xs text-stone-400 dark:text-slate-500">
                                 Belum ada bahan baku yang didaftarkan untuk produk ini.
                             </div>
 
@@ -1182,16 +1185,16 @@ const deleteProduct = (product: ProductRow) => {
                                 <div
                                     v-for="(item, index) in productForm.ingredients"
                                     :key="index"
-                                    class="group relative rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition hover:border-slate-700"
+                                    class="group relative rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/50 p-4 transition hover:border-stone-200 dark:border-slate-700"
                                 >
                                     <div class="grid gap-4 sm:grid-cols-[1fr_120px_140px_40px]">
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Pilih Bahan Baku
                                             </label>
                                             <select
                                                 v-model="item.raw_material_id"
-                                                class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                             >
                                                 <option
                                                     v-for="material in rawMaterials"
@@ -1203,7 +1206,7 @@ const deleteProduct = (product: ProductRow) => {
                                             </select>
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Pemakaian
                                             </label>
                                             <div class="flex items-center gap-2">
@@ -1212,18 +1215,18 @@ const deleteProduct = (product: ProductRow) => {
                                                     type="number"
                                                     step="0.001"
                                                     min="0.001"
-                                                    class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs text-white focus:border-orange-500 focus:outline-none"
+                                                    class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                                 />
-                                                <span class="text-[10px] font-bold text-slate-500">
+                                                <span class="text-[10px] font-bold text-stone-400 dark:text-slate-500">
                                                     {{ rawMaterials.find(m => m.id === item.raw_material_id)?.unit || 'u' }}
                                                 </span>
                                             </div>
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 Subtotal Biaya
                                             </label>
-                                            <div class="flex items-center h-[34px] px-3 rounded-xl bg-slate-950/50 border border-slate-800 text-[11px] font-bold text-emerald-400">
+                                            <div class="flex items-center h-[34px] px-3 rounded-xl bg-white dark:bg-slate-950/50 border border-stone-200 dark:border-slate-800 text-[11px] font-bold text-emerald-400">
                                                 {{ formatPrice(Number(rawMaterials.find(m => m.id === item.raw_material_id)?.cost_per_unit || 0) * Number(item.quantity || 0)) }}
                                             </div>
                                         </div>
@@ -1246,7 +1249,7 @@ const deleteProduct = (product: ProductRow) => {
                                             <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500">
                                                 Estimasi HPP Resep
                                             </p>
-                                            <h5 class="text-2xl font-black text-white mt-1">
+                                            <h5 class="text-2xl font-black text-stone-900 dark:text-white mt-1">
                                                 {{ formatPrice(calculatedHppFromRecipe) }}
                                             </h5>
                                         </div>
@@ -1258,7 +1261,7 @@ const deleteProduct = (product: ProductRow) => {
                                             Gunakan Nilai Ini
                                         </button>
                                     </div>
-                                    <p class="mt-2 text-[10px] text-slate-400 leading-relaxed italic">
+                                    <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400 leading-relaxed italic">
                                         *HPP dihitung berdasarkan (Cost per Unit bahan baku) x (Pemakaian).
                                         Klik tombol "Gunakan Nilai Ini" untuk mengupdate HPP di Tab Info Dasar.
                                     </p>
@@ -1269,7 +1272,7 @@ const deleteProduct = (product: ProductRow) => {
                 </div>
 
                 <!-- Footer Modal -->
-                <div class="flex items-center justify-between p-5 border-t border-slate-800/80 bg-slate-950/50 rounded-b-[28px]">
+                <div class="flex items-center justify-between p-5 border-t border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/50 rounded-b-[28px]">
                     <div class="flex items-center gap-2">
                         <div
                             v-if="Object.keys(productForm.errors).length > 0"
@@ -1288,7 +1291,7 @@ const deleteProduct = (product: ProductRow) => {
                         <button
                             type="button"
                             @click="closeProductModal"
-                            class="rounded-2xl border border-slate-800 px-6 py-3 text-sm font-semibold text-slate-300 transition hover:bg-slate-900"
+                            class="rounded-2xl border border-stone-200 dark:border-slate-800 px-6 py-3 text-sm font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-white dark:bg-slate-900"
                         >
                             Batal
                         </button>
@@ -1296,7 +1299,7 @@ const deleteProduct = (product: ProductRow) => {
                             type="submit"
                             form="productForm"
                             :disabled="productForm.processing"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-8 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/20 disabled:opacity-60"
+                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-8 py-3 text-sm font-bold text-stone-900 dark:text-white shadow-lg shadow-orange-500/20 disabled:opacity-60"
                         >
                             {{ productForm.processing ? 'Menyimpan...' : 'Simpan Produk' }}
                         </button>

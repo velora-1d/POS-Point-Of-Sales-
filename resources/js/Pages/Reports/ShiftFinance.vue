@@ -191,7 +191,7 @@ const cashDiffBadgeClass = (diff: number | null) => {
                 </div>
                 <a
                     :href="route('reports.exports.download', { type: 'shifts', ...filters })"
-                    class="inline-flex items-center gap-2 rounded-xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-slate-300 transition hover:bg-stone-50 dark:hover:bg-slate-800"
+                    class="inline-flex items-center gap-2 rounded-xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-slate-300 transition hover:bg-stone-50 dark:hover:bg-stone-100 dark:bg-slate-800"
                 >
                     <Download class="h-4 w-4" />
                     Export
@@ -341,7 +341,7 @@ const cashDiffBadgeClass = (diff: number | null) => {
                 <!-- Day Header (clickable accordion) -->
                 <button
                     @click="toggleDay(day.date)"
-                    class="w-full flex items-center justify-between gap-4 px-5 py-4 text-left transition hover:bg-stone-50 dark:hover:bg-slate-800/50"
+                    class="w-full flex items-center justify-between gap-4 px-5 py-4 text-left transition hover:bg-stone-50 dark:hover:bg-stone-100 dark:bg-slate-800/50"
                 >
                     <div class="flex items-center gap-3 min-w-0">
                         <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-orange-500/10">

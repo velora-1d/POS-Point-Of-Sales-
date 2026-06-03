@@ -116,7 +116,7 @@ const summaryCards = computed(() => [
         value: props.summary.total_outlets,
         helper: `${props.summary.configured_outlets} outlet sudah punya config QR`,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: Store,
     },
     {
@@ -219,10 +219,10 @@ function submitRegenerate() {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        Konfigurasi QR Meja
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+Konfigurasi QR Meja
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Kelola store slug, template visual QR, warna utama, dan bulk regenerate link scan publik
                         untuk seluruh meja aktif pada outlet terpilih.
                     </p>
@@ -247,30 +247,30 @@ function submitRegenerate() {
                 >
                     <div class="flex items-start justify-between gap-4">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-2xl font-black" :class="card.tone">{{ card.value }}</p>
-                            <p class="mt-2 text-xs text-slate-400">{{ card.helper }}</p>
+                            <p class="mt-2 text-xs text-stone-500 dark:text-slate-400">{{ card.helper }}</p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                            <component :is="card.icon" class="h-5 w-5 text-white" />
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3">
+                            <component :is="card.icon" class="h-5 w-5 text-stone-900 dark:text-white" />
                         </div>
                     </div>
                 </article>
             </section>
 
             <div class="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-                <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                <section class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                     <div class="grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
                         <div>
-                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 Outlet aktif
                             </label>
                             <select
                                 :value="qrForm.outlet_id"
                                 @change="openSelectedOutlet(($event.target as HTMLSelectElement).value)"
-                                class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                             >
                                 <option
                                     v-for="outlet in outlets"
@@ -282,11 +282,11 @@ function submitRegenerate() {
                             </select>
                         </div>
 
-                        <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
-                            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                        <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4">
+                            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 Ringkasan outlet
                             </p>
-                            <div class="mt-3 space-y-2 text-sm text-slate-200">
+                            <div class="mt-3 space-y-2 text-sm text-stone-800 dark:text-slate-200">
                                 <div class="flex items-center justify-between gap-3">
                                     <span>Status outlet</span>
                                     <span
@@ -300,13 +300,13 @@ function submitRegenerate() {
                                 </div>
                                 <div class="flex items-center justify-between gap-3">
                                     <span>Config QR</span>
-                                    <span class="text-slate-400">
+                                    <span class="text-stone-500 dark:text-slate-400">
                                         {{ formDefaults.has_config ? 'Sudah tersimpan' : 'Masih default' }}
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between gap-3">
                                     <span>Meja aktif</span>
-                                    <span class="text-slate-400">
+                                    <span class="text-stone-500 dark:text-slate-400">
                                         {{ selectedOutletOption?.active_tables_count || 0 }}
                                     </span>
                                 </div>
@@ -317,31 +317,31 @@ function submitRegenerate() {
                     <form class="mt-5 space-y-5" @submit.prevent="submitSave">
                         <div class="grid gap-4 md:grid-cols-2">
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                     Base URL domain
                                 </label>
                                 <input
                                     :value="formDefaults.base_url"
                                     type="text"
                                     disabled
-                                    class="w-full cursor-not-allowed rounded-2xl border border-slate-800 bg-slate-950/50 px-4 py-3 text-sm text-slate-500"
+                                    class="w-full cursor-not-allowed rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 px-4 py-3 text-sm text-stone-400 dark:text-slate-500"
                                 />
-                                <p class="mt-2 text-xs text-slate-500">
+                                <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
                                     Domain publik diambil dari konfigurasi aplikasi.
                                 </p>
                             </div>
 
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                     Store slug / identifier
                                 </label>
                                 <input
                                     v-model="qrForm.store_slug"
                                     type="text"
                                     placeholder="contoh: mentai-central"
-                                    class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                 />
-                                <p class="mt-2 text-xs text-slate-500">
+                                <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
                                     Dipakai pada URL scan: `{{ previewUrl }}`
                                 </p>
                                 <p v-if="qrForm.errors.store_slug" class="mt-2 text-xs text-rose-300">
@@ -351,33 +351,33 @@ function submitRegenerate() {
                         </div>
 
                         <div>
-                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 Template QR
                             </label>
                             <div class="grid gap-3 md:grid-cols-3">
                                 <label
                                     v-for="option in qrOptions.templates"
                                     :key="option.value"
-                                    class="flex cursor-pointer flex-col rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+                                    class="flex cursor-pointer flex-col rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4"
                                     :class="qrForm.qr_template === option.value ? 'border-orange-500/40 bg-orange-500/5' : ''"
                                 >
                                     <div class="flex items-center justify-between gap-3">
-                                        <span class="text-sm font-semibold text-white">{{ option.label }}</span>
+                                        <span class="text-sm font-semibold text-stone-900 dark:text-white">{{ option.label }}</span>
                                         <input
                                             v-model="qrForm.qr_template"
                                             type="radio"
                                             name="qr_template"
                                             :value="option.value"
-                                            class="h-4 w-4 border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                            class="h-4 w-4 border-stone-300 dark:border-slate-600 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                         />
                                     </div>
                                     <div
-                                        class="mt-3 flex h-24 items-center justify-center rounded-2xl border border-dashed border-slate-700 bg-white/95"
+                                        class="mt-3 flex h-24 items-center justify-center rounded-2xl border border-dashed border-stone-200 dark:border-slate-700 bg-white/95"
                                         :style="{ color: qrForm.primary_color }"
                                     >
                                         <QrCode class="h-12 w-12" />
                                     </div>
-                                    <p class="mt-3 text-xs text-slate-400">{{ option.description }}</p>
+                                    <p class="mt-3 text-xs text-stone-500 dark:text-slate-400">{{ option.description }}</p>
                                 </label>
                             </div>
                             <p v-if="qrForm.errors.qr_template" class="mt-2 text-xs text-rose-300">
@@ -386,7 +386,7 @@ function submitRegenerate() {
                         </div>
 
                         <div>
-                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 Primary color
                             </label>
                             <div class="flex flex-wrap items-center gap-3">
@@ -403,7 +403,7 @@ function submitRegenerate() {
                                 <input
                                     v-model="qrForm.primary_color"
                                     type="text"
-                                    class="w-36 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm uppercase text-slate-100 outline-none transition focus:border-orange-500"
+                                    class="w-36 rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm uppercase text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                 />
                             </div>
                             <p v-if="qrForm.errors.primary_color" class="mt-2 text-xs text-rose-300">
@@ -411,7 +411,7 @@ function submitRegenerate() {
                             </p>
                         </div>
 
-                        <div class="flex justify-end border-t border-slate-800 pt-5">
+                        <div class="flex justify-end border-t border-stone-200 dark:border-slate-800 pt-5">
                             <button
                                 type="submit"
                                 class="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
@@ -424,22 +424,22 @@ function submitRegenerate() {
                 </section>
 
                 <aside class="space-y-5">
-                    <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <section class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300">
                                     Live Preview
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-white">
+                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                                     Sample QR outlet
                                 </h3>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
-                                <Palette class="h-5 w-5 text-slate-200" />
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-3">
+                                <Palette class="h-5 w-5 text-stone-800 dark:text-slate-200" />
                             </div>
                         </div>
 
-                        <div class="mt-5 rounded-[24px] border border-slate-800 bg-white p-4">
+                        <div class="mt-5 rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white p-4">
                             <img
                                 :src="qrPreviewImage"
                                 :alt="`QR ${preview.sample_table_name}`"
@@ -447,49 +447,49 @@ function submitRegenerate() {
                             />
                         </div>
 
-                        <div class="mt-4 rounded-2xl border border-slate-800 bg-slate-950/70 px-4 py-3">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                        <div class="mt-4 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-4 py-3">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Sample meja
                             </p>
-                            <p class="mt-1 text-sm font-bold text-white">
+                            <p class="mt-1 text-sm font-bold text-stone-900 dark:text-white">
                                 {{ preview.sample_table_name }} • {{ preview.sample_table_code }}
                             </p>
-                            <p class="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <p class="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 URL publik
                             </p>
-                            <p class="mt-1 break-all text-xs text-slate-300">
+                            <p class="mt-1 break-all text-xs text-stone-600 dark:text-slate-300">
                                 {{ previewUrl }}
                             </p>
                         </div>
                     </section>
 
-                    <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <section class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
                                     Generate & Apply
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-white">
+                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                                     Bulk regenerate QR meja
                                 </h3>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
-                                <RefreshCw class="h-5 w-5 text-slate-200" />
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-3">
+                                <RefreshCw class="h-5 w-5 text-stone-800 dark:text-slate-200" />
                             </div>
                         </div>
 
-                        <div class="mt-4 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
+                        <div class="mt-4 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4 text-sm text-stone-600 dark:text-slate-300">
                             <div class="flex items-center justify-between gap-3">
                                 <span>Meja aktif outlet</span>
-                                <span class="font-semibold text-white">{{ regeneration.active_tables_count }}</span>
+                                <span class="font-semibold text-stone-900 dark:text-white">{{ regeneration.active_tables_count }}</span>
                             </div>
                             <div class="mt-3 flex items-center justify-between gap-3">
                                 <span>Kode QR siap pakai</span>
-                                <span class="font-semibold text-white">{{ regeneration.ready_qr_count }}</span>
+                                <span class="font-semibold text-stone-900 dark:text-white">{{ regeneration.ready_qr_count }}</span>
                             </div>
                             <div class="mt-3 flex items-center justify-between gap-3">
                                 <span>Regenerate terakhir</span>
-                                <span class="text-right text-xs text-slate-400">{{ lastRegeneratedLabel }}</span>
+                                <span class="text-right text-xs text-stone-500 dark:text-slate-400">{{ lastRegeneratedLabel }}</span>
                             </div>
                         </div>
 
@@ -503,7 +503,7 @@ function submitRegenerate() {
                             {{ regenerateForm.processing ? 'Memproses...' : 'Bulk regenerate QR' }}
                         </button>
 
-                        <p class="mt-3 text-[11px] leading-relaxed text-slate-500">
+                        <p class="mt-3 text-[11px] leading-relaxed text-stone-400 dark:text-slate-500">
                             Aksi ini mengganti `qr_code` untuk meja aktif dan memutakhirkan link scan baru.
                             Token checkout internal tetap dipertahankan agar flow self-order yang sedang berjalan tidak ikut rusak.
                         </p>

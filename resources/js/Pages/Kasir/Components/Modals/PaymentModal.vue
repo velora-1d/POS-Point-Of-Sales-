@@ -45,7 +45,7 @@ import {
     >
         <div
             v-if="paymentModalOpen && paymentTargetOrder"
-            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/85 p-4 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-white dark:bg-slate-950/85 p-4 backdrop-blur-sm"
         >
             <div class="w-full max-w-xl rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl text-stone-900 dark:text-slate-100">
                 <div class="flex items-start justify-between gap-4 border-b border-stone-250/60 dark:border-slate-800/80 px-6 py-5">
@@ -62,7 +62,7 @@ import {
                     </div>
                     <button
                         @click="closePaymentModal"
-                        class="text-stone-400 dark:text-slate-500 transition hover:text-stone-707 dark:hover:text-slate-200"
+                        class="text-stone-400 dark:text-slate-500 transition hover:text-stone-707 dark:hover:text-stone-800 dark:text-slate-200"
                     >
                         <X class="h-5 w-5" />
                     </button>
@@ -115,7 +115,7 @@ import {
                                 type="button"
                                 @click="refreshCurrentOrder"
                                 :disabled="isRefreshingOrder"
-                                class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900 px-3 py-1.5 text-[10px] font-bold text-stone-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-slate-800 disabled:opacity-50 transition"
+                                class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900 px-3 py-1.5 text-[10px] font-bold text-stone-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800 disabled:opacity-50 transition"
                             >
                                 {{ isRefreshingOrder ? 'Checking...' : 'Cek Status' }}
                             </button>
@@ -149,7 +149,7 @@ import {
                                 'rounded-2xl border p-4 text-left transition',
                                 existingPaymentMethod === 'cash'
                                     ? 'border-orange-500 bg-orange-500/10 text-orange-650 dark:text-white ring-2 ring-orange-500/20 font-bold'
-                                    : 'border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/70 text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-900',
+                                    : 'border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/70 text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-white dark:bg-slate-900',
                             ]"
                         >
                             <p class="text-sm font-bold">Cash</p>
@@ -166,7 +166,7 @@ import {
                                 'rounded-2xl border p-4 text-left transition',
                                 existingPaymentMethod === method
                                     ? getPaymentMethodConfig(method).colorClass
-                                    : 'border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/70 text-stone-700 dark:text-slate-305 hover:bg-stone-100 dark:hover:bg-slate-900',
+                                    : 'border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/70 text-stone-700 dark:text-slate-305 hover:bg-stone-100 dark:hover:bg-white dark:bg-slate-900',
                             ]"
                         >
                             <p class="text-sm font-bold">{{ getPaymentMethodConfig(method).label }} Gateway</p>
@@ -284,7 +284,7 @@ import {
                     <button
                         @click="closePaymentModal"
                         type="button"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-xs font-bold text-stone-700 dark:text-slate-300 transition hover:bg-stone-200 dark:hover:bg-slate-900 active:scale-[0.98]"
+                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-xs font-bold text-stone-700 dark:text-slate-300 transition hover:bg-stone-200 dark:hover:bg-white dark:bg-slate-900 active:scale-[0.98]"
                     >
                         Batal
                     </button>

@@ -177,7 +177,7 @@ const summaryCards = computed(() => [
         value: props.summary.total_outlets,
         helper: `${props.summary.active_outlets} aktif`,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: LayoutDashboard,
     },
     {
@@ -342,10 +342,10 @@ function toggleOutletStatus(outlet: OutletRow) {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         Manajemen Outlet & Cabang
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Kelola outlet aktif, setting operasional dasar per cabang, dan lihat snapshot
                         performa bulan berjalan dari satu dashboard owner.
                     </p>
@@ -382,31 +382,31 @@ function toggleOutletStatus(outlet: OutletRow) {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 {{ stat.label }}
                             </p>
                             <p :class="['mt-2 text-3xl font-black', stat.tone]">
                                 {{ stat.value }}
                             </p>
-                            <p class="mt-1 text-xs text-slate-400">
+                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                 {{ stat.helper }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                            <component :is="stat.icon" class="h-5 w-5 text-slate-200" />
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3">
+                            <component :is="stat.icon" class="h-5 w-5 text-stone-800 dark:text-slate-200" />
                         </div>
                     </div>
                 </article>
             </section>
 
             <section class="grid gap-5 xl:grid-cols-[1.3fr,0.7fr]">
-                <div class="rounded-[26px] border border-white/10 bg-slate-950/40 p-4">
+                <div class="rounded-[26px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-4">
                     <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
                                 Filter Outlet
                             </p>
-                            <p class="mt-1 text-xs text-slate-400">
+                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                 Cari nama, alamat, atau telepon outlet yang ingin dicek.
                             </p>
                         </div>
@@ -422,29 +422,29 @@ function toggleOutletStatus(outlet: OutletRow) {
 
                     <div class="mt-4 grid gap-3 md:grid-cols-[minmax(0,1fr),180px,auto]">
                         <label class="relative block">
-                            <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                            <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-500" />
                             <input
                                 v-model="search"
                                 type="text"
                                 placeholder="Cari outlet / cabang..."
-                                class="w-full rounded-2xl border border-white/10 bg-white/[0.03] py-3 pl-10 pr-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] py-3 pl-10 pr-3 text-sm text-stone-900 dark:text-white outline-none transition placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400/40"
                                 @keyup.enter="submitFilters"
                             >
                         </label>
 
                         <select
                             v-model="status"
-                            class="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                            class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/80 px-3 py-3 text-sm text-stone-900 dark:text-white outline-none transition focus:border-orange-400/40"
                             style="color-scheme: dark;"
                             @change="submitFilters"
                         >
-                            <option value="" class="bg-slate-950 text-slate-100">
+                            <option value="" class="bg-stone-100 dark:bg-slate-950 text-stone-900 dark:text-slate-100">
                                 Semua status
                             </option>
-                            <option value="active" class="bg-slate-950 text-slate-100">
+                            <option value="active" class="bg-stone-100 dark:bg-slate-950 text-stone-900 dark:text-slate-100">
                                 Aktif
                             </option>
-                            <option value="inactive" class="bg-slate-950 text-slate-100">
+                            <option value="inactive" class="bg-stone-100 dark:bg-slate-950 text-stone-900 dark:text-slate-100">
                                 Nonaktif
                             </option>
                         </select>
@@ -459,7 +459,7 @@ function toggleOutletStatus(outlet: OutletRow) {
                             </button>
                             <button
                                 type="button"
-                                class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/[0.05]"
+                                class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-white/[0.05]"
                                 @click="clearFilters"
                             >
                                 Reset
@@ -468,19 +468,19 @@ function toggleOutletStatus(outlet: OutletRow) {
                     </div>
                 </div>
 
-                <div class="rounded-[26px] border border-white/10 bg-slate-950/40 p-4">
+                <div class="rounded-[26px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-4">
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
                                 Perbandingan Outlet
                             </p>
-                            <p class="mt-1 text-xs text-slate-400">
+                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                 {{ period.label }}
                             </p>
                         </div>
                         <Link
                             :href="route('reports.outlets.index')"
-                            class="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/[0.05]"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-stone-800 dark:text-slate-200 transition hover:bg-white/[0.05]"
                         >
                             Buka Laporan
                         </Link>
@@ -493,17 +493,17 @@ function toggleOutletStatus(outlet: OutletRow) {
                         <article
                             v-for="(outlet, index) in comparison.leaderboard"
                             :key="outlet.id"
-                            class="rounded-2xl border border-white/10 bg-white/[0.03] p-3"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] p-3"
                         >
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                         Top {{ index + 1 }}
                                     </p>
-                                    <h3 class="mt-1 text-sm font-bold text-white">
+                                    <h3 class="mt-1 text-sm font-bold text-stone-900 dark:text-white">
                                         {{ outlet.name }}
                                     </h3>
-                                    <p class="mt-1 text-xs text-slate-400">
+                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                         {{ outlet.monthly_orders }} order • {{ outlet.active_employees }} karyawan aktif
                                     </p>
                                 </div>
@@ -511,7 +511,7 @@ function toggleOutletStatus(outlet: OutletRow) {
                                     <p class="text-sm font-black text-emerald-300">
                                         {{ formatCurrency(outlet.monthly_revenue) }}
                                     </p>
-                                    <p class="text-[11px] text-slate-500">
+                                    <p class="text-[11px] text-stone-400 dark:text-slate-500">
                                         share {{ outlet.revenue_share }}%
                                     </p>
                                 </div>
@@ -521,24 +521,24 @@ function toggleOutletStatus(outlet: OutletRow) {
 
                     <div
                         v-else
-                        class="mt-4 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-4 py-5 text-sm text-slate-400"
+                        class="mt-4 rounded-2xl border border-dashed border-stone-200 dark:border-white/10 bg-white/[0.02] px-4 py-5 text-sm text-stone-500 dark:text-slate-400"
                     >
                         Belum ada data revenue settled untuk periode ini.
                     </div>
                 </div>
             </section>
 
-            <section class="rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
+            <section class="rounded-[28px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/45 p-5">
                 <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                     <div>
                         <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
                             Daftar Outlet
                         </p>
-                        <h3 class="mt-1 text-xl font-black text-white">
+                        <h3 class="mt-1 text-xl font-black text-stone-900 dark:text-white">
                             Snapshot cabang aktif dan nonaktif
                         </h3>
                     </div>
-                    <p class="text-xs text-slate-500">
+                    <p class="text-xs text-stone-400 dark:text-slate-500">
                         Menampilkan {{ outlets.from ?? 0 }}-{{ outlets.to ?? 0 }} dari {{ outlets.total }} outlet
                     </p>
                 </div>
@@ -550,12 +550,12 @@ function toggleOutletStatus(outlet: OutletRow) {
                     <article
                         v-for="outlet in outlets.data"
                         :key="outlet.id"
-                        class="rounded-[24px] border border-white/10 bg-white/[0.03] p-4"
+                        class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white/[0.03] p-4"
                     >
                         <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                             <div>
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <h4 class="text-lg font-black text-white">
+                                    <h4 class="text-lg font-black text-stone-900 dark:text-white">
                                         {{ outlet.name }}
                                     </h4>
                                     <span
@@ -565,10 +565,10 @@ function toggleOutletStatus(outlet: OutletRow) {
                                         {{ outlet.is_active ? 'Aktif' : 'Nonaktif' }}
                                     </span>
                                 </div>
-                                <p class="mt-2 text-sm text-slate-300">
+                                <p class="mt-2 text-sm text-stone-600 dark:text-slate-300">
                                     {{ outlet.address || 'Alamat outlet belum diisi.' }}
                                 </p>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     Telepon: {{ outlet.phone || '-' }}
                                 </p>
                             </div>
@@ -576,7 +576,7 @@ function toggleOutletStatus(outlet: OutletRow) {
                             <div class="flex gap-2">
                                 <button
                                     type="button"
-                                    class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/[0.05]"
+                                    class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-stone-800 dark:text-slate-200 transition hover:bg-white/[0.05]"
                                     @click="openEditModal(outlet)"
                                 >
                                     <Pencil class="h-3.5 w-3.5" />
@@ -596,48 +596,48 @@ function toggleOutletStatus(outlet: OutletRow) {
                         </div>
 
                         <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Tim Aktif
                                 </p>
-                                <p class="mt-2 text-2xl font-black text-white">
+                                <p class="mt-2 text-2xl font-black text-stone-900 dark:text-white">
                                     {{ outlet.stats.active_employees }}
                                 </p>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     dari {{ outlet.stats.total_employees }} user
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Meja Aktif
                                 </p>
-                                <p class="mt-2 text-2xl font-black text-white">
+                                <p class="mt-2 text-2xl font-black text-stone-900 dark:text-white">
                                     {{ outlet.stats.active_tables }}
                                 </p>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     dari {{ outlet.stats.total_tables }} meja
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Average Ticket
                                 </p>
                                 <p class="mt-2 text-sm font-black text-emerald-300">
                                     {{ formatCurrency(outlet.stats.average_ticket) }}
                                 </p>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     {{ outlet.stats.monthly_orders }} order settled
                                 </p>
                             </div>
                         </div>
 
-                        <div class="mt-4 rounded-2xl border border-white/10 bg-slate-950/35 p-4">
+                        <div class="mt-4 rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/35 p-4">
                             <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                                 <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                         Setting Outlet
                                     </p>
-                                    <p class="mt-1 text-sm text-slate-300">
+                                    <p class="mt-1 text-sm text-stone-600 dark:text-slate-300">
                                         Default struk {{ formatReceiptMethod(outlet.settings.default_receipt_method) }}
                                     </p>
                                 </div>
@@ -647,19 +647,19 @@ function toggleOutletStatus(outlet: OutletRow) {
                             </div>
 
                             <div class="mt-3 flex flex-wrap gap-2">
-                                <span class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-slate-300">
+                                <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-stone-600 dark:text-slate-300">
                                     Bar approval {{ outlet.settings.bar_approval_enabled ? 'aktif' : 'mati' }}
                                 </span>
-                                <span class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-slate-300">
+                                <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-stone-600 dark:text-slate-300">
                                     Status customer {{ outlet.settings.customer_can_view_status ? 'visible' : 'hidden' }}
                                 </span>
-                                <span class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-slate-300">
+                                <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-stone-600 dark:text-slate-300">
                                     Edit customer {{ outlet.settings.customer_can_edit_order ? 'boleh' : 'off' }}
                                 </span>
                             </div>
 
                             <div class="mt-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
                                     Workflow Tersimpan
                                 </p>
                                 <div class="mt-2 flex flex-wrap gap-2">
@@ -678,12 +678,12 @@ function toggleOutletStatus(outlet: OutletRow) {
 
                 <div
                     v-else
-                    class="mt-5 rounded-[24px] border border-dashed border-white/10 bg-white/[0.02] px-5 py-10 text-center"
+                    class="mt-5 rounded-[24px] border border-dashed border-stone-200 dark:border-white/10 bg-white/[0.02] px-5 py-10 text-center"
                 >
-                    <p class="text-lg font-semibold text-white">
+                    <p class="text-lg font-semibold text-stone-900 dark:text-white">
                         Tidak ada outlet yang cocok dengan filter.
                     </p>
-                    <p class="mt-2 text-sm text-slate-400">
+                    <p class="mt-2 text-sm text-stone-500 dark:text-slate-400">
                         Coba ganti kata kunci pencarian atau reset filter status.
                     </p>
                 </div>
@@ -700,8 +700,8 @@ function toggleOutletStatus(outlet: OutletRow) {
                         :class="link.active
                             ? 'border-orange-400/40 bg-orange-500/15 text-orange-100'
                             : link.url
-                                ? 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/20 hover:bg-white/[0.05]'
-                                : 'cursor-not-allowed border-white/5 bg-white/[0.02] text-slate-600'"
+                                ? 'border-stone-200 dark:border-white/10 bg-white/[0.03] text-stone-600 dark:text-slate-300 hover:border-stone-200 dark:border-white/20 hover:bg-white/[0.05]'
+                                : 'cursor-not-allowed border-stone-200 dark:border-white/5 bg-white/[0.02] text-slate-600'"
                         v-html="link.label"
                     />
                 </div>
@@ -711,21 +711,21 @@ function toggleOutletStatus(outlet: OutletRow) {
         <teleport to="body">
             <div
                 v-if="isModalOpen"
-                class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 px-4 py-8 backdrop-blur-sm"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/75 px-4 py-8 backdrop-blur-sm"
             >
-                <div class="w-full max-w-3xl rounded-[28px] border border-white/10 bg-slate-900 shadow-2xl shadow-black/40">
-                    <div class="flex items-start justify-between border-b border-white/10 px-6 py-5">
+                <div class="w-full max-w-3xl rounded-[28px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-2xl shadow-black/40">
+                    <div class="flex items-start justify-between border-b border-stone-200 dark:border-white/10 px-6 py-5">
                         <div>
                             <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">
                                 Pengaturan Outlet
                             </p>
-                            <h3 class="mt-1 text-xl font-black text-white">
+                            <h3 class="mt-1 text-xl font-black text-stone-900 dark:text-white">
                                 {{ modalTitle }}
                             </h3>
                         </div>
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 bg-white/[0.03] p-2 text-slate-300 transition hover:bg-white/[0.06]"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] p-2 text-stone-600 dark:text-slate-300 transition hover:bg-white/[0.06]"
                             @click="closeModal"
                         >
                             <X class="h-4 w-4" />
@@ -733,12 +733,12 @@ function toggleOutletStatus(outlet: OutletRow) {
                     </div>
 
                     <!-- Tab Headers -->
-                    <div class="flex border-b border-white/10 px-6 bg-slate-950/20">
+                    <div class="flex border-b border-stone-200 dark:border-white/10 px-6 bg-white dark:bg-slate-950/20">
                         <button
                             type="button"
                             @click="activeTab = 'info'"
                             class="border-b-2 px-4 py-3.5 text-xs font-bold uppercase tracking-wider transition duration-150"
-                            :class="activeTab === 'info' ? 'border-orange-500 text-orange-400' : 'border-transparent text-slate-400 hover:text-slate-200'"
+                            :class="activeTab === 'info' ? 'border-orange-500 text-orange-400' : 'border-transparent text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200'"
                         >
                             Informasi Cabang
                         </button>
@@ -746,7 +746,7 @@ function toggleOutletStatus(outlet: OutletRow) {
                             type="button"
                             @click="activeTab = 'system'"
                             class="border-b-2 px-4 py-3.5 text-xs font-bold uppercase tracking-wider transition duration-150"
-                            :class="activeTab === 'system' ? 'border-orange-500 text-orange-400' : 'border-transparent text-slate-400 hover:text-slate-200'"
+                            :class="activeTab === 'system' ? 'border-orange-500 text-orange-400' : 'border-transparent text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200'"
                         >
                             Alur & Aturan Operasional
                         </button>
@@ -760,11 +760,11 @@ function toggleOutletStatus(outlet: OutletRow) {
                         <div v-show="activeTab === 'info'" class="space-y-5">
                             <div class="grid gap-4 md:grid-cols-2">
                                 <label class="block">
-                                    <span class="text-xs font-semibold text-slate-300">Nama outlet</span>
+                                    <span class="text-xs font-semibold text-stone-600 dark:text-slate-300">Nama outlet</span>
                                     <input
                                         v-model="outletForm.name"
                                         type="text"
-                                        class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                        class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-stone-900 dark:text-white outline-none transition focus:border-orange-400/40"
                                         placeholder="Mentai Sudirman"
                                     >
                                     <p
@@ -776,11 +776,11 @@ function toggleOutletStatus(outlet: OutletRow) {
                                 </label>
 
                                 <label class="block">
-                                    <span class="text-xs font-semibold text-slate-300">Nomor telepon</span>
+                                    <span class="text-xs font-semibold text-stone-600 dark:text-slate-300">Nomor telepon</span>
                                     <input
                                         v-model="outletForm.phone"
                                         type="text"
-                                        class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                        class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-stone-900 dark:text-white outline-none transition focus:border-orange-400/40"
                                         placeholder="08xxxxxxxxxx"
                                     >
                                     <p
@@ -793,11 +793,11 @@ function toggleOutletStatus(outlet: OutletRow) {
                             </div>
 
                             <label class="block">
-                                <span class="text-xs font-semibold text-slate-300">Alamat outlet</span>
+                                <span class="text-xs font-semibold text-stone-600 dark:text-slate-300">Alamat outlet</span>
                                 <textarea
                                     v-model="outletForm.address"
                                     rows="4"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                    class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-stone-900 dark:text-white outline-none transition focus:border-orange-400/40"
                                     placeholder="Alamat lengkap cabang"
                                 />
                                 <p
@@ -814,17 +814,17 @@ function toggleOutletStatus(outlet: OutletRow) {
                             <div class="grid gap-5 md:grid-cols-[1.1fr,0.9fr]">
                                 <!-- Left side: Visual Workflow Statuses -->
                                 <div class="block">
-                                    <span class="text-xs font-semibold text-slate-300">Workflow status outlet</span>
+                                    <span class="text-xs font-semibold text-stone-600 dark:text-slate-300">Workflow status outlet</span>
                                     
                                     <!-- Tag list -->
-                                    <div class="mt-2 flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-slate-950/40 p-3 min-h-[120px] align-content-start">
+                                    <div class="mt-2 flex flex-wrap gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3 min-h-[120px] align-content-start">
                                         <div
                                             v-for="(statusItem, index) in workflowArray"
                                             :key="index"
                                             class="inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-1 text-xs font-medium text-orange-100"
                                         >
                                             <span>{{ statusItem }}</span>
-                                            <div class="flex items-center gap-1 ml-1 border-l border-orange-500/20 pl-1.5 text-[9px] text-slate-400">
+                                            <div class="flex items-center gap-1 ml-1 border-l border-orange-500/20 pl-1.5 text-[9px] text-stone-500 dark:text-slate-400">
                                                 <button
                                                     v-if="index > 0"
                                                     type="button"
@@ -853,7 +853,7 @@ function toggleOutletStatus(outlet: OutletRow) {
                                                 </button>
                                             </div>
                                         </div>
-                                        <p v-if="workflowArray.length === 0" class="text-xs text-slate-500 p-2 italic">
+                                        <p v-if="workflowArray.length === 0" class="text-xs text-stone-400 dark:text-slate-500 p-2 italic">
                                             Belum ada status workflow. Tambahkan di bawah.
                                         </p>
                                     </div>
@@ -865,7 +865,7 @@ function toggleOutletStatus(outlet: OutletRow) {
                                             type="text"
                                             @keyup.enter.prevent="addWorkflowStatus"
                                             placeholder="Nama status (contoh: dimasak)"
-                                            class="flex-1 rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-xs text-white outline-none focus:border-orange-500"
+                                            class="flex-1 rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/60 px-3 py-2 text-xs text-stone-900 dark:text-white outline-none focus:border-orange-500"
                                             :disabled="workflowArray.length >= 10"
                                         />
                                         <button
@@ -879,7 +879,7 @@ function toggleOutletStatus(outlet: OutletRow) {
                                     </div>
 
                                     <div class="mt-2 flex items-center justify-between text-[11px]">
-                                        <span class="text-slate-500">
+                                        <span class="text-stone-400 dark:text-slate-500">
                                             Maksimal 10 status ({{ workflowArray.length }}/10)
                                         </span>
                                         <button
@@ -901,19 +901,19 @@ function toggleOutletStatus(outlet: OutletRow) {
                                 <!-- Right side: Config settings -->
                                 <div class="space-y-4">
                                     <label class="block">
-                                        <span class="text-xs font-semibold text-slate-300">Default struk</span>
+                                        <span class="text-xs font-semibold text-stone-600 dark:text-slate-300">Default struk</span>
                                         <select
                                             v-model="outletForm.default_receipt_method"
-                                            class="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-3 py-3 text-sm text-white outline-none transition focus:border-orange-400/40"
+                                            class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/80 px-3 py-3 text-sm text-stone-900 dark:text-white outline-none transition focus:border-orange-400/40"
                                             style="color-scheme: dark;"
                                         >
-                                            <option value="print" class="bg-slate-950 text-slate-100">
+                                            <option value="print" class="bg-stone-100 dark:bg-slate-950 text-stone-900 dark:text-slate-100">
                                                 Print
                                             </option>
-                                            <option value="whatsapp" class="bg-slate-950 text-slate-100">
+                                            <option value="whatsapp" class="bg-stone-100 dark:bg-slate-950 text-stone-900 dark:text-slate-100">
                                                 WhatsApp
                                             </option>
-                                            <option value="skip" class="bg-slate-950 text-slate-100">
+                                            <option value="skip" class="bg-stone-100 dark:bg-slate-950 text-stone-900 dark:text-slate-100">
                                                 Skip
                                             </option>
                                         </select>
@@ -925,38 +925,38 @@ function toggleOutletStatus(outlet: OutletRow) {
                                         </p>
                                     </label>
 
-                                    <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-3.5">
+                                    <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] p-4 space-y-3.5">
                                         <label class="flex items-start gap-3 cursor-pointer select-none">
                                             <input
                                                 v-model="outletForm.bar_approval_enabled"
                                                 type="checkbox"
-                                                class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                                                class="mt-1 h-4 w-4 rounded border-stone-200 dark:border-white/20 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-400"
                                             >
-                                            <span class="text-xs text-slate-200 leading-snug">
+                                            <span class="text-xs text-stone-800 dark:text-slate-200 leading-snug">
                                                 <span class="block font-bold">Bar approval</span>
-                                                <span class="text-[10px] text-slate-500">Order bar butuh approval manual untuk siap</span>
+                                                <span class="text-[10px] text-stone-400 dark:text-slate-500">Order bar butuh approval manual untuk siap</span>
                                             </span>
                                         </label>
                                         <label class="flex items-start gap-3 cursor-pointer select-none">
                                             <input
                                                 v-model="outletForm.customer_can_view_status"
                                                 type="checkbox"
-                                                class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                                                class="mt-1 h-4 w-4 rounded border-stone-200 dark:border-white/20 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-400"
                                             >
-                                            <span class="text-xs text-slate-200 leading-snug">
+                                            <span class="text-xs text-stone-800 dark:text-slate-200 leading-snug">
                                                 <span class="block font-bold">Customer view status</span>
-                                                <span class="text-[10px] text-slate-500">Pelanggan bisa melacak status masak pesanan</span>
+                                                <span class="text-[10px] text-stone-400 dark:text-slate-500">Pelanggan bisa melacak status masak pesanan</span>
                                             </span>
                                         </label>
                                         <label class="flex items-start gap-3 cursor-pointer select-none">
                                             <input
                                                 v-model="outletForm.customer_can_edit_order"
                                                 type="checkbox"
-                                                class="mt-1 h-4 w-4 rounded border-white/20 bg-slate-950 text-orange-500 focus:ring-orange-400"
+                                                class="mt-1 h-4 w-4 rounded border-stone-200 dark:border-white/20 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-400"
                                             >
-                                            <span class="text-xs text-slate-200 leading-snug">
+                                            <span class="text-xs text-stone-800 dark:text-slate-200 leading-snug">
                                                 <span class="block font-bold">Customer edit order</span>
-                                                <span class="text-[10px] text-slate-500">Pelanggan boleh edit pesanan (sebelum dimasak)</span>
+                                                <span class="text-[10px] text-stone-400 dark:text-slate-500">Pelanggan boleh edit pesanan (sebelum dimasak)</span>
                                             </span>
                                         </label>
                                     </div>
@@ -965,10 +965,10 @@ function toggleOutletStatus(outlet: OutletRow) {
                         </div>
 
                         <!-- Footer buttons -->
-                        <div class="flex flex-col-reverse gap-3 border-t border-white/10 pt-5 sm:flex-row sm:justify-end">
+                        <div class="flex flex-col-reverse gap-3 border-t border-stone-200 dark:border-white/10 pt-5 sm:flex-row sm:justify-end">
                             <button
                                 type="button"
-                                class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/[0.05]"
+                                class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-white/[0.05]"
                                 @click="closeModal"
                             >
                                 Batal

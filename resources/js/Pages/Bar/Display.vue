@@ -122,7 +122,7 @@ const resolveHistoryTone = (status: string) => {
         case 'ready':
             return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-300';
         default:
-            return 'border-slate-700/70 bg-slate-800 text-slate-300';
+            return 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300';
     }
 };
 
@@ -213,7 +213,7 @@ const boardStats = computed(() => [
         hint: 'Semua tiket bar',
         icon: ScanSearch,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
     },
     {
         label: 'Butuh Approval',
@@ -260,10 +260,10 @@ const approveReady = (orderId: string) => {
                         ></span>
                         Bar Approval Board
                     </div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         Bar Display System (BDS)
                     </h2>
-                    <p class="mt-1 text-xs text-slate-400">
+                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                         Finalisasi tiket dari kitchen sebelum status order masuk
                         ke ready.
                     </p>
@@ -289,7 +289,7 @@ const approveReady = (orderId: string) => {
             </div>
 
             <section
-                class="rounded-[22px] border border-slate-800/80 bg-slate-900/90 p-3 shadow-xl shadow-slate-950/15"
+                class="rounded-[22px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/90 p-3 shadow-xl shadow-slate-950/15"
             >
                 <div
                     class="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between"
@@ -303,7 +303,7 @@ const approveReady = (orderId: string) => {
                                     'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                     selectedCategoryId === 'all'
                                         ? 'border-cyan-500/30 bg-cyan-500/12 text-cyan-200'
-                                        : 'border-slate-700/70 bg-slate-950/60 text-slate-400 hover:border-slate-600 hover:text-slate-200',
+                                        : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:text-slate-200',
                                 ]"
                             >
                                 Semua Kategori
@@ -317,13 +317,13 @@ const approveReady = (orderId: string) => {
                                     'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                     selectedCategoryId === category.id
                                         ? 'border-cyan-500/30 bg-cyan-500/12 text-cyan-200'
-                                        : 'border-slate-700/70 bg-slate-950/60 text-slate-400 hover:border-slate-600 hover:text-slate-200',
+                                        : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:text-slate-200',
                                 ]"
                             >
                                 {{ category.name }}
                             </button>
                         </div>
-                        <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500">
                             Filter kategori pesanan untuk board bar.
                         </p>
                     </div>
@@ -339,7 +339,7 @@ const approveReady = (orderId: string) => {
                         >
                             <div class="mb-1 flex items-center justify-between">
                                 <span
-                                    class="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+                                    class="text-[9px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
                                 >
                                     {{ stat.label }}
                                 </span>
@@ -356,7 +356,7 @@ const approveReady = (orderId: string) => {
                             >
                                 {{ stat.value }}
                             </div>
-                            <p class="mt-0.5 text-[10px] text-slate-500">
+                            <p class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500">
                                 {{ stat.hint }}
                             </p>
                         </div>
@@ -366,14 +366,14 @@ const approveReady = (orderId: string) => {
 
             <div class="grid gap-4 xl:grid-cols-2">
                 <section
-                    class="rounded-[24px] border border-cyan-500/20 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/10"
+                    class="rounded-[24px] border border-cyan-500/20 bg-stone-50 dark:bg-slate-900/90 p-4 shadow-xl shadow-slate-950/10"
                 >
                     <div class="mb-4 flex items-center justify-between gap-3">
                         <div>
-                            <h3 class="mt-1 text-lg font-black text-white">
-                                Approval Order Selesai
+                            <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-stone-900 dark:text-white">
+Approval Order Selesai
                             </h3>
-                            <p class="mt-1 text-xs text-slate-400">
+                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                 Order dari kitchen masuk ke sini sebelum
                                 ditandai siap.
                             </p>
@@ -387,7 +387,7 @@ const approveReady = (orderId: string) => {
 
                     <div
                         v-if="waitingApprovalOrders.length === 0"
-                        class="rounded-2xl border border-dashed border-slate-800 px-4 py-14 text-center text-xs text-slate-500"
+                        class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 px-4 py-14 text-center text-xs text-stone-400 dark:text-slate-500"
                     >
                         Belum ada tiket yang menunggu approval bar.
                     </div>
@@ -399,17 +399,17 @@ const approveReady = (orderId: string) => {
                             class="rounded-2xl border border-cyan-500/15 bg-cyan-500/[0.04] p-4"
                         >
                             <div
-                                class="flex flex-col gap-3 border-b border-slate-800/80 pb-3 lg:flex-row lg:items-start lg:justify-between"
+                                class="flex flex-col gap-3 border-b border-stone-200 dark:border-slate-800/80 pb-3 lg:flex-row lg:items-start lg:justify-between"
                             >
                                 <div>
                                     <div
                                         class="flex flex-wrap items-center gap-2"
                                     >
-                                        <p class="text-sm font-black text-white">
+                                        <p class="text-sm font-black text-stone-900 dark:text-white">
                                             {{ order.orderNumber }}
                                         </p>
                                         <span
-                                            class="rounded-full border border-slate-700/70 bg-slate-800 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-300"
+                                            class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300"
                                         >
                                             {{ order.tableLabel }}
                                         </span>
@@ -419,13 +419,13 @@ const approveReady = (orderId: string) => {
                                             {{ order.sourceLabel }}
                                         </span>
                                     </div>
-                                    <p class="mt-1 text-[11px] text-slate-400">
+                                    <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
                                         {{ order.customerLabel }}
                                     </p>
                                 </div>
                                 <div class="text-left lg:text-right">
                                     <p
-                                        class="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                        class="text-[9px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
                                     >
                                         Menunggu Finalisasi
                                     </p>
@@ -434,7 +434,7 @@ const approveReady = (orderId: string) => {
                                     >
                                         {{ order.waitingLabel }}
                                     </p>
-                                    <p class="mt-1 text-[11px] text-slate-400">
+                                    <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
                                         Est {{ order.estimatedMinutes }} menit
                                     </p>
                                 </div>
@@ -444,18 +444,18 @@ const approveReady = (orderId: string) => {
                                 <div
                                     v-for="item in order.items"
                                     :key="item.id"
-                                    class="rounded-xl border border-slate-800/70 bg-slate-950/60 px-3 py-2"
+                                    class="rounded-xl border border-stone-200 dark:border-slate-800/70 bg-white dark:bg-slate-950/60 px-3 py-2"
                                 >
                                     <div
                                         class="flex items-start justify-between gap-3"
                                     >
                                         <div>
-                                            <p class="text-xs font-bold text-white">
+                                            <p class="text-xs font-bold text-stone-900 dark:text-white">
                                                 {{ item.name }}
                                             </p>
                                             <p
                                                 v-if="item.notes"
-                                                class="mt-1 text-[11px] text-slate-400"
+                                                class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
                                             >
                                                 {{ item.notes }}
                                             </p>
@@ -470,9 +470,9 @@ const approveReady = (orderId: string) => {
                             </div>
 
                             <div
-                                class="mt-3 flex flex-col gap-3 border-t border-slate-800/80 pt-3 sm:flex-row sm:items-center sm:justify-between"
+                                class="mt-3 flex flex-col gap-3 border-t border-stone-200 dark:border-slate-800/80 pt-3 sm:flex-row sm:items-center sm:justify-between"
                             >
-                                <p class="text-[11px] text-slate-400">
+                                <p class="text-[11px] text-stone-500 dark:text-slate-400">
                                     {{
                                         order.notes ||
                                         'Tidak ada catatan tambahan di level order.'
@@ -499,7 +499,7 @@ const approveReady = (orderId: string) => {
                 </section>
 
                 <section
-                    class="rounded-[24px] border border-emerald-500/20 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/10"
+                    class="rounded-[24px] border border-emerald-500/20 bg-stone-50 dark:bg-slate-900/90 p-4 shadow-xl shadow-slate-950/10"
                 >
                     <div class="mb-4 flex items-center justify-between gap-3">
                         <div>
@@ -508,10 +508,10 @@ const approveReady = (orderId: string) => {
                             >
                                 Ready Board
                             </p>
-                            <h3 class="mt-1 text-lg font-black text-white">
+                            <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                                 Siap Disajikan / Pickup
                             </h3>
-                            <p class="mt-1 text-xs text-slate-400">
+                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                 Tiket yang sudah selesai dan bisa dilanjutkan ke
                                 service atau closing pembayaran.
                             </p>
@@ -525,7 +525,7 @@ const approveReady = (orderId: string) => {
 
                     <div
                         v-if="readyOrders.length === 0"
-                        class="rounded-2xl border border-dashed border-slate-800 px-4 py-14 text-center text-xs text-slate-500"
+                        class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 px-4 py-14 text-center text-xs text-stone-400 dark:text-slate-500"
                     >
                         Belum ada tiket ready.
                     </div>
@@ -543,23 +543,23 @@ const approveReady = (orderId: string) => {
                                     <div
                                         class="flex flex-wrap items-center gap-2"
                                     >
-                                        <p class="text-sm font-black text-white">
+                                        <p class="text-sm font-black text-stone-900 dark:text-white">
                                             {{ order.orderNumber }}
                                         </p>
                                         <span
-                                            class="rounded-full border border-slate-700/70 bg-slate-800 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-300"
+                                            class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300"
                                         >
                                             {{ order.tableLabel }}
                                         </span>
                                     </div>
-                                    <p class="mt-1 text-[11px] text-slate-400">
+                                    <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
                                         {{ order.customerLabel }} •
                                         {{ order.sourceLabel }}
                                     </p>
                                 </div>
                                 <div class="text-left sm:text-right">
                                     <p
-                                        class="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                        class="text-[9px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
                                     >
                                         Ready Sejak
                                     </p>
@@ -568,7 +568,7 @@ const approveReady = (orderId: string) => {
                                     >
                                         {{ order.waitingLabel }}
                                     </p>
-                                    <p class="mt-1 text-[11px] text-slate-400">
+                                    <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
                                         Est {{ order.estimatedMinutes }} menit
                                     </p>
                                 </div>
@@ -579,22 +579,22 @@ const approveReady = (orderId: string) => {
             </div>
 
             <section
-                class="rounded-[22px] border border-slate-800/80 bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                class="rounded-[22px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
             >
                 <div
                     class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
                 >
                     <div>
-                        <h3 class="mt-1 text-lg font-black text-white">
-                            Riwayat Order Dapur
+                        <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-stone-900 dark:text-white">
+Riwayat Order Dapur
                         </h3>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Riwayat transisi terbaru yang relevan untuk lane
                             kitchen dan bar.
                         </p>
                     </div>
                     <span
-                        class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300"
+                        class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300"
                     >
                         {{ props.history.length }} log terbaru
                     </span>
@@ -602,7 +602,7 @@ const approveReady = (orderId: string) => {
 
                 <div
                     v-if="props.history.length === 0"
-                    class="rounded-2xl border border-dashed border-slate-800 px-4 py-14 text-center text-xs text-slate-500"
+                    class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 px-4 py-14 text-center text-xs text-stone-400 dark:text-slate-500"
                 >
                     Riwayat belum ada. Log akan muncul setelah ada transisi
                     status baru.
@@ -612,32 +612,32 @@ const approveReady = (orderId: string) => {
                     <article
                         v-for="entry in props.history"
                         :key="entry.id"
-                        class="rounded-2xl border border-slate-800/80 bg-slate-950/65 p-4"
+                        class="rounded-2xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/65 p-4"
                     >
                         <div
-                            class="flex flex-col gap-3 border-b border-slate-800/80 pb-3 sm:flex-row sm:items-start sm:justify-between"
+                            class="flex flex-col gap-3 border-b border-stone-200 dark:border-slate-800/80 pb-3 sm:flex-row sm:items-start sm:justify-between"
                         >
                             <div>
                                 <p
-                                    class="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+                                    class="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
                                 >
                                     {{ entry.orderNumber || 'Order' }}
                                 </p>
-                                <h4 class="mt-1 text-base font-black text-white">
+                                <h4 class="mt-1 text-base font-black text-stone-900 dark:text-white">
                                     {{ entry.tableLabel }}
                                 </h4>
-                                <p class="mt-1 text-[11px] text-slate-400">
+                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
                                     {{ entry.customerName || 'Walk-in' }}
                                 </p>
                             </div>
-                            <p class="text-[11px] text-slate-500">
+                            <p class="text-[11px] text-stone-400 dark:text-slate-500">
                                 {{ formatHistoryDateTime(entry.createdAt) }}
                             </p>
                         </div>
 
                         <div class="mt-3 flex flex-wrap items-center gap-2">
                             <span
-                                class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300"
+                                class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-600 dark:text-slate-300"
                             >
                                 {{ resolveStatusLabel(entry.fromStatus) }}
                             </span>
@@ -650,12 +650,12 @@ const approveReady = (orderId: string) => {
                             </span>
                         </div>
 
-                        <p class="mt-3 text-[11px] text-slate-400">
+                        <p class="mt-3 text-[11px] text-stone-500 dark:text-slate-400">
                             Oleh {{ entry.changedByName }}
                         </p>
                         <p
                             v-if="entry.notes"
-                            class="mt-1 text-[11px] leading-relaxed text-slate-500"
+                            class="mt-1 text-[11px] leading-relaxed text-stone-400 dark:text-slate-500"
                         >
                             {{ entry.notes }}
                         </p>

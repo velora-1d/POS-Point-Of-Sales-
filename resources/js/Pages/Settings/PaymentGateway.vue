@@ -86,10 +86,10 @@ function submitTest() {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         Monitoring Payment Gateway
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Pusat pemantauan koneksi gateway pembayaran digital yang terhubung secara global melalui konfigurasi sistem.
                     </p>
                 </div>
@@ -99,7 +99,7 @@ function submitTest() {
         <div class="mx-auto max-w-7xl space-y-6 p-4 pb-20 sm:px-6 lg:px-8">
             <!-- Main Status Card -->
             <div 
-                class="overflow-hidden rounded-[32px] border border-white/10 bg-slate-950 shadow-2xl transition-all duration-500"
+                class="overflow-hidden rounded-[32px] border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 shadow-2xl transition-all duration-500"
                 :class="effectiveConfig.is_active ? 'ring-1 ring-emerald-500/20' : 'ring-1 ring-amber-500/20'"
             >
                 <div class="relative flex flex-col md:flex-row">
@@ -110,24 +110,24 @@ function submitTest() {
                     >
                         <div class="relative">
                             <div 
-                                class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white/5 bg-slate-900 shadow-inner"
+                                class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-stone-200 dark:border-white/5 bg-white dark:bg-slate-900 shadow-inner"
                                 :class="effectiveConfig.is_active ? 'text-emerald-400 shadow-emerald-500/10' : 'text-amber-400 shadow-amber-500/10'"
                             >
                                 <Zap v-if="effectiveConfig.is_active" class="h-12 w-12 animate-pulse" />
                                 <Wifi v-else class="h-12 w-12 opacity-50" />
                             </div>
                             <div 
-                                class="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-slate-950 ring-4 ring-slate-900"
+                                class="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-stone-100 dark:bg-slate-950 ring-4 ring-slate-900"
                                 :class="effectiveConfig.is_active ? 'text-emerald-500' : 'text-amber-500'"
                             >
                                 <CheckCircle2 v-if="effectiveConfig.is_active" class="h-5 w-5" />
                                 <Info v-else class="h-5 w-5" />
                             </div>
                         </div>
-                        <h3 class="mt-6 text-xl font-black tracking-tight text-white uppercase">
+                        <h3 class="mt-6 text-xl font-black tracking-tight text-stone-900 dark:text-white uppercase">
                             {{ effectiveConfig.is_active ? 'Gateway Siap' : 'Belum Dikonfigurasi' }}
                         </h3>
-                        <p class="mt-2 text-center text-xs leading-relaxed text-slate-400">
+                        <p class="mt-2 text-center text-xs leading-relaxed text-stone-500 dark:text-slate-400">
                             {{ effectiveConfig.is_active 
                                 ? 'Sistem telah terhubung dengan kredensial .env yang valid dan siap melayani transaksi.' 
                                 : 'Lengkapi variabel PAKASIR_* di file .env server Bapak untuk mengaktifkan pembayaran digital.' 
@@ -136,38 +136,38 @@ function submitTest() {
                     </div>
 
                     <!-- Right: Info Grid -->
-                    <div class="flex flex-1 flex-col border-white/10 md:border-l">
-                        <div class="grid flex-1 grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                            <div class="bg-slate-950 p-6">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Provider Utama</p>
+                    <div class="flex flex-1 flex-col border-stone-200 dark:border-white/10 md:border-l">
+                        <div class="grid flex-1 grid-cols-1 gap-px bg-stone-100 dark:bg-white/5 sm:grid-cols-2">
+                            <div class="bg-stone-100 dark:bg-slate-950 p-6">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Provider Utama</p>
                                 <div class="mt-3 flex items-center gap-3">
                                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 text-slate-950 font-bold">P</div>
-                                    <p class="text-base font-bold text-white uppercase">{{ effectiveConfig.provider }}</p>
+                                    <p class="text-base font-bold text-stone-900 dark:text-white uppercase">{{ effectiveConfig.provider }}</p>
                                 </div>
                             </div>
-                            <div class="bg-slate-950 p-6">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Mode Sinkronisasi</p>
+                            <div class="bg-stone-100 dark:bg-slate-950 p-6">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Mode Sinkronisasi</p>
                                 <div class="mt-3 flex items-center gap-3 text-emerald-400">
                                     <ShieldCheck class="h-5 w-5" />
                                     <p class="text-base font-bold uppercase">Absolut (.env)</p>
                                 </div>
                             </div>
-                            <div class="bg-slate-950 p-6 sm:col-span-2">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Base Endpoint URL</p>
-                                <div class="mt-3 flex items-center gap-3 text-slate-300">
+                            <div class="bg-stone-100 dark:bg-slate-950 p-6 sm:col-span-2">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Base Endpoint URL</p>
+                                <div class="mt-3 flex items-center gap-3 text-stone-600 dark:text-slate-300">
                                     <Globe class="h-5 w-5 shrink-0 opacity-50" />
                                     <code class="text-sm font-mono break-all">{{ effectiveConfig.base_url || '-' }}</code>
                                 </div>
                             </div>
-                            <div class="bg-slate-950 p-6">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Project Slug</p>
-                                <p class="mt-3 text-base font-bold text-white">{{ effectiveConfig.project_slug || '-' }}</p>
+                            <div class="bg-stone-100 dark:bg-slate-950 p-6">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Project Slug</p>
+                                <p class="mt-3 text-base font-bold text-stone-900 dark:text-white">{{ effectiveConfig.project_slug || '-' }}</p>
                             </div>
-                            <div class="bg-slate-950 p-6">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">API Credentials</p>
+                            <div class="bg-stone-100 dark:bg-slate-950 p-6">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">API Credentials</p>
                                 <div class="mt-3 flex items-center gap-2">
                                     <div :class="['h-2 w-2 rounded-full', effectiveConfig.has_api_key ? 'bg-emerald-500' : 'bg-slate-600']"></div>
-                                    <p class="text-xs font-semibold" :class="effectiveConfig.has_api_key ? 'text-white' : 'text-slate-500'">
+                                    <p class="text-xs font-semibold" :class="effectiveConfig.has_api_key ? 'text-stone-900 dark:text-white' : 'text-stone-400 dark:text-slate-500'">
                                         {{ effectiveConfig.has_api_key ? 'Key & Secret Terbaca' : 'Kredensial Kosong' }}
                                     </p>
                                 </div>
@@ -175,14 +175,14 @@ function submitTest() {
                         </div>
 
                         <!-- Webhook area -->
-                        <div class="border-t border-white/5 bg-slate-950 p-6">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Webhook Callback URL</p>
+                        <div class="border-t border-stone-200 dark:border-white/5 bg-stone-100 dark:bg-slate-950 p-6">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">Webhook Callback URL</p>
                             <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                <div class="flex items-center gap-3 text-slate-300">
+                                <div class="flex items-center gap-3 text-stone-600 dark:text-slate-300">
                                     <LinkIcon class="h-5 w-5 shrink-0 opacity-50" />
                                     <code class="text-xs font-mono break-all">{{ effectiveConfig.callback_url || '-' }}</code>
                                 </div>
-                                <span class="inline-flex items-center rounded-lg bg-white/[0.03] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500 border border-white/5">
+                                <span class="inline-flex items-center rounded-lg bg-white/[0.03] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500 border border-stone-200 dark:border-white/5">
                                     Endpoint Aktif
                                 </span>
                             </div>
@@ -194,11 +194,11 @@ function submitTest() {
             <!-- Action Area -->
             <div class="grid gap-6 lg:grid-cols-[1fr,320px]">
                 <!-- Methods Settings Form -->
-                <form @submit.prevent="submitSave" class="flex flex-col justify-between rounded-[28px] border border-white/10 bg-slate-950/45 p-6 shadow-xl">
+                <form @submit.prevent="submitSave" class="flex flex-col justify-between rounded-[28px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/45 p-6 shadow-xl">
                     <div>
                         <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-400">Active Methods</p>
-                        <h3 class="mt-1 text-xl font-black text-white">Metode Bayar Digital Aktif</h3>
-                        <p class="mt-2 text-xs text-slate-400">
+                        <h3 class="mt-1 text-xl font-black text-stone-900 dark:text-white">Metode Bayar Digital Aktif</h3>
+                        <p class="mt-2 text-xs text-stone-500 dark:text-slate-400">
                             Centang metode pembayaran digital yang ingin diaktifkan di halaman kasir/order.
                         </p>
 
@@ -209,23 +209,23 @@ function submitTest() {
                                 class="flex items-start gap-4 rounded-2xl border p-4 cursor-pointer transition-all duration-200"
                                 :class="form.active_payment_methods.includes(method.value)
                                     ? 'border-orange-500/35 bg-orange-500/5 hover:bg-orange-500/10'
-                                    : 'border-white/5 bg-white/[0.01] hover:bg-white/[0.03]'"
+                                    : 'border-stone-200 dark:border-white/5 bg-white/[0.01] hover:bg-white/[0.03]'"
                             >
                                 <input
                                     type="checkbox"
                                     :checked="form.active_payment_methods.includes(method.value)"
                                     @change="toggleMethod(method.value)"
-                                    class="mt-1 h-4 w-4 rounded border-slate-700 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                    class="mt-1 h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                 />
                                 <div>
-                                    <span class="text-xs font-black uppercase tracking-wider text-white block">{{ method.label }}</span>
-                                    <span class="text-[11px] text-slate-400 block mt-0.5">{{ method.description }}</span>
+                                    <span class="text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white block">{{ method.label }}</span>
+                                    <span class="text-[11px] text-stone-500 dark:text-slate-400 block mt-0.5">{{ method.description }}</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <div class="mt-8 flex justify-end border-t border-white/5 pt-4">
+                    <div class="mt-8 flex justify-end border-t border-stone-200 dark:border-white/5 pt-4">
                         <button
                             type="submit"
                             :disabled="form.processing"
@@ -237,12 +237,12 @@ function submitTest() {
                 </form>
 
                 <!-- Big Test Button -->
-                <div class="flex flex-col justify-between rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-xl ring-1 ring-white/5">
+                <div class="flex flex-col justify-between rounded-[28px] border border-stone-200 dark:border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-xl ring-1 ring-white/5">
                     <div>
                         <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-400">Verification</p>
-                        <h3 class="mt-1 text-xl font-black text-white">Uji Koneksi</h3>
-                        <p class="mt-4 text-xs leading-relaxed text-slate-400">
-                            Klik tombol di bawah untuk melakukan ping real-time ke server Pakasir menggunakan kredensial yang ada di <code class="rounded bg-slate-800 px-1 text-emerald-300">.env</code>.
+                        <h3 class="mt-1 text-xl font-black text-stone-900 dark:text-white">Uji Koneksi</h3>
+                        <p class="mt-4 text-xs leading-relaxed text-stone-500 dark:text-slate-400">
+                            Klik tombol di bawah untuk melakukan ping real-time ke server Pakasir menggunakan kredensial yang ada di <code class="rounded bg-stone-100 dark:bg-slate-800 px-1 text-emerald-300">.env</code>.
                         </p>
                     </div>
 

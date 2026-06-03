@@ -118,7 +118,7 @@ const payIcon: Record<string, typeof Wallet> = { cash: Wallet, qris: ShoppingBag
 const growthPct = computed(() => fs.value.revenue_growth ?? 0);
 const growthClass = computed(() => growthPct.value > 0 ? 'text-emerald-300 bg-emerald-500/10 border-emerald-400/20'
     : growthPct.value < 0 ? 'text-rose-300 bg-rose-500/10 border-rose-400/20'
-    : 'text-slate-400 bg-white/[0.03] border-white/10');
+    : 'text-stone-500 dark:text-slate-400 bg-white/[0.03] border-stone-200 dark:border-white/10');
 const GrowthIcon = computed(() => growthPct.value > 0 ? TrendingUp : growthPct.value < 0 ? TrendingDown : Minus);
 
 // ─── Actions ────────────────────────────────────────────────────────────────────
@@ -138,10 +138,10 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
         <template #header>
             <div class="flex flex-col justify-between gap-3 md:flex-row md:items-center">
                 <div>
-                    <p class="text-xs text-slate-500">{{ greet }},</p>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <p class="text-xs text-stone-400 dark:text-slate-500">{{ greet }},</p>
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         {{ user?.name }}
-                        <span class="ml-2 text-sm font-normal text-slate-400">· {{ user?.outlet || 'Semua Outlet' }}</span>
+                        <span class="ml-2 text-sm font-normal text-stone-500 dark:text-slate-400">· {{ user?.outlet || 'Semua Outlet' }}</span>
                     </h2>
                 </div>
                 <div class="flex items-center gap-3">
@@ -149,7 +149,7 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                     <div v-if="canChooseOutlet && canViewFinance" class="flex items-center gap-2">
                         <select
                             v-model="outletFilter"
-                            class="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none transition focus:border-orange-400/40"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-stone-900 dark:text-white outline-none transition focus:border-orange-400/40"
                             @change="applyFilter"
                         >
                             <option value="">Semua Outlet</option>
@@ -177,20 +177,20 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                     <article class="relative col-span-2 overflow-hidden rounded-[24px] border border-emerald-400/20 bg-gradient-to-br from-emerald-500/20 via-emerald-500/8 to-slate-950 p-5 xl:col-span-2">
                         <div class="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-emerald-500/15 blur-2xl" />
                         <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">Revenue Hari Ini</p>
-                        <p class="mt-2 text-3xl font-black text-white">{{ fmt(fs.revenue) }}</p>
+                        <p class="mt-2 text-3xl font-black text-stone-900 dark:text-white">{{ fmt(fs.revenue) }}</p>
                         <div class="mt-2 flex items-center gap-2">
                             <span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold" :class="growthClass">
                                 <component :is="GrowthIcon" class="h-3 w-3" />
                                 {{ Math.abs(growthPct) }}% vs kemarin
                             </span>
                         </div>
-                        <p class="mt-2 text-xs text-slate-400">Kemarin {{ fmt(fs.yesterday_revenue) }}</p>
+                        <p class="mt-2 text-xs text-stone-500 dark:text-slate-400">Kemarin {{ fmt(fs.yesterday_revenue) }}</p>
                     </article>
 
                     <!-- Total Order -->
-                    <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Total Order</p>
-                        <p class="mt-2 text-3xl font-black text-white">{{ fs.orders ?? 0 }}</p>
+                    <article class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white/[0.03] p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">Total Order</p>
+                        <p class="mt-2 text-3xl font-black text-stone-900 dark:text-white">{{ fs.orders ?? 0 }}</p>
                         <div class="mt-2 flex flex-wrap gap-1.5">
                             <span class="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
                                 {{ fs.settled_orders ?? 0 }} selesai
@@ -199,14 +199,14 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                                 {{ fs.pending_orders }} pending
                             </span>
                         </div>
-                        <p class="mt-2 text-xs text-slate-500">Kemarin {{ fs.yesterday_orders ?? 0 }} order</p>
+                        <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">Kemarin {{ fs.yesterday_orders ?? 0 }} order</p>
                     </article>
 
                     <!-- Avg Ticket -->
-                    <article class="rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Avg Ticket</p>
-                        <p class="mt-2 text-2xl font-black text-white">{{ fmt(fs.avg_order_value) }}</p>
-                        <p class="mt-2 text-xs text-slate-500">Per transaksi selesai</p>
+                    <article class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white/[0.03] p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">Avg Ticket</p>
+                        <p class="mt-2 text-2xl font-black text-stone-900 dark:text-white">{{ fmt(fs.avg_order_value) }}</p>
+                        <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">Per transaksi selesai</p>
                         <p class="mt-1 text-xs text-rose-300">Diskon {{ fmt(fs.total_discount) }}</p>
                     </article>
 
@@ -216,19 +216,19 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                             <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-sky-300">Top Produk</p>
                             <Star class="h-3.5 w-3.5 text-sky-400" />
                         </div>
-                        <p class="mt-2 text-base font-black text-white leading-tight">{{ fs.top_product?.name || '–' }}</p>
+                        <p class="mt-2 text-base font-black text-stone-900 dark:text-white leading-tight">{{ fs.top_product?.name || '–' }}</p>
                         <p class="mt-2 text-xs text-sky-100/80">{{ fs.top_product?.quantity ?? 0 }} terjual · {{ fmt(fs.top_product?.revenue) }}</p>
                     </article>
 
                     <!-- Shift aktif -->
                     <article class="rounded-[24px] border p-5"
-                        :class="fs.active_shift ? 'border-orange-400/20 bg-orange-500/8' : 'border-white/10 bg-white/[0.03]'"
+                        :class="fs.active_shift ? 'border-orange-400/20 bg-orange-500/8' : 'border-stone-200 dark:border-white/10 bg-white/[0.03]'"
                     >
-                        <p class="text-[10px] font-bold uppercase tracking-[0.22em]" :class="fs.active_shift ? 'text-orange-300' : 'text-slate-400'">Shift Aktif</p>
-                        <p class="mt-2 text-base font-black text-white leading-tight">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em]" :class="fs.active_shift ? 'text-orange-300' : 'text-stone-500 dark:text-slate-400'">Shift Aktif</p>
+                        <p class="mt-2 text-base font-black text-stone-900 dark:text-white leading-tight">
                             {{ fs.active_shift?.cashier || 'Tidak Ada' }}
                         </p>
-                        <p class="mt-2 text-xs" :class="fs.active_shift ? 'text-orange-100/80' : 'text-slate-500'">
+                        <p class="mt-2 text-xs" :class="fs.active_shift ? 'text-orange-100/80' : 'text-stone-400 dark:text-slate-500'">
                             {{ fs.active_shift ? `Buka ${fmtTime(fs.active_shift.opened_at)}` : 'Shift belum dibuka' }}
                         </p>
                     </article>
@@ -238,11 +238,11 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                 <div class="mt-4 grid gap-4 lg:grid-cols-[1.6fr_1fr_1fr]">
 
                     <!-- Hourly Revenue Chart (CSS bar chart) -->
-                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                    <div class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-5">
                         <div class="flex items-center justify-between gap-3">
                             <div>
-                                <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Revenue per Jam</p>
-                                <p class="mt-0.5 text-xs text-slate-500">Hari ini · transaksi selesai</p>
+                                <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">Revenue per Jam</p>
+                                <p class="mt-0.5 text-xs text-stone-400 dark:text-slate-500">Hari ini · transaksi selesai</p>
                             </div>
                             <TrendingUp class="h-4 w-4 text-emerald-400" />
                         </div>
@@ -257,7 +257,7 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                                 >
                                     <div
                                         class="w-full rounded-t-sm transition-all duration-300"
-                                        :class="h.revenue > 0 ? 'bg-emerald-500/70 group-hover:bg-emerald-400' : 'bg-white/5'"
+                                        :class="h.revenue > 0 ? 'bg-emerald-500/70 group-hover:bg-emerald-400' : 'bg-stone-100 dark:bg-white/5'"
                                         :style="`height: ${Math.max(h.pct, h.revenue > 0 ? 4 : 2)}%`"
                                     />
                                 </div>
@@ -269,22 +269,22 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                                 </span>
                             </div>
                         </div>
-                        <div v-else class="mt-6 text-center text-xs text-slate-500">Belum ada transaksi hari ini.</div>
+                        <div v-else class="mt-6 text-center text-xs text-stone-400 dark:text-slate-500">Belum ada transaksi hari ini.</div>
                     </div>
 
                     <!-- Payment breakdown -->
-                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Metode Bayar</p>
+                    <div class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">Metode Bayar</p>
                         <div v-if="paymentBreakdowns.length" class="mt-4 space-y-2.5">
                             <div v-for="item in paymentBreakdowns" :key="item.method" class="space-y-1">
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-1.5">
-                                        <component :is="payIcon[item.method] ?? Wallet" class="h-3 w-3 text-slate-400" />
-                                        <span class="text-xs font-semibold text-slate-200">{{ payLabel[item.method] ?? item.method }}</span>
+                                        <component :is="payIcon[item.method] ?? Wallet" class="h-3 w-3 text-stone-500 dark:text-slate-400" />
+                                        <span class="text-xs font-semibold text-stone-800 dark:text-slate-200">{{ payLabel[item.method] ?? item.method }}</span>
                                     </div>
                                     <span class="text-[11px] font-black text-emerald-300">{{ fmtShort(item.amount) }}</span>
                                 </div>
-                                <div class="h-1.5 overflow-hidden rounded-full bg-white/5">
+                                <div class="h-1.5 overflow-hidden rounded-full bg-stone-100 dark:bg-white/5">
                                     <div
                                         class="h-full rounded-full bg-emerald-500/70 transition-all duration-500"
                                         :style="`width: ${Math.round((item.amount / totalPayments) * 100)}%`"
@@ -292,55 +292,55 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                                 </div>
                             </div>
                         </div>
-                        <p v-else class="mt-4 text-xs text-slate-500">Belum ada pembayaran.</p>
+                        <p v-else class="mt-4 text-xs text-stone-400 dark:text-slate-500">Belum ada pembayaran.</p>
                     </div>
 
                     <!-- Top 5 Products -->
-                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                    <div class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-5">
                         <div class="flex items-center justify-between gap-2">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">5 Produk Terlaris</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">5 Produk Terlaris</p>
                             <Star class="h-3.5 w-3.5 text-amber-400" />
                         </div>
                         <div v-if="topProducts.length" class="mt-4 space-y-2.5">
                             <div v-for="(p, i) in topProducts" :key="i" class="flex items-center gap-2.5">
                                 <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-black"
-                                    :class="i === 0 ? 'bg-amber-500/20 text-amber-300' : 'bg-white/5 text-slate-500'"
+                                    :class="i === 0 ? 'bg-amber-500/20 text-amber-300' : 'bg-stone-100 dark:bg-white/5 text-stone-400 dark:text-slate-500'"
                                 >{{ i + 1 }}</span>
                                 <div class="min-w-0 flex-1">
-                                    <p class="truncate text-xs font-semibold text-slate-200">{{ p.name }}</p>
-                                    <p class="text-[10px] text-slate-500">{{ p.quantity }} terjual</p>
+                                    <p class="truncate text-xs font-semibold text-stone-800 dark:text-slate-200">{{ p.name }}</p>
+                                    <p class="text-[10px] text-stone-400 dark:text-slate-500">{{ p.quantity }} terjual</p>
                                 </div>
                                 <span class="flex-shrink-0 text-[11px] font-black text-sky-300">{{ fmtShort(p.revenue) }}</span>
                             </div>
                         </div>
-                        <p v-else class="mt-4 text-xs text-slate-500">Belum ada penjualan.</p>
+                        <p v-else class="mt-4 text-xs text-stone-400 dark:text-slate-500">Belum ada penjualan.</p>
                     </div>
                 </div>
 
                 <!-- Channel source + Quick actions -->
                 <div class="mt-4 grid gap-4 lg:grid-cols-[1fr_1.8fr]">
                     <!-- Source breakdown -->
-                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Channel Penjualan</p>
+                    <div class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">Channel Penjualan</p>
                         <div v-if="sourceBreakdowns.length" class="mt-4 grid gap-2">
                             <div
                                 v-for="item in sourceBreakdowns"
                                 :key="item.source"
-                                class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5"
+                                class="flex items-center justify-between rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3.5 py-2.5"
                             >
                                 <div>
-                                    <p class="text-sm font-bold text-white">{{ srcLabel[item.source] ?? item.source }}</p>
-                                    <p class="text-[11px] text-slate-500">{{ item.orders }} order</p>
+                                    <p class="text-sm font-bold text-stone-900 dark:text-white">{{ srcLabel[item.source] ?? item.source }}</p>
+                                    <p class="text-[11px] text-stone-400 dark:text-slate-500">{{ item.orders }} order</p>
                                 </div>
                                 <p class="text-sm font-black text-sky-300">{{ fmt(item.amount) }}</p>
                             </div>
                         </div>
-                        <p v-else class="mt-4 text-xs text-slate-500">Belum ada channel tercatat.</p>
+                        <p v-else class="mt-4 text-xs text-stone-400 dark:text-slate-500">Belum ada channel tercatat.</p>
                     </div>
 
                     <!-- Quick Access -->
-                    <div class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Akses Cepat</p>
+                    <div class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">Akses Cepat</p>
                         <div class="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
                             <Link
                                 :href="route('kasir.order')"
@@ -401,15 +401,16 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
             <div class="grid gap-4 lg:grid-cols-2">
 
                 <!-- Stok Menipis -->
-                <section class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                <section class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-5">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-2.5">
                             <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/15">
                                 <AlertTriangle class="h-4 w-4 text-amber-300" />
                             </div>
                             <div>
-                                <p class="text-sm font-black text-white">Stok Menipis</p>
-                                <p class="text-[11px] text-slate-500">{{ lowStockSummary.total }} alert · {{ lowStockSummary.critical }} kritis</p>
+                                <p class="text-sm font-black text-stone-900 dark:text-white">
+Stok Menipis</p>
+                                <p class="text-[11px] text-stone-400 dark:text-slate-500">{{ lowStockSummary.total }} alert · {{ lowStockSummary.critical }} kritis</p>
                             </div>
                         </div>
                         <Link :href="route('stock-alerts.index')" class="flex items-center gap-1 text-[11px] font-semibold text-orange-300 hover:text-orange-200">
@@ -437,39 +438,39 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                         <article
                             v-for="item in lowStockItems.slice(0, 5)"
                             :key="`${item.type}-${item.id}`"
-                            class="flex items-center justify-between gap-3 rounded-2xl border border-white/5 bg-white/[0.02] px-3.5 py-2.5 transition hover:bg-white/[0.04]"
+                            class="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 dark:border-white/5 bg-white/[0.02] px-3.5 py-2.5 transition hover:bg-white/[0.04]"
                         >
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-1.5">
-                                    <p class="truncate text-xs font-bold text-white">{{ item.name }}</p>
+                                    <p class="truncate text-xs font-bold text-stone-900 dark:text-white">{{ item.name }}</p>
                                     <span class="flex-shrink-0 rounded-full border px-1.5 py-0.5 text-[9px] font-bold"
                                         :class="item.severity >= 2 ? 'border-rose-400/20 bg-rose-500/10 text-rose-300' : 'border-amber-400/20 bg-amber-500/10 text-amber-300'"
                                     >
                                         {{ item.severity >= 2 ? 'KRITIS' : 'TIPIS' }}
                                     </span>
                                 </div>
-                                <p class="text-[11px] text-slate-500">{{ item.current_stock }}/{{ item.minimum_stock }} {{ item.unit || 'pcs' }}</p>
+                                <p class="text-[11px] text-stone-400 dark:text-slate-500">{{ item.current_stock }}/{{ item.minimum_stock }} {{ item.unit || 'pcs' }}</p>
                             </div>
                             <Link :href="route(item.route)" class="flex-shrink-0 rounded-xl border border-orange-400/20 bg-orange-500/10 px-2.5 py-1.5 text-[10px] font-bold text-orange-300 hover:bg-orange-500/15">
                                 Tindak
                             </Link>
                         </article>
-                        <p v-if="lowStockItems.length > 5" class="mt-1 text-center text-[11px] text-slate-500">
+                        <p v-if="lowStockItems.length > 5" class="mt-1 text-center text-[11px] text-stone-400 dark:text-slate-500">
                             +{{ lowStockItems.length - 5 }} item lainnya
                         </p>
                     </div>
                 </section>
 
                 <!-- Expired -->
-                <section class="rounded-[24px] border border-white/10 bg-slate-950/50 p-5">
+                <section class="rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-5">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-2.5">
                             <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-rose-500/15">
                                 <BellRing class="h-4 w-4 text-rose-300" />
                             </div>
                             <div>
-                                <p class="text-sm font-black text-white">Reminder Expired</p>
-                                <p class="text-[11px] text-slate-500">{{ expiredSummary.critical }} perlu tindakan segera</p>
+                                <p class="text-sm font-black text-stone-900 dark:text-white">Reminder Expired</p>
+                                <p class="text-[11px] text-stone-400 dark:text-slate-500">{{ expiredSummary.critical }} perlu tindakan segera</p>
                             </div>
                         </div>
                         <Link :href="route('expired-tracking.index')" class="flex items-center gap-1 text-[11px] font-semibold text-orange-300 hover:text-orange-200">
@@ -497,11 +498,11 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                         <article
                             v-for="item in expiredItems.slice(0, 5)"
                             :key="item.id"
-                            class="flex items-center justify-between gap-3 rounded-2xl border border-white/5 bg-white/[0.02] px-3.5 py-2.5 transition hover:bg-white/[0.04]"
+                            class="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 dark:border-white/5 bg-white/[0.02] px-3.5 py-2.5 transition hover:bg-white/[0.04]"
                         >
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-1.5">
-                                    <p class="truncate text-xs font-bold text-white">{{ item.name }}</p>
+                                    <p class="truncate text-xs font-bold text-stone-900 dark:text-white">{{ item.name }}</p>
                                     <span class="flex-shrink-0 rounded-full border px-1.5 py-0.5 text-[9px] font-bold"
                                         :class="item.status === 'expired'
                                             ? 'border-rose-400/20 bg-rose-500/10 text-rose-300'
@@ -512,7 +513,7 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                                         {{ item.status === 'expired' ? `+${Math.abs(item.days_left)}hr` : item.status === 'today' ? 'HARI INI' : `H-${item.days_left}` }}
                                     </span>
                                 </div>
-                                <p class="text-[11px] text-slate-500">
+                                <p class="text-[11px] text-stone-400 dark:text-slate-500">
                                     {{ item.trackable_type === 'product' ? 'Produk' : 'Bahan baku' }} · qty {{ item.quantity }}
                                 </p>
                             </div>
@@ -520,7 +521,7 @@ const greet = NOW.getHours() < 12 ? 'Selamat pagi' : NOW.getHours() < 18 ? 'Sela
                                 Tindak
                             </Link>
                         </article>
-                        <p v-if="expiredItems.length > 5" class="mt-1 text-center text-[11px] text-slate-500">
+                        <p v-if="expiredItems.length > 5" class="mt-1 text-center text-[11px] text-stone-400 dark:text-slate-500">
                             +{{ expiredItems.length - 5 }} item lainnya
                         </p>
                     </div>

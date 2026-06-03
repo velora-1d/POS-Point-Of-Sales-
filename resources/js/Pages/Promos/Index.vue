@@ -200,7 +200,7 @@ const summaryCards = computed(() => [
         label: 'Total Template',
         value: props.summary.total,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: TicketPercent,
     },
     {
@@ -378,7 +378,7 @@ const formatDateTime = (value?: string | null) => {
 
 const statusClass = (promoStatus: string) => {
     if (promoStatus === 'active') return 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300';
-    if (promoStatus === 'inactive') return 'border-slate-500/20 bg-slate-500/10 text-slate-300';
+    if (promoStatus === 'inactive') return 'border-slate-500/20 bg-slate-500/10 text-stone-600 dark:text-slate-300';
     if (promoStatus === 'expired') return 'border-rose-400/20 bg-rose-500/10 text-rose-300';
     return 'border-amber-400/20 bg-amber-500/10 text-amber-300';
 };
@@ -451,10 +451,10 @@ const submitPromo = () => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         Template Promo & Diskon
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Kelola template promo owner-level untuk diskon persen, nominal, atau buy X get Y beserta trigger, periode, limit pakai, dan stacking rule.
                     </p>
                 </div>
@@ -478,42 +478,42 @@ const submitPromo = () => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-3xl font-black" :class="card.tone">
                                 {{ card.value }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3 text-white">
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3 text-stone-900 dark:text-white">
                             <component :is="card.icon" class="h-5 w-5" />
                         </div>
                     </div>
                 </article>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div class="grid flex-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Cari promo</span>
-                            <div class="flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/80 px-3">
-                                <Search class="h-4 w-4 text-slate-500" />
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Cari promo</span>
+                            <div class="flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3">
+                                <Search class="h-4 w-4 text-stone-400 dark:text-slate-500" />
                                 <input
                                     v-model="search"
                                     type="text"
                                     placeholder="Nama atau kode"
-                                    class="w-full border-0 bg-transparent px-0 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-0"
+                                    class="w-full border-0 bg-transparent px-0 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:outline-none focus:ring-0"
                                     @keyup.enter="submitFilters"
                                 />
                             </div>
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Status</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Status</span>
                             <select
                                 v-model="status"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua status</option>
                                 <option
@@ -527,10 +527,10 @@ const submitPromo = () => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Jenis</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Jenis</span>
                             <select
                                 v-model="type"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua jenis</option>
                                 <option
@@ -544,10 +544,10 @@ const submitPromo = () => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Metode apply</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Metode apply</span>
                             <select
                                 v-model="applyMethod"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua metode</option>
                                 <option
@@ -564,7 +564,7 @@ const submitPromo = () => {
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/5"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
                             @click="clearFilters"
                         >
                             Reset Filter
@@ -588,19 +588,19 @@ const submitPromo = () => {
                 </div>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 px-5 py-4">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Daftar Template Promo
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Menampilkan {{ props.promos.from ?? 0 }} - {{ props.promos.to ?? 0 }} dari {{ props.promos.total }} promo.
                         </p>
                     </div>
                 </div>
 
-                <div v-if="!props.promos.data.length" class="px-5 py-10 text-center text-sm text-slate-400">
+                <div v-if="!props.promos.data.length" class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                     Belum ada template promo pada filter ini.
                 </div>
 
@@ -612,7 +612,7 @@ const submitPromo = () => {
                     >
                         <div class="space-y-3">
                             <div class="flex flex-wrap items-center gap-2">
-                                <h3 class="text-base font-black text-white">{{ promo.name }}</h3>
+                                <h3 class="text-base font-black text-stone-900 dark:text-white">{{ promo.name }}</h3>
                                 <span
                                     class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
                                     :class="statusClass(promo.status)"
@@ -620,11 +620,11 @@ const submitPromo = () => {
                                     {{ statusOptions.find((item) => item.value === promo.status)?.label || promo.status }}
                                 </span>
                             </div>
-                            <div class="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-                                <span class="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-semibold">
+                            <div class="flex flex-wrap items-center gap-2 text-xs text-stone-500 dark:text-slate-400">
+                                <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-2.5 py-1 font-semibold">
                                     {{ getTypeLabel(promo.type) }}
                                 </span>
-                                <span class="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-semibold">
+                                <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-2.5 py-1 font-semibold">
                                     {{ getApplyMethodLabel(promo.apply_method) }}
                                 </span>
                                 <span
@@ -634,10 +634,10 @@ const submitPromo = () => {
                                     {{ promo.code }}
                                 </span>
                             </div>
-                            <div class="text-sm text-slate-300">
+                            <div class="text-sm text-stone-600 dark:text-slate-300">
                                 <template v-if="promo.type === 'percent'">
                                     Diskon {{ Number(promo.discount_percent || 0) }}%
-                                    <span v-if="promo.max_discount_amount" class="text-slate-500">
+                                    <span v-if="promo.max_discount_amount" class="text-stone-400 dark:text-slate-500">
                                         • cap {{ formatPrice(promo.max_discount_amount) }}
                                     </span>
                                 </template>
@@ -650,8 +650,8 @@ const submitPromo = () => {
                             </div>
                         </div>
 
-                        <div class="space-y-2 text-sm text-slate-300">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        <div class="space-y-2 text-sm text-stone-600 dark:text-slate-300">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Trigger & Kondisi
                             </p>
                             <div class="flex flex-wrap gap-2">
@@ -670,37 +670,37 @@ const submitPromo = () => {
                                 </span>
                                 <span
                                     v-if="!promo.rules?.length && !promo.min_transaction_amount"
-                                    class="text-xs text-slate-500"
+                                    class="text-xs text-stone-400 dark:text-slate-500"
                                 >
                                     Belum ada trigger tambahan
                                 </span>
                             </div>
                         </div>
 
-                        <div class="space-y-2 text-sm text-slate-300">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        <div class="space-y-2 text-sm text-stone-600 dark:text-slate-300">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Periode
                             </p>
                             <p>{{ formatDateTime(promo.start_date) }}</p>
-                            <p class="text-slate-500">s/d {{ formatDateTime(promo.end_date) }}</p>
+                            <p class="text-stone-400 dark:text-slate-500">s/d {{ formatDateTime(promo.end_date) }}</p>
                             <p v-if="promo.happy_hour_start || promo.happy_hour_end" class="text-xs text-orange-200">
                                 Happy hour {{ promo.happy_hour_start || '--:--' }} - {{ promo.happy_hour_end || '--:--' }}
                             </p>
                         </div>
 
-                        <div class="space-y-2 text-sm text-slate-300">
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        <div class="space-y-2 text-sm text-stone-600 dark:text-slate-300">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Limit & Stacking
                             </p>
                             <p>
                                 Limit:
-                                <span class="font-semibold text-white">
+                                <span class="font-semibold text-stone-900 dark:text-white">
                                     {{ promo.usage_limit ? `${promo.usage_count || 0}/${promo.usage_limit}` : 'Tanpa batas' }}
                                 </span>
                             </p>
                             <p>
                                 Stack:
-                                <span :class="promo.can_stack ? 'text-emerald-300' : 'text-slate-500'">
+                                <span :class="promo.can_stack ? 'text-emerald-300' : 'text-stone-400 dark:text-slate-500'">
                                     {{ promo.can_stack ? 'Bisa digabung promo lain' : 'Pilih nilai promo terbesar' }}
                                 </span>
                             </p>
@@ -709,7 +709,7 @@ const submitPromo = () => {
                         <div class="flex items-start justify-end">
                             <button
                                 type="button"
-                                class="inline-flex items-center gap-2 rounded-2xl border border-white/10 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-orange-400/30 hover:bg-orange-500/10 hover:text-orange-100"
+                                class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 px-3 py-2 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-orange-400/30 hover:bg-orange-500/10 hover:text-orange-100"
                                 @click="openEditModal(promo)"
                             >
                                 <Pencil class="h-4 w-4" />
@@ -721,9 +721,9 @@ const submitPromo = () => {
 
                 <div
                     v-if="props.promos.links.length > 3"
-                    class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-5 py-4"
+                    class="flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 dark:border-white/10 px-5 py-4"
                 >
-                    <p class="text-xs text-slate-500">
+                    <p class="text-xs text-stone-400 dark:text-slate-500">
                         Pagination promo tetap aktif untuk menjaga list owner tetap ringan.
                     </p>
                     <div class="flex flex-wrap gap-2">
@@ -734,7 +734,7 @@ const submitPromo = () => {
                             class="rounded-xl border px-3 py-2 text-xs font-semibold transition"
                             :class="link.active
                                 ? 'border-orange-400/30 bg-orange-500/15 text-orange-100'
-                                : 'border-white/10 text-slate-300 hover:bg-white/5'"
+                                : 'border-stone-200 dark:border-white/10 text-stone-600 dark:text-slate-300 hover:bg-stone-100 dark:bg-white/5'"
                             v-html="link.label"
                         />
                     </div>
@@ -744,19 +744,19 @@ const submitPromo = () => {
 
         <div
             v-if="isModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
         >
-            <div class="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-white/10 bg-slate-950 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)]">
+            <div class="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)]">
                 <div class="flex items-start justify-between gap-4">
                     <div>
-                        <h3 class="text-xl font-black text-white">{{ modalTitle }}</h3>
-                        <p class="mt-1 text-sm text-slate-400">
+                        <h3 class="text-xl font-black text-stone-900 dark:text-white">{{ modalTitle }}</h3>
+                        <p class="mt-1 text-sm text-stone-500 dark:text-slate-400">
                             Susun tipe promo, trigger, periode, dan aturan stack sesuai brief fase promo.
                         </p>
                     </div>
                     <button
                         type="button"
-                        class="rounded-2xl border border-white/10 p-2 text-slate-400 transition hover:border-white/20 hover:text-white"
+                        class="rounded-2xl border border-stone-200 dark:border-white/10 p-2 text-stone-500 dark:text-slate-400 transition hover:border-stone-200 dark:border-white/20 hover:text-stone-900 dark:text-white"
                         @click="closeModal"
                     >
                         <X class="h-5 w-5" />
@@ -766,21 +766,21 @@ const submitPromo = () => {
                 <form class="mt-6 space-y-6" @submit.prevent="submitPromo">
                     <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                         <label class="block xl:col-span-2">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Nama promo</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Nama promo</span>
                             <input
                                 v-model="promoForm.name"
                                 type="text"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
                                 placeholder="Contoh: Promo Jumat Berkah"
                             />
                             <p v-if="promoForm.errors.name" class="mt-2 text-xs text-rose-300">{{ promoForm.errors.name }}</p>
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Jenis promo</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Jenis promo</span>
                             <select
                                 v-model="promoForm.type"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option
                                     v-for="option in typeOptions"
@@ -793,10 +793,10 @@ const submitPromo = () => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Metode apply</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Metode apply</span>
                             <select
                                 v-model="promoForm.apply_method"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option
                                     v-for="option in applyMethodOptions"
@@ -811,92 +811,92 @@ const submitPromo = () => {
 
                     <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                         <label v-if="promoForm.apply_method !== 'auto'" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Kode promo</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Kode promo</span>
                             <input
                                 v-model="promoForm.code"
                                 type="text"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm uppercase text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm uppercase text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-0"
                                 placeholder="MENTAI10"
                             />
                             <p v-if="promoForm.errors.code" class="mt-2 text-xs text-rose-300">{{ promoForm.errors.code }}</p>
                         </label>
 
                         <label v-if="promoForm.type === 'percent'" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Diskon persen</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Diskon persen</span>
                             <input
                                 v-model="promoForm.discount_percent"
                                 type="number"
                                 min="0"
                                 step="0.01"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                             <p v-if="promoForm.errors.discount_percent" class="mt-2 text-xs text-rose-300">{{ promoForm.errors.discount_percent }}</p>
                         </label>
 
                         <label v-if="promoForm.type === 'percent'" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Max diskon</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Max diskon</span>
                             <input
                                 v-model="promoForm.max_discount_amount"
                                 type="number"
                                 min="0"
                                 step="1000"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                 placeholder="Opsional"
                             />
                         </label>
 
                         <label v-if="promoForm.type === 'nominal'" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Diskon nominal</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Diskon nominal</span>
                             <input
                                 v-model="promoForm.discount_amount"
                                 type="number"
                                 min="0"
                                 step="1000"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                             <p v-if="promoForm.errors.discount_amount" class="mt-2 text-xs text-rose-300">{{ promoForm.errors.discount_amount }}</p>
                         </label>
 
                         <label v-if="promoForm.type === 'buy_x_get_y'" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Buy quantity</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Buy quantity</span>
                             <input
                                 v-model="promoForm.buy_quantity"
                                 type="number"
                                 min="1"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
 
                         <label v-if="promoForm.type === 'buy_x_get_y'" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Get quantity</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Get quantity</span>
                             <input
                                 v-model="promoForm.get_quantity"
                                 type="number"
                                 min="1"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                             <p v-if="promoForm.errors.buy_quantity" class="mt-2 text-xs text-rose-300">{{ promoForm.errors.buy_quantity }}</p>
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Min transaksi</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Min transaksi</span>
                             <input
                                 v-model="promoForm.min_transaction_amount"
                                 type="number"
                                 min="0"
                                 step="1000"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                 placeholder="Opsional"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Limit penggunaan</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Limit penggunaan</span>
                             <input
                                 v-model="promoForm.usage_limit"
                                 type="number"
                                 min="1"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                 placeholder="Kosong = tanpa batas"
                             />
                         </label>
@@ -904,49 +904,49 @@ const submitPromo = () => {
 
                     <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mulai berlaku</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Mulai berlaku</span>
                             <input
                                 v-model="promoForm.start_date"
                                 type="datetime-local"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                             <p v-if="promoForm.errors.start_date" class="mt-2 text-xs text-rose-300">{{ promoForm.errors.start_date }}</p>
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Selesai berlaku</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Selesai berlaku</span>
                             <input
                                 v-model="promoForm.end_date"
                                 type="datetime-local"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                             <p v-if="promoForm.errors.end_date" class="mt-2 text-xs text-rose-300">{{ promoForm.errors.end_date }}</p>
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Happy hour mulai</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Happy hour mulai</span>
                             <input
                                 v-model="promoForm.happy_hour_start"
                                 type="time"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Happy hour selesai</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Happy hour selesai</span>
                             <input
                                 v-model="promoForm.happy_hour_end"
                                 type="time"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
                     </section>
 
-                    <section class="rounded-3xl border border-white/10 bg-white/[0.02] p-5">
+                    <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-5">
                         <div class="flex items-center justify-between gap-3">
                             <div>
-                                <h4 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">Trigger Kondisi</h4>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <h4 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">Trigger Kondisi</h4>
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     Tambahkan rule produk, kategori, waktu, metode bayar, tier member, atau transaction threshold.
                                 </p>
                             </div>
@@ -968,13 +968,13 @@ const submitPromo = () => {
                             <div
                                 v-for="(rule, index) in promoForm.rules"
                                 :key="`${rule.trigger}-${index}`"
-                                class="grid gap-3 rounded-2xl border border-white/10 bg-slate-950/70 p-4 lg:grid-cols-[0.9fr_1fr_1fr_auto]"
+                                class="grid gap-3 rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-4 lg:grid-cols-[0.9fr_1fr_1fr_auto]"
                             >
                                 <label class="block">
-                                    <span class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Trigger</span>
+                                    <span class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Trigger</span>
                                     <select
                                         v-model="rule.trigger"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option
                                             v-for="option in triggerOptions"
@@ -990,10 +990,10 @@ const submitPromo = () => {
                                     v-if="['product', 'category', 'member_tier'].includes(rule.trigger)"
                                     class="block"
                                 >
-                                    <span class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Referensi</span>
+                                    <span class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Referensi</span>
                                     <select
                                         v-model="rule.reference_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option value="">Pilih referensi</option>
                                         <option
@@ -1014,10 +1014,10 @@ const submitPromo = () => {
                                     v-else-if="rule.trigger === 'payment_method'"
                                     class="block"
                                 >
-                                    <span class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Metode bayar</span>
+                                    <span class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Metode bayar</span>
                                     <select
                                         v-model="rule.reference_value"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option value="">Pilih metode bayar</option>
                                         <option
@@ -1034,10 +1034,10 @@ const submitPromo = () => {
                                     v-else-if="rule.trigger === 'time'"
                                     class="block"
                                 >
-                                    <span class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Hari aktif</span>
+                                    <span class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Hari aktif</span>
                                     <select
                                         v-model="rule.reference_value"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option value="">Pilih hari atau pakai happy hour saja</option>
                                         <option
@@ -1050,12 +1050,12 @@ const submitPromo = () => {
                                     </select>
                                 </label>
 
-                                <div v-else class="rounded-2xl border border-dashed border-white/10 bg-slate-900/60 px-4 py-3 text-sm text-slate-400">
+                                <div v-else class="rounded-2xl border border-dashed border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/60 px-4 py-3 text-sm text-stone-500 dark:text-slate-400">
                                     {{ getRuleDescription(rule) }}
                                 </div>
 
                                 <div class="flex items-end justify-between gap-3">
-                                    <div class="text-xs text-slate-500">
+                                    <div class="text-xs text-stone-400 dark:text-slate-500">
                                         {{ getRuleLabel(rule.trigger) }}
                                     </div>
                                     <button
@@ -1068,32 +1068,32 @@ const submitPromo = () => {
                                 </div>
                             </div>
 
-                            <div v-if="!promoForm.rules.length" class="rounded-2xl border border-dashed border-white/10 px-4 py-6 text-center text-sm text-slate-500">
+                            <div v-if="!promoForm.rules.length" class="rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-4 py-6 text-center text-sm text-stone-400 dark:text-slate-500">
                                 Belum ada trigger tambahan. Promo tetap bisa disimpan dengan periode dan threshold dasar saja.
                             </div>
                         </div>
                     </section>
 
                     <section class="grid gap-4 md:grid-cols-2">
-                        <label class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+                        <label class="flex items-start gap-3 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-4">
                             <input
                                 v-model="promoForm.can_stack"
                                 type="checkbox"
-                                class="mt-1 rounded border-white/20 bg-slate-900 text-orange-500 focus:ring-orange-400"
+                                class="mt-1 rounded border-stone-200 dark:border-white/20 bg-white dark:bg-slate-900 text-orange-500 focus:ring-orange-400"
                             />
                             <span>
-                                <span class="block text-sm font-semibold text-white">Izinkan stacking</span>
-                                <span class="mt-1 block text-xs text-slate-500">
+                                <span class="block text-sm font-semibold text-stone-900 dark:text-white">Izinkan stacking</span>
+                                <span class="mt-1 block text-xs text-stone-400 dark:text-slate-500">
                                     Jika aktif, promo ini bisa digabung dengan promo eligible lain. Jika nonaktif, sistem pilih promo bernilai terbesar.
                                 </span>
                             </span>
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Status promo</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Status promo</span>
                             <select
                                 v-model="promoForm.status"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option
                                     v-for="option in statusOptions"
@@ -1106,10 +1106,10 @@ const submitPromo = () => {
                         </label>
                     </section>
 
-                    <div class="flex flex-wrap items-center justify-end gap-3 border-t border-white/10 pt-5">
+                    <div class="flex flex-wrap items-center justify-end gap-3 border-t border-stone-200 dark:border-white/10 pt-5">
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/5"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-stone-100 dark:bg-white/5"
                             @click="closeModal"
                         >
                             Batal

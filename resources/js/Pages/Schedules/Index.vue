@@ -169,7 +169,7 @@ const summaryCards = computed(() => [
         label: 'Shift Hari Ini',
         value: props.summary.today,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: CalendarDays,
     },
     {
@@ -480,10 +480,10 @@ const submitTakeover = () => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        Jadwal Shift Karyawan
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+Jadwal Shift Karyawan
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Assign shift per hari, bulk assign 1 minggu, dan lihat jadwal aktif karyawan per outlet.
                     </p>
                 </div>
@@ -499,41 +499,41 @@ const submitTakeover = () => {
             </div>
 
             <!-- Tab Navigation Global -->
-            <div class="flex border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
+            <div class="flex border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
                 <Link
                     :href="route('shifts.index')"
                     class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Shift Kasir (Laci Kas)
                 </Link>
                 <Link
                     :href="route('attendance.index')"
                     class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('attendance.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('attendance.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Absensi Karyawan
                 </Link>
                 <Link
                     :href="route('schedules.index')"
                     class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('schedules.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('schedules.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Jadwal Shift Kerja
                 </Link>
             </div>
 
             <!-- Panel Set Jam Shift Sederhana -->
-            <article v-if="canManage" class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <article v-if="canManage" class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                 <div class="flex items-center gap-3">
-                    <div class="rounded-2xl border border-white/10 bg-slate-950/50 p-3 text-orange-200">
+                    <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-3 text-orange-200">
                         <Clock3 class="h-5 w-5" />
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Pengaturan Waktu Kerja Shift
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Atur jam mulai dan jam selesai untuk shift pagi dan shift malam secara instan.
                         </p>
                     </div>
@@ -542,34 +542,34 @@ const submitTakeover = () => {
                 <form class="mt-5 flex flex-wrap items-end gap-4" @submit.prevent="submitUpdateShiftTimes">
                     <div class="flex flex-wrap gap-4 flex-1">
                         <!-- Shift Pagi -->
-                        <div class="flex gap-2 items-center rounded-2xl border border-white/10 bg-white/[0.02] p-3 flex-1 min-w-[240px]">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider w-20">Shift Pagi</span>
+                        <div class="flex gap-2 items-center rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-3 flex-1 min-w-[240px]">
+                            <span class="text-xs font-bold text-stone-500 dark:text-slate-400 uppercase tracking-wider w-20">Shift Pagi</span>
                             <input
                                 v-model="shiftTimesForm.pagi_start"
                                 type="time"
-                                class="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-xs text-white focus:border-orange-400 focus:outline-none"
+                                class="rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none"
                             />
-                            <span class="text-slate-500 text-xs">s/d</span>
+                            <span class="text-stone-400 dark:text-slate-500 text-xs">s/d</span>
                             <input
                                 v-model="shiftTimesForm.pagi_end"
                                 type="time"
-                                class="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-xs text-white focus:border-orange-400 focus:outline-none"
+                                class="rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none"
                             />
                         </div>
 
                         <!-- Shift Malam -->
-                        <div class="flex gap-2 items-center rounded-2xl border border-white/10 bg-white/[0.02] p-3 flex-1 min-w-[240px]">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider w-20">Shift Malam</span>
+                        <div class="flex gap-2 items-center rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-3 flex-1 min-w-[240px]">
+                            <span class="text-xs font-bold text-stone-500 dark:text-slate-400 uppercase tracking-wider w-20">Shift Malam</span>
                             <input
                                 v-model="shiftTimesForm.malam_start"
                                 type="time"
-                                class="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-xs text-white focus:border-orange-400 focus:outline-none"
+                                class="rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none"
                             />
-                            <span class="text-slate-500 text-xs">s/d</span>
+                            <span class="text-stone-400 dark:text-slate-500 text-xs">s/d</span>
                             <input
                                 v-model="shiftTimesForm.malam_end"
                                 type="time"
-                                class="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-xs text-white focus:border-orange-400 focus:outline-none"
+                                class="rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none"
                             />
                         </div>
                     </div>
@@ -594,37 +594,37 @@ const submitTakeover = () => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-3xl font-black" :class="card.tone">
                                 {{ card.value }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3 text-white">
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3 text-stone-900 dark:text-white">
                             <component :is="card.icon" class="h-5 w-5" />
                         </div>
                     </div>
                 </article>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div class="grid flex-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Minggu mulai</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Minggu mulai</span>
                             <input
                                 v-model="weekStart"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Filter Karyawan</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Filter Karyawan</span>
                             <select
                                 v-model="employeeFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua karyawan</option>
                                 <option
@@ -638,10 +638,10 @@ const submitTakeover = () => {
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                             <select
                                 v-model="outletFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option v-if="canChooseOutlet" value="">Semua outlet</option>
                                 <option
@@ -658,7 +658,7 @@ const submitTakeover = () => {
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/5"
+                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
                             @click="shiftWeek(-1)"
                         >
                             <ChevronLeft class="h-4 w-4" />
@@ -666,7 +666,7 @@ const submitTakeover = () => {
                         </button>
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/5"
+                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
                             @click="shiftWeek(1)"
                         >
                             Minggu Berikutnya
@@ -674,7 +674,7 @@ const submitTakeover = () => {
                         </button>
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/5"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
                             @click="clearFilters"
                         >
                             Reset
@@ -689,14 +689,14 @@ const submitTakeover = () => {
                     </div>
                 </div>
 
-                <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-400">
-                    <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
+                <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-stone-500 dark:text-slate-400">
+                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
                         Minggu aktif: {{ weekRangeLabel }}
                     </span>
-                    <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
+                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
                         Total template shift: {{ shiftTemplates.length }}
                     </span>
-                    <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
+                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
                         Karyawan tampil: {{ visibleEmployees.length }}
                     </span>
                 </div>
@@ -704,13 +704,13 @@ const submitTakeover = () => {
 
             <section class="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
                 <div class="space-y-5">
-                    <article class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                         <div class="flex items-start justify-between gap-4">
                             <div>
-                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                                     Assign Harian
                                 </h3>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     Pilih outlet, karyawan, tanggal, lalu tempelkan template shift untuk satu hari.
                                 </p>
                             </div>
@@ -722,10 +722,10 @@ const submitTakeover = () => {
                         <form class="mt-5 space-y-4" @submit.prevent="submitDaily">
                             <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                                     <select
                                         v-model="dailyForm.outlet_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option
                                             v-for="outlet in availableFormOutlets"
@@ -739,10 +739,10 @@ const submitTakeover = () => {
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Karyawan</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Karyawan</span>
                                     <select
                                         v-model="dailyForm.user_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option value="">Pilih karyawan</option>
                                         <option
@@ -757,20 +757,20 @@ const submitTakeover = () => {
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Tanggal</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Tanggal</span>
                                     <input
                                         v-model="dailyForm.schedule_date"
                                         type="date"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     />
                                     <p v-if="dailyForm.errors.schedule_date" class="mt-2 text-xs text-rose-300">{{ dailyForm.errors.schedule_date }}</p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Template Shift</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Template Shift</span>
                                     <select
                                         v-model="dailyForm.shift_template_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option value="">Pilih template</option>
                                         <option
@@ -797,13 +797,13 @@ const submitTakeover = () => {
                         </form>
                     </article>
 
-                    <article class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                         <div class="flex items-start justify-between gap-4">
                             <div>
-                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                                     Bulk Assign Mingguan
                                 </h3>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     Pilih satu karyawan lalu isi template untuk 7 hari dalam minggu aktif.
                                 </p>
                             </div>
@@ -815,10 +815,10 @@ const submitTakeover = () => {
                         <form class="mt-5 space-y-4" @submit.prevent="submitWeekly">
                             <div class="grid gap-4 md:grid-cols-3">
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                                     <select
                                         v-model="weeklyForm.outlet_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option
                                             v-for="outlet in availableFormOutlets"
@@ -832,10 +832,10 @@ const submitTakeover = () => {
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Karyawan</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Karyawan</span>
                                     <select
                                         v-model="weeklyForm.user_id"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option value="">Pilih karyawan</option>
                                         <option
@@ -850,11 +850,11 @@ const submitTakeover = () => {
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Minggu Mulai</span>
+                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Minggu Mulai</span>
                                     <input
                                         v-model="weeklyForm.week_start"
                                         type="date"
-                                        class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     />
                                     <p v-if="weeklyForm.errors.week_start" class="mt-2 text-xs text-rose-300">{{ weeklyForm.errors.week_start }}</p>
                                 </label>
@@ -864,17 +864,17 @@ const submitTakeover = () => {
                                 <label
                                     v-for="day in assignmentDays"
                                     :key="day.date"
-                                    class="block rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+                                    class="block rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] p-4"
                                 >
-                                    <span class="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                                    <span class="block text-xs font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                         {{ day.label }}
                                     </span>
-                                    <span class="mt-1 block text-sm font-bold text-white">
+                                    <span class="mt-1 block text-sm font-bold text-stone-900 dark:text-white">
                                         {{ day.shortDate }}
                                     </span>
                                     <select
                                         v-model="weeklyForm.days[day.index]"
-                                        class="mt-3 w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="mt-3 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                     >
                                         <option :value="null">Libur / Kosong</option>
                                         <option
@@ -906,22 +906,22 @@ const submitTakeover = () => {
                 </div>
 
                 <div class="space-y-5">
-                    <article class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                         <div class="flex items-center gap-3">
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/50 p-3 text-orange-200">
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-3 text-orange-200">
                                 <Clock3 class="h-5 w-5" />
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                                     Jadwal Hari Ini
                                 </h3>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     {{ formatDate(new Date().toISOString().slice(0, 10)) }}
                                 </p>
                             </div>
                         </div>
 
-                        <div v-if="!visibleTodaySchedules.length" class="mt-5 rounded-2xl border border-dashed border-white/10 px-4 py-8 text-center text-sm text-slate-400">
+                        <div v-if="!visibleTodaySchedules.length" class="mt-5 rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-4 py-8 text-center text-sm text-stone-500 dark:text-slate-400">
                             Belum ada jadwal aktif untuk filter hari ini.
                         </div>
 
@@ -929,12 +929,12 @@ const submitTakeover = () => {
                             <article
                                 v-for="schedule in visibleTodaySchedules"
                                 :key="schedule.id"
-                                class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4"
+                                class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-4"
                             >
                                 <div class="flex flex-wrap items-start justify-between gap-3">
                                     <div>
-                                        <p class="text-sm font-black text-white">{{ schedule.user?.name || '-' }}</p>
-                                        <p class="mt-1 text-xs text-slate-500">
+                                        <p class="text-sm font-black text-stone-900 dark:text-white">{{ schedule.user?.name || '-' }}</p>
+                                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                             {{ schedule.user?.outlet?.name || 'Tanpa outlet' }} • {{ schedule.user?.role?.name || '-' }}
                                         </p>
                                     </div>
@@ -945,29 +945,29 @@ const submitTakeover = () => {
                                         {{ getShiftTemplate(schedule)?.name || 'Tanpa template' }}
                                     </span>
                                 </div>
-                                <p class="mt-3 text-sm text-slate-300">
+                                <p class="mt-3 text-sm text-stone-600 dark:text-slate-300">
                                     {{ formatTimeRange(getShiftTemplate(schedule)) }}
                                 </p>
                             </article>
                         </div>
                     </article>
 
-                    <article class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                         <div class="flex items-center gap-3">
-                            <div class="rounded-2xl border border-white/10 bg-slate-950/50 p-3 text-sky-200">
+                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-3 text-sky-200">
                                 <Layers3 class="h-5 w-5" />
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                                     Template Shift Aktif
                                 </h3>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                     Template dipakai juga untuk fondasi menu buka/tutup shift kasir berikutnya.
                                 </p>
                             </div>
                         </div>
 
-                        <div v-if="!shiftTemplates.length" class="mt-5 rounded-2xl border border-dashed border-white/10 px-4 py-8 text-center text-sm text-slate-400">
+                        <div v-if="!shiftTemplates.length" class="mt-5 rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-4 py-8 text-center text-sm text-stone-500 dark:text-slate-400">
                             Belum ada template shift aktif pada outlet ini.
                         </div>
 
@@ -975,12 +975,12 @@ const submitTakeover = () => {
                             <article
                                 v-for="template in shiftTemplates.filter((item) => !outletFilter || item.outlet_id === outletFilter)"
                                 :key="template.id"
-                                class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4"
+                                class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-4"
                             >
                                 <div class="flex items-center justify-between gap-3">
                                     <div>
-                                        <p class="text-sm font-black text-white">{{ template.name }}</p>
-                                        <p class="mt-1 text-xs text-slate-500">
+                                        <p class="text-sm font-black text-stone-900 dark:text-white">{{ template.name }}</p>
+                                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                             {{ referenceData.outlets.find((outlet) => outlet.id === template.outlet_id)?.name || 'Outlet' }}
                                         </p>
                                     </div>
@@ -991,7 +991,7 @@ const submitTakeover = () => {
                                         Aktif
                                     </span>
                                 </div>
-                                <p class="mt-3 text-sm text-slate-300">
+                                <p class="mt-3 text-sm text-stone-600 dark:text-slate-300">
                                     {{ formatTimeRange(template) }}
                                 </p>
                             </article>
@@ -1000,22 +1000,22 @@ const submitTakeover = () => {
                 </div>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 px-5 py-4">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Grid Jadwal Mingguan
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Minggu {{ weekRangeLabel }}.
                         </p>
                     </div>
-                    <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400">
                         {{ visibleEmployees.length }} karyawan
                     </span>
                 </div>
 
-                <div v-if="!visibleEmployees.length" class="px-5 py-10 text-center text-sm text-slate-400">
+                <div v-if="!visibleEmployees.length" class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                     Tidak ada karyawan aktif untuk filter outlet / karyawan yang dipilih.
                 </div>
 
@@ -1023,16 +1023,16 @@ const submitTakeover = () => {
                     <table class="min-w-full divide-y divide-white/10">
                         <thead class="bg-white/[0.03]">
                             <tr>
-                                <th class="px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                                <th class="px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500">
                                     Karyawan
                                 </th>
                                 <th
                                     v-for="day in gridDays"
                                     :key="day.date"
-                                    class="min-w-[160px] px-4 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500"
+                                    class="min-w-[160px] px-4 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
                                 >
                                     <div>{{ day.label }}</div>
-                                    <div class="mt-1 text-slate-400">{{ day.shortDate }}</div>
+                                    <div class="mt-1 text-stone-500 dark:text-slate-400">{{ day.shortDate }}</div>
                                 </th>
                             </tr>
                         </thead>
@@ -1043,8 +1043,8 @@ const submitTakeover = () => {
                                 class="align-top"
                             >
                                 <td class="px-5 py-4">
-                                    <p class="text-sm font-black text-white">{{ employee.name }}</p>
-                                    <p class="mt-1 text-xs text-slate-500">
+                                    <p class="text-sm font-black text-stone-900 dark:text-white">{{ employee.name }}</p>
+                                    <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                         {{ employee.outlet?.name || 'Tanpa outlet' }} • {{ employee.role?.name || '-' }}
                                     </p>
                                 </td>
@@ -1067,7 +1067,7 @@ const submitTakeover = () => {
                                         <button
                                             v-if="canManage"
                                             type="button"
-                                            class="mt-2 inline-flex items-center gap-1 w-full justify-center rounded-xl bg-white/10 hover:bg-white/20 px-2 py-1 text-[10px] font-bold text-white transition duration-150"
+                                            class="mt-2 inline-flex items-center gap-1 w-full justify-center rounded-xl bg-stone-200 dark:bg-white/10 hover:bg-stone-200 dark:bg-white/20 px-2 py-1 text-[10px] font-bold text-stone-900 dark:text-white transition duration-150"
                                             @click="openTakeoverModal(getScheduleForCell(employee.id, day.date))"
                                         >
                                             <ArrowLeftRight class="h-3 w-3" />
@@ -1076,7 +1076,7 @@ const submitTakeover = () => {
                                     </div>
                                     <div
                                         v-else
-                                        class="rounded-2xl border border-dashed border-white/10 px-3 py-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"
+                                        class="rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-3 py-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
                                     >
                                         Libur / Belum diassign
                                     </div>
@@ -1091,22 +1091,22 @@ const submitTakeover = () => {
         <!-- Modal Takeover Shift -->
         <div
             v-if="isTakeoverOpen && activeTakeoverSchedule"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
         >
-            <div class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-white/10 bg-slate-950 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)]">
-                <div class="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
+            <div class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)]">
+                <div class="flex items-start justify-between gap-4 border-b border-stone-200 dark:border-white/10 pb-4">
                     <div>
-                        <h3 class="text-lg font-black text-white flex items-center gap-2">
+                        <h3 class="text-lg font-black text-stone-900 dark:text-white flex items-center gap-2">
                             <ArrowLeftRight class="h-5 w-5 text-orange-400" />
                             Ambil Alih Shift Kerja
                         </h3>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Pindahkan tanggung jawab shift hari ini ke karyawan pengganti.
                         </p>
                     </div>
                     <button
                         type="button"
-                        class="rounded-xl border border-white/10 p-1.5 text-slate-400 transition hover:border-white/20 hover:text-white"
+                        class="rounded-xl border border-stone-200 dark:border-white/10 p-1.5 text-stone-500 dark:text-slate-400 transition hover:border-stone-200 dark:border-white/20 hover:text-stone-900 dark:text-white"
                         @click="isTakeoverOpen = false"
                     >
                         <X class="h-4 w-4" />
@@ -1115,19 +1115,19 @@ const submitTakeover = () => {
 
                 <div class="mt-4 space-y-4">
                     <!-- Info Shift Asal -->
-                    <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-4 space-y-2">
+                    <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-4 space-y-2">
                         <div>
-                            <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Karyawan Terjadwal</span>
-                            <p class="text-sm font-black text-white">{{ activeTakeoverSchedule?.user?.name }}</p>
+                            <span class="text-[10px] uppercase font-bold text-stone-400 dark:text-slate-500 tracking-wider">Karyawan Terjadwal</span>
+                            <p class="text-sm font-black text-stone-900 dark:text-white">{{ activeTakeoverSchedule?.user?.name }}</p>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-white/5">
+                        <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-stone-200 dark:border-white/5">
                             <div>
-                                <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Shift</span>
+                                <span class="text-[10px] uppercase font-bold text-stone-400 dark:text-slate-500 tracking-wider">Shift</span>
                                 <p class="text-xs font-bold text-orange-200">{{ activeTakeoverSchedule?.shift_template?.name || activeTakeoverSchedule?.shiftTemplate?.name }}</p>
                             </div>
                             <div>
-                                <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Tanggal</span>
-                                <p class="text-xs font-bold text-slate-300">{{ activeTakeoverSchedule ? formatDate(activeTakeoverSchedule.schedule_date) : '' }}</p>
+                                <span class="text-[10px] uppercase font-bold text-stone-400 dark:text-slate-500 tracking-wider">Tanggal</span>
+                                <p class="text-xs font-bold text-stone-600 dark:text-slate-300">{{ activeTakeoverSchedule ? formatDate(activeTakeoverSchedule.schedule_date) : '' }}</p>
                             </div>
                         </div>
                     </div>
@@ -1135,10 +1135,10 @@ const submitTakeover = () => {
                     <!-- Pilihan Karyawan Pengganti -->
                     <form @submit.prevent="submitTakeover" class="space-y-4">
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Pilih Karyawan Pengganti</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Pilih Karyawan Pengganti</span>
                             <select
                                 v-model="takeoverForm.user_id"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                 required
                             >
                                 <option value="">Pilih karyawan pengganti</option>
@@ -1152,10 +1152,10 @@ const submitTakeover = () => {
                             </select>
                         </label>
 
-                        <div class="flex items-center justify-end gap-3 border-t border-white/10 pt-4">
+                        <div class="flex items-center justify-end gap-3 border-t border-stone-200 dark:border-white/10 pt-4">
                             <button
                                 type="button"
-                                class="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-slate-300 transition hover:bg-white/5"
+                                class="rounded-xl border border-stone-200 dark:border-white/10 px-4 py-2.5 text-xs font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-stone-100 dark:bg-white/5"
                                 @click="isTakeoverOpen = false"
                             >
                                 Batal

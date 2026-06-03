@@ -463,7 +463,7 @@ const resolveHistoryTone = (status: string) => {
         case 'ready':
             return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-300';
         default:
-            return 'border-slate-700/70 bg-slate-800 text-slate-300';
+            return 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300';
     }
 };
 
@@ -538,7 +538,7 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                     : 'border-sky-500/25',
                 cardSurface: isWarning
                     ? 'border-amber-500/20 bg-amber-500/[0.04]'
-                    : 'border-slate-800/90 bg-slate-950/78',
+                    : 'border-stone-200 dark:border-slate-800/90 bg-white dark:bg-slate-950/78',
                 orderNotes: order.notes,
                 items: order.items,
                 actionLabel: 'Mulai Masak',
@@ -551,7 +551,7 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                 sourceBadgeClass:
                     sourceLabel === 'QR Meja'
                         ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
-                        : 'border-slate-700/70 bg-slate-800 text-slate-300',
+                        : 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300',
                 estimatedMinutes:
                     order.estimatedMinutes ||
                     props.boardConfig.defaultEstimatedMinutes,
@@ -585,7 +585,7 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                     ? 'border-rose-500/25 bg-rose-500/[0.04]'
                     : isWarning
                       ? 'border-amber-500/20 bg-amber-500/[0.04]'
-                      : 'border-slate-800/90 bg-slate-950/78',
+                      : 'border-stone-200 dark:border-slate-800/90 bg-white dark:bg-slate-950/78',
                 orderNotes: order.notes,
                 items: order.items,
                 actionLabel: 'Selesai',
@@ -603,7 +603,7 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                 sourceBadgeClass:
                     sourceLabel === 'QR Meja'
                         ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
-                        : 'border-slate-700/70 bg-slate-800 text-slate-300',
+                        : 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300',
                 estimatedMinutes:
                     order.estimatedMinutes ||
                     props.boardConfig.defaultEstimatedMinutes,
@@ -640,7 +640,7 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
             sourceBadgeClass:
                 sourceLabel === 'QR Meja'
                     ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
-                    : 'border-slate-700/70 bg-slate-800 text-slate-300',
+                    : 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300',
             estimatedMinutes:
                 order.estimatedMinutes ||
                 props.boardConfig.defaultEstimatedMinutes,
@@ -718,7 +718,7 @@ const boardStats = computed(() => [
         hint: 'Semua lane',
         icon: ScanSearch,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
     },
     {
         label: 'Order Masuk',
@@ -838,12 +838,12 @@ const updateEstimate = (orderId: string, minutes: number) => {
                         Live Kitchen Board
                     </div>
                     <h2
-                        class="font-display text-2xl font-black tracking-tight text-white lg:text-3xl"
+                        class="font-display text-2xl font-black tracking-tight text-stone-900 dark:text-white lg:text-3xl"
                     >
                         Kitchen Display System
                     </h2>
                     <p
-                        class="mt-1 max-w-2xl text-xs leading-relaxed text-slate-400 lg:text-sm"
+                        class="mt-1 max-w-2xl text-xs leading-relaxed text-stone-500 dark:text-slate-400 lg:text-sm"
                     >
                         Monitor tiket masuk, masak, dan handoff secara
                         real-time.
@@ -851,18 +851,18 @@ const updateEstimate = (orderId: string, minutes: number) => {
                 </div>
 
                 <!-- Kontrol Volume Lokal -->
-                <div class="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-950/45 p-3 md:self-end">
+                <div class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/45 p-3 md:self-end">
                     <button
                         type="button"
                         @click="toggleLocalMute"
-                        class="rounded-xl border border-slate-800 bg-slate-900 p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition"
+                        class="rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:text-white transition"
                         title="Toggle Mute Dapur"
                     >
                         <VolumeX v-if="localMute || localVolume === 0" class="h-4.5 w-4.5 text-rose-400 animate-pulse" />
                         <Volume2 v-else class="h-4.5 w-4.5 text-fuchsia-400" />
                     </button>
                     <div class="flex flex-col gap-1 w-28 md:w-36">
-                        <span class="text-[9px] font-bold uppercase tracking-wider text-slate-500">
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                             Volume Lokal ({{ localMute ? 'Muted' : Math.round(localVolume * 100) + '%' }})
                         </span>
                         <input
@@ -872,7 +872,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                             step="0.1"
                             :value="localMute ? 0 : localVolume"
                             @input="handleVolumeChange"
-                            class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                            class="w-full h-1 bg-stone-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
                         />
                     </div>
                 </div>
@@ -891,8 +891,9 @@ const updateEstimate = (orderId: string, minutes: number) => {
                         <VolumeX class="h-5 w-5 text-amber-400 animate-bounce" />
                     </div>
                     <div>
-                        <h4 class="text-sm font-bold text-white">Notifikasi Suara Terblokir Browser</h4>
-                        <p class="text-xs text-slate-400 mt-0.5">
+                        <h4 class="text-sm font-bold text-stone-900 dark:text-stone-900 dark:text-white">
+Notifikasi Suara Terblokir Browser</h4>
+                        <p class="text-xs text-stone-500 dark:text-slate-400 mt-0.5">
                             Silakan klik area ini untuk mengaktifkan notifikasi suara bel dan pembacaan pesanan secara otomatis.
                         </p>
                     </div>
@@ -919,14 +920,14 @@ const updateEstimate = (orderId: string, minutes: number) => {
             </div>
 
             <section
-                class="rounded-[22px] border border-slate-800/80 bg-slate-900/90 p-3 shadow-xl shadow-slate-950/15"
+                class="rounded-[22px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/90 p-3 shadow-xl shadow-slate-950/15"
             >
                 <div
                     class="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between"
                 >
                     <div class="space-y-3">
                         <div
-                            class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500"
+                            class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500"
                         >
                             <span
                                 class="bg-emerald-500/8 rounded-full border border-emerald-500/20 px-3 py-1 text-emerald-300"
@@ -934,7 +935,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                 Sinkronisasi Aktif
                             </span>
                             <span
-                                class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1"
+                                class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 px-3 py-1"
                             >
                                 Waiting Alert
                                 {{
@@ -945,7 +946,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                 Menit
                             </span>
                             <span
-                                class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1"
+                                class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 px-3 py-1"
                             >
                                 Cooking Warning
                                 {{
@@ -959,12 +960,12 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
                         <div class="space-y-2">
                             <div
-                                class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500"
+                                class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500"
                             >
-                                <span class="text-slate-300 font-bold">
+                                <span class="text-stone-600 dark:text-slate-300 font-bold">
                                     Filter Kategori Menu
                                 </span>
-                                <span class="text-slate-500">
+                                <span class="text-stone-400 dark:text-slate-500">
                                     Tampilkan tiket berdasarkan kategori menu
                                 </span>
                             </div>
@@ -976,7 +977,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                         'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                         selectedCategoryId === 'all'
                                             ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
-                                            : 'border-slate-700/70 bg-slate-950/60 text-slate-400 hover:border-slate-600 hover:text-slate-200',
+                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:text-slate-200',
                                     ]"
                                 >
                                     Semua Kategori
@@ -990,7 +991,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                         'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                         selectedCategoryId === category.id
                                             ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
-                                            : 'border-slate-700/70 bg-slate-950/60 text-slate-400 hover:border-slate-600 hover:text-slate-200',
+                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:text-slate-200',
                                     ]"
                                 >
                                     {{ category.name }}
@@ -1012,7 +1013,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                         >
                             <div class="mb-1 flex items-center justify-between">
                                 <span
-                                    class="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+                                    class="text-[9px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
                                     >{{ stat.label }}</span
                                 >
                                 <component
@@ -1028,7 +1029,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                             >
                                 {{ stat.value }}
                             </div>
-                            <p class="mt-0.5 text-[10px] text-slate-500">
+                            <p class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500">
                                 {{ stat.hint }}
                             </p>
                         </div>
@@ -1044,7 +1045,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                 >
                     <div
                         :class="[
-                            'relative overflow-hidden rounded-[22px] border bg-slate-900/95 p-4 shadow-xl shadow-slate-950/15',
+                            'relative overflow-hidden rounded-[22px] border bg-stone-50 dark:bg-slate-900/95 p-4 shadow-xl shadow-slate-950/15',
                             lane.border,
                         ]"
                     >
@@ -1060,7 +1061,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                         >
                             <div class="flex items-center gap-3">
                                 <div
-                                    class="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] shadow-inner shadow-slate-950/30"
+                                    class="flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.04] shadow-inner shadow-slate-950/30"
                                 >
                                     <component
                                         :is="lane.icon"
@@ -1068,10 +1069,10 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                     />
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-black text-white">
+                                    <h3 class="text-lg font-black text-stone-900 dark:text-white">
                                         {{ lane.title }}
                                     </h3>
-                                    <p class="text-[11px] text-slate-400">
+                                    <p class="text-[11px] text-stone-500 dark:text-slate-400">
                                         {{ lane.subtitle }}
                                     </p>
                                 </div>
@@ -1096,7 +1097,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                     </div>
 
                     <div
-                        class="bg-slate-900/88 min-h-0 flex-1 overflow-hidden rounded-[22px] border border-slate-800/80 p-3 shadow-2xl shadow-slate-950/20"
+                        class="bg-stone-50 dark:bg-slate-900/88 min-h-0 flex-1 overflow-hidden rounded-[22px] border border-stone-200 dark:border-slate-800/80 p-3 shadow-2xl shadow-slate-950/20"
                     >
                         <div class="flex h-full min-h-0 flex-col">
                             <div
@@ -1115,26 +1116,26 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                     >
                                         <div class="min-w-0">
                                             <p
-                                                class="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500"
+                                                class="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
                                             >
                                                 {{ ticket.orderNumber }}
                                             </p>
                                             <h4
-                                                class="mt-1 truncate text-xl font-black text-white"
+                                                class="mt-1 truncate text-xl font-black text-stone-900 dark:text-white"
                                             >
                                                 {{ ticket.tableLabel }}
                                             </h4>
                                             <p
-                                                class="mt-1 text-sm text-slate-400"
+                                                class="mt-1 text-sm text-stone-500 dark:text-slate-400"
                                             >
                                                 {{ ticket.customerLabel }}
                                             </p>
                                         </div>
                                         <div
-                                            class="rounded-2xl border border-slate-800 bg-slate-900/85 px-3 py-2 text-right"
+                                            class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/85 px-3 py-2 text-right"
                                         >
                                             <p
-                                                class="text-[10px] uppercase tracking-[0.18em] text-slate-500"
+                                                class="text-[10px] uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
                                             >
                                                 {{ ticket.timerTitle }}
                                             </p>
@@ -1173,27 +1174,27 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                     </div>
 
                                     <div
-                                        class="space-y-2 rounded-2xl border border-slate-800/80 bg-slate-900/65 p-3"
+                                        class="space-y-2 rounded-2xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/65 p-3"
                                     >
                                         <div
                                             v-for="item in ticket.items"
                                             :key="item.id"
-                                            class="flex items-start gap-3 border-b border-slate-800/70 pb-2 last:border-b-0 last:pb-0"
+                                            class="flex items-start gap-3 border-b border-stone-200 dark:border-slate-800/70 pb-2 last:border-b-0 last:pb-0"
                                         >
                                             <span
-                                                class="mt-0.5 inline-flex min-w-10 justify-center rounded-xl border border-slate-700/70 bg-slate-950 px-2 py-1 text-sm font-black text-white"
+                                                class="mt-0.5 inline-flex min-w-10 justify-center rounded-xl border border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-950 px-2 py-1 text-sm font-black text-stone-900 dark:text-white"
                                             >
                                                 x{{ item.quantity }}
                                             </span>
                                             <div class="min-w-0 flex-1">
                                                 <p
-                                                    class="text-base font-bold leading-tight text-slate-100"
+                                                    class="text-base font-bold leading-tight text-stone-900 dark:text-slate-100"
                                                 >
                                                     {{ item.name }}
                                                 </p>
                                                 <p
                                                     v-if="item.notes"
-                                                    class="mt-1 text-[11px] italic leading-relaxed text-slate-500"
+                                                    class="mt-1 text-[11px] italic leading-relaxed text-stone-400 dark:text-slate-500"
                                                 >
                                                     {{ item.notes }}
                                                 </p>
@@ -1222,7 +1223,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                         >
                                             <div>
                                                 <p
-                                                    class="text-[11px] text-slate-400"
+                                                    class="text-[11px] text-stone-500 dark:text-slate-400"
                                                 >
                                                     Estimasi waktu masak per
                                                     order.
@@ -1248,7 +1249,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                                         ticket.estimatedMinutes ===
                                                         minutes
                                                             ? 'border-violet-400/30 bg-violet-500/14 text-violet-200'
-                                                            : 'border-slate-700/70 bg-slate-950/60 text-slate-400 hover:border-violet-400/20 hover:text-slate-200',
+                                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-violet-400/20 hover:text-stone-800 dark:text-slate-200',
                                                     ]"
                                                 >
                                                     {{ minutes }}m
@@ -1262,7 +1263,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                                         min="1"
                                                         max="180"
                                                         v-model.number="customEstimates[ticket.id]"
-                                                        class="w-16 rounded-full border border-slate-700 bg-slate-950/60 px-2.5 py-1 text-[11px] font-bold text-slate-300 placeholder:text-slate-600 focus:border-violet-500/50 focus:outline-none transition disabled:opacity-50"
+                                                        class="w-16 rounded-full border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/60 px-2.5 py-1 text-[11px] font-bold text-stone-600 dark:text-slate-300 placeholder:text-slate-600 focus:border-violet-500/50 focus:outline-none transition disabled:opacity-50"
                                                         :disabled="submittingOrderId === ticket.id"
                                                         @keydown.enter="submitCustomEstimate(ticket.id)"
                                                     />
@@ -1285,7 +1286,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                             ticket.actionValue
                                         "
                                         type="button"
-                                        class="mt-3 flex w-full items-center justify-center rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-bold text-white transition duration-150 hover:border-orange-500/40 hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+                                        class="mt-3 flex w-full items-center justify-center rounded-2xl border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white transition duration-150 hover:border-orange-500/40 hover:bg-white dark:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
                                         :disabled="
                                             submittingOrderId === ticket.id
                                         "
@@ -1310,12 +1311,12 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
                                 <div
                                     v-if="lane.tickets.length === 0"
-                                    class="rounded-[22px] border border-dashed border-slate-800 bg-slate-950/50 px-5 py-12 text-center"
+                                    class="rounded-[22px] border border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 px-5 py-12 text-center"
                                 >
-                                    <p class="text-sm font-bold text-slate-300">
+                                    <p class="text-sm font-bold text-stone-600 dark:text-slate-300">
                                         Lane kosong.
                                     </p>
-                                    <p class="mt-2 text-xs text-slate-500">
+                                    <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
                                         Tidak ada tiket aktif pada status ini.
                                     </p>
                                 </div>
@@ -1326,21 +1327,21 @@ const updateEstimate = (orderId: string, minutes: number) => {
             </section>
 
             <section
-                class="rounded-[22px] border border-slate-800/80 bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                class="rounded-[22px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
             >
                 <div
                     class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
                 >
                     <div>
-                        <h3 class="mt-1 text-lg font-black text-white">
-                            Riwayat Order Dapur
+                        <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-stone-900 dark:text-white">
+Riwayat Order Dapur
                         </h3>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Log transisi terbaru untuk flow kitchen dan bar.
                         </p>
                     </div>
                     <span
-                        class="rounded-full border border-slate-700/70 bg-slate-950/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300"
+                        class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300"
                     >
                         {{ props.history.length }} log terbaru
                     </span>
@@ -1348,7 +1349,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
                 <div
                     v-if="props.history.length === 0"
-                    class="rounded-2xl border border-dashed border-slate-800 px-4 py-14 text-center text-xs text-slate-500"
+                    class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 px-4 py-14 text-center text-xs text-stone-400 dark:text-slate-500"
                 >
                     Riwayat dapur belum ada. Log akan muncul setelah ada
                     transisi status baru.
@@ -1358,32 +1359,32 @@ const updateEstimate = (orderId: string, minutes: number) => {
                     <article
                         v-for="entry in props.history"
                         :key="entry.id"
-                        class="rounded-2xl border border-slate-800/80 bg-slate-950/65 p-4"
+                        class="rounded-2xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/65 p-4"
                     >
                         <div
-                            class="flex flex-col gap-3 border-b border-slate-800/80 pb-3 sm:flex-row sm:items-start sm:justify-between"
+                            class="flex flex-col gap-3 border-b border-stone-200 dark:border-slate-800/80 pb-3 sm:flex-row sm:items-start sm:justify-between"
                         >
                             <div>
                                 <p
-                                    class="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+                                    class="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
                                 >
                                     {{ entry.orderNumber || 'Order' }}
                                 </p>
-                                <h4 class="mt-1 text-base font-black text-white">
+                                <h4 class="mt-1 text-base font-black text-stone-900 dark:text-white">
                                     {{ entry.tableLabel }}
                                 </h4>
-                                <p class="mt-1 text-[11px] text-slate-400">
+                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
                                     {{ entry.customerName || 'Walk-in' }}
                                 </p>
                             </div>
-                            <p class="text-[11px] text-slate-500">
+                            <p class="text-[11px] text-stone-400 dark:text-slate-500">
                                 {{ formatHistoryDateTime(entry.createdAt) }}
                             </p>
                         </div>
 
                         <div class="mt-3 flex flex-wrap items-center gap-2">
                             <span
-                                class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300"
+                                class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-600 dark:text-slate-300"
                             >
                                 {{ resolveStatusLabel(entry.fromStatus) }}
                             </span>
@@ -1396,12 +1397,12 @@ const updateEstimate = (orderId: string, minutes: number) => {
                             </span>
                         </div>
 
-                        <p class="mt-3 text-[11px] text-slate-400">
+                        <p class="mt-3 text-[11px] text-stone-500 dark:text-slate-400">
                             Oleh {{ entry.changedByName }}
                         </p>
                         <p
                             v-if="entry.notes"
-                            class="mt-1 text-[11px] leading-relaxed text-slate-500"
+                            class="mt-1 text-[11px] leading-relaxed text-stone-400 dark:text-slate-500"
                         >
                             {{ entry.notes }}
                         </p>

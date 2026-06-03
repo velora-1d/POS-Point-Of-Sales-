@@ -222,7 +222,7 @@ const summaryCards = computed(() => [
         value: props.summary.total_outlets,
         helper: `${props.summary.configured_outlets} outlet sudah punya setting notifikasi`,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: Store,
     },
     {
@@ -334,10 +334,10 @@ function submitSave() {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        Notifikasi & Alert Sistem
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-900 dark:text-white">
+Notifikasi & Alert Sistem
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-slate-400">
+                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
                         Kelola kanal notifikasi untuk alert stok menipis, kasbon overdue, dan order online baru
                         berdasarkan outlet aktif.
                     </p>
@@ -347,18 +347,18 @@ function submitSave() {
 
         <div class="space-y-5">
             <!-- Tab Navigation Keamanan & Notifikasi -->
-            <div class="flex border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-md">
+            <div class="flex border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-md">
                 <Link
                     :href="route('settings.notifications.index')"
                     class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('settings.notifications.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('settings.notifications.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Notifikasi & Alert
                 </Link>
                 <Link
                     :href="route('settings.backup-security.index')"
                     class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('settings.backup-security.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('settings.backup-security.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Backup & Keamanan
                 </Link>
@@ -380,30 +380,30 @@ function submitSave() {
                 >
                     <div class="flex items-start justify-between gap-4">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-2xl font-black" :class="card.tone">{{ card.value }}</p>
-                            <p class="mt-2 text-xs text-slate-400">{{ card.helper }}</p>
+                            <p class="mt-2 text-xs text-stone-500 dark:text-slate-400">{{ card.helper }}</p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                            <component :is="card.icon" class="h-5 w-5 text-white" />
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3">
+                            <component :is="card.icon" class="h-5 w-5 text-stone-900 dark:text-white" />
                         </div>
                     </div>
                 </article>
             </section>
 
             <div class="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
-                <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                <section class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                     <div class="grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
                         <div>
-                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 Outlet aktif
                             </label>
                             <select
                                 :value="form.outlet_id"
                                 @change="openSelectedOutlet(($event.target as HTMLSelectElement).value)"
-                                class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                             >
                                 <option
                                     v-for="outlet in outlets"
@@ -415,11 +415,11 @@ function submitSave() {
                             </select>
                         </div>
 
-                        <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
-                            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                        <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4">
+                            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 Ringkasan outlet
                             </p>
-                            <div class="mt-3 space-y-2 text-sm text-slate-200">
+                            <div class="mt-3 space-y-2 text-sm text-stone-800 dark:text-slate-200">
                                 <div class="flex items-center justify-between gap-3">
                                     <span>Status outlet</span>
                                     <span
@@ -433,13 +433,13 @@ function submitSave() {
                                 </div>
                                 <div class="flex items-center justify-between gap-3">
                                     <span>Setting tersimpan</span>
-                                    <span class="text-slate-400">
+                                    <span class="text-stone-500 dark:text-slate-400">
                                         {{ formDefaults.has_config ? 'Sudah ada override' : 'Masih default' }}
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between gap-3">
                                     <span>Channel aktif</span>
-                                    <span class="text-right text-slate-400">
+                                    <span class="text-right text-stone-500 dark:text-slate-400">
                                         {{ [
                                             ...new Set([
                                                 ...form.low_stock_channels,
@@ -454,15 +454,15 @@ function submitSave() {
                     </div>
 
                     <form class="mt-5 space-y-4" @submit.prevent="submitSave">
-                        <article class="rounded-[24px] border border-slate-800 bg-slate-950/55 p-4">
+                        <article class="rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/55 p-4">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="flex items-start gap-3">
                                     <div class="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-3">
                                         <Box class="h-5 w-5 text-amber-300" />
                                     </div>
                                     <div>
-                                        <h3 class="text-base font-black text-white">Low Stock Notifications</h3>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <h3 class="text-base font-black text-stone-900 dark:text-white">Low Stock Notifications</h3>
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             Alert saat stok produk jadi atau bahan baku turun di bawah minimum.
                                         </p>
                                     </div>
@@ -472,40 +472,40 @@ function submitSave() {
                                     <div class="relative h-6 w-11 rounded-full bg-slate-700 transition peer-checked:bg-orange-500 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-full"></div>
                                 </label>
                             </div>
-                            <div class="mt-4 border-t border-slate-800 pt-4">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                            <div class="mt-4 border-t border-stone-200 dark:border-slate-800 pt-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500">
                                     Channels
                                 </p>
                                 <div class="mt-3 grid gap-3 sm:grid-cols-3">
                                     <label
                                         v-for="channel in alertOptions.channels"
                                         :key="`low-${channel.value}`"
-                                        class="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                        class="flex items-start gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 p-3"
                                     >
                                         <input
                                             :checked="form.low_stock_channels.includes(channel.value)"
                                             type="checkbox"
-                                            class="mt-1 h-4 w-4 rounded border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                            class="mt-1 h-4 w-4 rounded border-stone-300 dark:border-slate-600 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                             @change="toggleChannel('low_stock_channels', channel.value, ($event.target as HTMLInputElement).checked)"
                                         />
                                         <div>
-                                            <p class="text-sm font-semibold text-white">{{ channel.label }}</p>
-                                            <p class="mt-1 text-xs text-slate-400">{{ channel.description }}</p>
+                                            <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ channel.label }}</p>
+                                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">{{ channel.description }}</p>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                         </article>
 
-                        <article class="rounded-[24px] border border-slate-800 bg-slate-950/55 p-4">
+                        <article class="rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/55 p-4">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="flex items-start gap-3">
                                     <div class="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-3">
                                         <Wallet class="h-5 w-5 text-rose-300" />
                                     </div>
                                     <div>
-                                        <h3 class="text-base font-black text-white">Customer Debt Due</h3>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <h3 class="text-base font-black text-stone-900 dark:text-white">Customer Debt Due</h3>
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             Karena schema aktif belum punya `due_date`, overdue kasbon dihitung dari umur order belum lunas.
                                         </p>
                                     </div>
@@ -515,9 +515,9 @@ function submitSave() {
                                     <div class="relative h-6 w-11 rounded-full bg-slate-700 transition peer-checked:bg-orange-500 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-full"></div>
                                 </label>
                             </div>
-                            <div class="mt-4 grid gap-4 border-t border-slate-800 pt-4 md:grid-cols-[180px_minmax(0,1fr)]">
+                            <div class="mt-4 grid gap-4 border-t border-stone-200 dark:border-slate-800 pt-4 md:grid-cols-[180px_minmax(0,1fr)]">
                                 <div>
-                                    <label class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                    <label class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500">
                                         Threshold overdue
                                     </label>
                                     <input
@@ -525,31 +525,31 @@ function submitSave() {
                                         type="number"
                                         min="1"
                                         max="30"
-                                        class="w-full rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-orange-500"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-500"
                                     />
                                     <p v-if="form.errors.kasbon_due_threshold_days" class="mt-2 text-xs text-rose-300">
                                         {{ form.errors.kasbon_due_threshold_days }}
                                     </p>
                                 </div>
                                 <div>
-                                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500">
                                         Channels
                                     </p>
                                     <div class="mt-3 grid gap-3 sm:grid-cols-3">
                                         <label
                                             v-for="channel in alertOptions.channels"
                                             :key="`kasbon-${channel.value}`"
-                                            class="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                            class="flex items-start gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 p-3"
                                         >
                                             <input
                                                 :checked="form.kasbon_due_channels.includes(channel.value)"
                                                 type="checkbox"
-                                                class="mt-1 h-4 w-4 rounded border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                                class="mt-1 h-4 w-4 rounded border-stone-300 dark:border-slate-600 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                                 @change="toggleChannel('kasbon_due_channels', channel.value, ($event.target as HTMLInputElement).checked)"
                                             />
                                             <div>
-                                                <p class="text-sm font-semibold text-white">{{ channel.label }}</p>
-                                                <p class="mt-1 text-xs text-slate-400">{{ channel.description }}</p>
+                                                <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ channel.label }}</p>
+                                                <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">{{ channel.description }}</p>
                                             </div>
                                         </label>
                                     </div>
@@ -557,15 +557,15 @@ function submitSave() {
                             </div>
                         </article>
 
-                        <article class="rounded-[24px] border border-slate-800 bg-slate-950/55 p-4">
+                        <article class="rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/55 p-4">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="flex items-start gap-3">
                                     <div class="rounded-2xl border border-sky-500/20 bg-sky-500/10 p-3">
                                         <ShoppingBag class="h-5 w-5 text-sky-300" />
                                     </div>
                                     <div>
-                                        <h3 class="text-base font-black text-white">New Online Order</h3>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <h3 class="text-base font-black text-stone-900 dark:text-white">New Online Order</h3>
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             Alert untuk order GoFood/GrabFood yang masuk dan masih aktif hari ini.
                                         </p>
                                     </div>
@@ -575,40 +575,41 @@ function submitSave() {
                                     <div class="relative h-6 w-11 rounded-full bg-slate-700 transition peer-checked:bg-orange-500 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-full"></div>
                                 </label>
                             </div>
-                            <div class="mt-4 border-t border-slate-800 pt-4">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                            <div class="mt-4 border-t border-stone-200 dark:border-slate-800 pt-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500">
                                     Channels
                                 </p>
                                 <div class="mt-3 grid gap-3 sm:grid-cols-3">
                                     <label
                                         v-for="channel in alertOptions.channels"
                                         :key="`online-${channel.value}`"
-                                        class="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                        class="flex items-start gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 p-3"
                                     >
                                         <input
                                             :checked="form.online_order_channels.includes(channel.value)"
                                             type="checkbox"
-                                            class="mt-1 h-4 w-4 rounded border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                            class="mt-1 h-4 w-4 rounded border-stone-300 dark:border-slate-600 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
                                             @change="toggleChannel('online_order_channels', channel.value, ($event.target as HTMLInputElement).checked)"
                                         />
                                         <div>
-                                            <p class="text-sm font-semibold text-white">{{ channel.label }}</p>
-                                            <p class="mt-1 text-xs text-slate-400">{{ channel.description }}</p>
+                                            <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ channel.label }}</p>
+                                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">{{ channel.description }}</p>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                         </article>
 
-                        <article class="rounded-[24px] border border-slate-800 bg-slate-950/55 p-4">
+                        <article class="rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/55 p-4">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="flex items-start gap-3">
                                     <div class="rounded-2xl border border-fuchsia-500/20 bg-fuchsia-500/10 p-3">
                                         <Volume2 class="h-5 w-5 text-fuchsia-300" />
                                     </div>
                                     <div>
-                                        <h3 class="text-base font-black text-white">Notifikasi Suara Dapur (TTS)</h3>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <h3 class="text-base font-black text-stone-900 dark:text-stone-900 dark:text-white">
+Notifikasi Suara Dapur (TTS)</h3>
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             Browser di Kitchen Display System akan membunyikan bel dan membaca pesanan baru secara otomatis.
                                         </p>
                                     </div>
@@ -619,9 +620,9 @@ function submitSave() {
                                 </label>
                             </div>
                             
-                            <div v-if="form.metadata.kitchen_voice.enabled" class="mt-4 border-t border-slate-800 pt-4 grid gap-4 sm:grid-cols-3">
+                            <div v-if="form.metadata.kitchen_voice.enabled" class="mt-4 border-t border-stone-200 dark:border-slate-800 pt-4 grid gap-4 sm:grid-cols-3">
                                 <div>
-                                    <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-500">
+                                    <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                         Volume Suara ({{ Math.round(form.metadata.kitchen_voice.volume * 100) }}%)
                                     </label>
                                     <input
@@ -630,11 +631,11 @@ function submitSave() {
                                         min="0"
                                         max="1"
                                         step="0.1"
-                                        class="w-full accent-orange-500 bg-slate-800"
+                                        class="w-full accent-orange-500 bg-stone-100 dark:bg-slate-800"
                                     />
                                 </div>
                                 <div>
-                                    <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-slate-500">
+                                    <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                         Kecepatan Bicara ({{ form.metadata.kitchen_voice.rate }}x)
                                     </label>
                                     <input
@@ -643,21 +644,21 @@ function submitSave() {
                                         min="0.5"
                                         max="1.5"
                                         step="0.1"
-                                        class="w-full accent-orange-500 bg-slate-800"
+                                        class="w-full accent-orange-500 bg-stone-100 dark:bg-slate-800"
                                     />
                                 </div>
                                 <div class="flex items-end gap-2">
                                     <button
                                         type="button"
                                         @click="testAlarmNotification"
-                                        class="w-full rounded-xl border border-slate-850 bg-slate-900/40 py-2.5 text-xs font-semibold text-slate-300 transition hover:bg-slate-800 hover:text-white"
+                                        class="w-full rounded-xl border border-slate-850 bg-stone-50 dark:bg-slate-900/40 py-2.5 text-xs font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:text-white"
                                     >
                                         Uji Coba Alarm
                                     </button>
                                     <button
                                         type="button"
                                         @click="testVoiceNotification"
-                                        class="w-full rounded-xl border border-slate-800 bg-slate-900/60 py-2.5 text-xs font-semibold text-white transition hover:bg-slate-800"
+                                        class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 py-2.5 text-xs font-semibold text-stone-900 dark:text-white transition hover:bg-stone-100 dark:bg-slate-800"
                                     >
                                         Uji Coba Suara
                                     </button>
@@ -665,7 +666,7 @@ function submitSave() {
                             </div>
                         </article>
 
-                        <div class="flex justify-end border-t border-slate-800 pt-5">
+                        <div class="flex justify-end border-t border-stone-200 dark:border-slate-800 pt-5">
                             <button
                                 type="submit"
                                 class="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
@@ -678,18 +679,18 @@ function submitSave() {
                 </section>
 
                 <aside class="space-y-5">
-                    <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <section class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-300">
                                     Alert Snapshot
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-white">
+                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                                     Kondisi alert outlet saat ini
                                 </h3>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
-                                <CheckCircle2 class="h-5 w-5 text-slate-200" />
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-3">
+                                <CheckCircle2 class="h-5 w-5 text-stone-800 dark:text-slate-200" />
                             </div>
                         </div>
 
@@ -698,11 +699,11 @@ function submitSave() {
                                 <div class="flex items-center justify-between gap-3">
                                     <div>
                                         <p class="text-sm font-bold text-amber-300">Low Stock</p>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             {{ snapshots.low_stock.count }} item di bawah minimum, {{ snapshots.low_stock.critical }} kritikal.
                                         </p>
                                     </div>
-                                    <span class="text-xl font-black text-white">{{ snapshots.low_stock.count }}</span>
+                                    <span class="text-xl font-black text-stone-900 dark:text-white">{{ snapshots.low_stock.count }}</span>
                                 </div>
                             </div>
 
@@ -710,11 +711,11 @@ function submitSave() {
                                 <div class="flex items-center justify-between gap-3">
                                     <div>
                                         <p class="text-sm font-bold text-rose-300">Kasbon Overdue</p>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             {{ snapshots.kasbon_due.count }} order, total outstanding {{ formatCurrency(snapshots.kasbon_due.total_outstanding) }}.
                                         </p>
                                     </div>
-                                    <span class="text-xl font-black text-white">{{ snapshots.kasbon_due.count }}</span>
+                                    <span class="text-xl font-black text-stone-900 dark:text-white">{{ snapshots.kasbon_due.count }}</span>
                                 </div>
                             </div>
 
@@ -722,88 +723,88 @@ function submitSave() {
                                 <div class="flex items-center justify-between gap-3">
                                     <div>
                                         <p class="text-sm font-bold text-sky-300">Online Order Aktif</p>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             {{ snapshots.online_order.count }} order aktif dari {{ snapshots.online_order.today_orders }} order online hari ini.
                                         </p>
                                     </div>
-                                    <span class="text-xl font-black text-white">{{ snapshots.online_order.count }}</span>
+                                    <span class="text-xl font-black text-stone-900 dark:text-white">{{ snapshots.online_order.count }}</span>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <section class="rounded-[28px] border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
+                    <section class="rounded-[28px] border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300">
                                     Preview Feed
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-white">
+                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
                                     Contoh alert terdekat
                                 </h3>
                             </div>
                         </div>
 
                         <div class="mt-4 space-y-3">
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500">
                                     Low stock teratas
                                 </p>
-                                <div v-if="snapshots.low_stock.items.length === 0" class="mt-3 text-sm text-slate-500">
+                                <div v-if="snapshots.low_stock.items.length === 0" class="mt-3 text-sm text-stone-400 dark:text-slate-500">
                                     Belum ada alert stok menipis di outlet ini.
                                 </div>
                                 <div v-else class="mt-3 space-y-3">
                                     <div
                                         v-for="item in snapshots.low_stock.items"
                                         :key="item.id"
-                                        class="rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 p-3"
                                     >
-                                        <p class="text-sm font-semibold text-white">{{ item.name }}</p>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ item.name }}</p>
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             {{ item.context }} • {{ item.current_stock }}/{{ item.minimum_stock }} {{ item.unit }}
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500">
                                     Kasbon overdue teratas
                                 </p>
-                                <div v-if="snapshots.kasbon_due.items.length === 0" class="mt-3 text-sm text-slate-500">
+                                <div v-if="snapshots.kasbon_due.items.length === 0" class="mt-3 text-sm text-stone-400 dark:text-slate-500">
                                     Belum ada kasbon melewati threshold {{ form.kasbon_due_threshold_days }} hari.
                                 </div>
                                 <div v-else class="mt-3 space-y-3">
                                     <div
                                         v-for="item in snapshots.kasbon_due.items"
                                         :key="item.id"
-                                        class="rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 p-3"
                                     >
-                                        <p class="text-sm font-semibold text-white">{{ item.order_number }} • {{ item.customer_name }}</p>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ item.order_number }} • {{ item.customer_name }}</p>
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             {{ formatCurrency(item.outstanding_amount) }} • umur {{ item.age_days }} hari • {{ formatDateTime(item.created_at) }}
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-4">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500">
                                     Order online terbaru
                                 </p>
-                                <div v-if="snapshots.online_order.items.length === 0" class="mt-3 text-sm text-slate-500">
+                                <div v-if="snapshots.online_order.items.length === 0" class="mt-3 text-sm text-stone-400 dark:text-slate-500">
                                     Belum ada order online aktif hari ini.
                                 </div>
                                 <div v-else class="mt-3 space-y-3">
                                     <div
                                         v-for="item in snapshots.online_order.items"
                                         :key="item.id"
-                                        class="rounded-2xl border border-slate-800 bg-slate-900/60 p-3"
+                                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 p-3"
                                     >
-                                        <p class="text-sm font-semibold text-white">
+                                        <p class="text-sm font-semibold text-stone-900 dark:text-white">
                                             {{ item.order_number }} • {{ item.platform?.toUpperCase() }}
                                         </p>
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                             {{ formatOrderStatus(item.status) }} • {{ formatCurrency(item.total_amount) }} • {{ formatDateTime(item.created_at) }}
                                         </p>
                                     </div>

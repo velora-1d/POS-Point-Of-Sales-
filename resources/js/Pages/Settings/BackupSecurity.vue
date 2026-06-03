@@ -118,7 +118,7 @@ const summaryCards = computed(() => [
         value: props.summary.total_outlets,
         helper: `${props.summary.configured_outlets} outlet sudah punya konfigurasi backup`,
         tone: 'text-white',
-        surface: 'border-white/10 bg-white/[0.03]',
+        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
         icon: Store,
     },
     {
@@ -209,10 +209,10 @@ function downloadBackup() {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        Backup & Keamanan Data
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+Backup & Keamanan Data
                     </h2>
-                    <p class="mt-1 text-sm text-slate-400">
+                    <p class="mt-1 text-sm text-stone-500 dark:text-slate-400">
                         Kelola jadwal backup, download arsip manual, dan audit aktivitas keamanan outlet.
                     </p>
                 </div>
@@ -221,18 +221,18 @@ function downloadBackup() {
 
         <div class="space-y-6">
             <!-- Tab Navigation Keamanan & Notifikasi -->
-            <div class="flex border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-md">
+            <div class="flex border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-md">
                 <Link
                     :href="route('settings.notifications.index')"
                     class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('settings.notifications.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('settings.notifications.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Notifikasi & Alert
                 </Link>
                 <Link
                     :href="route('settings.backup-security.index')"
                     class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('settings.backup-security.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('settings.backup-security.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Backup & Keamanan
                 </Link>
@@ -247,18 +247,18 @@ function downloadBackup() {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                            <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-3xl font-black" :class="card.tone">
                                 {{ card.value }}
                             </p>
-                            <p class="mt-2 text-xs leading-5 text-slate-400">
+                            <p class="mt-2 text-xs leading-5 text-stone-500 dark:text-slate-400">
                                 {{ card.helper }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-3">
-                            <component :is="card.icon" class="h-5 w-5 text-slate-200" />
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3">
+                            <component :is="card.icon" class="h-5 w-5 text-stone-800 dark:text-slate-200" />
                         </div>
                     </div>
                 </div>
@@ -266,28 +266,28 @@ function downloadBackup() {
 
             <div class="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
                 <div class="space-y-6">
-                    <section class="rounded-3xl border border-slate-800/80 bg-slate-900/80 p-6">
-                        <div class="flex flex-col gap-4 border-b border-slate-800/80 pb-5 lg:flex-row lg:items-end lg:justify-between">
+                    <section class="rounded-3xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/80 p-6">
+                        <div class="flex flex-col gap-4 border-b border-stone-200 dark:border-slate-800/80 pb-5 lg:flex-row lg:items-end lg:justify-between">
                             <div>
                                 <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">
                                     Pengaturan Outlet
                                 </p>
-                                <h3 class="mt-2 text-lg font-black text-white">
-                                    Jadwal Backup Otomatis
+                                <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
+Jadwal Backup Otomatis
                                 </h3>
-                                <p class="mt-1 text-sm text-slate-400">
+                                <p class="mt-1 text-sm text-stone-500 dark:text-slate-400">
                                     Konfigurasi per outlet untuk frekuensi backup, retensi, dan posture keamanan dasar.
                                 </p>
                             </div>
 
                             <div class="w-full lg:w-72">
-                                <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                                <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                     Pilih Outlet
                                 </label>
                                 <select
                                     :value="form.outlet_id"
                                     @change="openSelectedOutlet(($event.target as HTMLSelectElement).value)"
-                                    class="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                                 >
                                     <option
                                         v-for="outlet in outlets"
@@ -301,11 +301,12 @@ function downloadBackup() {
                         </div>
 
                         <div class="mt-6 grid gap-5 lg:grid-cols-2">
-                            <div class="space-y-5 rounded-3xl border border-slate-800 bg-slate-950/50 p-5">
+                            <div class="space-y-5 rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 p-5">
                                 <div class="flex items-center justify-between gap-4">
                                     <div>
-                                        <p class="text-sm font-bold text-white">Backup Otomatis</p>
-                                        <p class="mt-1 text-xs leading-5 text-slate-400">
+                                        <p class="text-sm font-bold text-stone-900 dark:text-white">
+Backup Otomatis</p>
+                                        <p class="mt-1 text-xs leading-5 text-stone-500 dark:text-slate-400">
                                             Aktifkan jadwal backup rutin untuk outlet terpilih.
                                         </p>
                                     </div>
@@ -313,7 +314,7 @@ function downloadBackup() {
                                         type="button"
                                         @click="form.auto_backup_enabled = !form.auto_backup_enabled"
                                         class="rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider"
-                                        :class="form.auto_backup_enabled ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border-slate-700 bg-slate-900 text-slate-400'"
+                                        :class="form.auto_backup_enabled ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-stone-500 dark:text-slate-400'"
                                     >
                                         {{ form.auto_backup_enabled ? 'Aktif' : 'Nonaktif' }}
                                     </button>
@@ -321,12 +322,12 @@ function downloadBackup() {
 
                                 <div class="grid gap-4 sm:grid-cols-2">
                                     <div>
-                                        <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                                        <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                             Frekuensi
                                         </label>
                                         <select
                                             v-model="form.auto_backup_frequency"
-                                            class="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                                         >
                                             <option
                                                 v-for="option in backupOptions.frequencies"
@@ -339,19 +340,19 @@ function downloadBackup() {
                                     </div>
 
                                     <div>
-                                        <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                                        <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                             Jam Backup
                                         </label>
                                         <input
                                             v-model="form.auto_backup_time"
                                             type="time"
-                                            class="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                                    <label class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                         Retensi Arsip
                                     </label>
                                     <input
@@ -359,15 +360,15 @@ function downloadBackup() {
                                         type="number"
                                         min="7"
                                         max="365"
-                                        class="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                                     />
                                 </div>
                             </div>
 
-                            <div class="space-y-5 rounded-3xl border border-slate-800 bg-slate-950/50 p-5">
+                            <div class="space-y-5 rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 p-5">
                                 <div>
-                                    <p class="text-sm font-bold text-white">Kanal Penyimpanan</p>
-                                    <p class="mt-1 text-xs leading-5 text-slate-400">
+                                    <p class="text-sm font-bold text-stone-900 dark:text-white">Kanal Penyimpanan</p>
+                                    <p class="mt-1 text-xs leading-5 text-stone-500 dark:text-slate-400">
                                         Tandai channel backup yang ingin diprioritaskan per outlet.
                                     </p>
                                 </div>
@@ -379,15 +380,15 @@ function downloadBackup() {
                                         type="button"
                                         @click="selectBackupChannel(option.value as 'local_download' | 'cloud_storage' | 'hybrid')"
                                         class="w-full rounded-2xl border p-4 text-left transition"
-                                        :class="form.backup_channel === option.value ? 'border-orange-500/25 bg-orange-500/10 text-orange-100' : 'border-slate-800 bg-slate-950 text-slate-300'"
+                                        :class="form.backup_channel === option.value ? 'border-orange-500/25 bg-orange-500/10 text-orange-100' : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-300'"
                                     >
                                         <div class="flex items-center justify-between gap-3">
                                             <p class="text-sm font-bold">{{ option.label }}</p>
-                                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 {{ option.value }}
                                             </span>
                                         </div>
-                                        <p class="mt-2 text-xs leading-5 text-slate-400">
+                                        <p class="mt-2 text-xs leading-5 text-stone-500 dark:text-slate-400">
                                             {{ option.description }}
                                         </p>
                                     </button>
@@ -398,10 +399,10 @@ function downloadBackup() {
                                         type="button"
                                         @click="form.encryption_enabled = !form.encryption_enabled"
                                         class="rounded-2xl border p-4 text-left transition"
-                                        :class="form.encryption_enabled ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-200' : 'border-slate-800 bg-slate-950 text-slate-300'"
+                                        :class="form.encryption_enabled ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-200' : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-300'"
                                     >
                                         <p class="text-sm font-bold">Enkripsi</p>
-                                        <p class="mt-2 text-xs text-slate-400">
+                                        <p class="mt-2 text-xs text-stone-500 dark:text-slate-400">
                                             {{ form.encryption_enabled ? 'Aktif untuk backup & data transit' : 'Belum diwajibkan pada outlet ini' }}
                                         </p>
                                     </button>
@@ -409,10 +410,10 @@ function downloadBackup() {
                                         type="button"
                                         @click="form.two_factor_required = !form.two_factor_required"
                                         class="rounded-2xl border p-4 text-left transition"
-                                        :class="form.two_factor_required ? 'border-sky-500/25 bg-sky-500/10 text-sky-200' : 'border-slate-800 bg-slate-950 text-slate-300'"
+                                        :class="form.two_factor_required ? 'border-sky-500/25 bg-sky-500/10 text-sky-200' : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-300'"
                                     >
                                         <p class="text-sm font-bold">2FA Admin</p>
-                                        <p class="mt-2 text-xs text-slate-400">
+                                        <p class="mt-2 text-xs text-stone-500 dark:text-slate-400">
                                             {{ form.two_factor_required ? 'Akun admin outlet wajib 2FA' : 'Masih opsional untuk admin outlet' }}
                                         </p>
                                     </button>
@@ -420,12 +421,12 @@ function downloadBackup() {
                             </div>
                         </div>
 
-                        <div class="mt-6 flex flex-col gap-3 border-t border-slate-800/80 pt-5 sm:flex-row sm:justify-end">
+                        <div class="mt-6 flex flex-col gap-3 border-t border-stone-200 dark:border-slate-800/80 pt-5 sm:flex-row sm:justify-end">
                             <button
                                 type="button"
                                 @click="downloadBackup"
                                 :disabled="!form.outlet_id"
-                                class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-bold text-slate-200 transition hover:border-slate-600"
+                                class="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm font-bold text-stone-800 dark:text-slate-200 transition hover:border-stone-300 dark:border-slate-600"
                             >
                                 <Download class="h-4 w-4" />
                                 Download Backup Manual
@@ -434,31 +435,31 @@ function downloadBackup() {
                                 type="button"
                                 @click="submitSave"
                                 :disabled="form.processing"
-                                class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3 text-sm font-bold text-white transition disabled:pointer-events-none disabled:opacity-50"
+                                class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3 text-sm font-bold text-stone-900 dark:text-white transition disabled:pointer-events-none disabled:opacity-50"
                             >
                                 {{ form.processing ? 'Menyimpan...' : 'Simpan Konfigurasi' }}
                             </button>
                         </div>
                     </section>
 
-                    <section class="rounded-3xl border border-slate-800/80 bg-slate-900/80">
-                        <div class="flex items-center justify-between gap-4 border-b border-slate-800/80 px-6 py-5">
+                    <section class="rounded-3xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/80">
+                        <div class="flex items-center justify-between gap-4 border-b border-stone-200 dark:border-slate-800/80 px-6 py-5">
                             <div>
                                 <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">
                                     Log Aktivitas
                                 </p>
-                                <h3 class="mt-2 text-lg font-black text-white">
+                                <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
                                     Audit Keamanan Outlet
                                 </h3>
                             </div>
-                            <span class="rounded-full border border-slate-700 bg-slate-950 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            <span class="rounded-full border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                                 {{ activityLogs.length }} log terbaru
                             </span>
                         </div>
 
                         <div v-if="activityLogs.length" class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-slate-800 text-left text-sm">
-                                <thead class="bg-slate-950/70 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                                <thead class="bg-white dark:bg-slate-950/70 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                     <tr>
                                         <th class="px-6 py-3">Waktu</th>
                                         <th class="px-6 py-3">Aktor</th>
@@ -468,25 +469,25 @@ function downloadBackup() {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-800/80">
-                                    <tr v-for="log in activityLogs" :key="log.id" class="bg-slate-900/40">
-                                        <td class="px-6 py-4 text-slate-300">
+                                    <tr v-for="log in activityLogs" :key="log.id" class="bg-stone-50 dark:bg-slate-900/40">
+                                        <td class="px-6 py-4 text-stone-600 dark:text-slate-300">
                                             {{ formatDateTime(log.created_at) }}
                                         </td>
-                                        <td class="px-6 py-4 text-slate-200">
+                                        <td class="px-6 py-4 text-stone-800 dark:text-slate-200">
                                             <div class="font-bold">{{ log.actor_name }}</div>
-                                            <div class="text-xs text-slate-500">
+                                            <div class="text-xs text-stone-400 dark:text-slate-500">
                                                 {{ log.actor_role || 'system' }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 text-slate-300">
-                                            <div class="font-semibold text-white">
+                                        <td class="px-6 py-4 text-stone-600 dark:text-slate-300">
+                                            <div class="font-semibold text-stone-900 dark:text-white">
                                                 {{ log.description }}
                                             </div>
-                                            <div class="mt-1 text-xs uppercase tracking-wider text-slate-500">
+                                            <div class="mt-1 text-xs uppercase tracking-wider text-stone-400 dark:text-slate-500">
                                                 {{ log.action }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 text-slate-400">{{ log.ip_address }}</td>
+                                        <td class="px-6 py-4 text-stone-500 dark:text-slate-400">{{ log.ip_address }}</td>
                                         <td class="px-6 py-4">
                                             <span
                                                 class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
@@ -494,7 +495,7 @@ function downloadBackup() {
                                                     ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
                                                     : log.status === 'warning' || log.status === 'error'
                                                       ? 'border-amber-500/20 bg-amber-500/10 text-amber-300'
-                                                      : 'border-slate-700 bg-slate-950 text-slate-400'"
+                                                      : 'border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-stone-500 dark:text-slate-400'"
                                             >
                                                 {{ log.status }}
                                             </span>
@@ -505,8 +506,8 @@ function downloadBackup() {
                         </div>
 
                         <div v-else class="px-6 py-12 text-center">
-                            <p class="text-sm font-semibold text-white">Belum ada log keamanan untuk outlet ini.</p>
-                            <p class="mt-2 text-xs leading-5 text-slate-500">
+                            <p class="text-sm font-semibold text-stone-900 dark:text-white">Belum ada log keamanan untuk outlet ini.</p>
+                            <p class="mt-2 text-xs leading-5 text-stone-400 dark:text-slate-500">
                                 Log akan bertambah saat owner menyimpan konfigurasi, mengunduh backup manual, atau melakukan perubahan sensitif lain.
                             </p>
                         </div>
@@ -514,53 +515,53 @@ function downloadBackup() {
                 </div>
 
                 <div class="space-y-6">
-                    <section class="rounded-3xl border border-slate-800/80 bg-slate-900/80 p-6">
+                    <section class="rounded-3xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/80 p-6">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">
                                     Status Backup
                                 </p>
-                                <h3 class="mt-2 text-lg font-black text-white">
-                                    Backup Terakhir
+                                <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
+Backup Terakhir
                                 </h3>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-3">
-                                <Download class="h-5 w-5 text-slate-200" />
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-3">
+                                <Download class="h-5 w-5 text-stone-800 dark:text-slate-200" />
                             </div>
                         </div>
 
-                        <div class="mt-5 rounded-3xl border border-slate-800 bg-slate-950/50 p-5">
+                        <div class="mt-5 rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 p-5">
                             <div class="flex items-center gap-3">
                                 <span
                                     class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
                                     :class="latestBackup.status === 'success'
                                         ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
                                         : latestBackup.status === 'not_started'
-                                          ? 'border-slate-700 bg-slate-900 text-slate-400'
+                                          ? 'border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-stone-500 dark:text-slate-400'
                                           : 'border-amber-500/20 bg-amber-500/10 text-amber-300'"
                                 >
                                     {{ latestBackup.status }}
                                 </span>
-                                <p class="text-sm text-slate-400">
+                                <p class="text-sm text-stone-500 dark:text-slate-400">
                                     {{ formatDateTime(latestBackup.performed_at) }}
                                 </p>
                             </div>
-                            <div class="mt-4 space-y-3 text-sm text-slate-300">
+                            <div class="mt-4 space-y-3 text-sm text-stone-600 dark:text-slate-300">
                                 <div class="flex items-center justify-between gap-3">
-                                    <span class="text-slate-500">Nama File</span>
-                                    <span class="text-right font-semibold text-white">
+                                    <span class="text-stone-400 dark:text-slate-500">Nama File</span>
+                                    <span class="text-right font-semibold text-stone-900 dark:text-white">
                                         {{ latestBackup.file_name || 'Belum ada arsip' }}
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between gap-3">
-                                    <span class="text-slate-500">Ukuran</span>
-                                    <span class="font-semibold text-white">
+                                    <span class="text-stone-400 dark:text-slate-500">Ukuran</span>
+                                    <span class="font-semibold text-stone-900 dark:text-white">
                                         {{ formatBytes(latestBackup.size_bytes) }}
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between gap-3">
-                                    <span class="text-slate-500">Storage</span>
-                                    <span class="font-semibold text-white">
+                                    <span class="text-stone-400 dark:text-slate-500">Storage</span>
+                                    <span class="font-semibold text-stone-900 dark:text-white">
                                         {{ latestBackup.storage_label }}
                                     </span>
                                 </div>
@@ -568,66 +569,66 @@ function downloadBackup() {
                         </div>
                     </section>
 
-                    <section class="rounded-3xl border border-slate-800/80 bg-slate-900/80 p-6">
+                    <section class="rounded-3xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/80 p-6">
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300">
                                     Postur Keamanan
                                 </p>
-                                <h3 class="mt-2 text-lg font-black text-white">
+                                <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
                                     Ringkasan Proteksi
                                 </h3>
                             </div>
-                            <div class="rounded-2xl border border-slate-800 bg-slate-950/60 p-3">
-                                <Lock class="h-5 w-5 text-slate-200" />
+                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 p-3">
+                                <Lock class="h-5 w-5 text-stone-800 dark:text-slate-200" />
                             </div>
                         </div>
 
                         <div class="mt-5 space-y-4">
-                            <div class="rounded-3xl border border-slate-800 bg-slate-950/50 p-4">
+                            <div class="rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 p-4">
                                 <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-bold text-white">Enkripsi Backup</p>
-                                    <span class="text-xs font-bold uppercase tracking-wider" :class="securityPosture.encryption_status ? 'text-emerald-300' : 'text-slate-500'">
+                                    <p class="text-sm font-bold text-stone-900 dark:text-white">Enkripsi Backup</p>
+                                    <span class="text-xs font-bold uppercase tracking-wider" :class="securityPosture.encryption_status ? 'text-emerald-300' : 'text-stone-400 dark:text-slate-500'">
                                         {{ securityPosture.encryption_status ? 'Aktif' : 'Off' }}
                                     </span>
                                 </div>
-                                <p class="mt-2 text-xs leading-5 text-slate-400">
+                                <p class="mt-2 text-xs leading-5 text-stone-500 dark:text-slate-400">
                                     Menandai kewajiban enkripsi untuk data transit dan arsip backup outlet.
                                 </p>
                             </div>
 
-                            <div class="rounded-3xl border border-slate-800 bg-slate-950/50 p-4">
+                            <div class="rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 p-4">
                                 <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-bold text-white">2FA Admin</p>
-                                    <span class="text-xs font-bold uppercase tracking-wider" :class="securityPosture.two_factor_status ? 'text-sky-300' : 'text-slate-500'">
+                                    <p class="text-sm font-bold text-stone-900 dark:text-white">2FA Admin</p>
+                                    <span class="text-xs font-bold uppercase tracking-wider" :class="securityPosture.two_factor_status ? 'text-sky-300' : 'text-stone-400 dark:text-slate-500'">
                                         {{ securityPosture.two_factor_status ? 'Wajib' : 'Opsional' }}
                                     </span>
                                 </div>
-                                <p class="mt-2 text-xs leading-5 text-slate-400">
+                                <p class="mt-2 text-xs leading-5 text-stone-500 dark:text-slate-400">
                                     Kewajiban autentikasi dua langkah untuk akun admin yang mengelola outlet.
                                 </p>
                             </div>
 
-                            <div class="rounded-3xl border border-slate-800 bg-slate-950/50 p-4">
+                            <div class="rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 p-4">
                                 <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-bold text-white">PIN Owner/Supervisor</p>
-                                    <span class="text-xs font-bold text-white">
+                                    <p class="text-sm font-bold text-stone-900 dark:text-white">PIN Owner/Supervisor</p>
+                                    <span class="text-xs font-bold text-stone-900 dark:text-white">
                                         {{ securityPosture.approval_pin_coverage.secured }}/{{ securityPosture.approval_pin_coverage.total }}
                                     </span>
                                 </div>
-                                <p class="mt-2 text-xs leading-5 text-slate-400">
+                                <p class="mt-2 text-xs leading-5 text-stone-500 dark:text-slate-400">
                                     Coverage akun approver yang sudah punya approval PIN aktif.
                                 </p>
                             </div>
 
-                            <div class="rounded-3xl border border-slate-800 bg-slate-950/50 p-4">
+                            <div class="rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 p-4">
                                 <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-bold text-white">Warning 14 Hari</p>
+                                    <p class="text-sm font-bold text-stone-900 dark:text-white">Warning 14 Hari</p>
                                     <span class="text-xs font-bold" :class="securityPosture.recent_warnings > 0 ? 'text-amber-300' : 'text-emerald-300'">
                                         {{ securityPosture.recent_warnings }}
                                     </span>
                                 </div>
-                                <p class="mt-2 text-xs leading-5 text-slate-400">
+                                <p class="mt-2 text-xs leading-5 text-stone-500 dark:text-slate-400">
                                     Jumlah log warning/error keamanan yang tercatat untuk outlet aktif.
                                 </p>
                             </div>

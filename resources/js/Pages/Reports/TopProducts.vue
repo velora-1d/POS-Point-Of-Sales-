@@ -145,7 +145,7 @@ const growthLabel = (value: number | null) => {
 
 const growthClass = (value: number | null) => {
     if (value === null) {
-        return 'text-slate-300';
+        return 'text-stone-600 dark:text-slate-300';
     }
 
     if (value > 0.001) {
@@ -156,12 +156,12 @@ const growthClass = (value: number | null) => {
         return 'text-rose-300';
     }
 
-    return 'text-slate-300';
+    return 'text-stone-600 dark:text-slate-300';
 };
 
 const growthSurfaceClass = (value: number | null) => {
     if (value === null) {
-        return 'border-slate-700/60 bg-slate-900/70';
+        return 'border-stone-200 dark:border-slate-700/60 bg-stone-50 dark:bg-slate-900/70';
     }
 
     if (value > 0.001) {
@@ -172,7 +172,7 @@ const growthSurfaceClass = (value: number | null) => {
         return 'border-rose-400/15 bg-rose-500/10';
     }
 
-    return 'border-slate-700/60 bg-slate-900/70';
+    return 'border-stone-200 dark:border-slate-700/60 bg-stone-50 dark:bg-slate-900/70';
 };
 
 const submitFilters = () => {
@@ -251,10 +251,10 @@ const summaryCards = computed(() => [
         <template #header>
             <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-white">
-                        Laporan Produk Terlaris
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-900 dark:text-white">
+Laporan Produk Terlaris
                     </h2>
-                    <p class="mt-1 text-xs text-slate-400">
+                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                         Ranking produk terjual pada periode
                         <span class="font-semibold text-orange-300">
                             {{ formatDate(period.current.start_date) }} - {{ formatDate(period.current.end_date) }}
@@ -263,12 +263,12 @@ const summaryCards = computed(() => [
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
-                    <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-300">
+                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:text-slate-300">
                         {{ user?.role || '-' }}
                     </span>
                     <Link
                         :href="route('reports.cashiers.index')"
-                        class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.05]"
+                        class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-white/[0.05]"
                     >
                         <CalendarRange class="h-4 w-4 text-sky-300" />
                         Lihat Laporan Kasir
@@ -279,52 +279,52 @@ const summaryCards = computed(() => [
 
         <div class="space-y-6">
             <!-- Tab Navigation Laporan Transaksi & Kas -->
-            <div class="flex flex-wrap border-b border-slate-800 bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-4xl">
+            <div class="flex flex-wrap border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-4xl">
                 <Link
                     :href="route('reports.sales.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.sales.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.sales.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Penjualan & Kas
                 </Link>
                 <Link
                     :href="route('reports.outlets.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.outlets.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.outlets.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Per Outlet
                 </Link>
                 <Link
                     :href="route('reports.cashiers.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.cashiers.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.cashiers.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Per Kasir
                 </Link>
                 <Link
                     :href="route('reports.top-products.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.top-products.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.top-products.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Produk Terlaris
                 </Link>
                 <Link
                     :href="route('reports.expenses.index')"
                     class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.expenses.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'"
+                    :class="route().current('reports.expenses.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
                 >
                     Pengeluaran
                 </Link>
             </div>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div class="grid flex-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
                         <label v-if="canChooseOutlet" class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Outlet</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                             <select
                                 v-model="outletFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                                 @change="handleOutletChange"
                             >
                                 <option value="">Semua outlet</option>
@@ -339,28 +339,28 @@ const summaryCards = computed(() => [
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Dari tanggal</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Dari tanggal</span>
                             <input
                                 v-model="startDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Sampai tanggal</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Sampai tanggal</span>
                             <input
                                 v-model="endDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Kategori</span>
+                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Kategori</span>
                             <select
                                 v-model="categoryFilter"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-sm text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
                             >
                                 <option value="">Semua kategori</option>
                                 <option
@@ -373,14 +373,14 @@ const summaryCards = computed(() => [
                             </select>
                         </label>
 
-                        <div class="rounded-2xl border border-slate-700/60 bg-slate-900/70 px-4 py-4">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                        <div class="rounded-2xl border border-stone-200 dark:border-slate-700/60 bg-stone-50 dark:bg-slate-900/70 px-4 py-4">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
                                 Periode Sebelumnya
                             </p>
-                            <p class="mt-2 text-sm font-bold text-white">
+                            <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
                                 {{ formatDate(period.previous.start_date) }}
                             </p>
-                            <p class="mt-1 text-xs text-slate-400">
+                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                 sampai {{ formatDate(period.previous.end_date) }}
                             </p>
                         </div>
@@ -389,7 +389,7 @@ const summaryCards = computed(() => [
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/5"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
                             @click="clearFilters"
                         >
                             Reset Filter
@@ -414,35 +414,35 @@ const summaryCards = computed(() => [
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
                                 {{ card.label }}
                             </p>
                             <p class="mt-3 text-2xl font-black" :class="card.tone">
                                 {{ card.value }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-slate-950/30 p-3">
-                            <component :is="card.icon" class="h-5 w-5 text-white" />
+                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/30 p-3">
+                            <component :is="card.icon" class="h-5 w-5 text-stone-900 dark:text-white" />
                         </div>
                     </div>
-                    <p class="mt-3 text-xs text-slate-300">
+                    <p class="mt-3 text-xs text-stone-600 dark:text-slate-300">
                         {{ card.helper }}
                     </p>
                 </article>
             </section>
 
             <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-                <article class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Ranking Kuantitas Produk
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Produk terlaris berdasarkan jumlah item terjual.
                         </p>
                     </div>
 
-                    <div v-if="!products.length" class="mt-5 rounded-2xl border border-dashed border-white/10 px-4 py-10 text-center text-sm text-slate-400">
+                    <div v-if="!products.length" class="mt-5 rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-4 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                         Belum ada produk terjual pada periode ini.
                     </div>
 
@@ -450,22 +450,22 @@ const summaryCards = computed(() => [
                         <article
                             v-for="product in products"
                             :key="product.id"
-                            class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4"
+                            class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-4"
                         >
                             <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-2">
-                                        <p class="truncate text-sm font-black text-white">{{ product.name }}</p>
+                                        <p class="truncate text-sm font-black text-stone-900 dark:text-white">{{ product.name }}</p>
                                         <component
                                             :is="product.growth.quantity_percentage !== null && product.growth.quantity_percentage >= 0 ? TrendingUp : TrendingDown"
                                             class="h-4 w-4 shrink-0"
                                             :class="growthClass(product.growth.quantity_percentage)"
                                         />
                                     </div>
-                                    <p class="mt-1 text-xs text-slate-500">
+                                    <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                                         {{ product.category?.name || 'Tanpa kategori' }} • {{ product.outlet?.name || 'Tanpa outlet' }}
                                     </p>
-                                    <div class="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-800">
+                                    <div class="mt-3 h-2.5 overflow-hidden rounded-full bg-stone-100 dark:bg-slate-800">
                                         <div
                                             class="h-full rounded-full bg-gradient-to-r from-orange-500 via-amber-400 to-emerald-400"
                                             :style="{ width: `${product.current.quantity_bar_percentage}%` }"
@@ -486,12 +486,12 @@ const summaryCards = computed(() => [
                     </div>
                 </article>
 
-                <article class="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Highlight Growth
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Produk dengan pertumbuhan quantity paling menonjol.
                         </p>
                     </div>
@@ -505,8 +505,8 @@ const summaryCards = computed(() => [
                         >
                             <div class="flex items-center justify-between gap-3">
                                 <div>
-                                    <p class="text-sm font-black text-white">{{ product.name }}</p>
-                                    <p class="mt-1 text-xs text-slate-400">
+                                    <p class="text-sm font-black text-stone-900 dark:text-white">{{ product.name }}</p>
+                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                                         {{ product.current.orders }} order • avg {{ product.current.average_quantity_per_order.toFixed(1) }} item/order
                                     </p>
                                 </div>
@@ -514,7 +514,7 @@ const summaryCards = computed(() => [
                                     {{ growthLabel(product.growth.quantity_percentage) }}
                                 </p>
                             </div>
-                            <p class="mt-3 text-xs text-slate-300">
+                            <p class="mt-3 text-xs text-stone-600 dark:text-slate-300">
                                 Delta quantity {{ product.growth.quantity_amount > 0 ? '+' : '' }}{{ product.growth.quantity_amount }}
                                 dan selisih revenue {{ formatPrice(product.growth.revenue_amount) }}.
                             </p>
@@ -523,22 +523,22 @@ const summaryCards = computed(() => [
                 </article>
             </section>
 
-            <section class="rounded-3xl border border-white/10 bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div class="flex flex-col gap-3 border-b border-white/10 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                <div class="flex flex-col gap-3 border-b border-stone-200 dark:border-white/10 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-slate-300">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
                             Tabel Produk Terlaris
                         </h3>
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
                             Quantity, order, revenue, margin estimasi, dan growth produk dibanding periode sebelumnya.
                         </p>
                     </div>
-                    <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-slate-300">
+                    <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-stone-600 dark:text-slate-300">
                         Growth dibanding {{ formatDate(period.previous.start_date) }} - {{ formatDate(period.previous.end_date) }}
                     </div>
                 </div>
 
-                <div v-if="!products.length" class="px-5 py-10 text-center text-sm text-slate-400">
+                <div v-if="!products.length" class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
                     Tidak ada produk terlaris pada filter ini.
                 </div>
 
@@ -550,7 +550,7 @@ const summaryCards = computed(() => [
                     >
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
-                                <h3 class="text-base font-black text-white">{{ product.name }}</h3>
+                                <h3 class="text-base font-black text-stone-900 dark:text-white">{{ product.name }}</h3>
                                 <span
                                     class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
                                     :class="growthSurfaceClass(product.growth.quantity_percentage)"
@@ -558,33 +558,33 @@ const summaryCards = computed(() => [
                                     Growth
                                 </span>
                             </div>
-                            <p class="text-sm text-slate-300">{{ product.category?.name || 'Tanpa kategori' }}</p>
-                            <p class="text-xs text-slate-500">{{ product.outlet?.name || 'Tanpa outlet' }}</p>
+                            <p class="text-sm text-stone-600 dark:text-slate-300">{{ product.category?.name || 'Tanpa kategori' }}</p>
+                            <p class="text-xs text-stone-400 dark:text-slate-500">{{ product.outlet?.name || 'Tanpa outlet' }}</p>
                         </div>
 
                         <div class="space-y-2">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Quantity saat ini</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Quantity saat ini</p>
                             <p class="text-lg font-black text-emerald-300">{{ product.current.quantity }} item</p>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Orders</p>
-                            <p class="text-sm text-slate-300">{{ product.current.orders }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Orders</p>
+                            <p class="text-sm text-stone-600 dark:text-slate-300">{{ product.current.orders }}</p>
                         </div>
 
                         <div class="space-y-2">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Revenue</p>
-                            <p class="text-sm font-semibold text-white">{{ formatPrice(product.current.revenue) }}</p>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Margin estimasi</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Revenue</p>
+                            <p class="text-sm font-semibold text-stone-900 dark:text-white">{{ formatPrice(product.current.revenue) }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Margin estimasi</p>
                             <p class="text-sm text-amber-300">{{ formatPrice(product.current.estimated_margin) }}</p>
                         </div>
 
                         <div class="space-y-2">
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Growth quantity</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">Growth quantity</p>
                             <p class="text-lg font-black" :class="growthClass(product.growth.quantity_percentage)">
                                 {{ growthLabel(product.growth.quantity_percentage) }}
                             </p>
-                            <p class="text-xs text-slate-400">
+                            <p class="text-xs text-stone-500 dark:text-slate-400">
                                 Delta quantity {{ product.growth.quantity_amount > 0 ? '+' : '' }}{{ product.growth.quantity_amount }}
                             </p>
-                            <p class="text-xs text-slate-400">
+                            <p class="text-xs text-stone-500 dark:text-slate-400">
                                 Avg {{ product.current.average_quantity_per_order.toFixed(1) }} item/order
                             </p>
                         </div>
