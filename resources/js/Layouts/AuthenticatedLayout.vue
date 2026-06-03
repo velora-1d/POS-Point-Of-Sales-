@@ -1324,116 +1324,134 @@ onBeforeUnmount(() => {
                 </div>
             </nav>
 
-            <!-- Toggle Collapse Button (Desktop only) -->
-            <div class="hidden border-t border-stone-200 dark:border-slate-800/60 px-4 py-3 lg:block">
-                <button
-                    @click="toggleSidebarCollapse"
-                    class="flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/40 py-2.5 text-xs font-semibold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-200 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200"
-                    :title="isSidebarCollapsed ? 'Buka Sidebar' : 'Tutup Sidebar'"
-                >
-                    <component :is="isSidebarCollapsed ? ChevronsRight : ChevronsLeft" class="h-4 w-4" />
-                    <span v-if="!isSidebarCollapsed">Tutup Menu</span>
-                </button>
-            </div>
-
             <!-- User Profile & Session Section -->
             <div
                 :class="[
-                    'shrink-0 border-t border-stone-200 dark:border-slate-800/60 bg-stone-50 dark:bg-slate-950/20 p-4 transition-all duration-300',
-                    isSidebarCollapsed ? 'flex flex-col items-center gap-3' : ''
+                    'shrink-0 border-t border-stone-200 dark:border-slate-800/60 bg-stone-50/50 dark:bg-slate-950/20 p-3 transition-all duration-300',
+                    isSidebarCollapsed ? 'flex flex-col items-center gap-2' : 'flex flex-col gap-2.5'
                 ]"
             >
+                <!-- Profile Row -->
                 <div
                     :class="[
-                        'flex items-center gap-3 border border-stone-200 dark:border-slate-800/60 bg-white dark:bg-slate-900 transition-all duration-300',
-                        isSidebarCollapsed ? 'w-12 h-12 justify-center rounded-xl p-0' : 'w-full rounded-xl p-2'
+                        'flex items-center gap-2.5 transition-all duration-300',
+                        isSidebarCollapsed ? 'w-10 h-10 justify-center rounded-lg border border-stone-200 dark:border-slate-800/60 bg-white dark:bg-slate-900' : 'w-full justify-between'
                     ]"
-                    :title="isSidebarCollapsed ? `${user?.name || 'Staff'} (${user?.role || 'Guest'})` : undefined"
                 >
+                    <!-- Avatar & Info -->
+                    <div class="flex items-center gap-2.5 min-w-0" v-if="!isSidebarCollapsed">
+                        <div
+                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-orange-500/20 bg-gradient-to-tr from-orange-500/20 to-red-500/25 font-bold text-orange-500 dark:text-orange-400 shadow-inner text-xs"
+                        >
+                            {{ getInitials(user?.name) }}
+                        </div>
+                        <div class="min-w-0">
+                            <p
+                                class="truncate text-xs font-bold leading-tight text-stone-900 dark:text-white"
+                            >
+                                {{ user?.name || 'Staff' }}
+                            </p>
+                            <p class="truncate text-[9px] text-stone-500 dark:text-slate-400 leading-none mt-0.5">
+                                <span class="font-semibold text-orange-600 dark:text-orange-400 uppercase mr-1">{{ user?.role || 'Guest' }}</span>
+                                @ {{ user?.outlet || 'No Outlet' }}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Avatar only (when collapsed) -->
                     <div
-                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-orange-500/20 bg-gradient-to-tr from-orange-500/20 to-red-500/25 font-bold text-orange-400 shadow-inner"
+                        v-else
+                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-orange-500/20 bg-gradient-to-tr from-orange-500/20 to-red-500/25 font-bold text-orange-500 dark:text-orange-400 text-xs"
+                        :title="`${user?.name || 'Staff'} (${user?.role || 'Guest'}) @ ${user?.outlet || 'No Outlet'}`"
                     >
                         {{ getInitials(user?.name) }}
                     </div>
-                    <div v-if="!isSidebarCollapsed" class="min-w-0 flex-1">
-                        <p
-                            class="truncate text-sm font-bold leading-snug text-stone-900 dark:text-white"
-                        >
-                            {{ user?.name || 'Staff POS' }}
-                        </p>
-                        <div class="mt-0.5 flex items-center gap-1.5">
-                            <span
-                                class="py-0.2 rounded border border-orange-500/20 bg-orange-500/10 px-1.5 text-[9px] font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-400"
-                            >
-                                {{ user?.role || 'Guest' }}
-                            </span>
-                            <span class="truncate text-[9px] text-stone-500 dark:text-slate-400">
-                                @ {{ user?.outlet || 'No Outlet' }}
-                            </span>
-                        </div>
-                    </div>
+
+                    <!-- Logout Button (Only if not collapsed) -->
+                    <Link
+                        v-if="!isSidebarCollapsed"
+                        :href="route('logout')"
+                        method="post"
+                        as="button"
+                        title="Keluar Sesi (Logout)"
+                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-red-200 dark:border-red-950 bg-red-50/50 dark:bg-red-950/20 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600 transition active:scale-95"
+                    >
+                        <LogOut class="h-3.5 w-3.5" />
+                    </Link>
                 </div>
 
-                <!-- Theme Toggle Button -->
-                <div :class="[isSidebarCollapsed ? 'w-12' : 'w-full', 'mb-2']">
+                <!-- Utilitas Row (Theme toggle, Test alarm, Test voice, Collapse button) -->
+                <div
+                    :class="[
+                        'grid gap-1.5 w-full',
+                        isSidebarCollapsed ? 'grid-cols-1' : 'grid-cols-4'
+                    ]"
+                >
+                    <!-- Theme Toggle -->
                     <button
                         @click="toggleTheme"
                         type="button"
-                        :title="isSidebarCollapsed ? (isDarkMode ? 'Mode Terang' : 'Mode Gelap') : undefined"
-                        class="flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 py-2.5 text-xs font-bold text-stone-700 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-950 dark:hover:text-slate-200 active:scale-[0.98]"
+                        :title="isDarkMode ? 'Mode Terang' : 'Mode Gelap'"
+                        :class="[
+                            'flex items-center justify-center rounded-lg border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-500 dark:text-slate-400 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200 transition active:scale-95',
+                            isSidebarCollapsed ? 'w-10 h-10' : 'h-8.5'
+                        ]"
                     >
-                        <Sun v-if="isDarkMode" class="h-4.5 w-4.5 text-amber-500 shrink-0" />
-                        <Moon v-else class="h-4.5 w-4.5 text-stone-400 dark:text-slate-500 shrink-0" />
-                        <span v-if="!isSidebarCollapsed">
-                            {{ isDarkMode ? 'Mode Terang' : 'Mode Gelap' }}
-                        </span>
+                        <Sun v-if="isDarkMode" class="h-4 w-4 text-amber-500 shrink-0" />
+                        <Moon v-else class="h-4 w-4 text-stone-400 dark:text-slate-500 shrink-0" />
                     </button>
-                </div>
 
-                <!-- Test Suara & Alarm Buttons -->
-                <div :class="['flex gap-2 mb-2', isSidebarCollapsed ? 'flex-col items-center' : 'w-full']">
-                    <!-- Test Alarm Button -->
+                    <!-- Test Alarm -->
                     <button
                         @click="testAlarmGlobal"
                         type="button"
-                        :title="isSidebarCollapsed ? 'Test Alarm' : undefined"
+                        title="Test Alarm"
                         :class="[
-                            'flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 text-xs font-bold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200 active:scale-[0.98]',
-                            isSidebarCollapsed ? 'w-12 h-12 p-0' : 'flex-1 px-3 py-2.5'
+                            'flex items-center justify-center rounded-lg border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-500 dark:text-slate-400 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200 transition active:scale-95',
+                            isSidebarCollapsed ? 'w-10 h-10' : 'h-8.5'
                         ]"
                     >
-                        <Bell class="h-4 w-4 shrink-0 text-orange-500 dark:text-orange-400" />
-                        <span v-if="!isSidebarCollapsed">Test Alarm</span>
+                        <Bell class="h-3.5 w-3.5 text-orange-500 dark:text-orange-400" />
                     </button>
-                    <!-- Test Suara Button -->
+
+                    <!-- Test Voice -->
                     <button
                         @click="testVoiceGlobal"
                         type="button"
-                        :title="isSidebarCollapsed ? 'Test Suara' : undefined"
+                        title="Test Suara"
                         :class="[
-                            'flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 text-xs font-bold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200 active:scale-[0.98]',
-                            isSidebarCollapsed ? 'w-12 h-12 p-0' : 'flex-1 px-3 py-2.5'
+                            'flex items-center justify-center rounded-lg border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-500 dark:text-slate-400 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200 transition active:scale-95',
+                            isSidebarCollapsed ? 'w-10 h-10' : 'h-8.5'
                         ]"
                     >
-                        <Volume2 class="h-4 w-4 shrink-0 text-fuchsia-500 dark:text-fuchsia-400" />
-                        <span v-if="!isSidebarCollapsed">Test Suara</span>
+                        <Volume2 class="h-3.5 w-3.5 text-fuchsia-500 dark:text-fuchsia-400" />
                     </button>
-                </div>
 
-                <!-- Logout Link -->
-                <Link
-                    :href="route('logout')"
-                    method="post"
-                    as="button"
-                    :title="isSidebarCollapsed ? 'Keluar Sesi' : undefined"
-                    :class="[
-                        'flex items-center justify-center gap-2 rounded-xl border border-red-200 dark:border-red-900/35 bg-red-50 dark:bg-red-950/30 text-xs font-bold text-red-600 dark:text-red-400 transition duration-150 hover:border-red-300 dark:hover:border-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/20 active:scale-[0.98]',
-                        isSidebarCollapsed ? 'w-12 h-12 p-0' : 'w-full px-4 py-3'
-                    ]"
-                >
-                    <LogOut class="h-4 w-4 shrink-0" />
-                    <span v-if="!isSidebarCollapsed">Keluar Sesi (Logout)</span>
-                </Link>
+                    <!-- Collapse / Expand Sidebar -->
+                    <button
+                        @click="toggleSidebarCollapse"
+                        type="button"
+                        :title="isSidebarCollapsed ? 'Buka Sidebar' : 'Tutup Sidebar'"
+                        :class="[
+                            'flex items-center justify-center rounded-lg border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-500 dark:text-slate-400 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-800 dark:hover:text-slate-200 transition active:scale-95',
+                            isSidebarCollapsed ? 'w-10 h-10' : 'h-8.5'
+                        ]"
+                    >
+                        <component :is="isSidebarCollapsed ? ChevronsRight : ChevronsLeft" class="h-3.5 w-3.5" />
+                    </button>
+                    
+                    <!-- Logout button (when collapsed) -->
+                    <Link
+                        v-if="isSidebarCollapsed"
+                        :href="route('logout')"
+                        method="post"
+                        as="button"
+                        title="Keluar Sesi (Logout)"
+                        class="flex w-10 h-10 items-center justify-center rounded-lg border border-red-200 dark:border-red-950 bg-red-50/50 dark:bg-red-950/20 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600 transition active:scale-95"
+                    >
+                        <LogOut class="h-3.5 w-3.5" />
+                    </Link>
+                </div>
             </div>
         </aside>
 
