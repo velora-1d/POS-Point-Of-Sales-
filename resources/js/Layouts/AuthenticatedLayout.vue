@@ -1133,7 +1133,7 @@ onBeforeUnmount(() => {
                             'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition duration-150',
                             isSidebarCollapsed ? 'justify-center' : '',
                             route().current('dashboard')
-                                ? 'border border-orange-500/20 bg-gradient-to-r from-orange-500/10 to-red-500/5 text-orange-500 dark:text-orange-400'
+                                ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md shadow-orange-500/25 dark:shadow-orange-500/35 font-bold'
                                 : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800/40 hover:text-stone-900 dark:hover:text-slate-200',
                         ]"
                     >
@@ -1221,7 +1221,7 @@ onBeforeUnmount(() => {
                         :class="[
                             'group flex items-center justify-center rounded-lg p-3 transition duration-150',
                             isCategoryActive(category)
-                                ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400'
+                                ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md shadow-orange-500/25 dark:shadow-orange-500/35 font-bold'
                                 : 'hover:bg-stone-100 dark:hover:bg-slate-800 dark:bg-slate-800/30 text-stone-500 dark:text-slate-400'
                         ]"
                     >
@@ -1229,7 +1229,7 @@ onBeforeUnmount(() => {
                             :is="category.icon"
                             :class="[
                                 'h-5 w-5 shrink-0 transition duration-150',
-                                isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-400 dark:text-slate-400 group-hover:text-stone-800 dark:group-hover:text-slate-200'
+                                isCategoryActive(category) ? 'text-white' : 'text-stone-400 dark:text-slate-400 group-hover:text-stone-800 dark:group-hover:text-slate-200'
                             ]"
                         />
                     </Link>
@@ -1244,7 +1244,7 @@ onBeforeUnmount(() => {
                             'group flex items-center rounded-lg transition duration-150',
                             isSidebarCollapsed ? 'justify-center p-3' : 'justify-between px-3 py-2',
                             route().current(resolveSidebarRoute(category.pages[0]))
-                                ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
+                                ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md shadow-orange-500/25 dark:shadow-orange-500/35 font-bold'
                                 : 'hover:bg-stone-100 dark:hover:bg-slate-800 dark:bg-slate-800/30 text-stone-500 dark:text-slate-400'
                         ]"
                     >
@@ -1253,7 +1253,7 @@ onBeforeUnmount(() => {
                                 'flex min-w-0 items-center gap-2.5 transition duration-150',
                                 isSidebarCollapsed ? 'justify-center' : '',
                                 route().current(resolveSidebarRoute(category.pages[0]))
-                                    ? 'text-orange-500 dark:text-orange-400'
+                                    ? 'text-white'
                                     : 'text-stone-500 dark:text-slate-400 group-hover:text-stone-900 dark:group-hover:text-slate-200'
                             ]"
                         >
@@ -1262,18 +1262,23 @@ onBeforeUnmount(() => {
                                 :class="[
                                     'h-4.5 w-4.5 shrink-0 transition duration-150',
                                     isSidebarCollapsed ? 'h-5 w-5' : '',
-                                    route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-400 dark:text-slate-400'
+                                    route().current(resolveSidebarRoute(category.pages[0])) ? 'text-white' : 'text-stone-400 dark:text-slate-400'
                                 ]"
                             />
                             <div v-if="!isSidebarCollapsed" class="min-w-0">
                                 <span
                                     :class="[
                                         'truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-150',
-                                        route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-700 dark:text-slate-300'
+                                        route().current(resolveSidebarRoute(category.pages[0])) ? 'text-white' : 'text-stone-700 dark:text-slate-300'
                                     ]"
                                     >{{ category.name }}</span
                                 >
-                                <p class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500">
+                                <p :class="[
+                                    'mt-0.5 text-[10px] transition duration-150',
+                                    route().current(resolveSidebarRoute(category.pages[0]))
+                                        ? 'text-orange-100/90'
+                                        : 'text-stone-400 dark:text-slate-500'
+                                ]">
                                     {{ category.flow }}
                                 </p>
                             </div>
@@ -1303,7 +1308,7 @@ onBeforeUnmount(() => {
                                     route().current(
                                         resolveSidebarRoute(pageItem),
                                     )
-                                        ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
+                                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-sm shadow-orange-500/20 dark:shadow-orange-500/30 font-bold pl-3'
                                         : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800/60 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-slate-200 pl-3',
                                 ]"
                             >

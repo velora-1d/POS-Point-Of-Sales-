@@ -1,8 +1,17 @@
 <script setup lang="ts">
+import ChefAnimation from '@/Components/ChefAnimation.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { BellRing, CheckCheck, Flame, ScanSearch, Volume2, VolumeX } from '@lucide/vue';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+
+const isDapurBusy = computed(() => {
+    return props.orders.some(order => order.status === 'pending' || order.status === 'in_progress');
+});
+
+const chefState = computed(() => {
+    return isDapurBusy.value ? 'cooking' : 'idle';
+});
 
 type KitchenOrderStatus =
     | 'pending'
@@ -855,7 +864,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                     <button
                         type="button"
                         @click="toggleLocalMute"
-                        class="rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:text-white transition"
+                        class="rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition"
                         title="Toggle Mute Dapur"
                     >
                         <VolumeX v-if="localMute || localVolume === 0" class="h-4.5 w-4.5 text-rose-400 animate-pulse" />
@@ -891,7 +900,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                         <VolumeX class="h-5 w-5 text-amber-400 animate-bounce" />
                     </div>
                     <div>
-                        <h4 class="text-sm font-bold text-stone-900 dark:text-stone-900 dark:text-white">
+                        <h4 class="text-sm font-bold text-stone-900 dark:text-white">
 Notifikasi Suara Terblokir Browser</h4>
                         <p class="text-xs text-stone-500 dark:text-slate-400 mt-0.5">
                             Silakan klik area ini untuk mengaktifkan notifikasi suara bel dan pembacaan pesanan secara otomatis.
@@ -977,7 +986,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                         'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                         selectedCategoryId === 'all'
                                             ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
-                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:text-slate-200',
+                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:hover:text-slate-200',
                                     ]"
                                 >
                                     Semua Kategori
@@ -991,7 +1000,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                         'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                         selectedCategoryId === category.id
                                             ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
-                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:text-slate-200',
+                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:hover:text-slate-200',
                                     ]"
                                 >
                                     {{ category.name }}
@@ -1249,7 +1258,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                                         ticket.estimatedMinutes ===
                                                         minutes
                                                             ? 'border-violet-400/30 bg-violet-500/14 text-violet-200'
-                                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-violet-400/20 hover:text-stone-800 dark:text-slate-200',
+                                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-violet-400/20 hover:text-stone-800 dark:hover:text-slate-200',
                                                     ]"
                                                 >
                                                     {{ minutes }}m
@@ -1286,7 +1295,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                             ticket.actionValue
                                         "
                                         type="button"
-                                        class="mt-3 flex w-full items-center justify-center rounded-2xl border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white transition duration-150 hover:border-orange-500/40 hover:bg-white dark:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+                                        class="mt-3 flex w-full items-center justify-center rounded-2xl border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white transition duration-150 hover:border-orange-500/40 hover:bg-white dark:hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
                                         :disabled="
                                             submittingOrderId === ticket.id
                                         "
@@ -1333,7 +1342,7 @@ Notifikasi Suara Terblokir Browser</h4>
                     class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
                 >
                     <div>
-                        <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-stone-900 dark:text-white">
+                        <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
 Riwayat Order Dapur
                         </h3>
                         <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
@@ -1409,6 +1418,11 @@ Riwayat Order Dapur
                     </article>
                 </div>
             </section>
+        </div>
+
+        <!-- Widget Koki Pojok Melayang -->
+        <div class="fixed bottom-6 right-6 z-40 max-w-[120px] rounded-[24px] border border-stone-200/80 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 p-1.5 shadow-2xl backdrop-blur transition-all duration-300 hover:scale-105">
+            <ChefAnimation :state="chefState" />
         </div>
     </AuthenticatedLayout>
 </template>

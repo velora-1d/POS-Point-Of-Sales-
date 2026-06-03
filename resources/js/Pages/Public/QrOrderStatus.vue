@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ChefAnimation from '@/Components/ChefAnimation.vue';
 import { Head, router } from '@inertiajs/vue3';
 import {
     CheckCircle2,
@@ -19,6 +20,23 @@ const props = defineProps<{
     success?: string | null;
     paymentCheckout?: Record<string, any> | null;
 }>();
+
+const chefState = computed(() => {
+    switch (props.order?.status) {
+        case 'pending':
+        case 'payment_pending':
+            return 'waiting';
+        case 'in_progress':
+        case 'waiting_bar_approval':
+            return 'cooking';
+        case 'ready':
+        case 'delivered':
+        case 'completed':
+            return 'ready';
+        default:
+            return 'idle';
+    }
+});
 
 const activeCheckout = ref<Record<string, any> | null>(
     props.paymentCheckout ?? null,
@@ -225,10 +243,15 @@ const refreshPage = () => {
                                 :class="[
                                     'rounded-full border px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em]',
                                     statusClass,
-                                ]"
+                                    ]"
                             >
                                 {{ orderStatusLabel }}
                             </span>
+                        </div>
+
+                        <!-- Animasi Koki Masak Interaktif -->
+                        <div class="mt-6 flex justify-center border-t border-white/5 pt-4">
+                            <ChefAnimation :state="chefState" />
                         </div>
 
                         <div
