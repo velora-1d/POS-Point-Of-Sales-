@@ -33,6 +33,12 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- **Redesign & Animasi Koki Memasak (SVG + CSS Keyframes) serta Pembenahan Visual Sidebar**:
+  - Menambahkan komponen animasi koki memasak dinamis [ChefAnimation.vue](file:///home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Components/ChefAnimation.vue) dengan 4 state: `waiting`, `cooking`, `ready`, dan `idle` tanpa dependensi eksternal.
+  - Mengintegrasikan koki animasi ke halaman pelacakan pesanan QR pelanggan (`QrOrderStatus.vue`) dan ke pojok Kitchen Display System (`Display.vue`).
+  - Redesign penanda menu aktif di sidebar (`AuthenticatedLayout.vue`) menggunakan warna solid gradien oranye-merah premium, teks putih kontras tinggi, dan bayangan glow oranye.
+  - Menyederhanakan footer profil sidebar (`AuthenticatedLayout.vue`) menjadi sangat ringkas (kompak): menyingkirkan tombol block "Tutup Menu", merapikan informasi user menjadi satu baris horizontal dengan tombol logout ikon merah minimalis, dan mengelompokkan 4 tombol utilitas (Theme Toggle, Test Alarm, Test Voice, dan Collapse Button) ke dalam grid horizontal 4 kolom yang sangat hemat ruang vertikal.
+  - Verifikasi build `npm run build` berhasil 100% bebas error linting maupun TypeScript.
 - **Perbaikan Bug Dark Mode & Pembersihan Layout**:
   - Mengonfigurasi `tailwind.config.js` untuk memproses file `.ts` / `.js` agar class styling dinamis dari composable (seperti `useOrderState.ts`) ter-compile dengan benar.
   - Menambahkan dukungan untuk custom opacities (seperti `/92`, `/85`, `/65`, `/8`, `/6`, `/12`, dll.) di dalam `theme.extend.opacity` pada `tailwind.config.js` untuk memperbaiki background putih yang bocor di halaman Peta Meja, Katalog Produk, Kitchen, dan Bar.
