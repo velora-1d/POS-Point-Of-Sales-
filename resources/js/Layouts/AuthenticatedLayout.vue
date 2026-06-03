@@ -1134,7 +1134,7 @@ onBeforeUnmount(() => {
                             isSidebarCollapsed ? 'justify-center' : '',
                             route().current('dashboard')
                                 ? 'border border-orange-500/20 bg-gradient-to-r from-orange-500/10 to-red-500/5 text-orange-500 dark:text-orange-400'
-                                : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
+                                : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800/40 hover:text-stone-900 dark:hover:text-slate-200',
                         ]"
                     >
                         <LayoutDashboard class="h-4 w-4 shrink-0" />
@@ -1160,7 +1160,7 @@ onBeforeUnmount(() => {
                             'group flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 transition duration-150',
                             isCategoryActive(category)
                                 ? 'bg-stone-200/55 dark:bg-slate-800/20 text-stone-900 dark:text-slate-100'
-                                : 'hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/30 text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200'
+                                : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800/50 dark:bg-slate-800/30 hover:text-stone-900 dark:hover:text-slate-200'
                         ]"
                     >
                         <div
@@ -1168,7 +1168,7 @@ onBeforeUnmount(() => {
                                 'flex min-w-0 items-center gap-2.5 transition duration-150',
                                 isCategoryActive(category)
                                     ? 'text-orange-500 dark:text-orange-400'
-                                    : 'text-stone-500 dark:text-slate-400 group-hover:text-stone-900 dark:group-hover:text-stone-800 dark:text-slate-200'
+                                    : 'text-stone-500 dark:text-slate-400 group-hover:text-stone-900 dark:group-hover:text-slate-200'
                             ]"
                         >
                             <component
@@ -1229,7 +1229,7 @@ onBeforeUnmount(() => {
                             :is="category.icon"
                             :class="[
                                 'h-5 w-5 shrink-0 transition duration-150',
-                                isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-450 dark:text-slate-400 group-hover:text-stone-800 dark:group-hover:text-stone-800 dark:text-slate-200'
+                                isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-400 dark:text-slate-400 group-hover:text-stone-800 dark:group-hover:text-slate-200'
                             ]"
                         />
                     </Link>
@@ -1254,7 +1254,7 @@ onBeforeUnmount(() => {
                                 isSidebarCollapsed ? 'justify-center' : '',
                                 route().current(resolveSidebarRoute(category.pages[0]))
                                     ? 'text-orange-500 dark:text-orange-400'
-                                    : 'text-stone-500 dark:text-slate-400 group-hover:text-stone-900 dark:group-hover:text-stone-800 dark:text-slate-200'
+                                    : 'text-stone-500 dark:text-slate-400 group-hover:text-stone-900 dark:group-hover:text-slate-200'
                             ]"
                         >
                             <component
@@ -1262,7 +1262,7 @@ onBeforeUnmount(() => {
                                 :class="[
                                     'h-4.5 w-4.5 shrink-0 transition duration-150',
                                     isSidebarCollapsed ? 'h-5 w-5' : '',
-                                    route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-450 dark:text-slate-400'
+                                    route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-400 dark:text-slate-400'
                                 ]"
                             />
                             <div v-if="!isSidebarCollapsed" class="min-w-0">
@@ -1304,7 +1304,7 @@ onBeforeUnmount(() => {
                                         resolveSidebarRoute(pageItem),
                                     )
                                         ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
-                                        : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200 pl-3',
+                                        : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800/60 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-slate-200 pl-3',
                                 ]"
                             >
                                 <span class="flex min-w-0 items-center gap-2 truncate">
@@ -1323,7 +1323,7 @@ onBeforeUnmount(() => {
             <div class="hidden border-t border-stone-200 dark:border-slate-800/60 px-4 py-3 lg:block">
                 <button
                     @click="toggleSidebarCollapse"
-                    class="flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/40 py-2.5 text-xs font-semibold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800/60 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200"
+                    class="flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/40 py-2.5 text-xs font-semibold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-200 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200"
                     :title="isSidebarCollapsed ? 'Buka Sidebar' : 'Tutup Sidebar'"
                 >
                     <component :is="isSidebarCollapsed ? ChevronsRight : ChevronsLeft" class="h-4 w-4" />
@@ -1375,7 +1375,7 @@ onBeforeUnmount(() => {
                         @click="toggleTheme"
                         type="button"
                         :title="isSidebarCollapsed ? (isDarkMode ? 'Mode Terang' : 'Mode Gelap') : undefined"
-                        class="flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 py-2.5 text-xs font-bold text-stone-700 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/60 hover:text-stone-950 dark:hover:text-stone-800 dark:text-slate-200 active:scale-[0.98]"
+                        class="flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 py-2.5 text-xs font-bold text-stone-700 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-950 dark:hover:text-slate-200 active:scale-[0.98]"
                     >
                         <Sun v-if="isDarkMode" class="h-4.5 w-4.5 text-amber-500 shrink-0" />
                         <Moon v-else class="h-4.5 w-4.5 text-stone-400 dark:text-slate-500 shrink-0" />
@@ -1393,7 +1393,7 @@ onBeforeUnmount(() => {
                         type="button"
                         :title="isSidebarCollapsed ? 'Test Alarm' : undefined"
                         :class="[
-                            'flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 text-xs font-bold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/60 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200 active:scale-[0.98]',
+                            'flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 text-xs font-bold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200 active:scale-[0.98]',
                             isSidebarCollapsed ? 'w-12 h-12 p-0' : 'flex-1 px-3 py-2.5'
                         ]"
                     >
@@ -1406,7 +1406,7 @@ onBeforeUnmount(() => {
                         type="button"
                         :title="isSidebarCollapsed ? 'Test Suara' : undefined"
                         :class="[
-                            'flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 text-xs font-bold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/60 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200 active:scale-[0.98]',
+                            'flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 text-xs font-bold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200 active:scale-[0.98]',
                             isSidebarCollapsed ? 'w-12 h-12 p-0' : 'flex-1 px-3 py-2.5'
                         ]"
                     >
@@ -1458,7 +1458,7 @@ onBeforeUnmount(() => {
                     <button
                         @click="toggleTheme"
                         type="button"
-                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:hover:text-stone-900 dark:text-white transition"
+                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition"
                         :title="isDarkMode ? 'Mode Terang' : 'Mode Gelap'"
                     >
                         <Sun v-if="isDarkMode" class="h-5 w-5 text-amber-500" />
@@ -1467,7 +1467,7 @@ onBeforeUnmount(() => {
                     <button
                         @click="testAlarmGlobal"
                         type="button"
-                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:hover:text-stone-900 dark:text-white transition"
+                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition"
                         title="Uji coba alarm"
                     >
                         <Bell class="h-5 w-5 text-orange-500 dark:text-orange-400" />
@@ -1475,14 +1475,14 @@ onBeforeUnmount(() => {
                     <button
                         @click="testVoiceGlobal"
                         type="button"
-                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:hover:text-stone-900 dark:text-white transition"
+                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition"
                         title="Uji coba suara"
                     >
                         <Volume2 class="h-5 w-5 text-fuchsia-500 dark:text-fuchsia-400" />
                     </button>
                     <button
                         @click="isMobileOpen = !isMobileOpen"
-                        class="rounded-lg p-1 text-stone-550 dark:text-slate-450 transition duration-150 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:hover:text-stone-900 dark:text-white focus:outline-none"
+                        class="rounded-lg p-1 text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white focus:outline-none"
                     >
                         <Menu v-if="!isMobileOpen" class="h-6 w-6" />
                         <X v-else class="h-6 w-6" />

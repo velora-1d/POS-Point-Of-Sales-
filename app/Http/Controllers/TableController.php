@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Outlet;
 use App\Models\Table;
+use App\Services\TableQrConfigService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,6 +12,11 @@ use Illuminate\Support\Str;
 
 class TableController extends Controller
 {
+    public function __construct(
+        protected TableQrConfigService $tableQrConfigService,
+    ) {
+    }
+
     public function index(Request $request)
     {
         $user = auth()->user();
@@ -20,6 +26,16 @@ class TableController extends Controller
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
+
+        if ($outletId) {
+            $qrConfig = $this->tableQrConfigService->getConfigForOutlet($outletId);
+            $tables->each(function (Table $table) use ($qrConfig): void {
+                $table->setAttribute(
+                    'public_qr_url',
+                    $this->tableQrConfigService->buildPublicMenuUrlForTable($table, $qrConfig),
+                );
+            });
+        }
 
         return Inertia::render('Settings/Tables', [
             'tables' => $tables,
@@ -35,6 +51,7 @@ class TableController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:50',
             'capacity' => 'nullable|integer|min:1',
+            'category' => 'required|string|in:indoor,outdoor',
         ]);
 
         Table::create([
@@ -42,6 +59,7 @@ class TableController extends Controller
             'outlet_id' => $outletId,
             'name' => $validated['name'],
             'capacity' => $validated['capacity'],
+            'category' => $validated['category'],
             'qr_code' => Str::slug($validated['name']) . '-' . strtolower(Str::random(4)),
             'qr_session_token' => (string) Str::ulid(),
             'status' => 'available',
@@ -56,6 +74,7 @@ class TableController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:50',
             'capacity' => 'nullable|integer|min:1',
+            'category' => 'required|string|in:indoor,outdoor',
         ]);
 
         $table->update($validated);
