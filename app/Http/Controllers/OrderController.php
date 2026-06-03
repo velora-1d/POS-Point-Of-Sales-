@@ -230,6 +230,17 @@ class OrderController extends Controller
             ->with('paymentCheckout', $result['paymentCheckout']);
     }
 
+    public function deliver(Order $order): RedirectResponse
+    {
+        $this->orderEditService->deliverOrder($order, auth()->user());
+
+        return redirect()
+            ->route('kasir.order')
+            ->with('success', $order->isPaidInFull()
+                ? 'Pesanan berhasil disajikan dan transaksi selesai.'
+                : 'Pesanan berhasil ditandai sebagai disajikan.');
+    }
+
     protected function resolveOutletId(?User $user): ?string
     {
         return $user?->outlet_id ?? Outlet::first()?->id;

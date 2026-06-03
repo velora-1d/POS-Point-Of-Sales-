@@ -34,6 +34,7 @@ interface TablePayload {
     name: string;
     capacity?: number | null;
     status: 'available' | 'occupied' | 'reserved';
+    category?: string | null;
     qr_code?: string | null;
     qr_session_token?: string | null;
     public_qr_url?: string | null;
@@ -70,6 +71,11 @@ const props = defineProps<{
     success?: string | null;
     error?: string | null;
 }>();
+
+const selectedCategory = ref<'indoor' | 'outdoor'>('indoor');
+const filteredTables = computed(() => {
+    return props.tables.filter((t) => t.category === selectedCategory.value);
+});
 
 const POLLING_INTERVAL_MS = 8000;
 const LIVE_CHANGE_HIGHLIGHT_MS = 4000;
@@ -131,7 +137,7 @@ const currentDateTimeInput = () => {
 };
 
 const hasManualPositions = computed(() =>
-    props.tables.some(
+    filteredTables.value.some(
         (table) => table.position_x !== null || table.position_y !== null,
     ),
 );
@@ -144,7 +150,7 @@ const generatedSlots = [
 ];
 
 const tableCoordinates = computed(() => {
-    const positionedTables = props.tables.filter(
+    const positionedTables = filteredTables.value.filter(
         (table) =>
             table.position_x !== null &&
             table.position_x !== undefined &&
@@ -153,7 +159,7 @@ const tableCoordinates = computed(() => {
     );
 
     if (!hasManualPositions.value || positionedTables.length === 0) {
-        return props.tables.map((table, index) => {
+        return filteredTables.value.map((table, index) => {
             const [x, y] = generatedSlots[index % generatedSlots.length];
 
             return {
@@ -171,7 +177,7 @@ const tableCoordinates = computed(() => {
     const minY = Math.min(...ys);
     const maxY = Math.max(...ys);
 
-    return props.tables.map((table, index) => {
+    return filteredTables.value.map((table, index) => {
         if (
             table.position_x === null ||
             table.position_x === undefined ||
@@ -623,6 +629,32 @@ const cancelReservation = (reservationId: string) => {
                                 <h3 class="mt-1 text-lg font-black text-white">
                                     Visual map meja aktif
                                 </h3>
+                                <div class="mt-3 flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-950 p-1 w-fit">
+                                    <button
+                                        type="button"
+                                        @click="selectedCategory = 'indoor'"
+                                        :class="[
+                                            'rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-200',
+                                            selectedCategory === 'indoor'
+                                                ? 'bg-orange-500 text-white shadow-md'
+                                                : 'text-slate-400 hover:text-slate-200',
+                                        ]"
+                                    >
+                                        Indoor Area
+                                    </button>
+                                    <button
+                                        type="button"
+                                        @click="selectedCategory = 'outdoor'"
+                                        :class="[
+                                            'rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-200',
+                                            selectedCategory === 'outdoor'
+                                                ? 'bg-orange-500 text-white shadow-md'
+                                                : 'text-slate-400 hover:text-slate-200',
+                                        ]"
+                                    >
+                                        Outdoor Area
+                                    </button>
+                                </div>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <Link

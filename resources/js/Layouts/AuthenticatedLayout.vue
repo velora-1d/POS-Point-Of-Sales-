@@ -22,6 +22,8 @@ import {
     ChevronsRight,
     Volume2,
     Bell,
+    Sun,
+    Moon,
 } from '@lucide/vue';
 import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import axios from 'axios';
@@ -83,6 +85,32 @@ if (typeof window !== 'undefined') {
 const toggleSidebarCollapse = () => {
     isSidebarCollapsed.value = !isSidebarCollapsed.value;
     localStorage.setItem('sidebar_collapsed', isSidebarCollapsed.value ? 'true' : 'false');
+};
+
+const isDarkMode = ref(false);
+
+const initTheme = () => {
+    if (typeof window !== 'undefined') {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            isDarkMode.value = true;
+            document.documentElement.classList.add('dark');
+        } else {
+            isDarkMode.value = false;
+            document.documentElement.classList.remove('dark');
+        }
+    }
+};
+
+const toggleTheme = () => {
+    isDarkMode.value = !isDarkMode.value;
+    if (isDarkMode.value) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    }
 };
 
 // List of all 62 menu items categorized into 10 categories matching menu-per-role.md
@@ -1009,6 +1037,7 @@ const checkOrderAudioUpdates = async () => {
 };
 
 onMounted(() => {
+    initTheme();
     if (user.value && user.value.outlet_id) {
         checkOrderAudioUpdates();
         orderAudioPollInterval = window.setInterval(checkOrderAudioUpdates, 10000);
@@ -1024,19 +1053,19 @@ onBeforeUnmount(() => {
 
 <template>
     <div
-        class="flex h-screen flex-col overflow-hidden bg-slate-950 font-sans text-slate-100 antialiased selection:bg-orange-500 selection:text-white lg:flex-row"
+        class="flex h-screen flex-col overflow-hidden bg-stone-100 dark:bg-slate-950 font-sans text-stone-900 dark:text-slate-100 antialiased selection:bg-orange-500 selection:text-white lg:flex-row"
     >
         <!-- Backdrop for mobile sidebar drawer -->
         <div
             v-if="isMobileOpen"
             @click="isMobileOpen = false"
-            class="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300 lg:hidden"
+            class="fixed inset-0 z-40 bg-stone-950/40 dark:bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300 lg:hidden"
         ></div>
 
         <!-- Sidebar Navigation -->
         <aside
             :class="[
-                'fixed bottom-0 left-0 top-0 z-40 flex flex-col border-r border-slate-800/80 bg-slate-900/90 backdrop-blur-xl transition-all duration-300 lg:translate-x-0',
+                'fixed bottom-0 left-0 top-0 z-40 flex flex-col border-r border-stone-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl transition-all duration-300 lg:translate-x-0',
                 isSidebarCollapsed ? 'w-20' : 'w-80',
                 isMobileOpen ? 'translate-x-0' : '-translate-x-full',
             ]"
@@ -1044,22 +1073,22 @@ onBeforeUnmount(() => {
             <!-- Logo Section -->
             <div
                 :class="[
-                    'flex shrink-0 items-center gap-3 border-b border-slate-800/60 py-6 transition-all duration-300',
+                    'flex shrink-0 items-center gap-3 border-b border-stone-200 dark:border-slate-800/60 py-6 transition-all duration-300',
                     isSidebarCollapsed ? 'justify-center px-4' : 'px-6'
                 ]"
             >
-                <div v-if="isSidebarCollapsed" class="h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-white/10 p-1 backdrop-blur-sm">
+                <div v-if="isSidebarCollapsed" class="h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-white/10 p-1 backdrop-blur-sm">
                     <img src="/images/pos_logo.png" class="h-full w-full object-contain" alt="Logo" />
                 </div>
                 <div v-else class="flex items-center gap-3">
-                    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-700 bg-white p-1 shadow-lg shadow-orange-500/10">
+                    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-stone-200 dark:border-slate-700 bg-white p-1 shadow-lg shadow-orange-500/10">
                         <img src="/images/pos_logo.png" class="h-full w-full object-contain" alt="Logo" />
                     </div>
                     <div>
-                        <h1 class="text-base font-extrabold leading-none tracking-wider text-white">
+                        <h1 class="text-base font-extrabold leading-none tracking-wider text-stone-900 dark:text-white">
                             POS MENTAI
                         </h1>
-                        <span class="mt-1 block text-[10px] font-semibold uppercase tracking-widest text-orange-400">
+                        <span class="mt-1 block text-[10px] font-semibold uppercase tracking-widest text-orange-500 dark:text-orange-400">
                             Management Suite
                         </span>
                     </div>
@@ -1067,10 +1096,10 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- Search Area -->
-            <div v-if="!isSidebarCollapsed" class="border-slate-850 shrink-0 border-b px-4 py-4">
+            <div v-if="!isSidebarCollapsed" class="border-stone-200 dark:border-slate-850 shrink-0 border-b px-4 py-4">
                 <div class="relative">
                     <span
-                        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"
+                        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400 dark:text-slate-500"
                     >
                         <Search class="h-4 w-4" />
                     </span>
@@ -1078,7 +1107,7 @@ onBeforeUnmount(() => {
                         type="text"
                         v-model="searchQuery"
                         placeholder="Cari halaman atau fitur..."
-                        class="border-slate-850 w-full rounded-xl border bg-slate-950/60 py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        class="border-stone-200 dark:border-slate-850 w-full rounded-xl border bg-stone-100/50 dark:bg-slate-950/60 py-2.5 pl-10 pr-4 text-sm text-stone-850 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
                     <button
                         v-if="searchQuery"
@@ -1104,8 +1133,8 @@ onBeforeUnmount(() => {
                             'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition duration-150',
                             isSidebarCollapsed ? 'justify-center' : '',
                             route().current('dashboard')
-                                ? 'border border-orange-500/20 bg-gradient-to-r from-orange-500/10 to-red-500/5 text-orange-400'
-                                : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200',
+                                ? 'border border-orange-500/20 bg-gradient-to-r from-orange-500/10 to-red-500/5 text-orange-500 dark:text-orange-400'
+                                : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800/40 hover:text-stone-900 dark:hover:text-slate-200',
                         ]"
                     >
                         <LayoutDashboard class="h-4 w-4 shrink-0" />
@@ -1130,34 +1159,34 @@ onBeforeUnmount(() => {
                         :class="[
                             'group flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 transition duration-150',
                             isCategoryActive(category)
-                                ? 'bg-slate-800/20 text-slate-100'
-                                : 'hover:bg-slate-800/30 text-slate-400'
+                                ? 'bg-stone-200/55 dark:bg-slate-800/20 text-stone-900 dark:text-slate-100'
+                                : 'hover:bg-stone-100 dark:hover:bg-slate-800/30 text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-slate-200'
                         ]"
                     >
                         <div
                             :class="[
                                 'flex min-w-0 items-center gap-2.5 transition duration-150',
                                 isCategoryActive(category)
-                                    ? 'text-orange-400'
-                                    : 'text-slate-400 group-hover:text-slate-200'
+                                    ? 'text-orange-500 dark:text-orange-400'
+                                    : 'text-stone-500 dark:text-slate-400 group-hover:text-stone-900 dark:group-hover:text-slate-200'
                             ]"
                         >
                             <component
                                 :is="category.icon"
                                 :class="[
                                     'h-4.5 w-4.5 shrink-0 transition duration-150',
-                                    isCategoryActive(category) ? 'text-orange-400' : 'text-slate-400'
+                                    isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-400 dark:text-slate-400'
                                 ]"
                             />
                             <div class="min-w-0">
                                 <span
                                     :class="[
                                         'truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-150',
-                                        isCategoryActive(category) ? 'text-orange-400' : 'text-slate-300'
+                                        isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-700 dark:text-slate-300'
                                     ]"
                                     >{{ category.name }}</span
                                 >
-                                <p class="mt-0.5 text-[10px] text-slate-500">
+                                <p class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500">
                                     {{ category.flow }}
                                 </p>
                             </div>
@@ -1166,7 +1195,7 @@ onBeforeUnmount(() => {
                             <span
                                 :class="[
                                     'transition duration-150',
-                                    isCategoryActive(category) ? 'text-orange-400' : 'text-slate-500 group-hover:text-slate-350'
+                                    isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-400 dark:text-slate-500 group-hover:text-stone-600 dark:group-hover:text-slate-355'
                                 ]"
                             >
                             <ChevronDown
@@ -1192,15 +1221,15 @@ onBeforeUnmount(() => {
                         :class="[
                             'group flex items-center justify-center rounded-lg p-3 transition duration-150',
                             isCategoryActive(category)
-                                ? 'bg-orange-500/10 font-bold text-orange-400'
-                                : 'hover:bg-slate-800/30 text-slate-400'
+                                ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400'
+                                : 'hover:bg-stone-100 dark:hover:bg-slate-800/30 text-stone-500 dark:text-slate-400'
                         ]"
                     >
                         <component
                             :is="category.icon"
                             :class="[
                                 'h-5 w-5 shrink-0 transition duration-150',
-                                isCategoryActive(category) ? 'text-orange-400' : 'text-slate-400 group-hover:text-slate-205'
+                                isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-450 dark:text-slate-400 group-hover:text-stone-800 dark:group-hover:text-slate-200'
                             ]"
                         />
                     </Link>
@@ -1215,8 +1244,8 @@ onBeforeUnmount(() => {
                             'group flex items-center rounded-lg transition duration-150',
                             isSidebarCollapsed ? 'justify-center p-3' : 'justify-between px-3 py-2',
                             route().current(resolveSidebarRoute(category.pages[0]))
-                                ? 'bg-orange-500/10 font-bold text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
-                                : 'hover:bg-slate-800/30 text-slate-400'
+                                ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
+                                : 'hover:bg-stone-100 dark:hover:bg-slate-800/30 text-stone-500 dark:text-slate-400'
                         ]"
                     >
                         <div
@@ -1224,8 +1253,8 @@ onBeforeUnmount(() => {
                                 'flex min-w-0 items-center gap-2.5 transition duration-150',
                                 isSidebarCollapsed ? 'justify-center' : '',
                                 route().current(resolveSidebarRoute(category.pages[0]))
-                                    ? 'text-orange-400'
-                                    : 'text-slate-400 group-hover:text-slate-200'
+                                    ? 'text-orange-500 dark:text-orange-400'
+                                    : 'text-stone-500 dark:text-slate-400 group-hover:text-stone-900 dark:group-hover:text-slate-200'
                             ]"
                         >
                             <component
@@ -1233,18 +1262,18 @@ onBeforeUnmount(() => {
                                 :class="[
                                     'h-4.5 w-4.5 shrink-0 transition duration-150',
                                     isSidebarCollapsed ? 'h-5 w-5' : '',
-                                    route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-400' : 'text-slate-400'
+                                    route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-450 dark:text-slate-400'
                                 ]"
                             />
                             <div v-if="!isSidebarCollapsed" class="min-w-0">
                                 <span
                                     :class="[
                                         'truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-150',
-                                        route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-400' : 'text-slate-300'
+                                        route().current(resolveSidebarRoute(category.pages[0])) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-700 dark:text-slate-300'
                                     ]"
                                     >{{ category.name }}</span
                                 >
-                                <p class="mt-0.5 text-[10px] text-slate-500">
+                                <p class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500">
                                     {{ category.flow }}
                                 </p>
                             </div>
@@ -1260,7 +1289,7 @@ onBeforeUnmount(() => {
                                 category.isOpenFiltered,
                             )
                         "
-                        class="ml-5 space-y-1 border-l border-slate-800/40 pl-4"
+                        class="ml-5 space-y-1 border-l border-stone-200 dark:border-slate-800/40 pl-4"
                     >
                         <template
                             v-for="pageItem in category.pages"
@@ -1274,8 +1303,8 @@ onBeforeUnmount(() => {
                                     route().current(
                                         resolveSidebarRoute(pageItem),
                                     )
-                                        ? 'bg-orange-500/10 font-bold text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
-                                        : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 pl-3',
+                                        ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
+                                        : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800/40 hover:text-stone-900 dark:hover:text-slate-200 pl-3',
                                 ]"
                             >
                                 <span class="flex min-w-0 items-center gap-2 truncate">
@@ -1291,10 +1320,10 @@ onBeforeUnmount(() => {
             </nav>
 
             <!-- Toggle Collapse Button (Desktop only) -->
-            <div class="hidden border-t border-slate-800/60 px-4 py-3 lg:block">
+            <div class="hidden border-t border-stone-200 dark:border-slate-800/60 px-4 py-3 lg:block">
                 <button
                     @click="toggleSidebarCollapse"
-                    class="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 py-2.5 text-xs font-semibold text-slate-400 transition duration-150 hover:bg-slate-800/60 hover:text-slate-200"
+                    class="flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/40 py-2.5 text-xs font-semibold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-200 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200"
                     :title="isSidebarCollapsed ? 'Buka Sidebar' : 'Tutup Sidebar'"
                 >
                     <component :is="isSidebarCollapsed ? ChevronsRight : ChevronsLeft" class="h-4 w-4" />
@@ -1305,13 +1334,13 @@ onBeforeUnmount(() => {
             <!-- User Profile & Session Section -->
             <div
                 :class="[
-                    'shrink-0 border-t border-slate-800/60 bg-slate-950/20 p-4 transition-all duration-300',
+                    'shrink-0 border-t border-stone-200 dark:border-slate-800/60 bg-stone-50 dark:bg-slate-950/20 p-4 transition-all duration-300',
                     isSidebarCollapsed ? 'flex flex-col items-center gap-3' : ''
                 ]"
             >
                 <div
                     :class="[
-                        'flex items-center gap-3 border border-slate-800/60 bg-slate-900 transition-all duration-300',
+                        'flex items-center gap-3 border border-stone-200 dark:border-slate-800/60 bg-white dark:bg-slate-900 transition-all duration-300',
                         isSidebarCollapsed ? 'w-12 h-12 justify-center rounded-xl p-0' : 'w-full rounded-xl p-2'
                     ]"
                     :title="isSidebarCollapsed ? `${user?.name || 'Staff'} (${user?.role || 'Guest'})` : undefined"
@@ -1323,21 +1352,37 @@ onBeforeUnmount(() => {
                     </div>
                     <div v-if="!isSidebarCollapsed" class="min-w-0 flex-1">
                         <p
-                            class="truncate text-sm font-bold leading-snug text-white"
+                            class="truncate text-sm font-bold leading-snug text-stone-900 dark:text-white"
                         >
                             {{ user?.name || 'Staff POS' }}
                         </p>
                         <div class="mt-0.5 flex items-center gap-1.5">
                             <span
-                                class="py-0.2 rounded border border-orange-500/20 bg-orange-500/10 px-1.5 text-[9px] font-semibold uppercase tracking-wider text-orange-400"
+                                class="py-0.2 rounded border border-orange-500/20 bg-orange-500/10 px-1.5 text-[9px] font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-400"
                             >
                                 {{ user?.role || 'Guest' }}
                             </span>
-                            <span class="truncate text-[9px] text-slate-400">
+                            <span class="truncate text-[9px] text-stone-500 dark:text-slate-400">
                                 @ {{ user?.outlet || 'No Outlet' }}
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Theme Toggle Button -->
+                <div :class="[isSidebarCollapsed ? 'w-12' : 'w-full', 'mb-2']">
+                    <button
+                        @click="toggleTheme"
+                        type="button"
+                        :title="isSidebarCollapsed ? (isDarkMode ? 'Mode Terang' : 'Mode Gelap') : undefined"
+                        class="flex w-full items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 py-2.5 text-xs font-bold text-stone-700 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-950 dark:hover:text-slate-200 active:scale-[0.98]"
+                    >
+                        <Sun v-if="isDarkMode" class="h-4.5 w-4.5 text-amber-500 shrink-0" />
+                        <Moon v-else class="h-4.5 w-4.5 text-slate-500 shrink-0" />
+                        <span v-if="!isSidebarCollapsed">
+                            {{ isDarkMode ? 'Mode Terang' : 'Mode Gelap' }}
+                        </span>
+                    </button>
                 </div>
 
                 <!-- Test Suara & Alarm Buttons -->
@@ -1348,11 +1393,11 @@ onBeforeUnmount(() => {
                         type="button"
                         :title="isSidebarCollapsed ? 'Test Alarm' : undefined"
                         :class="[
-                            'flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 transition duration-150 hover:bg-slate-800/60 hover:text-slate-200 active:scale-[0.98]',
+                            'flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 text-xs font-bold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200 active:scale-[0.98]',
                             isSidebarCollapsed ? 'w-12 h-12 p-0' : 'flex-1 px-3 py-2.5'
                         ]"
                     >
-                        <Bell class="h-4 w-4 shrink-0 text-orange-400" />
+                        <Bell class="h-4 w-4 shrink-0 text-orange-500 dark:text-orange-400" />
                         <span v-if="!isSidebarCollapsed">Test Alarm</span>
                     </button>
                     <!-- Test Suara Button -->
@@ -1361,11 +1406,11 @@ onBeforeUnmount(() => {
                         type="button"
                         :title="isSidebarCollapsed ? 'Test Suara' : undefined"
                         :class="[
-                            'flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 transition duration-150 hover:bg-slate-800/60 hover:text-slate-200 active:scale-[0.98]',
+                            'flex items-center justify-center gap-2 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 text-xs font-bold text-stone-500 dark:text-slate-400 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800/60 hover:text-stone-900 dark:hover:text-slate-200 active:scale-[0.98]',
                             isSidebarCollapsed ? 'w-12 h-12 p-0' : 'flex-1 px-3 py-2.5'
                         ]"
                     >
-                        <Volume2 class="h-4 w-4 shrink-0 text-fuchsia-400" />
+                        <Volume2 class="h-4 w-4 shrink-0 text-fuchsia-500 dark:text-fuchsia-400" />
                         <span v-if="!isSidebarCollapsed">Test Suara</span>
                     </button>
                 </div>
@@ -1377,7 +1422,7 @@ onBeforeUnmount(() => {
                     as="button"
                     :title="isSidebarCollapsed ? 'Keluar Sesi' : undefined"
                     :class="[
-                        'flex items-center justify-center gap-2 rounded-xl border border-red-900/35 bg-red-950/30 text-xs font-bold text-red-400 transition duration-150 hover:border-red-900/50 hover:bg-red-900/20 active:scale-[0.98]',
+                        'flex items-center justify-center gap-2 rounded-xl border border-red-200 dark:border-red-900/35 bg-red-50 dark:bg-red-950/30 text-xs font-bold text-red-600 dark:text-red-400 transition duration-150 hover:border-red-300 dark:hover:border-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/20 active:scale-[0.98]',
                         isSidebarCollapsed ? 'w-12 h-12 p-0' : 'w-full px-4 py-3'
                     ]"
                 >
@@ -1396,7 +1441,7 @@ onBeforeUnmount(() => {
         >
             <!-- Mobile Sticky Navigation Header -->
             <div
-                class="sticky top-0 z-30 flex shrink-0 items-center justify-between border-b border-slate-800/60 bg-slate-900 px-5 py-4 backdrop-blur-md sm:px-6 lg:hidden"
+                class="sticky top-0 z-30 flex shrink-0 items-center justify-between border-b border-stone-200 dark:border-slate-800/60 bg-white/90 dark:bg-slate-900 px-5 py-4 backdrop-blur-md sm:px-6 lg:hidden"
             >
                 <div class="flex items-center gap-2">
                     <div
@@ -1404,30 +1449,40 @@ onBeforeUnmount(() => {
                     >
                         M
                     </div>
-                    <span class="text-lg font-bold tracking-wider text-white"
+                    <span class="text-lg font-bold tracking-wider text-stone-900 dark:text-white"
                         >POS MENTAI</span
                     >
                 </div>
                 <div class="flex items-center gap-2">
+                    <!-- Mobile Theme Toggle -->
+                    <button
+                        @click="toggleTheme"
+                        type="button"
+                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition"
+                        :title="isDarkMode ? 'Mode Terang' : 'Mode Gelap'"
+                    >
+                        <Sun v-if="isDarkMode" class="h-5 w-5 text-amber-500" />
+                        <Moon v-else class="h-5 w-5 text-slate-600 dark:text-slate-450" />
+                    </button>
                     <button
                         @click="testAlarmGlobal"
                         type="button"
-                        class="rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition"
+                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition"
                         title="Uji coba alarm"
                     >
-                        <Bell class="h-5 w-5 text-orange-400" />
+                        <Bell class="h-5 w-5 text-orange-500 dark:text-orange-400" />
                     </button>
                     <button
                         @click="testVoiceGlobal"
                         type="button"
-                        class="rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition"
+                        class="rounded-lg p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition"
                         title="Uji coba suara"
                     >
-                        <Volume2 class="h-5 w-5 text-fuchsia-400" />
+                        <Volume2 class="h-5 w-5 text-fuchsia-500 dark:text-fuchsia-400" />
                     </button>
                     <button
                         @click="isMobileOpen = !isMobileOpen"
-                        class="rounded-lg p-1 text-slate-400 transition duration-150 hover:bg-slate-800 hover:text-white focus:outline-none"
+                        class="rounded-lg p-1 text-stone-550 dark:text-slate-450 transition duration-150 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white focus:outline-none"
                     >
                         <Menu v-if="!isMobileOpen" class="h-6 w-6" />
                         <X v-else class="h-6 w-6" />
@@ -1438,7 +1493,7 @@ onBeforeUnmount(() => {
             <!-- Page Title Header (Slot) -->
             <header
                 v-if="$slots.header"
-                class="sticky top-0 z-20 hidden shrink-0 border-b border-slate-900 bg-slate-900/20 px-5 py-6 backdrop-blur-md sm:px-6 lg:block lg:px-8 xl:px-10"
+                class="sticky top-0 z-20 hidden shrink-0 border-b border-stone-200 dark:border-slate-900 bg-white/40 dark:bg-slate-900/20 px-5 py-6 backdrop-blur-md sm:px-6 lg:block lg:px-8 xl:px-10"
             >
                 <slot name="header" />
             </header>
@@ -1451,7 +1506,7 @@ onBeforeUnmount(() => {
 
                 <!-- Sticky footer for minor branding info -->
                 <footer
-                    class="border-t border-slate-900/60 px-5 py-6 text-center text-xs text-slate-600 sm:px-6 lg:px-8 xl:px-10"
+                    class="border-t border-stone-200 dark:border-slate-900/60 px-5 py-6 text-center text-xs text-stone-450 dark:text-slate-650 sm:px-6 lg:px-8 xl:px-10"
                 >
                     POS Mentai &copy; 2026. Hak Cipta Dilindungi.
                 </footer>
@@ -1468,8 +1523,11 @@ onBeforeUnmount(() => {
     height: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.35);
+    background: rgba(120, 113, 108, 0.15);
     border-radius: 9999px;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.35);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
     background: linear-gradient(
@@ -1478,8 +1536,11 @@ onBeforeUnmount(() => {
         rgba(239, 68, 68, 0.34)
     );
     border-radius: 9999px;
-    border: 2px solid rgba(15, 23, 42, 0.7);
+    border: 2px solid #f5f5f4;
     background-clip: padding-box;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    border-color: rgba(15, 23, 42, 0.7);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(
@@ -1487,6 +1548,9 @@ onBeforeUnmount(() => {
         rgba(251, 146, 60, 0.72),
         rgba(239, 68, 68, 0.5)
     );
+    border-color: #e7e5e4;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     border-color: rgba(15, 23, 42, 0.9);
 }
 

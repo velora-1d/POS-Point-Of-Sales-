@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
+use App\Services\OnlineOrderStatusSyncService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +17,7 @@ class OrderEditService
     public function __construct(
         protected PromoEngineService $promoEngineService,
         protected ApprovalRuleService $approvalRuleService,
+        protected OnlineOrderStatusSyncService $onlineOrderStatusSyncService,
     ) {
     }
 
@@ -208,6 +210,66 @@ class OrderEditService
                     'cancelled_at' => now()->toIso8601String(),
                 ]),
             ]);
+        });
+    }
+
+    public function deliverOrder(Order $order, User $actor): void
+    {
+        if ($order->outlet_id !== $actor->outlet_id) {
+            throw ValidationException::withMessages([
+                'error' => 'Order ini tidak berada di outlet aktif Anda.',
+            ]);
+        }
+
+        if (!in_array($order->status, ['ready', 'delivered'], true)) {
+            throw ValidationException::withMessages([
+                'error' => 'Hanya order dengan status Ready yang bisa disajikan.',
+            ]);
+        }
+
+        DB::transaction(function () use ($order, $actor) {
+            $isPaid = $order->isPaidInFull();
+            $newStatus = $isPaid ? 'completed' : 'delivered';
+            $oldStatus = $order->status;
+
+            $order->update([
+                'status' => $newStatus,
+            ]);
+
+            // Log status change
+            \App\Models\OrderStatusLog::create([
+                'order_id' => $order->id,
+                'from_status' => $oldStatus,
+                'to_status' => $newStatus,
+                'changed_by' => $actor->id,
+                'changed_by_type' => 'user',
+                'notes' => $isPaid 
+                    ? 'Pesanan disajikan dan transaksi selesai (Lunas).' 
+                    : 'Pesanan disajikan ke customer (Belum Lunas).',
+                'created_at' => now(),
+            ]);
+
+            // Sync status ke platform online
+            $this->onlineOrderStatusSyncService->sync(
+                $order,
+                $newStatus,
+                $isPaid ? 'Order online selesai disajikan.' : 'Order online sedang diantar.'
+            );
+
+            // Bebaskan meja jika statusnya completed (lunas)
+            if ($newStatus === 'completed' && $order->table_id) {
+                $hasOtherActiveOrders = Order::query()
+                    ->where('table_id', $order->table_id)
+                    ->where('id', '!=', $order->id)
+                    ->whereNotIn('status', ['completed', 'cancelled'])
+                    ->exists();
+
+                if (!$hasOtherActiveOrders) {
+                    \App\Models\Table::query()
+                        ->whereKey($order->table_id)
+                        ->update(['status' => 'available']);
+                }
+            }
         });
     }
 }

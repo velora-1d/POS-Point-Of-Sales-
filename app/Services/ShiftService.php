@@ -90,6 +90,8 @@ class ShiftService
         }
 
         return DB::transaction(function () use ($payload, $actor, $outletId, $shiftTemplateId) {
+            $shiftNumberOfDay = $this->shiftRepository->countTodayShiftsForOutlet($outletId) + 1;
+
             $shift = $this->shiftRepository->create([
                 'outlet_id' => $outletId,
                 'user_id' => $actor->id,
@@ -99,6 +101,7 @@ class ShiftService
                 'opened_at' => now(),
                 'closed_at' => null,
                 'status' => 'active',
+                'shift_number_of_day' => $shiftNumberOfDay,
                 'opening_cash' => (float) $payload['opening_cash'],
                 'expected_cash' => (float) $payload['opening_cash'],
                 'actual_cash' => null,
@@ -327,12 +330,14 @@ class ShiftService
 
     protected function transformShiftPaginator(LengthAwarePaginator $paginator): LengthAwarePaginator
     {
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $paginator */
         $paginator->setCollection(
             $paginator->getCollection()->map(fn (Shift $shift) => $this->transformShift($shift, $shift->status === 'active')),
         );
 
         return $paginator;
     }
+
 
     protected function transformShift(Shift $shift, bool $isLiveSummary): array
     {

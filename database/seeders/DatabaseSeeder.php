@@ -100,6 +100,7 @@ class DatabaseSeeder extends Seeder
                 'qr_code' => 'QR-' . strtoupper(Str::random(10)),
                 'status' => 'available',
                 'is_active' => true,
+                'category' => $tableData['category'] ?? 'indoor',
             ]);
         }
 

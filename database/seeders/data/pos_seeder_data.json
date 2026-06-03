@@ -79,13 +79,26 @@
     }
   ],
   "tables": [
-    { "name": "Meja 01", "capacity": 2 },
-    { "name": "Meja 02", "capacity": 2 },
-    { "name": "Meja 03", "capacity": 4 },
-    { "name": "Meja 04", "capacity": 4 },
-    { "name": "Meja 05", "capacity": 6 },
-    { "name": "VIP 01", "capacity": 8 },
-    { "name": "VIP 02", "capacity": 10 }
+    { "name": "Meja 01", "capacity": 2, "category": "indoor" },
+    { "name": "Meja 02", "capacity": 2, "category": "indoor" },
+    { "name": "Meja 03", "capacity": 4, "category": "indoor" },
+    { "name": "Meja 04", "capacity": 4, "category": "indoor" },
+    { "name": "Meja 05", "capacity": 4, "category": "indoor" },
+    { "name": "Meja 06", "capacity": 6, "category": "indoor" },
+    { "name": "Meja 07", "capacity": 6, "category": "indoor" },
+    { "name": "Meja 08", "capacity": 8, "category": "indoor" },
+    { "name": "Meja 09", "capacity": 8, "category": "indoor" },
+    { "name": "Meja 10", "capacity": 10, "category": "indoor" },
+    { "name": "Meja 11", "capacity": 2, "category": "outdoor" },
+    { "name": "Meja 12", "capacity": 2, "category": "outdoor" },
+    { "name": "Meja 13", "capacity": 4, "category": "outdoor" },
+    { "name": "Meja 14", "capacity": 4, "category": "outdoor" },
+    { "name": "Meja 15", "capacity": 4, "category": "outdoor" },
+    { "name": "Meja 16", "capacity": 6, "category": "outdoor" },
+    { "name": "Meja 17", "capacity": 6, "category": "outdoor" },
+    { "name": "Meja 18", "capacity": 8, "category": "outdoor" },
+    { "name": "Meja 19", "capacity": 8, "category": "outdoor" },
+    { "name": "Meja 20", "capacity": 10, "category": "outdoor" }
   ],
   "categories": [
     { "name": "Mentai Rice", "description": "Nasi panggang dengan saus mentai gurih khas Jepang" },

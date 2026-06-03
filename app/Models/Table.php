@@ -25,6 +25,7 @@ class Table extends Model
         'position_y',
         'status',
         'is_active',
+        'category',
     ];
 
     protected function casts(): array

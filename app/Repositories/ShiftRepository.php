@@ -170,10 +170,19 @@ class ShiftRepository
             ->get(['orders.id', 'orders.shift_id', 'orders.metadata']);
     }
 
+    public function countTodayShiftsForOutlet(string $outletId): int
+    {
+        return Shift::query()
+            ->where('outlet_id', $outletId)
+            ->whereDate('opened_at', now()->toDateString())
+            ->count();
+    }
+
     public function create(array $payload): Shift
     {
         return Shift::query()->create($payload);
     }
+
 
     public function update(Shift $shift, array $payload): Shift
     {

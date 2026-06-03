@@ -101,7 +101,14 @@ const selectedCategoryId = ref<string>('all');
 
 let clockInterval: number | undefined;
 let pollInterval: number | undefined;
-const knownOrderKeys = ref<Set<string>>(new Set());
+interface OrderMetadata {
+    status: KitchenOrderStatus;
+    itemsHash: string;
+    notes?: string | null;
+}
+
+const knownOrders = ref<Map<string, OrderMetadata>>(new Map());
+const customEstimates = ref<Record<string, number>>({});
 
 // State Audio Lokal
 const isAudioBlocked = ref(false);
@@ -123,26 +130,44 @@ const handleVolumeChange = (e: Event) => {
     }
 };
 
+// Singleton AudioContext
+let globalAudioCtx: AudioContext | null = null;
+const getAudioContext = (): AudioContext | null => {
+    if (typeof window === 'undefined') return null;
+    if (!globalAudioCtx) {
+        globalAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    return globalAudioCtx;
+};
+
 const initAudioAndDismiss = () => {
     try {
-        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
+        const audioCtx = getAudioContext();
+        if (audioCtx) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.2);
         }
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.2);
     } catch (e) {
         console.error(e);
     }
     isAudioBlocked.value = false;
+};
+
+// Helper Hash
+const getItemsHash = (order: KitchenOrderPayload): string => {
+    if (!order.items) return '';
+    return order.items.map(item => `${item.id}:${item.quantity}:${item.notes || ''}`).join('|');
 };
 
 onMounted(() => {
@@ -151,12 +176,18 @@ onMounted(() => {
     }, 1000);
 
     // Populate initial orders
-    props.orders.forEach((o) => knownOrderKeys.value.add(`${o.id}-${o.updatedAt || ''}`));
+    props.orders.forEach((o) => {
+        knownOrders.value.set(o.id, {
+            status: o.status,
+            itemsHash: getItemsHash(o),
+            notes: o.notes
+        });
+    });
 
     // Cek autoplay terblokir
     try {
-        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        if (audioCtx.state === 'suspended') {
+        const audioCtx = getAudioContext();
+        if (audioCtx && audioCtx.state === 'suspended') {
             isAudioBlocked.value = true;
         }
     } catch (e) {
@@ -199,15 +230,86 @@ const announceNewOrder = (order: KitchenOrderPayload, isUpdate: boolean = false)
     playChimeAndSpeak(text, voiceConfig);
 };
 
-const playChimeAndSpeak = (text: string, voiceConfig: any) => {
+// Antrean Suara (Speech Queue)
+interface SpeechItem {
+    text: string;
+    voiceConfig: any;
+}
+const speechQueue = ref<SpeechItem[]>([]);
+const isSpeaking = ref(false);
+
+const processSpeechQueue = () => {
+    if (speechQueue.value.length === 0) {
+        isSpeaking.value = false;
+        return;
+    }
+
+    if (!('speechSynthesis' in window)) return;
+
+    isSpeaking.value = true;
+    const nextSpeech = speechQueue.value[0];
+
+    // Ambil voices secara asinkron
+    let voices = window.speechSynthesis.getVoices();
+    let idVoice = voices.find(v => v.lang === 'id-ID' || v.lang === 'id' || v.lang.startsWith('id-') || v.lang.startsWith('id_'));
+
+    const speakNow = () => {
+        const utterance = new SpeechSynthesisUtterance(nextSpeech.text);
+        utterance.lang = 'id-ID';
+
+        const baseVolume = nextSpeech.voiceConfig ? Number(nextSpeech.voiceConfig.volume ?? 1.0) : 1.0;
+        utterance.volume = baseVolume * localVolume.value;
+
+        if (nextSpeech.voiceConfig) {
+            utterance.rate = Number(nextSpeech.voiceConfig.rate ?? 0.9);
+            utterance.pitch = Number(nextSpeech.voiceConfig.pitch ?? 1.05);
+        }
+
+        if (idVoice) {
+            utterance.voice = idVoice;
+        }
+
+        utterance.onend = () => {
+            speechQueue.value.shift();
+            processSpeechQueue();
+        };
+
+        utterance.onerror = (e) => {
+            console.error('Speech synthesis error:', e);
+            speechQueue.value.shift();
+            processSpeechQueue();
+        };
+
+        window.speechSynthesis.speak(utterance);
+    };
+
+    if (voices.length === 0) {
+        const oldOnVoicesChanged = window.speechSynthesis.onvoiceschanged;
+        window.speechSynthesis.onvoiceschanged = (e) => {
+            voices = window.speechSynthesis.getVoices();
+            idVoice = voices.find(v => v.lang === 'id-ID' || v.lang === 'id' || v.lang.startsWith('id-') || v.lang.startsWith('id_'));
+            if (oldOnVoicesChanged) {
+                oldOnVoicesChanged.call(window.speechSynthesis, e);
+            }
+            speakNow();
+        };
+    } else {
+        speakNow();
+    }
+};
+
+const playChimeTone = () => {
     if (localMute.value) return;
 
     try {
-        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const audioCtx = getAudioContext();
+        if (!audioCtx) return;
+
         if (audioCtx.state === 'suspended') {
             isAudioBlocked.value = true;
-            return;
+            return; // Lewati chime tetapi SpeechSynthesis di bawah tetap jalan
         }
+
         const playTone = (freq: number, start: number, duration: number) => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -216,38 +318,39 @@ const playChimeAndSpeak = (text: string, voiceConfig: any) => {
             const targetGain = 0.2 * localVolume.value;
             gain.gain.linearRampToValueAtTime(targetGain, start + 0.05);
             gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+            
             osc.connect(gain);
             gain.connect(audioCtx.destination);
+            
             osc.start(start);
             osc.stop(start + duration);
+
+            setTimeout(() => {
+                osc.disconnect();
+                gain.disconnect();
+            }, (duration + 0.5) * 1000);
         };
+
         playTone(587.33, audioCtx.currentTime, 0.4);
         playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
     } catch (e) {
         console.error(e);
     }
+};
 
-    setTimeout(() => {
-        if (!('speechSynthesis' in window)) return;
-        window.speechSynthesis.cancel();
-        
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'id-ID';
-        
-        const baseVolume = voiceConfig ? Number(voiceConfig.volume ?? 1.0) : 1.0;
-        utterance.volume = baseVolume * localVolume.value;
-        
-        if (voiceConfig) {
-            utterance.rate = Number(voiceConfig.rate ?? 0.9);
-            utterance.pitch = Number(voiceConfig.pitch ?? 1.05);
-        }
-        
-        const voices = window.speechSynthesis.getVoices();
-        const idVoice = voices.find(v => v.lang.includes('id'));
-        if (idVoice) utterance.voice = idVoice;
-        
-        window.speechSynthesis.speak(utterance);
-    }, 450);
+const playChimeAndSpeak = (text: string, voiceConfig: any) => {
+    if (localMute.value) return;
+
+    // Mainkan bel alarm (oscillator)
+    playChimeTone();
+
+    // Masukkan ke antrean pembacaan suara
+    speechQueue.value.push({ text, voiceConfig });
+
+    // Jalankan jika tidak sedang memproses
+    if (!isSpeaking.value) {
+        processSpeechQueue();
+    }
 };
 
 watch(
@@ -256,36 +359,51 @@ watch(
         if (!newOrders) return;
         
         newOrders.forEach((order) => {
-            const key = `${order.id}-${order.updatedAt || ''}`;
+            const hash = getItemsHash(order);
+            const existing = knownOrders.value.get(order.id);
             
-            if (!knownOrderKeys.value.has(key)) {
-                // Cek apakah order ID sudah ada dengan timestamp berbeda (artinya ini update)
-                const isUpdate = Array.from(knownOrderKeys.value).some(k => k.startsWith(order.id));
-                
-                announceNewOrder(order, isUpdate);
-                
-                // Hapus key lama untuk order ID yang sama
-                Array.from(knownOrderKeys.value).forEach(k => {
-                    if (k.startsWith(order.id)) {
-                        knownOrderKeys.value.delete(k);
-                    }
+            if (!existing) {
+                knownOrders.value.set(order.id, {
+                    status: order.status,
+                    itemsHash: hash,
+                    notes: order.notes
                 });
                 
-                knownOrderKeys.value.add(key);
+                // Hanya umumkan jika ini order baru yang masuk dengan status pending
+                if (order.status === 'pending') {
+                    announceNewOrder(order, false);
+                }
+            } else {
+                const isItemsChanged = existing.itemsHash !== hash || existing.notes !== order.notes;
+                
+                if (isItemsChanged) {
+                    announceNewOrder(order, true);
+                }
+                
+                existing.status = order.status;
+                existing.itemsHash = hash;
+                existing.notes = order.notes;
             }
         });
         
-        // Bersihkan data order yang sudah tidak aktif
+        // Bersihkan order yang sudah tidak aktif di board
         const activeIds = new Set(newOrders.map(o => o.id));
-        knownOrderKeys.value.forEach((key) => {
-            const orderId = key.split('-')[0];
+        for (const orderId of knownOrders.value.keys()) {
             if (!activeIds.has(orderId)) {
-                knownOrderKeys.value.delete(key);
+                knownOrders.value.delete(orderId);
             }
-        });
+        }
     },
     { deep: true },
 );
+
+const submitCustomEstimate = (orderId: string) => {
+    const minutes = customEstimates.value[orderId];
+    if (minutes && minutes > 0) {
+        updateEstimate(orderId, minutes);
+        customEstimates.value[orderId] = undefined as any; // reset input
+    }
+};
 
 const toTimestamp = (value?: string | null) => {
     if (!value) return null;
@@ -1110,7 +1228,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                                     order.
                                                 </p>
                                             </div>
-                                            <div class="flex flex-wrap gap-2">
+                                            <div class="flex flex-wrap items-center gap-2">
                                                 <button
                                                     v-for="minutes in estimatePresets"
                                                     :key="`${ticket.id}-${minutes}`"
@@ -1135,6 +1253,28 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                                 >
                                                     {{ minutes }}m
                                                 </button>
+
+                                                <!-- Input Kustom Estimasi Menit -->
+                                                <div class="flex items-center gap-1.5">
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Kustom"
+                                                        min="1"
+                                                        max="180"
+                                                        v-model.number="customEstimates[ticket.id]"
+                                                        class="w-16 rounded-full border border-slate-700 bg-slate-950/60 px-2.5 py-1 text-[11px] font-bold text-slate-300 placeholder:text-slate-600 focus:border-violet-500/50 focus:outline-none transition disabled:opacity-50"
+                                                        :disabled="submittingOrderId === ticket.id"
+                                                        @keydown.enter="submitCustomEstimate(ticket.id)"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        @click="submitCustomEstimate(ticket.id)"
+                                                        :disabled="!customEstimates[ticket.id] || submittingOrderId === ticket.id"
+                                                        class="rounded-full border border-violet-500/30 bg-violet-500/12 px-2.5 py-1 text-[11px] font-bold text-violet-300 hover:bg-violet-500/20 hover:text-white transition disabled:pointer-events-none disabled:opacity-40"
+                                                    >
+                                                        Set
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

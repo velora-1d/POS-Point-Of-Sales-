@@ -87,6 +87,7 @@ export const tables = pgTable("tables", {
   outletId: uuid("outlet_id").references(() => outlets.id, { onDelete: "cascade" }).notNull(),
   name: varchar("name", { length: 50 }).notNull(),     // e.g. "Meja 1", "VIP 1"
   capacity: integer("capacity"),
+  category: varchar("category", { length: 30 }).default("indoor").notNull(),
   qrCode: varchar("qr_code", { length: 255 }),         // QR code unik per meja
   barcodeTracking: varchar("barcode_tracking", { length: 100 }),
   qrSessionToken: varchar("qr_session_token", { length: 100 }).unique(), // token unik per meja untuk QR

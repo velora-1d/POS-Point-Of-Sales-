@@ -77,6 +77,10 @@ class OrderBillService
             null,
         );
 
+        $originalStatus = $order->status;
+        $keepStatus = in_array($originalStatus, ['waiting_bar_approval', 'ready', 'delivered'], true);
+        $newOrderStatus = $keepStatus ? $originalStatus : 'pending';
+
         DB::transaction(function () use (
             $order,
             $actor,
@@ -84,7 +88,9 @@ class OrderBillService
             $newOrderItems,
             $sourcePricing,
             $newOrderPricing,
-            $previousPromoIds
+            $previousPromoIds,
+            $newOrderStatus,
+            $keepStatus
         ) {
             $newOrder = Order::create([
                 'outlet_id' => $order->outlet_id,
@@ -94,14 +100,15 @@ class OrderBillService
                 'cashier_id' => $actor->id,
                 'source' => $order->source,
                 'type' => $order->type,
-                'status' => 'pending',
+                'status' => $newOrderStatus,
                 'subtotal' => $newOrderPricing['subtotal'],
                 'discount_amount' => $newOrderPricing['discount_amount'],
                 'total_amount' => $newOrderPricing['total_amount'],
                 'paid_amount' => 0,
                 'notes' => $order->notes,
                 'estimated_time' => $order->estimated_time,
-                'pending_started_at' => now(),
+                'pending_started_at' => $keepStatus ? $order->pending_started_at : now(),
+                'cooking_started_at' => $keepStatus ? $order->cooking_started_at : null,
                 'pay_later' => $order->pay_later,
                 'metadata' => array_merge($order->metadata ?? [], [
                     'split_from_order_id' => $order->id,
@@ -126,9 +133,9 @@ class OrderBillService
                 'subtotal' => $sourcePricing['subtotal'],
                 'discount_amount' => $sourcePricing['discount_amount'],
                 'total_amount' => $sourcePricing['total_amount'],
-                'status' => 'pending',
-                'cooking_started_at' => null,
-                'pending_started_at' => now(),
+                'status' => $newOrderStatus,
+                'cooking_started_at' => $keepStatus ? $order->cooking_started_at : null,
+                'pending_started_at' => $keepStatus ? $order->pending_started_at : now(),
                 'metadata' => $updatedSourceMetadata,
             ]);
 
@@ -206,6 +213,26 @@ class OrderBillService
             $manualCodes->count() === 1 ? $manualCodes->first() : null,
         );
 
+        // Cari status gabungan dengan prioritas tertinggi
+        $statusPriority = [
+            'pending' => 1,
+            'in_progress' => 2,
+            'waiting_bar_approval' => 3,
+            'ready' => 4,
+            'delivered' => 5,
+        ];
+        $targetStatus = 'pending';
+        $maxPriority = 0;
+        foreach ($orders as $o) {
+            $p = $statusPriority[$o->status] ?? 1;
+            if ($p > $maxPriority) {
+                $maxPriority = $p;
+                $targetStatus = $o->status;
+            }
+        }
+
+        $keepTimes = in_array($targetStatus, ['in_progress', 'waiting_bar_approval', 'ready', 'delivered'], true);
+
         DB::transaction(function () use (
             $orders,
             $baseOrder,
@@ -214,7 +241,9 @@ class OrderBillService
             $uniqueCustomerIds,
             $mergedNotes,
             $mergedPricing,
-            $previousPromoIds
+            $previousPromoIds,
+            $targetStatus,
+            $keepTimes
         ) {
             $mergedOrder = Order::create([
                 'outlet_id' => $baseOrder->outlet_id,
@@ -224,14 +253,15 @@ class OrderBillService
                 'cashier_id' => $actor->id,
                 'source' => $baseOrder->source,
                 'type' => $baseOrder->type,
-                'status' => 'pending',
+                'status' => $targetStatus,
                 'subtotal' => $mergedPricing['subtotal'],
                 'discount_amount' => $mergedPricing['discount_amount'],
                 'total_amount' => $mergedPricing['total_amount'],
                 'paid_amount' => 0,
                 'notes' => $mergedNotes ?: null,
                 'estimated_time' => $baseOrder->estimated_time,
-                'pending_started_at' => now(),
+                'pending_started_at' => $keepTimes ? $baseOrder->pending_started_at : now(),
+                'cooking_started_at' => $keepTimes ? $baseOrder->cooking_started_at : null,
                 'pay_later' => $baseOrder->pay_later,
                 'metadata' => array_merge($baseOrder->metadata ?? [], [
                     'merged_from_order_ids' => $orders->pluck('id')->values()->all(),
@@ -265,7 +295,8 @@ class OrderBillService
             ]);
         }
 
-        if ($order->hasPendingBeforeKitchenPayment() || in_array($order->status, ['ready', 'waiting_bar_approval', 'delivered', 'completed', 'cancelled'], true)) {
+        // Izinkan status waiting_bar_approval, ready, dan delivered
+        if ($order->hasPendingBeforeKitchenPayment() || in_array($order->status, ['completed', 'cancelled'], true)) {
             throw ValidationException::withMessages([
                 'error' => 'Order dengan status ini tidak bisa diproses untuk split/gabung bill.',
             ]);

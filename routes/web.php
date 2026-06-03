@@ -35,6 +35,7 @@ use App\Http\Controllers\RbacController;
 use App\Http\Controllers\ReportExportController;
 use App\Http\Controllers\SalesReportController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\ShiftFinancialReportController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\TableReservationController;
 use App\Http\Controllers\TableQrConfigController;
@@ -140,6 +141,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/top-products', [TopProductReportController::class, 'index'])->name('reports.top-products.index');
     Route::get('/reports/inventory', [InventoryReportController::class, 'index'])->name('reports.inventory.index');
     Route::get('/reports/attendance-shifts', [AttendanceShiftReportController::class, 'index'])->name('reports.attendance-shifts.index');
+    Route::get('/reports/shift-finance', [ShiftFinancialReportController::class, 'index'])->name('reports.shift-finance.index');
     Route::get('/reports/expenses', [FinanceController::class, 'index'])->name('reports.expenses.index');
     Route::get('/reports/export', [ReportExportController::class, 'index'])->name('reports.exports.index');
     Route::get('/reports/export/download', [ReportExportController::class, 'download'])->name('reports.exports.download');
@@ -187,6 +189,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/audio-updates', [OrderController::class, 'audioUpdates'])->name('orders.audio-updates');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order/{order}/pay', [OrderController::class, 'pay'])->name('order.pay');
+    Route::post('/order/{order}/deliver', [OrderController::class, 'deliver'])->name('order.deliver');
     Route::patch('/order/{order}', [OrderController::class, 'update'])->name('order.update');
     Route::post('/order/{order}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
     Route::post('/order/{order}/split-bill', [OrderController::class, 'splitBill'])->name('order.split-bill');
