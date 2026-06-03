@@ -34,6 +34,7 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 
 ## Progress Terakhir
 - **Redesign & Animasi Koki Memasak (SVG + CSS Keyframes) serta Pembenahan Visual Sidebar**:
+  - Memperbaiki bug `Call to undefined method App\Services\OrderPaymentService::startQrisCheckout()` pada [OrderPaymentService.php](file:///home/pak-hakim/Pak-Hakim/Project/POS/app/Services/OrderPaymentService.php) dengan mengarahkannya ke method gateway checkout yang benar `startGatewayCheckout($order, 'before_kitchen', 'qris')`.
   - Menambahkan komponen animasi koki memasak dinamis [ChefAnimation.vue](file:///home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Components/ChefAnimation.vue) dengan 4 state: `waiting`, `cooking`, `ready`, dan `idle` tanpa dependensi eksternal.
   - Mengintegrasikan koki animasi ke halaman pelacakan pesanan QR pelanggan (`QrOrderStatus.vue`) dan ke pojok Kitchen Display System (`Display.vue`).
   - Redesign penanda menu aktif di sidebar (`AuthenticatedLayout.vue`) menggunakan warna solid gradien oranye-merah premium, teks putih kontras tinggi, dan bayangan glow oranye.
