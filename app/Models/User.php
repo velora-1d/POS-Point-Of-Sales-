@@ -9,9 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
-    use HasFactory, MustVerifyEmailTrait, Notifiable;
+    use HasFactory, Notifiable;
 
     protected $table = 'users';
     protected $keyType = 'string';
