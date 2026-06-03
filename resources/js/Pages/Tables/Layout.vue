@@ -262,25 +262,25 @@ const statCards = computed(() => [
     {
         label: 'Total Meja',
         value: props.summary.total,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 dark:border-white/10 bg-white dark:bg-white/[0.03]',
     },
     {
         label: 'Siap Dipakai',
         value: props.summary.available,
-        tone: 'text-emerald-300',
+        tone: 'text-emerald-600 dark:text-emerald-300',
         surface: 'border-emerald-400/15 bg-emerald-500/8',
     },
     {
         label: 'Sedang Terpakai',
         value: props.summary.occupied,
-        tone: 'text-rose-300',
+        tone: 'text-rose-600 dark:text-rose-300',
         surface: 'border-rose-400/15 bg-rose-500/8',
     },
     {
         label: 'Reserved',
         value: props.summary.reserved,
-        tone: 'text-amber-300',
+        tone: 'text-amber-600 dark:text-amber-300',
         surface: 'border-amber-400/15 bg-amber-500/8',
     },
 ]);
@@ -404,12 +404,12 @@ const getStatusLabel = (status: string) => {
 const getStatusClass = (status: string) => {
     switch (status) {
         case 'occupied':
-            return 'border-rose-400/20 bg-rose-500/12 text-rose-300';
+            return 'border-rose-400/20 bg-rose-500/12 text-rose-600 dark:text-rose-300';
         case 'reserved':
-            return 'border-amber-400/20 bg-amber-500/12 text-amber-300';
+            return 'border-amber-400/20 bg-amber-500/12 text-amber-700 dark:text-amber-300';
         case 'available':
         default:
-            return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-300';
+            return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300';
     }
 };
 
@@ -571,21 +571,21 @@ const cancelReservation = (reservationId: string) => {
         <div class="space-y-5">
             <div
                 v-if="success"
-                class="rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
+                class="rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300"
             >
                 {{ success }}
             </div>
 
             <div
                 v-if="error"
-                class="rounded-xl border border-rose-500/20 bg-rose-500/12 px-4 py-3 text-sm font-medium text-rose-300"
+                class="rounded-xl border border-rose-500/20 bg-rose-500/12 px-4 py-3 text-sm font-medium text-rose-700 dark:text-rose-300"
             >
                 {{ error }}
             </div>
 
             <div
                 v-if="qrActionMessage"
-                class="rounded-xl border border-sky-500/20 bg-sky-500/12 px-4 py-3 text-sm font-medium text-sky-300"
+                class="rounded-xl border border-sky-500/20 bg-sky-500/12 px-4 py-3 text-sm font-medium text-sky-700 dark:text-sky-300"
             >
                 {{ qrActionMessage }}
             </div>
@@ -615,14 +615,14 @@ const cancelReservation = (reservationId: string) => {
                     class="overflow-hidden rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-2xl shadow-slate-950/20"
                 >
                     <div
-                        class="border-b border-stone-200 dark:border-slate-800/80 bg-[radial-gradient(circle_at_top_right,_rgba(249,115,22,0.14),_transparent_38%),linear-gradient(180deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))] px-5 py-4"
+                        class="border-b border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-[radial-gradient(circle_at_top_right,_rgba(249,115,22,0.14),_transparent_38%),linear-gradient(180deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))] px-5 py-4"
                     >
                         <div
                             class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
                         >
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
                                 >
                                     Arena Outlet
                                 </p>
@@ -637,7 +637,7 @@ const cancelReservation = (reservationId: string) => {
                                             'rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-200',
                                             selectedCategory === 'indoor'
                                                 ? 'bg-orange-500 text-white shadow-md'
-                                                : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200',
+                                                : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200',
                                         ]"
                                     >
                                         Indoor Area
@@ -649,7 +649,7 @@ const cancelReservation = (reservationId: string) => {
                                             'rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-200',
                                             selectedCategory === 'outdoor'
                                                 ? 'bg-orange-500 text-white shadow-md'
-                                                : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200',
+                                                : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200',
                                         ]"
                                     >
                                         Outdoor Area
@@ -659,7 +659,7 @@ const cancelReservation = (reservationId: string) => {
                             <div class="flex flex-wrap items-center gap-2">
                                 <Link
                                     :href="route('settings.tables.index')"
-                                    class="inline-flex items-center gap-1 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300 transition hover:bg-orange-500/20"
+                                    class="inline-flex items-center gap-1 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300 transition hover:bg-orange-500/20"
                                 >
                                     <Settings class="h-3.5 w-3.5" />
                                     Manajemen Meja
@@ -668,7 +668,7 @@ const cancelReservation = (reservationId: string) => {
                                     type="button"
                                     @click="refreshTableStatuses"
                                     :disabled="isRefreshing"
-                                    class="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-slate-700/80 bg-white dark:bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-800 dark:text-slate-200 transition hover:border-orange-500/30 hover:text-stone-900 dark:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                                    class="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-slate-700/80 bg-white dark:bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-800 dark:text-slate-200 transition hover:border-orange-500/30 hover:text-stone-900 dark:hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                                 >
                                     <RefreshCw
                                         :class="[
@@ -707,7 +707,7 @@ const cancelReservation = (reservationId: string) => {
 
                     <div class="p-4">
                         <div
-                            class="relative min-h-[36rem] overflow-hidden rounded-[24px] border border-stone-200 dark:border-slate-800 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.08),_transparent_32%),linear-gradient(180deg,#020617_0%,#111827_100%)]"
+                            class="relative min-h-[36rem] overflow-hidden rounded-[24px] border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.08),_transparent_32%),linear-gradient(180deg,#020617_0%,#111827_100%)]"
                         >
                             <div
                                 class="pointer-events-none absolute inset-0 opacity-20"
@@ -794,7 +794,7 @@ const cancelReservation = (reservationId: string) => {
 
                                     <div
                                         v-if="isTableChanged(table.id)"
-                                        class="mb-3 inline-flex items-center gap-1 rounded-full border border-sky-400/20 bg-sky-500/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-sky-300"
+                                        class="mb-3 inline-flex items-center gap-1 rounded-full border border-sky-400/20 bg-sky-500/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-sky-700 dark:text-sky-300"
                                     >
                                         <Activity class="h-3 w-3" />
                                         Perubahan baru
@@ -881,7 +881,7 @@ const cancelReservation = (reservationId: string) => {
                                     <div class="mt-3 grid grid-cols-2 gap-2">
                                         <Link
                                             :href="table.kasirUrl"
-                                            class="inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-3 py-2 text-[11px] font-bold text-stone-900 dark:text-white"
+                                            class="inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-3 py-2 text-[11px] font-bold text-white"
                                         >
                                             <span>Kasir</span>
                                             <ArrowUpRight class="h-3.5 w-3.5" />
@@ -907,7 +907,7 @@ const cancelReservation = (reservationId: string) => {
                                         v-if="table.status !== 'occupied' && !table.activeReservation"
                                         type="button"
                                         @click="openReservationModal(table.id)"
-                                        class="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[11px] font-bold text-amber-300"
+                                        class="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[11px] font-bold text-amber-700 dark:text-amber-300"
                                     >
                                         <Clock3 class="h-3.5 w-3.5" />
                                         Book Meja
@@ -924,7 +924,7 @@ const cancelReservation = (reservationId: string) => {
                         class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
                     >
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
                         >
                             Legenda Status
                         </p>
@@ -934,7 +934,7 @@ const cancelReservation = (reservationId: string) => {
                             >
                                 <div class="flex items-center justify-between gap-3">
                                     <div>
-                                        <p class="text-xs font-bold text-orange-300">
+                                        <p class="text-xs font-bold text-orange-600 dark:text-orange-300">
                                             QR per Meja
                                         </p>
                                         <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
@@ -944,7 +944,7 @@ const cancelReservation = (reservationId: string) => {
                                         </p>
                                     </div>
                                     <div
-                                        class="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-xs font-black text-orange-300"
+                                        class="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-xs font-black text-orange-600 dark:text-orange-300"
                                     >
                                         {{ qrReadyCount }}/{{ summary.total }}
                                     </div>
@@ -953,7 +953,7 @@ const cancelReservation = (reservationId: string) => {
                             <div
                                 class="rounded-2xl border border-sky-500/20 bg-sky-500/8 px-3 py-3"
                             >
-                                <p class="text-xs font-bold text-sky-300">
+                                <p class="text-xs font-bold text-sky-750 dark:text-sky-300">
                                     Live Status
                                 </p>
                                 <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
@@ -964,7 +964,7 @@ const cancelReservation = (reservationId: string) => {
                             <div
                                 class="rounded-2xl border border-emerald-500/20 bg-emerald-500/8 px-3 py-3"
                             >
-                                <p class="text-xs font-bold text-emerald-300">
+                                <p class="text-xs font-bold text-emerald-700 dark:text-emerald-300">
                                     Available
                                 </p>
                                 <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
@@ -974,7 +974,7 @@ const cancelReservation = (reservationId: string) => {
                             <div
                                 class="rounded-2xl border border-rose-500/20 bg-rose-500/8 px-3 py-3"
                             >
-                                <p class="text-xs font-bold text-rose-300">
+                                <p class="text-xs font-bold text-rose-700 dark:text-rose-300">
                                     Occupied
                                 </p>
                                 <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
@@ -984,7 +984,7 @@ const cancelReservation = (reservationId: string) => {
                             <div
                                 class="rounded-2xl border border-amber-500/20 bg-amber-500/8 px-3 py-3"
                             >
-                                <p class="text-xs font-bold text-amber-300">
+                                <p class="text-xs font-bold text-amber-700 dark:text-amber-300">
                                     Reserved
                                 </p>
                                 <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
@@ -1000,14 +1000,14 @@ const cancelReservation = (reservationId: string) => {
                     >
                         <div class="flex items-center justify-between gap-3">
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
                             >
                                 Reservasi Aktif
                             </p>
                             <button
                                 type="button"
                                 @click="openReservationModal()"
-                                class="inline-flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-amber-300"
+                                class="inline-flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-300"
                             >
                                 <Clock3 class="h-3.5 w-3.5" />
                                 Book Meja
@@ -1030,7 +1030,7 @@ const cancelReservation = (reservationId: string) => {
                                         <p class="text-xs font-bold text-stone-900 dark:text-white">
                                             {{ reservation.tableName }}
                                         </p>
-                                        <p class="mt-1 truncate text-[11px] font-semibold text-amber-300">
+                                        <p class="mt-1 truncate text-[11px] font-semibold text-amber-700 dark:text-amber-300">
                                             {{ reservation.customer_name }}
                                         </p>
                                         <p class="mt-1 text-[10px] text-stone-500 dark:text-slate-400">
@@ -1048,7 +1048,7 @@ const cancelReservation = (reservationId: string) => {
                                         </p>
                                     </div>
                                     <span
-                                        class="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-amber-300"
+                                        class="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300"
                                     >
                                         booked
                                     </span>
@@ -1056,7 +1056,7 @@ const cancelReservation = (reservationId: string) => {
                                 <div class="mt-3 grid grid-cols-2 gap-2">
                                     <Link
                                         :href="reservation.kasirUrl"
-                                        class="inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-3 py-2 text-[11px] font-bold text-stone-900 dark:text-white"
+                                        class="inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-3 py-2 text-[11px] font-bold text-white"
                                     >
                                         <ArrowUpRight class="h-3.5 w-3.5" />
                                         Kasir
@@ -1078,7 +1078,7 @@ const cancelReservation = (reservationId: string) => {
                         class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
                     >
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
                         >
                             Tindakan Cepat
                         </p>
@@ -1086,23 +1086,23 @@ const cancelReservation = (reservationId: string) => {
                             <button
                                 type="button"
                                 @click="openReservationModal()"
-                                class="flex w-full items-center justify-between rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-200 transition hover:border-amber-500/30"
+                                class="flex w-full items-center justify-between rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-700 dark:text-amber-200 transition hover:border-amber-500/30"
                             >
                                 <span>Buat Reservasi Meja</span>
-                                <Clock3 class="h-4 w-4 text-amber-300" />
+                                <Clock3 class="h-4 w-4 text-amber-700 dark:text-amber-300" />
                             </button>
                             <Link
                                 :href="`${route('kasir.order')}?mode=takeaway`"
                                 class="flex items-center justify-between rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white transition hover:border-orange-500/30"
                             >
                                 <span>Masuk Mode Takeaway</span>
-                                <ArrowUpRight class="h-4 w-4 text-orange-300" />
+                                <ArrowUpRight class="h-4 w-4 text-orange-600 dark:text-orange-300" />
                             </Link>
                             <div
                                 class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 px-4 py-3"
                             >
                                 <div class="flex items-center gap-2">
-                                    <Armchair class="h-4 w-4 text-sky-300" />
+                                    <Armchair class="h-4 w-4 text-sky-600 dark:text-sky-300" />
                                     <p class="text-sm font-bold text-stone-900 dark:text-white">
                                         Shortcut meja ke kasir
                                     </p>
@@ -1117,7 +1117,7 @@ const cancelReservation = (reservationId: string) => {
                                 class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 px-4 py-3"
                             >
                                 <div class="flex items-center gap-2">
-                                    <QrCode class="h-4 w-4 text-orange-300" />
+                                    <QrCode class="h-4 w-4 text-orange-600 dark:text-orange-300" />
                                     <p class="text-sm font-bold text-stone-900 dark:text-white">
                                         Preview QR Meja
                                     </p>
@@ -1132,7 +1132,7 @@ const cancelReservation = (reservationId: string) => {
                                 class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 px-4 py-3"
                             >
                                 <div class="flex items-center gap-2">
-                                    <Clock3 class="h-4 w-4 text-emerald-300" />
+                                    <Clock3 class="h-4 w-4 text-emerald-600 dark:text-emerald-300" />
                                     <p class="text-sm font-bold text-stone-900 dark:text-white">
                                         Posisi fallback aktif
                                     </p>
@@ -1159,7 +1159,7 @@ const cancelReservation = (reservationId: string) => {
                 <div class="flex items-start justify-between gap-4">
                     <div>
                         <div
-                            class="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-amber-300"
+                            class="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-amber-700 dark:text-amber-300"
                         >
                             <Clock3 class="h-3.5 w-3.5" />
                             Reservasi / Book Meja
@@ -1175,7 +1175,7 @@ const cancelReservation = (reservationId: string) => {
                     <button
                         type="button"
                         @click="closeReservationModal"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-600 dark:text-slate-300 transition hover:border-stone-200 dark:border-slate-700 hover:text-stone-900 dark:text-white"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-600 dark:text-slate-300 transition hover:border-stone-200 dark:hover:border-slate-700 hover:text-stone-900 dark:hover:text-white"
                     >
                         <X class="h-4 w-4" />
                     </button>
@@ -1341,7 +1341,7 @@ const cancelReservation = (reservationId: string) => {
                 <div class="flex items-start justify-between gap-4">
                     <div>
                         <div
-                            class="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-orange-300"
+                            class="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300"
                         >
                             <QrCode class="h-3.5 w-3.5" />
                             QR Code Per Meja
@@ -1356,7 +1356,7 @@ const cancelReservation = (reservationId: string) => {
                     <button
                         type="button"
                         @click="closeQrPreview"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-600 dark:text-slate-300 transition hover:border-stone-200 dark:border-slate-700 hover:text-stone-900 dark:text-white"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-600 dark:text-slate-300 transition hover:border-stone-200 dark:hover:border-slate-700 hover:text-stone-900 dark:hover:text-white"
                     >
                         <X class="h-4 w-4" />
                     </button>
@@ -1403,7 +1403,7 @@ const cancelReservation = (reservationId: string) => {
                         :href="selectedQrTable.qrUrl || '#'"
                         target="_blank"
                         rel="noreferrer"
-                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-orange-500/20 bg-orange-500/10 px-3 py-3 text-xs font-bold text-orange-300"
+                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-orange-500/20 bg-orange-500/10 px-3 py-3 text-xs font-bold text-orange-600 dark:text-orange-300"
                     >
                         <ExternalLink class="h-4 w-4" />
                         Buka Menu
@@ -1411,7 +1411,7 @@ const cancelReservation = (reservationId: string) => {
                     <button
                         type="button"
                         @click="printSelectedQr"
-                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-3 text-xs font-bold text-emerald-300"
+                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-3 text-xs font-bold text-emerald-700 dark:text-emerald-300"
                     >
                         <Printer class="h-4 w-4" />
                         Print QR

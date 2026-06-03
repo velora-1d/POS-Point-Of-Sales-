@@ -48,7 +48,7 @@ const submit = () => {
                     <button
                         type="button"
                         @click="showPassword = !showPassword"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-350"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
                         <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
                     </button>

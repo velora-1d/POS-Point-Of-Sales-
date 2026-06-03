@@ -117,13 +117,13 @@ watch(customerSearchQuery, (value) => {
                     <span>Detail Transaksi Aktif</span>
                 </h3>
 
-                <div class="space-y-2 rounded-xl bg-stone-50 dark:bg-slate-950/60 p-3 text-xs border border-stone-200 dark:border-slate-850">
+                <div class="space-y-2 rounded-xl bg-stone-50 dark:bg-slate-950/60 p-3 text-xs border border-stone-200 dark:border-slate-800">
                     <div class="flex justify-between"><span class="text-stone-500 dark:text-slate-400">Order ID:</span><span class="font-bold text-stone-900 dark:text-white">{{ selectedManagedOrder.order_number }}</span></div>
                     <div class="flex justify-between"><span class="text-stone-500 dark:text-slate-400">Layanan:</span><span class="font-bold text-stone-800 dark:text-slate-200">{{ getOrderServiceLabel(selectedManagedOrder) }}</span></div>
                     <div class="flex justify-between"><span class="text-stone-500 dark:text-slate-400">Meja:</span><span class="font-bold text-stone-800 dark:text-slate-200">{{ selectedManagedOrder.table?.name ?? 'Takeaway' }}</span></div>
                     <div class="flex justify-between"><span class="text-stone-500 dark:text-slate-400">Customer:</span><span class="font-bold text-stone-800 dark:text-slate-200">{{ getOrderCustomerPrimary(selectedManagedOrder) }}</span></div>
                     <div class="flex justify-between"><span class="text-stone-500 dark:text-slate-400">Status Bayar:</span>
-                        <span :class="['font-bold', isOrderPaid(selectedManagedOrder) ? 'text-emerald-450 dark:text-emerald-400' : 'text-red-650 dark:text-red-400']">
+                        <span :class="['font-bold', isOrderPaid(selectedManagedOrder) ? 'text-emerald-400 dark:text-emerald-400' : 'text-red-600 dark:text-red-400']">
                             {{ isOrderPaid(selectedManagedOrder) ? 'Lunas' : 'Belum Lunas' }}
                         </span>
                     </div>
@@ -133,14 +133,14 @@ watch(customerSearchQuery, (value) => {
                 <div class="space-y-2">
                     <p class="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Rincian Menu</p>
                     <div class="max-h-[150px] overflow-y-auto space-y-1.5 custom-scrollbar pr-1">
-                        <div v-for="item in selectedManagedOrder.items" :key="item.id" class="flex justify-between items-center text-xs bg-stone-50 dark:bg-slate-955/20 p-2 rounded-lg border border-stone-200 dark:border-slate-900/60">
+                        <div v-for="item in selectedManagedOrder.items" :key="item.id" class="flex justify-between items-center text-xs bg-stone-50 dark:bg-slate-950/20 p-2 rounded-lg border border-stone-200 dark:border-slate-900/60">
                             <div class="flex-1 min-w-0 pr-2">
-                                <p class="font-bold text-stone-850 dark:text-slate-200 truncate">{{ item.product?.name }}</p>
+                                <p class="font-bold text-stone-800 dark:text-slate-200 truncate">{{ item.product?.name }}</p>
                                 <p v-if="item.variant" class="text-[10px] text-stone-500 mt-0.5">{{ item.variant.name }}</p>
                             </div>
                             <div class="text-right shrink-0">
                                 <span class="text-stone-500 dark:text-slate-400 font-medium">x{{ item.quantity }}</span>
-                                <span class="font-bold text-stone-700 dark:text-slate-305 ml-2">{{ formatPrice(item.total_price) }}</span>
+                                <span class="font-bold text-stone-700 dark:text-slate-300 ml-2">{{ formatPrice(item.total_price) }}</span>
                             </div>
                         </div>
                     </div>
@@ -149,13 +149,13 @@ watch(customerSearchQuery, (value) => {
                 <!-- Kalkulasi Harga -->
                 <div class="border-t border-stone-200 dark:border-slate-800/80 pt-3 space-y-1.5 text-xs">
                     <div class="flex justify-between text-stone-500 dark:text-slate-400"><span>Subtotal:</span><span>{{ formatPrice(selectedManagedOrder.subtotal) }}</span></div>
-                    <div v-if="Number(selectedManagedOrder.discount_amount) > 0" class="flex justify-between text-red-650 dark:text-red-400"><span>Diskon:</span><span>-{{ formatPrice(selectedManagedOrder.discount_amount) }}</span></div>
+                    <div v-if="Number(selectedManagedOrder.discount_amount) > 0" class="flex justify-between text-red-600 dark:text-red-400"><span>Diskon:</span><span>-{{ formatPrice(selectedManagedOrder.discount_amount) }}</span></div>
                     <div class="flex justify-between text-sm font-black text-stone-900 dark:text-white pt-1 border-t border-stone-200 dark:border-slate-950"><span>Total Tagihan:</span><span class="text-orange-600 dark:text-orange-400">{{ formatPrice(selectedManagedOrder.total_amount) }}</span></div>
                 </div>
             </div>
 
             <!-- Button Actions -->
-            <div class="space-y-3 pt-3 border-t border-stone-200 dark:border-slate-850">
+            <div class="space-y-3 pt-3 border-t border-stone-200 dark:border-slate-800">
                 <!-- Tombol Bayar Tagihan -->
                 <button
                     v-if="canOpenPaymentModal(selectedManagedOrder)"
@@ -196,7 +196,7 @@ watch(customerSearchQuery, (value) => {
         </div>
 
         <!-- Placeholder -->
-        <div v-else class="flex min-h-[500px] flex-col items-center justify-center rounded-2xl border border-dashed border-stone-250 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-900/40 p-6 text-center text-stone-500 dark:text-slate-500">
+        <div v-else class="flex min-h-[500px] flex-col items-center justify-center rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-900/40 p-6 text-center text-stone-500 dark:text-slate-500">
             <Receipt class="mb-4 h-12 w-12 text-stone-400 dark:text-slate-700" />
             <p class="text-sm font-bold text-stone-700 dark:text-slate-400">Pilih Order Aktif</p>
             <p class="mt-1 text-xs text-stone-500 dark:text-slate-500">Silakan pilih salah satu pesanan aktif di sebelah kiri untuk melihat detail transaksi dan memproses pembayaran.</p>
@@ -216,7 +216,7 @@ watch(customerSearchQuery, (value) => {
             </h3>
 
             <div class="mb-4 grid gap-3 rounded-xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-950/40 p-4 sm:grid-cols-3">
-                <div class="rounded-xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-955/80 p-3">
+                <div class="rounded-xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/80 p-3">
                     <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-400">Tipe Order</p>
                     <p class="mt-2 text-sm font-extrabold text-stone-900 dark:text-white">
                         {{ isTakeawaySelection ? 'Takeaway' : 'Dine In' }}
@@ -225,14 +225,14 @@ watch(customerSearchQuery, (value) => {
                         {{ isTakeawaySelection ? 'Pesanan bungkus / pickup' : 'Pesanan makan di tempat' }}
                     </p>
                 </div>
-                <div class="rounded-xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-955/80 p-3">
+                <div class="rounded-xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/80 p-3">
                     <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-400">Meja</p>
                     <p class="mt-2 text-sm font-extrabold text-stone-900 dark:text-white">{{ selectedTable.name }}</p>
                     <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
                         {{ isTakeawaySelection ? 'Ambil di counter kasir' : 'Kirim ke meja terpilih' }}
                     </p>
                 </div>
-                <div class="rounded-xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-955/80 p-3">
+                <div class="rounded-xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/80 p-3">
                     <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-400">Menu</p>
                     <p class="mt-2 text-sm font-extrabold text-stone-900 dark:text-white">{{ cartItemCount }} item</p>
                     <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">{{ cart.length }} jenis menu aktif</p>
@@ -260,7 +260,7 @@ watch(customerSearchQuery, (value) => {
                             v-if="selectedCustomer || customerSearchQuery || customerName || customerPhone || isForcedNewCustomer"
                             type="button"
                             @click="resetCustomerSelection"
-                            class="rounded-lg border border-stone-250 dark:border-slate-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400 transition hover:border-stone-450 dark:hover:border-slate-600 hover:text-stone-900 dark:hover:text-slate-200"
+                            class="rounded-lg border border-stone-200 dark:border-slate-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400 transition hover:border-stone-400 dark:hover:border-slate-600 hover:text-stone-900 dark:hover:text-slate-200"
                         >
                             Reset / Batal
                         </button>
@@ -272,7 +272,7 @@ watch(customerSearchQuery, (value) => {
                         v-model="customerSearchQuery"
                         type="text"
                         placeholder="Cari pelanggan by nomor HP atau nama..."
-                        class="border-stone-200 dark:border-slate-855 w-full rounded-xl border bg-stone-55 dark:bg-slate-950 px-4 py-3 text-xs text-stone-855 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        class="border-stone-200 dark:border-slate-800 w-full rounded-xl border bg-stone-50 dark:bg-slate-950 px-4 py-3 text-xs text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
 
                     <div
@@ -290,7 +290,7 @@ watch(customerSearchQuery, (value) => {
                                 <p class="text-xs font-bold text-stone-900 dark:text-white">{{ customer.name || 'Pelanggan POS' }}</p>
                                 <p class="mt-0.5 text-[11px] text-stone-500 dark:text-slate-400">{{ customer.phone }}</p>
                             </div>
-                            <span v-if="customer.membership?.tier?.name" class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-655 dark:text-emerald-305">
+                            <span v-if="customer.membership?.tier?.name" class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-300">
                                 {{ customer.membership.tier.name }}
                             </span>
                         </button>
@@ -304,7 +304,7 @@ watch(customerSearchQuery, (value) => {
                             <p class="mt-0.5 text-[11px] text-stone-500 dark:text-slate-400">{{ selectedCustomer.phone }}</p>
                         </div>
                         <div class="text-right">
-                            <p v-if="selectedCustomer.membership?.tier?.name" class="text-[10px] font-bold uppercase tracking-wider text-emerald-650 dark:text-emerald-300">
+                            <p v-if="selectedCustomer.membership?.tier?.name" class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-300">
                                 {{ selectedCustomer.membership.tier.name }}
                             </p>
                             <p v-if="selectedCustomer.membership?.total_points !== undefined" class="mt-0.5 text-[11px] text-stone-500 dark:text-slate-400">
@@ -322,19 +322,19 @@ watch(customerSearchQuery, (value) => {
                         v-model="customerName"
                         type="text"
                         placeholder="Nama pelanggan"
-                        class="border-stone-200 dark:border-slate-855 w-full rounded-xl border bg-stone-55 dark:bg-slate-950 px-4 py-3 text-xs text-stone-855 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        class="border-stone-200 dark:border-slate-800 w-full rounded-xl border bg-stone-50 dark:bg-slate-950 px-4 py-3 text-xs text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
                     <input
                         v-model="customerPhone"
                         type="text"
                         placeholder="Nomor HP pelanggan"
-                        class="border-stone-200 dark:border-slate-855 w-full rounded-xl border bg-stone-55 dark:bg-slate-950 px-4 py-3 text-xs text-stone-855 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        class="border-stone-200 dark:border-slate-800 w-full rounded-xl border bg-stone-50 dark:bg-slate-950 px-4 py-3 text-xs text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
                     <input
                         v-model="customerEmail"
                         type="email"
                         placeholder="Email pelanggan (opsional)"
-                        class="border-stone-200 dark:border-slate-855 w-full rounded-xl border bg-stone-55 dark:bg-slate-950 px-4 py-3 text-xs text-stone-855 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        class="border-stone-200 dark:border-slate-800 w-full rounded-xl border bg-stone-50 dark:bg-slate-950 px-4 py-3 text-xs text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
                 </div>
             </div>
@@ -345,7 +345,7 @@ watch(customerSearchQuery, (value) => {
                     <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">Langkah 2 • Ringkasan Menu</p>
                     <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">Cek item, jumlah, varian, dan catatan per menu.</p>
                 </div>
-                <span class="rounded-full border border-stone-250 dark:border-slate-700 bg-stone-100 dark:bg-slate-900 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300">
+                <span class="rounded-full border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-900 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300">
                     {{ cartItemCount }} item
                 </span>
             </div>
@@ -354,7 +354,7 @@ watch(customerSearchQuery, (value) => {
                 <div
                     v-for="(item, index) in cart"
                     :key="index"
-                    class="border-stone-200 dark:border-slate-855 flex items-start justify-between gap-3 rounded-xl border bg-stone-50/50 dark:bg-slate-950/60 p-3 text-xs"
+                    class="border-stone-200 dark:border-slate-800 flex items-start justify-between gap-3 rounded-xl border bg-stone-50/50 dark:bg-slate-950/60 p-3 text-xs"
                 >
                     <div class="min-w-0 flex-1">
                         <p class="truncate font-bold leading-snug text-stone-900 dark:text-white">{{ item.product_name }}</p>
@@ -364,7 +364,7 @@ watch(customerSearchQuery, (value) => {
                         <p v-if="item.notes" class="text-stone-500 dark:text-slate-400 mt-0.5 text-[9px] italic">
                             "{{ item.notes }}"
                         </p>
-                        <p class="mt-2 font-extrabold text-stone-700 dark:text-slate-350">
+                        <p class="mt-2 font-extrabold text-stone-700 dark:text-slate-300">
                             {{ formatPrice(item.unit_price * item.quantity) }}
                         </p>
                     </div>
@@ -373,27 +373,27 @@ watch(customerSearchQuery, (value) => {
                     <div class="flex shrink-0 items-center gap-2">
                         <button
                             @click="decreaseCartQty(index)"
-                            class="border-stone-200 dark:border-slate-855 flex h-6 w-6 items-center justify-center rounded border bg-stone-100 dark:bg-slate-905 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-850 hover:text-stone-900 dark:hover:text-white"
+                            class="border-stone-200 dark:border-slate-800 flex h-6 w-6 items-center justify-center rounded border bg-stone-100 dark:bg-slate-900 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white"
                         >
                             <Minus class="h-3 w-3" />
                         </button>
-                        <span class="w-5 text-center text-xs font-bold text-stone-850 dark:text-slate-200">{{ item.quantity }}</span>
+                        <span class="w-5 text-center text-xs font-bold text-stone-800 dark:text-slate-200">{{ item.quantity }}</span>
                         <button
                             @click="increaseCartQty(index)"
-                            class="border-stone-200 dark:border-slate-855 flex h-6 w-6 items-center justify-center rounded border bg-stone-100 dark:bg-slate-905 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-850 hover:text-stone-900 dark:hover:text-white"
+                            class="border-stone-200 dark:border-slate-800 flex h-6 w-6 items-center justify-center rounded border bg-stone-100 dark:bg-slate-900 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white"
                         >
                             <Plus class="h-3 w-3" />
                         </button>
                         <button
                             @click="removeCartItem(index)"
-                            class="ml-1 flex h-6 w-6 items-center justify-center rounded border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-305"
+                            class="ml-1 flex h-6 w-6 items-center justify-center rounded border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
                         >
                             <Trash2 class="h-3 w-3" />
                         </button>
                     </div>
                 </div>
 
-                <div v-if="cart.length === 0" class="border-stone-200 dark:border-slate-855 rounded-xl border border-dashed py-16 text-center text-xs text-stone-400 dark:text-slate-500">
+                <div v-if="cart.length === 0" class="border-stone-200 dark:border-slate-800 rounded-xl border border-dashed py-16 text-center text-xs text-stone-400 dark:text-slate-500">
                     Keranjang belanja kosong.<br />Silakan pilih makanan di panel kiri.
                 </div>
             </div>
@@ -414,12 +414,12 @@ watch(customerSearchQuery, (value) => {
                         id="order-notes"
                         v-model="orderNotes"
                         :placeholder="isTakeawaySelection ? 'Contoh: Sambal dipisah, sendok plastik 2, tanpa daun bawang...' : 'Contoh: Meja 1 minta saus mentai dipanggang lebih garing...'"
-                        class="border-stone-200 dark:border-slate-855 h-16 w-full resize-none rounded-xl border bg-stone-55 dark:bg-slate-950 p-3 text-xs text-stone-855 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        class="border-stone-200 dark:border-slate-800 h-16 w-full resize-none rounded-xl border bg-stone-50 dark:bg-slate-950 p-3 text-xs text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     ></textarea>
                 </div>
 
                 <!-- Pricing Summary -->
-                <div class="border-stone-200 dark:border-slate-855 space-y-2 rounded-xl border bg-stone-50/50 dark:bg-slate-955/50 p-4">
+                <div class="border-stone-200 dark:border-slate-800 space-y-2 rounded-xl border bg-stone-50/50 dark:bg-slate-950/50 p-4">
                     <div class="space-y-2 pb-2">
                         <label class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400">
                             Voucher / Promo Code
@@ -427,7 +427,7 @@ watch(customerSearchQuery, (value) => {
                         <select
                             v-model="selectedNewOrderPromoCode"
                             @change="handleNewOrderPromoChange"
-                            class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-stone-850 dark:text-slate-200 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                            class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs text-stone-800 dark:text-slate-200 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                         >
                             <option value="" class="bg-white dark:bg-slate-950 text-stone-900 dark:text-slate-100">Tidak Ada Voucher</option>
                             <option v-for="promo in promos" :key="promo.id" :value="promo.code" class="bg-white dark:bg-slate-950 text-stone-900 dark:text-slate-100">
@@ -441,12 +441,12 @@ watch(customerSearchQuery, (value) => {
                             v-model="newOrderPromoCode"
                             type="text"
                             placeholder="Ketik kode voucher manual..."
-                            class="mt-2 w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-955 px-3 py-2 text-xs uppercase text-stone-850 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                            class="mt-2 w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-xs uppercase text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                         />
-                        <p v-if="newOrderPromoWarning" class="text-[11px] leading-5 text-rose-455 dark:text-rose-400 font-bold mt-1.5">
+                        <p v-if="newOrderPromoWarning" class="text-[11px] leading-5 text-rose-500 dark:text-rose-400 font-bold mt-1.5">
                             {{ newOrderPromoWarning }}
                         </p>
-                        <p class="text-[11px] leading-5 text-stone-500 dark:text-slate-550">
+                        <p class="text-[11px] leading-5 text-stone-500 dark:text-slate-500">
                             Promo otomatis, tier member, happy hour, dan voucher diverifikasi server saat order disimpan.
                         </p>
 
@@ -460,17 +460,17 @@ watch(customerSearchQuery, (value) => {
                                     :type="showNewOrderApprovalPin ? 'text' : 'password'"
                                     inputmode="numeric"
                                     placeholder="Isi jika diskon manual melewati threshold"
-                                    class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-955 pl-3 pr-10 py-2 text-xs text-stone-855 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 pl-3 pr-10 py-2 text-xs text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                                 />
                                 <button
                                     type="button"
                                     @click="showNewOrderApprovalPin = !showNewOrderApprovalPin"
-                                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-stone-400 dark:text-slate-500 hover:text-stone-600 dark:hover:text-slate-350"
+                                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-stone-400 dark:text-slate-500 hover:text-stone-600 dark:hover:text-slate-300"
                                 >
                                     <component :is="showNewOrderApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
                                 </button>
                             </div>
-                            <p class="mt-2 text-[11px] leading-5 text-stone-555 dark:text-slate-500">
+                            <p class="mt-2 text-[11px] leading-5 text-stone-500 dark:text-slate-500">
                                 Hanya diperlukan jika voucher atau diskon manual memicu approval owner.
                             </p>
                         </div>
@@ -479,17 +479,17 @@ watch(customerSearchQuery, (value) => {
                         <span>Subtotal:</span>
                         <span>{{ formatPrice(cartSubtotal) }}</span>
                     </div>
-                    <div v-if="cartDiscount > 0" class="flex justify-between text-emerald-655 dark:text-emerald-400 font-semibold">
+                    <div v-if="cartDiscount > 0" class="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
                         <span>Diskon Voucher:</span>
                         <span>-{{ formatPrice(cartDiscount) }}</span>
                     </div>
                     <div class="flex justify-between border-t border-stone-200 dark:border-slate-800 pt-2 text-sm font-black text-stone-900 dark:text-white">
                         <span>Total Tagihan:</span>
-                        <span class="text-orange-555 dark:text-orange-400 font-extrabold text-base">{{ formatPrice(cartTotal) }}</span>
+                        <span class="text-orange-500 dark:text-orange-400 font-extrabold text-base">{{ formatPrice(cartTotal) }}</span>
                     </div>
                 </div>
 
-                <div class="space-y-4 rounded-xl border border-stone-200 dark:border-slate-800/80 bg-stone-50/50 dark:bg-slate-955/50 p-4">
+                <div class="space-y-4 rounded-xl border border-stone-200 dark:border-slate-800/80 bg-stone-50/50 dark:bg-slate-950/50 p-4">
                     <div>
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400">Opsi Pembayaran</p>
                         <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
@@ -504,8 +504,8 @@ watch(customerSearchQuery, (value) => {
                             :class="[
                                 'rounded-xl border p-3 text-left transition',
                                 paymentOption === 'pay_later'
-                                    ? 'border-emerald-500 bg-emerald-500/10 text-emerald-655 dark:text-emerald-250 ring-2 ring-emerald-500/20 font-semibold'
-                                    : 'border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-stone-700 dark:text-slate-305 hover:border-stone-300 dark:hover:border-slate-700',
+                                    ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 ring-2 ring-emerald-500/20 font-semibold'
+                                    : 'border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-stone-700 dark:text-slate-300 hover:border-stone-300 dark:hover:border-slate-700',
                             ]"
                         >
                             <p class="text-xs font-bold">Bayar Nanti</p>
@@ -519,8 +519,8 @@ watch(customerSearchQuery, (value) => {
                             :class="[
                                 'rounded-xl border p-3 text-left transition',
                                 paymentOption === 'pay_now'
-                                    ? 'border-orange-500 bg-orange-500/10 text-orange-655 dark:text-orange-105 ring-2 ring-orange-500/20 font-semibold'
-                                    : 'border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-stone-700 dark:text-slate-305 hover:border-stone-300 dark:hover:border-slate-700',
+                                    ? 'border-orange-500 bg-orange-500/10 text-orange-600 dark:text-orange-100 ring-2 ring-orange-500/20 font-semibold'
+                                    : 'border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-stone-700 dark:text-slate-300 hover:border-stone-300 dark:hover:border-slate-700',
                             ]"
                         >
                             <p class="text-xs font-bold">Bayar Sekarang</p>
@@ -538,8 +538,8 @@ watch(customerSearchQuery, (value) => {
                                 :class="[
                                     'rounded-xl border p-3 text-left transition',
                                     newOrderPaymentMethod === 'cash'
-                                        ? 'border-orange-500 bg-orange-500/10 text-orange-655 dark:text-white ring-2 ring-orange-500/20 font-semibold'
-                                        : 'border-stone-200 dark:border-slate-850 bg-white dark:bg-slate-955/70 text-stone-700 dark:text-slate-305',
+                                        ? 'border-orange-500 bg-orange-500/10 text-orange-600 dark:text-white ring-2 ring-orange-500/20 font-semibold'
+                                        : 'border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 text-stone-700 dark:text-slate-300',
                                 ]"
                             >
                                 <p class="text-xs font-bold">Cash</p>
@@ -556,7 +556,7 @@ watch(customerSearchQuery, (value) => {
                                     'rounded-xl border p-3 text-left transition',
                                     newOrderPaymentMethod === method
                                         ? getPaymentMethodConfig(method).colorClass
-                                        : 'border-stone-200 dark:border-slate-850 bg-white dark:bg-slate-955/70 text-stone-700 dark:text-slate-305',
+                                        : 'border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 text-stone-700 dark:text-slate-300',
                                 ]"
                             >
                                 <p class="text-xs font-bold">{{ getPaymentMethodConfig(method).label }}</p>
@@ -568,7 +568,7 @@ watch(customerSearchQuery, (value) => {
 
                         <div v-if="newOrderPaymentMethod === 'cash'" class="grid gap-3 sm:grid-cols-2">
                             <div>
-                                <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-400">
+                                <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                                     Nominal Diterima
                                 </label>
                                 <input
@@ -577,13 +577,13 @@ watch(customerSearchQuery, (value) => {
                                     min="0"
                                     step="1000"
                                     placeholder="Contoh: 100000"
-                                    class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-3 text-xs text-stone-850 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-3 text-xs text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                                 />
                             </div>
-                            <div class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-55 dark:bg-slate-950 p-4">
-                                <p class="text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-500">Estimasi Kembalian</p>
-                                <p class="mt-2 text-sm font-extrabold text-emerald-650 dark:text-emerald-305">{{ formatPrice(newOrderCashChange) }}</p>
-                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-450">Jika nominal kosong, sistem anggap pas sesuai total.</p>
+                            <div class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-950 p-4">
+                                <p class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Estimasi Kembalian</p>
+                                <p class="mt-2 text-sm font-extrabold text-emerald-600 dark:text-emerald-300">{{ formatPrice(newOrderCashChange) }}</p>
+                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">Jika nominal kosong, sistem anggap pas sesuai total.</p>
                             </div>
                         </div>
                     </div>
@@ -593,7 +593,7 @@ watch(customerSearchQuery, (value) => {
                 <button
                     @click="submitOrder"
                     :disabled="cart.length === 0 || isSubmitting"
-                    class="to-red-650 hover:to-red-750 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 px-5 py-3 font-bold text-white shadow-md shadow-orange-500/10 transition duration-200 hover:from-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500/50 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50"
+                    class="to-red-600 hover:to-red-700 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 px-5 py-3 font-bold text-white shadow-md shadow-orange-500/10 transition duration-200 hover:from-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500/50 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50"
                 >
                     <svg v-if="isSubmitting" class="-ml-1 mr-2 h-4 w-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -625,7 +625,7 @@ watch(customerSearchQuery, (value) => {
                         <p class="font-bold text-stone-900 dark:text-white">{{ selectedManagedOrder.order_number }}</p>
                         <p class="mt-0.5 text-stone-500 dark:text-slate-400">{{ getOrderCustomerPrimary(selectedManagedOrder) }}</p>
                     </div>
-                    <span class="rounded-full border border-stone-250 dark:border-slate-700 bg-stone-100 dark:bg-slate-905 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300">
+                    <span class="rounded-full border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-900 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300">
                         {{ tableActiveOrders.length }} bill aktif
                     </span>
                 </div>
@@ -637,11 +637,11 @@ watch(customerSearchQuery, (value) => {
                     <button
                         @click="openPaymentModal"
                         :disabled="!canOpenPaymentModal(selectedManagedOrder)"
-                        class="flex w-full items-center justify-between rounded-xl border border-orange-200 dark:border-orange-500/20 bg-orange-50 dark:bg-orange-500/5 p-3.5 text-xs font-bold text-orange-655 dark:text-orange-400 transition duration-150 hover:bg-orange-105 dark:hover:bg-orange-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="flex w-full items-center justify-between rounded-xl border border-orange-200 dark:border-orange-500/20 bg-orange-50 dark:bg-orange-500/5 p-3.5 text-xs font-bold text-orange-600 dark:text-orange-400 transition duration-150 hover:bg-orange-100 dark:hover:bg-orange-500/10 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         <span>{{ getPaymentActionLabel(selectedManagedOrder) }}</span>
                     </button>
-                    <p class="mt-1 px-1 text-[10px] text-stone-555 dark:text-slate-500">
+                    <p class="mt-1 px-1 text-[10px] text-stone-500 dark:text-slate-500">
                         {{ canOpenPaymentModal(selectedManagedOrder) ? getPaymentActionHint(selectedManagedOrder) : 'Order ini belum ada di tahap settlement atau sudah lunas.' }}
                     </p>
                 </div>
@@ -651,11 +651,11 @@ watch(customerSearchQuery, (value) => {
                     <button
                         @click="deliverOrder(selectedManagedOrder)"
                         :disabled="isDeliveringOrder"
-                        class="flex w-full items-center justify-between rounded-xl border border-emerald-200 dark:border-emerald-500/25 bg-emerald-50 dark:bg-emerald-500/10 p-3.5 text-xs font-bold text-emerald-655 dark:text-emerald-305 transition duration-150 hover:bg-emerald-105 dark:hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="flex w-full items-center justify-between rounded-xl border border-emerald-200 dark:border-emerald-500/25 bg-emerald-50 dark:bg-emerald-500/10 p-3.5 text-xs font-bold text-emerald-600 dark:text-emerald-300 transition duration-150 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         <span>{{ isOrderPaid(selectedManagedOrder) ? 'Sajikan & Selesaikan' : 'Sajikan Pesanan' }}</span>
                     </button>
-                    <p class="mt-1 px-1 text-[10px] text-stone-555 dark:text-slate-500">
+                    <p class="mt-1 px-1 text-[10px] text-stone-500 dark:text-slate-500">
                         {{ isOrderPaid(selectedManagedOrder)
                             ? 'Pesanan sudah lunas. Sajikan hidangan dan selesaikan transaksi (kosongkan meja).'
                             : 'Sajikan hidangan ke meja customer sebelum pembayaran diselesaikan.' }}
@@ -666,11 +666,11 @@ watch(customerSearchQuery, (value) => {
                     <button
                         @click="openKasbonModal"
                         :disabled="!canCloseAsKasbon(selectedManagedOrder)"
-                        class="flex w-full items-center justify-between rounded-xl border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/5 p-3.5 text-xs font-bold text-amber-705 dark:text-amber-305 transition duration-150 hover:bg-amber-105 dark:hover:bg-amber-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="flex w-full items-center justify-between rounded-xl border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/5 p-3.5 text-xs font-bold text-amber-700 dark:text-amber-300 transition duration-150 hover:bg-amber-100 dark:hover:bg-amber-500/10 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         <span>Tutup Sebagai Kasbon</span>
                     </button>
-                    <p class="mt-1 px-1 text-[10px] text-stone-555 dark:text-slate-500">
+                    <p class="mt-1 px-1 text-[10px] text-stone-500 dark:text-slate-500">
                         {{ getKasbonActionHint(selectedManagedOrder) }}
                     </p>
                 </div>
@@ -678,11 +678,11 @@ watch(customerSearchQuery, (value) => {
                 <div class="group relative">
                     <button
                         @click="openEditOrder"
-                        class="flex w-full items-center justify-between rounded-xl border border-sky-200 dark:border-sky-500/20 bg-sky-50 dark:bg-sky-500/5 p-3.5 text-xs font-bold text-sky-705 dark:text-sky-305 transition duration-150 hover:bg-sky-105 dark:hover:bg-sky-500/10"
+                        class="flex w-full items-center justify-between rounded-xl border border-sky-200 dark:border-sky-500/20 bg-sky-50 dark:bg-sky-500/5 p-3.5 text-xs font-bold text-sky-700 dark:text-sky-300 transition duration-150 hover:bg-sky-100 dark:hover:bg-sky-500/10"
                     >
                         <span>Edit Order (Approval Flow)</span>
                     </button>
-                    <p class="mt-1 px-1 text-[10px] text-stone-555 dark:text-slate-500">
+                    <p class="mt-1 px-1 text-[10px] text-stone-500 dark:text-slate-500">
                         Status `pending` bisa diedit langsung. Status `in_progress` butuh PIN approval supervisor.
                     </p>
                 </div>
@@ -690,11 +690,11 @@ watch(customerSearchQuery, (value) => {
                 <div class="group relative">
                     <button
                         @click="openSplitBill"
-                        class="flex w-full items-center justify-between rounded-xl border border-fuchsia-200 dark:border-fuchsia-500/20 bg-fuchsia-50 dark:bg-fuchsia-500/5 p-3.5 text-xs font-bold text-fuchsia-655 dark:text-fuchsia-305 transition duration-150 hover:bg-fuchsia-105 dark:hover:bg-fuchsia-500/10"
+                        class="flex w-full items-center justify-between rounded-xl border border-fuchsia-200 dark:border-fuchsia-500/20 bg-fuchsia-50 dark:bg-fuchsia-500/5 p-3.5 text-xs font-bold text-fuchsia-600 dark:text-fuchsia-300 transition duration-150 hover:bg-fuchsia-100 dark:hover:bg-fuchsia-500/10"
                     >
                         <span>Split Bill</span>
                     </button>
-                    <p class="mt-1 px-1 text-[10px] text-stone-555 dark:text-slate-500">
+                    <p class="mt-1 px-1 text-[10px] text-stone-500 dark:text-slate-500">
                         Pisahkan item tertentu ke bill kedua dari order aktif yang dipilih.
                     </p>
                 </div>
@@ -702,11 +702,11 @@ watch(customerSearchQuery, (value) => {
                 <div class="group relative">
                     <button
                         @click="cancelActiveOrder(selectedManagedOrder)"
-                        class="flex w-full items-center justify-between rounded-xl border border-rose-200 dark:border-rose-500/20 bg-rose-50 dark:bg-rose-500/5 p-3.5 text-xs font-bold text-rose-655 dark:text-rose-305 transition duration-150 hover:bg-rose-105 dark:hover:bg-rose-500/10"
+                        class="flex w-full items-center justify-between rounded-xl border border-rose-200 dark:border-rose-500/20 bg-rose-50 dark:bg-rose-500/5 p-3.5 text-xs font-bold text-rose-600 dark:text-rose-300 transition duration-150 hover:bg-rose-100 dark:hover:bg-rose-500/10"
                     >
                         <span>Batalkan Order</span>
                     </button>
-                    <p class="mt-1 px-1 text-[10px] text-stone-555 dark:text-slate-500">
+                    <p class="mt-1 px-1 text-[10px] text-stone-500 dark:text-slate-500">
                         Batalkan seluruh pesanan ini secara permanen dari sistem.
                     </p>
                 </div>
@@ -723,18 +723,18 @@ watch(customerSearchQuery, (value) => {
                 <span>Daftar Order Aktif</span>
             </h3>
 
-            <div class="mb-4 rounded-xl border border-stone-200 dark:border-slate-800/80 bg-stone-50/50 dark:bg-slate-955/50 p-3">
+            <div class="mb-4 rounded-xl border border-stone-200 dark:border-slate-800/80 bg-stone-50/50 dark:bg-slate-950/50 p-3">
                 <div class="flex items-center justify-between gap-3">
                     <div>
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-400">Gabung Bill</p>
-                        <p class="mt-1 text-xs text-stone-555 dark:text-slate-400">
+                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                             Pilih minimal dua order aktif dari meja yang sama, lalu gabungkan jadi satu bill.
                         </p>
                     </div>
                     <button
                         @click="openMergeBill"
                         :disabled="!canMergeSelectedOrders"
-                        class="rounded-xl border border-fuchsia-200 dark:border-fuchsia-500/20 bg-fuchsia-50 dark:bg-fuchsia-500/10 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-fuchsia-655 dark:text-fuchsia-305 transition disabled:pointer-events-none disabled:opacity-40"
+                        class="rounded-xl border border-fuchsia-200 dark:border-fuchsia-500/20 bg-fuchsia-50 dark:bg-fuchsia-500/10 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-fuchsia-600 dark:text-fuchsia-300 transition disabled:pointer-events-none disabled:opacity-40"
                     >
                         Gabung Bill
                     </button>
@@ -746,7 +746,7 @@ watch(customerSearchQuery, (value) => {
                 <div
                     v-for="order in activeOrders"
                     :key="order.id"
-                    class="border-stone-200 dark:border-slate-850 space-y-3 rounded-xl border bg-stone-50/50 dark:bg-slate-950/60 p-4 transition duration-150 hover:border-stone-300 dark:hover:border-slate-700"
+                    class="border-stone-200 dark:border-slate-800 space-y-3 rounded-xl border bg-stone-50/50 dark:bg-slate-950/60 p-4 transition duration-150 hover:border-stone-300 dark:hover:border-slate-700"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div class="space-y-2">
@@ -756,7 +756,7 @@ watch(customerSearchQuery, (value) => {
                                     :checked="mergeSelectionIds.includes(order.id)"
                                     :disabled="!canEditOrderStatus(order.status)"
                                     type="checkbox"
-                                    class="h-4 w-4 rounded border-stone-300 dark:border-slate-700 bg-white dark:bg-slate-955 text-fuchsia-500 focus:ring-fuchsia-500"
+                                    class="h-4 w-4 rounded border-stone-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-fuchsia-500 focus:ring-fuchsia-500"
                                     @change="toggleMergeSelection(order.id)"
                                 />
                                 <span class="text-xs font-black text-stone-900 dark:text-white">{{ order.order_number }}</span>
@@ -779,11 +779,11 @@ watch(customerSearchQuery, (value) => {
                     <div class="grid grid-cols-1 gap-2 text-[11px] text-stone-600 dark:text-slate-400 sm:grid-cols-2">
                         <div>
                             <p class="text-[9px] font-semibold uppercase text-stone-500 dark:text-slate-500">Layanan</p>
-                            <p class="mt-0.5 font-bold text-stone-850 dark:text-slate-205">{{ getOrderServiceLabel(order) }}</p>
+                            <p class="mt-0.5 font-bold text-stone-800 dark:text-slate-200">{{ getOrderServiceLabel(order) }}</p>
                         </div>
                         <div>
                             <p class="text-[9px] font-semibold uppercase text-stone-500 dark:text-slate-500">Pelanggan</p>
-                            <p class="mt-0.5 font-bold text-stone-850 dark:text-slate-205">{{ getOrderCustomerPrimary(order) }}</p>
+                            <p class="mt-0.5 font-bold text-stone-800 dark:text-slate-200">{{ getOrderCustomerPrimary(order) }}</p>
                             <p v-if="getOrderCustomerSecondary(order)" class="mt-0.5 text-[10px] text-stone-500 dark:text-slate-500">
                                 {{ getOrderCustomerSecondary(order) }}
                             </p>
@@ -795,7 +795,7 @@ watch(customerSearchQuery, (value) => {
                             v-if="canOpenPaymentModal(order)"
                             type="button"
                             @click="openPaymentModalForOrder(order)"
-                            class="rounded-xl border border-orange-200 dark:border-orange-500/20 bg-orange-50 dark:bg-orange-500/10 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-orange-655 dark:text-orange-305 transition hover:bg-orange-100 dark:hover:bg-orange-500/15"
+                            class="rounded-xl border border-orange-200 dark:border-orange-500/20 bg-orange-50 dark:bg-orange-500/10 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-orange-600 dark:text-orange-300 transition hover:bg-orange-100 dark:hover:bg-orange-500/15"
                         >
                             {{ getPaymentActionLabel(order) }}
                         </button>
@@ -804,7 +804,7 @@ watch(customerSearchQuery, (value) => {
                             type="button"
                             @click="deliverOrder(order)"
                             :disabled="isDeliveringOrder"
-                            class="rounded-xl border border-emerald-200 dark:border-emerald-500/25 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-emerald-655 dark:text-emerald-305 transition hover:bg-emerald-105 dark:hover:bg-emerald-500/20 disabled:opacity-50"
+                            class="rounded-xl border border-emerald-200 dark:border-emerald-500/25 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-300 transition hover:bg-emerald-100 dark:hover:bg-emerald-500/20 disabled:opacity-50"
                         >
                             {{ isOrderPaid(order) ? 'Sajikan & Selesaikan' : 'Sajikan' }}
                         </button>
@@ -813,26 +813,26 @@ watch(customerSearchQuery, (value) => {
                             v-if="canCloseAsKasbon(order)"
                             type="button"
                             @click="openKasbonModalForOrder(order)"
-                            class="rounded-xl border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/10 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-amber-705 dark:text-amber-305 transition hover:bg-amber-105 dark:hover:bg-amber-500/15"
+                            class="rounded-xl border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/10 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 transition hover:bg-amber-100 dark:hover:bg-amber-500/15"
                         >
                             Tutup Kasbon
                         </button>
                         <span
                             v-else-if="!canCloseAsKasbon(order) && !isOrderPaid(order)"
-                            class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-905 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                            class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-500"
                         >
                             {{ getKasbonActionHint(order) }}
                         </span>
                     </div>
 
                     <!-- Footer detail items counter -->
-                    <div class="border-stone-200 dark:border-slate-855/60 flex items-center justify-between border-t pt-2 text-[10px] text-stone-500 dark:text-slate-500">
+                    <div class="border-stone-200 dark:border-slate-800/60 flex items-center justify-between border-t pt-2 text-[10px] text-stone-500 dark:text-slate-500">
                         <span>{{ order.items?.length || 0 }} Jenis Menu Pesanan</span>
                         <span>{{ new Date(order.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) }} WIB</span>
                     </div>
                 </div>
 
-                <div v-if="activeOrders.length === 0" class="border-stone-200 dark:border-slate-855 rounded-xl border border-dashed py-20 text-center text-xs text-stone-400 dark:text-slate-500">
+                <div v-if="activeOrders.length === 0" class="border-stone-200 dark:border-slate-800 rounded-xl border border-dashed py-20 text-center text-xs text-stone-400 dark:text-slate-500">
                     Belum ada transaksi aktif saat ini.<br />Gunakan panel peta meja untuk membuat baru.
                 </div>
             </div>

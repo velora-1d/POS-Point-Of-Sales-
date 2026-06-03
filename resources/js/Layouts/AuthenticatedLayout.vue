@@ -1096,7 +1096,7 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- Search Area -->
-            <div v-if="!isSidebarCollapsed" class="border-stone-200 dark:border-slate-850 shrink-0 border-b px-4 py-4">
+            <div v-if="!isSidebarCollapsed" class="border-stone-200 dark:border-slate-800 shrink-0 border-b px-4 py-4">
                 <div class="relative">
                     <span
                         class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400 dark:text-slate-500"
@@ -1107,12 +1107,12 @@ onBeforeUnmount(() => {
                         type="text"
                         v-model="searchQuery"
                         placeholder="Cari halaman atau fitur..."
-                        class="border-stone-200 dark:border-slate-850 w-full rounded-xl border bg-stone-100/50 dark:bg-slate-950/60 py-2.5 pl-10 pr-4 text-sm text-stone-850 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        class="border-stone-200 dark:border-slate-800 w-full rounded-xl border bg-stone-100/50 dark:bg-slate-950/60 py-2.5 pl-10 pr-4 text-sm text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
                     <button
                         v-if="searchQuery"
                         @click="searchQuery = ''"
-                        class="hover:text-slate-350 absolute inset-y-0 right-0 flex items-center pr-3 text-stone-400 dark:text-slate-500"
+                        class="hover:text-slate-300 absolute inset-y-0 right-0 flex items-center pr-3 text-stone-400 dark:text-slate-500"
                     >
                         <X class="h-4 w-4" />
                     </button>
@@ -1195,7 +1195,7 @@ onBeforeUnmount(() => {
                             <span
                                 :class="[
                                     'transition duration-150',
-                                    isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-400 dark:text-slate-500 group-hover:text-stone-600 dark:group-hover:text-slate-355'
+                                    isCategoryActive(category) ? 'text-orange-500 dark:text-orange-400' : 'text-stone-400 dark:text-slate-500 group-hover:text-stone-600 dark:group-hover:text-slate-400'
                                 ]"
                             >
                             <ChevronDown
@@ -1222,7 +1222,7 @@ onBeforeUnmount(() => {
                             'group flex items-center justify-center rounded-lg p-3 transition duration-150',
                             isCategoryActive(category)
                                 ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400'
-                                : 'hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/30 text-stone-500 dark:text-slate-400'
+                                : 'hover:bg-stone-100 dark:hover:bg-slate-800 dark:bg-slate-800/30 text-stone-500 dark:text-slate-400'
                         ]"
                     >
                         <component
@@ -1245,7 +1245,7 @@ onBeforeUnmount(() => {
                             isSidebarCollapsed ? 'justify-center p-3' : 'justify-between px-3 py-2',
                             route().current(resolveSidebarRoute(category.pages[0]))
                                 ? 'bg-orange-500/10 font-bold text-orange-500 dark:text-orange-400 border-l-4 border-orange-500 rounded-l-none pl-2'
-                                : 'hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/30 text-stone-500 dark:text-slate-400'
+                                : 'hover:bg-stone-100 dark:hover:bg-slate-800 dark:bg-slate-800/30 text-stone-500 dark:text-slate-400'
                         ]"
                     >
                         <div
@@ -1445,7 +1445,7 @@ onBeforeUnmount(() => {
             >
                 <div class="flex items-center gap-2">
                     <div
-                        class="to-red-650 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-orange-500 text-sm font-black text-stone-900 dark:text-white shadow-md shadow-orange-500/10"
+                        class="to-red-600 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-orange-500 text-sm font-black text-stone-900 dark:text-white shadow-md shadow-orange-500/10"
                     >
                         M
                     </div>
@@ -1462,7 +1462,7 @@ onBeforeUnmount(() => {
                         :title="isDarkMode ? 'Mode Terang' : 'Mode Gelap'"
                     >
                         <Sun v-if="isDarkMode" class="h-5 w-5 text-amber-500" />
-                        <Moon v-else class="h-5 w-5 text-slate-600 dark:text-slate-450" />
+                        <Moon v-else class="h-5 w-5 text-slate-600 dark:text-slate-400" />
                     </button>
                     <button
                         @click="testAlarmGlobal"
@@ -1506,7 +1506,7 @@ onBeforeUnmount(() => {
 
                 <!-- Sticky footer for minor branding info -->
                 <footer
-                    class="border-t border-stone-200 dark:border-slate-900/60 px-5 py-6 text-center text-xs text-stone-450 dark:text-slate-650 sm:px-6 lg:px-8 xl:px-10"
+                    class="border-t border-stone-200 dark:border-slate-900/60 px-5 py-6 text-center text-xs text-stone-400 dark:text-slate-600 sm:px-6 lg:px-8 xl:px-10"
                 >
                     POS Mentai &copy; 2026. Hak Cipta Dilindungi.
                 </footer>

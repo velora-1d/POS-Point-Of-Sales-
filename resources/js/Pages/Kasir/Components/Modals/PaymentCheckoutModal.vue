@@ -23,7 +23,7 @@ import {
             class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/85 p-4 backdrop-blur-sm"
         >
             <div class="w-full max-w-lg rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl text-stone-900 dark:text-slate-100">
-                <div class="flex items-start justify-between gap-4 border-b border-stone-250/60 dark:border-slate-800/80 px-6 py-5">
+                <div class="flex items-start justify-between gap-4 border-b border-stone-200/60 dark:border-slate-800/80 px-6 py-5">
                     <div>
                         <span
                             class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em]"
@@ -42,7 +42,7 @@ import {
                     </div>
                     <button
                         @click="paymentCheckoutModalOpen = false"
-                        class="text-stone-400 dark:text-slate-500 transition hover:text-stone-705 dark:hover:text-slate-200"
+                        class="text-stone-400 dark:text-slate-500 transition hover:text-stone-700 dark:hover:text-slate-200"
                     >
                         <X class="h-5 w-5" />
                     </button>
@@ -70,7 +70,7 @@ import {
                         Buka Checkout {{ activePaymentConfig.label }}
                     </button>
 
-                    <p class="text-center text-[11px] text-stone-555 dark:text-slate-555">
+                    <p class="text-center text-[11px] text-stone-500 dark:text-slate-500">
                         Jika belum lunas, kasir bisa buka ulang checkout ini kapan saja dari detail order aktif.
                     </p>
                 </div>

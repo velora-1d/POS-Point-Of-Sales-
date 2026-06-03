@@ -27,7 +27,7 @@ import {
             <div class="relative w-full max-w-md space-y-6 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl text-stone-900 dark:text-slate-100">
                 <button
                     @click="variantModalOpen = false"
-                    class="text-stone-400 hover:text-stone-700 dark:text-slate-500 dark:hover:text-slate-350 absolute right-4 top-4"
+                    class="text-stone-400 hover:text-stone-700 dark:text-slate-500 dark:hover:text-slate-300 absolute right-4 top-4"
                 >
                     <X class="h-5 w-5" />
                 </button>
@@ -46,7 +46,7 @@ import {
 
                 <!-- Variant Options Radio -->
                 <div class="space-y-2.5">
-                    <label class="block text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-400">
+                    <label class="block text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                         Pilihan Varian
                     </label>
                     <div class="grid grid-cols-1 gap-2">
@@ -57,8 +57,8 @@ import {
                             :class="[
                                 'flex cursor-pointer select-none items-center justify-between rounded-xl border p-3.5 transition',
                                 selectedVariant?.id === variant.id
-                                    ? 'border-orange-500 bg-orange-500/5 text-orange-655 dark:text-orange-400 font-semibold'
-                                    : 'border-stone-200 dark:border-slate-855 bg-stone-50/50 dark:bg-slate-950/60 text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-900',
+                                    ? 'border-orange-500 bg-orange-500/5 text-orange-600 dark:text-orange-400 font-semibold'
+                                    : 'border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/60 text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-900',
                             ]"
                         >
                             <div class="flex items-center gap-2 text-xs font-bold">
@@ -67,7 +67,7 @@ import {
                                         'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border',
                                         selectedVariant?.id === variant.id
                                             ? 'border-orange-500 text-orange-400'
-                                            : 'border-stone-305 dark:border-slate-700',
+                                            : 'border-stone-300 dark:border-slate-700',
                                     ]"
                                 >
                                     <span
@@ -85,14 +85,14 @@ import {
                 </div>
 
                 <!-- Quantity Control -->
-                <div class="flex items-center justify-between gap-4 border-t border-stone-250/60 dark:border-slate-800/80 pt-4">
-                    <span class="block text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-400">
+                <div class="flex items-center justify-between gap-4 border-t border-stone-200/60 dark:border-slate-800/80 pt-4">
+                    <span class="block text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                         Jumlah Item
                     </span>
                     <div class="flex items-center gap-3">
                         <button
                             @click="itemQuantity = itemQuantity > 1 ? itemQuantity - 1 : 1"
-                            class="border-stone-200 dark:border-slate-855 flex h-8 w-8 items-center justify-center rounded-lg border bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-900 hover:text-stone-900 dark:hover:text-white transition"
+                            class="border-stone-200 dark:border-slate-800 flex h-8 w-8 items-center justify-center rounded-lg border bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-900 hover:text-stone-900 dark:hover:text-white transition"
                         >
                             <Minus class="h-4 w-4" />
                         </button>
@@ -101,7 +101,7 @@ import {
                         </span>
                         <button
                             @click="itemQuantity += 1"
-                            class="border-stone-200 dark:border-slate-855 flex h-8 w-8 items-center justify-center rounded-lg border bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-900 hover:text-stone-900 dark:hover:text-white transition"
+                            class="border-stone-200 dark:border-slate-800 flex h-8 w-8 items-center justify-center rounded-lg border bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-900 hover:text-stone-900 dark:hover:text-white transition"
                         >
                             <Plus class="h-4 w-4" />
                         </button>
@@ -110,7 +110,7 @@ import {
 
                 <!-- Notes field for kitchen -->
                 <div>
-                    <label for="item-notes" class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-400">
+                    <label for="item-notes" class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                         Catatan Khusus Menu
                     </label>
                     <input
@@ -118,14 +118,14 @@ import {
                         type="text"
                         v-model="itemNotes"
                         placeholder="Contoh: level 3 pedas, extra mayones, dll..."
-                        class="border-stone-200 dark:border-slate-855 w-full rounded-xl border bg-stone-55 dark:bg-slate-950 px-4 py-3 text-xs text-stone-900 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        class="border-stone-200 dark:border-slate-800 w-full rounded-xl border bg-stone-50 dark:bg-slate-950 px-4 py-3 text-xs text-stone-900 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                     />
                 </div>
 
                 <!-- Confirm button -->
                 <button
                     @click="confirmVariantAdd"
-                    class="to-red-650 hover:to-red-750 w-full rounded-xl bg-gradient-to-r from-orange-500 px-5 py-3 text-xs font-bold text-white shadow-md transition duration-150 hover:from-orange-600 active:scale-[0.99]"
+                    class="to-red-600 hover:to-red-700 w-full rounded-xl bg-gradient-to-r from-orange-500 px-5 py-3 text-xs font-bold text-white shadow-md transition duration-150 hover:from-orange-600 active:scale-[0.99]"
                 >
                     Konfirmasi & Tambah ke Keranjang
                 </button>

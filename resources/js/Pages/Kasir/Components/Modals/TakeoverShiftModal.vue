@@ -41,7 +41,7 @@ const handleTakeoverSubmit = () => {
                 <button
                     v-if="!isShiftExpired"
                     @click="showTakeoverModal = false"
-                    class="rounded-lg p-1 text-stone-400 dark:text-slate-500 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:hover:text-white"
+                    class="rounded-lg p-1 text-stone-400 dark:text-slate-500 hover:bg-stone-100 dark:hover:bg-slate-800 dark:bg-slate-800 hover:text-stone-900 dark:hover:text-white"
                 >
                     <X class="h-5 w-5" />
                 </button>
@@ -50,12 +50,12 @@ const handleTakeoverSubmit = () => {
             <!-- Warning if expired -->
             <div
                 v-if="isShiftExpired"
-                class="mb-6 flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/5 dark:bg-red-500/10 p-4 text-xs text-red-650 dark:text-red-400"
+                class="mb-6 flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/5 dark:bg-red-500/10 p-4 text-xs text-red-600 dark:text-red-400"
             >
                 <ShieldAlert class="h-5 w-5 shrink-0 text-red-500" />
                 <div>
-                    <span class="font-extrabold text-red-750 dark:text-red-300">Akses Laci Kas Terkunci!</span>
-                    <p class="mt-1 leading-relaxed text-red-650/90 dark:text-red-400/90">
+                    <span class="font-extrabold text-red-700 dark:text-red-300">Akses Laci Kas Terkunci!</span>
+                    <p class="mt-1 leading-relaxed text-red-600/90 dark:text-red-400/90">
                         Jam shift kasir aktif saat ini telah berakhir. Sistem telah mengunci menu transaksi hingga proses serah terima laci kas ke karyawan berikutnya selesai dilakukan.
                     </p>
                 </div>
@@ -68,7 +68,7 @@ const handleTakeoverSubmit = () => {
                     <label class="mb-1.5 block text-xs font-bold text-stone-700 dark:text-slate-300">
                         Uang Tunai Fisik Akhir di Laci (IDR) <span class="text-red-500">*</span>
                     </label>
-                    <div class="relative rounded-2xl bg-stone-55 dark:bg-slate-950 border border-stone-200 dark:border-slate-800 focus-within:border-orange-500/50 transition-all">
+                    <div class="relative rounded-2xl bg-stone-50 dark:bg-slate-950 border border-stone-200 dark:border-slate-800 focus-within:border-orange-500/50 transition-all">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-stone-400 dark:text-slate-500">Rp</span>
                         <input
                             v-model.number="takeoverForm.actual_cash"
@@ -82,7 +82,7 @@ const handleTakeoverSubmit = () => {
                     <p class="mt-1 text-[10px] text-stone-500 dark:text-slate-400 leading-normal">
                         Hitung nominal uang cash riil di laci kas saat ini. Selisih dengan ekspektasi sistem akan dicatat di laporan rekap kas.
                     </p>
-                    <div v-if="takeoverForm.errors.actual_cash" class="mt-1 text-xs text-red-405">
+                    <div v-if="takeoverForm.errors.actual_cash" class="mt-1 text-xs text-red-400">
                         {{ takeoverForm.errors.actual_cash }}
                     </div>
                 </div>
@@ -92,7 +92,7 @@ const handleTakeoverSubmit = () => {
                     <label class="mb-1.5 block text-xs font-bold text-stone-700 dark:text-slate-300">
                         Pilih Karyawan Shift Berikutnya <span class="text-red-500">*</span>
                     </label>
-                    <div class="relative rounded-2xl bg-stone-55 dark:bg-slate-950 border border-stone-200 dark:border-slate-800 focus-within:border-orange-500/50 transition-all">
+                    <div class="relative rounded-2xl bg-stone-50 dark:bg-slate-950 border border-stone-200 dark:border-slate-800 focus-within:border-orange-500/50 transition-all">
                         <select
                             v-model="takeoverForm.next_user_id"
                             required
@@ -111,7 +111,7 @@ const handleTakeoverSubmit = () => {
                             </option>
                         </select>
                     </div>
-                    <div v-if="takeoverForm.errors.next_user_id" class="mt-1 text-xs text-red-405">
+                    <div v-if="takeoverForm.errors.next_user_id" class="mt-1 text-xs text-red-400">
                         {{ takeoverForm.errors.next_user_id }}
                     </div>
                 </div>
@@ -121,7 +121,7 @@ const handleTakeoverSubmit = () => {
                     <label class="mb-1.5 block text-xs font-bold text-stone-700 dark:text-slate-300">
                         PIN / Password Verifikasi Kasir Baru <span class="text-red-500">*</span>
                     </label>
-                    <div class="relative rounded-2xl bg-stone-55 dark:bg-slate-950 border border-stone-200 dark:border-slate-800 focus-within:border-orange-500/50 transition-all">
+                    <div class="relative rounded-2xl bg-stone-50 dark:bg-slate-950 border border-stone-200 dark:border-slate-800 focus-within:border-orange-500/50 transition-all">
                         <input
                             v-model="takeoverForm.next_password_or_pin"
                             type="password"
@@ -133,7 +133,7 @@ const handleTakeoverSubmit = () => {
                     <p class="mt-1 text-[10px] text-stone-500 dark:text-slate-400 leading-normal">
                         Kasir penerus wajib memasukkan PIN atau Password akun mereka sendiri untuk memvalidasi proses ambil alih shift secara instan.
                     </p>
-                    <div v-if="takeoverForm.errors.next_password_or_pin" class="mt-1 text-xs text-red-405">
+                    <div v-if="takeoverForm.errors.next_password_or_pin" class="mt-1 text-xs text-red-400">
                         {{ takeoverForm.errors.next_password_or_pin }}
                     </div>
                 </div>
@@ -143,7 +143,7 @@ const handleTakeoverSubmit = () => {
                     <label class="mb-1.5 block text-xs font-bold text-stone-700 dark:text-slate-300">
                         Catatan Serah Terima (Opsional)
                     </label>
-                    <div class="relative rounded-2xl bg-stone-55 dark:bg-slate-950 border border-stone-200 dark:border-slate-800 focus-within:border-orange-500/50 transition-all">
+                    <div class="relative rounded-2xl bg-stone-50 dark:bg-slate-950 border border-stone-200 dark:border-slate-800 focus-within:border-orange-500/50 transition-all">
                         <textarea
                             v-model="takeoverForm.notes"
                             class="w-full bg-transparent py-3 px-4 text-sm text-stone-900 dark:text-white placeholder-stone-400 dark:placeholder-slate-600 focus:outline-none border-none focus:ring-0 min-h-[70px] resize-none"
@@ -158,7 +158,7 @@ const handleTakeoverSubmit = () => {
                         v-if="!isShiftExpired"
                         type="button"
                         @click="showTakeoverModal = false"
-                        class="flex-1 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-transparent py-3.5 text-sm font-bold text-stone-700 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-950 dark:hover:text-white transition-all"
+                        class="flex-1 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-transparent py-3.5 text-sm font-bold text-stone-700 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 dark:bg-slate-800 hover:text-stone-950 dark:hover:text-white transition-all"
                     >
                         Batal
                     </button>

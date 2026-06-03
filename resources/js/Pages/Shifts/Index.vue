@@ -574,7 +574,7 @@ const submitCloseShift = () => {
                                                 <p class="text-sm font-black text-stone-900 dark:text-white mt-1">{{ formatPrice(activeShift.summary.expected_cash) }}</p>
                                             </div>
                                             <label class="block">
-                                                <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-450">Aktual di Laci</span>
+                                                <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">Aktual di Laci</span>
                                                 <input
                                                     v-model="closeShiftForm.actual_cash"
                                                     type="number"
@@ -619,7 +619,7 @@ const submitCloseShift = () => {
                                                 type="checkbox"
                                                 class="rounded border-stone-200 dark:border-white/20 bg-white dark:bg-slate-900 text-sky-500 focus:ring-sky-400"
                                             />
-                                            <span class="text-[10px] font-semibold text-slate-350">Ada selisih pada mesin EDC/QRIS</span>
+                                            <span class="text-[10px] font-semibold text-slate-300">Ada selisih pada mesin EDC/QRIS</span>
                                         </label>
                                     </div>
                                 </div>

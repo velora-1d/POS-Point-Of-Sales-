@@ -33,6 +33,19 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
+- **Perbaikan Bug Dark Mode & Pembersihan Layout**:
+  - Mengonfigurasi `tailwind.config.js` untuk memproses file `.ts` / `.js` agar class styling dinamis dari composable (seperti `useOrderState.ts`) ter-compile dengan benar.
+  - Menambahkan dukungan untuk custom opacities (seperti `/92`, `/85`, `/65`, `/8`, `/6`, `/12`, dll.) di dalam `theme.extend.opacity` pada `tailwind.config.js` untuk memperbaiki background putih yang bocor di halaman Peta Meja, Katalog Produk, Kitchen, dan Bar.
+  - Memperbaiki class warna teks yang bertabrakan (duplikasi `dark:text-slate-400` vs `dark:text-slate-200`) di [AuthenticatedLayout.vue](file:///home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Layouts/AuthenticatedLayout.vue).
+- **Desain Ulang Halaman Pengaturan Meja (`Tables.vue`)**:
+  - Mengubah tampilan menjadi layout split 2 kolom (Indoor & Outdoor) yang memiliki pemisah visual yang rapi.
+  - Menyediakan fitur filter status meja, quick-add kategori meja, bulk QR code preview modal, dan fitur unduh PDF QR code.
+  - Memperbaiki *warning/error static analysis* "Undefined method 'user'" di [TableController.php](file:///home/pak-hakim/Pak-Hakim/Project/POS/app/Http/Controllers/TableController.php) dengan mengganti `$request->user()` menjadi `auth()->user()`.
+- **Bypass / Penonaktifan Verifikasi Email secara Global**:
+  - Menghapus implementasi interface `MustVerifyEmail` dari model [User.php](file:///home/pak-hakim/Pak-Hakim/Project/POS/app/Models/User.php).
+  - Menghapus middleware `'verified'` pada seluruh rute di [routes/web.php](file:///home/pak-hakim/Pak-Hakim/Project/POS/routes/web.php) dan [routes/auth.php](file:///home/pak-hakim/Pak-Hakim/Project/POS/routes/auth.php).
+  - Membersihkan controller otentikasi [AuthenticatedSessionController.php](file:///home/pak-hakim/Pak-Hakim/Project/POS/app/Http/Controllers/Auth/AuthenticatedSessionController.php) untuk mem-bypass pengalihan ke halaman verifikasi email (`verification.notice`).
+
 - **Refaktorisasi `Order.vue` (5.320 baris → ~230 baris)** menjadi arsitektur modular coordinator pattern:
   - `useOrderState.ts` — composable singleton sebagai pusat state & business logic (1.460+ baris)
   - Komponen panel: `ProductCatalog.vue`, `CartPanel.vue`, `OrderTracker.vue`
@@ -304,6 +317,9 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - **Sesi Hari Ini**: Merombak fitur **Konfigurasi Payment Gateway** agar sepenuhnya menggunakan pengaturan fallback dari environment `.env` secara global, menghilangkan kebutuhan form input manual dan override per-outlet. 
 - **Sesi Hari Ini**: Mengatasi isu parsing Dotenv (string `${APP_URL}`) pada `PaymentGatewayConfigService`.
 - **Sesi Hari Ini**: Menjalankan seeding *database* untuk produk-produk yang tidak memiliki `image_url` agar memetakan aset lokal `public/images/` berdasarkan nama produknya, sehingga gambar produk otomatis muncul di menu Katalog Produk dan Kasir.
+- **Sesi Hari Ini**: Menyelesaikan perbaikan visual tema Light/Dark Mode di seluruh menu POS Mentai dengan membersihkan 361 kelas warna tidak valid hasil analisis skrip Python.
+- **Sesi Hari Ini**: Menyesuaikan layout peta meja visual, legenda status, dan modal reservasi di [Layout.vue](file:///home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Tables/Layout.vue) agar adaptif ke mode terang dan gelap dengan kontras visual tinggi (mengubah background, teks pudar, tombol reservasi, dan ikon detail).
+- **Sesi Hari Ini**: Memverifikasi kesuksesan kompilasi dengan `npm run build` (lulus 100% tanpa kesalahan) dan membersihkan file script scratch sementara.
 
 ## Last Updated
-2026-06-02
+2026-06-04

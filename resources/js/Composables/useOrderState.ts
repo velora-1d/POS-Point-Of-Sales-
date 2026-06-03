@@ -162,11 +162,11 @@ export const getPaymentMethodConfig = (method: string) => {
                 existingDesc: 'Buat atau buka checkout QRIS. Status akan berubah otomatis saat webhook pembayaran masuk.',
                 colorClass: 'border-fuchsia-500 bg-fuchsia-500/10 text-fuchsia-700 dark:text-white ring-2 ring-fuchsia-500/20 font-bold',
                 textClass: 'text-fuchsia-600 dark:text-fuchsia-300 hover:text-fuchsia-700 dark:hover:text-fuchsia-200',
-                textRawClass: 'text-fuchsia-650 dark:text-fuchsia-300',
+                textRawClass: 'text-fuchsia-600 dark:text-fuchsia-300',
                 borderClass: 'border-fuchsia-500/25 bg-fuchsia-500/5 dark:bg-fuchsia-500/10',
                 borderInnerClass: 'border-fuchsia-500/20',
                 iconBgClass: 'bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-300',
-                spinnerClass: 'text-fuchsia-550 dark:text-fuchsia-400',
+                spinnerClass: 'text-fuchsia-500 dark:text-fuchsia-400',
                 activeLabel: 'QRIS Gateway Sedang Aktif',
                 showText: 'Tampilkan QR Code',
                 gradientClass: 'bg-gradient-to-r from-fuchsia-500 to-pink-500',
@@ -179,12 +179,12 @@ export const getPaymentMethodConfig = (method: string) => {
                 desc: 'Bayar menggunakan e-wallet (OVO, GoPay, Dana, dll) via gateway.',
                 existingDesc: 'Bayar menggunakan e-wallet. Status akan berubah otomatis saat webhook pembayaran masuk.',
                 colorClass: 'border-blue-500 bg-blue-500/10 text-blue-700 dark:text-white ring-2 ring-blue-500/20 font-bold',
-                textClass: 'text-blue-650 dark:text-blue-300 hover:text-blue-755 dark:hover:text-blue-200',
-                textRawClass: 'text-blue-655 dark:text-blue-300',
+                textClass: 'text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200',
+                textRawClass: 'text-blue-600 dark:text-blue-300',
                 borderClass: 'border-blue-500/25 bg-blue-500/5 dark:bg-blue-500/10',
                 borderInnerClass: 'border-blue-500/20',
-                iconBgClass: 'bg-blue-500/10 text-blue-655 dark:text-blue-300',
-                spinnerClass: 'text-blue-555 dark:text-blue-400',
+                iconBgClass: 'bg-blue-500/10 text-blue-600 dark:text-blue-300',
+                spinnerClass: 'text-blue-500 dark:text-blue-400',
                 activeLabel: 'E-Wallet Gateway Sedang Aktif',
                 showText: 'Tampilkan QR / Link',
                 gradientClass: 'bg-gradient-to-r from-blue-500 to-indigo-500',
@@ -197,12 +197,12 @@ export const getPaymentMethodConfig = (method: string) => {
                 desc: 'Bayar menggunakan kartu debit/kredit via gateway.',
                 existingDesc: 'Bayar menggunakan kartu debit/kredit. Status akan berubah otomatis saat webhook pembayaran masuk.',
                 colorClass: 'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-white ring-2 ring-emerald-500/20 font-bold',
-                textClass: 'text-emerald-650 dark:text-emerald-300 hover:text-emerald-755 dark:hover:text-emerald-200',
-                textRawClass: 'text-emerald-655 dark:text-emerald-300',
+                textClass: 'text-emerald-600 dark:text-emerald-300 hover:text-emerald-700 dark:hover:text-emerald-200',
+                textRawClass: 'text-emerald-600 dark:text-emerald-300',
                 borderClass: 'border-emerald-500/25 bg-emerald-500/5 dark:bg-emerald-500/10',
                 borderInnerClass: 'border-emerald-500/20',
-                iconBgClass: 'bg-emerald-500/10 text-emerald-655 dark:text-emerald-300',
-                spinnerClass: 'text-emerald-555 dark:text-emerald-400',
+                iconBgClass: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
+                spinnerClass: 'text-emerald-500 dark:text-emerald-400',
                 activeLabel: 'Debit Gateway Sedang Aktif',
                 showText: 'Tampilkan QR / Link',
                 gradientClass: 'bg-gradient-to-r from-emerald-500 to-teal-500',
@@ -215,12 +215,12 @@ export const getPaymentMethodConfig = (method: string) => {
                 desc: 'Bayar menggunakan Virtual Account bank transfer via gateway.',
                 existingDesc: 'Bayar menggunakan Virtual Account bank transfer. Status akan berubah otomatis saat webhook pembayaran masuk.',
                 colorClass: 'border-indigo-500 bg-indigo-500/10 text-indigo-700 dark:text-white ring-2 ring-indigo-500/20 font-bold',
-                textClass: 'text-indigo-650 dark:text-indigo-300 hover:text-indigo-755 dark:hover:text-indigo-200',
-                textRawClass: 'text-indigo-655 dark:text-indigo-300',
+                textClass: 'text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-200',
+                textRawClass: 'text-indigo-600 dark:text-indigo-300',
                 borderClass: 'border-indigo-500/25 bg-indigo-500/5 dark:bg-indigo-500/10',
                 borderInnerClass: 'border-indigo-500/20',
-                iconBgClass: 'bg-indigo-500/10 text-indigo-655 dark:text-indigo-300',
-                spinnerClass: 'text-indigo-555 dark:text-indigo-400',
+                iconBgClass: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-300',
+                spinnerClass: 'text-indigo-500 dark:text-indigo-400',
                 activeLabel: 'Transfer Gateway Sedang Aktif',
                 showText: 'Tampilkan QR / Link',
                 gradientClass: 'bg-gradient-to-r from-indigo-500 to-violet-500',
@@ -238,7 +238,7 @@ export const getPaymentMethodConfig = (method: string) => {
                 borderClass: 'border-slate-500/25 bg-slate-500/5 dark:bg-slate-500/10',
                 borderInnerClass: 'border-slate-500/20',
                 iconBgClass: 'bg-slate-500/10 text-slate-600 dark:text-slate-300',
-                spinnerClass: 'text-slate-550 dark:text-slate-400',
+                spinnerClass: 'text-slate-500 dark:text-slate-400',
                 activeLabel: 'Gateway Sedang Aktif',
                 showText: 'Tampilkan QR / Link',
                 gradientClass: 'bg-gradient-to-r from-slate-500 to-slate-600',
@@ -294,7 +294,7 @@ export const getTableIconClass = (table: any) => {
 
 export const getTableBadgeClass = (table: any) => {
     if (table.status === 'occupied') {
-        return 'border-red-500/20 bg-red-500/10 text-red-650 dark:text-red-300';
+        return 'border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-300';
     }
     if (table.status === 'reserved') {
         return 'border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300';
@@ -1388,7 +1388,7 @@ export const getStatusClass = (status: string) => {
         case 'completed':
             return 'bg-slate-500/10 text-slate-400 border-slate-700/20';
         default:
-            return 'bg-slate-700 text-slate-350';
+            return 'bg-slate-700 text-slate-300';
     }
 };
 

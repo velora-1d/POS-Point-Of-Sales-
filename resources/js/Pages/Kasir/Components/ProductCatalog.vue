@@ -82,7 +82,7 @@ import {
                     'rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
                     selectedTableCategory === 'indoor'
                         ? 'bg-orange-500 text-white shadow-md'
-                        : 'text-stone-500 dark:text-slate-400 hover:text-slate-250 dark:hover:text-stone-800 dark:text-slate-200',
+                        : 'text-stone-500 dark:text-slate-400 hover:text-slate-200 dark:hover:text-stone-800 dark:text-slate-200',
                 ]"
             >
                 Indoor
@@ -94,7 +94,7 @@ import {
                     'rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
                     selectedTableCategory === 'outdoor'
                         ? 'bg-orange-500 text-white shadow-md'
-                        : 'text-stone-500 dark:text-slate-400 hover:text-slate-250 dark:hover:text-stone-800 dark:text-slate-200',
+                        : 'text-stone-500 dark:text-slate-400 hover:text-slate-200 dark:hover:text-stone-800 dark:text-slate-200',
                 ]"
             >
                 Outdoor
@@ -135,7 +135,7 @@ import {
                 </div>
 
                 <h4 class="text-base font-extrabold">{{ table.name }}</h4>
-                <p class="mt-1 text-[10px] uppercase tracking-wider text-stone-550 dark:text-slate-500">
+                <p class="mt-1 text-[10px] uppercase tracking-wider text-stone-500 dark:text-slate-500">
                     Kapasitas: {{ table.capacity }} Pax
                 </p>
 
@@ -144,10 +144,10 @@ import {
                 </span>
 
                 <div v-if="table.status === 'occupied' && table.active_order" class="mt-3 border-t border-red-500/10 pt-3 text-left">
-                    <p class="truncate text-[9px] font-bold uppercase text-red-650 dark:text-red-400">
+                    <p class="truncate text-[9px] font-bold uppercase text-red-600 dark:text-red-400">
                         {{ table.active_order.order_number }}
                     </p>
-                    <p class="mt-0.5 text-[10px] font-bold text-stone-850 dark:text-slate-300">
+                    <p class="mt-0.5 text-[10px] font-bold text-stone-800 dark:text-slate-300">
                         {{ formatPrice(table.active_order.total_amount) }}
                     </p>
                     <p v-if="table.active_orders?.length > 1" class="mt-1 text-[9px] font-semibold text-orange-600 dark:text-orange-300">
@@ -158,7 +158,7 @@ import {
                     <p class="truncate text-[9px] font-bold uppercase text-amber-600 dark:text-amber-300">
                         Reservasi Aktif
                     </p>
-                    <p class="mt-0.5 text-[10px] font-bold text-stone-850 dark:text-slate-200">
+                    <p class="mt-0.5 text-[10px] font-bold text-stone-800 dark:text-slate-200">
                         {{ table.active_reservation.customer_name }}
                     </p>
                     <p class="mt-1 text-[9px] text-stone-500 dark:text-slate-400">
@@ -179,7 +179,7 @@ import {
             <div class="flex items-center gap-3">
                 <button
                     @click="resetTableSelection"
-                    class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-955 text-stone-600 dark:text-slate-300 transition duration-150 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800"
+                    class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-300 transition duration-150 hover:bg-stone-200 dark:hover:bg-slate-800 dark:bg-slate-800"
                 >
                     <ChevronLeft class="h-5 w-5" />
                 </button>
@@ -194,14 +194,14 @@ import {
 
             <!-- Search Bar -->
             <div class="relative w-full sm:w-64">
-                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-450 dark:text-slate-500">
+                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400 dark:text-slate-500">
                     <Search class="h-4 w-4" />
                 </span>
                 <input
                     type="text"
                     v-model="productSearchQuery"
                     placeholder="Cari makanan/minuman..."
-                    class="border-stone-200 dark:border-slate-850 w-full rounded-xl border bg-stone-100/50 dark:bg-slate-950/80 py-2 pl-9 pr-4 text-xs text-stone-850 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    class="border-stone-200 dark:border-slate-800 w-full rounded-xl border bg-stone-100/50 dark:bg-slate-950/80 py-2 pl-9 pr-4 text-xs text-stone-800 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                 />
             </div>
         </div>
@@ -214,7 +214,7 @@ import {
                     'whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-semibold transition duration-150',
                     activeCategory === 'all'
                         ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400'
-                        : 'border-stone-200 dark:border-slate-850 bg-stone-100 dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
+                        : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
                 ]"
             >
                 Semua Menu
@@ -227,7 +227,7 @@ import {
                     'whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-semibold transition duration-150',
                     activeCategory === cat.id
                         ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400'
-                        : 'border-stone-200 dark:border-slate-850 bg-stone-100 dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
+                        : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:bg-stone-200 dark:hover:bg-slate-800 dark:bg-slate-800/40 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
                 ]"
             >
                 {{ cat.name }}
@@ -240,7 +240,7 @@ import {
                 v-for="product in filteredProducts"
                 :key="product.id"
                 @click="handleProductClick(product)"
-                class="hover:shadow-orange-500/5 group flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-stone-200 dark:border-slate-800/60 bg-stone-50 dark:bg-slate-950/60 transition duration-150 hover:bg-white dark:hover:bg-stone-100 dark:bg-slate-950 hover:border-orange-500/30 hover:shadow-md"
+                class="hover:shadow-orange-500/5 group flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-stone-200 dark:border-slate-800/60 bg-stone-50 dark:bg-slate-950/60 transition duration-150 hover:bg-white dark:hover:bg-slate-800 dark:bg-slate-950 hover:border-orange-500/30 hover:shadow-md"
             >
                 <div class="relative aspect-square w-full overflow-hidden border-b border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900">
                     <img
@@ -248,7 +248,7 @@ import {
                         :alt="product.name"
                         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <span class="text-stone-600 dark:text-slate-350 absolute right-2 top-2 rounded border border-stone-200 dark:border-slate-800 bg-stone-100/90 dark:bg-slate-900/80 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                    <span class="text-stone-600 dark:text-slate-300 absolute right-2 top-2 rounded border border-stone-200 dark:border-slate-800 bg-stone-100/90 dark:bg-slate-900/80 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider backdrop-blur-sm">
                         {{ product.category_name }}
                     </span>
                 </div>
@@ -259,8 +259,8 @@ import {
                         <p class="text-stone-500 dark:text-slate-400 mt-1 line-clamp-2 text-[10px]">{{ product.description || 'Tidak ada deskripsi.' }}</p>
                     </div>
 
-                    <div class="border-stone-200 dark:border-slate-850 flex items-center justify-between border-t pt-2.5">
-                        <span class="text-xs font-extrabold text-orange-655 dark:text-orange-400">{{ formatPrice(product.base_price) }}</span>
+                    <div class="border-stone-200 dark:border-slate-800 flex items-center justify-between border-t pt-2.5">
+                        <span class="text-xs font-extrabold text-orange-600 dark:text-orange-400">{{ formatPrice(product.base_price) }}</span>
                         <span class="flex h-6 w-6 items-center justify-center rounded-lg border border-orange-500/20 bg-orange-500/10 text-xs font-black text-orange-600 dark:text-orange-400">+</span>
                     </div>
                 </div>
@@ -268,7 +268,7 @@ import {
         </div>
 
         <div v-else class="rounded-xl border border-dashed border-stone-200 dark:border-slate-800 py-12 text-center text-stone-500 dark:text-slate-500">
-            <Utensils class="mx-auto mb-2 h-10 w-10 text-stone-400 dark:text-slate-650" />
+            <Utensils class="mx-auto mb-2 h-10 w-10 text-stone-400 dark:text-slate-600" />
             <p class="text-xs">Tidak ada menu yang sesuai dengan filter pencarian.</p>
         </div>
     </div>
@@ -281,14 +281,14 @@ import {
         <div class="flex items-center gap-3 border-b border-stone-200 dark:border-slate-800/60 pb-5">
             <button
                 @click="resetTableSelection"
-                class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-955 text-stone-600 dark:text-slate-300 transition duration-150 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800"
+                class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-300 transition duration-150 hover:bg-stone-200 dark:hover:bg-slate-800 dark:bg-slate-800"
             >
                 <ChevronLeft class="h-5 w-5" />
             </button>
             <div>
                 <h3 class="flex items-center gap-2 text-base font-bold text-stone-900 dark:text-white">
                     <span>Detail Meja: {{ selectedTable.name }}</span>
-                    <span class="rounded border border-red-500/20 bg-red-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-red-650 dark:text-red-400">
+                    <span class="rounded border border-red-500/20 bg-red-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400">
                         Occupied
                     </span>
                 </h3>
@@ -298,29 +298,29 @@ import {
             </div>
         </div>
 
-        <div v-if="selectedManagedOrder" class="border-stone-200 dark:border-slate-850 grid grid-cols-1 gap-4 rounded-xl border bg-stone-100/50 dark:bg-slate-955/60 p-4 text-xs md:grid-cols-2 xl:grid-cols-5">
+        <div v-if="selectedManagedOrder" class="border-stone-200 dark:border-slate-800 grid grid-cols-1 gap-4 rounded-xl border bg-stone-100/50 dark:bg-slate-950/60 p-4 text-xs md:grid-cols-2 xl:grid-cols-5">
             <div>
                 <p class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Nomor Transaksi</p>
-                <p class="mt-1 text-sm font-extrabold text-stone-850 dark:text-white">{{ selectedManagedOrder.order_number }}</p>
+                <p class="mt-1 text-sm font-extrabold text-stone-800 dark:text-white">{{ selectedManagedOrder.order_number }}</p>
             </div>
             <div>
                 <p class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Pelanggan</p>
-                <p class="mt-1 font-semibold text-stone-850 dark:text-white">{{ getOrderCustomerPrimary(selectedManagedOrder) }}</p>
+                <p class="mt-1 font-semibold text-stone-800 dark:text-white">{{ getOrderCustomerPrimary(selectedManagedOrder) }}</p>
                 <p v-if="getOrderCustomerSecondary(selectedManagedOrder)" class="mt-0.5 text-[10px] text-stone-500 dark:text-slate-400">
                     {{ getOrderCustomerSecondary(selectedManagedOrder) }}
                 </p>
             </div>
             <div>
                 <p class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Kasir Bertugas</p>
-                <p class="mt-1 flex items-center gap-1.5 font-semibold text-stone-850 dark:text-white">
-                    <User class="text-stone-500 dark:text-slate-455 h-3.5 w-3.5" />
+                <p class="mt-1 flex items-center gap-1.5 font-semibold text-stone-800 dark:text-white">
+                    <User class="text-stone-500 dark:text-slate-400 h-3.5 w-3.5" />
                     <span>{{ selectedManagedOrder.cashier?.name || 'Kasir Restoran' }}</span>
                 </p>
             </div>
             <div>
                 <p class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Waktu Masuk</p>
-                <p class="mt-1 flex items-center gap-1.5 font-semibold text-stone-850 dark:text-white">
-                    <Clock class="text-stone-500 dark:text-slate-455 h-3.5 w-3.5" />
+                <p class="mt-1 flex items-center gap-1.5 font-semibold text-stone-800 dark:text-white">
+                    <Clock class="text-stone-500 dark:text-slate-400 h-3.5 w-3.5" />
                     <span>{{ new Date(selectedManagedOrder.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) }} WIB</span>
                 </p>
             </div>
@@ -346,7 +346,7 @@ import {
                     :class="[
                         'whitespace-nowrap rounded-xl border px-3 py-2 text-[11px] font-bold transition',
                         selectedManagedOrderId === order.id
-                            ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-305'
+                            ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-300'
                             : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950/70 text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200',
                     ]"
                 >
@@ -354,25 +354,25 @@ import {
                 </button>
             </div>
 
-            <h4 class="text-xs font-bold uppercase tracking-wider text-stone-550 dark:text-slate-400">Daftar Item Makanan/Minuman</h4>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">Daftar Item Makanan/Minuman</h4>
             <div class="overflow-hidden rounded-xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-950/20">
                 <table class="w-full border-collapse text-left text-xs">
                     <thead>
-                        <tr class="border-stone-200 dark:border-slate-850 border-b bg-stone-100 dark:bg-slate-955/80 text-stone-550 dark:text-slate-400">
+                        <tr class="border-stone-200 dark:border-slate-800 border-b bg-stone-100 dark:bg-slate-950/80 text-stone-500 dark:text-slate-400">
                             <th class="p-3">Nama Menu</th>
                             <th class="p-3 text-center">Jumlah</th>
                             <th class="p-3 text-right">Harga Satuan</th>
                             <th class="p-3 text-right">Total Harga</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-stone-200 dark:divide-slate-850 divide-y">
-                        <tr v-for="item in selectedManagedOrder.items" :key="item.id" class="text-stone-850 dark:text-slate-200">
+                    <tbody class="divide-stone-200 dark:divide-slate-800 divide-y">
+                        <tr v-for="item in selectedManagedOrder.items" :key="item.id" class="text-stone-800 dark:text-slate-200">
                             <td class="p-3">
                                 <div class="font-bold">{{ item.product?.name }}</div>
                                 <div v-if="item.variant" class="mt-0.5 text-[9px] font-semibold text-orange-600 dark:text-orange-400">
                                     Varian: {{ item.variant.name }}
                                 </div>
-                                <div v-if="item.notes" class="text-stone-500 dark:text-slate-450 mt-0.5 text-[9px] italic">
+                                <div v-if="item.notes" class="text-stone-500 dark:text-slate-400 mt-0.5 text-[9px] italic">
                                     "{{ item.notes }}"
                                 </div>
                             </td>
@@ -392,11 +392,11 @@ import {
         <div v-if="selectedManagedOrder" class="flex flex-col justify-between gap-4 border-t border-stone-200 dark:border-slate-800/50 pt-5 text-xs md:flex-row">
             <div class="md:w-1/2">
                 <p class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Catatan Khusus Pesanan</p>
-                <p class="text-stone-600 dark:text-slate-355 border-stone-200 dark:border-slate-850 mt-1 rounded-lg border bg-stone-100/50 dark:bg-slate-950/50 p-3 italic">
+                <p class="text-stone-600 dark:text-slate-400 border-stone-200 dark:border-slate-800 mt-1 rounded-lg border bg-stone-100/50 dark:bg-slate-950/50 p-3 italic">
                     {{ selectedManagedOrder.notes || 'Tidak ada catatan khusus.' }}
                 </p>
             </div>
-            <div class="border-stone-200 dark:border-slate-850 space-y-2 rounded-xl border bg-stone-50 dark:bg-slate-950/50 p-4 md:w-1/3">
+            <div class="border-stone-200 dark:border-slate-800 space-y-2 rounded-xl border bg-stone-50 dark:bg-slate-950/50 p-4 md:w-1/3">
                 <div class="flex justify-between text-stone-500 dark:text-slate-400">
                     <span>Subtotal:</span>
                     <span>{{ formatPrice(selectedManagedOrder.subtotal) }}</span>
@@ -407,7 +407,7 @@ import {
                 </div>
                 <div class="flex justify-between border-t border-stone-200 dark:border-slate-800 pt-2 text-sm font-black text-stone-900 dark:text-white">
                     <span>Total Tagihan:</span>
-                    <span class="text-orange-600 dark:text-orange-405">{{ formatPrice(selectedManagedOrder.total_amount) }}</span>
+                    <span class="text-orange-600 dark:text-orange-400">{{ formatPrice(selectedManagedOrder.total_amount) }}</span>
                 </div>
                 <div class="flex justify-between border-t border-stone-200 dark:border-slate-800 pt-2 text-stone-500 dark:text-slate-400">
                     <span>Terbayar:</span>
@@ -426,14 +426,14 @@ import {
                     </div>
                 </div>
             </div>
-            <div class="border-stone-200 dark:border-slate-850 space-y-2 rounded-xl border bg-stone-50 dark:bg-slate-950/50 p-4 md:w-1/3">
+            <div class="border-stone-200 dark:border-slate-800 space-y-2 rounded-xl border bg-stone-50 dark:bg-slate-950/50 p-4 md:w-1/3">
                 <div class="flex items-center justify-between gap-3">
                     <p class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Ringkasan Pembayaran</p>
                     <span :class="['rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider', getPaymentStatusClass(selectedManagedOrder)]">
                         {{ getPaymentStatusLabel(selectedManagedOrder) }}
                     </span>
                 </div>
-                <p class="text-[11px] text-stone-555 dark:text-slate-400">
+                <p class="text-[11px] text-stone-500 dark:text-slate-400">
                     {{ getPaymentMeta(selectedManagedOrder).method
                         ? `Metode terakhir: ${String(getPaymentMeta(selectedManagedOrder).method).toUpperCase()}`
                         : 'Belum ada metode pembayaran yang dipilih.' }}

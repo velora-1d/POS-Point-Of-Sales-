@@ -111,7 +111,7 @@ onBeforeUnmount(() => {
                             Menu 1 - 6
                         </span>
                     </h2>
-                    <p class="mt-1 text-xs text-stone-550 dark:text-slate-400">
+                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                         Sistem pembuatan pesanan, pelacakan antrian aktif, dan
                         visualisasi detail meja secara real-time.
                     </p>
@@ -170,7 +170,7 @@ onBeforeUnmount(() => {
                         'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
                         activeSubTab === 'new_order'
                             ? 'bg-orange-500 text-white shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/40',
+                            : 'text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200 hover:bg-stone-100 dark:hover:bg-slate-800 dark:bg-slate-800/40',
                     ]"
                 >
                     <ShoppingCart class="h-4 w-4" />
@@ -183,7 +183,7 @@ onBeforeUnmount(() => {
                         'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
                         activeSubTab === 'active_orders'
                             ? 'bg-orange-500 text-white shadow-md shadow-orange-500/10'
-                            : 'text-stone-550 dark:text-slate-400 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200 hover:bg-stone-100 dark:hover:bg-stone-100 dark:bg-slate-800/40',
+                            : 'text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-stone-800 dark:text-slate-200 hover:bg-stone-100 dark:hover:bg-slate-800 dark:bg-slate-800/40',
                     ]"
                 >
                     <CookingPot class="h-4 w-4" />
@@ -192,7 +192,7 @@ onBeforeUnmount(() => {
                         v-if="activeOrders.length > 0" 
                         :class="[
                             'rounded-full px-2 py-0.5 text-[10px] font-bold transition-all duration-200',
-                            activeSubTab === 'active_orders' ? 'bg-stone-200 dark:bg-white/20 text-white' : 'bg-orange-500/10 text-orange-650 dark:text-orange-400 border border-orange-500/20'
+                            activeSubTab === 'active_orders' ? 'bg-stone-200 dark:bg-white/20 text-white' : 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20'
                         ]"
                     >
                         {{ activeOrders.length }}

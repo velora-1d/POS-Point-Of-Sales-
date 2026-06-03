@@ -651,7 +651,7 @@ Notifikasi Suara Dapur (TTS)</h3>
                                     <button
                                         type="button"
                                         @click="testAlarmNotification"
-                                        class="w-full rounded-xl border border-slate-850 bg-stone-50 dark:bg-slate-900/40 py-2.5 text-xs font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:text-white"
+                                        class="w-full rounded-xl border border-slate-800 bg-stone-50 dark:bg-slate-900/40 py-2.5 text-xs font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-stone-100 dark:bg-slate-800 hover:text-stone-900 dark:text-white"
                                     >
                                         Uji Coba Alarm
                                     </button>

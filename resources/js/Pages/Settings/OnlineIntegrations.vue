@@ -322,7 +322,7 @@ Integrasi GoFood & GrabFood
                                     <button
                                         type="button"
                                         @click="toggleApiKey(entry.key)"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-350"
+                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-300"
                                     >
                                         <component :is="showApiKeys[entry.key] ? EyeOff : Eye" class="h-4 w-4" />
                                     </button>
@@ -346,7 +346,7 @@ Integrasi GoFood & GrabFood
                                     <button
                                         type="button"
                                         @click="toggleApiSecret(entry.key)"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-350"
+                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-300"
                                     >
                                         <component :is="showApiSecrets[entry.key] ? EyeOff : Eye" class="h-4 w-4" />
                                     </button>

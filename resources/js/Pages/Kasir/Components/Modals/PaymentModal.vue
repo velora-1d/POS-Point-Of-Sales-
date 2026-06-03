@@ -48,9 +48,9 @@ import {
             class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-white dark:bg-slate-950/85 p-4 backdrop-blur-sm"
         >
             <div class="w-full max-w-xl rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl text-stone-900 dark:text-slate-100">
-                <div class="flex items-start justify-between gap-4 border-b border-stone-250/60 dark:border-slate-800/80 px-6 py-5">
+                <div class="flex items-start justify-between gap-4 border-b border-stone-200/60 dark:border-slate-800/80 px-6 py-5">
                     <div>
-                        <span class="rounded-full border border-orange-500/20 bg-orange-500/5 dark:bg-orange-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-orange-655 dark:text-orange-305">
+                        <span class="rounded-full border border-orange-500/20 bg-orange-500/5 dark:bg-orange-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300">
                             Pembayaran Pesanan
                         </span>
                         <h3 class="mt-3 text-xl font-black text-stone-900 dark:text-white">
@@ -62,7 +62,7 @@ import {
                     </div>
                     <button
                         @click="closePaymentModal"
-                        class="text-stone-400 dark:text-slate-500 transition hover:text-stone-707 dark:hover:text-stone-800 dark:text-slate-200"
+                        class="text-stone-400 dark:text-slate-400 transition hover:text-stone-700 dark:hover:text-slate-200"
                     >
                         <X class="h-5 w-5" />
                     </button>
@@ -72,7 +72,7 @@ import {
                     <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/60 p-4 space-y-3">
                         <div class="flex items-center justify-between gap-3">
                             <div>
-                                <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-655 dark:text-orange-450">Total Tagihan</p>
+                                <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-400">Total Tagihan</p>
                                 <p class="mt-2 text-2xl font-black text-stone-900 dark:text-white">
                                     {{ formatPrice(existingPaymentTotal) }}
                                 </p>
@@ -81,12 +81,12 @@ import {
                                 {{ getPaymentStatusLabel(paymentTargetOrder) }}
                             </span>
                         </div>
-                        <div v-if="existingPaymentDiscount > 0" class="border-t border-stone-250/60 dark:border-slate-800/80 pt-2 space-y-1 text-[11px]">
+                        <div v-if="existingPaymentDiscount > 0" class="border-t border-stone-200/60 dark:border-slate-800/80 pt-2 space-y-1 text-[11px]">
                             <div class="flex justify-between text-stone-500 dark:text-slate-400">
                                 <span>Subtotal:</span>
                                 <span>{{ formatPrice(Number(paymentTargetOrder.subtotal || 0)) }}</span>
                             </div>
-                            <div class="flex justify-between text-emerald-650 dark:text-emerald-400 font-semibold">
+                            <div class="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
                                 <span>Diskon Voucher:</span>
                                 <span>-{{ formatPrice(existingPaymentDiscount) }}</span>
                             </div>
@@ -115,7 +115,7 @@ import {
                                 type="button"
                                 @click="refreshCurrentOrder"
                                 :disabled="isRefreshingOrder"
-                                class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900 px-3 py-1.5 text-[10px] font-bold text-stone-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-stone-100 dark:bg-slate-800 disabled:opacity-50 transition"
+                                class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-900 px-3 py-1.5 text-[10px] font-bold text-stone-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-slate-800 disabled:opacity-50 transition"
                             >
                                 {{ isRefreshingOrder ? 'Checking...' : 'Cek Status' }}
                             </button>
@@ -148,7 +148,7 @@ import {
                             :class="[
                                 'rounded-2xl border p-4 text-left transition',
                                 existingPaymentMethod === 'cash'
-                                    ? 'border-orange-500 bg-orange-500/10 text-orange-650 dark:text-white ring-2 ring-orange-500/20 font-bold'
+                                    ? 'border-orange-500 bg-orange-500/10 text-orange-600 dark:text-white ring-2 ring-orange-500/20 font-bold'
                                     : 'border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/70 text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-white dark:bg-slate-900',
                             ]"
                         >
@@ -166,7 +166,7 @@ import {
                                 'rounded-2xl border p-4 text-left transition',
                                 existingPaymentMethod === method
                                     ? getPaymentMethodConfig(method).colorClass
-                                    : 'border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/70 text-stone-700 dark:text-slate-305 hover:bg-stone-100 dark:hover:bg-white dark:bg-slate-900',
+                                    : 'border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/70 text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-white dark:bg-slate-900',
                             ]"
                         >
                             <p class="text-sm font-bold">{{ getPaymentMethodConfig(method).label }} Gateway</p>
@@ -178,7 +178,7 @@ import {
 
                     <div v-if="existingPaymentMethod === 'cash'" class="grid gap-3 sm:grid-cols-2">
                         <div>
-                            <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-400">
+                            <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                                 Nominal Diterima
                             </label>
                             <input
@@ -190,9 +190,9 @@ import {
                                 class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-950 px-4 py-3 text-xs text-stone-900 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                             />
                         </div>
-                        <div class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-55 dark:bg-slate-950 p-4">
-                            <p class="text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-500">Estimasi Kembalian</p>
-                            <p class="mt-2 text-sm font-extrabold text-emerald-650 dark:text-emerald-305">
+                        <div class="rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-950 p-4">
+                            <p class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500">Estimasi Kembalian</p>
+                            <p class="mt-2 text-sm font-extrabold text-emerald-600 dark:text-emerald-300">
                                 {{ formatPrice(existingPaymentCashChange) }}
                             </p>
                             <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
@@ -205,7 +205,7 @@ import {
                         v-else
                         :class="['rounded-2xl border p-4', getPaymentMethodConfig(existingPaymentMethod).method === 'ewallet' ? 'border-blue-500/15 bg-blue-500/5' :
                                                            getPaymentMethodConfig(existingPaymentMethod).method === 'debit' ? 'border-emerald-500/15 bg-emerald-500/5' :
-                                                           getPaymentMethodConfig(existingPaymentMethod).method === 'transfer' ? 'border-indigo-500/15 bg-indigo-550/5' :
+                                                           getPaymentMethodConfig(existingPaymentMethod).method === 'transfer' ? 'border-indigo-500/15 bg-indigo-500/5' :
                                                            'border-fuchsia-500/15 bg-fuchsia-500/5']"
                     >
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em]" :class="getPaymentMethodConfig(existingPaymentMethod).textRawClass">
@@ -213,10 +213,10 @@ import {
                         </p>
                         <p
                             class="mt-1 text-xs leading-relaxed"
-                            :class="getPaymentMethodConfig(existingPaymentMethod).method === 'ewallet' ? 'text-blue-750/90 dark:text-blue-100/80' :
-                                    getPaymentMethodConfig(existingPaymentMethod).method === 'debit' ? 'text-emerald-750/90 dark:text-emerald-100/80' :
-                                    getPaymentMethodConfig(existingPaymentMethod).method === 'transfer' ? 'text-indigo-750/90 dark:text-indigo-100/80' :
-                                    'text-fuchsia-750/90 dark:text-fuchsia-100/80'"
+                            :class="getPaymentMethodConfig(existingPaymentMethod).method === 'ewallet' ? 'text-blue-700/90 dark:text-blue-100/80' :
+                                    getPaymentMethodConfig(existingPaymentMethod).method === 'debit' ? 'text-emerald-700/90 dark:text-emerald-100/80' :
+                                    getPaymentMethodConfig(existingPaymentMethod).method === 'transfer' ? 'text-indigo-700/90 dark:text-indigo-100/80' :
+                                    'text-fuchsia-700/90 dark:text-fuchsia-100/80'"
                         >
                             {{ hasPendingBeforeKitchenPayment(paymentTargetOrder)
                                 ? `Setelah ${getPaymentMethodConfig(existingPaymentMethod).label} lunas, order otomatis pindah ke lane pending agar bisa diproses kitchen.`
@@ -225,13 +225,13 @@ import {
                     </div>
 
                     <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/60 p-4">
-                        <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-400">
+                        <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                             Voucher / Promo Code
                         </label>
                         <select
                             v-model="selectedExistingPaymentPromoCode"
                             @change="handleExistingPaymentPromoChange"
-                            class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-55 dark:bg-slate-955 px-3 py-2 text-xs text-stone-900 dark:text-slate-200 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                            class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-slate-200 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                         >
                             <option value="" class="bg-white dark:bg-slate-950 text-stone-900 dark:text-slate-100">Tidak Ada Voucher</option>
                             <option v-for="promo in promos" :key="promo.id" :value="promo.code" class="bg-white dark:bg-slate-950 text-stone-900 dark:text-slate-100">
@@ -245,16 +245,16 @@ import {
                             v-model="existingPaymentPromoCode"
                             type="text"
                             placeholder="Ketik kode voucher manual..."
-                            class="mt-2 w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-55 dark:bg-slate-955 px-4 py-3 text-xs uppercase text-stone-900 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                            class="mt-2 w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-950 px-4 py-3 text-xs uppercase text-stone-900 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                         />
-                        <p v-if="existingPaymentPromoWarning" class="text-[11px] leading-relaxed text-rose-605 dark:text-rose-400 font-bold mt-1.5">
+                        <p v-if="existingPaymentPromoWarning" class="text-[11px] leading-relaxed text-rose-600 dark:text-rose-400 font-bold mt-1.5">
                             {{ existingPaymentPromoWarning }}
                         </p>
-                        <p class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-550">
+                        <p class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-500">
                             Total tagihan akan divalidasi ulang dengan promo otomatis, metode bayar, tier member, dan voucher sebelum settlement diproses.
                         </p>
                         <div class="mt-4">
-                            <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-555 dark:text-slate-400">
+                            <label class="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                                 PIN Owner (Opsional)
                             </label>
                             <div class="relative">
@@ -263,28 +263,28 @@ import {
                                     :type="showExistingPaymentApprovalPin ? 'text' : 'password'"
                                     inputmode="numeric"
                                     placeholder="Isi jika diskon manual melewati threshold"
-                                    class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-55 dark:bg-slate-955 pl-4 pr-12 py-3 text-xs text-stone-900 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-950 pl-4 pr-12 py-3 text-xs text-stone-900 dark:text-slate-200 placeholder-stone-400 dark:placeholder-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
                                 />
                                 <button
                                     type="button"
                                     @click="showExistingPaymentApprovalPin = !showExistingPaymentApprovalPin"
-                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-stone-700 dark:hover:text-slate-355"
+                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-stone-700 dark:hover:text-slate-400"
                                 >
                                     <component :is="showExistingPaymentApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
                                 </button>
                             </div>
-                            <p class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-555">
+                            <p class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-500">
                                 Approval owner hanya dipakai bila promo manual menghasilkan diskon di atas batas outlet.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-3 border-t border-stone-250/60 dark:border-slate-800/80 px-6 py-4">
+                <div class="flex items-center justify-end gap-3 border-t border-stone-200/60 dark:border-slate-800/80 px-6 py-4">
                     <button
                         @click="closePaymentModal"
                         type="button"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-xs font-bold text-stone-700 dark:text-slate-300 transition hover:bg-stone-200 dark:hover:bg-white dark:bg-slate-900 active:scale-[0.98]"
+                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-xs font-bold text-stone-700 dark:text-slate-300 transition hover:bg-stone-200 dark:hover:bg-slate-900 active:scale-[0.98]"
                     >
                         Batal
                     </button>

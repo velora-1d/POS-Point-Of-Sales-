@@ -68,7 +68,7 @@ const updatePassword = () => {
                     <button
                         type="button"
                         @click="showCurrentPassword = !showCurrentPassword"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-350"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
                         <component :is="showCurrentPassword ? EyeOff : Eye" class="h-4 w-4" />
                     </button>
@@ -95,7 +95,7 @@ const updatePassword = () => {
                     <button
                         type="button"
                         @click="showNewPassword = !showNewPassword"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-350"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
                         <component :is="showNewPassword ? EyeOff : Eye" class="h-4 w-4" />
                     </button>
@@ -121,7 +121,7 @@ const updatePassword = () => {
                     <button
                         type="button"
                         @click="showConfirmPassword = !showConfirmPassword"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-350"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
                         <component :is="showConfirmPassword ? EyeOff : Eye" class="h-4 w-4" />
                     </button>

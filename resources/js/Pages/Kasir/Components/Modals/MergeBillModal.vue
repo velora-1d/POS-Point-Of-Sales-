@@ -26,11 +26,11 @@ import {
     >
         <div
             v-if="mergeBillModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-stone-900/40 dark:bg-slate-955/85 p-4 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-stone-900/40 dark:bg-slate-950/85 p-4 backdrop-blur-sm"
         >
             <div class="relative w-full max-w-2xl rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl text-stone-900 dark:text-slate-100">
                 <div class="border-b border-stone-200 dark:border-slate-800/80 px-6 py-5">
-                    <span class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-fuchsia-600 dark:text-fuchsia-305">
+                    <span class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-fuchsia-600 dark:text-fuchsia-300">
                         Gabung Bill
                     </span>
                     <h3 class="mt-3 text-xl font-black text-stone-900 dark:text-white">
@@ -62,8 +62,8 @@ import {
                         </div>
                     </div>
 
-                    <div v-if="mergeNeedsApproval" class="rounded-2xl border border-amber-250 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/5 p-4">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-455">Gabung Bill</p>
+                    <div v-if="mergeNeedsApproval" class="rounded-2xl border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/5 p-4">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-500">Gabung Bill</p>
                         <p class="mt-1 text-xs text-amber-900/80 dark:text-amber-100/75">
                             Ada order `in_progress` di pilihan ini. Gabung bill butuh PIN supervisor atau owner.
                         </p>
@@ -73,12 +73,12 @@ import {
                                 :type="showMergeApprovalPin ? 'text' : 'password'"
                                 inputmode="numeric"
                                 placeholder="Masukkan PIN approval"
-                                class="w-full rounded-xl border border-amber-250 dark:border-amber-500/20 bg-stone-55 dark:bg-slate-950 pl-4 pr-12 py-3 text-xs text-stone-855 dark:text-slate-100 placeholder-stone-400 dark:placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                                class="w-full rounded-xl border border-amber-200 dark:border-amber-500/20 bg-stone-50 dark:bg-slate-950 pl-4 pr-12 py-3 text-xs text-stone-800 dark:text-slate-100 placeholder-stone-400 dark:placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
                             />
                             <button
                                 type="button"
                                 @click="showMergeApprovalPin = !showMergeApprovalPin"
-                                class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-stone-600 dark:hover:text-slate-350"
+                                class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-stone-600 dark:hover:text-slate-300"
                             >
                                 <component :is="showMergeApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
                             </button>
@@ -90,7 +90,7 @@ import {
                     <button
                         @click="closeMergeBill"
                         type="button"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-955 px-4 py-3 text-xs font-bold text-stone-700 dark:text-slate-305 hover:bg-stone-100 dark:hover:bg-slate-900"
+                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-3 text-xs font-bold text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-900"
                     >
                         Batal
                     </button>

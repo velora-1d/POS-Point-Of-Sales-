@@ -57,11 +57,11 @@ import {
                 <div class="grid grid-cols-2 gap-2 text-[11px] text-stone-500 dark:text-slate-400 border-t border-stone-200 dark:border-slate-900 pt-2">
                     <div>
                         <p class="text-[9px] font-semibold uppercase text-stone-400 dark:text-slate-500">Meja/Layanan</p>
-                        <p class="mt-0.5 font-bold text-stone-850 dark:text-slate-200">{{ order.table?.name ?? 'Takeaway' }}</p>
+                        <p class="mt-0.5 font-bold text-stone-800 dark:text-slate-200">{{ order.table?.name ?? 'Takeaway' }}</p>
                     </div>
                     <div>
                         <p class="text-[9px] font-semibold uppercase text-stone-400 dark:text-slate-500">Pelanggan</p>
-                        <p class="mt-0.5 font-bold text-stone-850 dark:text-slate-200 truncate">{{ getOrderCustomerPrimary(order) }}</p>
+                        <p class="mt-0.5 font-bold text-stone-800 dark:text-slate-200 truncate">{{ getOrderCustomerPrimary(order) }}</p>
                     </div>
                 </div>
             </div>

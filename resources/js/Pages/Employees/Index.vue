@@ -754,7 +754,7 @@ Data Karyawan
                                         <button
                                             type="button"
                                             @click="showPassword = !showPassword"
-                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-350"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-300"
                                         >
                                             <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
                                         </button>
@@ -778,7 +778,7 @@ Data Karyawan
                                         <button
                                             type="button"
                                             @click="showPin = !showPin"
-                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-350"
+                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-slate-300"
                                         >
                                             <component :is="showPin ? EyeOff : Eye" class="h-4 w-4" />
                                         </button>

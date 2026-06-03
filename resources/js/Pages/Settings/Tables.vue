@@ -129,11 +129,11 @@ function deleteTable(table: TableRow) {
 function getStatusBadgeClass(status: string) {
     switch (status) {
         case 'occupied':
-            return 'border-rose-450/20 bg-rose-500/10 text-rose-300';
+            return 'border-rose-400/20 bg-rose-500/10 text-rose-300';
         case 'reserved':
-            return 'border-amber-450/20 bg-amber-500/10 text-amber-300';
+            return 'border-amber-400/20 bg-amber-500/10 text-amber-300';
         default:
-            return 'border-emerald-450/20 bg-emerald-500/10 text-emerald-300';
+            return 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300';
     }
 }
 </script>
@@ -244,7 +244,7 @@ function getStatusBadgeClass(status: string) {
                                 </button>
                                 <button
                                     @click="deleteTable(table)"
-                                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-450 transition hover:bg-rose-500/20"
+                                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-400 transition hover:bg-rose-500/20"
                                     title="Hapus Meja"
                                 >
                                     <Trash2 class="h-4 w-4" />
@@ -313,7 +313,7 @@ function getStatusBadgeClass(status: string) {
                             <div class="mt-6 flex items-center gap-2 opacity-0 transition group-hover:opacity-100">
                                 <button
                                     @click="openEditModal(table)"
-                                    class="flex-1 rounded-xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 py-2 text-xs font-bold text-stone-850 dark:text-slate-200 transition hover:bg-stone-200 dark:hover:bg-white/10"
+                                    class="flex-1 rounded-xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 py-2 text-xs font-bold text-stone-800 dark:text-slate-200 transition hover:bg-stone-200 dark:hover:bg-white/10"
                                 >
                                     <div class="flex items-center justify-center gap-1.5">
                                         <Pencil class="h-3.5 w-3.5" />
@@ -330,7 +330,7 @@ function getStatusBadgeClass(status: string) {
                                 </button>
                                 <button
                                     @click="deleteTable(table)"
-                                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-450 transition hover:bg-rose-500/20"
+                                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-400 transition hover:bg-rose-500/20"
                                     title="Hapus Meja"
                                 >
                                     <Trash2 class="h-4 w-4" />
@@ -378,7 +378,7 @@ function getStatusBadgeClass(status: string) {
                                 class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                                 required
                             />
-                            <p v-if="tableForm.errors.name" class="mt-1 text-xs text-rose-450">
+                            <p v-if="tableForm.errors.name" class="mt-1 text-xs text-rose-400">
                                 {{ tableForm.errors.name }}
                             </p>
                         </div>
@@ -393,7 +393,7 @@ function getStatusBadgeClass(status: string) {
                                 min="1"
                                 class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
                             />
-                            <p v-if="tableForm.errors.capacity" class="mt-1 text-xs text-rose-450">
+                            <p v-if="tableForm.errors.capacity" class="mt-1 text-xs text-rose-400">
                                 {{ tableForm.errors.capacity }}
                             </p>
                         </div>
@@ -410,7 +410,7 @@ function getStatusBadgeClass(status: string) {
                                 <option value="indoor">Indoor (Dalam Ruangan)</option>
                                 <option value="outdoor">Outdoor (Luar Ruangan)</option>
                             </select>
-                            <p v-if="tableForm.errors.category" class="mt-1 text-xs text-rose-450">
+                            <p v-if="tableForm.errors.category" class="mt-1 text-xs text-rose-400">
                                 {{ tableForm.errors.category }}
                             </p>
                         </div>
@@ -461,7 +461,7 @@ function getStatusBadgeClass(status: string) {
                             alt="Table QR Code"
                             class="h-60 w-60 object-contain"
                         />
-                        <p class="mt-3 text-[10px] text-stone-550 break-all select-all font-semibold">
+                        <p class="mt-3 text-[10px] text-stone-500 break-all select-all font-semibold">
                             {{ selectedQrTable.public_qr_url }}
                         </p>
                     </div>

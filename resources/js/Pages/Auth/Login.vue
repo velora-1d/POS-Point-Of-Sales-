@@ -140,7 +140,7 @@ const submit = () => {
                             <a
                                 v-if="canResetPassword"
                                 :href="route('password.request')"
-                                class="text-sm font-medium text-orange-400 hover:text-orange-350 transition duration-150"
+                                class="text-sm font-medium text-orange-400 hover:text-orange-300 transition duration-150"
                             >
                                 Lupa sandi?
                             </a>

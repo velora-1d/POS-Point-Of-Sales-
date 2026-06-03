@@ -240,7 +240,7 @@ Kelola Tier Membership
                             <button
                                 type="button"
                                 @click="openEditModal(tierItem)"
-                                class="inline-flex items-center gap-1 rounded-xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1.5 text-[10px] font-bold text-stone-800 dark:text-slate-200 hover:border-slate-650 hover:text-stone-900 dark:text-white transition"
+                                class="inline-flex items-center gap-1 rounded-xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1.5 text-[10px] font-bold text-stone-800 dark:text-slate-200 hover:border-slate-600 hover:text-stone-900 dark:text-white transition"
                             >
                                 <Pencil class="h-3 w-3" />
                                 Edit
@@ -313,7 +313,7 @@ Kelola Tier Membership
                                     type="text"
                                     placeholder="Contoh: Platinum VIP"
                                     required
-                                    class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 py-2.5 px-3.5 text-xs text-stone-900 dark:text-white placeholder-slate-650 focus:border-orange-500 focus:outline-none focus:ring-0"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 py-2.5 px-3.5 text-xs text-stone-900 dark:text-white placeholder-slate-600 focus:border-orange-500 focus:outline-none focus:ring-0"
                                 />
                                 <p v-if="form.errors.name" class="text-[10px] text-rose-400 mt-1 font-bold">{{ form.errors.name }}</p>
                             </div>
@@ -328,7 +328,7 @@ Kelola Tier Membership
                                     type="text"
                                     placeholder="Contoh: platinum-vip"
                                     required
-                                    class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 py-2.5 px-3.5 text-xs text-stone-900 dark:text-white placeholder-slate-650 focus:border-orange-500 focus:outline-none focus:ring-0"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 py-2.5 px-3.5 text-xs text-stone-900 dark:text-white placeholder-slate-600 focus:border-orange-500 focus:outline-none focus:ring-0"
                                 />
                                 <p class="text-[10px] text-stone-400 dark:text-slate-500 mt-1">Digunakan sistem sebagai pengenal database unik (huruf kecil, angka, dan strip).</p>
                                 <p v-if="form.errors.tier" class="text-[10px] text-rose-400 mt-1 font-bold">{{ form.errors.tier }}</p>
@@ -391,7 +391,7 @@ Kelola Tier Membership
                                     v-model="form.description"
                                     rows="2"
                                     placeholder="Contoh: Potongan 15% setiap pembelian dine-in, dsb."
-                                    class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 py-2.5 px-3.5 text-xs text-stone-900 dark:text-white placeholder-slate-650 focus:border-orange-500 focus:outline-none focus:ring-0 resize-none"
+                                    class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 py-2.5 px-3.5 text-xs text-stone-900 dark:text-white placeholder-slate-600 focus:border-orange-500 focus:outline-none focus:ring-0 resize-none"
                                 ></textarea>
                                 <p v-if="form.errors.description" class="text-[10px] text-rose-400 mt-1 font-bold">{{ form.errors.description }}</p>
                             </div>
