@@ -33,7 +33,22 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - Repo = https://github.com/velora-1d/POS-Point-Of-Sales-
 
 ## Progress Terakhir
-- Implementasi ganti shift / serah terima kasir instan dan auto-blocker ketika shift selesai di Menu Order (`Kasir/Order.vue`). Kasir dapat melakukan serah terima nominal uang fisik laci, memilih kasir penerus, dan mengotentikasi kasir penerus via PIN/password secara langsung tanpa logout-login manual.
+- **Refaktorisasi `Order.vue` (5.320 baris → ~230 baris)** menjadi arsitektur modular coordinator pattern:
+  - `useOrderState.ts` — composable singleton sebagai pusat state & business logic (1.460+ baris)
+  - Komponen panel: `ProductCatalog.vue`, `CartPanel.vue`, `OrderTracker.vue`
+  - 8 modal terpisah: `PaymentModal.vue`, `EditOrderModal.vue`, `SplitBillModal.vue`, `MergeBillModal.vue`, `KasbonModal.vue`, `TakeoverShiftModal.vue`, `VariantModal.vue`, `PaymentCheckoutModal.vue`
+  - Semua 32+ TypeScript error diselesaikan (implicit any, missing exports, type mismatch)
+  - `npm run build` sukses 0 errors, 4.88s — UI/UX/dark mode identik dengan sebelumnya
+- **Fitur Laporan Keuangan Per Shift** (`/reports/shift-finance`) selesai end-to-end:
+  - Migration: kolom `shift_number_of_day` (nomor urut shift per hari per outlet) + auto-backfill data lama via `ROW_NUMBER()` PostgreSQL
+  - `ShiftFinancialReportRepository` — query shifts JOIN users, outlets, shift_templates, cash_reports
+  - `ShiftFinancialReportService` — group per hari (accordion), summary periode, breakdown per metode bayar, filter: shift/daily/weekly/monthly/quarterly/yearly + outlet + kasir
+  - `ShiftFinancialReportController` — endpoint Inertia `GET /reports/shift-finance`
+  - `ShiftFinance.vue` — 4 summary card, breakdown bar chart periode, accordion timeline per hari, per-shift card (avatar kasir, Shift ke-N badge, jam buka-tutup, breakdown mini bar, selisih kas badge hijau/merah, catatan)
+  - `ShiftService::open()` dimodifikasi untuk auto-set `shift_number_of_day` saat shift dibuka
+  - Fix IDE errors: `$request->user()` pattern + `@var` PHPDoc pada `LengthAwarePaginator`
+- `php artisan migrate` sukses (164ms), `npm run build` sukses (5.11s), push ke `main` commit `030e80e` — 33 files changed, 5871 insertions
+
 - Penambahan tombol **Test Alarm** di sidebar global (dan mobile sticky header) di samping tombol "Test Suara" serta di menu pengaturan notifikasi untuk membunyikan bel dapur tunggal (chime) secara cepat dari mana saja tanpa memanggil Text-to-Speech.
 - Integrasi data shift aktif (`activeShift`) dan daftar kasir (`cashiers`) dari `ShiftService` ke props Halaman Order (`OrderController` & `Order.vue`) untuk menampilkan identitas kasir bertugas secara visual dan realtime di header.
 - Penghapusan validasi PIN supervisor/owner pada flow edit/ubah pesanan oleh kasir, baik di frontend maupun backend, sehingga kasir dapat melakukan modifikasi order secara mandiri secara instan.
