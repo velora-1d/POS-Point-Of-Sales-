@@ -43,7 +43,7 @@ class AuthenticatedSessionController extends Controller
             case 'supervisor':
             case 'owner':
             default:
-                return redirect()->intended(route('dashboard', absolute: false));
+                return redirect()->route('dashboard');
         }
     }
 
