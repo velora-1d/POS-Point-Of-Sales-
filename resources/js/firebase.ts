@@ -13,12 +13,16 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+// Initialize Firebase only if we have a project ID (prevents crashes)
+export const app = firebaseConfig.projectId
+    ? initializeApp(firebaseConfig)
+    : null;
+
 export const analytics =
-    typeof window !== 'undefined' ? getAnalytics(app) : null;
+    app && typeof window !== 'undefined' ? getAnalytics(app) : null;
+
 export const messaging =
-    typeof window !== 'undefined' ? getMessaging(app) : null;
+    app && typeof window !== 'undefined' ? getMessaging(app) : null;
 
 export { onMessage };
 

@@ -15,26 +15,11 @@
     }
   ],
   "roles": [
-    {
-      "name": "Owner",
-      "type": "owner"
-    },
-    {
-      "name": "Supervisor",
-      "type": "supervisor"
-    },
-    {
-      "name": "Kasir",
-      "type": "kasir"
-    },
-    {
-      "name": "Bar",
-      "type": "bar"
-    },
-    {
-      "name": "Kitchen",
-      "type": "kitchen"
-    }
+    { "name": "Owner", "type": "owner" },
+    { "name": "Supervisor", "type": "supervisor" },
+    { "name": "Kasir", "type": "kasir" },
+    { "name": "Bar", "type": "bar" },
+    { "name": "Kitchen", "type": "kitchen" }
   ],
   "users": [
     {
@@ -102,83 +87,155 @@
   ],
   "categories": [
     { "name": "Mentai Rice", "description": "Nasi panggang dengan saus mentai gurih khas Jepang" },
+    { "name": "Appetizers", "description": "Menu pembuka yang lezat" },
     { "name": "Sides", "description": "Menu pendamping gurih dan renyah" },
-    { "name": "Drinks", "description": "Minuman segar dingin dan hangat" }
+    { "name": "Drinks", "description": "Minuman segar dingin dan hangat" },
+    { "name": "Coffee", "description": "Kopi berkualitas tinggi" },
+    { "name": "Desserts", "description": "Menu penutup manis" }
+  ],
+  "raw_materials": [
+    { "name": "Salmon Grade A", "unit": "kg", "quantity": 10.0, "minimum_stock": 2.0, "cost_per_unit": 250000 },
+    { "name": "Beras Jepang", "unit": "kg", "quantity": 50.0, "minimum_stock": 10.0, "cost_per_unit": 35000 },
+    { "name": "Saus Mentai (Gallon)", "unit": "liter", "quantity": 20.0, "minimum_stock": 5.0, "cost_per_unit": 120000 },
+    { "name": "Nori Sheet", "unit": "pack", "quantity": 100, "minimum_stock": 20, "cost_per_unit": 50000 },
+    { "name": "Beef Slice", "unit": "kg", "quantity": 15.0, "minimum_stock": 3.0, "cost_per_unit": 180000 },
+    { "name": "Chicken Breast", "unit": "kg", "quantity": 20.0, "minimum_stock": 5.0, "cost_per_unit": 65000 },
+    { "name": "Biji Kopi Arabica", "unit": "kg", "quantity": 5.0, "minimum_stock": 1.0, "cost_per_unit": 300000 },
+    { "name": "Susu UHT", "unit": "liter", "quantity": 24.0, "minimum_stock": 12.0, "cost_per_unit": 18000 },
+    { "name": "Gelas Plastik 16oz", "unit": "pcs", "quantity": 1000, "minimum_stock": 200, "cost_per_unit": 500 }
   ],
   "products": [
     {
       "category_name": "Mentai Rice",
       "name": "Salmon Mentai Rice",
       "description": "Nasi dengan irisan salmon premium, nori, dan saus mentai panggang yang creamy.",
-      "base_price": 45000.00,
-      "hpp": 22000.00,
+      "base_price": 45000,
+      "hpp": 22000,
+      "ingredients": [
+        { "material_name": "Salmon Grade A", "quantity": 0.05 },
+        { "material_name": "Beras Jepang", "quantity": 0.15 },
+        { "material_name": "Saus Mentai (Gallon)", "quantity": 0.03 }
+      ],
       "variants": [
-        { "name": "Level 1 (Original)", "additional_price": 0.00 },
-        { "name": "Level 2 (Spicy)", "additional_price": 0.00 },
-        { "name": "Level 3 (Extra Spicy)", "additional_price": 2000.00 },
-        { "name": "Extra Mozzarella Cheese", "additional_price": 5000.00 }
+        { "name": "Level 1 (Original)", "additional_price": 0 },
+        { "name": "Level 2 (Spicy)", "additional_price": 0 },
+        { "name": "Level 3 (Extra Spicy)", "additional_price": 2000 },
+        { "name": "Extra Mozzarella Cheese", "additional_price": 5000 }
       ],
       "prices": [
-        { "tier": "normal", "price": 45000.00 },
-        { "tier": "member", "price": 40000.00 }
+        { "tier": "normal", "price": 45000 },
+        { "tier": "member", "price": 40000 }
       ]
     },
     {
       "category_name": "Mentai Rice",
       "name": "Beef Mentai Rice",
       "description": "Nasi dengan slice beef tenderloin gurih, nori, dan saus mentai bakar.",
-      "base_price": 38000.00,
-      "hpp": 18000.00,
+      "base_price": 38000,
+      "hpp": 18000,
+      "ingredients": [
+        { "material_name": "Beef Slice", "quantity": 0.05 },
+        { "material_name": "Beras Jepang", "quantity": 0.15 },
+        { "material_name": "Saus Mentai (Gallon)", "quantity": 0.03 }
+      ],
       "variants": [
-        { "name": "Level 1 (Original)", "additional_price": 0.00 },
-        { "name": "Level 2 (Spicy)", "additional_price": 0.00 },
-        { "name": "Level 3 (Extra Spicy)", "additional_price": 2000.00 }
+        { "name": "Level 1 (Original)", "additional_price": 0 },
+        { "name": "Level 2 (Spicy)", "additional_price": 0 },
+        { "name": "Level 3 (Extra Spicy)", "additional_price": 2000 }
       ],
       "prices": [
-        { "tier": "normal", "price": 38000.00 },
-        { "tier": "member", "price": 35000.00 }
+        { "tier": "normal", "price": 38000 },
+        { "tier": "member", "price": 35000 }
+      ]
+    },
+    {
+      "category_name": "Mentai Rice",
+      "name": "Chicken Mentai Rice",
+      "description": "Nasi panggang dengan topping ayam krispi dan saus mentai signature.",
+      "base_price": 32000,
+      "hpp": 14000,
+      "ingredients": [
+        { "material_name": "Chicken Breast", "quantity": 0.08 },
+        { "material_name": "Beras Jepang", "quantity": 0.15 },
+        { "material_name": "Saus Mentai (Gallon)", "quantity": 0.03 }
+      ],
+      "variants": [],
+      "prices": [
+        { "tier": "normal", "price": 32000 }
+      ]
+    },
+    {
+      "category_name": "Appetizers",
+      "name": "Takoyaki (6 pcs)",
+      "description": "Bola-bola gurih berisi gurita dengan saus spesial.",
+      "base_price": 25000,
+      "hpp": 10000,
+      "ingredients": [],
+      "variants": [],
+      "prices": [
+        { "tier": "normal", "price": 25000 }
       ]
     },
     {
       "category_name": "Sides",
       "name": "Chicken Gyoza (5 pcs)",
       "description": "Pangsit panggang ala Jepang berisi daging ayam cincang gurih.",
-      "base_price": 22000.00,
-      "hpp": 9000.00,
+      "base_price": 22000,
+      "hpp": 9000,
+      "ingredients": [
+        { "material_name": "Chicken Breast", "quantity": 0.1 }
+      ],
       "variants": [
-        { "name": "Original", "additional_price": 0.00 },
-        { "name": "Spicy Mayo", "additional_price": 2000.00 }
+        { "name": "Original", "additional_price": 0 },
+        { "name": "Spicy Mayo", "additional_price": 2000 }
       ],
       "prices": [
-        { "tier": "normal", "price": 22000.00 },
-        { "tier": "member", "price": 20000.00 }
+        { "tier": "normal", "price": 22000 },
+        { "tier": "member", "price": 20000 }
       ]
     },
     {
       "category_name": "Drinks",
       "name": "Ocha Cold / Hot",
       "description": "Teh hijau khas Jepang, otentik dan menyegarkan.",
-      "base_price": 8000.00,
-      "hpp": 2000.00,
+      "base_price": 8000,
+      "hpp": 2000,
+      "ingredients": [],
       "variants": [
-        { "name": "Cold (Es)", "additional_price": 0.00 },
-        { "name": "Hot (Hangat)", "additional_price": 0.00 }
+        { "name": "Cold (Es)", "additional_price": 0 },
+        { "name": "Hot (Hangat)", "additional_price": 0 }
       ],
       "prices": [
-        { "tier": "normal", "price": 8000.00 },
-        { "tier": "member", "price": 7000.00 }
+        { "tier": "normal", "price": 8000 },
+        { "tier": "member", "price": 7000 }
       ]
     },
     {
-      "category_name": "Drinks",
-      "name": "Iced Matcha Latte",
-      "description": "Minuman susu matcha manis dengan es batu.",
-      "base_price": 18000.00,
-      "hpp": 7000.00,
+      "category_name": "Coffee",
+      "name": "Iced Palm Sugar Latte",
+      "description": "Kopi susu dengan gula aren organik yang legit.",
+      "base_price": 22000,
+      "hpp": 8000,
+      "ingredients": [
+        { "material_name": "Biji Kopi Arabica", "quantity": 0.02 },
+        { "material_name": "Susu UHT", "quantity": 0.2 },
+        { "material_name": "Gelas Plastik 16oz", "quantity": 1 }
+      ],
       "variants": [],
       "prices": [
-        { "tier": "normal", "price": 18000.00 },
-        { "tier": "member", "price": 16000.00 }
+        { "tier": "normal", "price": 22000 }
+      ]
+    },
+    {
+      "category_name": "Desserts",
+      "name": "Silky Pudding Matcha",
+      "description": "Pudding lembut dengan rasa teh hijau premium.",
+      "base_price": 15000,
+      "hpp": 5000,
+      "ingredients": [],
+      "variants": [],
+      "prices": [
+        { "tier": "normal", "price": 15000 }
       ]
     }
   ],
@@ -188,7 +245,7 @@
       "name": "Bronze Member",
       "point_threshold": 0,
       "point_rate_per_amount": 0.0001,
-      "discount_percent": 0.00,
+      "discount_percent": 0,
       "description": "Tier dasar keanggotaan"
     },
     {
@@ -196,7 +253,7 @@
       "name": "Silver Member",
       "point_threshold": 100,
       "point_rate_per_amount": 0.00015,
-      "discount_percent": 5.00,
+      "discount_percent": 5,
       "description": "Tier perak dengan diskon pesanan 5%"
     },
     {
@@ -204,7 +261,7 @@
       "name": "Gold Member",
       "point_threshold": 500,
       "point_rate_per_amount": 0.0002,
-      "discount_percent": 10.00,
+      "discount_percent": 10,
       "description": "Tier emas dengan diskon pesanan 10% & pelayanan VIP"
     }
   ],
@@ -224,6 +281,14 @@
       "tier": "gold",
       "total_points": 550,
       "lifetime_points": 600
+    },
+    {
+      "name": "Andi Wijaya",
+      "phone": "081299990003",
+      "email": "andi.wijaya@gmail.com",
+      "tier": "bronze",
+      "total_points": 10,
+      "lifetime_points": 10
     }
   ],
   "promos": [
@@ -232,10 +297,10 @@
       "code": "MENTAI10",
       "type": "percent",
       "apply_method": "both",
-      "discount_percent": 10.00,
+      "discount_percent": 10,
       "discount_amount": null,
-      "max_discount_amount": 15000.00,
-      "min_transaction_amount": 50000.00,
+      "max_discount_amount": 15000,
+      "min_transaction_amount": 50000,
       "can_stack": false,
       "usage_limit": 1000,
       "start_date": "2026-01-01 00:00:00",
@@ -248,9 +313,9 @@
       "type": "nominal",
       "apply_method": "auto",
       "discount_percent": null,
-      "discount_amount": 5000.00,
+      "discount_amount": 5000,
       "max_discount_amount": null,
-      "min_transaction_amount": 40000.00,
+      "min_transaction_amount": 40000,
       "can_stack": true,
       "usage_limit": null,
       "start_date": "2026-01-01 00:00:00",
@@ -259,15 +324,7 @@
     }
   ],
   "shift_templates": [
-    {
-      "name": "Shift Pagi",
-      "start_time": "08:00:00",
-      "end_time": "16:00:00"
-    },
-    {
-      "name": "Shift Malam",
-      "start_time": "16:00:00",
-      "end_time": "00:00:00"
-    }
+    { "name": "Shift Pagi", "start_time": "08:00:00", "end_time": "16:00:00" },
+    { "name": "Shift Malam", "start_time": "16:00:00", "end_time": "00:00:00" }
   ]
 }
