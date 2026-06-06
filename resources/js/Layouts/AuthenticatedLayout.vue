@@ -877,31 +877,14 @@ let orderAudioPollInterval: number | undefined;
 
 const playChimeAndSpeakGlobal = (text: string, volume = 1.0, rate = 0.9, pitch = 1.05) => {
     try {
-        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        
         const runChime = () => {
-            const playTone = (freq: number, start: number, duration: number) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.frequency.setValueAtTime(freq, start);
-                gain.gain.setValueAtTime(0, start);
-                const targetGain = 0.2 * volume;
-                gain.gain.linearRampToValueAtTime(targetGain, start + 0.05);
-                gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(start);
-                osc.stop(start + duration);
-            };
-            playTone(587.33, audioCtx.currentTime, 0.4);
-            playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+            const audio = new Audio('/notif_minpo.mp3');
+            audio.volume = volume;
+            audio.play().catch((err) => {
+                console.warn("Gagal memutar audio bel notifikasi global:", err);
+            });
         };
-
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume().then(runChime).catch(() => runChime());
-        } else {
-            runChime();
-        }
+        runChime();
     } catch (e) {
         console.error('Error playing global audio chime:', e);
     }

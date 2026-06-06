@@ -311,37 +311,11 @@ const playChimeTone = () => {
     if (localMute.value) return;
 
     try {
-        const audioCtx = getAudioContext();
-        if (!audioCtx) return;
-
-        if (audioCtx.state === 'suspended') {
-            isAudioBlocked.value = true;
-            return; // Lewati chime tetapi SpeechSynthesis di bawah tetap jalan
-        }
-
-        const playTone = (freq: number, start: number, duration: number) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(freq, start);
-            gain.gain.setValueAtTime(0, start);
-            const targetGain = 0.2 * localVolume.value;
-            gain.gain.linearRampToValueAtTime(targetGain, start + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start(start);
-            osc.stop(start + duration);
-
-            setTimeout(() => {
-                osc.disconnect();
-                gain.disconnect();
-            }, (duration + 0.5) * 1000);
-        };
-
-        playTone(587.33, audioCtx.currentTime, 0.4);
-        playTone(440.00, audioCtx.currentTime + 0.15, 0.6);
+        const audio = new Audio('/notif_minpo.mp3');
+        audio.volume = localVolume.value;
+        audio.play().catch((err) => {
+            console.warn("Gagal memutar audio bel dapur:", err);
+        });
     } catch (e) {
         console.error(e);
     }
