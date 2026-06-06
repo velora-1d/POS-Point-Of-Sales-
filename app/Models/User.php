@@ -29,6 +29,7 @@ class User extends Authenticatable
         'is_active',
         'join_date',
         'email_verified_at',
+        'fcm_token',
     ];
 
     protected $hidden = [

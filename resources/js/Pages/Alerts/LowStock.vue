@@ -79,11 +79,16 @@ const getItemLabel = (item: AlertItem) => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+                    <h2
+                        class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                    >
                         Alert Stok Menipis
                     </h2>
-                    <p class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400">
-                        Pantau item yang stoknya sudah menyentuh batas minimum, baik dari produk jadi maupun bahan baku.
+                    <p
+                        class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400"
+                    >
+                        Pantau item yang stoknya sudah menyentuh batas minimum,
+                        baik dari produk jadi maupun bahan baku.
                     </p>
                 </div>
             </div>
@@ -91,32 +96,50 @@ const getItemLabel = (item: AlertItem) => {
 
         <div class="space-y-5">
             <!-- Tab Navigation Global -->
-            <div class="flex border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-3xl">
+            <div
+                class="flex max-w-3xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+            >
                 <Link
                     :href="route('products.stock')"
-                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('products.stock') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('products.stock')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Stok Produk Jadi
                 </Link>
                 <Link
                     :href="route('products.hpp')"
-                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('products.hpp') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('products.hpp')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     HPP & Resep
                 </Link>
                 <Link
                     :href="route('stock-alerts.index')"
-                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('stock-alerts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('stock-alerts.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Alert Stok Menipis
                 </Link>
                 <Link
                     :href="route('expired-tracking.index')"
-                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('expired-tracking.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('expired-tracking.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Reminder Expired
                 </Link>
@@ -133,33 +156,48 @@ const getItemLabel = (item: AlertItem) => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <p
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 {{ stat.label }}
                             </p>
                             <p :class="['mt-2 text-3xl font-black', stat.tone]">
                                 {{ stat.value }}
                             </p>
                         </div>
-                        <component :is="stat.icon" class="h-5 w-5 text-stone-400 dark:text-slate-500" />
+                        <component
+                            :is="stat.icon"
+                            class="h-5 w-5 text-stone-400 dark:text-slate-500"
+                        />
                     </div>
                 </article>
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
-                <div class="flex flex-col gap-2 border-b border-stone-200 dark:border-slate-800/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div
+                    class="flex flex-col gap-2 border-b border-stone-200 px-5 py-4 dark:border-slate-800/80 sm:flex-row sm:items-center sm:justify-between"
+                >
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                        >
                             Prioritas Hari Ini
                         </p>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            Total {{ items.length }} item paling mendesak dari seluruh alert stok rendah.
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            Total {{ items.length }} item paling mendesak dari
+                            seluruh alert stok rendah.
                         </p>
                     </div>
                 </div>
 
-                <div v-if="!items.length" class="px-5 py-16 text-center text-sm text-stone-500 dark:text-slate-400">
+                <div
+                    v-if="!items.length"
+                    class="px-5 py-16 text-center text-sm text-stone-500 dark:text-slate-400"
+                >
                     Belum ada alert stok menipis. Semua stok utama masih aman.
                 </div>
 
@@ -167,13 +205,19 @@ const getItemLabel = (item: AlertItem) => {
                     <article
                         v-for="item in items"
                         :key="`${item.type}-${item.id}`"
-                        class="rounded-[24px] border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/60 p-5"
+                        class="rounded-[24px] border border-stone-200 bg-white p-5 dark:border-slate-800/80 dark:bg-slate-950/60"
                     >
                         <div class="flex flex-col gap-4">
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                            <div
+                                class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
+                            >
                                 <div class="space-y-2">
-                                    <div class="flex flex-wrap items-center gap-2">
-                                        <h3 class="text-lg font-black text-stone-900 dark:text-white">
+                                    <div
+                                        class="flex flex-wrap items-center gap-2"
+                                    >
+                                        <h3
+                                            class="text-lg font-black text-stone-900 dark:text-white"
+                                        >
                                             {{ item.name }}
                                         </h3>
                                         <span
@@ -185,9 +229,17 @@ const getItemLabel = (item: AlertItem) => {
                                             {{ getItemLabel(item) }}
                                         </span>
                                     </div>
-                                    <p class="text-xs text-stone-500 dark:text-slate-400">
-                                        {{ item.type === 'product' ? 'Produk jadi' : 'Bahan baku' }}
-                                        <span v-if="item.context">• {{ item.context }}</span>
+                                    <p
+                                        class="text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        {{
+                                            item.type === 'product'
+                                                ? 'Produk jadi'
+                                                : 'Bahan baku'
+                                        }}
+                                        <span v-if="item.context"
+                                            >• {{ item.context }}</span
+                                        >
                                     </p>
                                 </div>
 
@@ -200,25 +252,41 @@ const getItemLabel = (item: AlertItem) => {
                             </div>
 
                             <div class="grid gap-3 sm:grid-cols-2">
-                                <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                                <div
+                                    class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                                >
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                    >
                                         Stok Saat Ini
                                     </p>
-                                    <p class="mt-2 text-xl font-black text-stone-900 dark:text-white">
+                                    <p
+                                        class="mt-2 text-xl font-black text-stone-900 dark:text-white"
+                                    >
                                         {{ item.current_stock }}
-                                        <span class="text-sm font-semibold text-stone-500 dark:text-slate-400">
+                                        <span
+                                            class="text-sm font-semibold text-stone-500 dark:text-slate-400"
+                                        >
                                             {{ item.unit || 'pcs' }}
                                         </span>
                                     </p>
                                 </div>
 
-                                <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                                <div
+                                    class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                                >
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                    >
                                         Minimum Stok
                                     </p>
-                                    <p class="mt-2 text-xl font-black text-stone-900 dark:text-white">
+                                    <p
+                                        class="mt-2 text-xl font-black text-stone-900 dark:text-white"
+                                    >
                                         {{ item.minimum_stock }}
-                                        <span class="text-sm font-semibold text-stone-500 dark:text-slate-400">
+                                        <span
+                                            class="text-sm font-semibold text-stone-500 dark:text-slate-400"
+                                        >
                                             {{ item.unit || 'pcs' }}
                                         </span>
                                     </p>
@@ -231,70 +299,116 @@ const getItemLabel = (item: AlertItem) => {
 
             <div class="grid gap-5 xl:grid-cols-2">
                 <section
-                    class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-xl shadow-slate-950/15"
+                    class="rounded-[26px] border border-stone-200 bg-stone-50 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
                 >
-                    <div class="border-b border-stone-200 dark:border-slate-800/80 px-5 py-4">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
+                    <div
+                        class="border-b border-stone-200 px-5 py-4 dark:border-slate-800/80"
+                    >
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                        >
                             Produk Jadi Menipis
                         </p>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            {{ productItems.length }} item dari stok produk jadi.
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            {{ productItems.length }} item dari stok produk
+                            jadi.
                         </p>
                     </div>
                     <div class="space-y-3 px-5 py-5">
                         <article
                             v-for="item in productItems"
                             :key="item.id"
-                            class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 px-4 py-3"
+                            class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950/60"
                         >
-                            <div class="flex items-center justify-between gap-4">
+                            <div
+                                class="flex items-center justify-between gap-4"
+                            >
                                 <div>
-                                    <p class="text-sm font-bold text-stone-900 dark:text-white">{{ item.name }}</p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
+                                    <p
+                                        class="text-sm font-bold text-stone-900 dark:text-white"
+                                    >
+                                        {{ item.name }}
+                                    </p>
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
                                         {{ item.context || 'Tanpa kategori' }}
                                     </p>
                                 </div>
-                                <p class="text-xs font-semibold text-stone-600 dark:text-slate-300">
-                                    {{ item.current_stock }}/{{ item.minimum_stock }} {{ item.unit }}
+                                <p
+                                    class="text-xs font-semibold text-stone-600 dark:text-slate-300"
+                                >
+                                    {{ item.current_stock }}/{{
+                                        item.minimum_stock
+                                    }}
+                                    {{ item.unit }}
                                 </p>
                             </div>
                         </article>
-                        <p v-if="!productItems.length" class="text-sm text-stone-500 dark:text-slate-400">
+                        <p
+                            v-if="!productItems.length"
+                            class="text-sm text-stone-500 dark:text-slate-400"
+                        >
                             Belum ada produk jadi yang menipis.
                         </p>
                     </div>
                 </section>
 
                 <section
-                    class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-xl shadow-slate-950/15"
+                    class="rounded-[26px] border border-stone-200 bg-stone-50 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
                 >
-                    <div class="border-b border-stone-200 dark:border-slate-800/80 px-5 py-4">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
+                    <div
+                        class="border-b border-stone-200 px-5 py-4 dark:border-slate-800/80"
+                    >
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                        >
                             Bahan Baku Menipis
                         </p>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            {{ rawMaterialItems.length }} item dari inventori bahan baku.
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            {{ rawMaterialItems.length }} item dari inventori
+                            bahan baku.
                         </p>
                     </div>
                     <div class="space-y-3 px-5 py-5">
                         <article
                             v-for="item in rawMaterialItems"
                             :key="item.id"
-                            class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 px-4 py-3"
+                            class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950/60"
                         >
-                            <div class="flex items-center justify-between gap-4">
+                            <div
+                                class="flex items-center justify-between gap-4"
+                            >
                                 <div>
-                                    <p class="text-sm font-bold text-stone-900 dark:text-white">{{ item.name }}</p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
+                                    <p
+                                        class="text-sm font-bold text-stone-900 dark:text-white"
+                                    >
+                                        {{ item.name }}
+                                    </p>
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
                                         {{ item.context || 'Bahan baku' }}
                                     </p>
                                 </div>
-                                <p class="text-xs font-semibold text-stone-600 dark:text-slate-300">
-                                    {{ item.current_stock }}/{{ item.minimum_stock }} {{ item.unit }}
+                                <p
+                                    class="text-xs font-semibold text-stone-600 dark:text-slate-300"
+                                >
+                                    {{ item.current_stock }}/{{
+                                        item.minimum_stock
+                                    }}
+                                    {{ item.unit }}
                                 </p>
                             </div>
                         </article>
-                        <p v-if="!rawMaterialItems.length" class="text-sm text-stone-500 dark:text-slate-400">
+                        <p
+                            v-if="!rawMaterialItems.length"
+                            class="text-sm text-stone-500 dark:text-slate-400"
+                        >
                             Belum ada bahan baku yang menipis.
                         </p>
                     </div>

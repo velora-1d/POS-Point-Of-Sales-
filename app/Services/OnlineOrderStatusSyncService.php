@@ -8,7 +8,7 @@ class OnlineOrderStatusSyncService
 {
     public function sync(Order $order, string $internalStatus, ?string $notes = null): void
     {
-        if (!in_array($order->source, ['gofood', 'grabfood'], true)) {
+        if (!in_array($order->source, ['gofood', 'grabfood', 'shopeefood', 'maximfood'], true)) {
             return;
         }
 

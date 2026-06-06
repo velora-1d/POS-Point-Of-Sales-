@@ -31,7 +31,7 @@ class ReportExportDownloadRequest extends FormRequest
             'user_id' => ['nullable', 'exists:users,id'],
             'category_id' => ['nullable', 'exists:categories,id'],
             'category' => ['nullable', 'string', 'max:50'],
-            'source' => ['nullable', Rule::in(['kasir', 'qr_meja', 'gofood', 'grabfood'])],
+            'source' => ['nullable', Rule::in(['kasir', 'qr_meja', 'gofood', 'grabfood', 'shopeefood', 'maximfood'])],
             'payment_method' => ['nullable', Rule::in(['cash', 'qris', 'debit', 'ewallet', 'kasbon'])],
             'type' => ['nullable', Rule::in(['all', 'product', 'raw_material'])],
             'status' => ['nullable', Rule::in(['all', 'healthy', 'low', 'out', 'inactive'])],

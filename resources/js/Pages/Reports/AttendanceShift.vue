@@ -131,7 +131,9 @@ const endDateFilter = ref(props.filters.end_date);
 const outletFilter = ref(props.filters.outlet_id || '');
 const employeeFilter = ref(props.filters.user_id || '');
 const canChooseOutlet = computed(() => props.referenceData.outlets.length > 1);
-const canChooseEmployee = computed(() => props.referenceData.employees.length > 0);
+const canChooseEmployee = computed(
+    () => props.referenceData.employees.length > 0,
+);
 
 const currentDateInput = (date: Date) => {
     const year = date.getFullYear();
@@ -167,7 +169,10 @@ const formatPercent = (value: number | null | undefined) => {
     return `${value.toFixed(1)}%`;
 };
 
-const formatShiftTime = (startTime?: string | null, endTime?: string | null) => {
+const formatShiftTime = (
+    startTime?: string | null,
+    endTime?: string | null,
+) => {
     if (!startTime && !endTime) {
         return 'Jam shift belum tersedia';
     }
@@ -219,7 +224,9 @@ const submitFilters = () => {
 const clearFilters = () => {
     const now = new Date();
 
-    startDateFilter.value = currentDateInput(new Date(now.getFullYear(), now.getMonth(), 1));
+    startDateFilter.value = currentDateInput(
+        new Date(now.getFullYear(), now.getMonth(), 1),
+    );
     endDateFilter.value = currentDateInput(now);
     outletFilter.value = '';
     employeeFilter.value = '';
@@ -283,26 +290,33 @@ const summaryCards = computed(() => [
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+            <div
+                class="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
+            >
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
-Laporan Absensi & Shift
+                    <h2
+                        class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                    >
+                        Laporan Absensi & Shift
                     </h2>
                     <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
                         Ringkasan operasional karyawan untuk periode
                         <span class="font-semibold text-orange-300">
-                            {{ formatDate(period.start_date) }} - {{ formatDate(period.end_date) }}
+                            {{ formatDate(period.start_date) }} -
+                            {{ formatDate(period.end_date) }}
                         </span>
                     </p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
-                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:text-slate-300">
+                    <span
+                        class="rounded-full border border-stone-200 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:border-white/10 dark:text-slate-300"
+                    >
                         {{ user?.role || '-' }}
                     </span>
                     <Link
                         :href="route('attendance.index')"
-                        class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-white/[0.05]"
+                        class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-white/[0.05] dark:border-white/10 dark:border-white/20 dark:text-slate-200"
                     >
                         <CalendarRange class="h-4 w-4" />
                         Absensi Harian
@@ -320,74 +334,107 @@ Laporan Absensi & Shift
 
         <div class="space-y-6">
             <!-- Tab Navigation Laporan Sumber Daya -->
-            <div class="flex flex-wrap border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
+            <div
+                class="flex max-w-2xl flex-wrap gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+            >
                 <Link
                     :href="route('reports.inventory.index')"
-                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.inventory.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('reports.inventory.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Stok & Inventori
                 </Link>
                 <Link
                     :href="route('reports.attendance-shifts.index')"
-                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.attendance-shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('reports.attendance-shifts.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Absensi & Shift
                 </Link>
                 <Link
                     :href="route('reports.exports.index')"
-                    class="flex-1 min-w-[120px] text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('reports.exports.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('reports.exports.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Export Data
                 </Link>
             </div>
 
             <section class="grid gap-4 lg:grid-cols-[1.8fr_1fr]">
-                <div class="rounded-[28px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/75 p-5 shadow-2xl shadow-slate-950/40">
+                <div
+                    class="rounded-[28px] border border-stone-200 bg-white p-5 shadow-2xl shadow-slate-950/40 dark:border-white/10 dark:bg-slate-950/75"
+                >
                     <div class="flex items-start justify-between gap-4">
                         <div>
-                            <p class="text-[11px] font-black uppercase tracking-[0.24em] text-orange-300/85">
+                            <p
+                                class="text-[11px] font-black uppercase tracking-[0.24em] text-orange-300/85"
+                            >
                                 Filter Laporan
                             </p>
-                            <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
-                                Pantau kehadiran, missing schedule, dan selisih kas shift
+                            <h3
+                                class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                            >
+                                Pantau kehadiran, missing schedule, dan selisih
+                                kas shift
                             </h3>
                         </div>
-                        <div class="rounded-2xl border border-orange-500/20 bg-orange-500/10 p-3 text-orange-200">
+                        <div
+                            class="rounded-2xl border border-orange-500/20 bg-orange-500/10 p-3 text-orange-200"
+                        >
                             <Search class="h-5 w-5" />
                         </div>
                     </div>
 
                     <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
+                        <label
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
+                        >
                             <span>Tanggal mulai</span>
                             <input
                                 v-model="startDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
                             />
                         </label>
 
-                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
+                        <label
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
+                        >
                             <span>Tanggal akhir</span>
                             <input
                                 v-model="endDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40"
+                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
                             />
                         </label>
 
-                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
+                        <label
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
+                        >
                             <span>Outlet</span>
                             <select
                                 v-model="outletFilter"
                                 :disabled="!canChooseOutlet"
-                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40 disabled:cursor-not-allowed disabled:opacity-60"
+                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
                             >
                                 <option value="">
-                                    {{ canChooseOutlet ? 'Semua outlet' : 'Outlet scope aktif' }}
+                                    {{
+                                        canChooseOutlet
+                                            ? 'Semua outlet'
+                                            : 'Outlet scope aktif'
+                                    }}
                                 </option>
                                 <option
                                     v-for="outlet in referenceData.outlets"
@@ -399,22 +446,26 @@ Laporan Absensi & Shift
                             </select>
                         </label>
 
-                        <label class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
+                        <label
+                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
+                        >
                             <span>Karyawan</span>
                             <select
                                 v-model="employeeFilter"
                                 :disabled="!canChooseEmployee"
-                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-4 py-3 text-sm text-stone-900 dark:text-slate-100 outline-none transition focus:border-orange-400/40 disabled:cursor-not-allowed disabled:opacity-60"
+                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
                             >
-                                <option value="">
-                                    Semua karyawan
-                                </option>
+                                <option value="">Semua karyawan</option>
                                 <option
                                     v-for="employee in referenceData.employees"
                                     :key="employee.id"
                                     :value="employee.id"
                                 >
-                                    {{ employee.role ? `${employee.name} - ${employee.role}` : employee.name }}
+                                    {{
+                                        employee.role
+                                            ? `${employee.name} - ${employee.role}`
+                                            : employee.name
+                                    }}
                                 </option>
                             </select>
                         </label>
@@ -431,7 +482,7 @@ Laporan Absensi & Shift
                         </button>
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-white/[0.05]"
+                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-white/[0.05] dark:border-white/10 dark:border-white/20 dark:text-slate-200"
                             @click="clearFilters"
                         >
                             Reset Periode
@@ -440,16 +491,24 @@ Laporan Absensi & Shift
                 </div>
 
                 <div class="grid gap-4">
-                    <div class="rounded-[28px] border border-emerald-400/15 bg-emerald-500/10 p-5 shadow-lg shadow-emerald-950/20">
-                        <p class="text-[11px] font-black uppercase tracking-[0.24em] text-emerald-200/85">
+                    <div
+                        class="rounded-[28px] border border-emerald-400/15 bg-emerald-500/10 p-5 shadow-lg shadow-emerald-950/20"
+                    >
+                        <p
+                            class="text-[11px] font-black uppercase tracking-[0.24em] text-emerald-200/85"
+                        >
                             Catatan Absensi
                         </p>
                         <p class="mt-3 text-sm leading-6 text-emerald-50/90">
                             {{ limitations.attendance }}
                         </p>
                     </div>
-                    <div class="rounded-[28px] border border-violet-400/15 bg-violet-500/10 p-5 shadow-lg shadow-violet-950/20">
-                        <p class="text-[11px] font-black uppercase tracking-[0.24em] text-violet-200/85">
+                    <div
+                        class="rounded-[28px] border border-violet-400/15 bg-violet-500/10 p-5 shadow-lg shadow-violet-950/20"
+                    >
+                        <p
+                            class="text-[11px] font-black uppercase tracking-[0.24em] text-violet-200/85"
+                        >
                             Catatan Shift
                         </p>
                         <p class="mt-3 text-sm leading-6 text-violet-50/90">
@@ -468,46 +527,71 @@ Laporan Absensi & Shift
                 >
                     <div class="flex items-start justify-between gap-4">
                         <div>
-                            <p class="text-[11px] font-black uppercase tracking-[0.24em] text-stone-600 dark:text-slate-300/80">
+                            <p
+                                class="text-[11px] font-black uppercase tracking-[0.24em] text-stone-600 dark:text-slate-300/80"
+                            >
                                 {{ card.label }}
                             </p>
-                            <p class="mt-3 text-2xl font-black text-stone-900 dark:text-white">
+                            <p
+                                class="mt-3 text-2xl font-black text-stone-900 dark:text-white"
+                            >
                                 {{ card.value }}
                             </p>
-                            <p class="mt-2 text-sm text-stone-600 dark:text-slate-300/85">
+                            <p
+                                class="mt-2 text-sm text-stone-600 dark:text-slate-300/85"
+                            >
                                 {{ card.helper }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-black/20 p-3" :class="card.tone">
+                        <div
+                            class="rounded-2xl border border-stone-200 bg-black/20 p-3 dark:border-white/10"
+                            :class="card.tone"
+                        >
                             <component :is="card.icon" class="h-5 w-5" />
                         </div>
                     </div>
                 </article>
             </section>
 
-            <section class="rounded-[30px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/80 p-5 shadow-2xl shadow-slate-950/40">
-                <div class="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
+            <section
+                class="rounded-[30px] border border-stone-200 bg-white p-5 shadow-2xl shadow-slate-950/40 dark:border-white/10 dark:bg-slate-950/80"
+            >
+                <div
+                    class="flex flex-col justify-between gap-3 lg:flex-row lg:items-center"
+                >
                     <div>
-                        <p class="text-[11px] font-black uppercase tracking-[0.24em] text-orange-300/85">
+                        <p
+                            class="text-[11px] font-black uppercase tracking-[0.24em] text-orange-300/85"
+                        >
                             Rekap Per Karyawan
                         </p>
-                        <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
-                            Gabungan performa absensi dan shift pada periode aktif
+                        <h3
+                            class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                        >
+                            Gabungan performa absensi dan shift pada periode
+                            aktif
                         </h3>
                     </div>
-                    <div class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-stone-600 dark:text-slate-300">
+                    <div
+                        class="rounded-full border border-stone-200 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-stone-600 dark:border-white/10 dark:text-slate-300"
+                    >
                         {{ employees.length }} baris data
                     </div>
                 </div>
 
-                <div v-if="employees.length === 0" class="mt-6 rounded-3xl border border-dashed border-stone-200 dark:border-white/10 bg-white/[0.02] px-6 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
+                <div
+                    v-if="employees.length === 0"
+                    class="mt-6 rounded-3xl border border-dashed border-stone-200 bg-white/[0.02] px-6 py-10 text-center text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
+                >
                     Belum ada data absensi atau shift pada periode yang dipilih.
                 </div>
 
                 <div v-else class="mt-6 overflow-x-auto">
                     <table class="min-w-full divide-y divide-white/10 text-sm">
                         <thead>
-                            <tr class="text-left text-[11px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400">
+                            <tr
+                                class="text-left text-[11px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
+                            >
                                 <th class="px-4 py-3">Karyawan</th>
                                 <th class="px-4 py-3">Absensi</th>
                                 <th class="px-4 py-3">Shift</th>
@@ -523,77 +607,185 @@ Laporan Absensi & Shift
                             >
                                 <td class="px-4 py-4">
                                     <div class="flex items-start gap-3">
-                                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] p-2 text-orange-200">
+                                        <div
+                                            class="rounded-2xl border border-stone-200 bg-white/[0.03] p-2 text-orange-200 dark:border-white/10"
+                                        >
                                             <UserRound class="h-4 w-4" />
                                         </div>
                                         <div>
-                                            <p class="font-semibold text-stone-900 dark:text-white">
+                                            <p
+                                                class="font-semibold text-stone-900 dark:text-white"
+                                            >
                                                 {{ employee.name }}
                                             </p>
-                                            <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                                {{ employee.outlet?.name || 'Tanpa outlet' }}
+                                            <p
+                                                class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                            >
+                                                {{
+                                                    employee.outlet?.name ||
+                                                    'Tanpa outlet'
+                                                }}
                                             </p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-4 py-4 text-stone-800 dark:text-slate-200">
+                                <td
+                                    class="px-4 py-4 text-stone-800 dark:text-slate-200"
+                                >
                                     <p>
-                                        {{ employee.attendance.matched_schedules }} hadir dari
-                                        {{ employee.attendance.scheduled_days }} jadwal
+                                        {{
+                                            employee.attendance
+                                                .matched_schedules
+                                        }}
+                                        hadir dari
+                                        {{ employee.attendance.scheduled_days }}
+                                        jadwal
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        Rate {{ formatPercent(employee.attendance.attendance_rate) }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        Rate
+                                        {{
+                                            formatPercent(
+                                                employee.attendance
+                                                    .attendance_rate,
+                                            )
+                                        }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        Telat {{ employee.attendance.late_days }} • Missing {{ employee.attendance.missing_days }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        Telat
+                                        {{ employee.attendance.late_days }} •
+                                        Missing
+                                        {{ employee.attendance.missing_days }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                        Unscheduled check-in {{ employee.attendance.unscheduled_days }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    >
+                                        Unscheduled check-in
+                                        {{
+                                            employee.attendance.unscheduled_days
+                                        }}
                                     </p>
                                 </td>
-                                <td class="px-4 py-4 text-stone-800 dark:text-slate-200">
+                                <td
+                                    class="px-4 py-4 text-stone-800 dark:text-slate-200"
+                                >
                                     <p>
                                         {{ employee.shift.total_shifts }} shift
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        Closed {{ employee.shift.closed_shifts }} • Active {{ employee.shift.active_shifts }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        Closed
+                                        {{ employee.shift.closed_shifts }} •
+                                        Active
+                                        {{ employee.shift.active_shifts }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                        {{ employee.shift.total_orders }} order dari shift closed
+                                    <p
+                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    >
+                                        {{ employee.shift.total_orders }} order
+                                        dari shift closed
                                     </p>
                                 </td>
-                                <td class="px-4 py-4 text-stone-800 dark:text-slate-200">
-                                    <p class="font-semibold text-stone-900 dark:text-white">
-                                        {{ formatPrice(employee.shift.total_revenue) }}
+                                <td
+                                    class="px-4 py-4 text-stone-800 dark:text-slate-200"
+                                >
+                                    <p
+                                        class="font-semibold text-stone-900 dark:text-white"
+                                    >
+                                        {{
+                                            formatPrice(
+                                                employee.shift.total_revenue,
+                                            )
+                                        }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        Expected {{ formatPrice(employee.shift.expected_cash) }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        Expected
+                                        {{
+                                            formatPrice(
+                                                employee.shift.expected_cash,
+                                            )
+                                        }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        Actual {{ formatPrice(employee.shift.actual_cash) }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        Actual
+                                        {{
+                                            formatPrice(
+                                                employee.shift.actual_cash,
+                                            )
+                                        }}
                                     </p>
-                                    <p class="mt-2 inline-flex rounded-full border px-3 py-1 text-[11px] font-semibold" :class="cashDifferenceSurfaceClass(employee.shift.cash_difference)">
-                                        <span :class="cashDifferenceClass(employee.shift.cash_difference)">
-                                            Selisih {{ formatPrice(employee.shift.cash_difference) }}
+                                    <p
+                                        class="mt-2 inline-flex rounded-full border px-3 py-1 text-[11px] font-semibold"
+                                        :class="
+                                            cashDifferenceSurfaceClass(
+                                                employee.shift.cash_difference,
+                                            )
+                                        "
+                                    >
+                                        <span
+                                            :class="
+                                                cashDifferenceClass(
+                                                    employee.shift
+                                                        .cash_difference,
+                                                )
+                                            "
+                                        >
+                                            Selisih
+                                            {{
+                                                formatPrice(
+                                                    employee.shift
+                                                        .cash_difference,
+                                                )
+                                            }}
                                         </span>
                                     </p>
                                 </td>
-                                <td class="px-4 py-4 text-xs text-stone-600 dark:text-slate-300">
-                                    <p v-if="employee.attendance.missing_days > 0" class="font-semibold text-amber-300">
-                                        {{ employee.attendance.missing_days }} jadwal belum ada absensi.
+                                <td
+                                    class="px-4 py-4 text-xs text-stone-600 dark:text-slate-300"
+                                >
+                                    <p
+                                        v-if="
+                                            employee.attendance.missing_days > 0
+                                        "
+                                        class="font-semibold text-amber-300"
+                                    >
+                                        {{ employee.attendance.missing_days }}
+                                        jadwal belum ada absensi.
                                     </p>
-                                    <p v-else class="font-semibold text-emerald-300">
+                                    <p
+                                        v-else
+                                        class="font-semibold text-emerald-300"
+                                    >
                                         Tidak ada jadwal missing.
                                     </p>
                                     <p
-                                        v-for="missing in employee.attendance.missing_dates"
+                                        v-for="missing in employee.attendance
+                                            .missing_dates"
                                         :key="`${employee.id}-${missing.date}-${missing.shift_template_name}`"
                                         class="mt-1 text-stone-500 dark:text-slate-400"
                                     >
-                                        {{ formatDate(missing.date) }} • {{ missing.shift_template_name || 'Tanpa template' }}
+                                        {{ formatDate(missing.date) }} •
+                                        {{
+                                            missing.shift_template_name ||
+                                            'Tanpa template'
+                                        }}
                                     </p>
-                                    <p v-if="employee.shift.difference_count > 0" class="mt-2 text-rose-300">
-                                        {{ employee.shift.difference_count }} shift punya selisih kas.
+                                    <p
+                                        v-if="
+                                            employee.shift.difference_count > 0
+                                        "
+                                        class="mt-2 text-rose-300"
+                                    >
+                                        {{ employee.shift.difference_count }}
+                                        shift punya selisih kas.
                                     </p>
                                 </td>
                             </tr>
@@ -603,22 +795,33 @@ Laporan Absensi & Shift
             </section>
 
             <section class="grid gap-6 xl:grid-cols-2">
-                <article class="rounded-[30px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/80 p-5 shadow-2xl shadow-slate-950/40">
+                <article
+                    class="rounded-[30px] border border-stone-200 bg-white p-5 shadow-2xl shadow-slate-950/40 dark:border-white/10 dark:bg-slate-950/80"
+                >
                     <div class="flex items-center justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-black uppercase tracking-[0.24em] text-amber-300/85">
+                            <p
+                                class="text-[11px] font-black uppercase tracking-[0.24em] text-amber-300/85"
+                            >
                                 Missing Attendance
                             </p>
-                            <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
-Jadwal tanpa clock-in
+                            <h3
+                                class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                            >
+                                Jadwal tanpa clock-in
                             </h3>
                         </div>
-                        <div class="rounded-2xl border border-amber-400/15 bg-amber-500/10 p-3 text-amber-200">
+                        <div
+                            class="rounded-2xl border border-amber-400/15 bg-amber-500/10 p-3 text-amber-200"
+                        >
                             <AlertTriangle class="h-5 w-5" />
                         </div>
                     </div>
 
-                    <div v-if="missingAttendances.length === 0" class="mt-6 rounded-3xl border border-dashed border-stone-200 dark:border-white/10 bg-white/[0.02] px-5 py-8 text-sm text-stone-500 dark:text-slate-400">
+                    <div
+                        v-if="missingAttendances.length === 0"
+                        class="mt-6 rounded-3xl border border-dashed border-stone-200 bg-white/[0.02] px-5 py-8 text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
+                    >
                         Tidak ada jadwal missing pada periode ini.
                     </div>
 
@@ -626,21 +829,37 @@ Jadwal tanpa clock-in
                         <div
                             v-for="item in missingAttendances"
                             :key="item.id"
-                            class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white/[0.03] p-4"
+                            class="rounded-3xl border border-stone-200 bg-white/[0.03] p-4 dark:border-white/10"
                         >
-                            <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                            <div
+                                class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between"
+                            >
                                 <div>
-                                    <p class="font-semibold text-stone-900 dark:text-white">
+                                    <p
+                                        class="font-semibold text-stone-900 dark:text-white"
+                                    >
                                         {{ item.employee_name }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        {{ item.outlet_name }} • {{ item.shift_template_name }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        {{ item.outlet_name }} •
+                                        {{ item.shift_template_name }}
                                     </p>
                                 </div>
-                                <div class="text-right text-xs text-stone-600 dark:text-slate-300">
+                                <div
+                                    class="text-right text-xs text-stone-600 dark:text-slate-300"
+                                >
                                     <p>{{ formatDate(item.date) }}</p>
-                                    <p class="mt-1 text-stone-400 dark:text-slate-500">
-                                        {{ formatShiftTime(item.start_time, item.end_time) }}
+                                    <p
+                                        class="mt-1 text-stone-400 dark:text-slate-500"
+                                    >
+                                        {{
+                                            formatShiftTime(
+                                                item.start_time,
+                                                item.end_time,
+                                            )
+                                        }}
                                     </p>
                                 </div>
                             </div>
@@ -648,55 +867,92 @@ Jadwal tanpa clock-in
                     </div>
                 </article>
 
-                <article class="rounded-[30px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/80 p-5 shadow-2xl shadow-slate-950/40">
+                <article
+                    class="rounded-[30px] border border-stone-200 bg-white p-5 shadow-2xl shadow-slate-950/40 dark:border-white/10 dark:bg-slate-950/80"
+                >
                     <div class="flex items-center justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-black uppercase tracking-[0.24em] text-rose-300/85">
+                            <p
+                                class="text-[11px] font-black uppercase tracking-[0.24em] text-rose-300/85"
+                            >
                                 Anomali Shift
                             </p>
-                            <h3 class="mt-2 text-lg font-black text-stone-900 dark:text-white">
+                            <h3
+                                class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                            >
                                 Shift dengan selisih kas
                             </h3>
                         </div>
-                        <div class="rounded-2xl border border-rose-400/15 bg-rose-500/10 p-3 text-rose-200">
+                        <div
+                            class="rounded-2xl border border-rose-400/15 bg-rose-500/10 p-3 text-rose-200"
+                        >
                             <BarChart3 class="h-5 w-5" />
                         </div>
                     </div>
 
-                    <div v-if="shiftAnomalies.length === 0" class="mt-6 rounded-3xl border border-dashed border-stone-200 dark:border-white/10 bg-white/[0.02] px-5 py-8 text-sm text-stone-500 dark:text-slate-400">
-                        Tidak ada shift closed dengan selisih kas pada periode ini.
+                    <div
+                        v-if="shiftAnomalies.length === 0"
+                        class="mt-6 rounded-3xl border border-dashed border-stone-200 bg-white/[0.02] px-5 py-8 text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
+                    >
+                        Tidak ada shift closed dengan selisih kas pada periode
+                        ini.
                     </div>
 
                     <div v-else class="mt-6 space-y-3">
                         <div
                             v-for="item in shiftAnomalies"
                             :key="item.id"
-                            class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white/[0.03] p-4"
+                            class="rounded-3xl border border-stone-200 bg-white/[0.03] p-4 dark:border-white/10"
                         >
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                            <div
+                                class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
+                            >
                                 <div>
-                                    <p class="font-semibold text-stone-900 dark:text-white">
+                                    <p
+                                        class="font-semibold text-stone-900 dark:text-white"
+                                    >
                                         {{ item.employee_name }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        {{ item.outlet_name }} • {{ item.shift_template_name }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        {{ item.outlet_name }} •
+                                        {{ item.shift_template_name }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
+                                    <p
+                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    >
                                         {{ formatDate(item.opened_at) }}
                                     </p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-sm font-semibold text-stone-900 dark:text-white">
+                                    <p
+                                        class="text-sm font-semibold text-stone-900 dark:text-white"
+                                    >
                                         {{ formatPrice(item.total_revenue) }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        Expected {{ formatPrice(item.expected_cash) }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        Expected
+                                        {{ formatPrice(item.expected_cash) }}
                                     </p>
-                                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                        Actual {{ formatPrice(item.actual_cash) }}
+                                    <p
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        Actual
+                                        {{ formatPrice(item.actual_cash) }}
                                     </p>
-                                    <p class="mt-2 text-sm font-semibold" :class="cashDifferenceClass(item.cash_difference)">
-                                        Selisih {{ formatPrice(item.cash_difference) }}
+                                    <p
+                                        class="mt-2 text-sm font-semibold"
+                                        :class="
+                                            cashDifferenceClass(
+                                                item.cash_difference,
+                                            )
+                                        "
+                                    >
+                                        Selisih
+                                        {{ formatPrice(item.cash_difference) }}
                                     </p>
                                 </div>
                             </div>

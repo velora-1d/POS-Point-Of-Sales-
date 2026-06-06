@@ -116,6 +116,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/table-qr/regenerate', [TableQrConfigController::class, 'regenerate'])->name('settings.table-qr.regenerate');
     Route::get('/settings/notifications', [NotificationSettingController::class, 'index'])->name('settings.notifications.index');
     Route::put('/settings/notifications', [NotificationSettingController::class, 'update'])->name('settings.notifications.update');
+    Route::post('/settings/notifications/fcm-token', [NotificationSettingController::class, 'updateFcmToken'])->name('settings.notifications.fcm-token');
     Route::get('/settings/backup-security', [BackupSecurityController::class, 'index'])->name('settings.backup-security.index');
     Route::put('/settings/backup-security', [BackupSecurityController::class, 'update'])->name('settings.backup-security.update');
     Route::get('/settings/backup-security/download', [BackupSecurityController::class, 'download'])->name('settings.backup-security.download');
@@ -179,6 +180,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/tables', [TableController::class, 'store'])->name('settings.tables.store');
     Route::patch('/settings/tables/{table}', [TableController::class, 'update'])->name('settings.tables.update');
     Route::delete('/settings/tables/{table}', [TableController::class, 'destroy'])->name('settings.tables.destroy');
+    Route::post('/settings/tables/{table}/clear', [TableController::class, 'clearTable'])->name('settings.tables.clear');
 
     Route::get('/settings/membership-tiers', [MembershipTierController::class, 'index'])->name('settings.membership-tiers.index');
     Route::post('/settings/membership-tiers', [MembershipTierController::class, 'store'])->name('settings.membership-tiers.store');

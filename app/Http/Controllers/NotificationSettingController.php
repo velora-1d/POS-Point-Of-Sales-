@@ -46,4 +46,21 @@ class NotificationSettingController extends Controller
             ->route('settings.notifications.index', ['outlet_id' => $outletId])
             ->with('success', 'Setting notifikasi berhasil disimpan.');
     }
+
+    public function updateFcmToken(\Illuminate\Http\Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'token' => 'required|string',
+        ]);
+
+        $user = $request->user();
+        $user->update([
+            'fcm_token' => $request->token,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Token FCM berhasil diperbarui.',
+        ]);
+    }
 }

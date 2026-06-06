@@ -19,6 +19,7 @@ use App\Services\OrderEditService;
 use App\Services\OrderPaymentService;
 use App\Services\TableQrConfigService;
 use App\Services\ShiftService;
+use App\Services\TableManagementService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
@@ -30,6 +31,7 @@ class OrderController extends Controller
         protected OrderPaymentService $orderPaymentService,
         protected TableQrConfigService $tableQrConfigService,
         protected ShiftService $shiftService,
+        protected TableManagementService $tableManagementService,
     ) {
     }
 
@@ -116,6 +118,7 @@ class OrderController extends Controller
             'cashiers' => $cashiers,
             'success' => session('success'),
             'paymentCheckout' => session('paymentCheckout'),
+            'alertSettings' => $outletId ? $this->tableManagementService->getAlertSettings($outletId) : null,
         ]);
     }
 
@@ -152,6 +155,7 @@ class OrderController extends Controller
             'reservations' => $reservations,
             'summary' => $summary,
             'success' => session('success'),
+            'alertSettings' => $outletId ? $this->tableManagementService->getAlertSettings($outletId) : null,
         ]);
     }
 
@@ -320,6 +324,8 @@ class OrderController extends Controller
                 'public_qr_url',
                 $this->tableQrConfigService->buildPublicMenuUrlForTable($table, $qrConfig),
             );
+            // Sertakan remaining_capacity untuk tracking kapasitas
+            $table->append('remaining_capacity');
         });
 
         return $tables;

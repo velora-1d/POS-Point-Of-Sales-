@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { X, Eye, EyeOff } from '@lucide/vue';
 import {
-    mergeBillModalOpen,
-    mergeSelectedOrders,
-    mergeNeedsApproval,
-    mergeApprovalPin,
-    showMergeApprovalPin,
     canMergeSelectedOrders,
-    isMergingBills,
     closeMergeBill,
-    submitMergeBills,
     formatPrice,
     getOrderCustomerPrimary,
+    isMergingBills,
+    mergeApprovalPin,
+    mergeBillModalOpen,
+    mergeNeedsApproval,
+    mergeSelectedOrders,
+    showMergeApprovalPin,
+    submitMergeBills,
 } from '@/Composables/useOrderState';
+import { Eye, EyeOff } from '@lucide/vue';
 </script>
 
 <template>
@@ -26,18 +26,27 @@ import {
     >
         <div
             v-if="mergeBillModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-stone-900/40 dark:bg-slate-950/85 p-4 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-stone-900/40 p-4 backdrop-blur-sm dark:bg-slate-950/85"
         >
-            <div class="relative w-full max-w-2xl rounded-3xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl text-stone-900 dark:text-slate-100">
-                <div class="border-b border-stone-200 dark:border-slate-800/80 px-6 py-5">
-                    <span class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-fuchsia-600 dark:text-fuchsia-300">
+            <div
+                class="relative w-full max-w-2xl rounded-3xl border border-stone-200 bg-white text-stone-900 shadow-2xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+            >
+                <div
+                    class="border-b border-stone-200 px-6 py-5 dark:border-slate-800/80"
+                >
+                    <span
+                        class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-fuchsia-600 dark:text-fuchsia-300"
+                    >
                         Gabung Bill
                     </span>
-                    <h3 class="mt-3 text-xl font-black text-stone-900 dark:text-white">
+                    <h3
+                        class="mt-3 text-xl font-black text-stone-900 dark:text-white"
+                    >
                         Konfirmasi Gabung Bill
                     </h3>
                     <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                        Order terpilih akan digabung menjadi satu bill baru, lalu order asal diarsipkan.
+                        Order terpilih akan digabung menjadi satu bill baru,
+                        lalu order asal diarsipkan.
                     </p>
                 </div>
 
@@ -45,52 +54,78 @@ import {
                     <div
                         v-for="order in mergeSelectedOrders"
                         :key="`merge-${order.id}`"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-950/60 p-4"
+                        class="rounded-2xl border border-stone-200 bg-stone-50/50 p-4 dark:border-slate-800 dark:bg-slate-950/60"
                     >
                         <div class="flex items-center justify-between gap-3">
                             <div>
-                                <p class="text-sm font-bold text-stone-900 dark:text-white">
+                                <p
+                                    class="text-sm font-bold text-stone-900 dark:text-white"
+                                >
                                     {{ order.order_number }}
                                 </p>
-                                <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                                    {{ order.table?.name }} • {{ getOrderCustomerPrimary(order) }}
+                                <p
+                                    class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                >
+                                    {{ order.table?.name }} •
+                                    {{ getOrderCustomerPrimary(order) }}
                                 </p>
                             </div>
-                            <span class="text-xs font-extrabold text-orange-600 dark:text-orange-400">
+                            <span
+                                class="text-xs font-extrabold text-orange-600 dark:text-orange-400"
+                            >
                                 {{ formatPrice(order.total_amount) }}
                             </span>
                         </div>
                     </div>
 
-                    <div v-if="mergeNeedsApproval" class="rounded-2xl border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/5 p-4">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-500">Gabung Bill</p>
-                        <p class="mt-1 text-xs text-amber-900/80 dark:text-amber-100/75">
-                            Ada order `in_progress` di pilihan ini. Gabung bill butuh PIN supervisor atau owner.
+                    <div
+                        v-if="mergeNeedsApproval"
+                        class="rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/20 dark:bg-amber-500/5"
+                    >
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-500"
+                        >
+                            Gabung Bill
+                        </p>
+                        <p
+                            class="mt-1 text-xs text-amber-900/80 dark:text-amber-100/75"
+                        >
+                            Ada order `in_progress` di pilihan ini. Gabung bill
+                            butuh PIN supervisor atau owner.
                         </p>
                         <div class="relative mt-3">
                             <input
                                 v-model="mergeApprovalPin"
-                                :type="showMergeApprovalPin ? 'text' : 'password'"
+                                :type="
+                                    showMergeApprovalPin ? 'text' : 'password'
+                                "
                                 inputmode="numeric"
                                 placeholder="Masukkan PIN approval"
-                                class="w-full rounded-xl border border-amber-200 dark:border-amber-500/20 bg-stone-50 dark:bg-slate-950 pl-4 pr-12 py-3 text-xs text-stone-800 dark:text-slate-100 placeholder-stone-400 dark:placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                                class="w-full rounded-xl border border-amber-200 bg-stone-50 py-3 pl-4 pr-12 text-xs text-stone-800 placeholder-stone-400 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400 dark:border-amber-500/20 dark:bg-slate-950 dark:text-slate-100 dark:placeholder-slate-500"
                             />
                             <button
                                 type="button"
-                                @click="showMergeApprovalPin = !showMergeApprovalPin"
-                                class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 dark:text-slate-500 hover:text-stone-600 dark:hover:text-slate-300"
+                                @click="
+                                    showMergeApprovalPin = !showMergeApprovalPin
+                                "
+                                class="absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 hover:text-stone-600 dark:text-slate-500 dark:hover:text-slate-300"
                             >
-                                <component :is="showMergeApprovalPin ? EyeOff : Eye" class="h-4 w-4" />
+                                <component
+                                    :is="showMergeApprovalPin ? EyeOff : Eye"
+                                    class="h-4 w-4"
+                                />
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-3 border-t border-stone-200 dark:border-slate-800/80 px-6 py-4">
+                <div
+                    class="flex items-center justify-end gap-3 border-t border-stone-200 px-6 py-4 dark:border-slate-800/80"
+                >
                     <button
                         @click="closeMergeBill"
                         type="button"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-3 text-xs font-bold text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-900"
+                        class="rounded-2xl border border-stone-200 bg-white px-4 py-3 text-xs font-bold text-stone-700 hover:bg-stone-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900"
                     >
                         Batal
                     </button>
@@ -99,7 +134,11 @@ import {
                         :disabled="!canMergeSelectedOrders || isMergingBills"
                         class="rounded-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-5 py-3 text-xs font-bold text-white disabled:pointer-events-none disabled:opacity-50"
                     >
-                        {{ isMergingBills ? 'Memproses Merge...' : 'Konfirmasi Gabung Bill' }}
+                        {{
+                            isMergingBills
+                                ? 'Memproses Merge...'
+                                : 'Konfirmasi Gabung Bill'
+                        }}
                     </button>
                 </div>
             </div>

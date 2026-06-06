@@ -31,8 +31,10 @@ class OnlineOrderRepository
         return [
             'total_orders' => $orders->count(),
             'total_revenue' => (float) $orders->sum(fn (Order $order) => (float) $order->total_amount),
-            'gofood_orders' => $orders->where('external_platform', 'gofood')->count(),
-            'grabfood_orders' => $orders->where('external_platform', 'grabfood')->count(),
+            'gofood_orders' => $orders->where('source', 'gofood')->count(),
+            'grabfood_orders' => $orders->where('source', 'grabfood')->count(),
+            'shopeefood_orders' => $orders->where('source', 'shopeefood')->count(),
+            'maximfood_orders' => $orders->where('source', 'maximfood')->count(),
             'pending_orders' => $orders->whereIn('status', ['pending', 'in_progress', 'waiting_bar_approval', 'ready'])->count(),
         ];
     }
@@ -106,7 +108,7 @@ class OnlineOrderRepository
                 $startDate,
                 $endDate
             ) {
-                $query->whereIn('source', ['gofood', 'grabfood'])
+                $query->whereIn('source', ['gofood', 'grabfood', 'shopeefood', 'maximfood'])
                     ->when($scopeOutletId, fn (Builder $builder) => $builder->where('outlet_id', $scopeOutletId))
                     ->when($platform, fn (Builder $builder) => $builder->where('external_platform', $platform))
                     ->when($status, fn (Builder $builder) => $builder->where('status', $status))
@@ -158,7 +160,7 @@ class OnlineOrderRepository
 
         return Order::query()
             ->with(['customer', 'items.product', 'items.variant', 'cashier', 'outlet'])
-            ->whereIn('source', ['gofood', 'grabfood'])
+            ->whereIn('source', ['gofood', 'grabfood', 'shopeefood', 'maximfood'])
             ->when($scopeOutletId, fn (Builder $query) => $query->where('outlet_id', $scopeOutletId))
             ->when($platform, fn (Builder $query) => $query->where('external_platform', $platform))
             ->when($status, fn (Builder $query) => $query->where('status', $status))

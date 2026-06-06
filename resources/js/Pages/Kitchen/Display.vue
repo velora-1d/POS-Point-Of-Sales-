@@ -2,11 +2,20 @@
 import ChefAnimation from '@/Components/ChefAnimation.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { BellRing, CheckCheck, Flame, ScanSearch, Volume2, VolumeX } from '@lucide/vue';
+import {
+    BellRing,
+    CheckCheck,
+    Flame,
+    ScanSearch,
+    Volume2,
+    VolumeX,
+} from '@lucide/vue';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 const isDapurBusy = computed(() => {
-    return props.orders.some(order => order.status === 'pending' || order.status === 'in_progress');
+    return props.orders.some(
+        (order) => order.status === 'pending' || order.status === 'in_progress',
+    );
 });
 
 const chefState = computed(() => {
@@ -122,7 +131,11 @@ const customEstimates = ref<Record<string, number>>({});
 // State Audio Lokal
 const isAudioBlocked = ref(false);
 const localMute = ref(localStorage.getItem('kds_local_mute') === 'true');
-const localVolume = ref(localStorage.getItem('kds_local_volume') !== null ? Number(localStorage.getItem('kds_local_volume')) : 1.0);
+const localVolume = ref(
+    localStorage.getItem('kds_local_volume') !== null
+        ? Number(localStorage.getItem('kds_local_volume'))
+        : 1.0,
+);
 
 const toggleLocalMute = () => {
     localMute.value = !localMute.value;
@@ -144,7 +157,9 @@ let globalAudioCtx: AudioContext | null = null;
 const getAudioContext = (): AudioContext | null => {
     if (typeof window === 'undefined') return null;
     if (!globalAudioCtx) {
-        globalAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        globalAudioCtx = new (
+            window.AudioContext || (window as any).webkitAudioContext
+        )();
     }
     return globalAudioCtx;
 };
@@ -160,8 +175,14 @@ const initAudioAndDismiss = () => {
             const gain = audioCtx.createGain();
             osc.frequency.setValueAtTime(600, audioCtx.currentTime);
             gain.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            gain.gain.linearRampToValueAtTime(
+                0.05,
+                audioCtx.currentTime + 0.05,
+            );
+            gain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                audioCtx.currentTime + 0.2,
+            );
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
@@ -176,7 +197,9 @@ const initAudioAndDismiss = () => {
 // Helper Hash
 const getItemsHash = (order: KitchenOrderPayload): string => {
     if (!order.items) return '';
-    return order.items.map(item => `${item.id}:${item.quantity}:${item.notes || ''}`).join('|');
+    return order.items
+        .map((item) => `${item.id}:${item.quantity}:${item.notes || ''}`)
+        .join('|');
 };
 
 onMounted(() => {
@@ -189,7 +212,7 @@ onMounted(() => {
         knownOrders.value.set(o.id, {
             status: o.status,
             itemsHash: getItemsHash(o),
-            notes: o.notes
+            notes: o.notes,
         });
     });
 
@@ -205,7 +228,10 @@ onMounted(() => {
 
     // Start auto polling reload every 8 seconds
     pollInterval = window.setInterval(() => {
-        router.reload({ only: ['orders', 'history'], preserveScroll: true } as any);
+        router.reload({
+            only: ['orders', 'history'],
+            preserveScroll: true,
+        } as any);
     }, 8000);
 });
 
@@ -218,24 +244,39 @@ onBeforeUnmount(() => {
     }
 });
 
-const announceNewOrder = (order: KitchenOrderPayload, isUpdate: boolean = false) => {
+const announceNewOrder = (
+    order: KitchenOrderPayload,
+    isUpdate: boolean = false,
+) => {
     const voiceConfig = props.boardConfig.voiceSettings;
     if (voiceConfig && !voiceConfig.enabled) return;
 
-    const customer = order.customerName || (order.source === 'qr_meja' ? 'Pelanggan Meja' : 'Pelanggan');
-    const tableInfo = order.tableLabel && order.tableLabel !== 'Takeaway' ? `Meja ${order.tableLabel}` : 'Takeaway';
-    
-    const itemsText = order.items && order.items.length > 0
-        ? order.items.map(item => {
-            const qty = item.quantity || 1;
-            const cleanName = item.name ? item.name.replace(/\s*-\s*/g, ', ') : 'Menu';
-            return `${qty} porsi ${cleanName}`;
-        }).join(', ')
-        : 'Detail menu dapat dilihat di layar';
+    const customer =
+        order.customerName ||
+        (order.source === 'qr_meja' ? 'Pelanggan Meja' : 'Pelanggan');
+    const tableInfo =
+        order.tableLabel && order.tableLabel !== 'Takeaway'
+            ? `Meja ${order.tableLabel}`
+            : 'Takeaway';
 
-    const prefix = isUpdate ? 'Perhatian, ada perubahan pesanan atas nama' : 'Pesanan baru atas nama';
+    const itemsText =
+        order.items && order.items.length > 0
+            ? order.items
+                  .map((item) => {
+                      const qty = item.quantity || 1;
+                      const cleanName = item.name
+                          ? item.name.replace(/\s*-\s*/g, ', ')
+                          : 'Menu';
+                      return `${qty} porsi ${cleanName}`;
+                  })
+                  .join(', ')
+            : 'Detail menu dapat dilihat di layar';
+
+    const prefix = isUpdate
+        ? 'Perhatian, ada perubahan pesanan atas nama'
+        : 'Pesanan baru atas nama';
     const text = `${prefix} ${customer}, ${tableInfo}. Menu menjadi: ${itemsText}.`;
-    
+
     playChimeAndSpeak(text, voiceConfig);
 };
 
@@ -260,13 +301,21 @@ const processSpeechQueue = () => {
 
     // Ambil voices secara asinkron
     let voices = window.speechSynthesis.getVoices();
-    let idVoice = voices.find(v => v.lang === 'id-ID' || v.lang === 'id' || v.lang.startsWith('id-') || v.lang.startsWith('id_'));
+    let idVoice = voices.find(
+        (v) =>
+            v.lang === 'id-ID' ||
+            v.lang === 'id' ||
+            v.lang.startsWith('id-') ||
+            v.lang.startsWith('id_'),
+    );
 
     const speakNow = () => {
         const utterance = new SpeechSynthesisUtterance(nextSpeech.text);
         utterance.lang = 'id-ID';
 
-        const baseVolume = nextSpeech.voiceConfig ? Number(nextSpeech.voiceConfig.volume ?? 1.0) : 1.0;
+        const baseVolume = nextSpeech.voiceConfig
+            ? Number(nextSpeech.voiceConfig.volume ?? 1.0)
+            : 1.0;
         utterance.volume = baseVolume * localVolume.value;
 
         if (nextSpeech.voiceConfig) {
@@ -296,7 +345,13 @@ const processSpeechQueue = () => {
         const oldOnVoicesChanged = window.speechSynthesis.onvoiceschanged;
         window.speechSynthesis.onvoiceschanged = (e) => {
             voices = window.speechSynthesis.getVoices();
-            idVoice = voices.find(v => v.lang === 'id-ID' || v.lang === 'id' || v.lang.startsWith('id-') || v.lang.startsWith('id_'));
+            idVoice = voices.find(
+                (v) =>
+                    v.lang === 'id-ID' ||
+                    v.lang === 'id' ||
+                    v.lang.startsWith('id-') ||
+                    v.lang.startsWith('id_'),
+            );
             if (oldOnVoicesChanged) {
                 oldOnVoicesChanged.call(window.speechSynthesis, e);
             }
@@ -314,7 +369,7 @@ const playChimeTone = () => {
         const audio = new Audio('/notif_minpo.mp3');
         audio.volume = localVolume.value;
         audio.play().catch((err) => {
-            console.warn("Gagal memutar audio bel dapur:", err);
+            console.warn('Gagal memutar audio bel dapur:', err);
         });
     } catch (e) {
         console.error(e);
@@ -340,37 +395,39 @@ watch(
     () => props.orders,
     (newOrders) => {
         if (!newOrders) return;
-        
+
         newOrders.forEach((order) => {
             const hash = getItemsHash(order);
             const existing = knownOrders.value.get(order.id);
-            
+
             if (!existing) {
                 knownOrders.value.set(order.id, {
                     status: order.status,
                     itemsHash: hash,
-                    notes: order.notes
+                    notes: order.notes,
                 });
-                
+
                 // Hanya umumkan jika ini order baru yang masuk dengan status pending
                 if (order.status === 'pending') {
                     announceNewOrder(order, false);
                 }
             } else {
-                const isItemsChanged = existing.itemsHash !== hash || existing.notes !== order.notes;
-                
+                const isItemsChanged =
+                    existing.itemsHash !== hash ||
+                    existing.notes !== order.notes;
+
                 if (isItemsChanged) {
                     announceNewOrder(order, true);
                 }
-                
+
                 existing.status = order.status;
                 existing.itemsHash = hash;
                 existing.notes = order.notes;
             }
         });
-        
+
         // Bersihkan order yang sudah tidak aktif di board
-        const activeIds = new Set(newOrders.map(o => o.id));
+        const activeIds = new Set(newOrders.map((o) => o.id));
         for (const orderId of knownOrders.value.keys()) {
             if (!activeIds.has(orderId)) {
                 knownOrders.value.delete(orderId);
@@ -458,6 +515,10 @@ const resolveSourceLabel = (source: string) => {
             return 'GoFood';
         case 'grabfood':
             return 'GrabFood';
+        case 'shopeefood':
+            return 'ShopeeFood';
+        case 'maximfood':
+            return 'MaximFood';
         case 'kasir':
         default:
             return 'Kasir';
@@ -469,6 +530,8 @@ const resolveCustomerLabel = (order: KitchenOrderPayload) => {
     if (order.source === 'qr_meja') return 'Customer QR';
     if (order.source === 'gofood') return 'Customer GoFood';
     if (order.source === 'grabfood') return 'Customer GrabFood';
+    if (order.source === 'shopeefood') return 'Customer ShopeeFood';
+    if (order.source === 'maximfood') return 'Customer MaximFood';
 
     return 'Walk-in';
 };
@@ -810,10 +873,12 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between w-full">
+            <div
+                class="flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between"
+            >
                 <div>
                     <div
-                        class="bg-orange-500/8 mb-2 inline-flex items-center gap-2 rounded-full border border-orange-500/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
+                        class="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/8 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
                     >
                         <span
                             class="h-2 w-2 rounded-full bg-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.65)]"
@@ -834,19 +899,30 @@ const updateEstimate = (orderId: string, minutes: number) => {
                 </div>
 
                 <!-- Kontrol Volume Lokal -->
-                <div class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/45 p-3 md:self-end">
+                <div
+                    class="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/45 md:self-end"
+                >
                     <button
                         type="button"
                         @click="toggleLocalMute"
-                        class="rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition"
+                        class="rounded-xl border border-stone-200 bg-white p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
                         title="Toggle Mute Dapur"
                     >
-                        <VolumeX v-if="localMute || localVolume === 0" class="h-4.5 w-4.5 text-rose-400 animate-pulse" />
+                        <VolumeX
+                            v-if="localMute || localVolume === 0"
+                            class="h-4.5 w-4.5 animate-pulse text-rose-400"
+                        />
                         <Volume2 v-else class="h-4.5 w-4.5 text-fuchsia-400" />
                     </button>
-                    <div class="flex flex-col gap-1 w-28 md:w-36">
-                        <span class="text-[9px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
-                            Volume Lokal ({{ localMute ? 'Muted' : Math.round(localVolume * 100) + '%' }})
+                    <div class="flex w-28 flex-col gap-1 md:w-36">
+                        <span
+                            class="text-[9px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                        >
+                            Volume Lokal ({{
+                                localMute
+                                    ? 'Muted'
+                                    : Math.round(localVolume * 100) + '%'
+                            }})
                         </span>
                         <input
                             type="range"
@@ -855,7 +931,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                             step="0.1"
                             :value="localMute ? 0 : localVolume"
                             @input="handleVolumeChange"
-                            class="w-full h-1 bg-stone-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                            class="h-1 w-full cursor-pointer appearance-none rounded-lg bg-stone-100 accent-orange-500 dark:bg-slate-800"
                         />
                     </div>
                 </div>
@@ -867,28 +943,40 @@ const updateEstimate = (orderId: string, minutes: number) => {
             <div
                 v-if="isAudioBlocked"
                 @click="initAudioAndDismiss"
-                class="bg-amber-500/12 hover:bg-amber-500/18 flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-amber-500/25 px-5 py-4 text-amber-300 shadow-lg shadow-amber-950/10 transition group"
+                class="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/12 px-5 py-4 text-amber-300 shadow-lg shadow-amber-950/10 transition hover:bg-amber-500/18"
             >
                 <div class="flex items-center gap-3">
-                    <div class="rounded-xl border border-amber-500/20 bg-amber-500/10 p-2 group-hover:scale-105 transition duration-200">
-                        <VolumeX class="h-5 w-5 text-amber-400 animate-bounce" />
+                    <div
+                        class="rounded-xl border border-amber-500/20 bg-amber-500/10 p-2 transition duration-200 group-hover:scale-105"
+                    >
+                        <VolumeX
+                            class="h-5 w-5 animate-bounce text-amber-400"
+                        />
                     </div>
                     <div>
-                        <h4 class="text-sm font-bold text-stone-900 dark:text-white">
-Notifikasi Suara Terblokir Browser</h4>
-                        <p class="text-xs text-stone-500 dark:text-slate-400 mt-0.5">
-                            Silakan klik area ini untuk mengaktifkan notifikasi suara bel dan pembacaan pesanan secara otomatis.
+                        <h4
+                            class="text-sm font-bold text-stone-900 dark:text-white"
+                        >
+                            Notifikasi Suara Terblokir Browser
+                        </h4>
+                        <p
+                            class="mt-0.5 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            Silakan klik area ini untuk mengaktifkan notifikasi
+                            suara bel dan pembacaan pesanan secara otomatis.
                         </p>
                     </div>
                 </div>
-                <span class="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-black uppercase tracking-wider hover:bg-amber-500/20 transition">
+                <span
+                    class="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-black uppercase tracking-wider transition hover:bg-amber-500/20"
+                >
                     Aktifkan
                 </span>
             </div>
 
             <div
                 v-if="success"
-                class="bg-emerald-500/12 flex items-center gap-2 rounded-xl border border-emerald-500/20 px-4 py-3 text-sm font-medium text-emerald-300"
+                class="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
             >
                 <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
                 <span>{{ success }}</span>
@@ -896,14 +984,14 @@ Notifikasi Suara Terblokir Browser</h4>
 
             <div
                 v-if="error"
-                class="bg-rose-500/12 flex items-center gap-2 rounded-xl border border-rose-500/20 px-4 py-3 text-sm font-medium text-rose-300"
+                class="flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/12 px-4 py-3 text-sm font-medium text-rose-300"
             >
                 <span class="h-2 w-2 rounded-full bg-rose-400"></span>
                 <span>{{ error }}</span>
             </div>
 
             <section
-                class="rounded-[22px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/90 p-3 shadow-xl shadow-slate-950/15"
+                class="rounded-[22px] border border-stone-200 bg-stone-50 p-3 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/90"
             >
                 <div
                     class="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between"
@@ -913,12 +1001,12 @@ Notifikasi Suara Terblokir Browser</h4>
                             class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500"
                         >
                             <span
-                                class="bg-emerald-500/8 rounded-full border border-emerald-500/20 px-3 py-1 text-emerald-300"
+                                class="rounded-full border border-emerald-500/20 bg-emerald-500/8 px-3 py-1 text-emerald-300"
                             >
                                 Sinkronisasi Aktif
                             </span>
                             <span
-                                class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 px-3 py-1"
+                                class="rounded-full border border-stone-200 bg-white px-3 py-1 dark:border-slate-700/70 dark:bg-slate-950/60"
                             >
                                 Waiting Alert
                                 {{
@@ -929,7 +1017,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                 Menit
                             </span>
                             <span
-                                class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 px-3 py-1"
+                                class="rounded-full border border-stone-200 bg-white px-3 py-1 dark:border-slate-700/70 dark:bg-slate-950/60"
                             >
                                 Cooking Warning
                                 {{
@@ -945,10 +1033,14 @@ Notifikasi Suara Terblokir Browser</h4>
                             <div
                                 class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500"
                             >
-                                <span class="text-stone-600 dark:text-slate-300 font-bold">
+                                <span
+                                    class="font-bold text-stone-600 dark:text-slate-300"
+                                >
                                     Filter Kategori Menu
                                 </span>
-                                <span class="text-stone-400 dark:text-slate-500">
+                                <span
+                                    class="text-stone-400 dark:text-slate-500"
+                                >
                                     Tampilkan tiket berdasarkan kategori menu
                                 </span>
                             </div>
@@ -960,7 +1052,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                         'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                         selectedCategoryId === 'all'
                                             ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
-                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:hover:text-slate-200',
+                                            : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300 hover:text-stone-800 dark:border-slate-600 dark:border-slate-700/70 dark:bg-slate-950/60 dark:text-slate-400 dark:hover:text-slate-200',
                                     ]"
                                 >
                                     Semua Kategori
@@ -974,7 +1066,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                         'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                         selectedCategoryId === category.id
                                             ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
-                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-stone-300 dark:border-slate-600 hover:text-stone-800 dark:hover:text-slate-200',
+                                            : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300 hover:text-stone-800 dark:border-slate-600 dark:border-slate-700/70 dark:bg-slate-950/60 dark:text-slate-400 dark:hover:text-slate-200',
                                     ]"
                                 >
                                     {{ category.name }}
@@ -1012,7 +1104,9 @@ Notifikasi Suara Terblokir Browser</h4>
                             >
                                 {{ stat.value }}
                             </div>
-                            <p class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500">
+                            <p
+                                class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500"
+                            >
                                 {{ stat.hint }}
                             </p>
                         </div>
@@ -1028,7 +1122,7 @@ Notifikasi Suara Terblokir Browser</h4>
                 >
                     <div
                         :class="[
-                            'relative overflow-hidden rounded-[22px] border bg-stone-50 dark:bg-slate-900/95 p-4 shadow-xl shadow-slate-950/15',
+                            'relative overflow-hidden rounded-[22px] border bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:bg-slate-900/95',
                             lane.border,
                         ]"
                     >
@@ -1044,7 +1138,7 @@ Notifikasi Suara Terblokir Browser</h4>
                         >
                             <div class="flex items-center gap-3">
                                 <div
-                                    class="flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.04] shadow-inner shadow-slate-950/30"
+                                    class="flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200 bg-white/[0.04] shadow-inner shadow-slate-950/30 dark:border-white/10"
                                 >
                                     <component
                                         :is="lane.icon"
@@ -1052,10 +1146,14 @@ Notifikasi Suara Terblokir Browser</h4>
                                     />
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-black text-stone-900 dark:text-white">
+                                    <h3
+                                        class="text-lg font-black text-stone-900 dark:text-white"
+                                    >
                                         {{ lane.title }}
                                     </h3>
-                                    <p class="text-[11px] text-stone-500 dark:text-slate-400">
+                                    <p
+                                        class="text-[11px] text-stone-500 dark:text-slate-400"
+                                    >
                                         {{ lane.subtitle }}
                                     </p>
                                 </div>
@@ -1080,7 +1178,7 @@ Notifikasi Suara Terblokir Browser</h4>
                     </div>
 
                     <div
-                        class="bg-stone-50 dark:bg-slate-900/88 min-h-0 flex-1 overflow-hidden rounded-[22px] border border-stone-200 dark:border-slate-800/80 p-3 shadow-2xl shadow-slate-950/20"
+                        class="min-h-0 flex-1 overflow-hidden rounded-[22px] border border-stone-200 bg-stone-50 p-3 shadow-2xl shadow-slate-950/20 dark:border-slate-800/80 dark:bg-slate-900/88"
                     >
                         <div class="flex h-full min-h-0 flex-col">
                             <div
@@ -1115,7 +1213,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                             </p>
                                         </div>
                                         <div
-                                            class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/85 px-3 py-2 text-right"
+                                            class="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-2 text-right dark:border-slate-800 dark:bg-slate-900/85"
                                         >
                                             <p
                                                 class="text-[10px] uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
@@ -1157,15 +1255,15 @@ Notifikasi Suara Terblokir Browser</h4>
                                     </div>
 
                                     <div
-                                        class="space-y-2 rounded-2xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/65 p-3"
+                                        class="space-y-2 rounded-2xl border border-stone-200 bg-stone-50 p-3 dark:border-slate-800/80 dark:bg-slate-900/65"
                                     >
                                         <div
                                             v-for="item in ticket.items"
                                             :key="item.id"
-                                            class="flex items-start gap-3 border-b border-stone-200 dark:border-slate-800/70 pb-2 last:border-b-0 last:pb-0"
+                                            class="flex items-start gap-3 border-b border-stone-200 pb-2 last:border-b-0 last:pb-0 dark:border-slate-800/70"
                                         >
                                             <span
-                                                class="mt-0.5 inline-flex min-w-10 justify-center rounded-xl border border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-950 px-2 py-1 text-sm font-black text-stone-900 dark:text-white"
+                                                class="mt-0.5 inline-flex min-w-10 justify-center rounded-xl border border-stone-200 bg-stone-100 px-2 py-1 text-sm font-black text-stone-900 dark:border-slate-700/70 dark:bg-slate-950 dark:text-white"
                                             >
                                                 x{{ item.quantity }}
                                             </span>
@@ -1187,7 +1285,7 @@ Notifikasi Suara Terblokir Browser</h4>
 
                                     <div
                                         v-if="ticket.orderNotes"
-                                        class="bg-orange-500/6 mt-3 rounded-2xl border border-orange-500/15 px-3 py-2 text-[11px] leading-relaxed text-orange-100/85"
+                                        class="mt-3 rounded-2xl border border-orange-500/15 bg-orange-500/6 px-3 py-2 text-[11px] leading-relaxed text-orange-100/85"
                                     >
                                         <span
                                             class="font-bold uppercase tracking-[0.18em] text-orange-300"
@@ -1212,7 +1310,9 @@ Notifikasi Suara Terblokir Browser</h4>
                                                     order.
                                                 </p>
                                             </div>
-                                            <div class="flex flex-wrap items-center gap-2">
+                                            <div
+                                                class="flex flex-wrap items-center gap-2"
+                                            >
                                                 <button
                                                     v-for="minutes in estimatePresets"
                                                     :key="`${ticket.id}-${minutes}`"
@@ -1232,29 +1332,52 @@ Notifikasi Suara Terblokir Browser</h4>
                                                         ticket.estimatedMinutes ===
                                                         minutes
                                                             ? 'border-violet-400/30 bg-violet-500/14 text-violet-200'
-                                                            : 'border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 text-stone-500 dark:text-slate-400 hover:border-violet-400/20 hover:text-stone-800 dark:hover:text-slate-200',
+                                                            : 'border-stone-200 bg-white text-stone-500 hover:border-violet-400/20 hover:text-stone-800 dark:border-slate-700/70 dark:bg-slate-950/60 dark:text-slate-400 dark:hover:text-slate-200',
                                                     ]"
                                                 >
                                                     {{ minutes }}m
                                                 </button>
 
                                                 <!-- Input Kustom Estimasi Menit -->
-                                                <div class="flex items-center gap-1.5">
+                                                <div
+                                                    class="flex items-center gap-1.5"
+                                                >
                                                     <input
                                                         type="number"
                                                         placeholder="Kustom"
                                                         min="1"
                                                         max="180"
-                                                        v-model.number="customEstimates[ticket.id]"
-                                                        class="w-16 rounded-full border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-950/60 px-2.5 py-1 text-[11px] font-bold text-stone-600 dark:text-slate-300 placeholder:text-slate-600 focus:border-violet-500/50 focus:outline-none transition disabled:opacity-50"
-                                                        :disabled="submittingOrderId === ticket.id"
-                                                        @keydown.enter="submitCustomEstimate(ticket.id)"
+                                                        v-model.number="
+                                                            customEstimates[
+                                                                ticket.id
+                                                            ]
+                                                        "
+                                                        class="w-16 rounded-full border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-bold text-stone-600 transition placeholder:text-slate-600 focus:border-violet-500/50 focus:outline-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-300"
+                                                        :disabled="
+                                                            submittingOrderId ===
+                                                            ticket.id
+                                                        "
+                                                        @keydown.enter="
+                                                            submitCustomEstimate(
+                                                                ticket.id,
+                                                            )
+                                                        "
                                                     />
                                                     <button
                                                         type="button"
-                                                        @click="submitCustomEstimate(ticket.id)"
-                                                        :disabled="!customEstimates[ticket.id] || submittingOrderId === ticket.id"
-                                                        class="rounded-full border border-violet-500/30 bg-violet-500/12 px-2.5 py-1 text-[11px] font-bold text-violet-300 hover:bg-violet-500/20 hover:text-white transition disabled:pointer-events-none disabled:opacity-40"
+                                                        @click="
+                                                            submitCustomEstimate(
+                                                                ticket.id,
+                                                            )
+                                                        "
+                                                        :disabled="
+                                                            !customEstimates[
+                                                                ticket.id
+                                                            ] ||
+                                                            submittingOrderId ===
+                                                                ticket.id
+                                                        "
+                                                        class="rounded-full border border-violet-500/30 bg-violet-500/12 px-2.5 py-1 text-[11px] font-bold text-violet-300 transition hover:bg-violet-500/20 hover:text-white disabled:pointer-events-none disabled:opacity-40"
                                                     >
                                                         Set
                                                     </button>
@@ -1269,7 +1392,7 @@ Notifikasi Suara Terblokir Browser</h4>
                                             ticket.actionValue
                                         "
                                         type="button"
-                                        class="mt-3 flex w-full items-center justify-center rounded-2xl border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white transition duration-150 hover:border-orange-500/40 hover:bg-white dark:hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+                                        class="mt-3 flex w-full items-center justify-center rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm font-bold text-stone-900 transition duration-150 hover:border-orange-500/40 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-900"
                                         :disabled="
                                             submittingOrderId === ticket.id
                                         "
@@ -1294,12 +1417,16 @@ Notifikasi Suara Terblokir Browser</h4>
 
                                 <div
                                     v-if="lane.tickets.length === 0"
-                                    class="rounded-[22px] border border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/50 px-5 py-12 text-center"
+                                    class="rounded-[22px] border border-dashed border-stone-200 bg-white px-5 py-12 text-center dark:border-slate-800 dark:bg-slate-950/50"
                                 >
-                                    <p class="text-sm font-bold text-stone-600 dark:text-slate-300">
+                                    <p
+                                        class="text-sm font-bold text-stone-600 dark:text-slate-300"
+                                    >
                                         Lane kosong.
                                     </p>
-                                    <p class="mt-2 text-xs text-stone-400 dark:text-slate-500">
+                                    <p
+                                        class="mt-2 text-xs text-stone-400 dark:text-slate-500"
+                                    >
                                         Tidak ada tiket aktif pada status ini.
                                     </p>
                                 </div>
@@ -1310,21 +1437,25 @@ Notifikasi Suara Terblokir Browser</h4>
             </section>
 
             <section
-                class="rounded-[22px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                class="rounded-[22px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
                 <div
                     class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
                 >
                     <div>
-                        <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
-Riwayat Order Dapur
+                        <h3
+                            class="mt-1 text-lg font-black text-stone-900 dark:text-white"
+                        >
+                            Riwayat Order Dapur
                         </h3>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
                             Log transisi terbaru untuk flow kitchen dan bar.
                         </p>
                     </div>
                     <span
-                        class="rounded-full border border-stone-200 dark:border-slate-700/70 bg-white dark:bg-slate-950/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-300"
+                        class="rounded-full border border-stone-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:border-slate-700/70 dark:bg-slate-950/60 dark:text-slate-300"
                     >
                         {{ props.history.length }} log terbaru
                     </span>
@@ -1332,7 +1463,7 @@ Riwayat Order Dapur
 
                 <div
                     v-if="props.history.length === 0"
-                    class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 px-4 py-14 text-center text-xs text-stone-400 dark:text-slate-500"
+                    class="rounded-2xl border border-dashed border-stone-200 px-4 py-14 text-center text-xs text-stone-400 dark:border-slate-800 dark:text-slate-500"
                 >
                     Riwayat dapur belum ada. Log akan muncul setelah ada
                     transisi status baru.
@@ -1342,10 +1473,10 @@ Riwayat Order Dapur
                     <article
                         v-for="entry in props.history"
                         :key="entry.id"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/65 p-4"
+                        class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800/80 dark:bg-slate-950/65"
                     >
                         <div
-                            class="flex flex-col gap-3 border-b border-stone-200 dark:border-slate-800/80 pb-3 sm:flex-row sm:items-start sm:justify-between"
+                            class="flex flex-col gap-3 border-b border-stone-200 pb-3 dark:border-slate-800/80 sm:flex-row sm:items-start sm:justify-between"
                         >
                             <div>
                                 <p
@@ -1353,14 +1484,20 @@ Riwayat Order Dapur
                                 >
                                     {{ entry.orderNumber || 'Order' }}
                                 </p>
-                                <h4 class="mt-1 text-base font-black text-stone-900 dark:text-white">
+                                <h4
+                                    class="mt-1 text-base font-black text-stone-900 dark:text-white"
+                                >
                                     {{ entry.tableLabel }}
                                 </h4>
-                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
+                                <p
+                                    class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
+                                >
                                     {{ entry.customerName || 'Walk-in' }}
                                 </p>
                             </div>
-                            <p class="text-[11px] text-stone-400 dark:text-slate-500">
+                            <p
+                                class="text-[11px] text-stone-400 dark:text-slate-500"
+                            >
                                 {{ formatHistoryDateTime(entry.createdAt) }}
                             </p>
                         </div>
@@ -1380,7 +1517,9 @@ Riwayat Order Dapur
                             </span>
                         </div>
 
-                        <p class="mt-3 text-[11px] text-stone-500 dark:text-slate-400">
+                        <p
+                            class="mt-3 text-[11px] text-stone-500 dark:text-slate-400"
+                        >
                             Oleh {{ entry.changedByName }}
                         </p>
                         <p
@@ -1395,7 +1534,9 @@ Riwayat Order Dapur
         </div>
 
         <!-- Widget Koki Pojok Melayang -->
-        <div class="fixed bottom-6 right-6 z-40 max-w-[120px] rounded-[24px] border border-stone-200/80 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 p-1.5 shadow-2xl backdrop-blur transition-all duration-300 hover:scale-105">
+        <div
+            class="fixed bottom-6 right-6 z-40 max-w-[120px] rounded-[24px] border border-stone-200/80 bg-white/90 p-1.5 shadow-2xl backdrop-blur transition-all duration-300 hover:scale-105 dark:border-slate-800 dark:bg-slate-950/90"
+        >
             <ChefAnimation :state="chefState" />
         </div>
     </AuthenticatedLayout>

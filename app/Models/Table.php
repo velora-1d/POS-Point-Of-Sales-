@@ -18,6 +18,8 @@ class Table extends Model
         'outlet_id',
         'name',
         'capacity',
+        'current_guests',
+        'occupied_at',
         'qr_code',
         'barcode_tracking',
         'qr_session_token',
@@ -32,10 +34,21 @@ class Table extends Model
     {
         return [
             'capacity' => 'integer',
+            'current_guests' => 'integer',
             'position_x' => 'integer',
             'position_y' => 'integer',
             'is_active' => 'boolean',
+            'occupied_at' => 'datetime',
         ];
+    }
+
+    public function getRemainingCapacityAttribute(): ?int
+    {
+        if ($this->capacity === null) {
+            return null;
+        }
+
+        return max(0, $this->capacity - ($this->current_guests ?? 0));
     }
 
     public function outlet()

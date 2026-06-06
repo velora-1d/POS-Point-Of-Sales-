@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
 import { Eye, EyeOff } from '@lucide/vue';
+import { ref } from 'vue';
 
 const form = useForm({
     name: '',
@@ -80,7 +80,10 @@ const submit = () => {
                         @click="showPassword = !showPassword"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
-                        <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" />
+                        <component
+                            :is="showPassword ? EyeOff : Eye"
+                            class="h-4 w-4"
+                        />
                     </button>
                 </div>
 
@@ -107,7 +110,10 @@ const submit = () => {
                         @click="showConfirmPassword = !showConfirmPassword"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
-                        <component :is="showConfirmPassword ? EyeOff : Eye" class="h-4 w-4" />
+                        <component
+                            :is="showConfirmPassword ? EyeOff : Eye"
+                            class="h-4 w-4"
+                        />
                     </button>
                 </div>
 

@@ -1,20 +1,20 @@
 <script setup lang="ts">
+import AlertDialog from '@/Components/AlertDialog.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import {
-    Pencil,
-    Plus,
-    Settings,
-    Trash2,
-    Users,
-    X,
-    Home,
-    Trees,
-    QrCode,
     Download,
     ExternalLink,
+    Home,
+    Pencil,
+    Plus,
+    QrCode,
+    Settings,
+    Trash2,
+    Trees,
+    Users,
+    X,
 } from '@lucide/vue';
-import AlertDialog from '@/Components/AlertDialog.vue';
 import { computed, ref } from 'vue';
 
 interface TableRow {
@@ -56,10 +56,16 @@ const tableForm = useForm({
 
 const isModalOpen = computed(() => modalMode.value !== null);
 const isQrModalOpen = computed(() => selectedQrTable.value !== null);
-const modalTitle = computed(() => (modalMode.value === 'edit' ? 'Edit Meja' : 'Tambah Meja Baru'));
+const modalTitle = computed(() =>
+    modalMode.value === 'edit' ? 'Edit Meja' : 'Tambah Meja Baru',
+);
 
-const indoorTables = computed(() => props.tables.filter((t) => (t.category || 'indoor') === 'indoor'));
-const outdoorTables = computed(() => props.tables.filter((t) => t.category === 'outdoor'));
+const indoorTables = computed(() =>
+    props.tables.filter((t) => (t.category || 'indoor') === 'indoor'),
+);
+const outdoorTables = computed(() =>
+    props.tables.filter((t) => t.category === 'outdoor'),
+);
 
 const tableQrImage = computed(() => {
     if (!selectedQrTable.value?.public_qr_url) return '';
@@ -105,9 +111,12 @@ function submitTable() {
             onSuccess: () => closeModal(),
         });
     } else if (modalMode.value === 'edit' && selectedTable.value) {
-        tableForm.patch(route('settings.tables.update', selectedTable.value.id), {
-            onSuccess: () => closeModal(),
-        });
+        tableForm.patch(
+            route('settings.tables.update', selectedTable.value.id),
+            {
+                onSuccess: () => closeModal(),
+            },
+        );
     }
 }
 
@@ -152,11 +161,16 @@ function getStatusBadgeClass(status: string) {
                 </div>
                 <div class="flex items-end justify-between gap-4">
                     <div>
-                        <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+                        <h2
+                            class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                        >
                             Daftar Meja Outlet
                         </h2>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            Tambah, edit, atau hapus daftar meja dan kelola pembagian area serta QR Code pelanggan.
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            Tambah, edit, atau hapus daftar meja dan kelola
+                            pembagian area serta QR Code pelanggan.
                         </p>
                     </div>
                 </div>
@@ -174,20 +188,34 @@ function getStatusBadgeClass(status: string) {
             <!-- Layout 2 Kolom: Indoor vs Outdoor -->
             <div class="grid gap-6 lg:grid-cols-2">
                 <!-- Kolom Kiri: Indoor Area -->
-                <section class="rounded-[28px] border border-stone-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/20 p-6 space-y-4">
-                    <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 pb-4">
+                <section
+                    class="space-y-4 rounded-[28px] border border-stone-200 bg-white/50 p-6 dark:border-white/10 dark:bg-slate-900/20"
+                >
+                    <div
+                        class="flex items-center justify-between border-b border-stone-200 pb-4 dark:border-white/10"
+                    >
                         <div class="flex items-center gap-2.5">
-                            <div class="rounded-xl bg-orange-500/10 p-2 text-orange-500">
+                            <div
+                                class="rounded-xl bg-orange-500/10 p-2 text-orange-500"
+                            >
                                 <Home class="h-5 w-5" />
                             </div>
                             <div>
-                                <h3 class="text-lg font-black text-stone-900 dark:text-white">Area Indoor</h3>
-                                <p class="text-[11px] text-stone-500 dark:text-slate-400">{{ indoorTables.length }} meja terdaftar</p>
+                                <h3
+                                    class="text-lg font-black text-stone-900 dark:text-white"
+                                >
+                                    Area Indoor
+                                </h3>
+                                <p
+                                    class="text-[11px] text-stone-500 dark:text-slate-400"
+                                >
+                                    {{ indoorTables.length }} meja terdaftar
+                                </p>
                             </div>
                         </div>
                         <button
                             @click="openCreateModal('indoor')"
-                            class="inline-flex items-center gap-1.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 px-3 py-1.5 text-xs font-bold text-orange-500 transition"
+                            class="inline-flex items-center gap-1.5 rounded-xl bg-orange-500/10 px-3 py-1.5 text-xs font-bold text-orange-500 transition hover:bg-orange-500/20"
                         >
                             <Plus class="h-3.5 w-3.5" />
                             Tambah Meja
@@ -198,14 +226,18 @@ function getStatusBadgeClass(status: string) {
                         <article
                             v-for="table in indoorTables"
                             :key="table.id"
-                            class="group relative overflow-hidden rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900/40 p-5 transition hover:border-orange-500/30"
+                            class="group relative overflow-hidden rounded-[24px] border border-stone-200 bg-white p-5 transition hover:border-orange-500/30 dark:border-white/10 dark:bg-slate-900/40"
                         >
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500">
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
+                                    >
                                         {{ table.id.substring(0, 8) }}
                                     </p>
-                                    <h3 class="mt-1 text-xl font-black text-stone-900 dark:text-white">
+                                    <h3
+                                        class="mt-1 text-xl font-black text-stone-900 dark:text-white"
+                                    >
                                         {{ table.name }}
                                     </h3>
                                 </div>
@@ -219,17 +251,25 @@ function getStatusBadgeClass(status: string) {
                                 </span>
                             </div>
 
-                            <div class="mt-4 flex items-center gap-2 text-stone-500 dark:text-slate-400">
+                            <div
+                                class="mt-4 flex items-center gap-2 text-stone-500 dark:text-slate-400"
+                            >
                                 <Users class="h-4 w-4" />
-                                <span class="text-sm font-semibold">{{ table.capacity || '-' }} Pax</span>
+                                <span class="text-sm font-semibold"
+                                    >{{ table.capacity || '-' }} Pax</span
+                                >
                             </div>
 
-                            <div class="mt-6 flex items-center gap-2 opacity-0 transition group-hover:opacity-100">
+                            <div
+                                class="mt-6 flex items-center gap-2 opacity-0 transition group-hover:opacity-100"
+                            >
                                 <button
                                     @click="openEditModal(table)"
-                                    class="flex-1 rounded-xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 py-2 text-xs font-bold text-stone-800 dark:text-slate-200 transition hover:bg-stone-200 dark:hover:bg-white/10"
+                                    class="flex-1 rounded-xl border border-stone-200 bg-stone-100 py-2 text-xs font-bold text-stone-800 transition hover:bg-stone-200 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                                 >
-                                    <div class="flex items-center justify-center gap-1.5">
+                                    <div
+                                        class="flex items-center justify-center gap-1.5"
+                                    >
                                         <Pencil class="h-3.5 w-3.5" />
                                         Edit
                                     </div>
@@ -237,7 +277,7 @@ function getStatusBadgeClass(status: string) {
                                 <button
                                     v-if="table.public_qr_url"
                                     @click="openQrModal(table)"
-                                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 text-stone-600 dark:text-slate-300 transition hover:bg-stone-200 dark:hover:bg-white/10"
+                                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-stone-200 bg-stone-100 text-stone-600 transition hover:bg-stone-200 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
                                     title="Tampilkan QR Code"
                                 >
                                     <QrCode class="h-4 w-4" />
@@ -252,28 +292,47 @@ function getStatusBadgeClass(status: string) {
                             </div>
                         </article>
 
-                        <div v-if="!indoorTables.length" class="col-span-2 rounded-[24px] border border-dashed border-stone-200 dark:border-slate-800/80 bg-stone-50/50 p-8 text-center text-stone-500 dark:text-slate-400">
+                        <div
+                            v-if="!indoorTables.length"
+                            class="col-span-2 rounded-[24px] border border-dashed border-stone-200 bg-stone-50/50 p-8 text-center text-stone-500 dark:border-slate-800/80 dark:text-slate-400"
+                        >
                             <Home class="mx-auto mb-2 h-8 w-8 text-stone-400" />
-                            <p class="text-sm font-bold">Belum ada meja Indoor</p>
+                            <p class="text-sm font-bold">
+                                Belum ada meja Indoor
+                            </p>
                         </div>
                     </div>
                 </section>
 
                 <!-- Kolom Kanan: Outdoor Area -->
-                <section class="rounded-[28px] border border-stone-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/20 p-6 space-y-4">
-                    <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 pb-4">
+                <section
+                    class="space-y-4 rounded-[28px] border border-stone-200 bg-white/50 p-6 dark:border-white/10 dark:bg-slate-900/20"
+                >
+                    <div
+                        class="flex items-center justify-between border-b border-stone-200 pb-4 dark:border-white/10"
+                    >
                         <div class="flex items-center gap-2.5">
-                            <div class="rounded-xl bg-orange-500/10 p-2 text-orange-500">
+                            <div
+                                class="rounded-xl bg-orange-500/10 p-2 text-orange-500"
+                            >
                                 <Trees class="h-5 w-5" />
                             </div>
                             <div>
-                                <h3 class="text-lg font-black text-stone-900 dark:text-white">Area Outdoor</h3>
-                                <p class="text-[11px] text-stone-500 dark:text-slate-400">{{ outdoorTables.length }} meja terdaftar</p>
+                                <h3
+                                    class="text-lg font-black text-stone-900 dark:text-white"
+                                >
+                                    Area Outdoor
+                                </h3>
+                                <p
+                                    class="text-[11px] text-stone-500 dark:text-slate-400"
+                                >
+                                    {{ outdoorTables.length }} meja terdaftar
+                                </p>
                             </div>
                         </div>
                         <button
                             @click="openCreateModal('outdoor')"
-                            class="inline-flex items-center gap-1.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 px-3 py-1.5 text-xs font-bold text-orange-500 transition"
+                            class="inline-flex items-center gap-1.5 rounded-xl bg-orange-500/10 px-3 py-1.5 text-xs font-bold text-orange-500 transition hover:bg-orange-500/20"
                         >
                             <Plus class="h-3.5 w-3.5" />
                             Tambah Meja
@@ -284,14 +343,18 @@ function getStatusBadgeClass(status: string) {
                         <article
                             v-for="table in outdoorTables"
                             :key="table.id"
-                            class="group relative overflow-hidden rounded-[24px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900/40 p-5 transition hover:border-orange-500/30"
+                            class="group relative overflow-hidden rounded-[24px] border border-stone-200 bg-white p-5 transition hover:border-orange-500/30 dark:border-white/10 dark:bg-slate-900/40"
                         >
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500">
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
+                                    >
                                         {{ table.id.substring(0, 8) }}
                                     </p>
-                                    <h3 class="mt-1 text-xl font-black text-stone-900 dark:text-white">
+                                    <h3
+                                        class="mt-1 text-xl font-black text-stone-900 dark:text-white"
+                                    >
                                         {{ table.name }}
                                     </h3>
                                 </div>
@@ -305,17 +368,25 @@ function getStatusBadgeClass(status: string) {
                                 </span>
                             </div>
 
-                            <div class="mt-4 flex items-center gap-2 text-stone-500 dark:text-slate-400">
+                            <div
+                                class="mt-4 flex items-center gap-2 text-stone-500 dark:text-slate-400"
+                            >
                                 <Users class="h-4 w-4" />
-                                <span class="text-sm font-semibold">{{ table.capacity || '-' }} Pax</span>
+                                <span class="text-sm font-semibold"
+                                    >{{ table.capacity || '-' }} Pax</span
+                                >
                             </div>
 
-                            <div class="mt-6 flex items-center gap-2 opacity-0 transition group-hover:opacity-100">
+                            <div
+                                class="mt-6 flex items-center gap-2 opacity-0 transition group-hover:opacity-100"
+                            >
                                 <button
                                     @click="openEditModal(table)"
-                                    class="flex-1 rounded-xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 py-2 text-xs font-bold text-stone-800 dark:text-slate-200 transition hover:bg-stone-200 dark:hover:bg-white/10"
+                                    class="flex-1 rounded-xl border border-stone-200 bg-stone-100 py-2 text-xs font-bold text-stone-800 transition hover:bg-stone-200 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                                 >
-                                    <div class="flex items-center justify-center gap-1.5">
+                                    <div
+                                        class="flex items-center justify-center gap-1.5"
+                                    >
                                         <Pencil class="h-3.5 w-3.5" />
                                         Edit
                                     </div>
@@ -323,7 +394,7 @@ function getStatusBadgeClass(status: string) {
                                 <button
                                     v-if="table.public_qr_url"
                                     @click="openQrModal(table)"
-                                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 text-stone-600 dark:text-slate-300 transition hover:bg-stone-200 dark:hover:bg-white/10"
+                                    class="flex h-8 w-8 items-center justify-center rounded-xl border border-stone-200 bg-stone-100 text-stone-600 transition hover:bg-stone-200 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
                                     title="Tampilkan QR Code"
                                 >
                                     <QrCode class="h-4 w-4" />
@@ -338,9 +409,16 @@ function getStatusBadgeClass(status: string) {
                             </div>
                         </article>
 
-                        <div v-if="!outdoorTables.length" class="col-span-2 rounded-[24px] border border-dashed border-stone-200 dark:border-slate-800/80 bg-stone-50/50 p-8 text-center text-stone-500 dark:text-slate-400">
-                            <Trees class="mx-auto mb-2 h-8 w-8 text-stone-400" />
-                            <p class="text-sm font-bold">Belum ada meja Outdoor</p>
+                        <div
+                            v-if="!outdoorTables.length"
+                            class="col-span-2 rounded-[24px] border border-dashed border-stone-200 bg-stone-50/50 p-8 text-center text-stone-500 dark:border-slate-800/80 dark:text-slate-400"
+                        >
+                            <Trees
+                                class="mx-auto mb-2 h-8 w-8 text-stone-400"
+                            />
+                            <p class="text-sm font-bold">
+                                Belum ada meja Outdoor
+                            </p>
                         </div>
                     </div>
                 </section>
@@ -353,64 +431,89 @@ function getStatusBadgeClass(status: string) {
                 v-if="isModalOpen"
                 class="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/75 px-4 py-8 backdrop-blur-sm"
             >
-                <div class="w-full max-w-lg rounded-[28px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-2xl">
-                    <div class="flex items-start justify-between border-b border-stone-200 dark:border-white/10 px-6 py-5">
-                        <h3 class="text-xl font-black text-stone-900 dark:text-white">
+                <div
+                    class="w-full max-w-lg rounded-[28px] border border-stone-200 bg-white shadow-2xl dark:border-white/10 dark:bg-slate-900"
+                >
+                    <div
+                        class="flex items-start justify-between border-b border-stone-200 px-6 py-5 dark:border-white/10"
+                    >
+                        <h3
+                            class="text-xl font-black text-stone-900 dark:text-white"
+                        >
                             {{ modalTitle }}
                         </h3>
                         <button
                             @click="closeModal"
-                            class="rounded-xl p-2 text-stone-500 hover:bg-stone-100 dark:hover:bg-white/5 hover:text-white"
+                            class="rounded-xl p-2 text-stone-500 hover:bg-stone-100 hover:text-white dark:hover:bg-white/5"
                         >
                             <X class="h-5 w-5" />
                         </button>
                     </div>
 
-                    <form @submit.prevent="submitTable" class="p-6 space-y-5">
+                    <form @submit.prevent="submitTable" class="space-y-5 p-6">
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500"
+                            >
                                 Nama Meja
                             </label>
                             <input
                                 v-model="tableForm.name"
                                 type="text"
                                 placeholder="Contoh: Meja 01, VIP 1"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
                                 required
                             />
-                            <p v-if="tableForm.errors.name" class="mt-1 text-xs text-rose-400">
+                            <p
+                                v-if="tableForm.errors.name"
+                                class="mt-1 text-xs text-rose-400"
+                            >
                                 {{ tableForm.errors.name }}
                             </p>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500"
+                            >
                                 Kapasitas (Pax)
                             </label>
                             <input
                                 v-model="tableForm.capacity"
                                 type="number"
                                 min="1"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
                             />
-                            <p v-if="tableForm.errors.capacity" class="mt-1 text-xs text-rose-400">
+                            <p
+                                v-if="tableForm.errors.capacity"
+                                class="mt-1 text-xs text-rose-400"
+                            >
                                 {{ tableForm.errors.capacity }}
                             </p>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500"
+                            >
                                 Area Lokasi
                             </label>
                             <select
                                 v-model="tableForm.category"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
                                 required
                             >
-                                <option value="indoor">Indoor (Dalam Ruangan)</option>
-                                <option value="outdoor">Outdoor (Luar Ruangan)</option>
+                                <option value="indoor">
+                                    Indoor (Dalam Ruangan)
+                                </option>
+                                <option value="outdoor">
+                                    Outdoor (Luar Ruangan)
+                                </option>
                             </select>
-                            <p v-if="tableForm.errors.category" class="mt-1 text-xs text-rose-400">
+                            <p
+                                v-if="tableForm.errors.category"
+                                class="mt-1 text-xs text-rose-400"
+                            >
                                 {{ tableForm.errors.category }}
                             </p>
                         </div>
@@ -419,7 +522,7 @@ function getStatusBadgeClass(status: string) {
                             <button
                                 type="button"
                                 @click="closeModal"
-                                class="flex-1 rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 py-3 text-sm font-bold text-stone-600 dark:text-slate-300 transition hover:bg-stone-200 dark:hover:bg-white/10"
+                                class="flex-1 rounded-2xl border border-stone-200 bg-stone-100 py-3 text-sm font-bold text-stone-600 transition hover:bg-stone-200 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
                             >
                                 Batal
                             </button>
@@ -428,7 +531,11 @@ function getStatusBadgeClass(status: string) {
                                 :disabled="tableForm.processing"
                                 class="flex-1 rounded-2xl bg-orange-500 py-3 text-sm font-bold text-stone-950 transition hover:bg-orange-400 disabled:opacity-50"
                             >
-                                {{ tableForm.processing ? 'Menyimpan...' : 'Simpan Meja' }}
+                                {{
+                                    tableForm.processing
+                                        ? 'Menyimpan...'
+                                        : 'Simpan Meja'
+                                }}
                             </button>
                         </div>
                     </form>
@@ -442,9 +549,15 @@ function getStatusBadgeClass(status: string) {
                 v-if="isQrModalOpen && selectedQrTable"
                 class="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/75 px-4 py-8 backdrop-blur-sm"
             >
-                <div class="w-full max-w-sm rounded-[28px] border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-2xl p-6 space-y-5 text-center">
-                    <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 pb-3">
-                        <h3 class="text-lg font-black text-stone-900 dark:text-white">
+                <div
+                    class="w-full max-w-sm space-y-5 rounded-[28px] border border-stone-200 bg-white p-6 text-center shadow-2xl dark:border-white/10 dark:bg-slate-900"
+                >
+                    <div
+                        class="flex items-center justify-between border-b border-stone-200 pb-3 dark:border-white/10"
+                    >
+                        <h3
+                            class="text-lg font-black text-stone-900 dark:text-white"
+                        >
                             QR Code {{ selectedQrTable.name }}
                         </h3>
                         <button
@@ -455,13 +568,17 @@ function getStatusBadgeClass(status: string) {
                         </button>
                     </div>
 
-                    <div class="flex flex-col items-center justify-center bg-white rounded-2xl p-4 border border-stone-200">
+                    <div
+                        class="flex flex-col items-center justify-center rounded-2xl border border-stone-200 bg-white p-4"
+                    >
                         <img
                             :src="tableQrImage"
                             alt="Table QR Code"
                             class="h-60 w-60 object-contain"
                         />
-                        <p class="mt-3 text-[10px] text-stone-500 break-all select-all font-semibold">
+                        <p
+                            class="mt-3 select-all break-all text-[10px] font-semibold text-stone-500"
+                        >
                             {{ selectedQrTable.public_qr_url }}
                         </p>
                     </div>
@@ -480,7 +597,7 @@ function getStatusBadgeClass(status: string) {
                             v-if="selectedQrTable.public_qr_url"
                             :href="selectedQrTable.public_qr_url"
                             target="_blank"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-white/5 py-3 text-sm font-bold text-stone-800 dark:text-slate-200 transition hover:bg-stone-200 dark:hover:bg-white/10"
+                            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-200 bg-stone-100 py-3 text-sm font-bold text-stone-800 transition hover:bg-stone-200 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                         >
                             <ExternalLink class="h-4 w-4" />
                             Buka Link Menu

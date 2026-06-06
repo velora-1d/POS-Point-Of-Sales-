@@ -138,7 +138,8 @@ const getStatusLabel = (item: ExpiryItem) => {
 const openActionModal = (item: ExpiryItem) => {
     selectedItem.value = item;
     actionForm.clearErrors();
-    actionForm.action = item.status === 'expired' ? 'deactivate' : 'acknowledge';
+    actionForm.action =
+        item.status === 'expired' ? 'deactivate' : 'acknowledge';
     actionForm.notes = '';
 };
 
@@ -166,11 +167,17 @@ const submitAction = () => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+                    <h2
+                        class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                    >
                         Product Expired
                     </h2>
-                    <p class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400">
-                        Manajemen barang yang mendekati atau sudah melewati tanggal kedaluwarsa untuk memastikan kualitas produk tetap terjaga.
+                    <p
+                        class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400"
+                    >
+                        Manajemen barang yang mendekati atau sudah melewati
+                        tanggal kedaluwarsa untuk memastikan kualitas produk
+                        tetap terjaga.
                     </p>
                 </div>
             </div>
@@ -178,32 +185,50 @@ const submitAction = () => {
 
         <div class="space-y-5">
             <!-- Tab Navigation Global -->
-            <div class="flex border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-3xl">
+            <div
+                class="flex max-w-3xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+            >
                 <Link
                     :href="route('products.stock')"
-                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('products.stock') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('products.stock')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Stok Produk Jadi
                 </Link>
                 <Link
                     :href="route('products.hpp')"
-                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('products.hpp') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('products.hpp')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     HPP & Resep
                 </Link>
                 <Link
                     :href="route('stock-alerts.index')"
-                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('stock-alerts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('stock-alerts.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Alert Stok Menipis
                 </Link>
                 <Link
                     :href="route('expired-tracking.index')"
-                    class="flex-1 text-center py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('expired-tracking.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    :class="
+                        route().current('expired-tracking.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Reminder Expired
                 </Link>
@@ -227,20 +252,25 @@ const submitAction = () => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <p
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 {{ stat.label }}
                             </p>
                             <p :class="['mt-2 text-3xl font-black', stat.tone]">
                                 {{ stat.value }}
                             </p>
                         </div>
-                        <component :is="stat.icon" class="h-5 w-5 text-stone-400 dark:text-slate-500" />
+                        <component
+                            :is="stat.icon"
+                            class="h-5 w-5 text-stone-400 dark:text-slate-500"
+                        />
                     </div>
                 </article>
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
                 <form
                     class="grid gap-2 lg:grid-cols-[160px_200px_200px_110px]"
@@ -251,12 +281,12 @@ const submitAction = () => {
                         type="number"
                         min="1"
                         max="30"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                     />
 
                     <select
                         v-model="type"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                     >
                         <option value="all">Semua tipe</option>
                         <option value="product">Produk jadi</option>
@@ -265,7 +295,7 @@ const submitAction = () => {
 
                     <select
                         v-model="status"
-                        class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                     >
                         <option value="all">Semua status</option>
                         <option value="upcoming">Akan expired</option>
@@ -283,15 +313,22 @@ const submitAction = () => {
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
-                <div class="flex flex-col gap-2 border-b border-stone-200 dark:border-slate-800/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div
+                    class="flex flex-col gap-2 border-b border-stone-200 px-5 py-4 dark:border-slate-800/80 sm:flex-row sm:items-center sm:justify-between"
+                >
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                        >
                             Daftar Reminder Aktif
                         </p>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            Menampilkan {{ items.length }} reminder sesuai filter aktif.
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            Menampilkan {{ items.length }} reminder sesuai
+                            filter aktif.
                         </p>
                     </div>
                     <Link
@@ -310,20 +347,23 @@ const submitAction = () => {
                     Belum ada reminder expired sesuai filter saat ini.
                 </div>
 
-                <div
-                    v-else
-                    class="grid gap-4 px-5 py-5 xl:grid-cols-2"
-                >
+                <div v-else class="grid gap-4 px-5 py-5 xl:grid-cols-2">
                     <article
                         v-for="item in items"
                         :key="item.id"
-                        class="rounded-[24px] border border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/60 p-5"
+                        class="rounded-[24px] border border-stone-200 bg-white p-5 dark:border-slate-800/80 dark:bg-slate-950/60"
                     >
                         <div class="flex flex-col gap-4">
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                            <div
+                                class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
+                            >
                                 <div class="space-y-2">
-                                    <div class="flex flex-wrap items-center gap-2">
-                                        <h3 class="text-lg font-black text-stone-900 dark:text-white">
+                                    <div
+                                        class="flex flex-wrap items-center gap-2"
+                                    >
+                                        <h3
+                                            class="text-lg font-black text-stone-900 dark:text-white"
+                                        >
                                             {{ item.name }}
                                         </h3>
                                         <span
@@ -341,17 +381,25 @@ const submitAction = () => {
                                             Reminder aktif
                                         </span>
                                     </div>
-                                    <p class="text-xs text-stone-500 dark:text-slate-400">
-                                        {{ item.trackable_type === 'product' ? 'Produk jadi' : 'Bahan baku' }}
+                                    <p
+                                        class="text-xs text-stone-500 dark:text-slate-400"
+                                    >
+                                        {{
+                                            item.trackable_type === 'product'
+                                                ? 'Produk jadi'
+                                                : 'Bahan baku'
+                                        }}
                                         • {{ item.context }}
-                                        <span v-if="item.batch_code">• Batch {{ item.batch_code }}</span>
+                                        <span v-if="item.batch_code"
+                                            >• Batch {{ item.batch_code }}</span
+                                        >
                                     </p>
                                 </div>
 
                                 <div class="flex flex-wrap gap-2">
                                     <Link
                                         :href="route(item.route)"
-                                        class="inline-flex items-center gap-2 rounded-xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs font-bold text-stone-800 dark:text-slate-200"
+                                        class="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs font-bold text-stone-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
                                     >
                                         Buka Sumber
                                     </Link>
@@ -366,28 +414,48 @@ const submitAction = () => {
                             </div>
 
                             <div class="grid gap-3 sm:grid-cols-3">
-                                <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                                <div
+                                    class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                                >
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                    >
                                         Tanggal Expired
                                     </p>
-                                    <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
+                                    <p
+                                        class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                    >
                                         {{ formatDate(item.expired_at) }}
                                     </p>
                                 </div>
-                                <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                                <div
+                                    class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                                >
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                    >
                                         Qty Batch
                                     </p>
-                                    <p class="mt-2 text-xl font-black text-stone-900 dark:text-white">
+                                    <p
+                                        class="mt-2 text-xl font-black text-stone-900 dark:text-white"
+                                    >
                                         {{ item.quantity }}
                                     </p>
                                 </div>
-                                <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
-                                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                                <div
+                                    class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                                >
+                                    <p
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                    >
                                         Default Action
                                     </p>
-                                    <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
-                                        {{ item.expired_action || 'notify_only' }}
+                                    <p
+                                        class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                    >
+                                        {{
+                                            item.expired_action || 'notify_only'
+                                        }}
                                     </p>
                                 </div>
                             </div>
@@ -399,23 +467,29 @@ const submitAction = () => {
 
         <div
             v-if="selectedItem"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/80 px-4 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 backdrop-blur-sm dark:bg-slate-950/80"
             @click.self="closeActionModal"
         >
-            <div class="w-full max-w-xl rounded-[28px] border border-stone-200 dark:border-slate-800/80 bg-stone-100 dark:bg-slate-950 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)]">
+            <div
+                class="w-full max-w-xl rounded-[28px] border border-stone-200 bg-stone-100 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
+            >
                 <div class="flex items-start justify-between gap-4">
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                        >
                             Tindak Lanjut Expired
                         </p>
-                        <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
+                        <h3
+                            class="mt-1 text-lg font-black text-stone-900 dark:text-white"
+                        >
                             {{ selectedItem.name }}
                         </h3>
                     </div>
                     <button
                         type="button"
                         @click="closeActionModal"
-                        class="rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 text-stone-500 dark:text-slate-400"
+                        class="rounded-xl border border-stone-200 bg-white p-2 text-stone-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
                     >
                         <X class="h-4 w-4" />
                     </button>
@@ -423,33 +497,45 @@ const submitAction = () => {
 
                 <form class="mt-5 space-y-4" @submit.prevent="submitAction">
                     <div>
-                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
+                        <label
+                            class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300"
+                        >
                             Action
                         </label>
                         <select
                             v-model="actionForm.action"
-                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                         >
                             <option value="acknowledge">Acknowledge</option>
                             <option value="deactivate">Deactivate</option>
-                            <option value="dispose">Dispose / Buang stok</option>
+                            <option value="dispose">
+                                Dispose / Buang stok
+                            </option>
                             <option value="override">Override expired</option>
                         </select>
-                        <p v-if="actionForm.errors.action" class="mt-1 text-xs text-rose-300">
+                        <p
+                            v-if="actionForm.errors.action"
+                            class="mt-1 text-xs text-rose-300"
+                        >
                             {{ actionForm.errors.action }}
                         </p>
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
+                        <label
+                            class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300"
+                        >
                             Catatan
                         </label>
                         <textarea
                             v-model="actionForm.notes"
                             rows="4"
-                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                         ></textarea>
-                        <p v-if="actionForm.errors.notes" class="mt-1 text-xs text-rose-300">
+                        <p
+                            v-if="actionForm.errors.notes"
+                            class="mt-1 text-xs text-rose-300"
+                        >
                             {{ actionForm.errors.notes }}
                         </p>
                     </div>
@@ -458,16 +544,20 @@ const submitAction = () => {
                         <button
                             type="button"
                             @click="closeActionModal"
-                            class="rounded-2xl border border-stone-200 dark:border-slate-800 px-4 py-3 text-sm font-semibold text-stone-600 dark:text-slate-300"
+                            class="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-600 dark:border-slate-800 dark:text-slate-300"
                         >
                             Batal
                         </button>
                         <button
                             type="submit"
                             :disabled="actionForm.processing"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white disabled:opacity-60"
+                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 disabled:opacity-60 dark:text-white"
                         >
-                            {{ actionForm.processing ? 'Menyimpan...' : 'Simpan Tindakan' }}
+                            {{
+                                actionForm.processing
+                                    ? 'Menyimpan...'
+                                    : 'Simpan Tindakan'
+                            }}
                         </button>
                     </div>
                 </form>

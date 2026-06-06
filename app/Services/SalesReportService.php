@@ -13,7 +13,7 @@ class SalesReportService
 {
     protected const PAYMENT_METHODS = ['cash', 'qris', 'debit', 'ewallet', 'kasbon'];
 
-    protected const ORDER_SOURCES = ['kasir', 'qr_meja', 'gofood', 'grabfood'];
+    protected const ORDER_SOURCES = ['kasir', 'qr_meja', 'gofood', 'grabfood', 'shopeefood', 'maximfood'];
 
     public function __construct(
         protected SalesReportRepository $salesReportRepository,
@@ -217,6 +217,8 @@ class SalesReportService
             'qr_meja' => 'QR Meja',
             'gofood' => 'GoFood',
             'grabfood' => 'GrabFood',
+            'shopeefood' => 'ShopeeFood',
+            'maximfood' => 'MaximFood',
             default => $source,
         };
     }

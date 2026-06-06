@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { requestNotificationPermission } from '@/firebase';
 import { Head, router } from '@inertiajs/vue3';
 import {
     Minus,
@@ -10,6 +11,7 @@ import {
     Store,
     Trash2,
     UserRound,
+    Users,
     UtensilsCrossed,
     X,
 } from '@lucide/vue';
@@ -19,6 +21,7 @@ const props = defineProps<{
     table: any;
     outlet: any;
     categories: any[];
+    tableFull?: boolean;
 }>();
 
 const customerName = ref('');
@@ -26,6 +29,7 @@ const customerPhone = ref('');
 const customerEmail = ref('');
 const promoCode = ref('');
 const orderNotes = ref('');
+const guestsCount = ref(1);
 const activeCategory = ref<string>('all');
 const searchQuery = ref('');
 const cart = ref<any[]>([]);
@@ -189,17 +193,49 @@ const getProductImage = (product: any) => {
     return '/images/salmon_mentai.png';
 };
 
-const submitCheckout = () => {
+const remainingCapacity = computed(
+    () => props.table.remaining_capacity ?? null,
+);
+
+const capacityPercent = computed(() => {
+    if (!props.table.capacity || props.table.capacity <= 0) return 0;
+    const used = props.table.current_guests ?? 0;
+    return Math.min(100, Math.round((used / props.table.capacity) * 100));
+});
+
+const maxGuests = computed(() => {
+    if (remainingCapacity.value === null) return 100;
+    return Math.max(1, remainingCapacity.value);
+});
+
+const submitCheckout = async () => {
     if (
         !customerName.value ||
         !customerPhone.value ||
+        guestsCount.value < 1 ||
         cart.value.length === 0
     ) {
         return;
     }
 
+    if (
+        remainingCapacity.value !== null &&
+        guestsCount.value > remainingCapacity.value
+    ) {
+        checkoutError.value = `Sisa kapasitas meja hanya ${remainingCapacity.value} orang lagi.`;
+        return;
+    }
+
     isSubmitting.value = true;
     checkoutError.value = '';
+
+    // Request notification permission before checkout
+    let fcmToken = null;
+    try {
+        fcmToken = await requestNotificationPermission();
+    } catch (e) {
+        console.warn('Failed to get FCM token for customer:', e);
+    }
 
     router.post(
         route('self-service.checkout', props.table.qr_session_token),
@@ -207,8 +243,10 @@ const submitCheckout = () => {
             customer_name: customerName.value,
             customer_phone: customerPhone.value,
             customer_email: customerEmail.value || null,
+            guests_count: guestsCount.value,
             promo_code: promoCode.value || null,
             notes: orderNotes.value || null,
+            fcm_token: fcmToken,
             items: cart.value.map((item) => ({
                 product_id: item.product_id,
                 variant_id: item.variant_id,
@@ -220,6 +258,7 @@ const submitCheckout = () => {
         {
             onError: (errors) => {
                 checkoutError.value =
+                    errors.guests_count ||
                     errors.promo_code ||
                     errors.customer_name ||
                     errors.customer_phone ||
@@ -240,7 +279,47 @@ const submitCheckout = () => {
     <div
         class="h-screen overflow-y-auto bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),linear-gradient(180deg,#020617_0%,#0f172a_100%)] text-slate-100"
     >
+        <!-- MEJA PENUH: tampilkan halaman blokir -->
         <div
+            v-if="tableFull"
+            class="flex min-h-screen flex-col items-center justify-center px-6 text-center"
+        >
+            <div
+                class="w-full max-w-md rounded-[32px] border border-rose-500/20 bg-rose-950/30 p-10 shadow-2xl backdrop-blur"
+            >
+                <div
+                    class="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-rose-500/20 bg-rose-500/10 text-rose-300"
+                >
+                    <Users class="h-10 w-10" />
+                </div>
+                <h1 class="mt-6 text-2xl font-black text-white">
+                    Meja Sudah Penuh
+                </h1>
+                <p class="mt-3 text-sm leading-6 text-slate-400">
+                    Kapasitas
+                    <strong class="text-white">{{ table.name }}</strong> sudah
+                    penuh ({{ table.capacity }} pax). Silakan hubungi kasir atau
+                    tunggu hingga ada tempat kosong.
+                </p>
+                <div
+                    class="mt-6 rounded-2xl border border-white/10 bg-white/5 px-5 py-4"
+                >
+                    <p
+                        class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                    >
+                        Kapasitas Meja
+                    </p>
+                    <p class="mt-2 text-3xl font-black text-rose-300">
+                        {{ table.current_guests ?? 0 }} /
+                        {{ table.capacity }} Pax
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONTEN NORMAL -->
+        <div
+            v-else
             class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8"
         >
             <section
@@ -336,6 +415,48 @@ const submitCheckout = () => {
                         </div>
 
                         <div class="mt-5 grid gap-3 md:grid-cols-2">
+                            <!-- Info Kapasitas Meja -->
+                            <div
+                                v-if="table.capacity"
+                                class="flex items-center justify-between gap-4 rounded-2xl border border-emerald-500/15 bg-emerald-500/8 px-4 py-3 md:col-span-2"
+                            >
+                                <div class="flex items-center gap-2">
+                                    <Users
+                                        class="h-4 w-4 shrink-0 text-emerald-300"
+                                    />
+                                    <span
+                                        class="text-xs font-bold text-emerald-200"
+                                    >
+                                        Kapasitas {{ table.name }}
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="h-2 w-28 overflow-hidden rounded-full bg-slate-800"
+                                    >
+                                        <div
+                                            class="h-full rounded-full transition-all duration-500"
+                                            :class="
+                                                capacityPercent >= 90
+                                                    ? 'bg-rose-400'
+                                                    : capacityPercent >= 60
+                                                      ? 'bg-amber-400'
+                                                      : 'bg-emerald-400'
+                                            "
+                                            :style="{
+                                                width: capacityPercent + '%',
+                                            }"
+                                        />
+                                    </div>
+                                    <span
+                                        class="whitespace-nowrap text-xs font-black text-white"
+                                    >
+                                        {{ table.current_guests ?? 0 }} /
+                                        {{ table.capacity }} Pax
+                                    </span>
+                                </div>
+                            </div>
+
                             <input
                                 v-model="customerName"
                                 type="text"
@@ -354,6 +475,59 @@ const submitCheckout = () => {
                                 placeholder="Email (opsional)"
                                 class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 md:col-span-2"
                             />
+
+                            <!-- Input Jumlah Orang - WAJIB diisi -->
+                            <div class="md:col-span-2">
+                                <label
+                                    class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                >
+                                    Berapa orang dalam grup Anda?
+                                    <span class="text-rose-400">*</span>
+                                    <span
+                                        v-if="remainingCapacity !== null"
+                                        class="ml-2 normal-case tracking-normal text-emerald-400"
+                                    >
+                                        (sisa: {{ remainingCapacity }} tempat)
+                                    </span>
+                                </label>
+                                <div class="flex items-center gap-3">
+                                    <button
+                                        type="button"
+                                        @click="
+                                            guestsCount = Math.max(
+                                                1,
+                                                guestsCount - 1,
+                                            )
+                                        "
+                                        class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-slate-300 transition hover:border-orange-500/30 hover:text-orange-300"
+                                    >
+                                        <Minus class="h-4 w-4" />
+                                    </button>
+                                    <input
+                                        v-model.number="guestsCount"
+                                        type="number"
+                                        :min="1"
+                                        :max="maxGuests"
+                                        class="w-20 rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-center text-sm font-black text-white focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                                    />
+                                    <button
+                                        type="button"
+                                        @click="
+                                            guestsCount = Math.min(
+                                                maxGuests,
+                                                guestsCount + 1,
+                                            )
+                                        "
+                                        class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-slate-300 transition hover:border-orange-500/30 hover:text-orange-300"
+                                    >
+                                        <Plus class="h-4 w-4" />
+                                    </button>
+                                    <span class="text-sm text-slate-400"
+                                        >orang</span
+                                    >
+                                </div>
+                            </div>
+
                             <input
                                 v-model="promoCode"
                                 type="text"
@@ -693,6 +867,7 @@ const submitCheckout = () => {
                                 :disabled="
                                     !customerName ||
                                     !customerPhone ||
+                                    guestsCount < 1 ||
                                     cart.length === 0 ||
                                     isSubmitting
                                 "
@@ -712,7 +887,9 @@ const submitCheckout = () => {
                 </aside>
             </div>
         </div>
+        <!-- /KONTEN NORMAL -->
 
+        <!-- Modal Varian -->
         <Transition
             enter-active-class="transition duration-200 ease-out"
             enter-from-class="opacity-0"

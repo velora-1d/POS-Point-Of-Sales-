@@ -207,6 +207,24 @@ class KitchenDisplayService
             'ready',
             'Status platform dicatat saat bar mengubah order menjadi ready.',
         );
+
+        $this->notifyCustomer(
+            $order,
+            "Pesanan Siap!",
+            "Pesanan Anda di {$order->outlet->name} sudah siap dan akan segera diantar ke meja {$order->table->name}."
+        );
+    }
+
+    protected function notifyCustomer(Order $order, string $title, string $body): void
+    {
+        $fcmToken = $order->metadata['customer_fcm_token'] ?? null;
+        if ($fcmToken) {
+            \App\Services\FirebasePushService::sendPush($fcmToken, $title, $body, [
+                'type' => 'order_status_update',
+                'order_id' => $order->id,
+                'status' => $order->status,
+            ]);
+        }
     }
 
     protected function markAsCooking(Order $order, User $actor): void
@@ -236,6 +254,12 @@ class KitchenDisplayService
             'in_progress',
             'Status platform dicatat saat kitchen mulai memproses order.',
         );
+
+        $this->notifyCustomer(
+            $order,
+            "Sedang Dimasak 🍳",
+            "Koki kami sedang mulai memasak pesanan Anda. Mohon ditunggu ya!"
+        );
     }
 
     protected function markAsWaitingBar(Order $order, User $actor): void
@@ -256,6 +280,12 @@ class KitchenDisplayService
             'waiting_bar_approval',
             $actor,
             'Kitchen selesai memasak dan menunggu finalisasi bar.',
+        );
+
+        $this->notifyCustomer(
+            $order,
+            "Tahap Finishing ✨",
+            "Makanan Anda sudah selesai dimasak dan sedang dalam tahap penataan akhir (finishing)."
         );
 
         $this->syncOnlineOrderStatus(

@@ -24,6 +24,9 @@ class NotificationSetting extends Model
         'kasbon_due_threshold_days',
         'online_order_enabled',
         'online_order_channels',
+        'table_duration_alert_enabled',
+        'table_duration_warning_minutes',
+        'table_duration_danger_minutes',
         'metadata',
     ];
 
@@ -37,6 +40,9 @@ class NotificationSetting extends Model
             'kasbon_due_threshold_days' => 'integer',
             'online_order_enabled' => 'boolean',
             'online_order_channels' => 'array',
+            'table_duration_alert_enabled' => 'boolean',
+            'table_duration_warning_minutes' => 'integer',
+            'table_duration_danger_minutes' => 'integer',
             'metadata' => 'array',
         ];
     }

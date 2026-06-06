@@ -78,7 +78,7 @@ class NotificationSettingRepository
 
         $baseQuery = Order::query()
             ->where('outlet_id', $outletId)
-            ->whereIn('source', ['gofood', 'grabfood'])
+            ->whereIn('source', ['gofood', 'grabfood', 'shopeefood', 'maximfood'])
             ->whereDate('created_at', '>=', $today->toDateString());
 
         $activeStatuses = ['pending', 'in_progress', 'waiting_bar_approval', 'ready'];

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ReportExportService
 {
-    protected const SALES_SOURCES = ['kasir', 'qr_meja', 'gofood', 'grabfood'];
+    protected const SALES_SOURCES = ['kasir', 'qr_meja', 'gofood', 'grabfood', 'shopeefood', 'maximfood'];
 
     protected const SALES_PAYMENT_METHODS = ['cash', 'qris', 'debit', 'ewallet', 'kasbon'];
 

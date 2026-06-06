@@ -36,6 +36,8 @@ export const orderSourceEnum = pgEnum("order_source", [
   "qr_meja",
   "gofood",
   "grabfood",
+  "shopeefood",
+  "maximfood",
 ]);
 
 export const orderTypeEnum = pgEnum("order_type", [

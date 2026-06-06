@@ -26,6 +26,9 @@ class UpsertNotificationSettingRequest extends FormRequest
             'online_order_enabled' => ['nullable', 'boolean'],
             'online_order_channels' => ['nullable', 'array'],
             'online_order_channels.*' => ['string', Rule::in(['in_app', 'whatsapp', 'email'])],
+            'table_duration_alert_enabled' => ['nullable', 'boolean'],
+            'table_duration_warning_minutes' => ['required', 'integer', 'min:1'],
+            'table_duration_danger_minutes' => ['required', 'integer', 'min:1', 'gt:table_duration_warning_minutes'],
             'metadata' => ['nullable', 'array'],
         ];
     }
@@ -42,6 +45,9 @@ class UpsertNotificationSettingRequest extends FormRequest
             'kasbon_due_threshold_days' => (int) $this->input('kasbon_due_threshold_days', 3),
             'online_order_enabled' => $this->boolean('online_order_enabled', false),
             'online_order_channels' => $channels('online_order_channels'),
+            'table_duration_alert_enabled' => $this->boolean('table_duration_alert_enabled', false),
+            'table_duration_warning_minutes' => (int) $this->input('table_duration_warning_minutes', 90),
+            'table_duration_danger_minutes' => (int) $this->input('table_duration_danger_minutes', 180),
         ]);
     }
 }

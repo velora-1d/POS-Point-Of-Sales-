@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ChefAnimation from '@/Components/ChefAnimation.vue';
+import { messaging, onMessage } from '@/firebase';
 import { Head, router } from '@inertiajs/vue3';
 import {
     CheckCircle2,
@@ -11,7 +12,7 @@ import {
     RefreshCcw,
     Store,
 } from '@lucide/vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 const props = defineProps<{
     table: any;
@@ -145,6 +146,36 @@ const refreshPage = () => {
         },
     );
 };
+
+onMounted(() => {
+    if (messaging) {
+        onMessage(messaging, (payload) => {
+            console.log('Customer Foreground Message: ', payload);
+
+            // Play notification sound
+            try {
+                const audio = new Audio('/notif_minpo.mp3');
+                audio.play();
+            } catch (e) {
+                console.warn('Gagal memutar audio notifikasi:', e);
+            }
+
+            // Show native notification
+            if (Notification.permission === 'granted') {
+                new Notification(
+                    payload.notification?.title || 'Update Pesanan',
+                    {
+                        body: payload.notification?.body,
+                        icon: '/favicon.ico',
+                    },
+                );
+            }
+
+            // Refresh the page to show latest status
+            refreshPage();
+        });
+    }
+});
 </script>
 
 <template>
@@ -243,14 +274,16 @@ const refreshPage = () => {
                                 :class="[
                                     'rounded-full border px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em]',
                                     statusClass,
-                                    ]"
+                                ]"
                             >
                                 {{ orderStatusLabel }}
                             </span>
                         </div>
 
                         <!-- Animasi Koki Masak Interaktif -->
-                        <div class="mt-6 flex justify-center border-t border-white/5 pt-4">
+                        <div
+                            class="mt-6 flex justify-center border-t border-white/5 pt-4"
+                        >
                             <ChefAnimation :state="chefState" />
                         </div>
 
@@ -382,13 +415,17 @@ const refreshPage = () => {
                                 class="mt-3 flex items-center justify-between text-sm text-slate-400"
                             >
                                 <span>Diskon</span>
-                                <span>{{ formatPrice(order.discount_amount) }}</span>
+                                <span>{{
+                                    formatPrice(order.discount_amount)
+                                }}</span>
                             </div>
                             <div
                                 class="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-base font-black text-white"
                             >
                                 <span>Total final</span>
-                                <span class="text-fuchsia-200">{{ formatPrice(order.total_amount) }}</span>
+                                <span class="text-fuchsia-200">{{
+                                    formatPrice(order.total_amount)
+                                }}</span>
                             </div>
                             <div
                                 v-if="appliedPromos.length"
@@ -399,7 +436,8 @@ const refreshPage = () => {
                                     :key="promo.id"
                                     class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold text-fuchsia-100"
                                 >
-                                    {{ promo.name }} • {{ formatPrice(promo.discount_amount) }}
+                                    {{ promo.name }} •
+                                    {{ formatPrice(promo.discount_amount) }}
                                 </span>
                             </div>
                         </div>

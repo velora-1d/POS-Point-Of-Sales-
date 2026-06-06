@@ -2,8 +2,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
+    AlertTriangle,
     BadgeCheck,
     Boxes,
+    Camera,
+    Clock,
+    FlaskConical,
+    Image as ImageIcon,
     Layers3,
     Pencil,
     Plus,
@@ -11,11 +16,6 @@ import {
     Tags,
     Trash2,
     X,
-    Clock,
-    AlertTriangle,
-    FlaskConical,
-    Camera,
-    Image as ImageIcon,
 } from '@lucide/vue';
 import { computed, ref } from 'vue';
 
@@ -175,10 +175,14 @@ const summaryCards = computed(() => [
 
 const calculatedHppFromRecipe = computed(() => {
     let total = 0;
-    productForm.ingredients.forEach(item => {
-        const material = props.rawMaterials.find(m => m.id === item.raw_material_id);
+    productForm.ingredients.forEach((item) => {
+        const material = props.rawMaterials.find(
+            (m) => m.id === item.raw_material_id,
+        );
         if (material) {
-            total += Number(material.cost_per_unit || 0) * Number(item.quantity || 0);
+            total +=
+                Number(material.cost_per_unit || 0) *
+                Number(item.quantity || 0);
         }
     });
     return total;
@@ -246,32 +250,34 @@ const openEditModal = (product: ProductRow) => {
     productForm.track_stock = Boolean(product.track_stock);
     productForm.track_expired = Boolean(product.track_expired);
     productForm.expired_action = product.expired_action || 'notify_only';
-    productForm.expired_reminder_days = product.expired_reminder_days || [7, 3, 1];
+    productForm.expired_reminder_days = product.expired_reminder_days || [
+        7, 3, 1,
+    ];
     productForm.sort_order = product.sort_order || 0;
 
     // Map Variants
-    productForm.variants = (product.variants || []).map(v => ({
+    productForm.variants = (product.variants || []).map((v) => ({
         id: v.id,
         name: v.name,
         additional_price: Number(v.additional_price || 0),
-        is_active: Boolean(v.is_active)
+        is_active: Boolean(v.is_active),
     }));
 
     // Map Prices
-    productForm.prices = (product.prices || []).map(p => ({
+    productForm.prices = (product.prices || []).map((p) => ({
         id: p.id,
         tier: p.tier,
         tier_label: p.tier_label || '',
         price: Number(p.price || 0),
         happy_hour_start: p.happy_hour_start || '',
         happy_hour_end: p.happy_hour_end || '',
-        is_active: Boolean(p.is_active)
+        is_active: Boolean(p.is_active),
     }));
 
     // Map Ingredients
-    productForm.ingredients = (product.ingredients || []).map(i => ({
+    productForm.ingredients = (product.ingredients || []).map((i) => ({
         raw_material_id: i.raw_material_id,
-        quantity: Number(i.quantity || 0)
+        quantity: Number(i.quantity || 0),
     }));
 };
 
@@ -302,7 +308,7 @@ const addVariantRow = () => {
     productForm.variants.push({
         name: '',
         additional_price: 0,
-        is_active: true
+        is_active: true,
     });
 };
 
@@ -315,7 +321,7 @@ const addPriceRow = () => {
         tier: 'member',
         tier_label: '',
         price: Number(productForm.base_price),
-        is_active: true
+        is_active: true,
     });
 };
 
@@ -327,10 +333,12 @@ const addIngredientRow = () => {
     if (props.rawMaterials.length > 0) {
         productForm.ingredients.push({
             raw_material_id: props.rawMaterials[0].id,
-            quantity: 1
+            quantity: 1,
         });
     } else {
-        alert('Anda belum memiliki data bahan baku aktif. Silakan tambah bahan baku di menu Inventori terlebih dahulu.');
+        alert(
+            'Anda belum memiliki data bahan baku aktif. Silakan tambah bahan baku di menu Inventori terlebih dahulu.',
+        );
     }
 };
 
@@ -366,7 +374,9 @@ const submitProduct = () => {
 };
 
 const deleteProduct = (product: ProductRow) => {
-    if (!confirm(`Apakah Anda yakin ingin menghapus produk "${product.name}"?`)) {
+    if (
+        !confirm(`Apakah Anda yakin ingin menghapus produk "${product.name}"?`)
+    ) {
         return;
     }
 
@@ -381,12 +391,18 @@ const deleteProduct = (product: ProductRow) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div
+                class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+            >
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+                    <h2
+                        class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                    >
                         Katalog Produk & Varian
                     </h2>
-                    <p class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400">
+                    <p
+                        class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400"
+                    >
                         Pantau produk aktif, kategori, varian, dan multi harga
                         outlet dari satu halaman katalog internal.
                     </p>
@@ -394,7 +410,7 @@ const deleteProduct = (product: ProductRow) => {
                 <button
                     type="button"
                     @click="openCreateModal"
-                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white shadow-lg shadow-orange-500/20 transition hover:from-orange-600 hover:to-red-600"
+                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 shadow-lg shadow-orange-500/20 transition hover:from-orange-600 hover:to-red-600 dark:text-white"
                 >
                     <Plus class="h-4 w-4" />
                     Tambah Produk
@@ -421,28 +437,40 @@ const deleteProduct = (product: ProductRow) => {
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <p
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 {{ stat.label }}
                             </p>
                             <p :class="['mt-2 text-3xl font-black', stat.tone]">
                                 {{ stat.value }}
                             </p>
                         </div>
-                        <component :is="stat.icon" class="h-5 w-5 text-stone-400 dark:text-slate-500" />
+                        <component
+                            :is="stat.icon"
+                            class="h-5 w-5 text-stone-400 dark:text-slate-500"
+                        />
                     </div>
                 </article>
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
-                <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                <div
+                    class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between"
+                >
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                        >
                             Filter Produk
                         </p>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            Cari produk berdasarkan nama/deskripsi atau sempitkan per kategori.
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            Cari produk berdasarkan nama/deskripsi atau
+                            sempitkan per kategori.
                         </p>
                     </div>
                     <form
@@ -457,13 +485,13 @@ const deleteProduct = (product: ProductRow) => {
                                 v-model="search"
                                 type="text"
                                 placeholder="Cari nama atau deskripsi produk..."
-                                class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 py-3 pl-10 pr-10 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:text-slate-500 focus:border-orange-500 focus:outline-none"
+                                class="w-full rounded-2xl border border-stone-200 bg-stone-100 py-3 pl-10 pr-10 text-sm text-stone-900 placeholder:text-stone-400 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-slate-500 dark:text-white"
                             />
                             <button
                                 v-if="search"
                                 type="button"
                                 @click="clearSearch"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 dark:text-slate-500 transition hover:text-stone-900 dark:text-white"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 transition hover:text-stone-900 dark:text-slate-500 dark:text-white"
                             >
                                 <X class="h-4 w-4" />
                             </button>
@@ -471,7 +499,7 @@ const deleteProduct = (product: ProductRow) => {
 
                         <select
                             v-model="categoryId"
-                            class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                            class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                         >
                             <option value="">Semua kategori</option>
                             <option
@@ -494,25 +522,37 @@ const deleteProduct = (product: ProductRow) => {
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-xl shadow-slate-950/15"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
-                <div class="flex flex-col gap-2 border-b border-stone-200 dark:border-slate-800/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div
+                    class="flex flex-col gap-2 border-b border-stone-200 px-5 py-4 dark:border-slate-800/80 sm:flex-row sm:items-center sm:justify-between"
+                >
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                        >
                             Daftar Produk
                         </p>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            Menampilkan {{ products.from ?? 0 }}-{{ products.to ?? 0 }}
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            Menampilkan {{ products.from ?? 0 }}-{{
+                                products.to ?? 0
+                            }}
                             dari {{ products.total }} produk.
                         </p>
                     </div>
-                    <div class="rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-1 text-[11px] font-semibold text-stone-500 dark:text-slate-400">
+                    <div
+                        class="rounded-full border border-stone-200 bg-white px-3 py-1 text-[11px] font-semibold text-stone-500 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-400"
+                    >
                         Data katalog outlet aktif
                     </div>
                 </div>
 
                 <div v-if="products.data.length === 0" class="px-5 py-10">
-                    <div class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 px-4 py-8 text-center text-sm text-stone-400 dark:text-slate-500">
+                    <div
+                        class="rounded-2xl border border-dashed border-stone-200 bg-white px-4 py-8 text-center text-sm text-stone-400 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-500"
+                    >
                         Belum ada produk yang cocok dengan filter saat ini.
                     </div>
                 </div>
@@ -521,34 +561,51 @@ const deleteProduct = (product: ProductRow) => {
                     <article
                         v-for="product in products.data"
                         :key="product.id"
-                        class="rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 p-4"
+                        class="rounded-[24px] border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/70"
                     >
                         <div class="flex items-start justify-between gap-3">
-                            <div class="flex gap-4 min-w-0">
-                                <div class="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                            <div class="flex min-w-0 gap-4">
+                                <div
+                                    class="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border border-stone-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+                                >
                                     <img
                                         v-if="product.image_url"
                                         :src="product.image_url"
                                         class="h-full w-full object-cover"
                                         :alt="product.name"
                                     />
-                                    <div v-else class="flex h-full w-full items-center justify-center text-slate-700">
+                                    <div
+                                        v-else
+                                        class="flex h-full w-full items-center justify-center text-slate-700"
+                                    >
                                         <ImageIcon class="h-8 w-8" />
                                     </div>
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="flex flex-wrap items-center gap-2">
-                                        <h3 class="truncate text-lg font-black text-stone-900 dark:text-white">
+                                    <div
+                                        class="flex flex-wrap items-center gap-2"
+                                    >
+                                        <h3
+                                            class="truncate text-lg font-black text-stone-900 dark:text-white"
+                                        >
                                             {{ product.name }}
                                         </h3>
                                         <span
                                             class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-300"
                                         >
-                                            {{ product.category?.name || 'Tanpa kategori' }}
+                                            {{
+                                                product.category?.name ||
+                                                'Tanpa kategori'
+                                            }}
                                         </span>
                                     </div>
-                                    <p class="mt-2 text-xs leading-relaxed text-stone-500 dark:text-slate-400 line-clamp-2">
-                                        {{ product.description || 'Belum ada deskripsi produk.' }}
+                                    <p
+                                        class="mt-2 line-clamp-2 text-xs leading-relaxed text-stone-500 dark:text-slate-400"
+                                    >
+                                        {{
+                                            product.description ||
+                                            'Belum ada deskripsi produk.'
+                                        }}
                                     </p>
                                 </div>
                             </div>
@@ -556,24 +613,30 @@ const deleteProduct = (product: ProductRow) => {
                                 <span
                                     :class="[
                                         'rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-wider',
-                                        product.is_available && product.is_active
+                                        product.is_available &&
+                                        product.is_active
                                             ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
                                             : 'border-rose-500/20 bg-rose-500/10 text-rose-300',
                                     ]"
                                 >
-                                    {{ product.is_available && product.is_active ? 'aktif' : 'off' }}
+                                    {{
+                                        product.is_available &&
+                                        product.is_active
+                                            ? 'aktif'
+                                            : 'off'
+                                    }}
                                 </span>
                                 <div class="flex gap-1">
                                     <button
                                         @click="openEditModal(product)"
-                                        class="rounded-lg border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1.5 text-stone-500 dark:text-slate-400 transition hover:border-sky-500/50 hover:text-sky-400"
+                                        class="rounded-lg border border-stone-200 bg-white p-1.5 text-stone-500 transition hover:border-sky-500/50 hover:text-sky-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
                                         title="Edit Produk"
                                     >
                                         <Pencil class="h-3.5 w-3.5" />
                                     </button>
                                     <button
                                         @click="deleteProduct(product)"
-                                        class="rounded-lg border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1.5 text-stone-500 dark:text-slate-400 transition hover:border-rose-500/50 hover:text-rose-400"
+                                        class="rounded-lg border border-stone-200 bg-white p-1.5 text-stone-500 transition hover:border-rose-500/50 hover:text-rose-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
                                         title="Hapus Produk"
                                     >
                                         <Trash2 class="h-3.5 w-3.5" />
@@ -583,82 +646,153 @@ const deleteProduct = (product: ProductRow) => {
                         </div>
 
                         <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
+                            <div
+                                class="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                            >
+                                <p
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                >
                                     Harga Dasar
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
+                                <p
+                                    class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                >
                                     {{ formatPrice(product.base_price) }}
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
+                            <div
+                                class="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                            >
+                                <p
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                >
                                     HPP
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
+                                <p
+                                    class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                >
                                     {{ formatPrice(product.hpp) }}
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-3 py-3">
-                                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500">
+                            <div
+                                class="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                            >
+                                <p
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                >
                                     Status Teknis
                                 </p>
-                                <p class="mt-2 text-sm font-bold text-stone-900 dark:text-white">
-                                    {{ product.track_stock ? 'Track stock' : 'No stock' }}
+                                <p
+                                    class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                >
+                                    {{
+                                        product.track_stock
+                                            ? 'Track stock'
+                                            : 'No stock'
+                                    }}
                                 </p>
-                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
-                                    {{ product.track_expired ? 'Track expired' : 'No expired' }}
+                                <p
+                                    class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
+                                >
+                                    {{
+                                        product.track_expired
+                                            ? 'Track expired'
+                                            : 'No expired'
+                                    }}
                                 </p>
                             </div>
                         </div>
 
                         <div class="mt-4 grid gap-4 lg:grid-cols-2">
-                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
-                                <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-bold text-stone-900 dark:text-white">
+                            <div
+                                class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                            >
+                                <div
+                                    class="flex items-center justify-between gap-3"
+                                >
+                                    <p
+                                        class="text-sm font-bold text-stone-900 dark:text-white"
+                                    >
                                         Varian Produk
                                     </p>
-                                    <span class="rounded-full border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-300">
+                                    <span
+                                        class="rounded-full border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-300"
+                                    >
                                         {{ product.active_variants_count || 0 }}
                                     </span>
                                 </div>
-                                <div v-if="product.variants && product.variants.length > 0" class="mt-3 space-y-2">
+                                <div
+                                    v-if="
+                                        product.variants &&
+                                        product.variants.length > 0
+                                    "
+                                    class="mt-3 space-y-2"
+                                >
                                     <div
                                         v-for="variant in product.variants"
                                         :key="variant.id"
-                                        class="flex items-center justify-between rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-2 text-[11px]"
+                                        class="flex items-center justify-between rounded-xl border border-stone-200 bg-white px-3 py-2 text-[11px] dark:border-slate-800 dark:bg-slate-950/70"
                                     >
-                                        <span class="font-semibold text-stone-800 dark:text-slate-200">
+                                        <span
+                                            class="font-semibold text-stone-800 dark:text-slate-200"
+                                        >
                                             {{ variant.name }}
                                         </span>
                                         <span class="font-bold text-sky-300">
-                                            +{{ formatPrice(variant.additional_price) }}
+                                            +{{
+                                                formatPrice(
+                                                    variant.additional_price,
+                                                )
+                                            }}
                                         </span>
                                     </div>
                                 </div>
-                                <p v-else class="mt-3 text-[11px] text-stone-400 dark:text-slate-500">
+                                <p
+                                    v-else
+                                    class="mt-3 text-[11px] text-stone-400 dark:text-slate-500"
+                                >
                                     Produk ini belum punya varian aktif.
                                 </p>
                             </div>
 
-                            <div class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3">
-                                <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-bold text-stone-900 dark:text-white">
+                            <div
+                                class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+                            >
+                                <div
+                                    class="flex items-center justify-between gap-3"
+                                >
+                                    <p
+                                        class="text-sm font-bold text-stone-900 dark:text-white"
+                                    >
                                         Multi Harga
                                     </p>
-                                    <span class="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                                    <span
+                                        class="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-300"
+                                    >
                                         {{ product.active_prices_count || 0 }}
                                     </span>
                                 </div>
-                                <div v-if="product.prices && product.prices.length > 0" class="mt-3 space-y-2">
+                                <div
+                                    v-if="
+                                        product.prices &&
+                                        product.prices.length > 0
+                                    "
+                                    class="mt-3 space-y-2"
+                                >
                                     <div
                                         v-for="price in product.prices"
                                         :key="price.id"
-                                        class="flex items-center justify-between rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-3 py-2 text-[11px]"
+                                        class="flex items-center justify-between rounded-xl border border-stone-200 bg-white px-3 py-2 text-[11px] dark:border-slate-800 dark:bg-slate-950/70"
                                     >
                                         <div>
-                                            <p class="font-semibold text-stone-800 dark:text-slate-200">
-                                                {{ price.tier_label || price.tier || 'Harga' }}
+                                            <p
+                                                class="font-semibold text-stone-800 dark:text-slate-200"
+                                            >
+                                                {{
+                                                    price.tier_label ||
+                                                    price.tier ||
+                                                    'Harga'
+                                                }}
                                             </p>
                                         </div>
                                         <span class="font-bold text-amber-300">
@@ -666,7 +800,10 @@ const deleteProduct = (product: ProductRow) => {
                                         </span>
                                     </div>
                                 </div>
-                                <p v-else class="mt-3 text-[11px] text-stone-400 dark:text-slate-500">
+                                <p
+                                    v-else
+                                    class="mt-3 text-[11px] text-stone-400 dark:text-slate-500"
+                                >
                                     Produk ini baru memakai satu harga dasar.
                                 </p>
                             </div>
@@ -676,7 +813,7 @@ const deleteProduct = (product: ProductRow) => {
 
                 <div
                     v-if="products.links.length > 3"
-                    class="flex flex-wrap items-center justify-center gap-2 border-t border-stone-200 dark:border-slate-800/80 px-5 py-4"
+                    class="flex flex-wrap items-center justify-center gap-2 border-t border-stone-200 px-5 py-4 dark:border-slate-800/80"
                 >
                     <template
                         v-for="link in products.links"
@@ -690,15 +827,17 @@ const deleteProduct = (product: ProductRow) => {
                                 'rounded-xl border px-3 py-2 text-xs font-bold transition',
                                 link.active
                                     ? 'border-orange-500/20 bg-orange-500/10 text-orange-300'
-                                    : 'border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 text-stone-600 dark:text-slate-300 hover:border-stone-200 dark:border-slate-700',
+                                    : 'border-stone-200 bg-stone-100 text-stone-600 hover:border-stone-200 dark:border-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300',
                             ]"
-                            v-html="link.label"
-                        />
+                        >
+                            <span v-html="link.label"></span>
+                        </Link>
                         <span
                             v-else
-                            class="rounded-xl border border-slate-900 bg-white dark:bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-600"
-                            v-html="link.label"
-                        />
+                            class="rounded-xl border border-slate-900 bg-white px-3 py-2 text-xs font-bold text-slate-600 dark:bg-slate-950/50"
+                        >
+                            <span v-html="link.label"></span>
+                        </span>
                     </template>
                 </div>
             </section>
@@ -707,63 +846,98 @@ const deleteProduct = (product: ProductRow) => {
         <!-- Create/Edit Modal -->
         <div
             v-if="isProductModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/80 px-4 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 backdrop-blur-sm dark:bg-slate-950/80"
             @click.self="closeProductModal"
         >
-            <div class="w-full max-w-4xl max-h-[90vh] flex flex-col rounded-[28px] border border-stone-200 dark:border-slate-800/80 bg-stone-100 dark:bg-slate-950 shadow-[0_30px_120px_rgba(2,6,23,0.7)]">
+            <div
+                class="flex max-h-[90vh] w-full max-w-4xl flex-col rounded-[28px] border border-stone-200 bg-stone-100 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
+            >
                 <!-- Header Modal -->
-                <div class="flex items-start justify-between gap-4 p-5 border-b border-stone-200 dark:border-slate-800/80">
+                <div
+                    class="flex items-start justify-between gap-4 border-b border-stone-200 p-5 dark:border-slate-800/80"
+                >
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">
-                            {{ editingProduct ? 'Edit Produk' : 'Tambah Produk Baru' }}
+                        <p
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                        >
+                            {{
+                                editingProduct
+                                    ? 'Edit Produk'
+                                    : 'Tambah Produk Baru'
+                            }}
                         </p>
-                        <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
-                            {{ editingProduct ? editingProduct.name : 'Data produk outlet' }}
+                        <h3
+                            class="mt-1 text-lg font-black text-stone-900 dark:text-white"
+                        >
+                            {{
+                                editingProduct
+                                    ? editingProduct.name
+                                    : 'Data produk outlet'
+                            }}
                         </h3>
                     </div>
                     <button
                         type="button"
                         @click="closeProductModal"
-                        class="rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 text-stone-500 dark:text-slate-400"
+                        class="rounded-xl border border-stone-200 bg-white p-2 text-stone-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
                     >
                         <X class="h-4 w-4" />
                     </button>
                 </div>
 
                 <!-- Tabs -->
-                <div class="flex border-b border-stone-200 dark:border-slate-800/80 px-5 overflow-x-auto no-scrollbar">
+                <div
+                    class="no-scrollbar flex overflow-x-auto border-b border-stone-200 px-5 dark:border-slate-800/80"
+                >
                     <button
                         v-for="tab in [
                             { id: 'basic', label: 'Info Dasar', icon: Boxes },
-                            { id: 'variants', label: 'Varian Produk', icon: Layers3 },
+                            {
+                                id: 'variants',
+                                label: 'Varian Produk',
+                                icon: Layers3,
+                            },
                             { id: 'prices', label: 'Multi Harga', icon: Tags },
-                            { id: 'recipe', label: 'Resep / Bahan Baku', icon: FlaskConical },
+                            {
+                                id: 'recipe',
+                                label: 'Resep / Bahan Baku',
+                                icon: FlaskConical,
+                            },
                         ]"
                         :key="tab.id"
                         @click="activeTab = tab.id as any"
                         :class="[
-                            'flex items-center gap-2 border-b-2 px-4 py-4 text-xs font-bold transition whitespace-nowrap',
+                            'flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-4 text-xs font-bold transition',
                             activeTab === tab.id
                                 ? 'border-orange-500 text-orange-500'
-                                : 'border-transparent text-stone-400 dark:text-slate-500 hover:text-stone-600 dark:text-slate-300'
+                                : 'border-transparent text-stone-400 hover:text-stone-600 dark:text-slate-300 dark:text-slate-500',
                         ]"
                     >
                         <component :is="tab.icon" class="h-4 w-4" />
                         {{ tab.label }}
                         <span
-                            v-if="tab.id === 'variants' && productForm.variants.length > 0"
+                            v-if="
+                                tab.id === 'variants' &&
+                                productForm.variants.length > 0
+                            "
                             class="rounded-full bg-orange-500/20 px-1.5 py-0.5 text-[10px] text-orange-500"
                         >
                             {{ productForm.variants.length }}
                         </span>
                         <span
-                            v-if="tab.id === 'prices' && productForm.prices.length > 0"
+                            v-if="
+                                tab.id === 'prices' &&
+                                productForm.prices.length > 0
+                            "
                             class="rounded-full bg-orange-500/20 px-1.5 py-0.5 text-[10px] text-orange-500"
                         >
                             {{ productForm.prices.length }}
                         </span>
                         <span
-                            v-if="tab.id === 'recipe' && productForm.ingredients.length > 0"
+                            v-if="
+                                tab.id === 'recipe' &&
+                                productForm.ingredients.length > 0
+                            "
                             class="rounded-full bg-orange-500/20 px-1.5 py-0.5 text-[10px] text-orange-500"
                         >
                             {{ productForm.ingredients.length }}
@@ -772,18 +946,22 @@ const deleteProduct = (product: ProductRow) => {
                 </div>
 
                 <!-- Modal Body -->
-                <div class="flex-1 overflow-y-auto p-5 custom-scrollbar">
+                <div class="custom-scrollbar flex-1 overflow-y-auto p-5">
                     <form @submit.prevent="submitProduct" id="productForm">
                         <!-- Basic Info Tab -->
                         <div v-show="activeTab === 'basic'" class="space-y-6">
                             <div class="flex flex-col gap-6 md:flex-row">
                                 <!-- Image Upload Section -->
-                                <div class="flex flex-col items-center gap-3 md:w-48">
-                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500 w-full text-center">
+                                <div
+                                    class="flex flex-col items-center gap-3 md:w-48"
+                                >
+                                    <label
+                                        class="block w-full text-center text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                    >
                                         Gambar Produk
                                     </label>
                                     <div
-                                        class="group relative h-40 w-40 overflow-hidden rounded-3xl border-2 border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition hover:border-orange-500/50"
+                                        class="group relative h-40 w-40 overflow-hidden rounded-3xl border-2 border-dashed border-stone-200 bg-white transition hover:border-orange-500/50 dark:border-slate-800 dark:bg-slate-900"
                                         @click="openFilePicker"
                                     >
                                         <img
@@ -791,12 +969,22 @@ const deleteProduct = (product: ProductRow) => {
                                             :src="imagePreview"
                                             class="h-full w-full object-cover"
                                         />
-                                        <div v-else class="flex h-full w-full flex-col items-center justify-center gap-2 text-slate-600">
+                                        <div
+                                            v-else
+                                            class="flex h-full w-full flex-col items-center justify-center gap-2 text-slate-600"
+                                        >
                                             <Camera class="h-8 w-8" />
-                                            <span class="text-[10px] font-bold uppercase">Klik Upload</span>
+                                            <span
+                                                class="text-[10px] font-bold uppercase"
+                                                >Klik Upload</span
+                                            >
                                         </div>
-                                        <div class="absolute inset-0 flex items-center justify-center bg-white dark:bg-slate-950/40 opacity-0 transition group-hover:opacity-100 cursor-pointer">
-                                            <Camera class="h-6 w-6 text-stone-900 dark:text-white" />
+                                        <div
+                                            class="absolute inset-0 flex cursor-pointer items-center justify-center bg-white opacity-0 transition group-hover:opacity-100 dark:bg-slate-950/40"
+                                        >
+                                            <Camera
+                                                class="h-6 w-6 text-stone-900 dark:text-white"
+                                            />
                                         </div>
                                     </div>
                                     <input
@@ -806,39 +994,53 @@ const deleteProduct = (product: ProductRow) => {
                                         accept="image/*"
                                         @change="onFileChange"
                                     />
-                                    <p class="text-center text-[10px] text-stone-400 dark:text-slate-500">
+                                    <p
+                                        class="text-center text-[10px] text-stone-400 dark:text-slate-500"
+                                    >
                                         Format: JPG, PNG, WebP (Max 2MB)
                                     </p>
-                                    <p v-if="productForm.errors.image" class="text-center text-[10px] text-rose-300">
+                                    <p
+                                        v-if="productForm.errors.image"
+                                        class="text-center text-[10px] text-rose-300"
+                                    >
                                         {{ productForm.errors.image }}
                                     </p>
                                 </div>
 
-                                <div class="flex-1 grid gap-4 md:grid-cols-2">
+                                <div class="grid flex-1 gap-4 md:grid-cols-2">
                                     <div>
-                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
+                                        <label
+                                            class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300"
+                                        >
                                             Nama Produk
                                         </label>
                                         <input
                                             v-model="productForm.name"
                                             type="text"
                                             placeholder="Masukkan nama produk..."
-                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                         />
-                                        <p v-if="productForm.errors.name" class="mt-1 text-xs text-rose-300">
+                                        <p
+                                            v-if="productForm.errors.name"
+                                            class="mt-1 text-xs text-rose-300"
+                                        >
                                             {{ productForm.errors.name }}
                                         </p>
                                     </div>
 
                                     <div>
-                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
+                                        <label
+                                            class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300"
+                                        >
                                             Kategori
                                         </label>
                                         <select
                                             v-model="productForm.category_id"
-                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                         >
-                                            <option value="" disabled>Pilih kategori...</option>
+                                            <option value="" disabled>
+                                                Pilih kategori...
+                                            </option>
                                             <option
                                                 v-for="category in categories"
                                                 :key="category.id"
@@ -847,43 +1049,62 @@ const deleteProduct = (product: ProductRow) => {
                                                 {{ category.name }}
                                             </option>
                                         </select>
-                                        <p v-if="productForm.errors.category_id" class="mt-1 text-xs text-rose-300">
+                                        <p
+                                            v-if="
+                                                productForm.errors.category_id
+                                            "
+                                            class="mt-1 text-xs text-rose-300"
+                                        >
                                             {{ productForm.errors.category_id }}
                                         </p>
                                     </div>
 
                                     <div class="md:col-span-2">
-                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
+                                        <label
+                                            class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300"
+                                        >
                                             Deskripsi (Opsional)
                                         </label>
                                         <textarea
                                             v-model="productForm.description"
                                             rows="2"
                                             placeholder="Masukkan deskripsi produk..."
-                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                         ></textarea>
-                                        <p v-if="productForm.errors.description" class="mt-1 text-xs text-rose-300">
+                                        <p
+                                            v-if="
+                                                productForm.errors.description
+                                            "
+                                            class="mt-1 text-xs text-rose-300"
+                                        >
                                             {{ productForm.errors.description }}
                                         </p>
                                     </div>
 
                                     <div>
-                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
+                                        <label
+                                            class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300"
+                                        >
                                             Harga Dasar
                                         </label>
                                         <input
                                             v-model="productForm.base_price"
                                             type="number"
                                             min="0"
-                                            class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none font-bold text-orange-400"
+                                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm font-bold text-orange-400 text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                         />
-                                        <p v-if="productForm.errors.base_price" class="mt-1 text-xs text-rose-300">
+                                        <p
+                                            v-if="productForm.errors.base_price"
+                                            class="mt-1 text-xs text-rose-300"
+                                        >
                                             {{ productForm.errors.base_price }}
                                         </p>
                                     </div>
 
                                     <div>
-                                        <label class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300">
+                                        <label
+                                            class="mb-2 block text-xs font-semibold text-stone-600 dark:text-slate-300"
+                                        >
                                             HPP Estimasi (Manual)
                                         </label>
                                         <div class="relative">
@@ -891,10 +1112,13 @@ const deleteProduct = (product: ProductRow) => {
                                                 v-model="productForm.hpp"
                                                 type="number"
                                                 min="0"
-                                                class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                             />
                                             <button
-                                                v-if="productForm.ingredients.length > 0"
+                                                v-if="
+                                                    productForm.ingredients
+                                                        .length > 0
+                                                "
                                                 type="button"
                                                 @click="applyCalculatedHpp"
                                                 class="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg bg-orange-500/20 px-2 py-1 text-[10px] font-bold text-orange-400"
@@ -902,67 +1126,93 @@ const deleteProduct = (product: ProductRow) => {
                                                 Gunakan Hitungan Resep
                                             </button>
                                         </div>
-                                        <p v-if="productForm.errors.hpp" class="mt-1 text-xs text-rose-300">
+                                        <p
+                                            v-if="productForm.errors.hpp"
+                                            class="mt-1 text-xs text-rose-300"
+                                        >
                                             {{ productForm.errors.hpp }}
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-                                <label class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-800 dark:text-slate-200 cursor-pointer">
+                            <div
+                                class="grid gap-3 sm:grid-cols-2 md:grid-cols-3"
+                            >
+                                <label
+                                    class="flex cursor-pointer items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[11px] text-stone-800 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+                                >
                                     <input
                                         v-model="productForm.is_available"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                        class="h-4 w-4 rounded border-stone-200 bg-stone-100 text-orange-500 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-950"
                                     />
                                     Siap Dijual
                                 </label>
 
-                                <label class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-800 dark:text-slate-200 cursor-pointer">
+                                <label
+                                    class="flex cursor-pointer items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[11px] text-stone-800 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+                                >
                                     <input
                                         v-model="productForm.is_active"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                        class="h-4 w-4 rounded border-stone-200 bg-stone-100 text-orange-500 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-950"
                                     />
                                     Produk Aktif
                                 </label>
 
-                                <label class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-800 dark:text-slate-200 cursor-pointer">
+                                <label
+                                    class="flex cursor-pointer items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[11px] text-stone-800 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+                                >
                                     <input
                                         v-model="productForm.track_stock"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                        class="h-4 w-4 rounded border-stone-200 bg-stone-100 text-orange-500 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-950"
                                     />
                                     Track Stok
                                 </label>
 
-                                <label class="flex items-center gap-3 rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-800 dark:text-slate-200 cursor-pointer">
+                                <label
+                                    class="flex cursor-pointer items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[11px] text-stone-800 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+                                >
                                     <input
                                         v-model="productForm.track_expired"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-orange-500 focus:ring-orange-500"
+                                        class="h-4 w-4 rounded border-stone-200 bg-stone-100 text-orange-500 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-950"
                                     />
                                     Track Expired
                                 </label>
 
-                                <div v-if="productForm.track_expired" class="sm:col-span-2">
+                                <div
+                                    v-if="productForm.track_expired"
+                                    class="sm:col-span-2"
+                                >
                                     <select
                                         v-model="productForm.expired_action"
-                                        class="w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-[11px] text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[11px] text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                     >
-                                        <option value="notify_only">Notify only (Hanya peringatan)</option>
-                                        <option value="auto_deactivate">Auto deactivate (Otomatis off)</option>
+                                        <option value="notify_only">
+                                            Notify only (Hanya peringatan)
+                                        </option>
+                                        <option value="auto_deactivate">
+                                            Auto deactivate (Otomatis off)
+                                        </option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Variants Tab -->
-                        <div v-show="activeTab === 'variants'" class="space-y-4">
+                        <div
+                            v-show="activeTab === 'variants'"
+                            class="space-y-4"
+                        >
                             <div class="flex items-center justify-between">
-                                <h4 class="text-sm font-bold text-stone-900 dark:text-white">
-Kelola Varian Produk</h4>
+                                <h4
+                                    class="text-sm font-bold text-stone-900 dark:text-white"
+                                >
+                                    Kelola Varian Produk
+                                </h4>
                                 <button
                                     type="button"
                                     @click="addVariantRow"
@@ -973,48 +1223,66 @@ Kelola Varian Produk</h4>
                                 </button>
                             </div>
 
-                            <div v-if="productForm.variants.length === 0" class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 p-8 text-center text-xs text-stone-400 dark:text-slate-500">
-                                Belum ada varian ditambahkan. Produk ini akan dijual sebagai item tunggal.
+                            <div
+                                v-if="productForm.variants.length === 0"
+                                class="rounded-2xl border border-dashed border-stone-200 p-8 text-center text-xs text-stone-400 dark:border-slate-800 dark:text-slate-500"
+                            >
+                                Belum ada varian ditambahkan. Produk ini akan
+                                dijual sebagai item tunggal.
                             </div>
 
                             <div v-else class="space-y-3">
                                 <div
-                                    v-for="(variant, index) in productForm.variants"
+                                    v-for="(
+                                        variant, index
+                                    ) in productForm.variants"
                                     :key="index"
-                                    class="group relative rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/50 p-4 transition hover:border-stone-200 dark:border-slate-700"
+                                    class="group relative rounded-2xl border border-stone-200 bg-stone-50 p-4 transition hover:border-stone-200 dark:border-slate-700 dark:border-slate-800 dark:bg-slate-900/50"
                                 >
-                                    <div class="grid gap-4 sm:grid-cols-[1fr_200px_100px_40px]">
+                                    <div
+                                        class="grid gap-4 sm:grid-cols-[1fr_200px_100px_40px]"
+                                    >
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Nama Varian
                                             </label>
                                             <input
                                                 v-model="variant.name"
                                                 type="text"
                                                 placeholder="Contoh: Pedas, Large, Topping..."
-                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                             />
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Tambahan Harga (Rp)
                                             </label>
                                             <input
-                                                v-model="variant.additional_price"
+                                                v-model="
+                                                    variant.additional_price
+                                                "
                                                 type="number"
                                                 min="0"
-                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                             />
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Status
                                             </label>
-                                            <label class="flex items-center h-[34px] gap-2 text-[10px] text-stone-600 dark:text-slate-300 cursor-pointer">
+                                            <label
+                                                class="flex h-[34px] cursor-pointer items-center gap-2 text-[10px] text-stone-600 dark:text-slate-300"
+                                            >
                                                 <input
                                                     v-model="variant.is_active"
                                                     type="checkbox"
-                                                    class="h-3.5 w-3.5 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-sky-500 focus:ring-sky-500"
+                                                    class="h-3.5 w-3.5 rounded border-stone-200 bg-stone-100 text-sky-500 focus:ring-sky-500 dark:border-slate-700 dark:bg-slate-950"
                                                 />
                                                 Aktif
                                             </label>
@@ -1036,8 +1304,11 @@ Kelola Varian Produk</h4>
                         <!-- Multi Price Tab -->
                         <div v-show="activeTab === 'prices'" class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <h4 class="text-sm font-bold text-stone-900 dark:text-white">
-Kelola Multi Harga & Tier</h4>
+                                <h4
+                                    class="text-sm font-bold text-stone-900 dark:text-white"
+                                >
+                                    Kelola Multi Harga & Tier
+                                </h4>
                                 <button
                                     type="button"
                                     @click="addPriceRow"
@@ -1048,24 +1319,32 @@ Kelola Multi Harga & Tier</h4>
                                 </button>
                             </div>
 
-                            <div v-if="productForm.prices.length === 0" class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 p-8 text-center text-xs text-stone-400 dark:text-slate-500">
-                                Belum ada multi harga. Produk hanya menggunakan Harga Dasar.
+                            <div
+                                v-if="productForm.prices.length === 0"
+                                class="rounded-2xl border border-dashed border-stone-200 p-8 text-center text-xs text-stone-400 dark:border-slate-800 dark:text-slate-500"
+                            >
+                                Belum ada multi harga. Produk hanya menggunakan
+                                Harga Dasar.
                             </div>
 
                             <div v-else class="space-y-3">
                                 <div
                                     v-for="(price, index) in productForm.prices"
                                     :key="index"
-                                    class="group relative rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/50 p-4 transition hover:border-stone-200 dark:border-slate-700"
+                                    class="group relative rounded-2xl border border-stone-200 bg-stone-50 p-4 transition hover:border-stone-200 dark:border-slate-700 dark:border-slate-800 dark:bg-slate-900/50"
                                 >
-                                    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-[160px_1fr_160px_100px_40px]">
+                                    <div
+                                        class="grid gap-4 sm:grid-cols-2 md:grid-cols-[160px_1fr_160px_100px_40px]"
+                                    >
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Tier
                                             </label>
                                             <select
                                                 v-model="price.tier"
-                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                             >
                                                 <option
                                                     v-for="tier in priceTiers"
@@ -1077,36 +1356,44 @@ Kelola Multi Harga & Tier</h4>
                                             </select>
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Label Kustom (Opsional)
                                             </label>
                                             <input
                                                 v-model="price.tier_label"
                                                 type="text"
                                                 placeholder="Contoh: Member Gold, Promo Jumat..."
-                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                             />
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Harga Final (Rp)
                                             </label>
                                             <input
                                                 v-model="price.price"
                                                 type="number"
                                                 min="0"
-                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none font-bold text-amber-300"
+                                                class="w-full rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs font-bold text-amber-300 text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                             />
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Status
                                             </label>
-                                            <label class="flex items-center h-[34px] gap-2 text-[10px] text-stone-600 dark:text-slate-300 cursor-pointer">
+                                            <label
+                                                class="flex h-[34px] cursor-pointer items-center gap-2 text-[10px] text-stone-600 dark:text-slate-300"
+                                            >
                                                 <input
                                                     v-model="price.is_active"
                                                     type="checkbox"
-                                                    class="h-3.5 w-3.5 rounded border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-amber-500 focus:ring-amber-500"
+                                                    class="h-3.5 w-3.5 rounded border-stone-200 bg-stone-100 text-amber-500 focus:ring-amber-500 dark:border-slate-700 dark:bg-slate-950"
                                                 />
                                                 Aktif
                                             </label>
@@ -1122,33 +1409,56 @@ Kelola Multi Harga & Tier</h4>
                                         </div>
 
                                         <!-- Happy Hour Row -->
-                                        <div class="sm:col-span-2 md:col-span-5 flex flex-wrap items-center gap-4 mt-1">
-                                            <div class="flex items-center gap-2 text-[10px] font-bold text-stone-400 dark:text-slate-500">
+                                        <div
+                                            class="mt-1 flex flex-wrap items-center gap-4 sm:col-span-2 md:col-span-5"
+                                        >
+                                            <div
+                                                class="flex items-center gap-2 text-[10px] font-bold text-stone-400 dark:text-slate-500"
+                                            >
                                                 <Clock class="h-3 w-3" />
                                                 SET HAPPY HOUR:
                                             </div>
-                                            <div class="flex items-center gap-2">
+                                            <div
+                                                class="flex items-center gap-2"
+                                            >
                                                 <input
-                                                    v-model="price.happy_hour_start"
+                                                    v-model="
+                                                        price.happy_hour_start
+                                                    "
                                                     type="time"
-                                                    class="rounded-lg border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-2 py-1 text-[10px] text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                    class="rounded-lg border border-stone-200 bg-stone-100 px-2 py-1 text-[10px] text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                                 />
-                                                <span class="text-[10px] text-slate-600">S/D</span>
+                                                <span
+                                                    class="text-[10px] text-slate-600"
+                                                    >S/D</span
+                                                >
                                                 <input
-                                                    v-model="price.happy_hour_end"
+                                                    v-model="
+                                                        price.happy_hour_end
+                                                    "
                                                     type="time"
-                                                    class="rounded-lg border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-2 py-1 text-[10px] text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                    class="rounded-lg border border-stone-200 bg-stone-100 px-2 py-1 text-[10px] text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                                 />
                                                 <button
-                                                    v-if="price.happy_hour_start || price.happy_hour_end"
+                                                    v-if="
+                                                        price.happy_hour_start ||
+                                                        price.happy_hour_end
+                                                    "
                                                     type="button"
-                                                    @click="price.happy_hour_start = ''; price.happy_hour_end = ''"
+                                                    @click="
+                                                        price.happy_hour_start =
+                                                            '';
+                                                        price.happy_hour_end =
+                                                            '';
+                                                    "
                                                     class="text-[10px] text-rose-400 underline underline-offset-2"
                                                 >
                                                     Hapus
                                                 </button>
                                             </div>
-                                            <p class="text-[10px] text-stone-400 dark:text-slate-500 italic">
+                                            <p
+                                                class="text-[10px] italic text-stone-400 dark:text-slate-500"
+                                            >
                                                 *Kosongkan jika berlaku 24 jam.
                                             </p>
                                         </div>
@@ -1161,10 +1471,16 @@ Kelola Multi Harga & Tier</h4>
                         <div v-show="activeTab === 'recipe'" class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h4 class="text-sm font-bold text-stone-900 dark:text-white">
-Bahan Baku (Resep)</h4>
-                                    <p class="text-[10px] text-stone-400 dark:text-slate-500 mt-0.5">
-                                        Tentukan pemakaian bahan baku untuk menghitung HPP otomatis.
+                                    <h4
+                                        class="text-sm font-bold text-stone-900 dark:text-white"
+                                    >
+                                        Bahan Baku (Resep)
+                                    </h4>
+                                    <p
+                                        class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500"
+                                    >
+                                        Tentukan pemakaian bahan baku untuk
+                                        menghitung HPP otomatis.
                                     </p>
                                 </div>
                                 <button
@@ -1177,63 +1493,108 @@ Bahan Baku (Resep)</h4>
                                 </button>
                             </div>
 
-                            <div v-if="productForm.ingredients.length === 0" class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 p-8 text-center text-xs text-stone-400 dark:text-slate-500">
-                                Belum ada bahan baku yang didaftarkan untuk produk ini.
+                            <div
+                                v-if="productForm.ingredients.length === 0"
+                                class="rounded-2xl border border-dashed border-stone-200 p-8 text-center text-xs text-stone-400 dark:border-slate-800 dark:text-slate-500"
+                            >
+                                Belum ada bahan baku yang didaftarkan untuk
+                                produk ini.
                             </div>
 
                             <div v-else class="space-y-3">
                                 <div
-                                    v-for="(item, index) in productForm.ingredients"
+                                    v-for="(
+                                        item, index
+                                    ) in productForm.ingredients"
                                     :key="index"
-                                    class="group relative rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/50 p-4 transition hover:border-stone-200 dark:border-slate-700"
+                                    class="group relative rounded-2xl border border-stone-200 bg-stone-50 p-4 transition hover:border-stone-200 dark:border-slate-700 dark:border-slate-800 dark:bg-slate-900/50"
                                 >
-                                    <div class="grid gap-4 sm:grid-cols-[1fr_120px_140px_40px]">
+                                    <div
+                                        class="grid gap-4 sm:grid-cols-[1fr_120px_140px_40px]"
+                                    >
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Pilih Bahan Baku
                                             </label>
                                             <select
                                                 v-model="item.raw_material_id"
-                                                class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                class="w-full rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                             >
                                                 <option
                                                     v-for="material in rawMaterials"
                                                     :key="material.id"
                                                     :value="material.id"
                                                 >
-                                                    {{ material.name }} ({{ material.unit }})
+                                                    {{ material.name }} ({{
+                                                        material.unit
+                                                    }})
                                                 </option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Pemakaian
                                             </label>
-                                            <div class="flex items-center gap-2">
+                                            <div
+                                                class="flex items-center gap-2"
+                                            >
                                                 <input
                                                     v-model="item.quantity"
                                                     type="number"
                                                     step="0.001"
                                                     min="0.001"
-                                                    class="w-full rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-xs text-stone-900 dark:text-white focus:border-orange-500 focus:outline-none"
+                                                    class="w-full rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs text-stone-900 focus:border-orange-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
                                                 />
-                                                <span class="text-[10px] font-bold text-stone-400 dark:text-slate-500">
-                                                    {{ rawMaterials.find(m => m.id === item.raw_material_id)?.unit || 'u' }}
+                                                <span
+                                                    class="text-[10px] font-bold text-stone-400 dark:text-slate-500"
+                                                >
+                                                    {{
+                                                        rawMaterials.find(
+                                                            (m) =>
+                                                                m.id ===
+                                                                item.raw_material_id,
+                                                        )?.unit || 'u'
+                                                    }}
                                                 </span>
                                             </div>
                                         </div>
                                         <div>
-                                            <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                            <label
+                                                class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                            >
                                                 Subtotal Biaya
                                             </label>
-                                            <div class="flex items-center h-[34px] px-3 rounded-xl bg-white dark:bg-slate-950/50 border border-stone-200 dark:border-slate-800 text-[11px] font-bold text-emerald-400">
-                                                {{ formatPrice(Number(rawMaterials.find(m => m.id === item.raw_material_id)?.cost_per_unit || 0) * Number(item.quantity || 0)) }}
+                                            <div
+                                                class="flex h-[34px] items-center rounded-xl border border-stone-200 bg-white px-3 text-[11px] font-bold text-emerald-400 dark:border-slate-800 dark:bg-slate-950/50"
+                                            >
+                                                {{
+                                                    formatPrice(
+                                                        Number(
+                                                            rawMaterials.find(
+                                                                (m) =>
+                                                                    m.id ===
+                                                                    item.raw_material_id,
+                                                            )?.cost_per_unit ||
+                                                                0,
+                                                        ) *
+                                                            Number(
+                                                                item.quantity ||
+                                                                    0,
+                                                            ),
+                                                    )
+                                                }}
                                             </div>
                                         </div>
                                         <div class="flex items-end justify-end">
                                             <button
                                                 type="button"
-                                                @click="removeIngredientRow(index)"
+                                                @click="
+                                                    removeIngredientRow(index)
+                                                "
                                                 class="flex h-[34px] w-full items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-400 transition hover:bg-rose-500/20"
                                             >
                                                 <Trash2 class="h-3.5 w-3.5" />
@@ -1243,14 +1604,26 @@ Bahan Baku (Resep)</h4>
                                 </div>
 
                                 <!-- HPP Calculation Summary -->
-                                <div class="mt-6 rounded-2xl border-2 border-emerald-500/20 bg-emerald-500/5 p-4">
-                                    <div class="flex items-center justify-between">
+                                <div
+                                    class="mt-6 rounded-2xl border-2 border-emerald-500/20 bg-emerald-500/5 p-4"
+                                >
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
                                         <div>
-                                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500">
+                                            <p
+                                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500"
+                                            >
                                                 Estimasi HPP Resep
                                             </p>
-                                            <h5 class="text-2xl font-black text-stone-900 dark:text-white mt-1">
-                                                {{ formatPrice(calculatedHppFromRecipe) }}
+                                            <h5
+                                                class="mt-1 text-2xl font-black text-stone-900 dark:text-white"
+                                            >
+                                                {{
+                                                    formatPrice(
+                                                        calculatedHppFromRecipe,
+                                                    )
+                                                }}
                                             </h5>
                                         </div>
                                         <button
@@ -1261,9 +1634,13 @@ Bahan Baku (Resep)</h4>
                                             Gunakan Nilai Ini
                                         </button>
                                     </div>
-                                    <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400 leading-relaxed italic">
-                                        *HPP dihitung berdasarkan (Cost per Unit bahan baku) x (Pemakaian).
-                                        Klik tombol "Gunakan Nilai Ini" untuk mengupdate HPP di Tab Info Dasar.
+                                    <p
+                                        class="mt-2 text-[10px] italic leading-relaxed text-stone-500 dark:text-slate-400"
+                                    >
+                                        *HPP dihitung berdasarkan (Cost per Unit
+                                        bahan baku) x (Pemakaian). Klik tombol
+                                        "Gunakan Nilai Ini" untuk mengupdate HPP
+                                        di Tab Info Dasar.
                                     </p>
                                 </div>
                             </div>
@@ -1272,7 +1649,9 @@ Bahan Baku (Resep)</h4>
                 </div>
 
                 <!-- Footer Modal -->
-                <div class="flex items-center justify-between p-5 border-t border-stone-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/50 rounded-b-[28px]">
+                <div
+                    class="flex items-center justify-between rounded-b-[28px] border-t border-stone-200 bg-white p-5 dark:border-slate-800/80 dark:bg-slate-950/50"
+                >
                     <div class="flex items-center gap-2">
                         <div
                             v-if="Object.keys(productForm.errors).length > 0"
@@ -1280,9 +1659,13 @@ Bahan Baku (Resep)</h4>
                         >
                             <div class="flex items-center gap-2">
                                 <AlertTriangle class="h-4 w-4" />
-                                Ada {{ Object.keys(productForm.errors).length }} error validasi.
+                                Ada
+                                {{ Object.keys(productForm.errors).length }}
+                                error validasi.
                             </div>
-                            <p class="font-medium text-[10px] text-rose-300/80 ml-6">
+                            <p
+                                class="ml-6 text-[10px] font-medium text-rose-300/80"
+                            >
                                 * {{ Object.values(productForm.errors)[0] }}
                             </p>
                         </div>
@@ -1291,7 +1674,7 @@ Bahan Baku (Resep)</h4>
                         <button
                             type="button"
                             @click="closeProductModal"
-                            class="rounded-2xl border border-stone-200 dark:border-slate-800 px-6 py-3 text-sm font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-white dark:bg-slate-900"
+                            class="rounded-2xl border border-stone-200 px-6 py-3 text-sm font-semibold text-stone-600 transition hover:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
                         >
                             Batal
                         </button>
@@ -1299,9 +1682,13 @@ Bahan Baku (Resep)</h4>
                             type="submit"
                             form="productForm"
                             :disabled="productForm.processing"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-8 py-3 text-sm font-bold text-stone-900 dark:text-white shadow-lg shadow-orange-500/20 disabled:opacity-60"
+                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-8 py-3 text-sm font-bold text-stone-900 shadow-lg shadow-orange-500/20 disabled:opacity-60 dark:text-white"
                         >
-                            {{ productForm.processing ? 'Menyimpan...' : 'Simpan Produk' }}
+                            {{
+                                productForm.processing
+                                    ? 'Menyimpan...'
+                                    : 'Simpan Produk'
+                            }}
                         </button>
                     </div>
                 </div>

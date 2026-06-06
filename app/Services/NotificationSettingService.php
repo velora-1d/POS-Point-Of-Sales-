@@ -124,6 +124,9 @@ class NotificationSettingService
             'kasbon_due_threshold_days' => $storedSetting?->kasbon_due_threshold_days ?? 3,
             'online_order_enabled' => $storedSetting?->online_order_enabled ?? true,
             'online_order_channels' => $this->normalizeChannels($storedSetting?->online_order_channels ?? ['in_app']),
+            'table_duration_alert_enabled' => $storedSetting?->table_duration_alert_enabled ?? true,
+            'table_duration_warning_minutes' => $storedSetting?->table_duration_warning_minutes ?? 90,
+            'table_duration_danger_minutes' => $storedSetting?->table_duration_danger_minutes ?? 180,
             'metadata' => $storedSetting?->metadata ?? [
                 'kitchen_voice' => [
                     'enabled' => true,
@@ -194,6 +197,9 @@ class NotificationSettingService
             'kasbon_due_threshold_days' => max(1, min(30, (int) ($payload['kasbon_due_threshold_days'] ?? 3))),
             'online_order_enabled' => (bool) ($payload['online_order_enabled'] ?? false),
             'online_order_channels' => $this->normalizeChannels($payload['online_order_channels'] ?? []),
+            'table_duration_alert_enabled' => (bool) ($payload['table_duration_alert_enabled'] ?? false),
+            'table_duration_warning_minutes' => max(1, (int) ($payload['table_duration_warning_minutes'] ?? 90)),
+            'table_duration_danger_minutes' => max(2, (int) ($payload['table_duration_danger_minutes'] ?? 180)),
             'metadata' => $payload['metadata'] ?? null,
         ];
     }

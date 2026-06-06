@@ -23,24 +23,28 @@ class QrSelfServiceController extends Controller
     public function showMenu(string $tableToken): Response
     {
         $table = $this->resolveTable($tableToken);
+        $table->append('remaining_capacity');
         $categories = $this->getOutletCategories($table->outlet_id);
 
         return Inertia::render('Public/QrOrderMenu', [
-            'table' => $table,
-            'outlet' => $table->outlet,
+            'table'      => $table,
+            'outlet'     => $table->outlet,
             'categories' => $categories,
+            'tableFull'  => $table->capacity !== null && $table->remaining_capacity === 0,
         ]);
     }
 
     public function showMenuByAlias(string $storeSlug, string $tableCode): Response
     {
         $table = $this->tableQrConfigService->resolveTableByAlias($storeSlug, $tableCode);
+        $table->append('remaining_capacity');
         $categories = $this->getOutletCategories($table->outlet_id);
 
         return Inertia::render('Public/QrOrderMenu', [
-            'table' => $table,
-            'outlet' => $table->outlet,
+            'table'      => $table,
+            'outlet'     => $table->outlet,
             'categories' => $categories,
+            'tableFull'  => $table->capacity !== null && $table->remaining_capacity === 0,
         ]);
     }
 
@@ -50,6 +54,24 @@ class QrSelfServiceController extends Controller
             $tableToken,
             $request->validated(),
         );
+
+        try {
+            $table = $this->resolveTable($tableToken);
+            $order = $result['order'];
+            $formattedTotal = number_format($order->total_amount, 0, ',', '.');
+            
+            \App\Services\FirebasePushService::sendToActiveCashiers(
+                "Order Mandiri Baru!",
+                "Meja {$table->name} telah membuat pesanan baru senilai Rp {$formattedTotal}.",
+                [
+                    'type' => 'qr_order',
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
+                ]
+            );
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to send FCM notification for checkout: " . $e->getMessage());
+        }
 
         return redirect()
             ->route('self-service.orders.status', [

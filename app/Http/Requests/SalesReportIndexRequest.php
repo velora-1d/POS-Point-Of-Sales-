@@ -18,7 +18,7 @@ class SalesReportIndexRequest extends FormRequest
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'outlet_id' => ['nullable', 'exists:outlets,id'],
-            'source' => ['nullable', Rule::in(['kasir', 'qr_meja', 'gofood', 'grabfood'])],
+            'source' => ['nullable', Rule::in(['kasir', 'qr_meja', 'gofood', 'grabfood', 'shopeefood', 'maximfood'])],
             'payment_method' => ['nullable', Rule::in(['cash', 'qris', 'debit', 'ewallet', 'kasbon'])],
             'search' => ['nullable', 'string', 'max:100'],
             'per_page' => ['nullable', 'integer', 'min:5', 'max:25'],

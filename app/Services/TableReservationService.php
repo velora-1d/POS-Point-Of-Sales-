@@ -12,6 +12,10 @@ use Illuminate\Validation\ValidationException;
 
 class TableReservationService
 {
+    public function __construct(
+        protected TableManagementService $tableManagementService,
+    ) {
+    }
     public function create(array $payload, User $actor): TableReservation
     {
         $outletId = $actor->outlet_id;
@@ -36,6 +40,12 @@ class TableReservationService
         if ($table->status === 'occupied') {
             throw ValidationException::withMessages([
                 'table_id' => 'Meja sedang dipakai dan tidak bisa direservasi.',
+            ]);
+        }
+
+        if ($payload['guest_count'] > $table->capacity) {
+            throw ValidationException::withMessages([
+                'guest_count' => "Jumlah tamu ({$payload['guest_count']} pax) melebihi kapasitas meja ({$table->capacity} pax).",
             ]);
         }
 
@@ -130,6 +140,11 @@ class TableReservationService
             ->exists();
 
         if ($hasActiveOrder) {
+            // Sinkronisasi jumlah tamu aktif
+            $this->tableManagementService->syncTableGuests($tableId);
+            // Tandai occupied_at jika belum ada
+            $this->tableManagementService->markOccupiedAt($tableId);
+
             Table::query()
                 ->whereKey($tableId)
                 ->update(['status' => 'occupied']);
@@ -142,9 +157,14 @@ class TableReservationService
             ->where('status', 'booked')
             ->exists();
 
+        // Tidak ada order aktif → reset kapasitas dan occupied_at
         Table::query()
             ->whereKey($tableId)
-            ->update(['status' => $hasActiveReservation ? 'reserved' : 'available']);
+            ->update([
+                'status'         => $hasActiveReservation ? 'reserved' : 'available',
+                'current_guests' => 0,
+                'occupied_at'    => null,
+            ]);
     }
 
     protected function resolveCustomer(

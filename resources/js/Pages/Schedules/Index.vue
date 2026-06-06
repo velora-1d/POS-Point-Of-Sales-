@@ -2,15 +2,15 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
+    ArrowLeftRight,
     CalendarDays,
     ChevronLeft,
     ChevronRight,
     Clock3,
     Layers3,
     Plus,
-    Users,
-    ArrowLeftRight,
     Save,
+    Users,
     X,
 } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
@@ -80,7 +80,11 @@ const props = defineProps<{
     success?: string | null;
 }>();
 
-const weekStart = ref(props.filters.week_start || props.days[0] || new Date().toISOString().slice(0, 10));
+const weekStart = ref(
+    props.filters.week_start ||
+        props.days[0] ||
+        new Date().toISOString().slice(0, 10),
+);
 const employeeFilter = ref(props.filters.employee_id || '');
 const outletFilter = ref(props.filters.outlet_id || '');
 
@@ -93,7 +97,10 @@ const dailyForm = useForm<{
     outlet_id: outletFilter.value || props.referenceData.outlets[0]?.id || '',
     user_id: props.filters.employee_id || '',
     shift_template_id: '',
-    schedule_date: props.filters.week_start || props.days[0] || new Date().toISOString().slice(0, 10),
+    schedule_date:
+        props.filters.week_start ||
+        props.days[0] ||
+        new Date().toISOString().slice(0, 10),
 });
 
 const weeklyForm = useForm<{
@@ -104,7 +111,10 @@ const weeklyForm = useForm<{
 }>({
     outlet_id: outletFilter.value || props.referenceData.outlets[0]?.id || '',
     user_id: props.filters.employee_id || '',
-    week_start: props.filters.week_start || props.days[0] || new Date().toISOString().slice(0, 10),
+    week_start:
+        props.filters.week_start ||
+        props.days[0] ||
+        new Date().toISOString().slice(0, 10),
     days: Array(7).fill(null),
 });
 
@@ -144,7 +154,11 @@ const gridDays = computed(() => {
 });
 
 const assignmentDays = computed(() => {
-    const start = new Date(weeklyForm.week_start || props.days[0] || new Date().toISOString().slice(0, 10));
+    const start = new Date(
+        weeklyForm.week_start ||
+            props.days[0] ||
+            new Date().toISOString().slice(0, 10),
+    );
 
     return Array.from({ length: 7 }, (_, index) => {
         const current = new Date(start);
@@ -211,10 +225,18 @@ const filterTemplatesByOutlet = (selectedOutletId: string) => {
     });
 };
 
-const dailyEmployees = computed(() => filterEmployeesByOutlet(dailyForm.outlet_id));
-const dailyTemplates = computed(() => filterTemplatesByOutlet(dailyForm.outlet_id));
-const weeklyEmployees = computed(() => filterEmployeesByOutlet(weeklyForm.outlet_id));
-const weeklyTemplates = computed(() => filterTemplatesByOutlet(weeklyForm.outlet_id));
+const dailyEmployees = computed(() =>
+    filterEmployeesByOutlet(dailyForm.outlet_id),
+);
+const dailyTemplates = computed(() =>
+    filterTemplatesByOutlet(dailyForm.outlet_id),
+);
+const weeklyEmployees = computed(() =>
+    filterEmployeesByOutlet(weeklyForm.outlet_id),
+);
+const weeklyTemplates = computed(() =>
+    filterTemplatesByOutlet(weeklyForm.outlet_id),
+);
 const availableFormOutlets = computed(() => {
     const outletIds = new Set<string>();
 
@@ -228,7 +250,9 @@ const availableFormOutlets = computed(() => {
         outletIds.add(template.outlet_id);
     });
 
-    return props.referenceData.outlets.filter((outlet) => outletIds.has(outlet.id));
+    return props.referenceData.outlets.filter((outlet) =>
+        outletIds.has(outlet.id),
+    );
 });
 
 const visibleEmployees = computed(() => {
@@ -326,8 +350,12 @@ const syncSelection = (
     updateUser: (value: string) => void,
     updateTemplate: (value: string) => void,
 ) => {
-    const employeeExists = filterEmployeesByOutlet(selectedOutletId).some((employee) => employee.id === currentUserId);
-    const templateExists = filterTemplatesByOutlet(selectedOutletId).some((template) => template.id === currentTemplateId);
+    const employeeExists = filterEmployeesByOutlet(selectedOutletId).some(
+        (employee) => employee.id === currentUserId,
+    );
+    const templateExists = filterTemplatesByOutlet(selectedOutletId).some(
+        (template) => template.id === currentTemplateId,
+    );
 
     if (!employeeExists) {
         updateUser('');
@@ -373,7 +401,9 @@ watch(
                 return null;
             }
 
-            return filterTemplatesByOutlet(selectedOutletId).some((template) => template.id === shiftTemplateId)
+            return filterTemplatesByOutlet(selectedOutletId).some(
+                (template) => template.id === shiftTemplateId,
+            )
                 ? shiftTemplateId
                 : null;
         });
@@ -399,7 +429,9 @@ const submitFilters = () => {
 const clearFilters = () => {
     weekStart.value = props.days[0] || new Date().toISOString().slice(0, 10);
     employeeFilter.value = '';
-    outletFilter.value = canChooseOutlet.value ? '' : props.referenceData.outlets[0]?.id || '';
+    outletFilter.value = canChooseOutlet.value
+        ? ''
+        : props.referenceData.outlets[0]?.id || '';
     submitFilters();
 };
 
@@ -422,15 +454,20 @@ const submitWeekly = () => {
     });
 };
 
-const pagiTemplate = computed(() => props.shiftTemplates.find(t => t.name.toLowerCase().includes('pagi')));
-const malamTemplate = computed(() => props.shiftTemplates.find(t => t.name.toLowerCase().includes('malam')));
+const pagiTemplate = computed(() =>
+    props.shiftTemplates.find((t) => t.name.toLowerCase().includes('pagi')),
+);
+const malamTemplate = computed(() =>
+    props.shiftTemplates.find((t) => t.name.toLowerCase().includes('malam')),
+);
 
 const shiftTimesForm = useForm({
     pagi_start: pagiTemplate.value?.start_time?.slice(0, 5) || '08:00',
     pagi_end: pagiTemplate.value?.end_time?.slice(0, 5) || '17:00',
     malam_start: malamTemplate.value?.start_time?.slice(0, 5) || '15:00',
     malam_end: malamTemplate.value?.end_time?.slice(0, 5) || '24:00',
-    outlet_id: props.filters.outlet_id || props.referenceData.outlets[0]?.id || '',
+    outlet_id:
+        props.filters.outlet_id || props.referenceData.outlets[0]?.id || '',
 });
 
 const submitUpdateShiftTimes = () => {
@@ -453,10 +490,17 @@ const activeTakeoverSchedule = ref<ScheduleRow | null>(null);
 const openTakeoverModal = (schedule: ScheduleRow | null) => {
     if (!schedule) return;
     activeTakeoverSchedule.value = schedule;
-    takeoverForm.outlet_id = schedule.user?.outlet?.id || schedule.user?.outlet_id || props.filters.outlet_id || props.referenceData.outlets[0]?.id || '';
+    takeoverForm.outlet_id =
+        schedule.user?.outlet?.id ||
+        schedule.user?.outlet_id ||
+        props.filters.outlet_id ||
+        props.referenceData.outlets[0]?.id ||
+        '';
     takeoverForm.schedule_date = schedule.schedule_date;
-    takeoverForm.shift_template_id = schedule.shift_template?.id || schedule.shift_template_id || '';
-    takeoverForm.takeover_from_user_id = schedule.user?.id || schedule.user_id || '';
+    takeoverForm.shift_template_id =
+        schedule.shift_template?.id || schedule.shift_template_id || '';
+    takeoverForm.takeover_from_user_id =
+        schedule.user?.id || schedule.user_id || '';
     takeoverForm.user_id = '';
     isTakeoverOpen.value = true;
 };
@@ -468,7 +512,7 @@ const submitTakeover = () => {
             isTakeoverOpen.value = false;
             activeTakeoverSchedule.value = null;
             takeoverForm.reset();
-        }
+        },
     });
 };
 </script>
@@ -480,11 +524,16 @@ const submitTakeover = () => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
-Jadwal Shift Karyawan
+                    <h2
+                        class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                    >
+                        Jadwal Shift Karyawan
                     </h2>
-                    <p class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400">
-                        Assign shift per hari, bulk assign 1 minggu, dan lihat jadwal aktif karyawan per outlet.
+                    <p
+                        class="mt-1 max-w-3xl text-xs text-stone-500 dark:text-slate-400"
+                    >
+                        Assign shift per hari, bulk assign 1 minggu, dan lihat
+                        jadwal aktif karyawan per outlet.
                     </p>
                 </div>
             </div>
@@ -499,77 +548,120 @@ Jadwal Shift Karyawan
             </div>
 
             <!-- Tab Navigation Global -->
-            <div class="flex border-b border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/40 rounded-2xl p-1 gap-1 max-w-2xl">
+            <div
+                class="flex max-w-2xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+            >
                 <Link
                     :href="route('shifts.index')"
-                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('shifts.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    :class="
+                        route().current('shifts.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Shift Kasir (Laci Kas)
                 </Link>
                 <Link
                     :href="route('attendance.index')"
-                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('attendance.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    :class="
+                        route().current('attendance.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Absensi Karyawan
                 </Link>
                 <Link
                     :href="route('schedules.index')"
-                    class="flex-1 text-center py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition duration-150"
-                    :class="route().current('schedules.index') ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10' : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:text-slate-200 hover:bg-white/[0.02]'"
+                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    :class="
+                        route().current('schedules.index')
+                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
+                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                    "
                 >
                     Jadwal Shift Kerja
                 </Link>
             </div>
 
             <!-- Panel Set Jam Shift Sederhana -->
-            <article v-if="canManage" class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <article
+                v-if="canManage"
+                class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+            >
                 <div class="flex items-center gap-3">
-                    <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-3 text-orange-200">
+                    <div
+                        class="rounded-2xl border border-stone-200 bg-white p-3 text-orange-200 dark:border-white/10 dark:bg-slate-950/50"
+                    >
                         <Clock3 class="h-5 w-5" />
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
+                        <h3
+                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                        >
                             Pengaturan Waktu Kerja Shift
                         </h3>
-                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                            Atur jam mulai dan jam selesai untuk shift pagi dan shift malam secara instan.
+                        <p
+                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                        >
+                            Atur jam mulai dan jam selesai untuk shift pagi dan
+                            shift malam secara instan.
                         </p>
                     </div>
                 </div>
 
-                <form class="mt-5 flex flex-wrap items-end gap-4" @submit.prevent="submitUpdateShiftTimes">
-                    <div class="flex flex-wrap gap-4 flex-1">
+                <form
+                    class="mt-5 flex flex-wrap items-end gap-4"
+                    @submit.prevent="submitUpdateShiftTimes"
+                >
+                    <div class="flex flex-1 flex-wrap gap-4">
                         <!-- Shift Pagi -->
-                        <div class="flex gap-2 items-center rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-3 flex-1 min-w-[240px]">
-                            <span class="text-xs font-bold text-stone-500 dark:text-slate-400 uppercase tracking-wider w-20">Shift Pagi</span>
+                        <div
+                            class="flex min-w-[240px] flex-1 items-center gap-2 rounded-2xl border border-stone-200 bg-white/[0.02] p-3 dark:border-white/10"
+                        >
+                            <span
+                                class="w-20 text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400"
+                                >Shift Pagi</span
+                            >
                             <input
                                 v-model="shiftTimesForm.pagi_start"
                                 type="time"
-                                class="rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none"
+                                class="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs text-stone-900 focus:border-orange-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
                             />
-                            <span class="text-stone-400 dark:text-slate-500 text-xs">s/d</span>
+                            <span
+                                class="text-xs text-stone-400 dark:text-slate-500"
+                                >s/d</span
+                            >
                             <input
                                 v-model="shiftTimesForm.pagi_end"
                                 type="time"
-                                class="rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none"
+                                class="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs text-stone-900 focus:border-orange-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
                             />
                         </div>
 
                         <!-- Shift Malam -->
-                        <div class="flex gap-2 items-center rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-3 flex-1 min-w-[240px]">
-                            <span class="text-xs font-bold text-stone-500 dark:text-slate-400 uppercase tracking-wider w-20">Shift Malam</span>
+                        <div
+                            class="flex min-w-[240px] flex-1 items-center gap-2 rounded-2xl border border-stone-200 bg-white/[0.02] p-3 dark:border-white/10"
+                        >
+                            <span
+                                class="w-20 text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400"
+                                >Shift Malam</span
+                            >
                             <input
                                 v-model="shiftTimesForm.malam_start"
                                 type="time"
-                                class="rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none"
+                                class="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs text-stone-900 focus:border-orange-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
                             />
-                            <span class="text-stone-400 dark:text-slate-500 text-xs">s/d</span>
+                            <span
+                                class="text-xs text-stone-400 dark:text-slate-500"
+                                >s/d</span
+                            >
                             <input
                                 v-model="shiftTimesForm.malam_end"
                                 type="time"
-                                class="rounded-xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none"
+                                class="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs text-stone-900 focus:border-orange-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
                             />
                         </div>
                     </div>
@@ -580,7 +672,11 @@ Jadwal Shift Karyawan
                         :disabled="shiftTimesForm.processing"
                     >
                         <Save class="h-4 w-4" />
-                        {{ shiftTimesForm.processing ? 'Menyimpan...' : 'Simpan Waktu' }}
+                        {{
+                            shiftTimesForm.processing
+                                ? 'Menyimpan...'
+                                : 'Simpan Waktu'
+                        }}
                     </button>
                 </form>
             </article>
@@ -594,56 +690,87 @@ Jadwal Shift Karyawan
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400">
+                            <p
+                                class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400"
+                            >
                                 {{ card.label }}
                             </p>
-                            <p class="mt-3 text-3xl font-black" :class="card.tone">
+                            <p
+                                class="mt-3 text-3xl font-black"
+                                :class="card.tone"
+                            >
                                 {{ card.value }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/40 p-3 text-stone-900 dark:text-white">
+                        <div
+                            class="rounded-2xl border border-stone-200 bg-white p-3 text-stone-900 dark:border-white/10 dark:bg-slate-950/40 dark:text-white"
+                        >
                             <component :is="card.icon" class="h-5 w-5" />
                         </div>
                     </div>
                 </article>
             </section>
 
-            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                    <div class="grid flex-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            <section
+                class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+            >
+                <div
+                    class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
+                >
+                    <div
+                        class="grid flex-1 gap-3 md:grid-cols-2 xl:grid-cols-3"
+                    >
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Minggu mulai</span>
+                            <span
+                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                >Minggu mulai</span
+                            >
                             <input
                                 v-model="weekStart"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
                             />
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Filter Karyawan</span>
+                            <span
+                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                >Filter Karyawan</span
+                            >
                             <select
                                 v-model="employeeFilter"
-                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
                             >
                                 <option value="">Semua karyawan</option>
                                 <option
-                                    v-for="employee in employees.filter((item) => !outletFilter || item.outlet?.id === outletFilter)"
+                                    v-for="employee in employees.filter(
+                                        (item) =>
+                                            !outletFilter ||
+                                            item.outlet?.id === outletFilter,
+                                    )"
                                     :key="employee.id"
                                     :value="employee.id"
                                 >
-                                    {{ employee.name }} • {{ employee.outlet?.name || 'Tanpa outlet' }}
+                                    {{ employee.name }} •
+                                    {{
+                                        employee.outlet?.name || 'Tanpa outlet'
+                                    }}
                                 </option>
                             </select>
                         </label>
 
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
+                            <span
+                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                >Outlet</span
+                            >
                             <select
                                 v-model="outletFilter"
-                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-stone-50 dark:bg-slate-900/80 px-3 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
                             >
-                                <option v-if="canChooseOutlet" value="">Semua outlet</option>
+                                <option v-if="canChooseOutlet" value="">
+                                    Semua outlet
+                                </option>
                                 <option
                                     v-for="outlet in referenceData.outlets"
                                     :key="outlet.id"
@@ -658,7 +785,7 @@ Jadwal Shift Karyawan
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
+                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
                             @click="shiftWeek(-1)"
                         >
                             <ChevronLeft class="h-4 w-4" />
@@ -666,7 +793,7 @@ Jadwal Shift Karyawan
                         </button>
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
+                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
                             @click="shiftWeek(1)"
                         >
                             Minggu Berikutnya
@@ -674,7 +801,7 @@ Jadwal Shift Karyawan
                         </button>
                         <button
                             type="button"
-                            class="rounded-2xl border border-stone-200 dark:border-white/10 px-4 py-3 text-sm font-semibold text-stone-800 dark:text-slate-200 transition hover:border-stone-200 dark:border-white/20 hover:bg-stone-100 dark:bg-white/5"
+                            class="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
                             @click="clearFilters"
                         >
                             Reset
@@ -689,14 +816,22 @@ Jadwal Shift Karyawan
                     </div>
                 </div>
 
-                <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-stone-500 dark:text-slate-400">
-                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
+                <div
+                    class="mt-4 flex flex-wrap items-center gap-3 text-xs text-stone-500 dark:text-slate-400"
+                >
+                    <span
+                        class="rounded-full border border-stone-200 bg-white/[0.03] px-3 py-1.5 font-semibold dark:border-white/10"
+                    >
                         Minggu aktif: {{ weekRangeLabel }}
                     </span>
-                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
+                    <span
+                        class="rounded-full border border-stone-200 bg-white/[0.03] px-3 py-1.5 font-semibold dark:border-white/10"
+                    >
                         Total template shift: {{ shiftTemplates.length }}
                     </span>
-                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1.5 font-semibold">
+                    <span
+                        class="rounded-full border border-stone-200 bg-white/[0.03] px-3 py-1.5 font-semibold dark:border-white/10"
+                    >
                         Karyawan tampil: {{ visibleEmployees.length }}
                     </span>
                 </div>
@@ -704,28 +839,45 @@ Jadwal Shift Karyawan
 
             <section class="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
                 <div class="space-y-5">
-                    <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <article
+                        class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                    >
                         <div class="flex items-start justify-between gap-4">
                             <div>
-                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
+                                <h3
+                                    class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                                >
                                     Assign Harian
                                 </h3>
-                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                    Pilih outlet, karyawan, tanggal, lalu tempelkan template shift untuk satu hari.
+                                <p
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                >
+                                    Pilih outlet, karyawan, tanggal, lalu
+                                    tempelkan template shift untuk satu hari.
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-orange-400/20 bg-orange-500/10 p-3 text-orange-200">
+                            <div
+                                class="rounded-2xl border border-orange-400/20 bg-orange-500/10 p-3 text-orange-200"
+                            >
                                 <Plus class="h-5 w-5" />
                             </div>
                         </div>
 
-                        <form class="mt-5 space-y-4" @submit.prevent="submitDaily">
-                            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                        <form
+                            class="mt-5 space-y-4"
+                            @submit.prevent="submitDaily"
+                        >
+                            <div
+                                class="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+                            >
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
+                                    <span
+                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        >Outlet</span
+                                    >
                                     <select
                                         v-model="dailyForm.outlet_id"
-                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option
                                             v-for="outlet in availableFormOutlets"
@@ -735,14 +887,22 @@ Jadwal Shift Karyawan
                                             {{ outlet.name }}
                                         </option>
                                     </select>
-                                    <p v-if="dailyForm.errors.outlet_id" class="mt-2 text-xs text-rose-300">{{ dailyForm.errors.outlet_id }}</p>
+                                    <p
+                                        v-if="dailyForm.errors.outlet_id"
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ dailyForm.errors.outlet_id }}
+                                    </p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Karyawan</span>
+                                    <span
+                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        >Karyawan</span
+                                    >
                                     <select
                                         v-model="dailyForm.user_id"
-                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option value="">Pilih karyawan</option>
                                         <option
@@ -750,27 +910,44 @@ Jadwal Shift Karyawan
                                             :key="employee.id"
                                             :value="employee.id"
                                         >
-                                            {{ employee.name }} • {{ employee.role?.name || '-' }}
+                                            {{ employee.name }} •
+                                            {{ employee.role?.name || '-' }}
                                         </option>
                                     </select>
-                                    <p v-if="dailyForm.errors.user_id" class="mt-2 text-xs text-rose-300">{{ dailyForm.errors.user_id }}</p>
+                                    <p
+                                        v-if="dailyForm.errors.user_id"
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ dailyForm.errors.user_id }}
+                                    </p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Tanggal</span>
+                                    <span
+                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        >Tanggal</span
+                                    >
                                     <input
                                         v-model="dailyForm.schedule_date"
                                         type="date"
-                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                     />
-                                    <p v-if="dailyForm.errors.schedule_date" class="mt-2 text-xs text-rose-300">{{ dailyForm.errors.schedule_date }}</p>
+                                    <p
+                                        v-if="dailyForm.errors.schedule_date"
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ dailyForm.errors.schedule_date }}
+                                    </p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Template Shift</span>
+                                    <span
+                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        >Template Shift</span
+                                    >
                                     <select
                                         v-model="dailyForm.shift_template_id"
-                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option value="">Pilih template</option>
                                         <option
@@ -778,10 +955,18 @@ Jadwal Shift Karyawan
                                             :key="template.id"
                                             :value="template.id"
                                         >
-                                            {{ template.name }} • {{ formatTimeRange(template) }}
+                                            {{ template.name }} •
+                                            {{ formatTimeRange(template) }}
                                         </option>
                                     </select>
-                                    <p v-if="dailyForm.errors.shift_template_id" class="mt-2 text-xs text-rose-300">{{ dailyForm.errors.shift_template_id }}</p>
+                                    <p
+                                        v-if="
+                                            dailyForm.errors.shift_template_id
+                                        "
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ dailyForm.errors.shift_template_id }}
+                                    </p>
                                 </label>
                             </div>
 
@@ -791,34 +976,53 @@ Jadwal Shift Karyawan
                                     class="rounded-2xl bg-orange-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
                                     :disabled="dailyForm.processing"
                                 >
-                                    {{ dailyForm.processing ? 'Menyimpan...' : 'Simpan Jadwal Harian' }}
+                                    {{
+                                        dailyForm.processing
+                                            ? 'Menyimpan...'
+                                            : 'Simpan Jadwal Harian'
+                                    }}
                                 </button>
                             </div>
                         </form>
                     </article>
 
-                    <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <article
+                        class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                    >
                         <div class="flex items-start justify-between gap-4">
                             <div>
-                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
+                                <h3
+                                    class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                                >
                                     Bulk Assign Mingguan
                                 </h3>
-                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                    Pilih satu karyawan lalu isi template untuk 7 hari dalam minggu aktif.
+                                <p
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                >
+                                    Pilih satu karyawan lalu isi template untuk
+                                    7 hari dalam minggu aktif.
                                 </p>
                             </div>
-                            <div class="rounded-2xl border border-sky-400/20 bg-sky-500/10 p-3 text-sky-200">
+                            <div
+                                class="rounded-2xl border border-sky-400/20 bg-sky-500/10 p-3 text-sky-200"
+                            >
                                 <Layers3 class="h-5 w-5" />
                             </div>
                         </div>
 
-                        <form class="mt-5 space-y-4" @submit.prevent="submitWeekly">
+                        <form
+                            class="mt-5 space-y-4"
+                            @submit.prevent="submitWeekly"
+                        >
                             <div class="grid gap-4 md:grid-cols-3">
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
+                                    <span
+                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        >Outlet</span
+                                    >
                                     <select
                                         v-model="weeklyForm.outlet_id"
-                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option
                                             v-for="outlet in availableFormOutlets"
@@ -828,14 +1032,22 @@ Jadwal Shift Karyawan
                                             {{ outlet.name }}
                                         </option>
                                     </select>
-                                    <p v-if="weeklyForm.errors.outlet_id" class="mt-2 text-xs text-rose-300">{{ weeklyForm.errors.outlet_id }}</p>
+                                    <p
+                                        v-if="weeklyForm.errors.outlet_id"
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ weeklyForm.errors.outlet_id }}
+                                    </p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Karyawan</span>
+                                    <span
+                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        >Karyawan</span
+                                    >
                                     <select
                                         v-model="weeklyForm.user_id"
-                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option value="">Pilih karyawan</option>
                                         <option
@@ -843,52 +1055,78 @@ Jadwal Shift Karyawan
                                             :key="employee.id"
                                             :value="employee.id"
                                         >
-                                            {{ employee.name }} • {{ employee.role?.name || '-' }}
+                                            {{ employee.name }} •
+                                            {{ employee.role?.name || '-' }}
                                         </option>
                                     </select>
-                                    <p v-if="weeklyForm.errors.user_id" class="mt-2 text-xs text-rose-300">{{ weeklyForm.errors.user_id }}</p>
+                                    <p
+                                        v-if="weeklyForm.errors.user_id"
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ weeklyForm.errors.user_id }}
+                                    </p>
                                 </label>
 
                                 <label class="block">
-                                    <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Minggu Mulai</span>
+                                    <span
+                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        >Minggu Mulai</span
+                                    >
                                     <input
                                         v-model="weeklyForm.week_start"
                                         type="date"
-                                        class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                     />
-                                    <p v-if="weeklyForm.errors.week_start" class="mt-2 text-xs text-rose-300">{{ weeklyForm.errors.week_start }}</p>
+                                    <p
+                                        v-if="weeklyForm.errors.week_start"
+                                        class="mt-2 text-xs text-rose-300"
+                                    >
+                                        {{ weeklyForm.errors.week_start }}
+                                    </p>
                                 </label>
                             </div>
 
-                            <div class="grid gap-3 lg:grid-cols-2 xl:grid-cols-4">
+                            <div
+                                class="grid gap-3 lg:grid-cols-2 xl:grid-cols-4"
+                            >
                                 <label
                                     v-for="day in assignmentDays"
                                     :key="day.date"
-                                    class="block rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] p-4"
+                                    class="block rounded-2xl border border-stone-200 bg-white/[0.03] p-4 dark:border-white/10"
                                 >
-                                    <span class="block text-xs font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                                    <span
+                                        class="block text-xs font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                    >
                                         {{ day.label }}
                                     </span>
-                                    <span class="mt-1 block text-sm font-bold text-stone-900 dark:text-white">
+                                    <span
+                                        class="mt-1 block text-sm font-bold text-stone-900 dark:text-white"
+                                    >
                                         {{ day.shortDate }}
                                     </span>
                                     <select
                                         v-model="weeklyForm.days[day.index]"
-                                        class="mt-3 w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                        class="mt-3 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                     >
-                                        <option :value="null">Libur / Kosong</option>
+                                        <option :value="null">
+                                            Libur / Kosong
+                                        </option>
                                         <option
                                             v-for="template in weeklyTemplates"
                                             :key="template.id"
                                             :value="template.id"
                                         >
-                                            {{ template.name }} • {{ formatTimeRange(template) }}
+                                            {{ template.name }} •
+                                            {{ formatTimeRange(template) }}
                                         </option>
                                     </select>
                                 </label>
                             </div>
 
-                            <p v-if="weeklyForm.errors.days" class="text-xs text-rose-300">
+                            <p
+                                v-if="weeklyForm.errors.days"
+                                class="text-xs text-rose-300"
+                            >
                                 {{ weeklyForm.errors.days }}
                             </p>
 
@@ -898,7 +1136,11 @@ Jadwal Shift Karyawan
                                     class="rounded-2xl bg-sky-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60"
                                     :disabled="weeklyForm.processing"
                                 >
-                                    {{ weeklyForm.processing ? 'Menyimpan...' : 'Simpan Bulk Mingguan' }}
+                                    {{
+                                        weeklyForm.processing
+                                            ? 'Menyimpan...'
+                                            : 'Simpan Bulk Mingguan'
+                                    }}
                                 </button>
                             </div>
                         </form>
@@ -906,22 +1148,39 @@ Jadwal Shift Karyawan
                 </div>
 
                 <div class="space-y-5">
-                    <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <article
+                        class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                    >
                         <div class="flex items-center gap-3">
-                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-3 text-orange-200">
+                            <div
+                                class="rounded-2xl border border-stone-200 bg-white p-3 text-orange-200 dark:border-white/10 dark:bg-slate-950/50"
+                            >
                                 <Clock3 class="h-5 w-5" />
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
+                                <h3
+                                    class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                                >
                                     Jadwal Hari Ini
                                 </h3>
-                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                    {{ formatDate(new Date().toISOString().slice(0, 10)) }}
+                                <p
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                >
+                                    {{
+                                        formatDate(
+                                            new Date()
+                                                .toISOString()
+                                                .slice(0, 10),
+                                        )
+                                    }}
                                 </p>
                             </div>
                         </div>
 
-                        <div v-if="!visibleTodaySchedules.length" class="mt-5 rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-4 py-8 text-center text-sm text-stone-500 dark:text-slate-400">
+                        <div
+                            v-if="!visibleTodaySchedules.length"
+                            class="mt-5 rounded-2xl border border-dashed border-stone-200 px-4 py-8 text-center text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
+                        >
                             Belum ada jadwal aktif untuk filter hari ini.
                         </div>
 
@@ -929,59 +1188,117 @@ Jadwal Shift Karyawan
                             <article
                                 v-for="schedule in visibleTodaySchedules"
                                 :key="schedule.id"
-                                class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-4"
+                                class="rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-4 dark:border-white/10"
                             >
-                                <div class="flex flex-wrap items-start justify-between gap-3">
+                                <div
+                                    class="flex flex-wrap items-start justify-between gap-3"
+                                >
                                     <div>
-                                        <p class="text-sm font-black text-stone-900 dark:text-white">{{ schedule.user?.name || '-' }}</p>
-                                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                            {{ schedule.user?.outlet?.name || 'Tanpa outlet' }} • {{ schedule.user?.role?.name || '-' }}
+                                        <p
+                                            class="text-sm font-black text-stone-900 dark:text-white"
+                                        >
+                                            {{ schedule.user?.name || '-' }}
+                                        </p>
+                                        <p
+                                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        >
+                                            {{
+                                                schedule.user?.outlet?.name ||
+                                                'Tanpa outlet'
+                                            }}
+                                            •
+                                            {{
+                                                schedule.user?.role?.name || '-'
+                                            }}
                                         </p>
                                     </div>
                                     <span
                                         class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
-                                        :class="getShiftTone(getShiftTemplate(schedule))"
+                                        :class="
+                                            getShiftTone(
+                                                getShiftTemplate(schedule),
+                                            )
+                                        "
                                     >
-                                        {{ getShiftTemplate(schedule)?.name || 'Tanpa template' }}
+                                        {{
+                                            getShiftTemplate(schedule)?.name ||
+                                            'Tanpa template'
+                                        }}
                                     </span>
                                 </div>
-                                <p class="mt-3 text-sm text-stone-600 dark:text-slate-300">
-                                    {{ formatTimeRange(getShiftTemplate(schedule)) }}
+                                <p
+                                    class="mt-3 text-sm text-stone-600 dark:text-slate-300"
+                                >
+                                    {{
+                                        formatTimeRange(
+                                            getShiftTemplate(schedule),
+                                        )
+                                    }}
                                 </p>
                             </article>
                         </div>
                     </article>
 
-                    <article class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+                    <article
+                        class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                    >
                         <div class="flex items-center gap-3">
-                            <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/50 p-3 text-sky-200">
+                            <div
+                                class="rounded-2xl border border-stone-200 bg-white p-3 text-sky-200 dark:border-white/10 dark:bg-slate-950/50"
+                            >
                                 <Layers3 class="h-5 w-5" />
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
+                                <h3
+                                    class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                                >
                                     Template Shift Aktif
                                 </h3>
-                                <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                    Template dipakai juga untuk fondasi menu buka/tutup shift kasir berikutnya.
+                                <p
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                >
+                                    Template dipakai juga untuk fondasi menu
+                                    buka/tutup shift kasir berikutnya.
                                 </p>
                             </div>
                         </div>
 
-                        <div v-if="!shiftTemplates.length" class="mt-5 rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-4 py-8 text-center text-sm text-stone-500 dark:text-slate-400">
+                        <div
+                            v-if="!shiftTemplates.length"
+                            class="mt-5 rounded-2xl border border-dashed border-stone-200 px-4 py-8 text-center text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
+                        >
                             Belum ada template shift aktif pada outlet ini.
                         </div>
 
                         <div v-else class="mt-5 space-y-3">
                             <article
-                                v-for="template in shiftTemplates.filter((item) => !outletFilter || item.outlet_id === outletFilter)"
+                                v-for="template in shiftTemplates.filter(
+                                    (item) =>
+                                        !outletFilter ||
+                                        item.outlet_id === outletFilter,
+                                )"
                                 :key="template.id"
-                                class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.03] px-4 py-4"
+                                class="rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-4 dark:border-white/10"
                             >
-                                <div class="flex items-center justify-between gap-3">
+                                <div
+                                    class="flex items-center justify-between gap-3"
+                                >
                                     <div>
-                                        <p class="text-sm font-black text-stone-900 dark:text-white">{{ template.name }}</p>
-                                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                            {{ referenceData.outlets.find((outlet) => outlet.id === template.outlet_id)?.name || 'Outlet' }}
+                                        <p
+                                            class="text-sm font-black text-stone-900 dark:text-white"
+                                        >
+                                            {{ template.name }}
+                                        </p>
+                                        <p
+                                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        >
+                                            {{
+                                                referenceData.outlets.find(
+                                                    (outlet) =>
+                                                        outlet.id ===
+                                                        template.outlet_id,
+                                                )?.name || 'Outlet'
+                                            }}
                                         </p>
                                     </div>
                                     <span
@@ -991,7 +1308,9 @@ Jadwal Shift Karyawan
                                         Aktif
                                     </span>
                                 </div>
-                                <p class="mt-3 text-sm text-stone-600 dark:text-slate-300">
+                                <p
+                                    class="mt-3 text-sm text-stone-600 dark:text-slate-300"
+                                >
                                     {{ formatTimeRange(template) }}
                                 </p>
                             </article>
@@ -1000,30 +1319,46 @@ Jadwal Shift Karyawan
                 </div>
             </section>
 
-            <section class="rounded-3xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-950/70 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div class="flex items-center justify-between border-b border-stone-200 dark:border-white/10 px-5 py-4">
+            <section
+                class="rounded-3xl border border-stone-200 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+            >
+                <div
+                    class="flex items-center justify-between border-b border-stone-200 px-5 py-4 dark:border-white/10"
+                >
                     <div>
-                        <h3 class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300">
+                        <h3
+                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                        >
                             Grid Jadwal Mingguan
                         </h3>
-                        <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
+                        <p
+                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                        >
                             Minggu {{ weekRangeLabel }}.
                         </p>
                     </div>
-                    <span class="rounded-full border border-stone-200 dark:border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400">
+                    <span
+                        class="rounded-full border border-stone-200 bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500 dark:border-white/10 dark:text-slate-400"
+                    >
                         {{ visibleEmployees.length }} karyawan
                     </span>
                 </div>
 
-                <div v-if="!visibleEmployees.length" class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400">
-                    Tidak ada karyawan aktif untuk filter outlet / karyawan yang dipilih.
+                <div
+                    v-if="!visibleEmployees.length"
+                    class="px-5 py-10 text-center text-sm text-stone-500 dark:text-slate-400"
+                >
+                    Tidak ada karyawan aktif untuk filter outlet / karyawan yang
+                    dipilih.
                 </div>
 
                 <div v-else class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-white/10">
                         <thead class="bg-white/[0.03]">
                             <tr>
-                                <th class="px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500">
+                                <th
+                                    class="px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
+                                >
                                     Karyawan
                                 </th>
                                 <th
@@ -1032,7 +1367,11 @@ Jadwal Shift Karyawan
                                     class="min-w-[160px] px-4 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
                                 >
                                     <div>{{ day.label }}</div>
-                                    <div class="mt-1 text-stone-500 dark:text-slate-400">{{ day.shortDate }}</div>
+                                    <div
+                                        class="mt-1 text-stone-500 dark:text-slate-400"
+                                    >
+                                        {{ day.shortDate }}
+                                    </div>
                                 </th>
                             </tr>
                         </thead>
@@ -1043,9 +1382,19 @@ Jadwal Shift Karyawan
                                 class="align-top"
                             >
                                 <td class="px-5 py-4">
-                                    <p class="text-sm font-black text-stone-900 dark:text-white">{{ employee.name }}</p>
-                                    <p class="mt-1 text-xs text-stone-400 dark:text-slate-500">
-                                        {{ employee.outlet?.name || 'Tanpa outlet' }} • {{ employee.role?.name || '-' }}
+                                    <p
+                                        class="text-sm font-black text-stone-900 dark:text-white"
+                                    >
+                                        {{ employee.name }}
+                                    </p>
+                                    <p
+                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    >
+                                        {{
+                                            employee.outlet?.name ||
+                                            'Tanpa outlet'
+                                        }}
+                                        • {{ employee.role?.name || '-' }}
                                     </p>
                                 </td>
                                 <td
@@ -1054,21 +1403,60 @@ Jadwal Shift Karyawan
                                     class="px-4 py-4"
                                 >
                                     <div
-                                        v-if="getScheduleForCell(employee.id, day.date)"
-                                        class="rounded-2xl border px-3 py-3 group relative"
-                                        :class="getShiftTone(getShiftTemplate(getScheduleForCell(employee.id, day.date)))"
+                                        v-if="
+                                            getScheduleForCell(
+                                                employee.id,
+                                                day.date,
+                                            )
+                                        "
+                                        class="group relative rounded-2xl border px-3 py-3"
+                                        :class="
+                                            getShiftTone(
+                                                getShiftTemplate(
+                                                    getScheduleForCell(
+                                                        employee.id,
+                                                        day.date,
+                                                    ),
+                                                ),
+                                            )
+                                        "
                                     >
                                         <p class="text-sm font-black">
-                                            {{ getShiftTemplate(getScheduleForCell(employee.id, day.date))?.name || '-' }}
+                                            {{
+                                                getShiftTemplate(
+                                                    getScheduleForCell(
+                                                        employee.id,
+                                                        day.date,
+                                                    ),
+                                                )?.name || '-'
+                                            }}
                                         </p>
-                                        <p class="mt-1 text-[11px] font-semibold uppercase tracking-[0.16em] opacity-80">
-                                            {{ formatTimeRange(getShiftTemplate(getScheduleForCell(employee.id, day.date))) }}
+                                        <p
+                                            class="mt-1 text-[11px] font-semibold uppercase tracking-[0.16em] opacity-80"
+                                        >
+                                            {{
+                                                formatTimeRange(
+                                                    getShiftTemplate(
+                                                        getScheduleForCell(
+                                                            employee.id,
+                                                            day.date,
+                                                        ),
+                                                    ),
+                                                )
+                                            }}
                                         </p>
                                         <button
                                             v-if="canManage"
                                             type="button"
-                                            class="mt-2 inline-flex items-center gap-1 w-full justify-center rounded-xl bg-stone-200 dark:bg-white/10 hover:bg-stone-200 dark:bg-white/20 px-2 py-1 text-[10px] font-bold text-stone-900 dark:text-white transition duration-150"
-                                            @click="openTakeoverModal(getScheduleForCell(employee.id, day.date))"
+                                            class="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-xl bg-stone-200 px-2 py-1 text-[10px] font-bold text-stone-900 transition duration-150 hover:bg-stone-200 dark:bg-white/10 dark:bg-white/20 dark:text-white"
+                                            @click="
+                                                openTakeoverModal(
+                                                    getScheduleForCell(
+                                                        employee.id,
+                                                        day.date,
+                                                    ),
+                                                )
+                                            "
                                         >
                                             <ArrowLeftRight class="h-3 w-3" />
                                             Ambil Alih
@@ -1076,7 +1464,7 @@ Jadwal Shift Karyawan
                                     </div>
                                     <div
                                         v-else
-                                        class="rounded-2xl border border-dashed border-stone-200 dark:border-white/10 px-3 py-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                        class="rounded-2xl border border-dashed border-stone-200 px-3 py-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-stone-400 dark:border-white/10 dark:text-slate-500"
                                     >
                                         Libur / Belum diassign
                                     </div>
@@ -1091,22 +1479,31 @@ Jadwal Shift Karyawan
         <!-- Modal Takeover Shift -->
         <div
             v-if="isTakeoverOpen && activeTakeoverSchedule"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/80"
         >
-            <div class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-stone-200 dark:border-white/10 bg-stone-100 dark:bg-slate-950 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)]">
-                <div class="flex items-start justify-between gap-4 border-b border-stone-200 dark:border-white/10 pb-4">
+            <div
+                class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-stone-200 bg-stone-100 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)] dark:border-white/10 dark:bg-slate-950"
+            >
+                <div
+                    class="flex items-start justify-between gap-4 border-b border-stone-200 pb-4 dark:border-white/10"
+                >
                     <div>
-                        <h3 class="text-lg font-black text-stone-900 dark:text-white flex items-center gap-2">
+                        <h3
+                            class="flex items-center gap-2 text-lg font-black text-stone-900 dark:text-white"
+                        >
                             <ArrowLeftRight class="h-5 w-5 text-orange-400" />
                             Ambil Alih Shift Kerja
                         </h3>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            Pindahkan tanggung jawab shift hari ini ke karyawan pengganti.
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            Pindahkan tanggung jawab shift hari ini ke karyawan
+                            pengganti.
                         </p>
                     </div>
                     <button
                         type="button"
-                        class="rounded-xl border border-stone-200 dark:border-white/10 p-1.5 text-stone-500 dark:text-slate-400 transition hover:border-stone-200 dark:border-white/20 hover:text-stone-900 dark:text-white"
+                        class="rounded-xl border border-stone-200 p-1.5 text-stone-500 transition hover:border-stone-200 hover:text-stone-900 dark:border-white/10 dark:border-white/20 dark:text-slate-400 dark:text-white"
                         @click="isTakeoverOpen = false"
                     >
                         <X class="h-4 w-4" />
@@ -1115,19 +1512,53 @@ Jadwal Shift Karyawan
 
                 <div class="mt-4 space-y-4">
                     <!-- Info Shift Asal -->
-                    <div class="rounded-2xl border border-stone-200 dark:border-white/10 bg-white/[0.02] p-4 space-y-2">
+                    <div
+                        class="space-y-2 rounded-2xl border border-stone-200 bg-white/[0.02] p-4 dark:border-white/10"
+                    >
                         <div>
-                            <span class="text-[10px] uppercase font-bold text-stone-400 dark:text-slate-500 tracking-wider">Karyawan Terjadwal</span>
-                            <p class="text-sm font-black text-stone-900 dark:text-white">{{ activeTakeoverSchedule?.user?.name }}</p>
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                >Karyawan Terjadwal</span
+                            >
+                            <p
+                                class="text-sm font-black text-stone-900 dark:text-white"
+                            >
+                                {{ activeTakeoverSchedule?.user?.name }}
+                            </p>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-stone-200 dark:border-white/5">
+                        <div
+                            class="mt-2 grid grid-cols-2 gap-2 border-t border-stone-200 pt-2 dark:border-white/5"
+                        >
                             <div>
-                                <span class="text-[10px] uppercase font-bold text-stone-400 dark:text-slate-500 tracking-wider">Shift</span>
-                                <p class="text-xs font-bold text-orange-200">{{ activeTakeoverSchedule?.shift_template?.name || activeTakeoverSchedule?.shiftTemplate?.name }}</p>
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                    >Shift</span
+                                >
+                                <p class="text-xs font-bold text-orange-200">
+                                    {{
+                                        activeTakeoverSchedule?.shift_template
+                                            ?.name ||
+                                        activeTakeoverSchedule?.shiftTemplate
+                                            ?.name
+                                    }}
+                                </p>
                             </div>
                             <div>
-                                <span class="text-[10px] uppercase font-bold text-stone-400 dark:text-slate-500 tracking-wider">Tanggal</span>
-                                <p class="text-xs font-bold text-stone-600 dark:text-slate-300">{{ activeTakeoverSchedule ? formatDate(activeTakeoverSchedule.schedule_date) : '' }}</p>
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                    >Tanggal</span
+                                >
+                                <p
+                                    class="text-xs font-bold text-stone-600 dark:text-slate-300"
+                                >
+                                    {{
+                                        activeTakeoverSchedule
+                                            ? formatDate(
+                                                  activeTakeoverSchedule.schedule_date,
+                                              )
+                                            : ''
+                                    }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -1135,27 +1566,40 @@ Jadwal Shift Karyawan
                     <!-- Pilihan Karyawan Pengganti -->
                     <form @submit.prevent="submitTakeover" class="space-y-4">
                         <label class="block">
-                            <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Pilih Karyawan Pengganti</span>
+                            <span
+                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                >Pilih Karyawan Pengganti</span
+                            >
                             <select
                                 v-model="takeoverForm.user_id"
-                                class="w-full rounded-2xl border border-stone-200 dark:border-white/10 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-orange-400 focus:outline-none focus:ring-0"
+                                class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
                                 required
                             >
-                                <option value="">Pilih karyawan pengganti</option>
+                                <option value="">
+                                    Pilih karyawan pengganti
+                                </option>
                                 <option
-                                    v-for="employee in employees.filter(e => e.id !== activeTakeoverSchedule?.user?.id)"
+                                    v-for="employee in employees.filter(
+                                        (e) =>
+                                            e.id !==
+                                            activeTakeoverSchedule?.user?.id,
+                                    )"
                                     :key="employee.id"
                                     :value="employee.id"
                                 >
-                                    {{ employee.name }} ({{ employee.role?.name || '-' }})
+                                    {{ employee.name }} ({{
+                                        employee.role?.name || '-'
+                                    }})
                                 </option>
                             </select>
                         </label>
 
-                        <div class="flex items-center justify-end gap-3 border-t border-stone-200 dark:border-white/10 pt-4">
+                        <div
+                            class="flex items-center justify-end gap-3 border-t border-stone-200 pt-4 dark:border-white/10"
+                        >
                             <button
                                 type="button"
-                                class="rounded-xl border border-stone-200 dark:border-white/10 px-4 py-2.5 text-xs font-semibold text-stone-600 dark:text-slate-300 transition hover:bg-stone-100 dark:bg-white/5"
+                                class="rounded-xl border border-stone-200 px-4 py-2.5 text-xs font-semibold text-stone-600 transition hover:bg-stone-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-300"
                                 @click="isTakeoverOpen = false"
                             >
                                 Batal
@@ -1166,7 +1610,11 @@ Jadwal Shift Karyawan
                                 :disabled="takeoverForm.processing"
                             >
                                 <Save class="h-3.5 w-3.5" />
-                                {{ takeoverForm.processing ? 'Menyimpan...' : 'Konfirmasi' }}
+                                {{
+                                    takeoverForm.processing
+                                        ? 'Menyimpan...'
+                                        : 'Konfirmasi'
+                                }}
                             </button>
                         </div>
                     </form>

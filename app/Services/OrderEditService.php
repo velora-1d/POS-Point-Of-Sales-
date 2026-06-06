@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
 use App\Services\OnlineOrderStatusSyncService;
+use App\Services\TableReservationService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +19,7 @@ class OrderEditService
         protected PromoEngineService $promoEngineService,
         protected ApprovalRuleService $approvalRuleService,
         protected OnlineOrderStatusSyncService $onlineOrderStatusSyncService,
+        protected TableReservationService $tableReservationService,
     ) {
     }
 
@@ -211,6 +213,10 @@ class OrderEditService
                 ]),
             ]);
         });
+
+        if ($order->table_id) {
+            $this->tableReservationService->syncTableStatus($order->table_id);
+        }
     }
 
     public function deliverOrder(Order $order, User $actor): void
@@ -236,6 +242,20 @@ class OrderEditService
                 'status' => $newStatus,
             ]);
 
+            $fcmToken = $order->metadata['customer_fcm_token'] ?? null;
+            if ($fcmToken) {
+                $title = $newStatus === 'completed' ? "Pesanan Selesai ✅" : "Pesanan Dihidangkan 🍱";
+                $body = $newStatus === 'completed' 
+                    ? "Terima kasih sudah berkunjung! Pesanan Anda telah selesai diproses."
+                    : "Pesanan Anda sudah dihidangkan di meja. Selamat menikmati!";
+
+                \App\Services\FirebasePushService::sendPush($fcmToken, $title, $body, [
+                    'type' => 'order_status_update',
+                    'order_id' => $order->id,
+                    'status' => $newStatus,
+                ]);
+            }
+
             // Log status change
             \App\Models\OrderStatusLog::create([
                 'order_id' => $order->id,
@@ -256,19 +276,9 @@ class OrderEditService
                 $isPaid ? 'Order online selesai disajikan.' : 'Order online sedang diantar.'
             );
 
-            // Bebaskan meja jika statusnya completed (lunas)
+            // Bebaskan/sinkronkan meja jika statusnya completed (lunas)
             if ($newStatus === 'completed' && $order->table_id) {
-                $hasOtherActiveOrders = Order::query()
-                    ->where('table_id', $order->table_id)
-                    ->where('id', '!=', $order->id)
-                    ->whereNotIn('status', ['completed', 'cancelled'])
-                    ->exists();
-
-                if (!$hasOtherActiveOrders) {
-                    \App\Models\Table::query()
-                        ->whereKey($order->table_id)
-                        ->update(['status' => 'available']);
-                }
+                $this->tableReservationService->syncTableStatus($order->table_id);
             }
         });
     }

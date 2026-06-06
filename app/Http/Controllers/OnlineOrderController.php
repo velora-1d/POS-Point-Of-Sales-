@@ -37,6 +37,27 @@ class OnlineOrderController extends Controller
     {
         $result = $this->onlineOrderService->receiveWebhook('gofood', $request->validated());
 
+        if ($result['created']) {
+            try {
+                $order = \App\Models\Order::find($result['order_id']);
+                if ($order) {
+                    $platformName = $order->source === 'gofood' ? 'GoFood' : 'GoFood';
+                    $formattedTotal = number_format($order->total_amount, 0, ',', '.');
+                    \App\Services\FirebasePushService::sendToActiveCashiers(
+                        "Pesanan Online Baru!",
+                        "Ada pesanan masuk dari {$platformName} senilai Rp {$formattedTotal}.",
+                        [
+                            'type' => 'online_order',
+                            'order_id' => $order->id,
+                            'order_number' => $order->order_number,
+                        ]
+                    );
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Failed to send FCM notification for GoFood online order: " . $e->getMessage());
+            }
+        }
+
         return response()->json([
             'success' => true,
             'message' => $result['created']
@@ -49,6 +70,27 @@ class OnlineOrderController extends Controller
     public function storeGrabfoodWebhook(StoreOnlineOrderWebhookRequest $request): JsonResponse
     {
         $result = $this->onlineOrderService->receiveWebhook('grabfood', $request->validated());
+
+        if ($result['created']) {
+            try {
+                $order = \App\Models\Order::find($result['order_id']);
+                if ($order) {
+                    $platformName = $order->source === 'grabfood' ? 'GrabFood' : 'GrabFood';
+                    $formattedTotal = number_format($order->total_amount, 0, ',', '.');
+                    \App\Services\FirebasePushService::sendToActiveCashiers(
+                        "Pesanan Online Baru!",
+                        "Ada pesanan masuk dari {$platformName} senilai Rp {$formattedTotal}.",
+                        [
+                            'type' => 'online_order',
+                            'order_id' => $order->id,
+                            'order_number' => $order->order_number,
+                        ]
+                    );
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Failed to send FCM notification for GrabFood online order: " . $e->getMessage());
+            }
+        }
 
         return response()->json([
             'success' => true,

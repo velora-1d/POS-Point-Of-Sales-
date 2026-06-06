@@ -7,7 +7,7 @@ use App\Models\EmployeeSchedule;
 use App\Models\User;
 use App\Repositories\AttendanceRepository;
 use Carbon\CarbonImmutable;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -338,7 +338,7 @@ class AttendanceService
         ];
     }
 
-    protected function formatDuration($clockIn, $clockOut): string
+    protected function formatDuration(?\Carbon\CarbonInterface $clockIn, ?\Carbon\CarbonInterface $clockOut): string
     {
         if (!$clockIn) {
             return '-';
@@ -364,7 +364,7 @@ class AttendanceService
         return $notes->isEmpty() ? null : $notes->implode("\n");
     }
 
-    protected function canManage(User $actor): bool
+    public function canManage(User $actor): bool
     {
         return in_array($actor->role?->type, ['owner', 'supervisor'], true);
     }

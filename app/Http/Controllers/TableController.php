@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Outlet;
 use App\Models\Table;
+use App\Services\TableManagementService;
 use App\Services\TableQrConfigService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ class TableController extends Controller
 {
     public function __construct(
         protected TableQrConfigService $tableQrConfigService,
+        protected TableManagementService $tableManagementService,
     ) {
     }
 
@@ -29,16 +31,18 @@ class TableController extends Controller
 
         if ($outletId) {
             $qrConfig = $this->tableQrConfigService->getConfigForOutlet($outletId);
-            $tables->each(function (Table $table) use ($qrConfig): void {
+        $tables->each(function (Table $table) use ($qrConfig): void {
                 $table->setAttribute(
                     'public_qr_url',
                     $this->tableQrConfigService->buildPublicMenuUrlForTable($table, $qrConfig),
                 );
+                // Sertakan remaining_capacity untuk frontend
+                $table->append('remaining_capacity');
             });
         }
 
         return Inertia::render('Settings/Tables', [
-            'tables' => $tables,
+            'tables'  => $tables,
             'success' => session('success'),
         ]);
     }
@@ -88,5 +92,19 @@ class TableController extends Controller
         $table->update(['is_active' => false]);
 
         return redirect()->back()->with('success', 'Meja berhasil dihapus.');
+    }
+
+    public function clearTable(Request $request, Table $table): RedirectResponse
+    {
+        $user = auth()->user();
+
+        // Pastikan meja milik outlet yang sama
+        if ($table->outlet_id !== $user->outlet_id) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $this->tableManagementService->clearTable($table, $user);
+
+        return redirect()->back()->with('success', "Meja {$table->name} berhasil dibersihkan.");
     }
 }

@@ -23,6 +23,7 @@ class OrderPaymentService
         protected PromoEngineService $promoEngineService,
         protected ShiftService $shiftService,
         protected ApprovalRuleService $approvalRuleService,
+        protected TableManagementService $tableManagementService,
     ) {
     }
 
@@ -157,31 +158,33 @@ class OrderPaymentService
 
         return DB::transaction(function () use ($payload, $table, $customer, $items, $tableToken, $pricing) {
             $order = Order::create([
-                'outlet_id' => $table->outlet_id,
-                'table_id' => $table->id,
-                'customer_id' => $customer?->id,
-                'cashier_id' => null,
-                'subtotal' => $pricing['subtotal'],
-                'discount_amount' => $pricing['discount_amount'],
-                'total_amount' => $pricing['total_amount'],
-                'paid_amount' => 0,
-                'status' => 'pending',
-                'source' => 'qr_meja',
-                'type' => 'dine_in',
-                'notes' => $payload['notes'] ?? null,
+                'outlet_id'      => $table->outlet_id,
+                'table_id'       => $table->id,
+                'customer_id'    => $customer?->id,
+                'cashier_id'     => null,
+                'subtotal'       => $pricing['subtotal'],
+                'discount_amount'=> $pricing['discount_amount'],
+                'total_amount'   => $pricing['total_amount'],
+                'paid_amount'    => 0,
+                'status'         => 'pending',
+                'source'         => 'qr_meja',
+                'type'           => 'dine_in',
+                'guests_count'   => max(1, (int) ($payload['guests_count'] ?? 1)),
+                'notes'          => $payload['notes'] ?? null,
                 'estimated_time' => 15,
                 'pending_started_at' => null,
-                'pay_later' => false,
+                'pay_later'      => false,
                 'qr_session_token' => $tableToken,
-                'metadata' => [
+                'metadata'       => [
+                    'customer_fcm_token' => $payload['fcm_token'] ?? null,
                     'payment' => [
                         'provider' => 'pakasir',
-                        'method' => 'qris',
-                        'status' => 'pending',
-                        'context' => 'before_kitchen',
+                        'method'   => 'qris',
+                        'status'   => 'pending',
+                        'context'  => 'before_kitchen',
                     ],
                     'self_service' => [
-                        'channel' => 'qr_meja',
+                        'channel'    => 'qr_meja',
                         'table_name' => $table->name,
                     ],
                     'promo' => $this->buildPromoMetadata($pricing),
@@ -294,9 +297,35 @@ class OrderPaymentService
             ];
         }
 
+        if ($payload['payment_method'] === 'online_platform') {
+            return $this->markOrderPaidViaPlatform($order);
+        }
+
         return $payload['payment_method'] === 'cash'
             ? $this->markOrderPaidBeforeKitchen($order, $payload['cash_received'] ?? null)
             : $this->startGatewayCheckout($order, 'before_kitchen', $payload['payment_method']);
+    }
+
+    protected function markOrderPaidViaPlatform(Order $order): array
+    {
+        $order->update([
+            'paid_amount' => $order->total_amount,
+            'pay_later' => false,
+            'metadata' => $this->mergePaymentMeta($order, [
+                'provider' => 'online_platform',
+                'method' => $order->source,
+                'status' => 'paid',
+                'context' => 'before_kitchen',
+                'requested_at' => now()->toIso8601String(),
+                'paid_at' => now()->toIso8601String(),
+                'checkout_url' => null,
+            ]),
+        ]);
+
+        return [
+            'message' => 'Order online telah ditandai lunas (sudah dibayar) dan dikirim ke dapur.',
+            'paymentCheckout' => null,
+        ];
     }
 
     protected function markOrderPaidBeforeKitchen(Order $order, mixed $cashReceived): array
@@ -444,28 +473,29 @@ class OrderPaymentService
         string $shiftId,
     ): Order {
         return Order::create([
-            'outlet_id' => $outletId,
-            'shift_id' => $shiftId,
-            'table_id' => $payload['order_type'] === 'takeaway' ? null : $payload['table_id'],
-            'customer_id' => $customerId,
-            'cashier_id' => $actor->id,
-            'subtotal' => $pricing['subtotal'],
+            'outlet_id'       => $outletId,
+            'shift_id'        => $shiftId,
+            'table_id'        => in_array($payload['order_type'], ['takeaway', 'online'], true) ? null : $payload['table_id'],
+            'customer_id'     => $customerId,
+            'cashier_id'      => $actor->id,
+            'subtotal'        => $pricing['subtotal'],
             'discount_amount' => $pricing['discount_amount'],
-            'total_amount' => $pricing['total_amount'],
-            'paid_amount' => 0,
-            'status' => 'pending',
-            'source' => 'kasir',
-            'type' => $payload['order_type'],
-            'notes' => $payload['notes'] ?? null,
-            'estimated_time' => 15,
+            'total_amount'    => $pricing['total_amount'],
+            'paid_amount'     => 0,
+            'status'          => 'pending',
+            'source'          => $payload['source'] ?? 'kasir',
+            'type'            => $payload['order_type'],
+            'guests_count'    => $payload['order_type'] === 'dine_in' ? max(1, (int) ($payload['guests_count'] ?? 1)) : 1,
+            'notes'           => $payload['notes'] ?? null,
+            'estimated_time'  => 15,
             'pending_started_at' => now(),
-            'pay_later' => ($payload['payment_option'] ?? 'pay_later') === 'pay_later',
-            'metadata' => $this->mergeArray([], [
+            'pay_later'       => ($payload['payment_option'] ?? 'pay_later') === 'pay_later',
+            'metadata'        => $this->mergeArray([], [
                 'payment' => [
-                    'provider' => null,
-                    'method' => $payload['payment_option'] === 'pay_now' ? ($payload['payment_method'] ?? null) : null,
-                    'status' => $payload['payment_option'] === 'pay_now' ? 'pending' : 'unpaid',
-                    'context' => $payload['payment_option'] === 'pay_now' ? 'before_kitchen' : 'after_service',
+                    'provider' => $payload['payment_method'] === 'online_platform' ? 'online_platform' : null,
+                    'method'   => $payload['payment_option'] === 'pay_now' ? ($payload['payment_method'] ?? null) : null,
+                    'status'   => $payload['payment_option'] === 'pay_now' ? ($payload['payment_method'] === 'online_platform' ? 'paid' : 'pending') : 'unpaid',
+                    'context'  => $payload['payment_option'] === 'pay_now' ? 'before_kitchen' : 'after_service',
                 ],
                 'reservation' => [
                     'id' => $payload['reservation_id'] ?? null,
@@ -668,6 +698,11 @@ class OrderPaymentService
         if (!$order->table_id) {
             return;
         }
+
+        // Sinkronisasi current_guests dari semua order aktif
+        $this->tableManagementService->syncTableGuests($order->table_id);
+        // Tandai occupied_at jika belum ada
+        $this->tableManagementService->markOccupiedAt($order->table_id);
 
         Table::query()
             ->whereKey($order->table_id)

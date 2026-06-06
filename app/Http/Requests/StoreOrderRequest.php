@@ -15,7 +15,11 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_type' => ['required', Rule::in(['dine_in', 'takeaway'])],
+            'order_type' => ['required', Rule::in(['dine_in', 'takeaway', 'online'])],
+            'source' => [
+                'nullable',
+                Rule::in(['kasir', 'qr_meja', 'gofood', 'grabfood', 'shopeefood', 'maximfood']),
+            ],
             'table_id' => [
                 'nullable',
                 'exists:tables,id',
@@ -39,7 +43,7 @@ class StoreOrderRequest extends FormRequest
             'payment_method' => [
                 'nullable',
                 Rule::requiredIf(fn () => $this->input('payment_option') === 'pay_now'),
-                Rule::in(['cash', 'qris']),
+                Rule::in(['cash', 'qris', 'online_platform']),
             ],
             'cash_received' => ['nullable', 'numeric', 'min:0'],
         ];

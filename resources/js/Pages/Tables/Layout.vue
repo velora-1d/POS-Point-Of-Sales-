@@ -3,15 +3,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
     Activity,
-    ArrowUpRight,
     Armchair,
+    ArrowUpRight,
+    Clock,
     Clock3,
     Copy,
     ExternalLink,
     Printer,
     QrCode,
     RefreshCw,
-    Sparkles,
     Users,
     X,
 } from '@lucide/vue';
@@ -43,6 +43,8 @@ interface TablePayload {
     active_reservation?: TableReservationPayload | null;
     active_order?: TableOrderSummary | null;
     active_orders?: TableOrderSummary[];
+    current_guests?: number | null;
+    occupied_at?: string | null;
 }
 
 interface TableReservationPayload {
@@ -70,6 +72,7 @@ const props = defineProps<{
     };
     success?: string | null;
     error?: string | null;
+    alertSettings?: any;
 }>();
 
 const selectedCategory = ref<'indoor' | 'outdoor'>('indoor');
@@ -143,10 +146,22 @@ const hasManualPositions = computed(() =>
 );
 
 const generatedSlots = [
-    [12, 12], [37, 12], [62, 12], [87, 12],
-    [12, 38], [37, 38], [62, 38], [87, 38],
-    [12, 64], [37, 64], [62, 64], [87, 64],
-    [12, 90], [37, 90], [62, 90], [87, 90],
+    [12, 12],
+    [37, 12],
+    [62, 12],
+    [87, 12],
+    [12, 38],
+    [37, 38],
+    [62, 38],
+    [87, 38],
+    [12, 64],
+    [37, 64],
+    [62, 64],
+    [87, 64],
+    [12, 90],
+    [37, 90],
+    [62, 90],
+    [87, 90],
 ];
 
 const tableCoordinates = computed(() => {
@@ -232,8 +247,8 @@ const tableCards = computed(() =>
             qrUrl: table.public_qr_url
                 ? table.public_qr_url
                 : table.qr_session_token
-                ? route('self-service.menu', table.qr_session_token)
-                : null,
+                  ? route('self-service.menu', table.qr_session_token)
+                  : null,
         };
     }),
 );
@@ -263,7 +278,8 @@ const statCards = computed(() => [
         label: 'Total Meja',
         value: props.summary.total,
         tone: 'text-stone-900 dark:text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white dark:bg-white/[0.03]',
+        surface:
+            'border-stone-200 dark:border-white/10 bg-white dark:bg-white/[0.03]',
     },
     {
         label: 'Siap Dipakai',
@@ -308,7 +324,9 @@ const getTableSnapshot = (table: TablePayload) =>
         activeOrderId: table.active_order?.id ?? null,
         activeOrderCount: table.active_orders?.length ?? 0,
         latestOrderStatus:
-            table.active_orders?.[0]?.status ?? table.active_order?.status ?? null,
+            table.active_orders?.[0]?.status ??
+            table.active_order?.status ??
+            null,
     });
 
 const refreshTableStatuses = () => {
@@ -350,7 +368,10 @@ watch(
         );
 
         const updatedIds = currentTables
-            .filter((table) => previousMap.get(table.id) !== getTableSnapshot(table))
+            .filter(
+                (table) =>
+                    previousMap.get(table.id) !== getTableSnapshot(table),
+            )
             .map((table) => table.id);
 
         if (updatedIds.length === 0) {
@@ -413,7 +434,8 @@ const getStatusClass = (status: string) => {
     }
 };
 
-const isTableChanged = (tableId: string) => changedTableIds.value.includes(tableId);
+const isTableChanged = (tableId: string) =>
+    changedTableIds.value.includes(tableId);
 
 const showQrActionMessage = (message: string) => {
     qrActionMessage.value = message;
@@ -466,7 +488,11 @@ const printSelectedQr = () => {
         return;
     }
 
-    const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=520,height=760');
+    const printWindow = window.open(
+        '',
+        '_blank',
+        'noopener,noreferrer,width=520,height=760',
+    );
 
     if (!printWindow) {
         showQrActionMessage('Popup print diblokir browser.');
@@ -498,7 +524,7 @@ const printSelectedQr = () => {
                     window.onload = function () {
                         window.print();
                     };
-                <\/script>
+                </${'script'}>
             </body>
         </html>
     `);
@@ -509,9 +535,7 @@ const openReservationModal = (tableId: string | null = null) => {
     reservationForm.reset();
     reservationForm.clearErrors();
     reservationForm.table_id =
-        tableId ||
-        reservationTableOptions.value[0]?.id ||
-        '';
+        tableId || reservationTableOptions.value[0]?.id || '';
     reservationForm.customer_id = null;
     reservationForm.customer_name = '';
     reservationForm.customer_phone = '';
@@ -547,6 +571,54 @@ const cancelReservation = (reservationId: string) => {
         },
     );
 };
+
+const alertSettings = computed(() => ({
+    enabled: props.alertSettings?.enabled ?? true,
+    warning_minutes: props.alertSettings?.warning_minutes ?? 90,
+    danger_minutes: props.alertSettings?.danger_minutes ?? 180,
+}));
+
+const getCapacityPercent = (table: any): number => {
+    if (!table.capacity || table.capacity <= 0) return 0;
+    return Math.min(
+        100,
+        Math.round(((table.current_guests ?? 0) / table.capacity) * 100),
+    );
+};
+
+const getCapacityBarClass = (table: any): string => {
+    const pct = getCapacityPercent(table);
+    if (pct >= 90) return 'bg-rose-500';
+    if (pct >= 60) return 'bg-amber-400';
+    return 'bg-emerald-500';
+};
+
+const getOccupiedMinutes = (table: any): number => {
+    if (!table.occupied_at) return 0;
+    return Math.floor(
+        (Date.now() - new Date(table.occupied_at).getTime()) / 60000,
+    );
+};
+
+const formatTableTimer = (table: any): string => {
+    const m = getOccupiedMinutes(table);
+    const h = Math.floor(m / 60);
+    const min = m % 60;
+    if (h > 0) return `${h}j ${min}m`;
+    return `${min}m`;
+};
+
+const getTableTimerClass = (table: any): string => {
+    if (table.status !== 'occupied') return '';
+    const m = getOccupiedMinutes(table);
+    if (m >= alertSettings.value.danger_minutes) {
+        return 'border-rose-400/20 bg-rose-500/12 text-rose-600 dark:text-rose-300';
+    }
+    if (m >= alertSettings.value.warning_minutes) {
+        return 'border-amber-400/20 bg-amber-500/12 text-amber-700 dark:text-amber-300';
+    }
+    return 'border-blue-400/20 bg-blue-500/12 text-blue-600 dark:text-blue-300';
+};
 </script>
 
 <template>
@@ -556,10 +628,14 @@ const cancelReservation = (reservationId: string) => {
         <template #header>
             <div class="flex flex-col gap-2">
                 <div>
-                    <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+                    <h2
+                        class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                    >
                         Peta Meja Outlet
                     </h2>
-                    <p class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400">
+                    <p
+                        class="mt-1 max-w-2xl text-xs text-stone-500 dark:text-slate-400"
+                    >
                         Pantau posisi, kapasitas, status meja, reservasi aktif,
                         dan QR self-service per meja, lalu lompat langsung ke
                         flow kasir dengan refresh otomatis.
@@ -612,10 +688,10 @@ const cancelReservation = (reservationId: string) => {
 
             <div class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
                 <section
-                    class="overflow-hidden rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 shadow-2xl shadow-slate-950/20"
+                    class="overflow-hidden rounded-[26px] border border-stone-200 bg-stone-50 shadow-2xl shadow-slate-950/20 dark:border-slate-800/80 dark:bg-slate-900/92"
                 >
                     <div
-                        class="border-b border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-[radial-gradient(circle_at_top_right,_rgba(249,115,22,0.14),_transparent_38%),linear-gradient(180deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))] px-5 py-4"
+                        class="border-b border-stone-200 bg-stone-50 px-5 py-4 dark:border-slate-800/80 dark:bg-[radial-gradient(circle_at_top_right,_rgba(249,115,22,0.14),_transparent_38%),linear-gradient(180deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))]"
                     >
                         <div
                             class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
@@ -626,10 +702,14 @@ const cancelReservation = (reservationId: string) => {
                                 >
                                     Arena Outlet
                                 </p>
-                                <h3 class="mt-1 text-lg font-black text-stone-900 dark:text-white">
+                                <h3
+                                    class="mt-1 text-lg font-black text-stone-900 dark:text-white"
+                                >
                                     Visual map meja aktif
                                 </h3>
-                                <div class="mt-3 flex items-center gap-1 rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-slate-950 p-1 w-fit">
+                                <div
+                                    class="mt-3 flex w-fit items-center gap-1 rounded-xl border border-stone-200 bg-stone-100 p-1 dark:border-slate-800 dark:bg-slate-950"
+                                >
                                     <button
                                         type="button"
                                         @click="selectedCategory = 'indoor'"
@@ -637,7 +717,7 @@ const cancelReservation = (reservationId: string) => {
                                             'rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-200',
                                             selectedCategory === 'indoor'
                                                 ? 'bg-orange-500 text-white shadow-md'
-                                                : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200',
+                                                : 'text-stone-500 hover:text-stone-800 dark:text-slate-400 dark:hover:text-slate-200',
                                         ]"
                                     >
                                         Indoor Area
@@ -649,7 +729,7 @@ const cancelReservation = (reservationId: string) => {
                                             'rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-200',
                                             selectedCategory === 'outdoor'
                                                 ? 'bg-orange-500 text-white shadow-md'
-                                                : 'text-stone-500 dark:text-slate-400 hover:text-stone-800 dark:hover:text-slate-200',
+                                                : 'text-stone-500 hover:text-stone-800 dark:text-slate-400 dark:hover:text-slate-200',
                                         ]"
                                     >
                                         Outdoor Area
@@ -659,7 +739,7 @@ const cancelReservation = (reservationId: string) => {
                             <div class="flex flex-wrap items-center gap-2">
                                 <Link
                                     :href="route('settings.tables.index')"
-                                    class="inline-flex items-center gap-1 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300 transition hover:bg-orange-500/20"
+                                    class="inline-flex items-center gap-1 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 transition hover:bg-orange-500/20 dark:text-orange-300"
                                 >
                                     <Settings class="h-3.5 w-3.5" />
                                     Manajemen Meja
@@ -668,7 +748,7 @@ const cancelReservation = (reservationId: string) => {
                                     type="button"
                                     @click="refreshTableStatuses"
                                     :disabled="isRefreshing"
-                                    class="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-slate-700/80 bg-white dark:bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-800 dark:text-slate-200 transition hover:border-orange-500/30 hover:text-stone-900 dark:hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                                    class="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-800 transition hover:border-orange-500/30 hover:text-stone-900 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700/80 dark:bg-slate-950/70 dark:text-slate-200 dark:hover:text-white"
                                 >
                                     <RefreshCw
                                         :class="[
@@ -691,12 +771,16 @@ const cancelReservation = (reservationId: string) => {
                                     </span>
                                     Live tiap 8 detik
                                 </div>
-                                <p class="text-[11px] text-stone-400 dark:text-slate-500">
+                                <p
+                                    class="text-[11px] text-stone-400 dark:text-slate-500"
+                                >
                                     Update terakhir {{ lastUpdatedLabel }}
                                 </p>
                             </div>
                         </div>
-                        <p class="mt-3 text-[11px] text-stone-400 dark:text-slate-500">
+                        <p
+                            class="mt-3 text-[11px] text-stone-400 dark:text-slate-500"
+                        >
                             {{
                                 hasManualPositions
                                     ? 'Menggunakan koordinat posisi meja yang tersimpan.'
@@ -707,7 +791,7 @@ const cancelReservation = (reservationId: string) => {
 
                     <div class="p-4">
                         <div
-                            class="relative min-h-[36rem] overflow-hidden rounded-[24px] border border-stone-200 dark:border-slate-800 bg-stone-100 dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.08),_transparent_32%),linear-gradient(180deg,#020617_0%,#111827_100%)]"
+                            class="relative min-h-[36rem] overflow-hidden rounded-[24px] border border-stone-200 bg-stone-100 dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.08),_transparent_32%),linear-gradient(180deg,#020617_0%,#111827_100%)]"
                         >
                             <div
                                 class="pointer-events-none absolute inset-0 opacity-20"
@@ -730,7 +814,7 @@ const cancelReservation = (reservationId: string) => {
                                 :class="[
                                     hasManualPositions
                                         ? 'absolute inset-0'
-                                        : 'relative z-10 grid h-full content-start gap-6 overflow-y-auto p-6 grid-cols-[repeat(auto-fill,minmax(180px,1fr))]',
+                                        : 'relative z-10 grid h-full grid-cols-[repeat(auto-fill,minmax(180px,1fr))] content-start gap-6 overflow-y-auto p-6',
                                 ]"
                             >
                                 <div
@@ -754,166 +838,269 @@ const cancelReservation = (reservationId: string) => {
                                             : {}
                                     "
                                 >
-                                <div
-                                    :class="[
-                                        'rounded-[22px] border border-stone-200 dark:border-slate-700/80 bg-white dark:bg-slate-950/90 p-3 shadow-[0_20px_50px_rgba(2,6,23,0.45)] backdrop-blur transition duration-300',
-                                        isTableChanged(table.id)
-                                            ? 'border-sky-400/40 shadow-[0_0_0_1px_rgba(56,189,248,0.18),0_20px_50px_rgba(14,165,233,0.18)]'
-                                            : '',
-                                    ]"
-                                >
                                     <div
-                                        class="mb-3 flex items-start justify-between gap-3"
+                                        :class="[
+                                            'rounded-[22px] border border-stone-200 bg-white p-3 shadow-[0_20px_50px_rgba(2,6,23,0.45)] backdrop-blur transition duration-300 dark:border-slate-700/80 dark:bg-slate-950/90',
+                                            isTableChanged(table.id)
+                                                ? 'border-sky-400/40 shadow-[0_0_0_1px_rgba(56,189,248,0.18),0_20px_50px_rgba(14,165,233,0.18)]'
+                                                : '',
+                                        ]"
                                     >
-                                        <div>
-                                            <p
-                                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
-                                            >
-                                                {{ table.name }}
-                                            </p>
-                                            <p
-                                                class="mt-1 text-lg font-black text-stone-900 dark:text-white"
+                                        <div
+                                            class="mb-3 flex items-start justify-between gap-3"
+                                        >
+                                            <div>
+                                                <p
+                                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                                >
+                                                    {{ table.name }}
+                                                </p>
+                                                <p
+                                                    class="mt-1 text-lg font-black text-stone-900 dark:text-white"
+                                                >
+                                                    {{
+                                                        table.activeOrders
+                                                            .length
+                                                            ? table.activeOrders
+                                                                  .length
+                                                            : table.capacity ||
+                                                              '-'
+                                                    }}
+                                                </p>
+                                            </div>
+                                            <span
+                                                :class="[
+                                                    'rounded-full border px-2 py-1 text-[9px] font-bold uppercase tracking-wider',
+                                                    table.status === 'occupied'
+                                                        ? getTableTimerClass(
+                                                              table,
+                                                          )
+                                                        : getStatusClass(
+                                                              table.status,
+                                                          ),
+                                                ]"
                                             >
                                                 {{
-                                                    table.activeOrders.length
-                                                        ? table.activeOrders
-                                                              .length
-                                                        : table.capacity || '-'
+                                                    getStatusLabel(table.status)
                                                 }}
-                                            </p>
-                                        </div>
-                                        <span
-                                            :class="[
-                                                'rounded-full border px-2 py-1 text-[9px] font-bold uppercase tracking-wider',
-                                                getStatusClass(table.status),
-                                            ]"
-                                        >
-                                            {{ getStatusLabel(table.status) }}
-                                        </span>
-                                    </div>
-
-                                    <div
-                                        v-if="isTableChanged(table.id)"
-                                        class="mb-3 inline-flex items-center gap-1 rounded-full border border-sky-400/20 bg-sky-500/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-sky-700 dark:text-sky-300"
-                                    >
-                                        <Activity class="h-3 w-3" />
-                                        Perubahan baru
-                                    </div>
-
-                                    <div
-                                        class="rounded-2xl border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/70 px-3 py-2"
-                                    >
-                                        <div
-                                            class="flex items-center justify-between gap-2"
-                                        >
-                                            <span
-                                                class="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
-                                            >
-                                                Kapasitas
-                                            </span>
-                                            <span
-                                                class="flex items-center gap-1 text-[11px] font-bold text-stone-800 dark:text-slate-200"
-                                            >
-                                                <Users class="h-3.5 w-3.5" />
-                                                {{ table.capacity || '-' }}
                                             </span>
                                         </div>
 
                                         <div
-                                            class="mt-2 flex items-center justify-between gap-2"
+                                            v-if="isTableChanged(table.id)"
+                                            class="mb-3 inline-flex items-center gap-1 rounded-full border border-sky-400/20 bg-sky-500/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-sky-700 dark:text-sky-300"
                                         >
-                                            <span
-                                                class="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
-                                            >
-                                                Customer
-                                            </span>
-                                            <span
-                                                class="max-w-[84px] truncate text-[11px] font-bold text-stone-600 dark:text-slate-300"
-                                            >
-                                                {{ table.customerLabel }}
-                                            </span>
+                                            <Activity class="h-3 w-3" />
+                                            Perubahan baru
                                         </div>
-                                    </div>
 
-                                    <div
-                                        class="mt-3 flex items-center justify-between gap-2 text-[11px] text-stone-500 dark:text-slate-400"
-                                    >
                                         <div
-                                            v-if="table.latestOrder"
-                                            class="min-w-0"
+                                            class="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-2 dark:border-slate-800/80 dark:bg-slate-900/70"
                                         >
-                                            <p class="truncate font-bold text-stone-900 dark:text-white">
-                                                {{
-                                                    table.latestOrder
-                                                        .order_number
-                                                }}
-                                            </p>
-                                            <p class="mt-0.5 text-stone-400 dark:text-slate-500">
-                                                {{
-                                                    formatPrice(
+                                            <div class="flex flex-col gap-1.5">
+                                                <div
+                                                    class="flex items-center justify-between gap-2"
+                                                >
+                                                    <span
+                                                        class="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                                    >
+                                                        Kapasitas
+                                                    </span>
+                                                    <span
+                                                        class="flex items-center gap-1 text-[11px] font-bold text-stone-800 dark:text-slate-200"
+                                                    >
+                                                        <Users
+                                                            class="h-3.5 w-3.5"
+                                                        />
+                                                        {{
+                                                            table.status ===
+                                                            'occupied'
+                                                                ? `${table.current_guests ?? 0}/${table.capacity || '-'}`
+                                                                : table.capacity ||
+                                                                  '-'
+                                                        }}
+                                                    </span>
+                                                </div>
+                                                <!-- Progress Bar Kapasitas Terpakai -->
+                                                <div
+                                                    v-if="
+                                                        table.status ===
+                                                            'occupied' &&
+                                                        table.capacity
+                                                    "
+                                                    class="h-1.5 w-full overflow-hidden rounded-full bg-stone-200 dark:bg-slate-800"
+                                                >
+                                                    <div
+                                                        class="h-full rounded-full transition-all duration-500"
+                                                        :class="
+                                                            getCapacityBarClass(
+                                                                table,
+                                                            )
+                                                        "
+                                                        :style="{
+                                                            width:
+                                                                getCapacityPercent(
+                                                                    table,
+                                                                ) + '%',
+                                                        }"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="mt-2 flex items-center justify-between gap-2"
+                                            >
+                                                <span
+                                                    class="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                                >
+                                                    Customer
+                                                </span>
+                                                <span
+                                                    class="max-w-[84px] truncate text-[11px] font-bold text-stone-600 dark:text-slate-300"
+                                                >
+                                                    {{ table.customerLabel }}
+                                                </span>
+                                            </div>
+
+                                            <!-- Durasi Meja Occupied -->
+                                            <div
+                                                v-if="
+                                                    table.status ===
+                                                        'occupied' &&
+                                                    table.occupied_at
+                                                "
+                                                class="mt-2 flex items-center justify-between gap-2 border-t border-dashed border-stone-200 pt-2 dark:border-slate-700/50"
+                                            >
+                                                <span
+                                                    class="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                                >
+                                                    Durasi
+                                                </span>
+                                                <span
+                                                    class="flex items-center gap-1 text-[11px] font-bold text-stone-700 dark:text-slate-300"
+                                                >
+                                                    <Clock class="h-3 w-3" />
+                                                    {{
+                                                        formatTableTimer(table)
+                                                    }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="mt-3 flex items-center justify-between gap-2 text-[11px] text-stone-500 dark:text-slate-400"
+                                        >
+                                            <div
+                                                v-if="table.latestOrder"
+                                                class="min-w-0"
+                                            >
+                                                <p
+                                                    class="truncate font-bold text-stone-900 dark:text-white"
+                                                >
+                                                    {{
                                                         table.latestOrder
-                                                            .total_amount,
+                                                            .order_number
+                                                    }}
+                                                </p>
+                                                <p
+                                                    class="mt-0.5 text-stone-400 dark:text-slate-500"
+                                                >
+                                                    {{
+                                                        formatPrice(
+                                                            table.latestOrder
+                                                                .total_amount,
+                                                        )
+                                                    }}
+                                                </p>
+                                            </div>
+                                            <div
+                                                v-else
+                                                class="text-stone-400 dark:text-slate-500"
+                                            >
+                                                Siap untuk order baru
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            v-if="table.activeReservation"
+                                            class="mt-3 rounded-2xl border border-amber-500/20 bg-amber-500/8 px-3 py-2"
+                                        >
+                                            <p
+                                                class="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-300"
+                                            >
+                                                Reservasi Aktif
+                                            </p>
+                                            <p
+                                                class="mt-1 truncate text-[11px] font-bold text-stone-900 dark:text-white"
+                                            >
+                                                {{
+                                                    table.activeReservation
+                                                        .customer_name
+                                                }}
+                                            </p>
+                                            <p
+                                                class="mt-0.5 text-[10px] text-stone-500 dark:text-slate-400"
+                                            >
+                                                {{
+                                                    formatDateTime(
+                                                        table.activeReservation
+                                                            .reserved_for,
                                                     )
                                                 }}
+                                                •
+                                                {{
+                                                    table.activeReservation
+                                                        .guest_count
+                                                }}
+                                                pax
                                             </p>
                                         </div>
-                                        <div v-else class="text-stone-400 dark:text-slate-500">
-                                            Siap untuk order baru
-                                        </div>
-                                    </div>
 
-                                    <div
-                                        v-if="table.activeReservation"
-                                        class="mt-3 rounded-2xl border border-amber-500/20 bg-amber-500/8 px-3 py-2"
-                                    >
-                                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-300">
-                                            Reservasi Aktif
-                                        </p>
-                                        <p class="mt-1 truncate text-[11px] font-bold text-stone-900 dark:text-white">
-                                            {{ table.activeReservation.customer_name }}
-                                        </p>
-                                        <p class="mt-0.5 text-[10px] text-stone-500 dark:text-slate-400">
-                                            {{ formatDateTime(table.activeReservation.reserved_for) }}
-                                            • {{ table.activeReservation.guest_count }} pax
-                                        </p>
-                                    </div>
-
-                                    <div class="mt-3 grid grid-cols-2 gap-2">
-                                        <Link
-                                            :href="table.kasirUrl"
-                                            class="inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-3 py-2 text-[11px] font-bold text-white"
-                                        >
-                                            <span>Kasir</span>
-                                            <ArrowUpRight class="h-3.5 w-3.5" />
-                                        </Link>
-                                        <button
-                                            v-if="table.qrUrl"
-                                            type="button"
-                                            @click="openQrPreview(table)"
-                                            class="inline-flex items-center justify-center gap-1 rounded-xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-[11px] font-bold text-stone-800 dark:text-slate-200"
-                                        >
-                                            <QrCode class="h-3.5 w-3.5" />
-                                            <span>QR</span>
-                                        </button>
                                         <div
-                                            v-else
-                                            class="inline-flex items-center justify-center rounded-xl border border-dashed border-stone-200 dark:border-slate-800 px-3 py-2 text-[11px] font-bold text-slate-600"
+                                            class="mt-3 grid grid-cols-2 gap-2"
                                         >
-                                            QR Off
+                                            <Link
+                                                :href="table.kasirUrl"
+                                                class="inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-3 py-2 text-[11px] font-bold text-white"
+                                            >
+                                                <span>Kasir</span>
+                                                <ArrowUpRight
+                                                    class="h-3.5 w-3.5"
+                                                />
+                                            </Link>
+                                            <button
+                                                v-if="table.qrUrl"
+                                                type="button"
+                                                @click="openQrPreview(table)"
+                                                class="inline-flex items-center justify-center gap-1 rounded-xl border border-stone-200 bg-white px-3 py-2 text-[11px] font-bold text-stone-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                                            >
+                                                <QrCode class="h-3.5 w-3.5" />
+                                                <span>QR</span>
+                                            </button>
+                                            <div
+                                                v-else
+                                                class="inline-flex items-center justify-center rounded-xl border border-dashed border-stone-200 px-3 py-2 text-[11px] font-bold text-slate-600 dark:border-slate-800"
+                                            >
+                                                QR Off
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <button
-                                        v-if="table.status !== 'occupied' && !table.activeReservation"
-                                        type="button"
-                                        @click="openReservationModal(table.id)"
-                                        class="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[11px] font-bold text-amber-700 dark:text-amber-300"
-                                    >
-                                        <Clock3 class="h-3.5 w-3.5" />
-                                        Book Meja
-                                    </button>
+                                        <button
+                                            v-if="
+                                                table.status !== 'occupied' &&
+                                                !table.activeReservation
+                                            "
+                                            type="button"
+                                            @click="
+                                                openReservationModal(table.id)
+                                            "
+                                            class="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[11px] font-bold text-amber-700 dark:text-amber-300"
+                                        >
+                                            <Clock3 class="h-3.5 w-3.5" />
+                                            Book Meja
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -921,7 +1108,7 @@ const cancelReservation = (reservationId: string) => {
 
                 <aside class="space-y-4">
                     <section
-                        class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                        class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
                     >
                         <p
                             class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
@@ -932,12 +1119,18 @@ const cancelReservation = (reservationId: string) => {
                             <div
                                 class="rounded-2xl border border-orange-500/20 bg-orange-500/8 px-3 py-3"
                             >
-                                <div class="flex items-center justify-between gap-3">
+                                <div
+                                    class="flex items-center justify-between gap-3"
+                                >
                                     <div>
-                                        <p class="text-xs font-bold text-orange-600 dark:text-orange-300">
+                                        <p
+                                            class="text-xs font-bold text-orange-600 dark:text-orange-300"
+                                        >
                                             QR per Meja
                                         </p>
-                                        <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
+                                        <p
+                                            class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
+                                        >
                                             {{ qrReadyCount }} dari
                                             {{ summary.total }} meja sudah punya
                                             QR self-service aktif.
@@ -953,41 +1146,57 @@ const cancelReservation = (reservationId: string) => {
                             <div
                                 class="rounded-2xl border border-sky-500/20 bg-sky-500/8 px-3 py-3"
                             >
-                                <p class="text-xs font-bold text-sky-750 dark:text-sky-300">
+                                <p
+                                    class="text-sky-750 text-xs font-bold dark:text-sky-300"
+                                >
                                     Live Status
                                 </p>
-                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
-                                    Status meja disegarkan otomatis tiap 8
-                                    detik dan perubahan baru diberi highlight.
+                                <p
+                                    class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
+                                >
+                                    Status meja disegarkan otomatis tiap 8 detik
+                                    dan perubahan baru diberi highlight.
                                 </p>
                             </div>
                             <div
                                 class="rounded-2xl border border-emerald-500/20 bg-emerald-500/8 px-3 py-3"
                             >
-                                <p class="text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                                <p
+                                    class="text-xs font-bold text-emerald-700 dark:text-emerald-300"
+                                >
                                     Available
                                 </p>
-                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
+                                <p
+                                    class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
+                                >
                                     Meja siap dipakai untuk order baru.
                                 </p>
                             </div>
                             <div
                                 class="rounded-2xl border border-rose-500/20 bg-rose-500/8 px-3 py-3"
                             >
-                                <p class="text-xs font-bold text-rose-700 dark:text-rose-300">
+                                <p
+                                    class="text-xs font-bold text-rose-700 dark:text-rose-300"
+                                >
                                     Occupied
                                 </p>
-                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
+                                <p
+                                    class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
+                                >
                                     Ada order aktif dan bisa langsung dikelola.
                                 </p>
                             </div>
                             <div
                                 class="rounded-2xl border border-amber-500/20 bg-amber-500/8 px-3 py-3"
                             >
-                                <p class="text-xs font-bold text-amber-700 dark:text-amber-300">
+                                <p
+                                    class="text-xs font-bold text-amber-700 dark:text-amber-300"
+                                >
                                     Reserved
                                 </p>
-                                <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-400">
+                                <p
+                                    class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
+                                >
                                     Meja ditahan untuk booking atau kebutuhan
                                     operasional khusus.
                                 </p>
@@ -996,7 +1205,7 @@ const cancelReservation = (reservationId: string) => {
                     </section>
 
                     <section
-                        class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                        class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
                     >
                         <div class="flex items-center justify-between gap-3">
                             <p
@@ -1016,7 +1225,7 @@ const cancelReservation = (reservationId: string) => {
                         <div class="mt-4 space-y-3">
                             <div
                                 v-if="reservationCards.length === 0"
-                                class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/40 px-4 py-4 text-[11px] text-stone-400 dark:text-slate-500"
+                                class="rounded-2xl border border-dashed border-stone-200 bg-white px-4 py-4 text-[11px] text-stone-400 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-500"
                             >
                                 Belum ada reservasi aktif untuk outlet ini.
                             </div>
@@ -1025,19 +1234,33 @@ const cancelReservation = (reservationId: string) => {
                                 :key="reservation.id"
                                 class="rounded-2xl border border-amber-500/15 bg-amber-500/6 px-4 py-3"
                             >
-                                <div class="flex items-start justify-between gap-3">
+                                <div
+                                    class="flex items-start justify-between gap-3"
+                                >
                                     <div class="min-w-0">
-                                        <p class="text-xs font-bold text-stone-900 dark:text-white">
+                                        <p
+                                            class="text-xs font-bold text-stone-900 dark:text-white"
+                                        >
                                             {{ reservation.tableName }}
                                         </p>
-                                        <p class="mt-1 truncate text-[11px] font-semibold text-amber-700 dark:text-amber-300">
+                                        <p
+                                            class="mt-1 truncate text-[11px] font-semibold text-amber-700 dark:text-amber-300"
+                                        >
                                             {{ reservation.customer_name }}
                                         </p>
-                                        <p class="mt-1 text-[10px] text-stone-500 dark:text-slate-400">
-                                            {{ formatDateTime(reservation.reserved_for) }}
+                                        <p
+                                            class="mt-1 text-[10px] text-stone-500 dark:text-slate-400"
+                                        >
+                                            {{
+                                                formatDateTime(
+                                                    reservation.reserved_for,
+                                                )
+                                            }}
                                             • {{ reservation.guest_count }} pax
                                         </p>
-                                        <p class="mt-1 text-[10px] text-stone-400 dark:text-slate-500">
+                                        <p
+                                            class="mt-1 text-[10px] text-stone-400 dark:text-slate-500"
+                                        >
                                             {{ reservation.customer_phone }}
                                         </p>
                                         <p
@@ -1063,8 +1286,10 @@ const cancelReservation = (reservationId: string) => {
                                     </Link>
                                     <button
                                         type="button"
-                                        @click="cancelReservation(reservation.id)"
-                                        class="inline-flex items-center justify-center gap-1 rounded-xl border border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 px-3 py-2 text-[11px] font-bold text-stone-800 dark:text-slate-200"
+                                        @click="
+                                            cancelReservation(reservation.id)
+                                        "
+                                        class="inline-flex items-center justify-center gap-1 rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-[11px] font-bold text-stone-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
                                     >
                                         <X class="h-3.5 w-3.5" />
                                         Batalkan
@@ -1075,7 +1300,7 @@ const cancelReservation = (reservationId: string) => {
                     </section>
 
                     <section
-                        class="rounded-[26px] border border-stone-200 dark:border-slate-800/80 bg-stone-50 dark:bg-slate-900/92 p-4 shadow-xl shadow-slate-950/15"
+                        class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
                     >
                         <p
                             class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
@@ -1086,58 +1311,80 @@ const cancelReservation = (reservationId: string) => {
                             <button
                                 type="button"
                                 @click="openReservationModal()"
-                                class="flex w-full items-center justify-between rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-700 dark:text-amber-200 transition hover:border-amber-500/30"
+                                class="flex w-full items-center justify-between rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-700 transition hover:border-amber-500/30 dark:text-amber-200"
                             >
                                 <span>Buat Reservasi Meja</span>
-                                <Clock3 class="h-4 w-4 text-amber-700 dark:text-amber-300" />
+                                <Clock3
+                                    class="h-4 w-4 text-amber-700 dark:text-amber-300"
+                                />
                             </button>
                             <Link
                                 :href="`${route('kasir.order')}?mode=takeaway`"
-                                class="flex items-center justify-between rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/70 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white transition hover:border-orange-500/30"
+                                class="flex items-center justify-between rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm font-bold text-stone-900 transition hover:border-orange-500/30 dark:border-slate-800 dark:bg-slate-950/70 dark:text-white"
                             >
                                 <span>Masuk Mode Takeaway</span>
-                                <ArrowUpRight class="h-4 w-4 text-orange-600 dark:text-orange-300" />
+                                <ArrowUpRight
+                                    class="h-4 w-4 text-orange-600 dark:text-orange-300"
+                                />
                             </Link>
                             <div
-                                class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 px-4 py-3"
+                                class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950/60"
                             >
                                 <div class="flex items-center gap-2">
-                                    <Armchair class="h-4 w-4 text-sky-600 dark:text-sky-300" />
-                                    <p class="text-sm font-bold text-stone-900 dark:text-white">
+                                    <Armchair
+                                        class="h-4 w-4 text-sky-600 dark:text-sky-300"
+                                    />
+                                    <p
+                                        class="text-sm font-bold text-stone-900 dark:text-white"
+                                    >
                                         Shortcut meja ke kasir
                                     </p>
                                 </div>
-                                <p class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-400">
+                                <p
+                                    class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-400"
+                                >
                                     Klik tombol `Kasir` pada kartu meja untuk
                                     langsung buka flow order sesuai meja yang
                                     dipilih.
                                 </p>
                             </div>
                             <div
-                                class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 px-4 py-3"
+                                class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950/60"
                             >
                                 <div class="flex items-center gap-2">
-                                    <QrCode class="h-4 w-4 text-orange-600 dark:text-orange-300" />
-                                    <p class="text-sm font-bold text-stone-900 dark:text-white">
+                                    <QrCode
+                                        class="h-4 w-4 text-orange-600 dark:text-orange-300"
+                                    />
+                                    <p
+                                        class="text-sm font-bold text-stone-900 dark:text-white"
+                                    >
                                         Preview QR Meja
                                     </p>
                                 </div>
-                                <p class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-400">
+                                <p
+                                    class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-400"
+                                >
                                     Klik tombol `QR` pada kartu meja untuk buka
                                     preview, salin link, buka menu publik, atau
                                     print QR meja.
                                 </p>
                             </div>
                             <div
-                                class="rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-950/60 px-4 py-3"
+                                class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950/60"
                             >
                                 <div class="flex items-center gap-2">
-                                    <Clock3 class="h-4 w-4 text-emerald-600 dark:text-emerald-300" />
-                                    <p class="text-sm font-bold text-stone-900 dark:text-white">
+                                    <Clock3
+                                        class="h-4 w-4 text-emerald-600 dark:text-emerald-300"
+                                    />
+                                    <p
+                                        class="text-sm font-bold text-stone-900 dark:text-white"
+                                    >
                                         Posisi fallback aktif
                                     </p>
                                 </div>
-                                <p class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-400">
+                                <p
+                                    class="mt-2 text-[11px] leading-relaxed text-stone-500 dark:text-slate-400"
+                                >
                                     Jika koordinat meja belum diisi, sistem
                                     tetap menampilkan visual map dengan susunan
                                     otomatis.
@@ -1151,10 +1398,10 @@ const cancelReservation = (reservationId: string) => {
 
         <div
             v-if="reservationModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/85 px-4 py-6 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
-                class="w-full max-w-2xl rounded-[28px] border border-stone-200 dark:border-slate-800/80 bg-stone-100 dark:bg-slate-950 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)]"
+                class="w-full max-w-2xl rounded-[28px] border border-stone-200 bg-stone-100 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
             >
                 <div class="flex items-start justify-between gap-4">
                     <div>
@@ -1164,32 +1411,41 @@ const cancelReservation = (reservationId: string) => {
                             <Clock3 class="h-3.5 w-3.5" />
                             Reservasi / Book Meja
                         </div>
-                        <h3 class="mt-3 text-2xl font-black text-stone-900 dark:text-white">
+                        <h3
+                            class="mt-3 text-2xl font-black text-stone-900 dark:text-white"
+                        >
                             Buat Reservasi Baru
                         </h3>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                            Simpan jadwal booking meja lengkap dengan nama customer,
-                            jam kedatangan, jumlah pax, dan catatan.
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
+                            Simpan jadwal booking meja lengkap dengan nama
+                            customer, jam kedatangan, jumlah pax, dan catatan.
                         </p>
                     </div>
                     <button
                         type="button"
                         @click="closeReservationModal"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-600 dark:text-slate-300 transition hover:border-stone-200 dark:hover:border-slate-700 hover:text-stone-900 dark:hover:text-white"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition hover:border-stone-200 hover:text-stone-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white"
                     >
                         <X class="h-4 w-4" />
                     </button>
                 </div>
 
-                <form class="mt-5 space-y-4" @submit.prevent="submitReservation">
+                <form
+                    class="mt-5 space-y-4"
+                    @submit.prevent="submitReservation"
+                >
                     <div class="grid gap-4 md:grid-cols-2">
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 Meja
                             </span>
                             <select
                                 v-model="reservationForm.table_id"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-amber-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-amber-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                             >
                                 <option value="" disabled>Pilih meja</option>
                                 <option
@@ -1197,7 +1453,8 @@ const cancelReservation = (reservationId: string) => {
                                     :key="table.id"
                                     :value="table.id"
                                 >
-                                    {{ table.name }} • {{ table.capacity || '-' }} pax
+                                    {{ table.name }} •
+                                    {{ table.capacity || '-' }} pax
                                 </option>
                             </select>
                             <p
@@ -1209,13 +1466,15 @@ const cancelReservation = (reservationId: string) => {
                         </label>
 
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 Jadwal Datang
                             </span>
                             <input
                                 v-model="reservationForm.reserved_for"
                                 type="datetime-local"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-amber-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-amber-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                             />
                             <p
                                 v-if="reservationForm.errors.reserved_for"
@@ -1228,13 +1487,15 @@ const cancelReservation = (reservationId: string) => {
 
                     <div class="grid gap-4 md:grid-cols-2">
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 Nama Customer
                             </span>
                             <input
                                 v-model="reservationForm.customer_name"
                                 type="text"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-amber-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-amber-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                 placeholder="Nama pemesan"
                             />
                             <p
@@ -1246,13 +1507,15 @@ const cancelReservation = (reservationId: string) => {
                         </label>
 
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 Nomor Telepon
                             </span>
                             <input
                                 v-model="reservationForm.customer_phone"
                                 type="text"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-amber-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-amber-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                 placeholder="08xxxxxxxxxx"
                             />
                             <p
@@ -1266,7 +1529,9 @@ const cancelReservation = (reservationId: string) => {
 
                     <div class="grid gap-4 md:grid-cols-[180px_minmax(0,1fr)]">
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 Jumlah Pax
                             </span>
                             <input
@@ -1274,7 +1539,7 @@ const cancelReservation = (reservationId: string) => {
                                 type="number"
                                 min="1"
                                 max="50"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-amber-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-amber-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                             />
                             <p
                                 v-if="reservationForm.errors.guest_count"
@@ -1285,13 +1550,15 @@ const cancelReservation = (reservationId: string) => {
                         </label>
 
                         <label class="block">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            >
                                 Catatan
                             </span>
                             <textarea
                                 v-model="reservationForm.notes"
                                 rows="4"
-                                class="mt-2 w-full rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm text-stone-900 dark:text-white focus:border-amber-500 focus:outline-none"
+                                class="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-amber-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                                 placeholder="Contoh: datang jam 19.30, minta dekat jendela, alergi seafood, dsb."
                             ></textarea>
                             <p
@@ -1305,24 +1572,29 @@ const cancelReservation = (reservationId: string) => {
 
                     <div
                         v-if="reservationTableOptions.length === 0"
-                        class="rounded-2xl border border-dashed border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/50 px-4 py-3 text-sm text-stone-400 dark:text-slate-500"
+                        class="rounded-2xl border border-dashed border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-400 dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-500"
                     >
                         Tidak ada meja yang bisa dibooking saat ini. Semua meja
                         sedang dipakai atau sudah punya reservasi aktif.
                     </div>
 
-                    <div class="flex flex-col gap-2 pt-2 sm:flex-row sm:justify-end">
+                    <div
+                        class="flex flex-col gap-2 pt-2 sm:flex-row sm:justify-end"
+                    >
                         <button
                             type="button"
                             @click="closeReservationModal"
-                            class="inline-flex items-center justify-center rounded-2xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-bold text-stone-800 dark:text-slate-200"
+                            class="inline-flex items-center justify-center rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm font-bold text-stone-800 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
                         >
                             Tutup
                         </button>
                         <button
                             type="submit"
-                            :disabled="reservationForm.processing || reservationTableOptions.length === 0"
-                            class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                            :disabled="
+                                reservationForm.processing ||
+                                reservationTableOptions.length === 0
+                            "
+                            class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-3 text-sm font-bold text-stone-900 disabled:cursor-not-allowed disabled:opacity-60 dark:text-white"
                         >
                             Simpan Reservasi
                         </button>
@@ -1333,10 +1605,10 @@ const cancelReservation = (reservationId: string) => {
 
         <div
             v-if="selectedQrTable"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-slate-950/85 px-4 py-6 backdrop-blur-sm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
-                class="w-full max-w-md rounded-[28px] border border-stone-200 dark:border-slate-800/80 bg-stone-100 dark:bg-slate-950 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)]"
+                class="w-full max-w-md rounded-[28px] border border-stone-200 bg-stone-100 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
             >
                 <div class="flex items-start justify-between gap-4">
                     <div>
@@ -1346,24 +1618,28 @@ const cancelReservation = (reservationId: string) => {
                             <QrCode class="h-3.5 w-3.5" />
                             QR Code Per Meja
                         </div>
-                        <h3 class="mt-3 text-2xl font-black text-stone-900 dark:text-white">
+                        <h3
+                            class="mt-3 text-2xl font-black text-stone-900 dark:text-white"
+                        >
                             {{ selectedQrTable.name }}
                         </h3>
-                        <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
+                        <p
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                        >
                             Scan untuk buka flow order self-service meja ini.
                         </p>
                     </div>
                     <button
                         type="button"
                         @click="closeQrPreview"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-stone-600 dark:text-slate-300 transition hover:border-stone-200 dark:hover:border-slate-700 hover:text-stone-900 dark:hover:text-white"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition hover:border-stone-200 hover:text-stone-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white"
                     >
                         <X class="h-4 w-4" />
                     </button>
                 </div>
 
                 <div
-                    class="mt-5 rounded-[24px] border border-stone-200 dark:border-slate-800 bg-white p-4"
+                    class="mt-5 rounded-[24px] border border-stone-200 bg-white p-4 dark:border-slate-800"
                 >
                     <img
                         v-if="qrPreviewUrl"
@@ -1374,18 +1650,26 @@ const cancelReservation = (reservationId: string) => {
                 </div>
 
                 <div
-                    class="mt-4 rounded-2xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/70 px-4 py-3"
+                    class="mt-4 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/70"
                 >
-                    <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                    <p
+                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                    >
                         Kode QR Meja
                     </p>
-                    <p class="mt-1 break-all text-sm font-bold text-stone-900 dark:text-white">
+                    <p
+                        class="mt-1 break-all text-sm font-bold text-stone-900 dark:text-white"
+                    >
                         {{ selectedQrTable.qrLabel || '-' }}
                     </p>
-                    <p class="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500">
+                    <p
+                        class="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                    >
                         Link Menu Publik
                     </p>
-                    <p class="mt-1 break-all text-xs text-stone-600 dark:text-slate-300">
+                    <p
+                        class="mt-1 break-all text-xs text-stone-600 dark:text-slate-300"
+                    >
                         {{ selectedQrTable.qrUrl }}
                     </p>
                 </div>
@@ -1394,7 +1678,7 @@ const cancelReservation = (reservationId: string) => {
                     <button
                         type="button"
                         @click="copySelectedQrLink"
-                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-3 text-xs font-bold text-stone-800 dark:text-slate-200"
+                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-200 bg-white px-3 py-3 text-xs font-bold text-stone-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
                     >
                         <Copy class="h-4 w-4" />
                         Salin Link
@@ -1418,7 +1702,9 @@ const cancelReservation = (reservationId: string) => {
                     </button>
                 </div>
 
-                <p class="mt-4 text-[11px] leading-relaxed text-stone-400 dark:text-slate-500">
+                <p
+                    class="mt-4 text-[11px] leading-relaxed text-stone-400 dark:text-slate-500"
+                >
                     Preview QR memakai generator gambar eksternal berbasis link
                     menu publik yang sudah aktif di sistem.
                 </p>

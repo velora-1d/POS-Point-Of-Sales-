@@ -4,8 +4,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
 import { Eye, EyeOff } from '@lucide/vue';
+import { ref } from 'vue';
 
 const passwordInput = ref<HTMLInputElement | null>(null);
 const currentPasswordInput = ref<HTMLInputElement | null>(null);
@@ -70,7 +70,10 @@ const updatePassword = () => {
                         @click="showCurrentPassword = !showCurrentPassword"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
-                        <component :is="showCurrentPassword ? EyeOff : Eye" class="h-4 w-4" />
+                        <component
+                            :is="showCurrentPassword ? EyeOff : Eye"
+                            class="h-4 w-4"
+                        />
                     </button>
                 </div>
 
@@ -97,7 +100,10 @@ const updatePassword = () => {
                         @click="showNewPassword = !showNewPassword"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
-                        <component :is="showNewPassword ? EyeOff : Eye" class="h-4 w-4" />
+                        <component
+                            :is="showNewPassword ? EyeOff : Eye"
+                            class="h-4 w-4"
+                        />
                     </button>
                 </div>
 
@@ -123,7 +129,10 @@ const updatePassword = () => {
                         @click="showConfirmPassword = !showConfirmPassword"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300"
                     >
-                        <component :is="showConfirmPassword ? EyeOff : Eye" class="h-4 w-4" />
+                        <component
+                            :is="showConfirmPassword ? EyeOff : Eye"
+                            class="h-4 w-4"
+                        />
                     </button>
                 </div>
 

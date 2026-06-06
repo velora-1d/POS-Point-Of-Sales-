@@ -13,6 +13,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
+use App\Services\TableReservationService;
+
 class TransactionService
 {
     protected const PAYMENT_METHODS = [
@@ -27,6 +29,7 @@ class TransactionService
         protected PromoEngineService $promoEngineService,
         protected ShiftService $shiftService,
         protected SecurityActivityLogService $securityActivityLogService,
+        protected TableReservationService $tableReservationService,
     ) {
     }
 
@@ -318,9 +321,7 @@ class TransactionService
         ]);
 
         if ($order->table_id) {
-            Table::query()
-                ->whereKey($order->table_id)
-                ->update(['status' => 'occupied']);
+            $this->tableReservationService->syncTableStatus($order->table_id);
         }
     }
 

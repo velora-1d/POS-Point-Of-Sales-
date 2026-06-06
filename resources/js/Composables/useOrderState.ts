@@ -1,8 +1,14 @@
-import { ref, computed, watchEffect } from 'vue';
-import { useForm, router, usePage } from '@inertiajs/vue3';
+import { router, useForm, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 
 export type PaymentOption = 'pay_later' | 'pay_now';
-export type PaymentMethod = 'cash' | 'qris' | 'ewallet' | 'debit' | 'transfer';
+export type PaymentMethod =
+    | 'cash'
+    | 'qris'
+    | 'ewallet'
+    | 'debit'
+    | 'transfer'
+    | 'online_platform';
 
 // Props reference
 export const propsData = ref<any>({});
@@ -14,7 +20,9 @@ export const customers = computed(() => propsData.value.customers || []);
 export const promos = computed(() => propsData.value.promos || []);
 export const activeShift = computed(() => propsData.value.activeShift || null);
 export const cashiers = computed(() => propsData.value.cashiers || []);
-export const paymentCheckout = computed(() => propsData.value.paymentCheckout || null);
+export const paymentCheckout = computed(
+    () => propsData.value.paymentCheckout || null,
+);
 export const success = computed(() => propsData.value.success || null);
 
 // Shared UI & Shift State
@@ -24,7 +32,10 @@ export const timeRemainingText = ref('');
 export const showNoShiftBlocker = computed(() => {
     const page = usePage<any>();
     const userRole = page.props.auth?.user?.role?.type || 'kasir';
-    return (userRole === 'kasir' || userRole === 'supervisor') && !activeShift.value;
+    return (
+        (userRole === 'kasir' || userRole === 'supervisor') &&
+        !activeShift.value
+    );
 });
 
 export const takeoverForm = useForm({
@@ -55,9 +66,28 @@ export const selectedTable = ref<any>(null);
 export const selectedTableCategory = ref<'indoor' | 'outdoor'>('indoor');
 export const cart = ref<any[]>([]);
 export const orderNotes = ref('');
+export const guestsCount = ref(1);
 export const isTakeawaySelection = computed(
     () => selectedTable.value?.mode === 'takeaway',
 );
+export const isOnlineSelection = computed(
+    () => selectedTable.value?.mode === 'online',
+);
+
+// Computed: sisa kapasitas meja yang dipilih
+export const tableRemainingCapacity = computed<number | null>(() => {
+    if (!selectedTable.value || selectedTable.value.mode) return null;
+    if (selectedTable.value.remaining_capacity === undefined) return null;
+    return selectedTable.value.remaining_capacity as number | null;
+});
+
+// Computed: berapa menit meja sudah occupied
+export const tableOccupiedMinutes = computed<number | null>(() => {
+    if (!selectedTable.value?.occupied_at) return null;
+    const occupiedAt = new Date(selectedTable.value.occupied_at);
+    const now = new Date();
+    return Math.floor((now.getTime() - occupiedAt.getTime()) / 60000);
+});
 
 // Customer Selection State
 export const customerSearchQuery = ref('');
@@ -159,72 +189,95 @@ export const getPaymentMethodConfig = (method: string) => {
                 method: 'qris',
                 label: 'QRIS',
                 desc: 'Buat checkout gateway. Order baru masuk dapur setelah webhook lunas diterima.',
-                existingDesc: 'Buat atau buka checkout QRIS. Status akan berubah otomatis saat webhook pembayaran masuk.',
-                colorClass: 'border-fuchsia-500 bg-fuchsia-500/10 text-fuchsia-700 dark:text-white ring-2 ring-fuchsia-500/20 font-bold',
-                textClass: 'text-fuchsia-600 dark:text-fuchsia-300 hover:text-fuchsia-700 dark:hover:text-fuchsia-200',
+                existingDesc:
+                    'Buat atau buka checkout QRIS. Status akan berubah otomatis saat webhook pembayaran masuk.',
+                colorClass:
+                    'border-fuchsia-500 bg-fuchsia-500/10 text-fuchsia-700 dark:text-white ring-2 ring-fuchsia-500/20 font-bold',
+                textClass:
+                    'text-fuchsia-600 dark:text-fuchsia-300 hover:text-fuchsia-700 dark:hover:text-fuchsia-200',
                 textRawClass: 'text-fuchsia-600 dark:text-fuchsia-300',
-                borderClass: 'border-fuchsia-500/25 bg-fuchsia-500/5 dark:bg-fuchsia-500/10',
+                borderClass:
+                    'border-fuchsia-500/25 bg-fuchsia-500/5 dark:bg-fuchsia-500/10',
                 borderInnerClass: 'border-fuchsia-500/20',
-                iconBgClass: 'bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-300',
+                iconBgClass:
+                    'bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-300',
                 spinnerClass: 'text-fuchsia-500 dark:text-fuchsia-400',
                 activeLabel: 'QRIS Gateway Sedang Aktif',
                 showText: 'Tampilkan QR Code',
                 gradientClass: 'bg-gradient-to-r from-fuchsia-500 to-pink-500',
-                buttonClass: 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-200 hover:bg-fuchsia-500/15'
+                buttonClass:
+                    'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-200 hover:bg-fuchsia-500/15',
             };
         case 'ewallet':
             return {
                 method: 'ewallet',
                 label: 'E-Wallet',
                 desc: 'Bayar menggunakan e-wallet (OVO, GoPay, Dana, dll) via gateway.',
-                existingDesc: 'Bayar menggunakan e-wallet. Status akan berubah otomatis saat webhook pembayaran masuk.',
-                colorClass: 'border-blue-500 bg-blue-500/10 text-blue-700 dark:text-white ring-2 ring-blue-500/20 font-bold',
-                textClass: 'text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200',
+                existingDesc:
+                    'Bayar menggunakan e-wallet. Status akan berubah otomatis saat webhook pembayaran masuk.',
+                colorClass:
+                    'border-blue-500 bg-blue-500/10 text-blue-700 dark:text-white ring-2 ring-blue-500/20 font-bold',
+                textClass:
+                    'text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200',
                 textRawClass: 'text-blue-600 dark:text-blue-300',
-                borderClass: 'border-blue-500/25 bg-blue-500/5 dark:bg-blue-500/10',
+                borderClass:
+                    'border-blue-500/25 bg-blue-500/5 dark:bg-blue-500/10',
                 borderInnerClass: 'border-blue-500/20',
                 iconBgClass: 'bg-blue-500/10 text-blue-600 dark:text-blue-300',
                 spinnerClass: 'text-blue-500 dark:text-blue-400',
                 activeLabel: 'E-Wallet Gateway Sedang Aktif',
                 showText: 'Tampilkan QR / Link',
                 gradientClass: 'bg-gradient-to-r from-blue-500 to-indigo-500',
-                buttonClass: 'border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-200 hover:bg-blue-500/15'
+                buttonClass:
+                    'border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-200 hover:bg-blue-500/15',
             };
         case 'debit':
             return {
                 method: 'debit',
                 label: 'Debit Card',
                 desc: 'Bayar menggunakan kartu debit/kredit via gateway.',
-                existingDesc: 'Bayar menggunakan kartu debit/kredit. Status akan berubah otomatis saat webhook pembayaran masuk.',
-                colorClass: 'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-white ring-2 ring-emerald-500/20 font-bold',
-                textClass: 'text-emerald-600 dark:text-emerald-300 hover:text-emerald-700 dark:hover:text-emerald-200',
+                existingDesc:
+                    'Bayar menggunakan kartu debit/kredit. Status akan berubah otomatis saat webhook pembayaran masuk.',
+                colorClass:
+                    'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-white ring-2 ring-emerald-500/20 font-bold',
+                textClass:
+                    'text-emerald-600 dark:text-emerald-300 hover:text-emerald-700 dark:hover:text-emerald-200',
                 textRawClass: 'text-emerald-600 dark:text-emerald-300',
-                borderClass: 'border-emerald-500/25 bg-emerald-500/5 dark:bg-emerald-500/10',
+                borderClass:
+                    'border-emerald-500/25 bg-emerald-500/5 dark:bg-emerald-500/10',
                 borderInnerClass: 'border-emerald-500/20',
-                iconBgClass: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
+                iconBgClass:
+                    'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
                 spinnerClass: 'text-emerald-500 dark:text-emerald-400',
                 activeLabel: 'Debit Gateway Sedang Aktif',
                 showText: 'Tampilkan QR / Link',
                 gradientClass: 'bg-gradient-to-r from-emerald-500 to-teal-500',
-                buttonClass: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-200 hover:bg-emerald-500/15'
+                buttonClass:
+                    'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-200 hover:bg-emerald-500/15',
             };
         case 'transfer':
             return {
                 method: 'transfer',
                 label: 'Transfer / VA',
                 desc: 'Bayar menggunakan Virtual Account bank transfer via gateway.',
-                existingDesc: 'Bayar menggunakan Virtual Account bank transfer. Status akan berubah otomatis saat webhook pembayaran masuk.',
-                colorClass: 'border-indigo-500 bg-indigo-500/10 text-indigo-700 dark:text-white ring-2 ring-indigo-500/20 font-bold',
-                textClass: 'text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-200',
+                existingDesc:
+                    'Bayar menggunakan Virtual Account bank transfer. Status akan berubah otomatis saat webhook pembayaran masuk.',
+                colorClass:
+                    'border-indigo-500 bg-indigo-500/10 text-indigo-700 dark:text-white ring-2 ring-indigo-500/20 font-bold',
+                textClass:
+                    'text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-indigo-200',
                 textRawClass: 'text-indigo-600 dark:text-indigo-300',
-                borderClass: 'border-indigo-500/25 bg-indigo-500/5 dark:bg-indigo-500/10',
+                borderClass:
+                    'border-indigo-500/25 bg-indigo-500/5 dark:bg-indigo-500/10',
                 borderInnerClass: 'border-indigo-500/20',
-                iconBgClass: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-300',
+                iconBgClass:
+                    'bg-indigo-500/10 text-indigo-600 dark:text-indigo-300',
                 spinnerClass: 'text-indigo-500 dark:text-indigo-400',
                 activeLabel: 'Transfer Gateway Sedang Aktif',
                 showText: 'Tampilkan QR / Link',
                 gradientClass: 'bg-gradient-to-r from-indigo-500 to-violet-500',
-                buttonClass: 'border-indigo-500/20 bg-indigo-500/10 text-indigo-700 dark:text-indigo-200 hover:bg-indigo-500/15'
+                buttonClass:
+                    'border-indigo-500/20 bg-indigo-500/10 text-indigo-700 dark:text-indigo-200 hover:bg-indigo-500/15',
             };
         default:
             return {
@@ -232,28 +285,35 @@ export const getPaymentMethodConfig = (method: string) => {
                 label: 'Digital Payment',
                 desc: 'Buat checkout digital via gateway.',
                 existingDesc: 'Buat checkout digital via gateway.',
-                colorClass: 'border-slate-500 bg-slate-500/10 text-slate-700 dark:text-white ring-2 ring-slate-500/20 font-bold',
-                textClass: 'text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200',
+                colorClass:
+                    'border-slate-500 bg-slate-500/10 text-slate-700 dark:text-white ring-2 ring-slate-500/20 font-bold',
+                textClass:
+                    'text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200',
                 textRawClass: 'text-slate-600 dark:text-slate-300',
-                borderClass: 'border-slate-500/25 bg-slate-500/5 dark:bg-slate-500/10',
+                borderClass:
+                    'border-slate-500/25 bg-slate-500/5 dark:bg-slate-500/10',
                 borderInnerClass: 'border-slate-500/20',
-                iconBgClass: 'bg-slate-500/10 text-slate-600 dark:text-slate-300',
+                iconBgClass:
+                    'bg-slate-500/10 text-slate-600 dark:text-slate-300',
                 spinnerClass: 'text-slate-500 dark:text-slate-400',
                 activeLabel: 'Gateway Sedang Aktif',
                 showText: 'Tampilkan QR / Link',
                 gradientClass: 'bg-gradient-to-r from-slate-500 to-slate-600',
-                buttonClass: 'border-slate-500/20 bg-slate-500/10 text-slate-700 dark:text-slate-200 hover:bg-slate-500/15'
+                buttonClass:
+                    'border-slate-500/20 bg-slate-500/10 text-slate-700 dark:text-slate-200 hover:bg-slate-500/15',
             };
     }
 };
 
 export const activePaymentConfig = computed(() => {
-    return getPaymentMethodConfig(activePaymentCheckout.value?.method ?? 'qris');
+    return getPaymentMethodConfig(
+        activePaymentCheckout.value?.method ?? 'qris',
+    );
 });
 
 // Computed properties for calculations
 export const allProducts = computed(() => {
-    let list: any[] = [];
+    const list: any[] = [];
     categories.value.forEach((cat: any) => {
         cat.products.forEach((prod: any) => {
             list.push({
@@ -376,7 +436,8 @@ export const cartSubtotal = computed(() => {
 export const cartDiscount = computed(() => {
     if (!newOrderPromoCode.value) return 0;
     const promo = promos.value?.find(
-        (p: any) => p.code.toUpperCase() === newOrderPromoCode.value.toUpperCase()
+        (p: any) =>
+            p.code.toUpperCase() === newOrderPromoCode.value.toUpperCase(),
     );
     if (!promo) return 0;
     const minTransaction = Number(promo.min_transaction_amount || 0);
@@ -395,7 +456,8 @@ export const cartDiscount = computed(() => {
 export const newOrderPromoWarning = computed(() => {
     if (!newOrderPromoCode.value) return '';
     const promo = promos.value?.find(
-        (p: any) => p.code.toUpperCase() === newOrderPromoCode.value.toUpperCase()
+        (p: any) =>
+            p.code.toUpperCase() === newOrderPromoCode.value.toUpperCase(),
     );
     if (!promo) return 'Kode voucher tidak valid';
     const minTransaction = Number(promo.min_transaction_amount || 0);
@@ -415,7 +477,10 @@ export const cartItemCount = computed(() => {
 });
 
 export const newOrderCashChange = computed(() => {
-    if (paymentOption.value !== 'pay_now' || newOrderPaymentMethod.value !== 'cash') {
+    if (
+        paymentOption.value !== 'pay_now' ||
+        newOrderPaymentMethod.value !== 'cash'
+    ) {
         return 0;
     }
     const received = Number(newOrderCashReceived.value || 0);
@@ -512,7 +577,9 @@ export const mergeNeedsApproval = computed(() => {
 export const existingPaymentDiscount = computed(() => {
     if (!paymentTargetOrder.value || !existingPaymentPromoCode.value) return 0;
     const promo = promos.value?.find(
-        (p: any) => p.code.toUpperCase() === existingPaymentPromoCode.value.toUpperCase()
+        (p: any) =>
+            p.code.toUpperCase() ===
+            existingPaymentPromoCode.value.toUpperCase(),
     );
     if (!promo) return 0;
     const sub = Number(paymentTargetOrder.value.subtotal || 0);
@@ -531,7 +598,9 @@ export const existingPaymentDiscount = computed(() => {
 export const existingPaymentPromoWarning = computed(() => {
     if (!paymentTargetOrder.value || !existingPaymentPromoCode.value) return '';
     const promo = promos.value?.find(
-        (p: any) => p.code.toUpperCase() === existingPaymentPromoCode.value.toUpperCase()
+        (p: any) =>
+            p.code.toUpperCase() ===
+            existingPaymentPromoCode.value.toUpperCase(),
     );
     if (!promo) return 'Kode voucher tidak valid';
     const sub = Number(paymentTargetOrder.value.subtotal || 0);
@@ -567,6 +636,15 @@ export const isPhoneLookup = (value: string) => {
 
 export const getOrderServiceLabel = (order: any) => {
     if (order.type === 'takeaway') return 'Takeaway / Bungkus';
+    if (order.type === 'online') {
+        const names: Record<string, string> = {
+            gofood: 'GoFood',
+            grabfood: 'GrabFood',
+            shopeefood: 'ShopeeFood',
+            maximfood: 'MaximFood',
+        };
+        return `Online - ${names[order.source] || 'Platform'}`;
+    }
     if (order.table?.name) return order.table.name;
     return 'Dine In';
 };
@@ -574,6 +652,9 @@ export const getOrderServiceLabel = (order: any) => {
 export const getOrderServiceBadgeClass = (order: any) => {
     if (order.type === 'takeaway') {
         return 'border-orange-500/20 bg-orange-500/10 text-orange-300';
+    }
+    if (order.type === 'online') {
+        return 'border-blue-500/20 bg-blue-500/10 text-blue-300';
     }
     return 'border-sky-500/20 bg-sky-500/10 text-sky-300';
 };
@@ -596,7 +677,13 @@ export const canEditOrderStatus = (status?: string) => {
 };
 
 export const canSplitOrderStatus = (status?: string) => {
-    return ['pending', 'in_progress', 'waiting_bar_approval', 'ready', 'delivered'].includes((status || '').toLowerCase());
+    return [
+        'pending',
+        'in_progress',
+        'waiting_bar_approval',
+        'ready',
+        'delivered',
+    ].includes((status || '').toLowerCase());
 };
 
 export const getPaymentMeta = (order: any) => {
@@ -655,11 +742,10 @@ export const getPaymentStatusClass = (order: any) => {
 
 export const canOpenPaymentModal = (order: any) => {
     if (!order || isOrderPaid(order)) return false;
-    return [
-        'waiting_bar_approval',
-        'ready',
-        'delivered',
-    ].includes(order.status) || hasPendingBeforeKitchenPayment(order);
+    return (
+        ['waiting_bar_approval', 'ready', 'delivered'].includes(order.status) ||
+        hasPendingBeforeKitchenPayment(order)
+    );
 };
 
 export const getPaymentActionLabel = (order: any) => {
@@ -679,7 +765,9 @@ export const getPaymentActionHint = (order: any) => {
 export const canCloseAsKasbon = (order: any) => {
     if (!order || isOrderPaid(order)) return false;
     if (!order.customer?.id && !order.customer_id) return false;
-    return ['waiting_bar_approval', 'ready', 'delivered'].includes(order.status);
+    return ['waiting_bar_approval', 'ready', 'delivered'].includes(
+        order.status,
+    );
 };
 
 export const getKasbonActionHint = (order: any) => {
@@ -689,7 +777,9 @@ export const getKasbonActionHint = (order: any) => {
     if (isOrderPaid(order)) {
         return 'Order ini sudah lunas, tidak bisa ditutup sebagai kasbon.';
     }
-    if (!['waiting_bar_approval', 'ready', 'delivered'].includes(order?.status)) {
+    if (
+        !['waiting_bar_approval', 'ready', 'delivered'].includes(order?.status)
+    ) {
         return 'Kasbon dipakai setelah layanan siap ditutup dan masih ada sisa tagihan.';
     }
     return 'Tutup transaksi sebagai piutang customer, lalu cicilan dilanjutkan dari menu transaksi.';
@@ -749,6 +839,7 @@ export const selectTable = (table: any) => {
         table.active_orders?.[0]?.id || table.active_order?.id || null;
     cart.value = [];
     orderNotes.value = '';
+    guestsCount.value = 1;
     resetCustomerSelection();
     resetNewOrderPaymentState();
     resetEditOrderState();
@@ -769,8 +860,46 @@ export const selectTakeawayOrder = () => {
     selectedManagedOrderId.value = null;
     cart.value = [];
     orderNotes.value = '';
+    guestsCount.value = 1;
     resetCustomerSelection();
     resetNewOrderPaymentState();
+    resetEditOrderState();
+    resetSplitBillState();
+    resetMergeBillState();
+    closeKasbonModal();
+    closePaymentModal();
+};
+
+export const selectOnlineOrder = (
+    source: 'gofood' | 'grabfood' | 'shopeefood' | 'maximfood',
+) => {
+    const names: Record<string, string> = {
+        gofood: 'GoFood',
+        grabfood: 'GrabFood',
+        shopeefood: 'ShopeeFood',
+        maximfood: 'MaximFood',
+    };
+    selectedTable.value = {
+        id: null,
+        name: `Online - ${names[source] || 'Platform'}`,
+        status: 'available',
+        capacity: null,
+        mode: 'online',
+        source: source,
+    };
+    selectedManagedOrderId.value = null;
+    cart.value = [];
+    orderNotes.value = '';
+    guestsCount.value = 1;
+    resetCustomerSelection();
+
+    // Default online order to paid on platform
+    paymentOption.value = 'pay_now';
+    newOrderPaymentMethod.value = 'online_platform';
+    newOrderCashReceived.value = '';
+    newOrderPromoCode.value = '';
+    newOrderApprovalPin.value = '';
+
     resetEditOrderState();
     resetSplitBillState();
     resetMergeBillState();
@@ -821,10 +950,9 @@ export const openPaymentModalForOrder = (order: any) => {
     }
 
     paymentTargetOrder.value = order;
-    existingPaymentMethod.value =
-        hasPendingBeforeKitchenPayment(order)
-            ? (getPaymentMeta(order).method || 'qris')
-            : 'cash';
+    existingPaymentMethod.value = hasPendingBeforeKitchenPayment(order)
+        ? getPaymentMeta(order).method || 'qris'
+        : 'cash';
     existingPaymentCashReceived.value = '';
     const code = getPromoMeta(order).manual_code || '';
     existingPaymentPromoCode.value = code;
@@ -917,17 +1045,25 @@ export const cancelActiveOrder = (order: any) => {
         showLocalToast('Order tidak ditemukan.');
         return;
     }
-    if (confirm(`Apakah Anda yakin ingin membatalkan order ${order.order_number}?`)) {
-        router.post(route('order.cancel', order.id), {}, {
-            preserveScroll: true,
-            onSuccess: () => {
-                showLocalToast('Order berhasil dibatalkan.');
-                selectedManagedOrderId.value = null;
+    if (
+        confirm(
+            `Apakah Anda yakin ingin membatalkan order ${order.order_number}?`,
+        )
+    ) {
+        router.post(
+            route('order.cancel', order.id),
+            {},
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    showLocalToast('Order berhasil dibatalkan.');
+                    selectedManagedOrderId.value = null;
+                },
+                onError: (errors: any) => {
+                    showLocalToast(errors.error || 'Gagal membatalkan order.');
+                },
             },
-            onError: (errors: any) => {
-                showLocalToast(errors.error || 'Gagal membatalkan order.');
-            }
-        });
+        );
     }
 };
 
@@ -947,8 +1083,8 @@ export const deliverOrder = (order: any) => {
             onError: (errors: any) => {
                 isDeliveringOrder.value = false;
                 showLocalToast(errors.error || 'Gagal menyajikan pesanan.');
-            }
-        }
+            },
+        },
     );
 };
 
@@ -1278,9 +1414,11 @@ export const refreshCurrentOrder = () => {
         onFinish: () => {
             isRefreshingOrder.value = false;
             showLocalToast('Status pembayaran berhasil diperbarui.');
-            
+
             if (paymentTargetOrder.value) {
-                const updated = activeOrders.value.find((o: any) => o.id === paymentTargetOrder.value.id);
+                const updated = activeOrders.value.find(
+                    (o: any) => o.id === paymentTargetOrder.value.id,
+                );
                 if (updated) {
                     paymentTargetOrder.value = updated;
                     if (isOrderPaid(updated)) {
@@ -1288,7 +1426,7 @@ export const refreshCurrentOrder = () => {
                     }
                 }
             }
-        }
+        },
     } as any);
 };
 
@@ -1322,11 +1460,24 @@ export const submitOrder = () => {
     isSubmitting.value = true;
 
     const payload = {
-        table_id: isTakeawaySelection.value ? null : selectedTable.value.id,
-        order_type: isTakeawaySelection.value ? 'takeaway' : 'dine_in',
-        reservation_id: isTakeawaySelection.value
-            ? null
-            : selectedTable.value.active_reservation?.id ?? null,
+        table_id:
+            isTakeawaySelection.value || isOnlineSelection.value
+                ? null
+                : selectedTable.value.id,
+        order_type: isOnlineSelection.value
+            ? 'online'
+            : isTakeawaySelection.value
+              ? 'takeaway'
+              : 'dine_in',
+        guests_count:
+            !isTakeawaySelection.value && !isOnlineSelection.value
+                ? Math.max(1, guestsCount.value)
+                : 1,
+        source: isOnlineSelection.value ? selectedTable.value.source : 'kasir',
+        reservation_id:
+            isTakeawaySelection.value || isOnlineSelection.value
+                ? null
+                : (selectedTable.value.active_reservation?.id ?? null),
         customer_id: selectedCustomer.value?.id ?? null,
         customer_name: customerName.value || null,
         customer_phone: customerPhone.value || null,
@@ -1424,7 +1575,11 @@ export const submitTakeover = () => {
     const page = usePage<any>();
     const isOwner = page.props.auth?.user?.role?.type === 'owner';
     if (isOwner) {
-        if (!confirm('Anda login sebagai Owner. Apakah Anda yakin ingin melakukan serah terima & ambil alih shift ini secara manual?')) {
+        if (
+            !confirm(
+                'Anda login sebagai Owner. Apakah Anda yakin ingin melakukan serah terima & ambil alih shift ini secara manual?',
+            )
+        ) {
             return;
         }
     }
@@ -1453,7 +1608,7 @@ export const checkShiftStatus = () => {
     const endTime = new Date();
     endTime.setHours(hours, minutes, 0, 0);
 
-    let diff = endTime.getTime() - now.getTime();
+    const diff = endTime.getTime() - now.getTime();
 
     if (diff <= 0) {
         isShiftExpired.value = true;
@@ -1466,5 +1621,3 @@ export const checkShiftStatus = () => {
         timeRemainingText.value = `${diffHours}j ${mins}m sisa`;
     }
 };
-
-
