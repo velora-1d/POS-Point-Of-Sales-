@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tables', function (Blueprint $table) {
-            $table->string('category', 30)->default('indoor');
-        });
+        if (!Schema::hasColumn('tables', 'category')) {
+            Schema::table('tables', function (Blueprint $table) {
+                $table->string('category', 30)->default('indoor');
+            });
+        }
     }
 
     /**

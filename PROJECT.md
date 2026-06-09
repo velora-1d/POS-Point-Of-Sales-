@@ -326,7 +326,11 @@ Sistem Point of Sale (POS) untuk Mentai Restaurant dengan fitur multi-outlet, ma
 - **Sesi Hari Ini**: Menjalankan seeding *database* untuk produk-produk yang tidak memiliki `image_url` agar memetakan aset lokal `public/images/` berdasarkan nama produknya, sehingga gambar produk otomatis muncul di menu Katalog Produk dan Kasir.
 - **Sesi Hari Ini**: Menyelesaikan perbaikan visual tema Light/Dark Mode di seluruh menu POS Mentai dengan membersihkan 361 kelas warna tidak valid hasil analisis skrip Python.
 - **Sesi Hari Ini**: Menyesuaikan layout peta meja visual, legenda status, dan modal reservasi di [Layout.vue](file:///home/pak-hakim/Pak-Hakim/Project/POS/resources/js/Pages/Tables/Layout.vue) agar adaptif ke mode terang dan gelap dengan kontras visual tinggi (mengubah background, teks pudar, tombol reservasi, dan ikon detail).
-- **Sesi Hari Ini**: Memverifikasi kesuksesan kompilasi dengan `npm run build` (lulus 100% tanpa kesalahan) dan membersihkan file script scratch sementara.
+- **Sesi Hari Ini**: Melakukan refactor besar-besaran pada navigasi sidebar: sub-menu yang sebelumnya bertumpuk (accordion hell) dipindahkan menjadi sistem **Page-Level Tabs** horizontal di bagian atas konten. Sidebar kini jauh lebih ringkas dan profesional.
+- **Sesi Hari Ini**: Mengintegrasikan sistem RBAC (Role-Based Access Control) ke dalam navigasi baru, memastikan sidebar dan tab horizontal menyaring menu secara otomatis sesuai hak akses user (`readyMenuIds`).
+- **Sesi Hari Ini**: Menyetel durasi sesi aplikasi menjadi **Lifetime (1 Tahun)** agar pengguna tidak perlu login berulang kali setiap hari, kecuali jika melakukan logout manual.
+- **Sesi Hari Ini**: Melakukan sinkronisasi penuh database ke **Neon PostgreSQL** menggunakan Laravel Migrations. Membuat 7 file migrasi foundation baru untuk melengkapi tabel-tabel inti yang sebelumnya hanya ada di skema Drizzle, memastikan database terstruktur 100% via Laravel.
+- **Sesi Hari Ini**: Berhasil menjalankan `php artisan db:seed` dengan data demo lengkap (Owner, Kasir, Produk, Stok, Pelanggan, hingga Riwayat Transaksi 30 hari terakhir) setelah memperbaiki beberapa isu mismatch UUID dan kolom pada seeder.
 
 ## Last Updated
-2026-06-04
+2026-06-09

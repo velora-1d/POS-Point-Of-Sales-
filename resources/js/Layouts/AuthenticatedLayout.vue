@@ -13,7 +13,6 @@ import {
     BellRing,
     CalendarDays,
     ChefHat,
-    ChevronDown,
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
@@ -34,7 +33,7 @@ import {
     X,
 } from '@lucide/vue';
 import axios from 'axios';
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 interface MenuItem {
     id: number;
@@ -582,13 +581,6 @@ const menuData: MenuCategory[] = [
     },
 ];
 
-// Reactive states for collapsed categories
-const collapsedCategories = ref<Record<string, boolean>>({});
-
-const toggleCategory = (name: string) => {
-    collapsedCategories.value[name] = !collapsedCategories.value[name];
-};
-
 const menuItemsById = new Map(
     menuData
         .flatMap((category) => category.items)
@@ -910,24 +902,32 @@ const sidebarData: SidebarCategory[] = [
     },
 ];
 
-// Filter menu items based on search query
+// Filter menu items based on RBAC and search query
 const filteredSidebar = computed(() => {
-    if (!searchQuery.value) return sidebarData;
-
     const query = searchQuery.value.toLowerCase();
 
     return sidebarData
         .map((category) => {
-            const filteredPages = category.pages.filter((page) => {
-                const featureNames = page.menuIds
-                    .map((menuId) => menuItemsById.get(menuId)?.name ?? '')
-                    .join(' ');
-                const aliases = page.aliases?.join(' ') ?? '';
-                const haystack =
-                    `${page.title} ${aliases} ${featureNames}`.toLowerCase();
-
-                return haystack.includes(query);
+            // 1. RBAC Filter: Only include pages the user has access to
+            let filteredPages = category.pages.filter((page) => {
+                // If menuIds is empty, we assume it's a safe/public page, otherwise check access
+                if (!page.menuIds || page.menuIds.length === 0) return true;
+                return getReadyCount(page.menuIds) > 0;
             });
+
+            // 2. Search Filter
+            if (query) {
+                filteredPages = filteredPages.filter((page) => {
+                    const featureNames = page.menuIds
+                        .map((menuId) => menuItemsById.get(menuId)?.name ?? '')
+                        .join(' ');
+                    const aliases = page.aliases?.join(' ') ?? '';
+                    const haystack =
+                        `${page.title} ${aliases} ${featureNames}`.toLowerCase();
+
+                    return haystack.includes(query);
+                });
+            }
 
             return {
                 ...category,
@@ -938,13 +938,9 @@ const filteredSidebar = computed(() => {
         .filter((category) => category.pages.length > 0);
 });
 
-// Check if category should be expanded
-const isCategoryExpanded = (categoryName: string, isFilteredOpen?: boolean) => {
-    if (searchQuery.value) {
-        return isFilteredOpen ?? false;
-    }
-    return collapsedCategories.value[categoryName] !== true;
-};
+const activeCategory = computed(() => {
+    return filteredSidebar.value.find((category) => isCategoryActive(category));
+});
 
 // Get initials for user avatar
 const getInitials = (name?: string) => {
@@ -977,28 +973,6 @@ const resolveSidebarRoute = (pageItem: SidebarPage): string => {
 
     return pageItem.route ?? 'dashboard';
 };
-
-// Initialize categories as collapsed (true) by default
-sidebarData.forEach((category) => {
-    collapsedCategories.value[category.name] = true;
-});
-
-// Watch for route/url changes to auto-expand the category containing the active page
-watch(
-    () => page.url,
-    () => {
-        sidebarData.forEach((category) => {
-            const hasActivePage = category.pages.some((pageItem) => {
-                const resolved = resolveSidebarRoute(pageItem);
-                return route().current(resolved);
-            });
-            if (hasActivePage) {
-                collapsedCategories.value[category.name] = false;
-            }
-        });
-    },
-    { immediate: true },
-);
 
 // Helper to check if a category is active (has an active page inside it)
 const isCategoryActive = (category: SidebarCategory) => {
@@ -1637,103 +1611,8 @@ onBeforeUnmount(() => {
                     :key="category.name"
                     class="space-y-1.5"
                 >
-                    <!-- Category Header Accordion (if multi page and sidebar is not collapsed) -->
-                    <div
-                        v-if="category.pages.length > 1 && !isSidebarCollapsed"
-                        @click="toggleCategory(category.name)"
-                        :class="[
-                            'group flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 transition duration-150',
-                            isCategoryActive(category)
-                                ? 'bg-stone-200/55 text-stone-900 dark:bg-slate-800/20 dark:text-slate-100'
-                                : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200',
-                        ]"
-                    >
-                        <div
-                            :class="[
-                                'flex min-w-0 items-center gap-2.5 transition duration-150',
-                                isCategoryActive(category)
-                                    ? 'text-orange-500 dark:text-orange-400'
-                                    : 'text-stone-500 group-hover:text-stone-900 dark:text-slate-400 dark:group-hover:text-slate-200',
-                            ]"
-                        >
-                            <component
-                                :is="category.icon"
-                                :class="[
-                                    'h-4.5 w-4.5 shrink-0 transition duration-150',
-                                    isCategoryActive(category)
-                                        ? 'text-orange-500 dark:text-orange-400'
-                                        : 'text-stone-400 dark:text-slate-400',
-                                ]"
-                            />
-                            <div class="min-w-0">
-                                <span
-                                    :class="[
-                                        'truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-150',
-                                        isCategoryActive(category)
-                                            ? 'text-orange-500 dark:text-orange-400'
-                                            : 'text-stone-700 dark:text-slate-300',
-                                    ]"
-                                    >{{ category.name }}</span
-                                >
-                                <p
-                                    class="mt-0.5 text-[10px] text-stone-400 dark:text-slate-500"
-                                >
-                                    {{ category.flow }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span
-                                :class="[
-                                    'transition duration-150',
-                                    isCategoryActive(category)
-                                        ? 'text-orange-500 dark:text-orange-400'
-                                        : 'text-stone-400 group-hover:text-stone-600 dark:text-slate-500 dark:group-hover:text-slate-400',
-                                ]"
-                            >
-                                <ChevronDown
-                                    v-if="
-                                        isCategoryExpanded(
-                                            category.name,
-                                            category.isOpenFiltered,
-                                        )
-                                    "
-                                    class="h-4 w-4"
-                                />
-                                <ChevronRight v-else class="h-4 w-4" />
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Category Link (if multi page and sidebar is collapsed) -->
+                    <!-- Category Link (simplified, always points to first child) -->
                     <Link
-                        v-else-if="
-                            category.pages.length > 1 && isSidebarCollapsed
-                        "
-                        :href="route(resolveSidebarRoute(category.pages[0]))"
-                        @click="isMobileOpen = false"
-                        :title="`${category.name} (${category.pages.map((p) => p.title).join(', ')})`"
-                        :class="[
-                            'group flex items-center justify-center rounded-lg p-3 transition duration-150',
-                            isCategoryActive(category)
-                                ? 'bg-gradient-to-r from-orange-500 to-red-500 font-bold text-white shadow-md shadow-orange-500/25 dark:shadow-orange-500/35'
-                                : 'text-stone-500 hover:bg-stone-100 dark:text-slate-400 dark:hover:bg-slate-800/40',
-                        ]"
-                    >
-                        <component
-                            :is="category.icon"
-                            :class="[
-                                'h-5 w-5 shrink-0 transition duration-150',
-                                isCategoryActive(category)
-                                    ? 'text-white'
-                                    : 'text-stone-400 group-hover:text-stone-800 dark:text-slate-400 dark:group-hover:text-slate-200',
-                            ]"
-                        />
-                    </Link>
-
-                    <!-- Category Header Link (if single page) -->
-                    <Link
-                        v-else
                         :href="route(resolveSidebarRoute(category.pages[0]))"
                         @click="isMobileOpen = false"
                         :title="isSidebarCollapsed ? category.name : undefined"
@@ -1742,9 +1621,7 @@ onBeforeUnmount(() => {
                             isSidebarCollapsed
                                 ? 'justify-center p-3'
                                 : 'justify-between px-3 py-2',
-                            route().current(
-                                resolveSidebarRoute(category.pages[0]),
-                            )
+                            isCategoryActive(category)
                                 ? 'bg-gradient-to-r from-orange-500 to-red-500 font-bold text-white shadow-md shadow-orange-500/25 dark:shadow-orange-500/35'
                                 : 'text-stone-500 hover:bg-stone-100 dark:text-slate-400 dark:hover:bg-slate-800/40',
                         ]"
@@ -1753,9 +1630,7 @@ onBeforeUnmount(() => {
                             :class="[
                                 'flex min-w-0 items-center gap-2.5 transition duration-150',
                                 isSidebarCollapsed ? 'justify-center' : '',
-                                route().current(
-                                    resolveSidebarRoute(category.pages[0]),
-                                )
+                                isCategoryActive(category)
                                     ? 'text-white'
                                     : 'text-stone-500 group-hover:text-stone-900 dark:text-slate-400 dark:group-hover:text-slate-200',
                             ]"
@@ -1765,9 +1640,7 @@ onBeforeUnmount(() => {
                                 :class="[
                                     'h-4.5 w-4.5 shrink-0 transition duration-150',
                                     isSidebarCollapsed ? 'h-5 w-5' : '',
-                                    route().current(
-                                        resolveSidebarRoute(category.pages[0]),
-                                    )
+                                    isCategoryActive(category)
                                         ? 'text-white'
                                         : 'text-stone-400 dark:text-slate-400',
                                 ]"
@@ -1776,11 +1649,7 @@ onBeforeUnmount(() => {
                                 <span
                                     :class="[
                                         'truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-150',
-                                        route().current(
-                                            resolveSidebarRoute(
-                                                category.pages[0],
-                                            ),
-                                        )
+                                        isCategoryActive(category)
                                             ? 'text-white'
                                             : 'text-stone-700 dark:text-slate-300',
                                     ]"
@@ -1789,11 +1658,7 @@ onBeforeUnmount(() => {
                                 <p
                                     :class="[
                                         'mt-0.5 text-[10px] transition duration-150',
-                                        route().current(
-                                            resolveSidebarRoute(
-                                                category.pages[0],
-                                            ),
-                                        )
+                                        isCategoryActive(category)
                                             ? 'text-orange-100/90'
                                             : 'text-stone-400 dark:text-slate-500',
                                     ]"
@@ -1803,44 +1668,6 @@ onBeforeUnmount(() => {
                             </div>
                         </div>
                     </Link>
-
-                    <!-- Category Pages (only if multi page and sidebar is not collapsed) -->
-                    <div
-                        v-if="category.pages.length > 1 && !isSidebarCollapsed"
-                        v-show="
-                            isCategoryExpanded(
-                                category.name,
-                                category.isOpenFiltered,
-                            )
-                        "
-                        class="ml-5 space-y-1 border-l border-stone-200 pl-4 dark:border-slate-800/40"
-                    >
-                        <template
-                            v-for="pageItem in category.pages"
-                            :key="pageItem.key"
-                        >
-                            <Link
-                                :href="route(resolveSidebarRoute(pageItem))"
-                                @click="isMobileOpen = false"
-                                :class="[
-                                    'group/item relative flex w-full items-center justify-between overflow-hidden rounded-lg px-3 py-2 text-left text-xs transition duration-150',
-                                    route().current(
-                                        resolveSidebarRoute(pageItem),
-                                    )
-                                        ? 'bg-gradient-to-r from-orange-500 to-red-500 pl-3 font-bold text-white shadow-sm shadow-orange-500/20 dark:shadow-orange-500/30'
-                                        : 'pl-3 text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200',
-                                ]"
-                            >
-                                <span
-                                    class="flex min-w-0 items-center gap-2 truncate"
-                                >
-                                    <span class="truncate">{{
-                                        pageItem.title
-                                    }}</span>
-                                </span>
-                            </Link>
-                        </template>
-                    </div>
                 </div>
             </nav>
 
@@ -2077,11 +1904,40 @@ onBeforeUnmount(() => {
             <!-- Page Title Header (Slot) -->
             <header
                 v-if="$slots.header"
-                class="sticky top-0 z-20 hidden shrink-0 border-b border-stone-200 bg-white/40 px-5 py-6 backdrop-blur-md dark:border-slate-900 dark:bg-slate-900/20 sm:px-6 lg:block lg:px-8 xl:px-10"
+                class="hidden shrink-0 border-b border-stone-200 bg-white/40 px-5 py-6 dark:border-slate-900 dark:bg-slate-900/20 sm:px-6 lg:block lg:px-8 xl:px-10"
             >
                 <slot name="header" />
             </header>
 
+            <!-- Horizontal Page Tabs (for sub-menus) -->
+            <div
+                v-if="activeCategory && activeCategory.pages.length > 1"
+                class="border-b border-stone-200 bg-white/60 px-5 dark:border-slate-900 dark:bg-slate-900/40 sm:px-6 lg:px-8 xl:px-10"
+            >
+                <div
+                    class="no-scrollbar flex items-center gap-8 overflow-x-auto py-1"
+                >
+                    <Link
+                        v-for="pageItem in activeCategory.pages"
+                        :key="pageItem.key"
+                        :href="route(resolveSidebarRoute(pageItem))"
+                        :class="[
+                            'relative whitespace-nowrap py-3 text-xs font-bold uppercase tracking-wider transition-colors',
+                            route().current(resolveSidebarRoute(pageItem))
+                                ? 'text-orange-600 dark:text-orange-400'
+                                : 'text-stone-500 hover:text-stone-900 dark:text-slate-400 dark:hover:text-slate-200',
+                        ]"
+                    >
+                        {{ pageItem.title }}
+                        <div
+                            v-if="
+                                route().current(resolveSidebarRoute(pageItem))
+                            "
+                            class="absolute bottom-0 left-0 h-0.5 w-full bg-orange-500"
+                        ></div>
+                    </Link>
+                </div>
+            </div>
             <div class="custom-scrollbar min-h-0 flex-1 overflow-y-auto">
                 <!-- Main Content Area (Slot) -->
                 <main class="w-full px-5 py-6 sm:px-6 lg:px-8 lg:py-8 xl:px-10">
@@ -2101,6 +1957,13 @@ onBeforeUnmount(() => {
 
 <style>
 /* Custom styled scrollbar for sidebar */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
 .custom-scrollbar::-webkit-scrollbar {
     width: 10px;
     height: 10px;

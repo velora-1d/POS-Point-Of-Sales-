@@ -9,8 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tables', function (Blueprint $table) {
-            $table->unsignedInteger('current_guests')->default(0)->after('capacity');
-            $table->timestamp('occupied_at')->nullable()->after('current_guests');
+            if (!Schema::hasColumn('tables', 'current_guests')) {
+                $table->unsignedInteger('current_guests')->default(0)->after('capacity');
+            }
+            if (!Schema::hasColumn('tables', 'occupied_at')) {
+                $table->timestamp('occupied_at')->nullable()->after('current_guests');
+            }
         });
     }
 

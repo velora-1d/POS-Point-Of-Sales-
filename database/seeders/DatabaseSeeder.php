@@ -172,6 +172,7 @@ class DatabaseSeeder extends Seeder
             if (isset($productData['ingredients'])) {
                 foreach ($productData['ingredients'] as $ingData) {
                     ProductIngredient::create([
+                        'id' => (string) Str::uuid(),
                         'product_id' => $productId,
                         'raw_material_id' => $materialMap[$ingData['material_name']],
                         'quantity' => $ingData['quantity'],
@@ -246,6 +247,7 @@ class DatabaseSeeder extends Seeder
                 'is_active' => true,
             ]);
             Membership::create([
+                'id' => (string) Str::uuid(),
                 'customer_id' => $customerId,
                 'tier_id' => $tierIds[$customerData['tier']],
                 'total_points' => $customerData['total_points'],
