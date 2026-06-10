@@ -95,6 +95,31 @@ const cartSubtotal = computed(() => {
     );
 });
 
+const cartTax = computed(() => {
+    const taxPercentage = Number(props.outlet?.settings?.tax_percentage || 0);
+    if (taxPercentage <= 0) return 0;
+
+    const isInclusive = !!props.outlet?.settings?.tax_is_inclusive;
+    const taxableAmount = cartSubtotal.value; // QR menu doesn't have real-time discount yet
+
+    if (isInclusive) {
+        return taxableAmount - taxableAmount / (1 + taxPercentage / 100);
+    } else {
+        return taxableAmount * (taxPercentage / 100);
+    }
+});
+
+const cartTotal = computed(() => {
+    const isInclusive = !!props.outlet?.settings?.tax_is_inclusive;
+    const taxableAmount = cartSubtotal.value;
+
+    if (isInclusive) {
+        return taxableAmount;
+    } else {
+        return taxableAmount + cartTax.value;
+    }
+});
+
 const cartItemCount = computed(() => {
     return cart.value.reduce((sum, item) => sum + item.quantity, 0);
 });
@@ -298,7 +323,7 @@ const submitCheckout = async () => {
                 <p class="mt-3 text-sm leading-6 text-slate-400">
                     Kapasitas
                     <strong class="text-white">{{ table.name }}</strong> sudah
-                    penuh ({{ table.capacity }} pax). Silakan hubungi kasir atau
+                    penuh ({{ table.capacity }} Orang). Silakan hubungi kasir atau
                     tunggu hingga ada tempat kosong.
                 </p>
                 <div
@@ -311,7 +336,7 @@ const submitCheckout = async () => {
                     </p>
                     <p class="mt-2 text-3xl font-black text-rose-300">
                         {{ table.current_guests ?? 0 }} /
-                        {{ table.capacity }} Pax
+                        {{ table.capacity }} Orang
                     </p>
                 </div>
             </div>
@@ -452,7 +477,7 @@ const submitCheckout = async () => {
                                         class="whitespace-nowrap text-xs font-black text-white"
                                     >
                                         {{ table.current_guests ?? 0 }} /
-                                        {{ table.capacity }} Pax
+                                        {{ table.capacity }} Orang
                                     </span>
                                 </div>
                             </div>
@@ -846,6 +871,26 @@ const submitCheckout = async () => {
                                     <span>{{ formatPrice(cartSubtotal) }}</span>
                                 </div>
                                 <div
+                                    v-if="cartTax > 0"
+                                    class="mt-3 flex items-center justify-between text-sm text-slate-400"
+                                >
+                                    <span>
+                                        Pajak ({{
+                                            outlet?.settings?.tax_percentage ||
+                                            0
+                                        }}%):
+                                        <span
+                                            v-if="
+                                                outlet?.settings
+                                                    ?.tax_is_inclusive
+                                            "
+                                            class="ml-1 text-[10px] italic opacity-70"
+                                            >(Inklusif)</span
+                                        >
+                                    </span>
+                                    <span>{{ formatPrice(cartTax) }}</span>
+                                </div>
+                                <div
                                     class="mt-3 flex items-center justify-between text-sm text-slate-500"
                                 >
                                     <span>Estimasi diskon</span>
@@ -854,9 +899,9 @@ const submitCheckout = async () => {
                                 <div
                                     class="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-base font-black text-white"
                                 >
-                                    <span>Total sebelum promo final</span>
+                                    <span>Total Pembayaran</span>
                                     <span class="text-orange-300">{{
-                                        formatPrice(cartSubtotal)
+                                        formatPrice(cartTotal)
                                     }}</span>
                                 </div>
                             </div>

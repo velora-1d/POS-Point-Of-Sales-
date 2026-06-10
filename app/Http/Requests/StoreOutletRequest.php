@@ -23,6 +23,8 @@ class StoreOutletRequest extends FormRequest
             'bar_approval_enabled' => ['nullable', 'boolean'],
             'customer_can_view_status' => ['nullable', 'boolean'],
             'customer_can_edit_order' => ['nullable', 'boolean'],
+            'tax_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'tax_is_inclusive' => ['nullable', 'boolean'],
         ];
     }
 }

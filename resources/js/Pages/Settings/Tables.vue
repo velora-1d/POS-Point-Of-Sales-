@@ -247,16 +247,16 @@ function getStatusBadgeClass(status: string) {
                                         getStatusBadgeClass(table.status),
                                     ]"
                                 >
-                                    {{ table.status }}
+                                    {{ table.status === 'occupied' ? 'Terisi' : (table.status === 'reserved' ? 'Reservasi' : 'Kosong') }}
                                 </span>
                             </div>
 
                             <div
                                 class="mt-4 flex items-center gap-2 text-stone-500 dark:text-slate-400"
-                            >
+                                >
                                 <Users class="h-4 w-4" />
                                 <span class="text-sm font-semibold"
-                                    >{{ table.capacity || '-' }} Pax</span
+                                    >{{ table.capacity || '-' }} Orang</span
                                 >
                             </div>
 
@@ -364,16 +364,16 @@ function getStatusBadgeClass(status: string) {
                                         getStatusBadgeClass(table.status),
                                     ]"
                                 >
-                                    {{ table.status }}
+                                    {{ table.status === 'occupied' ? 'Terisi' : (table.status === 'reserved' ? 'Reservasi' : 'Kosong') }}
                                 </span>
                             </div>
 
                             <div
                                 class="mt-4 flex items-center gap-2 text-stone-500 dark:text-slate-400"
-                            >
+                                >
                                 <Users class="h-4 w-4" />
                                 <span class="text-sm font-semibold"
-                                    >{{ table.capacity || '-' }} Pax</span
+                                    >{{ table.capacity || '-' }} Orang</span
                                 >
                             </div>
 
@@ -476,7 +476,7 @@ function getStatusBadgeClass(status: string) {
                             <label
                                 class="block text-xs font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500"
                             >
-                                Kapasitas (Pax)
+                                Kapasitas (Orang)
                             </label>
                             <input
                                 v-model="tableForm.capacity"

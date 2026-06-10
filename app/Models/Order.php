@@ -29,6 +29,7 @@ class Order extends Model
         'status',
         'subtotal',
         'discount_amount',
+        'tax_amount',
         'total_amount',
         'paid_amount',
         'notes',
@@ -50,6 +51,7 @@ class Order extends Model
         return [
             'subtotal' => 'decimal:2',
             'discount_amount' => 'decimal:2',
+            'tax_amount' => 'decimal:2',
             'total_amount' => 'decimal:2',
             'paid_amount' => 'decimal:2',
             'guests_count' => 'integer',

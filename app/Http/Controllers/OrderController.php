@@ -109,6 +109,7 @@ class OrderController extends Controller
         }
 
         return Inertia::render('Kasir/Order', [
+            'outlet' => Outlet::find($outletId),
             'tables' => $tables,
             'categories' => $categories,
             'activeOrders' => $activeOrders,

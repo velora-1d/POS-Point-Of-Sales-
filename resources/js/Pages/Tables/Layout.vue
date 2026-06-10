@@ -282,19 +282,19 @@ const statCards = computed(() => [
             'border-stone-200 dark:border-white/10 bg-white dark:bg-white/[0.03]',
     },
     {
-        label: 'Siap Dipakai',
+        label: 'Kosong',
         value: props.summary.available,
         tone: 'text-emerald-600 dark:text-emerald-300',
         surface: 'border-emerald-400/15 bg-emerald-500/8',
     },
     {
-        label: 'Sedang Terpakai',
+        label: 'Terisi',
         value: props.summary.occupied,
         tone: 'text-rose-600 dark:text-rose-300',
         surface: 'border-rose-400/15 bg-rose-500/8',
     },
     {
-        label: 'Reserved',
+        label: 'Reservasi',
         value: props.summary.reserved,
         tone: 'text-amber-600 dark:text-amber-300',
         surface: 'border-amber-400/15 bg-amber-500/8',
@@ -413,12 +413,12 @@ onBeforeUnmount(() => {
 const getStatusLabel = (status: string) => {
     switch (status) {
         case 'occupied':
-            return 'Occupied';
+            return 'Terisi';
         case 'reserved':
-            return 'Reserved';
+            return 'Reservasi';
         case 'available':
         default:
-            return 'Available';
+            return 'Kosong';
     }
 };
 
@@ -904,7 +904,7 @@ const getTableTimerClass = (table: any): string => {
                                                     <span
                                                         class="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
                                                     >
-                                                        Kapasitas
+                                                        {{ table.status === 'occupied' ? 'Tamu' : 'Kapasitas' }}
                                                     </span>
                                                     <span
                                                         class="flex items-center gap-1 text-[11px] font-bold text-stone-800 dark:text-slate-200"
@@ -915,10 +915,24 @@ const getTableTimerClass = (table: any): string => {
                                                         {{
                                                             table.status ===
                                                             'occupied'
-                                                                ? `${table.current_guests ?? 0}/${table.capacity || '-'}`
-                                                                : table.capacity ||
-                                                                  '-'
+                                                                ? `${table.current_guests ?? 0} Orang`
+                                                                : `${table.capacity || '-'} Orang`
                                                         }}
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    v-if="table.status === 'occupied'"
+                                                    class="flex items-center justify-between gap-2"
+                                                >
+                                                    <span
+                                                        class="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                                    >
+                                                        Sisa Kursi
+                                                    </span>
+                                                    <span
+                                                        class="text-[11px] font-bold text-stone-800 dark:text-slate-200"
+                                                    >
+                                                        {{ Math.max(0, (table.capacity || 0) - (table.current_guests ?? 0)) }} Org
                                                     </span>
                                                 </div>
                                                 <!-- Progress Bar Kapasitas Terpakai -->
@@ -1052,7 +1066,7 @@ const getTableTimerClass = (table: any): string => {
                                                     table.activeReservation
                                                         .guest_count
                                                 }}
-                                                pax
+                                                Orang
                                             </p>
                                         </div>
 
@@ -1164,7 +1178,7 @@ const getTableTimerClass = (table: any): string => {
                                 <p
                                     class="text-xs font-bold text-emerald-700 dark:text-emerald-300"
                                 >
-                                    Available
+                                    Kosong
                                 </p>
                                 <p
                                     class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
@@ -1178,7 +1192,7 @@ const getTableTimerClass = (table: any): string => {
                                 <p
                                     class="text-xs font-bold text-rose-700 dark:text-rose-300"
                                 >
-                                    Occupied
+                                    Terisi
                                 </p>
                                 <p
                                     class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
@@ -1192,7 +1206,7 @@ const getTableTimerClass = (table: any): string => {
                                 <p
                                     class="text-xs font-bold text-amber-700 dark:text-amber-300"
                                 >
-                                    Reserved
+                                    Reservasi
                                 </p>
                                 <p
                                     class="mt-1 text-[11px] text-stone-500 dark:text-slate-400"
@@ -1256,7 +1270,7 @@ const getTableTimerClass = (table: any): string => {
                                                     reservation.reserved_for,
                                                 )
                                             }}
-                                            • {{ reservation.guest_count }} pax
+                                            • {{ reservation.guest_count }} Orang
                                         </p>
                                         <p
                                             class="mt-1 text-[10px] text-stone-400 dark:text-slate-500"
@@ -1420,7 +1434,7 @@ const getTableTimerClass = (table: any): string => {
                             class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                         >
                             Simpan jadwal booking meja lengkap dengan nama
-                            customer, jam kedatangan, jumlah pax, dan catatan.
+                            customer, jam kedatangan, jumlah Orang, dan catatan.
                         </p>
                     </div>
                     <button
@@ -1454,7 +1468,7 @@ const getTableTimerClass = (table: any): string => {
                                     :value="table.id"
                                 >
                                     {{ table.name }} •
-                                    {{ table.capacity || '-' }} pax
+                                    {{ table.capacity || '-' }} Orang
                                 </option>
                             </select>
                             <p

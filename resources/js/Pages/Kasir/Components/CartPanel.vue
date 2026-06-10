@@ -13,6 +13,7 @@ import {
     cartDiscount,
     cartItemCount,
     cartSubtotal,
+    cartTax,
     cartTotal,
     customerEmail,
     customerName,
@@ -58,6 +59,7 @@ import {
     openPaymentModalForOrder,
     openSplitBill,
     orderNotes,
+    outlet,
     paymentOption,
     promos,
     removeCartItem,
@@ -618,7 +620,7 @@ watch(customerSearchQuery, (value) => {
                                 ? tableRemainingCapacity
                                 : selectedTable.capacity
                         }}
-                        pax
+                        Orang
                     </div>
                 </div>
 
@@ -889,6 +891,22 @@ watch(customerSearchQuery, (value) => {
                     >
                         <span>Diskon Voucher:</span>
                         <span>-{{ formatPrice(cartDiscount) }}</span>
+                    </div>
+                    <div
+                        v-if="cartTax > 0"
+                        class="flex justify-between text-stone-600 dark:text-slate-400"
+                    >
+                        <span>
+                            Pajak ({{
+                                outlet?.settings?.tax_percentage || 0
+                            }}%):
+                            <span
+                                v-if="outlet?.settings?.tax_is_inclusive"
+                                class="text-[10px] italic opacity-70"
+                                >(Inklusif)</span
+                            >
+                        </span>
+                        <span>{{ formatPrice(cartTax) }}</span>
                     </div>
                     <div
                         class="flex justify-between border-t border-stone-200 pt-2 text-sm font-black text-stone-900 dark:border-slate-800 dark:text-white"

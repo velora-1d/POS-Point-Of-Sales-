@@ -420,6 +420,14 @@ onMounted(() => {
                                 }}</span>
                             </div>
                             <div
+                                class="mt-3 flex items-center justify-between text-sm text-slate-400"
+                            >
+                                <span>Pajak</span>
+                                <span>{{
+                                    formatPrice(order.tax_amount)
+                                }}</span>
+                            </div>
+                            <div
                                 class="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-base font-black text-white"
                             >
                                 <span>Total final</span>

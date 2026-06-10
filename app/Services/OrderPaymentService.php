@@ -72,6 +72,11 @@ class OrderPaymentService
             $payload['approval_pin'] ?? null,
         );
 
+        // Fetch tax settings from outlet
+        $outlet = Outlet::findOrFail($outletId);
+        $taxPricing = $this->calculateTax($pricing, $outlet);
+        $pricing = array_merge($pricing, $taxPricing);
+
         return DB::transaction(function () use ($payload, $actor, $outletId, $customer, $reservation, $items, $pricing, $activeShift) {
             $order = $this->createOrderRecord($payload, $actor, $outletId, $customer?->id, $pricing, $activeShift->id);
 
@@ -156,6 +161,9 @@ class OrderPaymentService
             $payload['promo_code'] ?? null,
         );
 
+        $taxPricing = $this->calculateTax($pricing, $table->outlet);
+        $pricing = array_merge($pricing, $taxPricing);
+
         return DB::transaction(function () use ($payload, $table, $customer, $items, $tableToken, $pricing) {
             $order = Order::create([
                 'outlet_id'      => $table->outlet_id,
@@ -164,6 +172,7 @@ class OrderPaymentService
                 'cashier_id'     => null,
                 'subtotal'       => $pricing['subtotal'],
                 'discount_amount'=> $pricing['discount_amount'],
+                'tax_amount'     => $pricing['tax_amount'] ?? 0,
                 'total_amount'   => $pricing['total_amount'],
                 'paid_amount'    => 0,
                 'status'         => 'pending',
@@ -480,6 +489,7 @@ class OrderPaymentService
             'cashier_id'      => $actor->id,
             'subtotal'        => $pricing['subtotal'],
             'discount_amount' => $pricing['discount_amount'],
+            'tax_amount'      => $pricing['tax_amount'] ?? 0,
             'total_amount'    => $pricing['total_amount'],
             'paid_amount'     => 0,
             'status'          => 'pending',
@@ -756,6 +766,41 @@ class OrderPaymentService
         ];
     }
 
+    /**
+     * Hitung pajak berdasarkan setting outlet.
+     * Mendukung pajak inklusif (dalam harga) dan eksklusif (ditambah ke harga).
+     */
+    protected function calculateTax(array $pricing, Outlet $outlet): array
+    {
+        $taxPercentage = (float) ($outlet->settings['tax_percentage'] ?? 0);
+        $isInclusive = (bool) ($outlet->settings['tax_is_inclusive'] ?? false);
+
+        $taxableAmount = (float) ($pricing['subtotal'] - $pricing['discount_amount']);
+        $taxAmount = 0;
+        $totalAmount = $taxableAmount;
+
+        if ($taxPercentage > 0) {
+            if ($isInclusive) {
+                // Inklusif: Pajak sudah ada di dalam harga.
+                // Pajak = Total - (Total / (1 + Rate))
+                $taxAmount = $taxableAmount - ($taxableAmount / (1 + ($taxPercentage / 100)));
+                $totalAmount = $taxableAmount; // Total tidak bertambah
+            } else {
+                // Eksklusif: Pajak ditambahkan di atas harga.
+                // Pajak = Total * Rate
+                $taxAmount = $taxableAmount * ($taxPercentage / 100);
+                $totalAmount = $taxableAmount + $taxAmount;
+            }
+        }
+
+        return [
+            'tax_amount' => round($taxAmount, 2),
+            'total_amount' => round($totalAmount, 2),
+            'tax_percentage' => $taxPercentage,
+            'tax_is_inclusive' => $isInclusive,
+        ];
+    }
+
     protected function calculateExistingOrderPricing(Order $order, ?string $paymentMethod, ?string $promoCode): array
     {
         $order->loadMissing(['items.product', 'customer.membership.tier']);
@@ -772,13 +817,17 @@ class OrderPaymentService
             ];
         })->all();
 
-        return $this->promoEngineService->calculate(
+        $pricing = $this->promoEngineService->calculate(
             $order->outlet_id,
             $items,
             $order->customer,
             $paymentMethod,
             $promoCode,
         );
+
+        $taxPricing = $this->calculateTax($pricing, $order->outlet);
+
+        return array_merge($pricing, $taxPricing);
     }
 
     protected function applyExistingOrderPricing(Order $order, array $pricing): void
@@ -791,6 +840,7 @@ class OrderPaymentService
         $order->update([
             'subtotal' => $pricing['subtotal'],
             'discount_amount' => $pricing['discount_amount'],
+            'tax_amount' => $pricing['tax_amount'] ?? 0,
             'total_amount' => $pricing['total_amount'],
             'metadata' => $metadata,
         ]);

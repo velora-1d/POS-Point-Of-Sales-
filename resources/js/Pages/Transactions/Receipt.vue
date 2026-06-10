@@ -10,6 +10,7 @@ const props = defineProps<{
         status: string;
         subtotal: number;
         discount_amount: number;
+        tax_amount: number;
         total_amount: number;
         paid_amount: number;
         remaining_amount: number;
@@ -376,6 +377,14 @@ function skipReceipt() {
                                 <span>Diskon</span>
                                 <span>{{
                                     formatCurrency(order.discount_amount)
+                                }}</span>
+                            </div>
+                            <div
+                                class="mt-2 flex justify-between text-sm text-slate-600"
+                            >
+                                <span>Pajak</span>
+                                <span>{{
+                                    formatCurrency(order.tax_amount)
                                 }}</span>
                             </div>
                             <div

@@ -242,6 +242,8 @@ class OutletManagementService
             'bar_approval_enabled' => (bool) ($payload['bar_approval_enabled'] ?? false),
             'customer_can_view_status' => (bool) ($payload['customer_can_view_status'] ?? true),
             'customer_can_edit_order' => (bool) ($payload['customer_can_edit_order'] ?? false),
+            'tax_percentage' => (float) ($payload['tax_percentage'] ?? 0),
+            'tax_is_inclusive' => (bool) ($payload['tax_is_inclusive'] ?? false),
         ];
     }
 
@@ -271,6 +273,8 @@ class OutletManagementService
             'bar_approval_enabled' => (bool) ($settings['bar_approval_enabled'] ?? false),
             'customer_can_view_status' => (bool) ($settings['customer_can_view_status'] ?? true),
             'customer_can_edit_order' => (bool) ($settings['customer_can_edit_order'] ?? false),
+            'tax_percentage' => (float) ($settings['tax_percentage'] ?? 0),
+            'tax_is_inclusive' => (bool) ($settings['tax_is_inclusive'] ?? false),
         ];
     }
 

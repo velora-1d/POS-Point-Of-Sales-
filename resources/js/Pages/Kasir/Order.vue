@@ -182,57 +182,45 @@ onBeforeUnmount(() => {
 
         <!-- Sub-tab Navigation (Premium Glassmorphism Switcher) -->
         <div
-            class="mb-6 flex select-none items-center justify-between rounded-2xl border border-stone-200 bg-white/80 p-2 shadow-lg backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/60"
+            class="mb-6 flex w-full select-none items-center justify-between gap-1 rounded-2xl border border-stone-200 bg-white/80 p-2 shadow-lg backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/60"
         >
-            <div class="flex items-center gap-2">
-                <button
-                    type="button"
-                    @click="activeSubTab = 'new_order'"
-                    :class="[
-                        'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
-                        activeSubTab === 'new_order'
-                            ? 'bg-orange-500 text-white shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:bg-slate-800/40 dark:text-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-stone-800',
-                    ]"
-                >
-                    <ShoppingCart class="h-4 w-4" />
-                    <span>Transaksi Baru & Meja</span>
-                </button>
-                <button
-                    type="button"
-                    @click="activeSubTab = 'active_orders'"
-                    :class="[
-                        'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
-                        activeSubTab === 'active_orders'
-                            ? 'bg-orange-500 text-white shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:bg-slate-800/40 dark:text-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-stone-800',
-                    ]"
-                >
-                    <CookingPot class="h-4 w-4" />
-                    <span>Pelacakan Order Aktif</span>
-                    <span
-                        v-if="activeOrders.length > 0"
-                        :class="[
-                            'rounded-full px-2 py-0.5 text-[10px] font-bold transition-all duration-200',
-                            activeSubTab === 'active_orders'
-                                ? 'bg-stone-200 text-white dark:bg-white/20'
-                                : 'border border-orange-500/20 bg-orange-500/10 text-orange-600 dark:text-orange-400',
-                        ]"
-                    >
-                        {{ activeOrders.length }}
-                    </span>
-                </button>
-            </div>
-
-            <!-- Quick stats indicator -->
-            <div class="hidden items-center gap-4 pr-2 text-xs sm:flex">
+            <button
+                type="button"
+                @click="activeSubTab = 'new_order'"
+                :class="[
+                    'flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
+                    activeSubTab === 'new_order'
+                        ? 'bg-orange-500 text-white shadow-md shadow-orange-500/10'
+                        : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:bg-slate-800/40 dark:text-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-stone-800',
+                ]"
+            >
+                <ShoppingCart class="h-4 w-4" />
+                <span>Transaksi Baru & Meja</span>
+            </button>
+            <button
+                type="button"
+                @click="activeSubTab = 'active_orders'"
+                :class="[
+                    'flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
+                    activeSubTab === 'active_orders'
+                        ? 'bg-orange-500 text-white shadow-md shadow-orange-500/10'
+                        : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:bg-slate-800/40 dark:text-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-stone-800',
+                ]"
+            >
+                <CookingPot class="h-4 w-4" />
+                <span>Pelacakan Order Aktif</span>
                 <span
-                    class="flex items-center gap-1.5 text-stone-500 dark:text-slate-400"
+                    v-if="activeOrders.length > 0"
+                    :class="[
+                        'rounded-full px-2 py-0.5 text-[10px] font-bold transition-all duration-200',
+                        activeSubTab === 'active_orders'
+                            ? 'bg-stone-200 text-white dark:bg-white/20'
+                            : 'border border-orange-500/20 bg-orange-500/10 text-orange-600 dark:text-orange-400',
+                    ]"
                 >
-                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                    <span>Dapur Online</span>
+                    {{ activeOrders.length }}
                 </span>
-            </div>
+            </button>
         </div>
 
         <!-- Split Grid Layout -->

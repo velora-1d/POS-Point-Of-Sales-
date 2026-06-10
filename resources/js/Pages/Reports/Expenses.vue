@@ -589,11 +589,11 @@ const deleteIncome = (income: FinancialItemRow) => {
                 >
                     <!-- Tab Buttons -->
                     <div
-                        class="flex w-fit gap-2 rounded-xl bg-stone-50 p-1 dark:bg-slate-900/60"
+                        class="flex w-full gap-2 rounded-xl bg-stone-50 p-1 dark:bg-slate-900/60"
                     >
                         <button
                             type="button"
-                            class="rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition"
+                            class="flex-1 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition"
                             :class="
                                 activeTab === 'expense'
                                     ? 'bg-orange-500 text-slate-950'
@@ -605,7 +605,7 @@ const deleteIncome = (income: FinancialItemRow) => {
                         </button>
                         <button
                             type="button"
-                            class="rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition"
+                            class="flex-1 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition"
                             :class="
                                 activeTab === 'income'
                                     ? 'bg-orange-500 text-slate-950'

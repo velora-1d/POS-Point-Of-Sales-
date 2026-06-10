@@ -194,8 +194,7 @@ const dismiss = (tableId: string) => {
                                 >{{ table.currentGuests }}/{{
                                     table.capacity
                                 }}
-                                pax</span
-                            >
+                                Orang</span>
                         </div>
                     </div>
                 </div>

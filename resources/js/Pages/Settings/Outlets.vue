@@ -33,6 +33,8 @@ interface OutletRow {
         bar_approval_enabled: boolean;
         customer_can_view_status: boolean;
         customer_can_edit_order: boolean;
+        tax_percentage: number;
+        tax_is_inclusive: boolean;
     };
     stats: {
         active_employees: number;
@@ -54,6 +56,8 @@ interface OutletFormPayload {
     bar_approval_enabled: boolean;
     customer_can_view_status: boolean;
     customer_can_edit_order: boolean;
+    tax_percentage: number;
+    tax_is_inclusive: boolean;
 }
 
 const props = defineProps<{
@@ -170,6 +174,8 @@ const outletForm = useForm<OutletFormPayload>({
     bar_approval_enabled: false,
     customer_can_view_status: true,
     customer_can_edit_order: false,
+    tax_percentage: 0,
+    tax_is_inclusive: false,
 });
 
 const summaryCards = computed(() => [
@@ -265,6 +271,8 @@ function resetOutletForm() {
     outletForm.bar_approval_enabled = false;
     outletForm.customer_can_view_status = true;
     outletForm.customer_can_edit_order = false;
+    outletForm.tax_percentage = 0;
+    outletForm.tax_is_inclusive = false;
     selectedStatuses.value = [
         'pending',
         'in_progress',
@@ -294,6 +302,8 @@ function openEditModal(outlet: OutletRow) {
         outlet.settings.customer_can_view_status;
     outletForm.customer_can_edit_order =
         outlet.settings.customer_can_edit_order;
+    outletForm.tax_percentage = outlet.settings.tax_percentage || 0;
+    outletForm.tax_is_inclusive = outlet.settings.tax_is_inclusive || false;
     selectedStatuses.value = [...outlet.settings.workflow_statuses];
 }
 
@@ -1217,6 +1227,82 @@ function toggleOutletStatus(outlet: OutletRow) {
                                                 >
                                             </span>
                                         </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Pengaturan Pajak -->
+                        <div class="space-y-4 rounded-3xl border border-stone-200 bg-stone-50/50 p-6 dark:border-white/10 dark:bg-white/[0.02]">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-orange-400">
+                                        Pengaturan Pajak (PB1/VAT)
+                                    </h4>
+                                    <p class="mt-1 text-[11px] text-stone-500 dark:text-slate-500">
+                                        Atur persentase pajak dan tentukan siapa yang menanggung beban pajak.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-2 rounded-2xl bg-white p-1.5 dark:bg-slate-950/40 border border-stone-200 dark:border-white/10">
+                                    <button
+                                        type="button"
+                                        @click="outletForm.tax_is_inclusive = false"
+                                        :class="[
+                                            'px-3 py-1.5 text-[10px] font-bold rounded-xl transition',
+                                            !outletForm.tax_is_inclusive
+                                                ? 'bg-orange-500 text-slate-950 shadow-sm'
+                                                : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-white/5'
+                                        ]"
+                                    >
+                                        Eksklusif
+                                    </button>
+                                    <button
+                                        type="button"
+                                        @click="outletForm.tax_is_inclusive = true"
+                                        :class="[
+                                            'px-3 py-1.5 text-[10px] font-bold rounded-xl transition',
+                                            outletForm.tax_is_inclusive
+                                                ? 'bg-emerald-500 text-white shadow-sm'
+                                                : 'text-stone-500 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-white/5'
+                                        ]"
+                                    >
+                                        Inklusif
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-6 md:grid-cols-2 items-end">
+                                <label class="block">
+                                    <span class="text-xs font-semibold text-stone-600 dark:text-slate-300">Persentase Pajak (%)</span>
+                                    <div class="relative mt-2">
+                                        <input
+                                            v-model="outletForm.tax_percentage"
+                                            type="number"
+                                            step="0.1"
+                                            min="0"
+                                            max="100"
+                                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white"
+                                            placeholder="Contoh: 10"
+                                        />
+                                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-stone-400">%</span>
+                                    </div>
+                                    <p v-if="outletForm.errors.tax_percentage" class="mt-2 text-xs text-rose-300">
+                                        {{ outletForm.errors.tax_percentage }}
+                                    </p>
+                                </label>
+
+                                <div class="rounded-2xl border border-dashed border-stone-300 dark:border-white/10 p-3 bg-white/40 dark:bg-black/20">
+                                    <div v-if="!outletForm.tax_is_inclusive" class="flex items-start gap-2">
+                                        <div class="mt-1 h-2 w-2 rounded-full bg-orange-500 shrink-0"></div>
+                                        <p class="text-[11px] leading-relaxed text-stone-600 dark:text-slate-400">
+                                            <strong class="text-stone-900 dark:text-white">Eksklusif:</strong> Pajak ditambahkan di atas harga produk. Pelanggan membayar lebih dari harga menu.
+                                        </p>
+                                    </div>
+                                    <div v-else class="flex items-start gap-2">
+                                        <div class="mt-1 h-2 w-2 rounded-full bg-emerald-500 shrink-0"></div>
+                                        <p class="text-[11px] leading-relaxed text-stone-600 dark:text-slate-400">
+                                            <strong class="text-stone-900 dark:text-white">Inklusif:</strong> Harga menu sudah termasuk pajak. Pendapatan bersih Anda akan dipotong nilai pajak.
+                                        </p>
                                     </div>
                                 </div>
                             </div>

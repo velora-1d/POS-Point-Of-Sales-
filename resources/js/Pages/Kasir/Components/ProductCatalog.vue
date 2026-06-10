@@ -145,26 +145,26 @@ const clearTable = (table: any) => {
                     <span
                         class="h-2.5 w-2.5 rounded-full bg-emerald-500"
                     ></span>
-                    Available
+                    Kosong
                 </span>
                 <span
                     class="flex items-center gap-1.5 text-stone-500 dark:text-slate-400"
                 >
                     <span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>
-                    Occupied (Terisi)
+                    Terisi
                 </span>
             </div>
         </div>
 
         <!-- Tab Kategori Meja -->
         <div
-            class="mb-5 flex w-fit select-none items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-100 p-1 dark:border-slate-800 dark:bg-slate-950"
+            class="mb-5 flex w-full select-none items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-100 p-1 dark:border-slate-800 dark:bg-slate-950"
         >
             <button
                 type="button"
                 @click="selectedTableCategory = 'indoor'"
                 :class="[
-                    'rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
+                    'flex-1 rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
                     selectedTableCategory === 'indoor'
                         ? 'bg-orange-500 text-white shadow-md'
                         : 'text-stone-500 hover:text-slate-200 dark:text-slate-200 dark:text-slate-400 dark:hover:text-stone-800',
@@ -176,7 +176,7 @@ const clearTable = (table: any) => {
                 type="button"
                 @click="selectedTableCategory = 'outdoor'"
                 :class="[
-                    'rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
+                    'flex-1 rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
                     selectedTableCategory === 'outdoor'
                         ? 'bg-orange-500 text-white shadow-md'
                         : 'text-stone-500 hover:text-slate-200 dark:text-slate-200 dark:text-slate-400 dark:hover:text-stone-800',
@@ -273,8 +273,8 @@ const clearTable = (table: any) => {
                         <span
                             class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
                         >
-                            {{ table.current_guests ?? 0 }}/{{ table.capacity }}
-                            Pax
+                            {{ table.status === 'occupied' ? 'Tamu' : 'Kapasitas' }}: {{ table.current_guests ?? 0 }}/{{ table.capacity }}
+                            Orang
                         </span>
                         <span
                             v-if="table.occupied_at"
@@ -301,7 +301,7 @@ const clearTable = (table: any) => {
                     v-else
                     class="mt-1 text-[10px] uppercase tracking-wider text-stone-500 dark:text-slate-500"
                 >
-                    Kapasitas: — Pax
+                    Kapasitas: — Orang
                 </p>
 
                 <span
@@ -310,7 +310,7 @@ const clearTable = (table: any) => {
                         getTableBadgeClass(table),
                     ]"
                 >
-                    {{ table.status }}
+                    {{ table.status === 'occupied' ? 'Terisi' : (table.status === 'reserved' ? 'Reservasi' : 'Kosong') }}
                 </span>
 
                 <div
@@ -351,7 +351,7 @@ const clearTable = (table: any) => {
                     <p
                         class="mt-1 text-[9px] text-stone-500 dark:text-slate-400"
                     >
-                        {{ table.active_reservation.guest_count }} pax
+                        {{ table.active_reservation.guest_count }} Orang
                     </p>
                 </div>
             </div>
@@ -529,7 +529,7 @@ const clearTable = (table: any) => {
                     <span
                         class="rounded border border-red-500/20 bg-red-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400"
                     >
-                        Occupied
+                        Terisi
                     </span>
                 </h3>
                 <p

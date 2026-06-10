@@ -13,6 +13,7 @@ export type PaymentMethod =
 // Props reference
 export const propsData = ref<any>({});
 
+export const outlet = computed(() => propsData.value.outlet || null);
 export const tables = computed(() => propsData.value.tables || []);
 export const categories = computed(() => propsData.value.categories || []);
 export const activeOrders = computed(() => propsData.value.activeOrders || []);
@@ -453,6 +454,24 @@ export const cartDiscount = computed(() => {
     return Math.min(discount, sub);
 });
 
+export const cartTax = computed(() => {
+    const taxPercentage = Number(outlet.value?.settings?.tax_percentage || 0);
+    if (taxPercentage <= 0) return 0;
+
+    const isInclusive = !!outlet.value?.settings?.tax_is_inclusive;
+    const taxableAmount = cartSubtotal.value - cartDiscount.value;
+
+    if (isInclusive) {
+        // Inklusif: Pajak sudah di dalam harga.
+        // Tax = Total - (Total / (1 + Rate))
+        return taxableAmount - taxableAmount / (1 + taxPercentage / 100);
+    } else {
+        // Eksklusif: Pajak ditambahkan di atas harga.
+        // Tax = Total * Rate
+        return taxableAmount * (taxPercentage / 100);
+    }
+});
+
 export const newOrderPromoWarning = computed(() => {
     if (!newOrderPromoCode.value) return '';
     const promo = promos.value?.find(
@@ -469,7 +488,14 @@ export const newOrderPromoWarning = computed(() => {
 });
 
 export const cartTotal = computed(() => {
-    return Math.max(0, cartSubtotal.value - cartDiscount.value);
+    const isInclusive = !!outlet.value?.settings?.tax_is_inclusive;
+    const taxableAmount = Math.max(0, cartSubtotal.value - cartDiscount.value);
+
+    if (isInclusive) {
+        return taxableAmount;
+    } else {
+        return taxableAmount + cartTax.value;
+    }
 });
 
 export const cartItemCount = computed(() => {
