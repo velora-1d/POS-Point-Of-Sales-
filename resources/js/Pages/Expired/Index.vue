@@ -60,29 +60,29 @@ const summaryCards = computed(() => [
     {
         label: 'Akan Expired',
         value: props.summary.upcoming,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
+        tone: 'text-amber-600 dark:text-amber-300',
+        surface: 'border-amber-200 bg-amber-50 dark:border-amber-400/15 dark:bg-amber-500/8',
         icon: CalendarClock,
     },
     {
         label: 'Expired Hari Ini',
         value: props.summary.today,
-        tone: 'text-orange-300',
-        surface: 'border-orange-400/15 bg-orange-500/8',
+        tone: 'text-orange-600 dark:text-orange-300',
+        surface: 'border-orange-200 bg-orange-50 dark:border-orange-400/15 dark:bg-orange-500/8',
         icon: BellRing,
     },
     {
         label: 'Sudah Expired',
         value: props.summary.expired,
-        tone: 'text-rose-300',
-        surface: 'border-rose-400/15 bg-rose-500/8',
+        tone: 'text-rose-600 dark:text-rose-300',
+        surface: 'border-rose-200 bg-rose-50 dark:border-rose-400/15 dark:bg-rose-500/8',
         icon: AlertTriangle,
     },
     {
         label: 'Butuh Tindakan',
         value: props.summary.critical,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: ShieldAlert,
     },
 ]);
@@ -113,14 +113,14 @@ const formatDate = (value: string) => {
 
 const getStatusClass = (item: ExpiryItem) => {
     if (item.status === 'expired') {
-        return 'border-rose-500/20 bg-rose-500/10 text-rose-300';
+        return 'border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300';
     }
 
     if (item.status === 'today') {
-        return 'border-orange-500/20 bg-orange-500/10 text-orange-300';
+        return 'border-orange-200 bg-orange-50 text-orange-600 dark:border-orange-500/20 dark:bg-orange-500/10 dark:text-orange-300';
     }
 
-    return 'border-amber-500/20 bg-amber-500/10 text-amber-300';
+    return 'border-amber-200 bg-amber-50 text-amber-600 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300';
 };
 
 const getStatusLabel = (item: ExpiryItem) => {
@@ -186,15 +186,15 @@ const submitAction = () => {
         <div class="space-y-5">
             <!-- Tab Navigation Global -->
             <div
-                class="flex max-w-3xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
             >
                 <Link
                     :href="route('products.stock')"
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('products.stock')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Stok Produk Jadi
@@ -204,8 +204,8 @@ const submitAction = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('products.hpp')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     HPP & Resep
@@ -215,8 +215,8 @@ const submitAction = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('stock-alerts.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Alert Stok Menipis
@@ -226,8 +226,8 @@ const submitAction = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('expired-tracking.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Reminder Expired
@@ -305,7 +305,7 @@ const submitAction = () => {
 
                     <button
                         type="submit"
-                        class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
+                        class="rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition"
                     >
                         Terapkan
                     </button>
@@ -320,7 +320,7 @@ const submitAction = () => {
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
                         >
                             Daftar Reminder Aktif
                         </p>
@@ -333,7 +333,7 @@ const submitAction = () => {
                     </div>
                     <Link
                         :href="route('stock-alerts.index')"
-                        class="inline-flex items-center gap-2 text-xs font-semibold text-orange-300 transition hover:text-orange-200"
+                        class="inline-flex items-center gap-2 text-xs font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200"
                     >
                         <PackageMinus class="h-4 w-4" />
                         Buka Alert Stok Menipis
@@ -376,7 +376,7 @@ const submitAction = () => {
                                         </span>
                                         <span
                                             v-if="item.reminder_hit"
-                                            class="rounded-full border border-sky-500/20 bg-sky-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-sky-300"
+                                            class="rounded-full border border-sky-500/20 bg-sky-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-sky-600 dark:text-sky-300"
                                         >
                                             Reminder aktif
                                         </span>
@@ -406,7 +406,7 @@ const submitAction = () => {
                                     <button
                                         type="button"
                                         @click="openActionModal(item)"
-                                        class="inline-flex items-center gap-2 rounded-xl border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-300"
+                                        class="inline-flex items-center gap-2 rounded-xl border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-600 dark:text-orange-300"
                                     >
                                         Tindak Lanjut
                                     </button>
@@ -467,7 +467,7 @@ const submitAction = () => {
 
         <div
             v-if="selectedItem"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 backdrop-blur-sm dark:bg-slate-950/80"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 backdrop-blur-sm dark:bg-slate-950/80"
             @click.self="closeActionModal"
         >
             <div
@@ -551,7 +551,7 @@ const submitAction = () => {
                         <button
                             type="submit"
                             :disabled="actionForm.processing"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 disabled:opacity-60 dark:text-white"
+                            class="rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition disabled:opacity-60"
                         >
                             {{
                                 actionForm.processing

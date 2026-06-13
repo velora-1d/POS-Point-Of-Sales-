@@ -103,29 +103,29 @@ const summaryCards = computed(() => [
     {
         label: 'Total Produk',
         value: props.summary.total,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: PackageOpen,
     },
     {
         label: 'Punya Resep',
         value: props.summary.with_recipe,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/8',
+        tone: 'text-emerald-600 dark:text-emerald-300',
+        surface: 'border-emerald-200 bg-emerald-50 dark:border-emerald-400/15 dark:bg-emerald-500/8',
         icon: CookingPot,
     },
     {
         label: 'HPP Sinkron',
         value: props.summary.synced_hpp,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/8',
+        tone: 'text-sky-600 dark:text-sky-300',
+        surface: 'border-sky-200 bg-sky-50 dark:border-sky-400/15 dark:bg-sky-500/8',
         icon: Calculator,
     },
     {
         label: 'Margin Positif',
         value: props.summary.healthy_margin,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
+        tone: 'text-amber-600 dark:text-amber-300',
+        surface: 'border-amber-200 bg-amber-50 dark:border-amber-400/15 dark:bg-amber-500/8',
         icon: Coins,
     },
 ]);
@@ -261,15 +261,15 @@ const submitRecipe = () => {
         <div class="space-y-5">
             <!-- Tab Navigation Global -->
             <div
-                class="flex max-w-3xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
             >
                 <Link
                     :href="route('products.stock')"
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('products.stock')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Stok Produk Jadi
@@ -279,8 +279,8 @@ const submitRecipe = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('products.hpp')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     HPP & Resep
@@ -290,8 +290,8 @@ const submitRecipe = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('stock-alerts.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Alert Stok Menipis
@@ -301,8 +301,8 @@ const submitRecipe = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('expired-tracking.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Reminder Expired
@@ -400,7 +400,7 @@ const submitRecipe = () => {
 
                         <button
                             type="submit"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
+                            class="rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition"
                         >
                             Terapkan
                         </button>
@@ -416,7 +416,7 @@ const submitRecipe = () => {
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
                         >
                             Daftar Produk & HPP
                         </p>
@@ -431,7 +431,7 @@ const submitRecipe = () => {
                     </div>
                     <Link
                         :href="route('raw-materials.index')"
-                        class="inline-flex items-center gap-2 text-xs font-semibold text-orange-300 transition hover:text-orange-200"
+                        class="inline-flex items-center gap-2 text-xs font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200"
                     >
                         <Wallet class="h-4 w-4" />
                         Buka Inventori Bahan Baku
@@ -465,7 +465,7 @@ const submitRecipe = () => {
                                             {{ product.name }}
                                         </h3>
                                         <span
-                                            class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                                            class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
                                         >
                                             {{ product.ingredients_count || 0 }}
                                             bahan
@@ -487,7 +487,7 @@ const submitRecipe = () => {
                                 <button
                                     type="button"
                                     @click="openRecipeModal(product)"
-                                    class="inline-flex items-center gap-2 rounded-xl border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-300"
+                                    class="inline-flex items-center gap-2 rounded-xl border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-600 dark:text-orange-300"
                                 >
                                     <CookingPot class="h-3.5 w-3.5" />
                                     Atur Resep
@@ -538,8 +538,8 @@ const submitRecipe = () => {
                                             'mt-2 text-xl font-black',
                                             Number(product.gross_margin || 0) >=
                                             0
-                                                ? 'text-emerald-300'
-                                                : 'text-rose-300',
+                                                ? 'text-emerald-600 dark:text-emerald-300'
+                                                : 'text-rose-600 dark:text-rose-300',
                                         ]"
                                     >
                                         {{ formatPrice(product.gross_margin) }}
@@ -607,7 +607,7 @@ const submitRecipe = () => {
 
         <div
             v-if="selectedProduct"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 backdrop-blur-sm dark:bg-slate-950/80"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 backdrop-blur-sm dark:bg-slate-950/80"
             @click.self="closeRecipeModal"
         >
             <div
@@ -761,7 +761,7 @@ const submitRecipe = () => {
                         <button
                             type="submit"
                             :disabled="hppForm.processing"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 disabled:opacity-60 dark:text-white"
+                            class="rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition disabled:opacity-60"
                         >
                             {{
                                 hppForm.processing

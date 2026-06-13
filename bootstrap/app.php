@@ -22,6 +22,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/v1/callback/pakasir',
             'api/v1/online-orders/webhook/gofood',
             'api/v1/online-orders/webhook/grabfood',
+            'settings/*',
+            'products*',
+            'promos*',
+            'raw-materials*',
+            'order*',
+            'shifts*',
+            'tables*',
+            'm/*',
         ]);
 
         //

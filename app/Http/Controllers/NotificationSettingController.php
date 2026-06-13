@@ -63,4 +63,37 @@ class NotificationSettingController extends Controller
             'message' => 'Token FCM berhasil diperbarui.',
         ]);
     }
+
+    public function testPush(\Illuminate\Http\Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = $request->user();
+        if (!$user->fcm_token) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal: Perangkat Anda belum terdaftar dengan FCM Token di server. Silakan aktifkan/izinkan notifikasi browser terlebih dahulu.',
+            ], 400);
+        }
+
+        $success = \App\Services\FirebasePushService::sendPush(
+            $user->fcm_token,
+            'Tes Notifikasi Firebase',
+            'Halo ' . $user->name . '! Ini adalah push notifikasi pengujian dari server POS Mentai.',
+            [
+                'type' => 'test_push',
+                'action_url' => route('dashboard'),
+            ]
+        );
+
+        if ($success) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Tes push notifikasi berhasil dikirim ke perangkat Anda!',
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal mengirim push notifikasi. Silakan periksa file credentials.json dan log error server.',
+        ], 500);
+    }
 }

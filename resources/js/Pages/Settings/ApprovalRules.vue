@@ -78,24 +78,24 @@ const summaryCards = computed(() => [
         label: 'Outlet Terkonfigurasi',
         value: `${props.summary.configured_outlets}/${props.summary.total_outlets}`,
         helper: 'Jumlah outlet yang sudah punya threshold approval tersimpan',
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-slate-900/40',
         icon: CheckCircle2,
     },
     {
         label: 'Manual Discount',
         value: props.summary.manual_discount_enabled,
         helper: 'Outlet yang mengaktifkan approval diskon manual',
-        tone: 'text-orange-300',
-        surface: 'border-orange-400/15 bg-orange-500/10',
+        tone: 'text-orange-700 dark:text-orange-300',
+        surface: 'border-orange-200 bg-orange-50 dark:border-orange-500/20 dark:bg-orange-500/10',
         icon: Percent,
     },
     {
         label: 'Edit Order',
         value: props.summary.order_edit_enabled,
         helper: 'Outlet yang mengaktifkan threshold edit order',
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-700 dark:text-sky-300',
+        surface: 'border-sky-200 bg-sky-50 dark:border-sky-500/20 dark:bg-sky-500/10',
         icon: Receipt,
     },
 ]);
@@ -138,11 +138,11 @@ function submitSave() {
             <div class="flex flex-col gap-2">
                 <div>
                     <h2
-                        class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                        class="text-2xl font-black tracking-tight text-stone-955 dark:text-white"
                     >
                         Aturan Approval Transaksi
                     </h2>
-                    <p class="mt-1 text-sm text-stone-500 dark:text-slate-400">
+                    <p class="mt-1 text-sm font-semibold text-stone-700 dark:text-stone-300">
                         Definisikan threshold nominal yang mewajibkan approval
                         owner untuk diskon manual dan edit order.
                     </p>
@@ -155,34 +155,34 @@ function submitSave() {
                 <div
                     v-for="card in summaryCards"
                     :key="card.label"
-                    class="rounded-3xl border p-5"
+                    class="rounded-3xl border-2 p-5 shadow-sm transition-all duration-200 hover:shadow-md"
                     :class="card.surface"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p
-                                class="text-[11px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
+                                class="text-[11px] font-extrabold uppercase tracking-[0.2em] text-stone-500 dark:text-stone-400"
                             >
                                 {{ card.label }}
                             </p>
                             <p
-                                class="mt-3 text-3xl font-black"
+                                class="mt-3 text-3xl font-black tracking-tight"
                                 :class="card.tone"
                             >
                                 {{ card.value }}
                             </p>
                             <p
-                                class="mt-2 text-xs leading-5 text-stone-500 dark:text-slate-400"
+                                class="mt-2 text-xs font-semibold leading-5 text-stone-600 dark:text-slate-400"
                             >
                                 {{ card.helper }}
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-950/40"
+                            class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-950"
                         >
                             <component
                                 :is="card.icon"
-                                class="h-5 w-5 text-stone-800 dark:text-slate-200"
+                                class="h-5 w-5 text-stone-850 dark:text-slate-200"
                             />
                         </div>
                     </div>
@@ -191,14 +191,14 @@ function submitSave() {
 
             <div class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
                 <section
-                    class="rounded-3xl border border-stone-200 bg-stone-50 p-6 dark:border-slate-800/80 dark:bg-slate-900/80"
+                    class="rounded-3xl border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-slate-800/80 dark:bg-slate-950/45"
                 >
                     <div
-                        class="flex flex-col gap-4 border-b border-stone-200 pb-5 dark:border-slate-800/80 lg:flex-row lg:items-end lg:justify-between"
+                        class="flex flex-col gap-4 border-b-2 border-stone-200 pb-5 dark:border-slate-800/80 lg:flex-row lg:items-end lg:justify-between"
                     >
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                                class="text-[10px] font-extrabold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-400"
                             >
                                 Konfigurasi Outlet
                             </p>
@@ -208,7 +208,7 @@ function submitSave() {
                                 Threshold Approval Operasional
                             </h3>
                             <p
-                                class="mt-1 text-sm text-stone-500 dark:text-slate-400"
+                                class="mt-1 text-sm font-semibold text-stone-500 dark:text-slate-400"
                             >
                                 Jika nominal melebihi batas, kasir wajib mengisi
                                 PIN owner sebelum aksi diproses.
@@ -217,7 +217,7 @@ function submitSave() {
 
                         <div class="w-full lg:w-72">
                             <label
-                                class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="mb-2 block text-[10px] font-extrabold uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400"
                             >
                                 Pilih Outlet
                             </label>
@@ -229,7 +229,7 @@ function submitSave() {
                                             .value,
                                     )
                                 "
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm font-bold text-stone-950 focus:border-orange-500 focus:outline-none transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-orange-500"
                             >
                                 <option
                                     v-for="outlet in outlets"
@@ -244,7 +244,7 @@ function submitSave() {
 
                     <div class="mt-6 space-y-5">
                         <div
-                            class="rounded-3xl border border-stone-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/50"
+                            class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950/20"
                         >
                             <div class="flex items-start justify-between gap-4">
                                 <div>
@@ -254,7 +254,7 @@ function submitSave() {
                                         Manual Discount Threshold
                                     </h4>
                                     <p
-                                        class="mt-1 text-sm leading-6 text-stone-500 dark:text-slate-400"
+                                        class="mt-1 text-sm font-semibold leading-6 text-stone-500 dark:text-slate-400"
                                     >
                                         Berlaku saat kasir memakai voucher atau
                                         diskon manual. Sistem menghitung nominal
@@ -267,11 +267,11 @@ function submitSave() {
                                         form.manual_discount_enabled =
                                             !form.manual_discount_enabled
                                     "
-                                    class="rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider"
+                                    class="rounded-full border-2 px-3 py-1 text-[11px] font-black uppercase tracking-wider transition-all"
                                     :class="
                                         form.manual_discount_enabled
-                                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
-                                            : 'border-stone-200 bg-white text-stone-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400'
+                                            ? 'border-emerald-350 bg-emerald-50 text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300'
+                                            : 'border-stone-300 bg-stone-100 text-stone-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400'
                                     "
                                 >
                                     {{
@@ -284,7 +284,7 @@ function submitSave() {
 
                             <div class="mt-5">
                                 <label
-                                    class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                    class="mb-2 block text-[10px] font-extrabold uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400"
                                 >
                                     Threshold Diskon Manual
                                 </label>
@@ -293,10 +293,10 @@ function submitSave() {
                                     type="number"
                                     min="0"
                                     step="1000"
-                                    class="w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                    class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm font-black text-stone-950 focus:border-orange-500 focus:outline-none transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-orange-500"
                                 />
                                 <p
-                                    class="mt-2 text-xs leading-5 text-stone-400 dark:text-slate-500"
+                                    class="mt-2 text-xs font-bold leading-5 text-stone-600 dark:text-slate-400"
                                 >
                                     Preview limit:
                                     {{
@@ -309,7 +309,7 @@ function submitSave() {
                         </div>
 
                         <div
-                            class="rounded-3xl border border-stone-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/50"
+                            class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950/20"
                         >
                             <div class="flex items-start justify-between gap-4">
                                 <div>
@@ -319,7 +319,7 @@ function submitSave() {
                                         Edit Order Threshold
                                     </h4>
                                     <p
-                                        class="mt-1 text-sm leading-6 text-stone-500 dark:text-slate-400"
+                                        class="mt-1 text-sm font-semibold leading-6 text-stone-500 dark:text-slate-400"
                                     >
                                         Berlaku saat kasir mengubah order. Jika
                                         total order hasil edit melewati batas,
@@ -332,11 +332,11 @@ function submitSave() {
                                         form.order_edit_enabled =
                                             !form.order_edit_enabled
                                     "
-                                    class="rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider"
+                                    class="rounded-full border-2 px-3 py-1 text-[11px] font-black uppercase tracking-wider transition-all"
                                     :class="
                                         form.order_edit_enabled
-                                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
-                                            : 'border-stone-200 bg-white text-stone-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400'
+                                            ? 'border-emerald-350 bg-emerald-50 text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300'
+                                            : 'border-stone-300 bg-stone-100 text-stone-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400'
                                     "
                                 >
                                     {{
@@ -349,7 +349,7 @@ function submitSave() {
 
                             <div class="mt-5">
                                 <label
-                                    class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                    class="mb-2 block text-[10px] font-extrabold uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400"
                                 >
                                     Threshold Total Order Setelah Edit
                                 </label>
@@ -358,10 +358,10 @@ function submitSave() {
                                     type="number"
                                     min="0"
                                     step="1000"
-                                    class="w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                    class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm font-black text-stone-950 focus:border-orange-500 focus:outline-none transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-orange-500"
                                 />
                                 <p
-                                    class="mt-2 text-xs leading-5 text-stone-400 dark:text-slate-500"
+                                    class="mt-2 text-xs font-bold leading-5 text-stone-600 dark:text-slate-400"
                                 >
                                     Preview limit:
                                     {{
@@ -375,13 +375,13 @@ function submitSave() {
                     </div>
 
                     <div
-                        class="mt-6 flex justify-end border-t border-stone-200 pt-5 dark:border-slate-800/80"
+                        class="mt-6 flex justify-end border-t-2 border-stone-200 pt-5 dark:border-slate-800/80"
                     >
                         <button
                             type="button"
                             @click="submitSave"
                             :disabled="form.processing"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3 text-sm font-bold text-stone-900 transition disabled:pointer-events-none disabled:opacity-50 dark:text-white"
+                            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-500 hover:bg-orange-400 px-5 py-3 text-sm font-black text-stone-950 transition disabled:pointer-events-none disabled:opacity-50"
                         >
                             {{
                                 form.processing
@@ -394,10 +394,10 @@ function submitSave() {
 
                 <section class="space-y-6">
                     <div
-                        class="rounded-3xl border border-stone-200 bg-stone-50 p-6 dark:border-slate-800/80 dark:bg-slate-900/80"
+                        class="rounded-3xl border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-slate-800/80 dark:bg-slate-950/45"
                     >
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                            class="text-[10px] font-extrabold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-400"
                         >
                             Cara Kerja
                         </p>
@@ -407,7 +407,7 @@ function submitSave() {
                             Lock Before Commit
                         </h3>
                         <p
-                            class="mt-3 text-sm leading-7 text-stone-500 dark:text-slate-400"
+                            class="mt-3 text-sm font-semibold leading-7 text-stone-500 dark:text-slate-400"
                         >
                             Runtime order sekarang mengecek threshold sebelum
                             diskon manual atau edit order disimpan. Jika limit
@@ -417,24 +417,24 @@ function submitSave() {
                     </div>
 
                     <div
-                        class="rounded-3xl border border-stone-200 bg-stone-50 p-6 dark:border-slate-800/80 dark:bg-slate-900/80"
+                        class="rounded-3xl border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-slate-800/80 dark:bg-slate-950/45"
                     >
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                            class="text-[10px] font-extrabold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-400"
                         >
                             Scope Runtime
                         </p>
                         <div class="mt-4 space-y-4">
                             <div
-                                class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/50"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 p-4 dark:border-slate-800 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-sm font-bold text-stone-900 dark:text-white"
+                                    class="text-sm font-black text-stone-900 dark:text-white"
                                 >
                                     Diskon Manual
                                 </p>
                                 <p
-                                    class="mt-2 text-xs leading-6 text-stone-500 dark:text-slate-400"
+                                    class="mt-2 text-xs font-semibold leading-6 text-stone-500 dark:text-slate-400"
                                 >
                                     Diterapkan pada create order baru dan
                                     settlement tagihan existing ketika voucher
@@ -442,15 +442,15 @@ function submitSave() {
                                 </p>
                             </div>
                             <div
-                                class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/50"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 p-4 dark:border-slate-800 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-sm font-bold text-stone-900 dark:text-white"
+                                    class="text-sm font-black text-stone-900 dark:text-white"
                                 >
                                     Edit Order
                                 </p>
                                 <p
-                                    class="mt-2 text-xs leading-6 text-stone-500 dark:text-slate-400"
+                                    class="mt-2 text-xs font-semibold leading-6 text-stone-500 dark:text-slate-400"
                                 >
                                     Diterapkan saat total order hasil edit
                                     mencapai atau melewati nominal threshold
@@ -458,19 +458,19 @@ function submitSave() {
                                 </p>
                             </div>
                             <div
-                                class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/50"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 p-4 dark:border-slate-800 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-sm font-bold text-stone-900 dark:text-white"
+                                    class="text-sm font-black text-stone-900 dark:text-white"
                                 >
                                     PIN Supervisor Lama
                                 </p>
                                 <p
-                                    class="mt-2 text-xs leading-6 text-stone-500 dark:text-slate-400"
+                                    class="mt-2 text-xs font-semibold leading-6 text-stone-500 dark:text-slate-400"
                                 >
                                     Untuk order status
                                     <code
-                                        class="rounded bg-stone-100 px-1.5 py-0.5 text-[11px] text-orange-300 dark:bg-slate-950"
+                                        class="rounded bg-orange-50 border border-orange-200 px-1.5 py-0.5 text-[11px] font-bold text-orange-700 dark:bg-slate-950 dark:border-none dark:text-orange-300"
                                         >in_progress</code
                                     >, rule supervisor tetap berlaku bila
                                     threshold owner tidak terpenuhi.

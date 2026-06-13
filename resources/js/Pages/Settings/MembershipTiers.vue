@@ -361,7 +361,7 @@ const pointIllustration = computed(() => {
             >
                 <div
                     v-if="isFormModalOpen"
-                    class="fixed inset-0 z-50 flex items-center justify-center bg-white p-4 backdrop-blur-sm dark:bg-slate-950/80"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/80"
                 >
                     <div
                         class="w-full max-w-lg rounded-3xl border border-stone-200 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-slate-900"

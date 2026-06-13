@@ -120,37 +120,37 @@ const clearTable = (table: any) => {
     <!-- VIEW 1: Grid of Tables (when no table selected) -->
     <div
         v-if="!selectedTable"
-        class="rounded-2xl border border-stone-200 bg-white p-6 shadow-xl dark:border-slate-800/80 dark:bg-slate-900"
+        class="rounded-2xl border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-white/10 dark:bg-slate-900"
     >
-        <div class="mb-6 flex items-center justify-between">
+        <div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <h3
-                class="flex items-center gap-2 text-lg font-bold text-stone-900 dark:text-white"
+                class="flex items-center gap-2 text-lg font-black text-stone-900 dark:text-white"
             >
                 <span
-                    class="flex h-5 w-5 items-center justify-center text-orange-500"
+                    class="flex h-5 w-5 items-center justify-center text-orange-650"
                     >🏢</span
                 >
                 <span>Pilih Meja Restoran (Visual Map)</span>
             </h3>
             <div class="flex items-center gap-3 text-xs">
                 <span
-                    class="flex items-center gap-1.5 text-stone-500 dark:text-slate-400"
+                    class="flex items-center gap-1.5 text-stone-700 font-bold dark:text-slate-300"
                 >
-                    <span class="h-2.5 w-2.5 rounded-full bg-orange-400"></span>
+                    <span class="h-2.5 w-2.5 rounded-full bg-orange-650 border border-stone-300 dark:border-white/10"></span>
                     Takeaway
                 </span>
                 <span
-                    class="flex items-center gap-1.5 text-stone-500 dark:text-slate-400"
+                    class="flex items-center gap-1.5 text-stone-700 font-bold dark:text-slate-300"
                 >
                     <span
-                        class="h-2.5 w-2.5 rounded-full bg-emerald-500"
+                        class="h-2.5 w-2.5 rounded-full bg-emerald-650 border border-stone-300 dark:border-white/10"
                     ></span>
                     Kosong
                 </span>
                 <span
-                    class="flex items-center gap-1.5 text-stone-500 dark:text-slate-400"
+                    class="flex items-center gap-1.5 text-stone-700 font-bold dark:text-slate-300"
                 >
-                    <span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>
+                    <span class="h-2.5 w-2.5 rounded-full bg-rose-650 border border-stone-300 dark:border-white/10"></span>
                     Terisi
                 </span>
             </div>
@@ -158,16 +158,16 @@ const clearTable = (table: any) => {
 
         <!-- Tab Kategori Meja -->
         <div
-            class="mb-5 flex w-full select-none items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-100 p-1 dark:border-slate-800 dark:bg-slate-950"
+            class="mb-5 flex w-full select-none items-center gap-1.5 rounded-xl border-2 border-stone-200 bg-stone-50 p-1 dark:border-white/10 dark:bg-slate-950/60"
         >
             <button
                 type="button"
                 @click="selectedTableCategory = 'indoor'"
                 :class="[
-                    'flex-1 rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
+                    'flex-1 rounded-lg px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
                     selectedTableCategory === 'indoor'
-                        ? 'bg-orange-500 text-white shadow-md'
-                        : 'text-stone-500 hover:text-slate-200 dark:text-slate-200 dark:text-slate-400 dark:hover:text-stone-800',
+                        ? 'bg-orange-500 text-stone-950 shadow-sm'
+                        : 'text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-100 dark:bg-slate-900 dark:text-slate-350 dark:hover:text-white dark:hover:bg-slate-850',
                 ]"
             >
                 Indoor
@@ -176,10 +176,10 @@ const clearTable = (table: any) => {
                 type="button"
                 @click="selectedTableCategory = 'outdoor'"
                 :class="[
-                    'flex-1 rounded-lg px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200',
+                    'flex-1 rounded-lg px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
                     selectedTableCategory === 'outdoor'
-                        ? 'bg-orange-500 text-white shadow-md'
-                        : 'text-stone-500 hover:text-slate-200 dark:text-slate-200 dark:text-slate-400 dark:hover:text-stone-800',
+                        ? 'bg-orange-500 text-stone-950 shadow-sm'
+                        : 'text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-100 dark:bg-slate-900 dark:text-slate-350 dark:hover:text-white dark:hover:bg-slate-850',
                 ]"
             >
                 Outdoor
@@ -190,27 +190,27 @@ const clearTable = (table: any) => {
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
             <div
                 @click="selectTakeawayOrder"
-                class="group relative cursor-pointer select-none rounded-2xl border border-orange-500/20 bg-orange-500/[0.08] p-5 text-center text-orange-700 shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-500/40 hover:shadow-orange-500/10 dark:text-orange-100"
+                class="group relative cursor-pointer select-none rounded-2xl border-2 border-orange-700 bg-orange-50 p-5 text-center text-orange-955 shadow-md transition-all duration-200 hover:-translate-y-0.5"
             >
                 <div
-                    class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-300"
+                    class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border-2 border-orange-700 bg-orange-100 text-orange-850 font-bold"
                 >
                     <Package class="h-4 w-4" />
                 </div>
 
                 <h4
-                    class="text-base font-extrabold text-stone-900 dark:text-white"
+                    class="text-base font-black text-black"
                 >
                     Takeaway
                 </h4>
                 <p
-                    class="mt-1 text-[10px] uppercase tracking-wider text-stone-500 dark:text-orange-200/70"
+                    class="mt-1 text-[10px] uppercase tracking-wider text-orange-900 font-extrabold"
                 >
                     Pesanan bungkus / dibawa pulang
                 </p>
 
                 <span
-                    class="absolute right-3 top-3 rounded border border-orange-500/20 bg-orange-500/10 px-1.5 py-0.5 text-[8px] font-bold uppercase text-orange-600 dark:text-orange-300"
+                    class="absolute right-3 top-3 rounded border-2 border-orange-700 bg-orange-100 px-1.5 py-0.5 text-[8px] font-black uppercase text-orange-850"
                 >
                     Bungkus
                 </span>
@@ -219,27 +219,27 @@ const clearTable = (table: any) => {
             <!-- Order Online Card -->
             <div
                 @click="showOnlinePlatformModal = true"
-                class="group relative cursor-pointer select-none rounded-2xl border border-blue-500/20 bg-blue-500/[0.08] p-5 text-center text-blue-700 shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/40 hover:shadow-blue-500/10 dark:text-blue-100"
+                class="group relative cursor-pointer select-none rounded-2xl border-2 border-blue-700 bg-blue-50 p-5 text-center text-blue-955 shadow-md transition-all duration-200 hover:-translate-y-0.5"
             >
                 <div
-                    class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-300"
+                    class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-700 bg-blue-100 text-blue-800 font-bold"
                 >
                     <span class="text-base">🌐</span>
                 </div>
 
                 <h4
-                    class="text-base font-extrabold text-stone-900 dark:text-white"
+                    class="text-base font-black text-black"
                 >
                     Order Online
                 </h4>
                 <p
-                    class="mt-1 text-[10px] uppercase tracking-wider text-stone-500 dark:text-blue-200/70"
+                    class="mt-1 text-[10px] uppercase tracking-wider text-blue-900 font-extrabold"
                 >
                     Pencatatan manual GoFood, GrabFood, ShopeeFood, Maxim
                 </p>
 
                 <span
-                    class="absolute right-3 top-3 rounded border border-blue-500/20 bg-blue-500/10 px-1.5 py-0.5 text-[8px] font-bold uppercase text-blue-600 dark:text-blue-300"
+                    class="absolute right-3 top-3 rounded border-2 border-blue-700 bg-blue-100 px-1.5 py-0.5 text-[8px] font-black uppercase text-blue-850"
                 >
                     Online
                 </span>
@@ -252,26 +252,26 @@ const clearTable = (table: any) => {
                 :key="table.id"
                 @click="selectTable(table)"
                 :class="[
-                    'group relative cursor-pointer select-none rounded-2xl border p-5 text-center shadow-md transition-all duration-200',
+                    'group relative cursor-pointer select-none rounded-2xl border-2 p-5 text-center shadow-md transition-all duration-200',
                     getTableCardClass(table),
                 ]"
             >
                 <div
                     :class="[
-                        'mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border text-sm font-bold',
+                        'mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-black',
                         getTableIconClass(table),
                     ]"
                 >
                     T
                 </div>
 
-                <h4 class="text-base font-extrabold">{{ table.name }}</h4>
+                <h4 class="text-base font-black">{{ table.name }}</h4>
 
                 <!-- Progress Bar Kapasitas -->
                 <div v-if="table.capacity" class="mt-2 space-y-1">
                     <div class="flex items-center justify-between">
                         <span
-                            class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                            class="text-[9px] font-black uppercase tracking-wider text-black"
                         >
                             {{ table.status === 'occupied' ? 'Tamu' : 'Kapasitas' }}: {{ table.current_guests ?? 0 }}/{{ table.capacity }}
                             Orang
@@ -279,7 +279,7 @@ const clearTable = (table: any) => {
                         <span
                             v-if="table.occupied_at"
                             :class="[
-                                'inline-flex items-center gap-0.5 text-[9px] font-bold',
+                                'inline-flex items-center gap-0.5 text-[9px] font-black',
                                 getTableTimerClass(table),
                             ]"
                         >
@@ -288,7 +288,7 @@ const clearTable = (table: any) => {
                         </span>
                     </div>
                     <div
-                        class="h-1.5 w-full overflow-hidden rounded-full bg-stone-200 dark:bg-slate-700"
+                        class="h-1.5 w-full overflow-hidden rounded-full bg-stone-300"
                     >
                         <div
                             class="h-full rounded-full transition-all duration-500"
@@ -299,14 +299,14 @@ const clearTable = (table: any) => {
                 </div>
                 <p
                     v-else
-                    class="mt-1 text-[10px] uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                    class="mt-1 text-[10px] uppercase tracking-wider text-black font-semibold"
                 >
                     Kapasitas: — Orang
                 </p>
 
                 <span
                     :class="[
-                        'absolute right-3 top-3 rounded border px-1.5 py-0.5 text-[8px] font-bold uppercase',
+                        'absolute right-3 top-3 rounded border-2 px-1.5 py-0.5 text-[8px] font-black uppercase',
                         getTableBadgeClass(table),
                     ]"
                 >
@@ -315,41 +315,41 @@ const clearTable = (table: any) => {
 
                 <div
                     v-if="table.status === 'occupied' && table.active_order"
-                    class="mt-3 border-t border-red-500/10 pt-3 text-left"
+                    class="mt-3 border-t-2 border-rose-200 pt-3 text-left"
                 >
                     <p
-                        class="truncate text-[9px] font-bold uppercase text-red-600 dark:text-red-400"
+                        class="truncate text-[9px] font-black uppercase text-rose-800"
                     >
                         {{ table.active_order.order_number }}
                     </p>
                     <p
-                        class="mt-0.5 text-[10px] font-bold text-stone-800 dark:text-slate-300"
+                        class="mt-0.5 text-[10px] font-black text-black"
                     >
                         {{ formatPrice(table.active_order.total_amount) }}
                     </p>
                     <p
                         v-if="table.active_orders?.length > 1"
-                        class="mt-1 text-[9px] font-semibold text-orange-600 dark:text-orange-300"
+                        class="mt-1 text-[9px] font-black text-orange-850"
                     >
                         {{ table.active_orders.length }} bill aktif
                     </p>
                 </div>
                 <div
                     v-else-if="table.active_reservation"
-                    class="mt-3 border-t border-amber-500/10 pt-3 text-left"
+                    class="mt-3 border-t-2 border-amber-200 pt-3 text-left"
                 >
                     <p
-                        class="truncate text-[9px] font-bold uppercase text-amber-600 dark:text-amber-300"
+                        class="truncate text-[9px] font-black uppercase text-amber-800"
                     >
                         Reservasi Aktif
                     </p>
                     <p
-                        class="mt-0.5 text-[10px] font-bold text-stone-800 dark:text-slate-200"
+                        class="mt-0.5 text-[10px] font-black text-black"
                     >
                         {{ table.active_reservation.customer_name }}
                     </p>
                     <p
-                        class="mt-1 text-[9px] text-stone-500 dark:text-slate-400"
+                        class="mt-1 text-[9px] text-black font-semibold"
                     >
                         {{ table.active_reservation.guest_count }} Orang
                     </p>
@@ -361,31 +361,31 @@ const clearTable = (table: any) => {
     <!-- VIEW 2: Product Catalog (when available table selected) -->
     <div
         v-else-if="isReadyTable(selectedTable)"
-        class="space-y-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-xl dark:border-slate-800/80 dark:bg-slate-900"
+        class="space-y-6 rounded-2xl border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-white/10 dark:bg-slate-900"
     >
         <!-- Catalog Header with Back Button -->
         <div
-            class="flex flex-col justify-between gap-4 border-b border-stone-200 pb-5 dark:border-slate-800/60 sm:flex-row sm:items-center"
+            class="flex flex-col justify-between gap-4 border-b-2 border-stone-200 pb-5 sm:flex-row sm:items-center dark:border-white/5"
         >
             <div class="flex items-center gap-3">
                 <button
                     @click="resetTableSelection"
-                    class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 bg-stone-100 text-stone-600 transition duration-150 hover:bg-stone-200 dark:border-slate-800 dark:bg-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-800"
+                    class="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-stone-200 bg-stone-100 text-stone-700 transition duration-150 hover:bg-stone-200 font-bold dark:border-white/10 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
                 >
                     <ChevronLeft class="h-5 w-5" />
                 </button>
                 <div>
                     <h3
-                        class="text-base font-bold text-stone-900 dark:text-white"
+                        class="text-base font-black text-stone-900 dark:text-white"
                     >
                         Pilih Produk Mentai
                     </h3>
                     <p
-                        class="mt-0.5 text-[10px] text-stone-500 dark:text-slate-400"
+                        class="mt-0.5 text-[10px] text-stone-500 dark:text-slate-400 font-semibold"
                     >
                         Melayani pesanan untuk
                         <span
-                            class="font-bold text-orange-500 dark:text-orange-400"
+                            class="font-black text-orange-650 dark:text-orange-400"
                             >{{ selectedTable.name }}</span
                         >
                     </p>
@@ -395,15 +395,15 @@ const clearTable = (table: any) => {
             <!-- Search Bar -->
             <div class="relative w-full sm:w-64">
                 <span
-                    class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400 dark:text-slate-500"
+                    class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-500 font-bold dark:text-slate-400"
                 >
-                    <Search class="h-4 w-4" />
+                    <Search class="h-4 w-4 text-stone-500 dark:text-slate-400" />
                 </span>
                 <input
                     type="text"
                     v-model="productSearchQuery"
                     placeholder="Cari makanan/minuman..."
-                    class="w-full rounded-xl border border-stone-200 bg-stone-100/50 py-2 pl-9 pr-4 text-xs text-stone-800 placeholder-stone-400 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-200 dark:placeholder-slate-500"
+                    class="w-full rounded-xl border-2 border-stone-200 bg-white py-2 pl-9 pr-4 text-xs text-stone-900 placeholder-stone-400 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                 />
             </div>
         </div>
@@ -413,10 +413,10 @@ const clearTable = (table: any) => {
             <button
                 @click="activeCategory = 'all'"
                 :class="[
-                    'whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-semibold transition duration-150',
+                    'whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-black transition duration-150',
                     activeCategory === 'all'
-                        ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400'
-                        : 'border-stone-200 bg-stone-100 text-stone-500 hover:bg-stone-200 hover:text-stone-900 dark:border-slate-800 dark:bg-slate-800/40 dark:bg-slate-950/60 dark:text-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-stone-800',
+                        ? 'border-2 border-orange-500 bg-orange-500 text-stone-950 dark:border-orange-500 dark:bg-orange-500 dark:text-white'
+                        : 'border-2 border-stone-200 bg-white text-stone-700 hover:bg-stone-50 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900',
                 ]"
             >
                 Semua Menu
@@ -426,10 +426,10 @@ const clearTable = (table: any) => {
                 :key="cat.id"
                 @click="activeCategory = cat.id"
                 :class="[
-                    'whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-semibold transition duration-150',
+                    'whitespace-nowrap rounded-xl border px-4 py-2 text-xs font-black transition duration-150',
                     activeCategory === cat.id
-                        ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400'
-                        : 'border-stone-200 bg-stone-100 text-stone-500 hover:bg-stone-200 hover:text-stone-900 dark:border-slate-800 dark:bg-slate-800/40 dark:bg-slate-950/60 dark:text-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-stone-800',
+                        ? 'border-2 border-orange-500 bg-orange-500 text-stone-950 dark:border-orange-500 dark:bg-orange-500 dark:text-white'
+                        : 'border-2 border-stone-200 bg-white text-stone-700 hover:bg-stone-50 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900',
                 ]"
             >
                 {{ cat.name }}
@@ -445,10 +445,10 @@ const clearTable = (table: any) => {
                 v-for="product in filteredProducts"
                 :key="product.id"
                 @click="handleProductClick(product)"
-                class="group flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-stone-200 bg-stone-50 transition duration-150 hover:border-orange-500/30 hover:bg-white hover:shadow-md hover:shadow-orange-500/5 dark:border-slate-800/60 dark:bg-slate-950 dark:bg-slate-950/60 dark:hover:bg-slate-800"
+                class="group flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl border-2 border-stone-200 bg-white transition duration-150 hover:border-orange-500/50 dark:border-white/10 dark:bg-slate-950/40 dark:hover:border-orange-400 shadow-sm"
             >
                 <div
-                    class="relative aspect-square w-full overflow-hidden border-b border-stone-200 bg-stone-100 dark:border-slate-800 dark:bg-slate-900"
+                    class="relative aspect-square w-full overflow-hidden border-b-2 border-stone-200 bg-stone-50 dark:border-white/5"
                 >
                     <img
                         :src="getProductImage(product)"
@@ -456,7 +456,7 @@ const clearTable = (table: any) => {
                         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                     <span
-                        class="absolute right-2 top-2 rounded border border-stone-200 bg-stone-100/90 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-stone-600 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300"
+                        class="absolute right-2 top-2 rounded border-2 border-stone-200 bg-stone-900 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-white dark:border-white/10 dark:bg-slate-800"
                     >
                         {{ product.category_name }}
                     </span>
@@ -467,26 +467,26 @@ const clearTable = (table: any) => {
                 >
                     <div>
                         <h4
-                            class="text-xs font-bold leading-tight text-stone-900 dark:text-white"
+                            class="text-xs font-black leading-tight text-stone-900 dark:text-white"
                         >
                             {{ product.name }}
                         </h4>
                         <p
-                            class="mt-1 line-clamp-2 text-[10px] text-stone-500 dark:text-slate-400"
+                            class="mt-1 line-clamp-2 text-[10px] text-stone-500 dark:text-slate-400 font-semibold"
                         >
                             {{ product.description || 'Tidak ada deskripsi.' }}
                         </p>
                     </div>
 
                     <div
-                        class="flex items-center justify-between border-t border-stone-200 pt-2.5 dark:border-slate-800"
+                        class="flex items-center justify-between border-t border-stone-200 pt-2.5 dark:border-white/5"
                     >
                         <span
-                            class="text-xs font-extrabold text-orange-600 dark:text-orange-400"
+                            class="text-xs font-black text-orange-650 dark:text-orange-400"
                             >{{ formatPrice(product.base_price) }}</span
                         >
                         <span
-                            class="flex h-6 w-6 items-center justify-center rounded-lg border border-orange-500/20 bg-orange-500/10 text-xs font-black text-orange-600 dark:text-orange-400"
+                            class="flex h-6 w-6 items-center justify-center rounded-lg border-2 border-orange-500 bg-orange-50 text-xs font-black text-orange-650 dark:border-orange-500/20 dark:bg-orange-500/10 dark:text-orange-400"
                             >+</span
                         >
                     </div>
@@ -496,10 +496,10 @@ const clearTable = (table: any) => {
 
         <div
             v-else
-            class="rounded-xl border border-dashed border-stone-200 py-12 text-center text-stone-500 dark:border-slate-800 dark:text-slate-500"
+            class="rounded-xl border-2 border-dashed border-stone-200 py-12 text-center text-stone-400 font-semibold dark:border-white/10 dark:text-slate-500"
         >
             <Utensils
-                class="mx-auto mb-2 h-10 w-10 text-stone-400 dark:text-slate-600"
+                class="mx-auto mb-2 h-10 w-10 text-stone-400 dark:text-slate-500 font-bold"
             />
             <p class="text-xs">
                 Tidak ada menu yang sesuai dengan filter pencarian.
@@ -509,31 +509,31 @@ const clearTable = (table: any) => {
 
     <!-- VIEW 3: Detail Order per Meja (when occupied table selected) -->
     <div
-        v-else-if="selectedTable.status === 'occupied'"
-        class="space-y-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-xl dark:border-slate-800/80 dark:bg-slate-900"
+    v-else-if="selectedTable.status === 'occupied'"
+        class="space-y-6 rounded-2xl border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-white/10 dark:bg-slate-900"
     >
         <div
-            class="flex items-center gap-3 border-b border-stone-200 pb-5 dark:border-slate-800/60"
+            class="flex items-center gap-3 border-b-2 border-stone-200 pb-5 dark:border-white/5"
         >
             <button
                 @click="resetTableSelection"
-                class="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 bg-stone-100 text-stone-600 transition duration-150 hover:bg-stone-200 dark:border-slate-800 dark:bg-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-800"
+                class="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-stone-200 bg-stone-100 text-stone-700 transition duration-150 hover:bg-stone-200 font-bold dark:border-white/10 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
             >
                 <ChevronLeft class="h-5 w-5" />
             </button>
             <div>
                 <h3
-                    class="flex items-center gap-2 text-base font-bold text-stone-900 dark:text-white"
+                    class="flex items-center gap-2 text-base font-black text-stone-900 dark:text-white"
                 >
                     <span>Detail Meja: {{ selectedTable.name }}</span>
                     <span
-                        class="rounded border border-red-500/20 bg-red-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400"
+                        class="rounded border-2 border-rose-700 bg-rose-100 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-rose-800 dark:border-rose-800/30 dark:bg-rose-950/20 dark:text-rose-400"
                     >
                         Terisi
                     </span>
                 </h3>
                 <p
-                    class="mt-0.5 text-[10px] text-stone-500 dark:text-slate-400"
+                    class="mt-0.5 text-[10px] text-stone-500 font-semibold dark:text-slate-400"
                 >
                     Menampilkan rincian pesanan pelanggan di meja saat ini.
                 </p>
@@ -542,44 +542,44 @@ const clearTable = (table: any) => {
 
         <div
             v-if="selectedManagedOrder"
-            class="grid grid-cols-1 gap-4 rounded-xl border border-stone-200 bg-stone-100/50 p-4 text-xs dark:border-slate-800 dark:bg-slate-950/60 md:grid-cols-2 xl:grid-cols-5"
+            class="grid grid-cols-1 gap-4 rounded-xl border-2 border-stone-200 bg-white p-4 text-xs md:grid-cols-2 xl:grid-cols-5 dark:border-white/10 dark:bg-slate-950/40"
         >
             <div>
                 <p
-                    class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                    class="text-[9px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400"
                 >
                     Nomor Transaksi
                 </p>
                 <p
-                    class="mt-1 text-sm font-extrabold text-stone-800 dark:text-white"
+                    class="mt-1 text-sm font-black text-stone-900 dark:text-white"
                 >
                     {{ selectedManagedOrder.order_number }}
                 </p>
             </div>
             <div>
                 <p
-                    class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                    class="text-[9px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400"
                 >
                     Pelanggan
                 </p>
-                <p class="mt-1 font-semibold text-stone-800 dark:text-white">
+                <p class="mt-1 font-bold text-stone-900 dark:text-white">
                     {{ getOrderCustomerPrimary(selectedManagedOrder) }}
                 </p>
                 <p
                     v-if="getOrderCustomerSecondary(selectedManagedOrder)"
-                    class="mt-0.5 text-[10px] text-stone-500 dark:text-slate-400"
+                    class="mt-0.5 text-[10px] text-stone-500 font-semibold dark:text-slate-400"
                 >
                     {{ getOrderCustomerSecondary(selectedManagedOrder) }}
                 </p>
             </div>
             <div>
                 <p
-                    class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                    class="text-[9px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400"
                 >
                     Kasir Bertugas
                 </p>
                 <p
-                    class="mt-1 flex items-center gap-1.5 font-semibold text-stone-800 dark:text-white"
+                    class="mt-1 flex items-center gap-1.5 font-bold text-stone-900 dark:text-white"
                 >
                     <User
                         class="h-3.5 w-3.5 text-stone-500 dark:text-slate-400"
@@ -591,18 +591,17 @@ const clearTable = (table: any) => {
             </div>
             <div>
                 <p
-                    class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                    class="text-[9px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400"
                 >
                     Waktu Masuk
                 </p>
                 <p
-                    class="mt-1 flex items-center gap-1.5 font-semibold text-stone-800 dark:text-white"
+                    class="mt-1 flex items-center gap-1.5 font-bold text-stone-900 dark:text-white"
                 >
                     <Clock
-                        class="h-3.5 w-3.5 text-stone-500 dark:text-slate-400"
+                        class="h-3.5 w-3.5 text-black dark:text-white"
                     />
-                    <span
-                        >{{
+                    <span>{{
                             new Date(
                                 selectedManagedOrder.created_at,
                             ).toLocaleTimeString('id-ID', {
@@ -610,26 +609,25 @@ const clearTable = (table: any) => {
                                 minute: '2-digit',
                             })
                         }}
-                        WIB</span
-                    >
+                        WIB</span>
                 </p>
             </div>
             <div>
                 <p
-                    class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                    class="text-[9px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400"
                 >
                     Status Bayar
                 </p>
                 <div class="mt-1 space-y-2">
                     <span
                         :class="[
-                            'inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider',
+                            'inline-flex rounded-full border-2 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider',
                             getPaymentStatusClass(selectedManagedOrder),
                         ]"
                     >
                         {{ getPaymentStatusLabel(selectedManagedOrder) }}
                     </span>
-                    <p class="text-[10px] text-stone-500 dark:text-slate-400">
+                    <p class="text-[10px] text-stone-600 dark:text-slate-300 font-semibold">
                         {{
                             isOrderPaid(selectedManagedOrder)
                                 ? 'Tagihan sudah diterima.'
@@ -650,10 +648,10 @@ const clearTable = (table: any) => {
                     :key="`managed-order-${order.id}`"
                     @click="selectedManagedOrderId = order.id"
                     :class="[
-                        'whitespace-nowrap rounded-xl border px-3 py-2 text-[11px] font-bold transition',
-                        selectedManagedOrderId === order.id
-                            ? 'border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-300'
-                            : 'border-stone-200 bg-stone-100 text-stone-500 hover:text-stone-900 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-200 dark:text-slate-400 dark:hover:text-stone-800',
+                        'whitespace-nowrap rounded-xl border px-3 py-2 text-[11px] font-black transition',
+                    selectedManagedOrderId === order.id
+                        ? 'border-2 border-orange-500 bg-orange-50 text-orange-700 dark:border-orange-500 dark:bg-orange-500/10 dark:text-orange-400'
+                        : 'border-2 border-stone-200 bg-white text-stone-700 hover:bg-stone-50 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900',
                     ]"
                 >
                     {{ order.order_number }}
@@ -661,17 +659,17 @@ const clearTable = (table: any) => {
             </div>
 
             <h4
-                class="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400"
+                class="text-xs font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
             >
                 Daftar Item Makanan/Minuman
             </h4>
             <div
-                class="overflow-hidden rounded-xl border border-stone-200 bg-stone-50 dark:border-slate-800/80 dark:bg-slate-950/20"
+                class="overflow-hidden rounded-xl border-2 border-stone-200 bg-white dark:border-white/10 dark:bg-slate-900 shadow-sm"
             >
                 <table class="w-full border-collapse text-left text-xs">
                     <thead>
                         <tr
-                            class="border-b border-stone-200 bg-stone-100 text-stone-500 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-400"
+                            class="border-b-2 border-stone-200 bg-stone-50 text-stone-700 font-black dark:border-white/5 dark:bg-slate-950/60 dark:text-white"
                         >
                             <th class="p-3">Nama Menu</th>
                             <th class="p-3 text-center">Jumlah</th>
@@ -680,32 +678,32 @@ const clearTable = (table: any) => {
                         </tr>
                     </thead>
                     <tbody
-                        class="divide-y divide-stone-200 dark:divide-slate-800"
+                        class="divide-y divide-stone-200 dark:divide-white/5"
                     >
                         <tr
                             v-for="item in selectedManagedOrder.items"
                             :key="item.id"
-                            class="text-stone-800 dark:text-slate-200"
+                            class="text-stone-700 font-bold dark:text-slate-200"
                         >
                             <td class="p-3">
-                                <div class="font-bold">
+                                <div class="font-black text-stone-900 dark:text-white">
                                     {{ item.product?.name }}
                                 </div>
                                 <div
                                     v-if="item.variant"
-                                    class="mt-0.5 text-[9px] font-semibold text-orange-600 dark:text-orange-400"
+                                    class="mt-0.5 text-[9px] font-black text-orange-650 dark:text-orange-400"
                                 >
                                     Varian: {{ item.variant.name }}
                                 </div>
                                 <div
                                     v-if="item.notes"
-                                    class="mt-0.5 text-[9px] italic text-stone-500 dark:text-slate-400"
+                                    class="mt-0.5 text-[9px] italic text-stone-500 font-bold dark:text-slate-400"
                                 >
                                     "{{ item.notes }}"
                                 </div>
                             </td>
                             <td
-                                class="p-3 text-center font-bold text-stone-900 dark:text-slate-100"
+                                class="p-3 text-center font-black text-stone-900 dark:text-white"
                             >
                                 {{ item.quantity }}x
                             </td>
@@ -713,7 +711,7 @@ const clearTable = (table: any) => {
                                 {{ formatPrice(item.unit_price) }}
                             </td>
                             <td
-                                class="p-3 text-right font-extrabold text-stone-900 dark:text-white"
+                                class="p-3 text-right font-black text-stone-900 dark:text-white"
                             >
                                 {{ formatPrice(item.total_price) }}
                             </td>
@@ -725,16 +723,16 @@ const clearTable = (table: any) => {
 
         <div
             v-if="selectedManagedOrder"
-            class="flex flex-col justify-between gap-4 border-t border-stone-200 pt-5 text-xs dark:border-slate-800/50 md:flex-row"
+            class="flex flex-col justify-between gap-4 border-t-2 border-stone-200 pt-5 text-xs dark:border-white/5 md:flex-row"
         >
             <div class="md:w-1/2">
                 <p
-                    class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                    class="text-[9px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
                 >
                     Catatan Khusus Pesanan
                 </p>
                 <p
-                    class="mt-1 rounded-lg border border-stone-200 bg-stone-100/50 p-3 italic text-stone-600 dark:border-slate-800 dark:bg-slate-950/50 dark:text-slate-400"
+                    class="mt-1 rounded-lg border-2 border-stone-200 bg-white p-3 italic text-stone-700 font-bold dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-200 shadow-sm"
                 >
                     {{
                         selectedManagedOrder.notes ||
@@ -743,10 +741,10 @@ const clearTable = (table: any) => {
                 </p>
             </div>
             <div
-                class="space-y-2 rounded-xl border border-stone-200 bg-stone-50 p-4 dark:border-slate-800 dark:bg-slate-950/50 md:w-1/3"
+                class="space-y-2 rounded-xl border-2 border-stone-200 bg-white p-4 md:w-1/3 dark:border-white/10 dark:bg-slate-950/40 shadow-sm"
             >
                 <div
-                    class="flex justify-between text-stone-500 dark:text-slate-400"
+                    class="flex justify-between text-stone-600 font-bold dark:text-slate-300"
                 >
                     <span>Subtotal:</span>
                     <span>{{
@@ -754,7 +752,7 @@ const clearTable = (table: any) => {
                     }}</span>
                 </div>
                 <div
-                    class="flex justify-between text-stone-500 dark:text-slate-400"
+                    class="flex justify-between text-stone-600 font-bold dark:text-slate-300"
                 >
                     <span>Diskon:</span>
                     <span>{{
@@ -762,7 +760,7 @@ const clearTable = (table: any) => {
                     }}</span>
                 </div>
                 <div
-                    class="flex justify-between border-t border-stone-200 pt-2 text-sm font-black text-stone-900 dark:border-slate-800 dark:text-white"
+                    class="flex justify-between border-t-2 border-stone-200 pt-2 text-sm font-black text-stone-900 dark:border-white/10 dark:text-white"
                 >
                     <span>Total Tagihan:</span>
                     <span class="text-orange-600 dark:text-orange-400">{{
@@ -770,7 +768,7 @@ const clearTable = (table: any) => {
                     }}</span>
                 </div>
                 <div
-                    class="flex justify-between border-t border-stone-200 pt-2 text-stone-500 dark:border-slate-800 dark:text-slate-400"
+                    class="flex justify-between border-t-2 border-stone-200 pt-2 text-stone-600 font-bold dark:border-white/10 dark:text-slate-300"
                 >
                     <span>Terbayar:</span>
                     <span>{{
@@ -779,10 +777,10 @@ const clearTable = (table: any) => {
                 </div>
                 <div
                     v-if="getAppliedPromos(selectedManagedOrder).length"
-                    class="space-y-2 border-t border-stone-200 pt-2 dark:border-slate-800"
+                    class="space-y-2 border-t-2 border-stone-200 pt-2 dark:border-white/10"
                 >
                     <p
-                        class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                        class="text-[9px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
                     >
                         Promo Applied
                     </p>
@@ -792,7 +790,7 @@ const clearTable = (table: any) => {
                                 selectedManagedOrder,
                             )"
                             :key="promo.id"
-                            class="rounded-full border border-orange-500/25 bg-orange-500/10 px-2 py-1 text-[10px] font-bold text-orange-600 dark:text-orange-200"
+                            class="rounded-full border-2 border-orange-700 bg-orange-100 px-2 py-1 text-[10px] font-black text-orange-800 dark:border-orange-850 dark:bg-orange-950/20 dark:text-orange-400"
                         >
                             {{ promo.name }} •
                             {{ formatPrice(promo.discount_amount) }}
@@ -801,24 +799,24 @@ const clearTable = (table: any) => {
                 </div>
             </div>
             <div
-                class="space-y-2 rounded-xl border border-stone-200 bg-stone-50 p-4 dark:border-slate-800 dark:bg-slate-950/50 md:w-1/3"
+                class="space-y-2 rounded-xl border-2 border-stone-200 bg-white p-4 md:w-1/3 dark:border-white/10 dark:bg-slate-950/40 shadow-sm"
             >
                 <div class="flex items-center justify-between gap-3">
                     <p
-                        class="text-[9px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-500"
+                        class="text-[9px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
                     >
                         Ringkasan Pembayaran
                     </p>
                     <span
                         :class="[
-                            'rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider',
+                            'rounded-full border-2 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider',
                             getPaymentStatusClass(selectedManagedOrder),
                         ]"
                     >
                         {{ getPaymentStatusLabel(selectedManagedOrder) }}
                     </span>
                 </div>
-                <p class="text-[11px] text-stone-500 dark:text-slate-400">
+                <p class="text-[11px] text-stone-700 font-bold dark:text-slate-350">
                     {{
                         getPaymentMeta(selectedManagedOrder).method
                             ? `Metode terakhir: ${String(getPaymentMeta(selectedManagedOrder).method).toUpperCase()}`
@@ -849,7 +847,7 @@ const clearTable = (table: any) => {
                         };
                         paymentCheckoutModalOpen = true;
                     "
-                    class="w-full rounded-xl border px-3 py-2 text-[11px] font-bold transition"
+                    class="w-full rounded-xl border-2 px-3 py-2 text-[11px] font-black transition"
                     :class="
                         getPaymentMethodConfig(
                             getPaymentMeta(selectedManagedOrder).method ||

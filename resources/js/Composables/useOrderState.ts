@@ -25,6 +25,7 @@ export const paymentCheckout = computed(
     () => propsData.value.paymentCheckout || null,
 );
 export const success = computed(() => propsData.value.success || null);
+export const error = computed(() => propsData.value.error || null);
 
 // Shared UI & Shift State
 export const showTakeoverModal = ref(false);
@@ -127,7 +128,7 @@ export const editApprovalPin = ref('');
 export const editCategory = ref<string>('all');
 export const editProductSearchQuery = ref('');
 export const isUpdatingOrder = ref(false);
-export const selectedManagedOrderId = ref<string | null>(null);
+export const selectedManagedOrderId = ref<string | number | null>(null);
 
 // Split Bill State
 export const splitBillModalOpen = ref(false);
@@ -565,7 +566,7 @@ export const selectedManagedOrder = computed(() => {
     if (orders.length === 0) return null;
     return (
         orders.find(
-            (order: any) => order.id === selectedManagedOrderId.value,
+            (order: any) => String(order.id) === String(selectedManagedOrderId.value),
         ) || orders[0]
     );
 });
@@ -677,12 +678,12 @@ export const getOrderServiceLabel = (order: any) => {
 
 export const getOrderServiceBadgeClass = (order: any) => {
     if (order.type === 'takeaway') {
-        return 'border-orange-500/20 bg-orange-500/10 text-orange-300';
+        return 'border-orange-700 bg-orange-100 text-orange-850 dark:border-orange-500/30 dark:bg-orange-950/20 dark:text-orange-400';
     }
     if (order.type === 'online') {
-        return 'border-blue-500/20 bg-blue-500/10 text-blue-300';
+        return 'border-blue-700 bg-blue-100 text-blue-800 dark:border-blue-500/30 dark:bg-blue-950/20 dark:text-blue-400';
     }
-    return 'border-sky-500/20 bg-sky-500/10 text-sky-300';
+    return 'border-sky-700 bg-sky-100 text-sky-800 dark:border-sky-500/30 dark:bg-sky-950/20 dark:text-sky-400';
 };
 
 export const getOrderCustomerPrimary = (order: any) => {
@@ -750,26 +751,26 @@ export const getPaymentStatusLabel = (order: any) => {
 
 export const getPaymentStatusClass = (order: any) => {
     if (isOrderPaid(order)) {
-        return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300';
+        return 'border-emerald-700 bg-emerald-100 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-950/20 dark:text-emerald-400';
     }
     if (hasPendingBeforeKitchenPayment(order)) {
         const payment = getPaymentMeta(order);
         if (payment.method === 'ewallet') {
-            return 'border-blue-500/20 bg-blue-500/10 text-blue-300';
+            return 'border-blue-700 bg-blue-100 text-blue-800 dark:border-blue-500/30 dark:bg-blue-950/20 dark:text-blue-400';
         } else if (payment.method === 'debit') {
-            return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300';
+            return 'border-emerald-700 bg-emerald-100 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-950/20 dark:text-emerald-400';
         } else if (payment.method === 'transfer') {
-            return 'border-indigo-500/20 bg-indigo-500/10 text-indigo-300';
+            return 'border-indigo-700 bg-indigo-100 text-indigo-800 dark:border-indigo-500/30 dark:bg-indigo-950/20 dark:text-indigo-400';
         }
-        return 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-300';
+        return 'border-fuchsia-700 bg-fuchsia-100 text-fuchsia-800 dark:border-fuchsia-500/30 dark:bg-fuchsia-950/20 dark:text-fuchsia-400';
     }
-    return 'border-amber-500/20 bg-amber-500/10 text-amber-300';
+    return 'border-amber-700 bg-amber-100 text-amber-800 dark:border-amber-500/30 dark:bg-amber-950/20 dark:text-amber-400';
 };
 
 export const canOpenPaymentModal = (order: any) => {
     if (!order || isOrderPaid(order)) return false;
     return (
-        ['waiting_bar_approval', 'ready', 'delivered'].includes(order.status) ||
+        ['in_progress', 'waiting_bar_approval', 'ready', 'delivered'].includes(order.status) ||
         hasPendingBeforeKitchenPayment(order)
     );
 };
@@ -791,7 +792,7 @@ export const getPaymentActionHint = (order: any) => {
 export const canCloseAsKasbon = (order: any) => {
     if (!order || isOrderPaid(order)) return false;
     if (!order.customer?.id && !order.customer_id) return false;
-    return ['waiting_bar_approval', 'ready', 'delivered'].includes(
+    return ['in_progress', 'waiting_bar_approval', 'ready', 'delivered'].includes(
         order.status,
     );
 };
@@ -804,11 +805,11 @@ export const getKasbonActionHint = (order: any) => {
         return 'Order ini sudah lunas, tidak bisa ditutup sebagai kasbon.';
     }
     if (
-        !['waiting_bar_approval', 'ready', 'delivered'].includes(order?.status)
+        !['in_progress', 'waiting_bar_approval', 'ready', 'delivered'].includes(order?.status)
     ) {
         return 'Kasbon dipakai setelah layanan siap ditutup dan masih ada sisa tagihan.';
     }
-    return 'Tutup transaksi sebagai piutang customer, lalu cicilan dilanjutkan dari menu transaksi.';
+    return 'Tutup order dengan tagihan berjalan sebagai kasbon (utang customer).';
 };
 
 // Reset State Actions
@@ -873,6 +874,61 @@ export const selectTable = (table: any) => {
     resetMergeBillState();
     closeKasbonModal();
     closePaymentModal();
+};
+
+export const selectManagedOrderById = (orderId: number | string) => {
+    const order = activeOrders.value.find((o: any) => String(o.id) === String(orderId));
+    if (!order) return;
+
+    selectedManagedOrderId.value = order.id;
+
+    cart.value = [];
+    orderNotes.value = '';
+    guestsCount.value = 1;
+    resetCustomerSelection();
+    resetNewOrderPaymentState();
+    resetEditOrderState();
+    resetSplitBillState();
+    resetMergeBillState();
+    closeKasbonModal();
+    closePaymentModal();
+
+    if (order.type === 'takeaway') {
+        selectedTable.value = {
+            id: null,
+            name: 'Takeaway / Bungkus',
+            status: 'available',
+            capacity: null,
+            mode: 'takeaway',
+        };
+    } else if (order.type === 'online') {
+        const platform = order.metadata?.payment?.method || 'online_platform';
+        const names: Record<string, string> = {
+            gofood: 'GoFood',
+            grabfood: 'GrabFood',
+            shopeefood: 'ShopeeFood',
+            maximfood: 'MaximFood',
+        };
+        selectedTable.value = {
+            id: null,
+            name: `Online - ${names[platform] || 'Platform'}`,
+            status: 'available',
+            capacity: null,
+            mode: 'online',
+            source: platform,
+        };
+    } else {
+        const table = tables.value.find((t: any) => t.id === order.table_id);
+        if (table) {
+            selectedTable.value = table;
+        } else {
+            selectedTable.value = order.table || {
+                id: order.table_id,
+                name: `Meja ${order.table_id}`,
+                status: 'occupied',
+            };
+        }
+    }
 };
 
 export const selectTakeawayOrder = () => {
@@ -1013,6 +1069,8 @@ export const closePaymentModal = () => {
     isCustomExistingPaymentPromo.value = false;
     existingPaymentApprovalPin.value = '';
     isProcessingPayment.value = false;
+    paymentCheckoutModalOpen.value = false;
+    activePaymentCheckout.value = null;
 };
 
 export const openKasbonModalForOrder = (order: any) => {
@@ -1432,28 +1490,81 @@ export const submitExistingPayment = () => {
 };
 
 export const refreshCurrentOrder = () => {
-    if (isRefreshingOrder.value || !paymentTargetOrder.value) return;
+    if (isRefreshingOrder.value) return;
+    if (!paymentTargetOrder.value && !activePaymentCheckout.value) return;
+
     isRefreshingOrder.value = true;
-    router.reload({
-        only: ['activeOrders', 'tables'],
+
+    let orderId = paymentTargetOrder.value?.id || activePaymentCheckout.value?.id;
+    if (!orderId) {
+        const orderNumber = paymentTargetOrder.value?.order_number || activePaymentCheckout.value?.order_number;
+        if (orderNumber) {
+            const match = activeOrders.value.find((o: any) => o.order_number === orderNumber);
+            if (match) {
+                orderId = match.id;
+            }
+        }
+    }
+
+    if (!orderId) {
+        router.reload({
+            only: ['activeOrders', 'tables'],
+            preserveScroll: true,
+            onFinish: () => {
+                isRefreshingOrder.value = false;
+                showLocalToast('Status pembayaran berhasil diperbarui.');
+            }
+        } as any);
+        return;
+    }
+
+    router.post(route('order.check-payment', orderId), {}, {
         preserveScroll: true,
+        onSuccess: () => {
+            if (error.value) {
+                showLocalToast(error.value);
+            } else if (success.value) {
+                showLocalToast(success.value);
+            } else {
+                showLocalToast('Status pembayaran berhasil diperbarui.');
+            }
+        },
+        onError: (errors: any) => {
+            showLocalToast(errors.error || 'Gagal memeriksa status pembayaran.');
+        },
         onFinish: () => {
             isRefreshingOrder.value = false;
-            showLocalToast('Status pembayaran berhasil diperbarui.');
 
-            if (paymentTargetOrder.value) {
+            let target = paymentTargetOrder.value;
+            if (!target && activePaymentCheckout.value) {
+                target = activeOrders.value.find(
+                    (o: any) => o.order_number === activePaymentCheckout.value?.order_number
+                );
+            }
+
+            if (target) {
                 const updated = activeOrders.value.find(
-                    (o: any) => o.id === paymentTargetOrder.value.id,
+                    (o: any) => o.id === target.id,
                 );
                 if (updated) {
                     paymentTargetOrder.value = updated;
                     if (isOrderPaid(updated)) {
                         closePaymentModal();
                     }
+                } else {
+                    // Order has been completed/archived, close modal
+                    closePaymentModal();
+                }
+            } else if (activePaymentCheckout.value) {
+                const activeMatch = activeOrders.value.find(
+                    (o: any) => o.order_number === activePaymentCheckout.value?.order_number
+                );
+                if (!activeMatch || isOrderPaid(activeMatch)) {
+                    closePaymentModal();
                 }
             }
-        },
-    } as any);
+        }
+    });
 };
 
 export const submitKasbon = () => {
@@ -1555,19 +1666,20 @@ export const submitOrder = () => {
 export const getStatusClass = (status: string) => {
     switch (status.toLowerCase()) {
         case 'payment_pending':
-            return 'bg-fuchsia-500/10 text-fuchsia-300 border-fuchsia-500/20';
+            return 'bg-fuchsia-100 border-2 border-fuchsia-500 text-fuchsia-900 font-black dark:bg-fuchsia-950/40 dark:border-fuchsia-500 dark:text-fuchsia-300';
         case 'pending':
-            return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
+            return 'bg-orange-100 border-2 border-orange-500 text-orange-950 font-black dark:bg-orange-950/40 dark:border-orange-500 dark:text-orange-300';
         case 'in_progress':
-            return 'bg-amber-500/10 text-amber-400 border-amber-500/20 animate-pulse';
+            return 'bg-amber-100 border-2 border-amber-500 text-amber-900 font-black animate-pulse dark:bg-amber-950/40 dark:border-amber-500 dark:text-amber-300';
         case 'ready':
-            return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+            return 'bg-emerald-100 border-2 border-emerald-500 text-emerald-900 font-black dark:bg-emerald-950/40 dark:border-emerald-500 dark:text-emerald-300';
         case 'completed':
-            return 'bg-slate-500/10 text-slate-400 border-slate-700/20';
+            return 'bg-slate-100 border-2 border-slate-500 text-slate-900 font-black dark:bg-slate-900/40 dark:border-slate-800 dark:text-slate-300';
         default:
-            return 'bg-slate-700 text-slate-300';
+            return 'bg-slate-100 border-2 border-slate-500 text-slate-900 font-black dark:bg-slate-900/40 dark:border-slate-800 dark:text-slate-300';
     }
 };
+
 
 export const getProductImage = (product: any) => {
     if (product.image_url) return product.image_url;
@@ -1595,6 +1707,13 @@ export const openPaymentCheckout = () => {
         '_blank',
         'noopener,noreferrer',
     );
+};
+
+export const dismissTakeover = () => {
+    showTakeoverModal.value = false;
+    if (activeShift.value) {
+        sessionStorage.setItem('dismissed_takeover_' + activeShift.value.id, 'true');
+    }
 };
 
 export const submitTakeover = () => {
@@ -1638,7 +1757,10 @@ export const checkShiftStatus = () => {
 
     if (diff <= 0) {
         isShiftExpired.value = true;
-        showTakeoverModal.value = true;
+        const dismissed = activeShift.value ? sessionStorage.getItem('dismissed_takeover_' + activeShift.value.id) : null;
+        if (!dismissed) {
+            showTakeoverModal.value = true;
+        }
         timeRemainingText.value = 'Shift Selesai!';
     } else {
         const diffMins = Math.floor(diff / 60000);

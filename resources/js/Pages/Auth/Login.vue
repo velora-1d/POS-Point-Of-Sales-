@@ -249,7 +249,7 @@ const submit = () => {
                     <!-- Submit Button -->
                     <button
                         type="submit"
-                        class="duration-250 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 px-6 py-4 font-bold text-white shadow-lg shadow-orange-500/25 transition hover:from-orange-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-orange-500/50 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50"
+                        class="duration-250 flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-400 px-6 py-4 font-bold text-stone-950 transition focus:outline-none focus:ring-2 focus:ring-orange-500/50 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50"
                         :disabled="isSubmitting || form.processing"
                     >
                         <!-- Loading spinner -->

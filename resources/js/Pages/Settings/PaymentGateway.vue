@@ -116,14 +116,34 @@ function submitTest() {
             </div>
         </template>
 
-        <div class="mx-auto max-w-7xl space-y-6 p-4 pb-20 sm:px-6 lg:px-8">
+        <div class="space-y-6 pb-20">
+            <div
+                v-if="success"
+                class="flex items-center gap-2 rounded-2xl border-2 border-emerald-500 bg-emerald-50/50 p-4 text-sm font-black text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400"
+            >
+                <CheckCircle2 class="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-450" />
+                <span>{{ success }}</span>
+            </div>
+
+            <div
+                v-if="$page.props.errors && Object.keys($page.props.errors).length > 0"
+                class="flex items-start gap-2.5 rounded-2xl border-2 border-rose-500 bg-rose-50/50 p-4 text-sm font-black text-rose-800 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-400 animate-in fade-in duration-200"
+            >
+                <div class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-rose-600 animate-pulse"></div>
+                <div class="flex-1 space-y-1">
+                    <p v-for="(err, key) in $page.props.errors" :key="key">
+                        {{ err }}
+                    </p>
+                </div>
+            </div>
+
             <!-- Main Status Card -->
             <div
-                class="overflow-hidden rounded-[32px] border border-stone-200 bg-stone-100 shadow-2xl transition-all duration-500 dark:border-white/10 dark:bg-slate-950"
+                class="overflow-hidden rounded-[32px] border-2 border-stone-200 bg-white shadow-2xl transition-all duration-500 dark:border-white/10 dark:bg-slate-950"
                 :class="
                     effectiveConfig.is_active
-                        ? 'ring-1 ring-emerald-500/20'
-                        : 'ring-1 ring-amber-500/20'
+                        ? 'ring-2 ring-emerald-500/10'
+                        : 'ring-2 ring-amber-500/10'
                 "
             >
                 <div class="relative flex flex-col md:flex-row">
@@ -141,8 +161,8 @@ function submitTest() {
                                 class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-stone-200 bg-white shadow-inner dark:border-white/5 dark:bg-slate-900"
                                 :class="
                                     effectiveConfig.is_active
-                                        ? 'text-emerald-400 shadow-emerald-500/10'
-                                        : 'text-amber-400 shadow-amber-500/10'
+                                        ? 'text-emerald-500 dark:text-emerald-450 shadow-emerald-500/10'
+                                        : 'text-amber-500 dark:text-amber-450 shadow-amber-500/10'
                                 "
                             >
                                 <Zap
@@ -188,12 +208,12 @@ function submitTest() {
 
                     <!-- Right: Info Grid -->
                     <div
-                        class="flex flex-1 flex-col border-stone-200 dark:border-white/10 md:border-l"
+                        class="flex flex-1 flex-col border-stone-200 dark:border-white/10 md:border-l-2"
                     >
                         <div
-                            class="grid flex-1 grid-cols-1 gap-px bg-stone-100 dark:bg-white/5 sm:grid-cols-2"
+                            class="grid flex-1 grid-cols-1 gap-px bg-stone-200 dark:bg-white/5 sm:grid-cols-2"
                         >
-                            <div class="bg-stone-100 p-6 dark:bg-slate-950">
+                            <div class="bg-white p-6 dark:bg-slate-950">
                                 <p
                                     class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
                                 >
@@ -201,7 +221,7 @@ function submitTest() {
                                 </p>
                                 <div class="mt-3 flex items-center gap-3">
                                     <div
-                                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 font-bold text-slate-950"
+                                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 font-bold text-stone-950"
                                     >
                                         P
                                     </div>
@@ -212,14 +232,14 @@ function submitTest() {
                                     </p>
                                 </div>
                             </div>
-                            <div class="bg-stone-100 p-6 dark:bg-slate-950">
+                            <div class="bg-white p-6 dark:bg-slate-950">
                                 <p
                                     class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
                                 >
                                     Mode Sinkronisasi
                                 </p>
                                 <div
-                                    class="mt-3 flex items-center gap-3 text-emerald-400"
+                                    class="mt-3 flex items-center gap-3 text-emerald-600 dark:text-emerald-450"
                                 >
                                     <ShieldCheck class="h-5 w-5" />
                                     <p class="text-base font-bold uppercase">
@@ -228,7 +248,7 @@ function submitTest() {
                                 </div>
                             </div>
                             <div
-                                class="bg-stone-100 p-6 dark:bg-slate-950 sm:col-span-2"
+                                class="bg-white p-6 dark:bg-slate-950 sm:col-span-2"
                             >
                                 <p
                                     class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
@@ -236,7 +256,7 @@ function submitTest() {
                                     Base Endpoint URL
                                 </p>
                                 <div
-                                    class="mt-3 flex items-center gap-3 text-stone-600 dark:text-slate-300"
+                                    class="mt-3 flex items-center gap-3 text-stone-700 dark:text-slate-350"
                                 >
                                     <Globe
                                         class="h-5 w-5 shrink-0 opacity-50"
@@ -246,7 +266,7 @@ function submitTest() {
                                     }}</code>
                                 </div>
                             </div>
-                            <div class="bg-stone-100 p-6 dark:bg-slate-950">
+                            <div class="bg-white p-6 dark:bg-slate-950">
                                 <p
                                     class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
                                 >
@@ -258,7 +278,7 @@ function submitTest() {
                                     {{ effectiveConfig.project_slug || '-' }}
                                 </p>
                             </div>
-                            <div class="bg-stone-100 p-6 dark:bg-slate-950">
+                            <div class="bg-white p-6 dark:bg-slate-950">
                                 <p
                                     class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
                                 >
@@ -270,7 +290,7 @@ function submitTest() {
                                             'h-2 w-2 rounded-full',
                                             effectiveConfig.has_api_key
                                                 ? 'bg-emerald-500'
-                                                : 'bg-slate-600',
+                                                : 'bg-stone-400 dark:bg-slate-600',
                                         ]"
                                     ></div>
                                     <p
@@ -293,7 +313,7 @@ function submitTest() {
 
                         <!-- Webhook area -->
                         <div
-                            class="border-t border-stone-200 bg-stone-100 p-6 dark:border-white/5 dark:bg-slate-950"
+                            class="border-t-2 border-stone-200 bg-white p-6 dark:border-white/5 dark:bg-slate-950"
                         >
                             <p
                                 class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
@@ -304,7 +324,7 @@ function submitTest() {
                                 class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
                             >
                                 <div
-                                    class="flex items-center gap-3 text-stone-600 dark:text-slate-300"
+                                    class="flex items-center gap-3 text-stone-700 dark:text-slate-350"
                                 >
                                     <LinkIcon
                                         class="h-5 w-5 shrink-0 opacity-50"
@@ -314,7 +334,7 @@ function submitTest() {
                                     }}</code>
                                 </div>
                                 <span
-                                    class="inline-flex items-center rounded-lg border border-stone-200 bg-white/[0.03] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-stone-400 dark:border-white/5 dark:text-slate-500"
+                                    class="inline-flex items-center rounded-lg border-2 border-stone-200 bg-stone-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-stone-500 dark:border-white/5 dark:bg-white/[0.03] dark:text-slate-500"
                                 >
                                     Endpoint Aktif
                                 </span>
@@ -329,7 +349,7 @@ function submitTest() {
                 <!-- Methods Settings Form -->
                 <form
                     @submit.prevent="submitSave"
-                    class="flex flex-col justify-between rounded-[28px] border border-stone-200 bg-white p-6 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
+                    class="flex flex-col justify-between rounded-[28px] border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div>
                         <p
@@ -353,13 +373,13 @@ function submitTest() {
                             <label
                                 v-for="method in availableMethods"
                                 :key="method.value"
-                                class="flex cursor-pointer items-start gap-4 rounded-2xl border p-4 transition-all duration-200"
+                                class="flex cursor-pointer items-start gap-4 rounded-2xl border-2 p-4 transition-all duration-200"
                                 :class="
                                     form.active_payment_methods.includes(
                                         method.value,
                                     )
-                                        ? 'border-orange-500/35 bg-orange-500/5 hover:bg-orange-500/10'
-                                        : 'border-stone-200 bg-white/[0.01] hover:bg-white/[0.03] dark:border-white/5'
+                                        ? 'border-orange-500 bg-orange-500/5 hover:bg-orange-500/10'
+                                        : 'border-stone-200 bg-white hover:bg-stone-50 dark:border-white/10 dark:bg-slate-900/60 dark:hover:bg-slate-900'
                                 "
                             >
                                 <input
@@ -387,12 +407,12 @@ function submitTest() {
                     </div>
 
                     <div
-                        class="mt-8 flex justify-end border-t border-stone-200 pt-4 dark:border-white/5"
+                        class="mt-8 flex justify-end border-t-2 border-stone-200 pt-4 dark:border-white/5"
                     >
                         <button
                             type="submit"
                             :disabled="form.processing"
-                            class="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:opacity-50"
+                            class="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-6 py-3 text-sm font-semibold text-stone-950 transition hover:bg-orange-400 disabled:opacity-50"
                         >
                             {{
                                 form.processing
@@ -405,11 +425,11 @@ function submitTest() {
 
                 <!-- Big Test Button -->
                 <div
-                    class="flex flex-col justify-between rounded-[28px] border border-stone-200 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-xl ring-1 ring-white/5 dark:border-white/10"
+                    class="flex flex-col justify-between rounded-[28px] border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div>
                         <p
-                            class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-400"
+                            class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-400"
                         >
                             Verification
                         </p>
@@ -424,16 +444,21 @@ function submitTest() {
                             Klik tombol di bawah untuk melakukan ping real-time
                             ke server Pakasir menggunakan kredensial yang ada di
                             <code
-                                class="rounded bg-stone-100 px-1 text-emerald-300 dark:bg-slate-800"
-                                >.env</code
-                            >.
+                                class="rounded bg-stone-100 dark:bg-slate-800 px-1.5 py-0.5 text-emerald-600 dark:text-emerald-400 font-bold"
+                                >.env</code>.
+                        </p>
+                        <p
+                            v-if="$page.props.errors.test_connection"
+                            class="mt-3 text-xs font-black text-rose-600 dark:text-rose-400"
+                        >
+                            Error: {{ $page.props.errors.test_connection }}
                         </p>
                     </div>
 
                     <button
                         @click="submitTest"
                         :disabled="isTesting || !effectiveConfig.is_active"
-                        class="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-orange-500 py-4 text-sm font-black uppercase tracking-widest text-slate-950 transition-all hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-40"
+                        class="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-orange-500 py-4 text-sm font-black uppercase tracking-widest text-stone-950 transition-all hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                         <Activity
                             class="h-5 w-5 transition-transform group-hover:scale-110"
@@ -450,7 +475,7 @@ function submitTest() {
 
             <!-- Note Footer -->
             <div
-                class="flex items-start gap-4 rounded-3xl border border-blue-500/10 bg-blue-500/5 p-6 text-blue-300/80 shadow-inner"
+                class="flex items-start gap-4 rounded-3xl border border-blue-500/20 bg-blue-500/5 p-6 text-blue-700 dark:text-blue-300 shadow-inner"
             >
                 <Info class="h-6 w-6 shrink-0" />
                 <div>

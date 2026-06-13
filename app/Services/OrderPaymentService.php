@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Table;
@@ -297,6 +298,81 @@ class OrderPaymentService
         });
     }
 
+    public function syncPaymentStatus(Order $order): array
+    {
+        $paymentMeta = $this->getPaymentMeta($order);
+        $digitalMethods = ['qris', 'ewallet', 'debit', 'transfer'];
+
+        if (!in_array($paymentMeta['method'] ?? null, $digitalMethods, true)) {
+            return [
+                'success' => false,
+                'message' => 'Order ini tidak menggunakan pembayaran gateway/digital.',
+            ];
+        }
+
+        $expectedAmount = $this->resolveGatewayAmount($order);
+        $transaction = $this->pakasirService
+            ->getTransactionDetail($order->order_number, $expectedAmount, $order->outlet_id)['transaction'] ?? null;
+
+        if (!$transaction) {
+            return [
+                'success' => false,
+                'message' => 'Transaksi tidak ditemukan di gateway Pakasir.',
+            ];
+        }
+
+        if (($transaction['status'] ?? null) !== 'completed') {
+            return [
+                'success' => false,
+                'message' => 'Pembayaran belum diselesaikan atau status di gateway masih pending.',
+            ];
+        }
+
+        DB::transaction(function () use ($order, $transaction, $paymentMeta) {
+            $freshOrder = Order::query()
+                ->lockForUpdate()
+                ->findOrFail($order->id);
+
+            $paymentMeta = $this->getPaymentMeta($freshOrder);
+            if (($paymentMeta['status'] ?? null) === 'paid') {
+                return;
+            }
+
+            $context = $paymentMeta['context'] ?? 'after_service';
+            $status = $context === 'before_kitchen' ? 'pending' : 'completed';
+
+            $freshOrder->update([
+                'status' => $status,
+                'paid_amount' => $freshOrder->total_amount,
+                'pay_later' => false,
+                'pending_started_at' => $context === 'before_kitchen'
+                    ? ($freshOrder->pending_started_at ?: now())
+                    : $freshOrder->pending_started_at,
+                'metadata' => $this->mergePaymentMeta($freshOrder, [
+                    'provider' => 'pakasir',
+                    'method' => $transaction['payment_method'] ?? 'qris',
+                    'status' => 'paid',
+                    'requested_at' => $paymentMeta['requested_at'] ?? now()->toIso8601String(),
+                    'paid_at' => $transaction['completed_at'] ?? now()->toIso8601String(),
+                    'checkout_url' => $paymentMeta['checkout_url'] ?? null,
+                ]),
+            ]);
+
+            if ($context === 'before_kitchen' && $freshOrder->table_id) {
+                $this->markTableOccupied($freshOrder);
+            }
+
+            if ($status === 'completed') {
+                $this->syncTableStatus($freshOrder->table_id);
+            }
+        });
+
+        return [
+            'success' => true,
+            'message' => 'Pembayaran berhasil dikonfirmasi dan status order telah diperbarui.',
+        ];
+    }
+
     protected function applyInitialPaymentFlow(Order $order, array $payload): array
     {
         if ($payload['payment_option'] === 'pay_later') {
@@ -394,6 +470,7 @@ class OrderPaymentService
                 ? 'Checkout ' . strtoupper($method) . ' dibuat. Order akan masuk ke dapur setelah pembayaran terkonfirmasi.'
                 : 'Checkout ' . strtoupper($method) . ' dibuat. Order akan selesai otomatis setelah pembayaran terkonfirmasi.',
             'paymentCheckout' => [
+                'id' => $order->id,
                 'provider' => 'pakasir',
                 'method' => $method,
                 'order_number' => $order->order_number,
@@ -502,9 +579,9 @@ class OrderPaymentService
             'pay_later'       => ($payload['payment_option'] ?? 'pay_later') === 'pay_later',
             'metadata'        => $this->mergeArray([], [
                 'payment' => [
-                    'provider' => $payload['payment_method'] === 'online_platform' ? 'online_platform' : null,
+                    'provider' => ($payload['payment_method'] ?? null) === 'online_platform' ? 'online_platform' : null,
                     'method'   => $payload['payment_option'] === 'pay_now' ? ($payload['payment_method'] ?? null) : null,
-                    'status'   => $payload['payment_option'] === 'pay_now' ? ($payload['payment_method'] === 'online_platform' ? 'paid' : 'pending') : 'unpaid',
+                    'status'   => $payload['payment_option'] === 'pay_now' ? (($payload['payment_method'] ?? null) === 'online_platform' ? 'paid' : 'pending') : 'unpaid',
                     'context'  => $payload['payment_option'] === 'pay_now' ? 'before_kitchen' : 'after_service',
                 ],
                 'reservation' => [
@@ -662,7 +739,7 @@ class OrderPaymentService
             return 'before_kitchen';
         }
 
-        if (in_array($order->status, ['waiting_bar_approval', 'ready', 'delivered'], true)) {
+        if (in_array($order->status, ['in_progress', 'waiting_bar_approval', 'ready', 'delivered'], true)) {
             return 'after_service';
         }
 

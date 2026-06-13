@@ -18,7 +18,7 @@ class DashboardController extends Controller
     {
         $data = $this->dashboardService->getDashboard(
             $request->user(),
-            $request->only(['outlet_id']),
+            $request->only(['outlet_id', 'period']),
         );
 
         return Inertia::render('Dashboard', [

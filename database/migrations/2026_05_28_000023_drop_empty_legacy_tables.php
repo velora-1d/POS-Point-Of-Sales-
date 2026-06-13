@@ -28,16 +28,18 @@ return new class extends Migration
             Schema::dropIfExists($table);
         }
 
-        foreach ([
-            'approval_status',
-            'approval_action',
-            'kasbon_status',
-            'cicilan_status',
-            'po_status',
-            'notification_type',
-            'notif_channel',
-        ] as $type) {
-            DB::statement("DROP TYPE IF EXISTS {$type}");
+        if (DB::getDriverName() === 'pgsql') {
+            foreach ([
+                'approval_status',
+                'approval_action',
+                'kasbon_status',
+                'cicilan_status',
+                'po_status',
+                'notification_type',
+                'notif_channel',
+            ] as $type) {
+                DB::statement("DROP TYPE IF EXISTS {$type}");
+            }
         }
     }
 

@@ -387,7 +387,7 @@ function submitSave() {
         <div class="space-y-5">
             <!-- Tab Navigation Keamanan & Notifikasi -->
             <div
-                class="flex max-w-md gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
             >
                 <Link
                     :href="route('settings.notifications.index')"

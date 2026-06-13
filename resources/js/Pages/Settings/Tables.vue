@@ -29,6 +29,10 @@ interface TableRow {
 
 const props = defineProps<{
     tables: TableRow[];
+    qrConfig?: {
+        primary_color?: string | null;
+        qr_template?: string | null;
+    } | null;
     success?: string | null;
 }>();
 
@@ -69,7 +73,8 @@ const outdoorTables = computed(() =>
 
 const tableQrImage = computed(() => {
     if (!selectedQrTable.value?.public_qr_url) return '';
-    return `https://api.qrserver.com/v1/create-qr-code/?size=350x350&margin=16&data=${encodeURIComponent(selectedQrTable.value.public_qr_url)}`;
+    const hexColor = (props.qrConfig?.primary_color || '#111827').replace('#', '');
+    return `https://api.qrserver.com/v1/create-qr-code/?size=350x350&margin=16&color=${hexColor}&data=${encodeURIComponent(selectedQrTable.value.public_qr_url)}`;
 });
 
 function openCreateModal(defaultCategory?: 'indoor' | 'outdoor') {
@@ -138,11 +143,11 @@ function deleteTable(table: TableRow) {
 function getStatusBadgeClass(status: string) {
     switch (status) {
         case 'occupied':
-            return 'border-rose-400/20 bg-rose-500/10 text-rose-300';
+            return 'border-rose-700 bg-rose-600 text-white font-black';
         case 'reserved':
-            return 'border-amber-400/20 bg-amber-500/10 text-amber-300';
+            return 'border-amber-700 bg-amber-600 text-white font-black';
         default:
-            return 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300';
+            return 'border-emerald-700 bg-emerald-600 text-white font-black';
     }
 }
 </script>
@@ -226,7 +231,14 @@ function getStatusBadgeClass(status: string) {
                         <article
                             v-for="table in indoorTables"
                             :key="table.id"
-                            class="group relative overflow-hidden rounded-[24px] border border-stone-200 bg-white p-5 transition hover:border-orange-500/30 dark:border-white/10 dark:bg-slate-900/40"
+                            :class="[
+                                'group relative overflow-hidden rounded-[24px] border-2 p-5 transition hover:border-orange-500/30',
+                                table.status === 'occupied'
+                                    ? 'bg-rose-100/50 border-rose-500 text-stone-900 dark:border-rose-500 dark:bg-rose-950/30'
+                                    : (table.status === 'reserved'
+                                        ? 'bg-amber-100/50 border-amber-500 text-stone-900 dark:border-amber-500 dark:bg-amber-950/30'
+                                        : 'bg-emerald-50/20 border-emerald-500 text-stone-900 dark:border-emerald-500 dark:bg-emerald-950/15')
+                            ]"
                         >
                             <div class="flex items-start justify-between gap-3">
                                 <div>
@@ -261,7 +273,7 @@ function getStatusBadgeClass(status: string) {
                             </div>
 
                             <div
-                                class="mt-6 flex items-center gap-2 opacity-0 transition group-hover:opacity-100"
+                                class="mt-6 flex items-center gap-2"
                             >
                                 <button
                                     @click="openEditModal(table)"
@@ -294,7 +306,7 @@ function getStatusBadgeClass(status: string) {
 
                         <div
                             v-if="!indoorTables.length"
-                            class="col-span-2 rounded-[24px] border border-dashed border-stone-200 bg-stone-50/50 p-8 text-center text-stone-500 dark:border-slate-800/80 dark:text-slate-400"
+                            class="col-span-2 rounded-[24px] border border-dashed border-stone-200 bg-slate-50/50 p-8 text-center text-stone-500 dark:border-slate-800/80 dark:text-slate-400"
                         >
                             <Home class="mx-auto mb-2 h-8 w-8 text-stone-400" />
                             <p class="text-sm font-bold">
@@ -343,7 +355,14 @@ function getStatusBadgeClass(status: string) {
                         <article
                             v-for="table in outdoorTables"
                             :key="table.id"
-                            class="group relative overflow-hidden rounded-[24px] border border-stone-200 bg-white p-5 transition hover:border-orange-500/30 dark:border-white/10 dark:bg-slate-900/40"
+                            :class="[
+                                'group relative overflow-hidden rounded-[24px] border-2 p-5 transition hover:border-orange-500/30',
+                                table.status === 'occupied'
+                                    ? 'bg-rose-100/50 border-rose-500 text-stone-900 dark:border-rose-500 dark:bg-rose-950/30'
+                                    : (table.status === 'reserved'
+                                        ? 'bg-amber-100/50 border-amber-500 text-stone-900 dark:border-amber-500 dark:bg-amber-950/30'
+                                        : 'bg-emerald-50/20 border-emerald-500 text-stone-900 dark:border-emerald-500 dark:bg-emerald-950/15')
+                            ]"
                         >
                             <div class="flex items-start justify-between gap-3">
                                 <div>
@@ -378,7 +397,7 @@ function getStatusBadgeClass(status: string) {
                             </div>
 
                             <div
-                                class="mt-6 flex items-center gap-2 opacity-0 transition group-hover:opacity-100"
+                                class="mt-6 flex items-center gap-2"
                             >
                                 <button
                                     @click="openEditModal(table)"
@@ -411,7 +430,7 @@ function getStatusBadgeClass(status: string) {
 
                         <div
                             v-if="!outdoorTables.length"
-                            class="col-span-2 rounded-[24px] border border-dashed border-stone-200 bg-stone-50/50 p-8 text-center text-stone-500 dark:border-slate-800/80 dark:text-slate-400"
+                            class="col-span-2 rounded-[24px] border border-dashed border-stone-200 bg-slate-50/50 p-8 text-center text-stone-500 dark:border-slate-800/80 dark:text-slate-400"
                         >
                             <Trees
                                 class="mx-auto mb-2 h-8 w-8 text-stone-400"

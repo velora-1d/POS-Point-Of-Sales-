@@ -16,7 +16,7 @@ import {
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
-    LayoutDashboard,
+    Home,
     LogOut,
     Menu,
     Moon,
@@ -27,7 +27,7 @@ import {
     Settings,
     ShoppingCart,
     Sun,
-    TableProperties,
+    Table,
     Users,
     Volume2,
     X,
@@ -101,28 +101,16 @@ const toggleSidebarCollapse = () => {
 const isDarkMode = ref(false);
 
 const initTheme = () => {
+    isDarkMode.value = false;
     if (typeof window !== 'undefined') {
-        const savedTheme = localStorage.getItem('theme');
-        if (
-            savedTheme === 'dark' ||
-            (!savedTheme &&
-                window.matchMedia('(prefers-color-scheme: dark)').matches)
-        ) {
-            isDarkMode.value = true;
-            document.documentElement.classList.add('dark');
-        } else {
-            isDarkMode.value = false;
-            document.documentElement.classList.remove('dark');
-        }
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
     }
 };
 
 const toggleTheme = () => {
-    isDarkMode.value = !isDarkMode.value;
-    if (isDarkMode.value) {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-    } else {
+    isDarkMode.value = false;
+    if (typeof window !== 'undefined') {
         document.documentElement.classList.remove('dark');
         localStorage.setItem('theme', 'light');
     }
@@ -134,7 +122,7 @@ const menuData: MenuCategory[] = [
         phase: 'Fase 2',
         flow: 'Meja & Order',
         name: 'Meja',
-        icon: TableProperties,
+        icon: Table,
         items: [
             {
                 id: 19,
@@ -592,7 +580,7 @@ const sidebarData: SidebarCategory[] = [
         phase: 'Fase 2',
         flow: 'Meja & Order',
         name: 'Meja',
-        icon: TableProperties,
+        icon: Table,
         pages: [
             {
                 key: 'tables-layout',
@@ -683,6 +671,7 @@ const sidebarData: SidebarCategory[] = [
             {
                 key: 'kitchen-display',
                 title: 'Kitchen Display',
+                route: 'kitchen.display',
                 menuIds: [13, 14, 16, 17, 18],
                 aliases: [
                     'antrian order',
@@ -974,16 +963,76 @@ const resolveSidebarRoute = (pageItem: SidebarPage): string => {
     return pageItem.route ?? 'dashboard';
 };
 
+// Helper to check if a specific sub-page item is active, including nested sub-routes
+const isSubPageActive = (pageItem: SidebarPage) => {
+    if (pageItem.key === 'products-stock') {
+        return (
+            route().current('products.stock') ||
+            route().current('products.hpp') ||
+            route().current('stock-alerts.index') ||
+            route().current('expired-tracking.index')
+        );
+    }
+    if (pageItem.key === 'shifts') {
+        return (
+            route().current('shifts.index') ||
+            route().current('attendance.index') ||
+            route().current('schedules.index')
+        );
+    }
+    if (pageItem.key === 'report-sales') {
+        return (
+            route().current('reports.sales.index') ||
+            route().current('reports.outlets.index') ||
+            route().current('reports.cashiers.index') ||
+            route().current('reports.top-products.index') ||
+            route().current('reports.expenses.index') ||
+            route().current('reports.shift-finance.index')
+        );
+    }
+    if (pageItem.key === 'report-inventory') {
+        return (
+            route().current('reports.inventory.index') ||
+            route().current('reports.attendance-shifts.index') ||
+            route().current('reports.exports.index')
+        );
+    }
+    if (pageItem.key === 'settings-notifications') {
+        return (
+            route().current('settings.notifications.index') ||
+            route().current('settings.backup-security.index')
+        );
+    }
+    const resolved = resolveSidebarRoute(pageItem);
+    return route().current(resolved);
+};
+
 // Helper to check if a category is active (has an active page inside it)
 const isCategoryActive = (category: SidebarCategory) => {
     return category.pages.some((pageItem) => {
-        const resolved = resolveSidebarRoute(pageItem);
-        return route().current(resolved);
+        return isSubPageActive(pageItem);
     });
 };
 
 const getReadyCount = (menuIds: number[]) => {
     return menuIds.filter((menuId) => isMenuReady(menuId)).length;
+};
+
+const isTestingPush = ref(false);
+
+const triggerTestPushNotification = async () => {
+    if (isTestingPush.value) return;
+    isTestingPush.value = true;
+    try {
+        const response = await axios.post(route('settings.notifications.test-push'));
+        alert(response.data.message || 'Tes push notifikasi berhasil dikirim!');
+    } catch (err) {
+        console.error('Error triggering test push notification:', err);
+        const errMsg = err.response?.data?.message || 'Gagal mengirim tes push notifikasi. Pastikan izin notifikasi browser sudah aktif.';
+        alert(errMsg);
+    } finally {
+        isTestingPush.value = false;
+    }
 };
 
 // --- GLOBAL ORDER AUDIO NOTIFICATIONS ---
@@ -1293,7 +1342,7 @@ onBeforeUnmount(() => {
 
 <template>
     <div
-        class="flex h-screen flex-col overflow-hidden bg-stone-100 font-sans text-stone-900 antialiased selection:bg-orange-500 selection:text-white dark:bg-slate-950 dark:text-slate-100 lg:flex-row"
+        class="flex h-screen flex-col overflow-hidden bg-[oklch(98.8%_0.003_106.5)] font-sans text-stone-900 antialiased selection:bg-orange-500 selection:text-white dark:bg-[oklch(70.9%_0.01_56.259)] dark:text-slate-100 lg:flex-row"
     >
         <!-- Blocking Overlay for Notification Permission -->
         <div
@@ -1561,7 +1610,7 @@ onBeforeUnmount(() => {
                         type="text"
                         v-model="searchQuery"
                         placeholder="Cari halaman atau fitur..."
-                        class="w-full rounded-xl border border-stone-200 bg-stone-100/50 py-2.5 pl-10 pr-4 text-sm text-stone-800 placeholder-stone-400 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-200 dark:placeholder-slate-500"
+                        class="w-full rounded-[16px] border-2 border-stone-200 bg-stone-100/50 py-2.5 pl-10 pr-4 text-xs font-semibold text-stone-800 placeholder-stone-400 transition duration-200 focus:border-orange-500 focus:outline-none dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-200 dark:placeholder-slate-500"
                     />
                     <button
                         v-if="searchQuery"
@@ -1581,27 +1630,38 @@ onBeforeUnmount(() => {
                 <div class="px-2">
                     <Link
                         :href="route('dashboard')"
+                        prefetch
                         @click="isMobileOpen = false"
                         :title="
                             isSidebarCollapsed ? 'Dashboard Utama' : undefined
                         "
                         :class="[
-                            'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition duration-150',
-                            isSidebarCollapsed ? 'justify-center' : '',
+                            'flex w-full items-center gap-3 rounded-xl transition-all duration-200 border-2 border-stone-950 dark:border-slate-800',
+                            isSidebarCollapsed ? 'justify-center p-3' : 'px-3 py-2.5',
                             route().current('dashboard')
-                                ? 'bg-gradient-to-r from-orange-500 to-red-500 font-bold text-white shadow-md shadow-orange-500/25 dark:shadow-orange-500/35'
-                                : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200',
+                                ? 'bg-orange-500 text-stone-950 dark:border-orange-400 font-black shadow-md shadow-orange-500/10'
+                                : 'bg-white text-stone-900 hover:bg-stone-50 hover:text-stone-950 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white',
                         ]"
                     >
-                        <LayoutDashboard class="h-4 w-4 shrink-0" />
-                        <span v-if="!isSidebarCollapsed">Dashboard Utama</span>
+                        <Home
+                            :class="[
+                                'h-4.5 w-4.5 shrink-0 transition-colors duration-155',
+                                route().current('dashboard')
+                                    ? 'text-stone-950 font-black'
+                                    : 'text-stone-700 dark:text-slate-300',
+                            ]"
+                        />
                         <span
-                            v-if="
-                                route().current('dashboard') &&
-                                !isSidebarCollapsed
-                            "
-                            class="h-1.5 w-1.5 rounded-full bg-orange-500"
-                        ></span>
+                            v-if="!isSidebarCollapsed"
+                            class="truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-155"
+                            :class="[
+                                route().current('dashboard')
+                                    ? 'text-stone-950 font-black'
+                                    : 'text-stone-900 dark:text-slate-200',
+                            ]"
+                        >
+                            Dashboard Utama
+                        </span>
                     </Link>
                 </div>
 
@@ -1609,64 +1669,41 @@ onBeforeUnmount(() => {
                 <div
                     v-for="category in filteredSidebar"
                     :key="category.name"
-                    class="space-y-1.5"
+                    class="px-2 space-y-1.5"
                 >
-                    <!-- Category Link (simplified, always points to first child) -->
                     <Link
                         :href="route(resolveSidebarRoute(category.pages[0]))"
+                        prefetch
                         @click="isMobileOpen = false"
                         :title="isSidebarCollapsed ? category.name : undefined"
                         :class="[
-                            'group flex items-center rounded-lg transition duration-150',
-                            isSidebarCollapsed
-                                ? 'justify-center p-3'
-                                : 'justify-between px-3 py-2',
+                            'group flex w-full items-center gap-3 rounded-xl transition-all duration-200 border-2 border-stone-950 dark:border-slate-800',
+                            isSidebarCollapsed ? 'justify-center p-3' : 'px-3 py-2.5',
                             isCategoryActive(category)
-                                ? 'bg-gradient-to-r from-orange-500 to-red-500 font-bold text-white shadow-md shadow-orange-500/25 dark:shadow-orange-500/35'
-                                : 'text-stone-500 hover:bg-stone-100 dark:text-slate-400 dark:hover:bg-slate-800/40',
+                                ? 'bg-orange-500 text-stone-950 dark:border-orange-400 font-black shadow-md shadow-orange-500/10'
+                                : 'bg-white text-stone-900 hover:bg-stone-50 hover:text-stone-950 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white',
                         ]"
                     >
-                        <div
+                        <component
+                            :is="category.icon"
                             :class="[
-                                'flex min-w-0 items-center gap-2.5 transition duration-150',
-                                isSidebarCollapsed ? 'justify-center' : '',
+                                'h-4.5 w-4.5 shrink-0 transition-colors duration-155',
                                 isCategoryActive(category)
-                                    ? 'text-white'
-                                    : 'text-stone-500 group-hover:text-stone-900 dark:text-slate-400 dark:group-hover:text-slate-200',
+                                    ? 'text-stone-950 font-black'
+                                    : 'text-stone-700 dark:text-slate-300 group-hover:text-stone-950 dark:group-hover:text-white',
+                            ]"
+                        />
+                        <span
+                            v-if="!isSidebarCollapsed"
+                            :class="[
+                                'truncate text-xs font-bold uppercase tracking-[0.18em] transition-colors duration-155',
+                                isCategoryActive(category)
+                                    ? 'text-stone-950 font-black'
+                                    : 'text-stone-900 dark:text-slate-200 group-hover:text-stone-950 dark:group-hover:text-white',
                             ]"
                         >
-                            <component
-                                :is="category.icon"
-                                :class="[
-                                    'h-4.5 w-4.5 shrink-0 transition duration-150',
-                                    isSidebarCollapsed ? 'h-5 w-5' : '',
-                                    isCategoryActive(category)
-                                        ? 'text-white'
-                                        : 'text-stone-400 dark:text-slate-400',
-                                ]"
-                            />
-                            <div v-if="!isSidebarCollapsed" class="min-w-0">
-                                <span
-                                    :class="[
-                                        'truncate text-xs font-bold uppercase tracking-[0.18em] transition duration-150',
-                                        isCategoryActive(category)
-                                            ? 'text-white'
-                                            : 'text-stone-700 dark:text-slate-300',
-                                    ]"
-                                    >{{ category.name }}</span
-                                >
-                                <p
-                                    :class="[
-                                        'mt-0.5 text-[10px] transition duration-150',
-                                        isCategoryActive(category)
-                                            ? 'text-orange-100/90'
-                                            : 'text-stone-400 dark:text-slate-500',
-                                    ]"
-                                >
-                                    {{ category.flow }}
-                                </p>
-                            </div>
-                        </div>
+                            {{ category.name }}
+                        </span>
                     </Link>
                 </div>
             </nav>
@@ -1739,44 +1776,32 @@ onBeforeUnmount(() => {
                     </Link>
                 </div>
 
-                <!-- Utilitas Row (Theme toggle, Test alarm, Test voice, Collapse button) -->
+                <!-- Utilitas Row (Test alarm, Test voice, Collapse button) -->
                 <div
                     :class="[
                         'grid w-full gap-1.5',
-                        isSidebarCollapsed ? 'grid-cols-1' : 'grid-cols-4',
+                        isSidebarCollapsed ? 'grid-cols-1' : 'grid-cols-3',
                     ]"
                 >
-                    <!-- Theme Toggle -->
-                    <button
-                        @click="toggleTheme"
-                        type="button"
-                        :title="isDarkMode ? 'Mode Terang' : 'Mode Gelap'"
-                        :class="[
-                            'flex items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-500 transition hover:bg-stone-50 hover:text-stone-800 active:scale-95 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200',
-                            isSidebarCollapsed ? 'h-10 w-10' : 'h-8.5',
-                        ]"
-                    >
-                        <Sun
-                            v-if="isDarkMode"
-                            class="h-4 w-4 shrink-0 text-amber-500"
-                        />
-                        <Moon
-                            v-else
-                            class="h-4 w-4 shrink-0 text-stone-400 dark:text-slate-500"
-                        />
-                    </button>
 
-                    <!-- Test Alarm -->
+                    <!-- Test Push Notification -->
                     <button
-                        @click="testAlarmGlobal"
+                        @click="triggerTestPushNotification"
                         type="button"
-                        title="Test Alarm"
+                        title="Test Push Notifikasi"
+                        :disabled="isTestingPush"
                         :class="[
                             'flex items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-500 transition hover:bg-stone-50 hover:text-stone-800 active:scale-95 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200',
                             isSidebarCollapsed ? 'h-10 w-10' : 'h-8.5',
+                            isTestingPush ? 'opacity-50 cursor-not-allowed' : ''
                         ]"
                     >
+                        <RefreshCw
+                            v-if="isTestingPush"
+                            class="h-3.5 w-3.5 animate-spin text-orange-500 dark:text-orange-400"
+                        />
                         <Bell
+                            v-else
                             class="h-3.5 w-3.5 text-orange-500 dark:text-orange-400"
                         />
                     </button>
@@ -1858,26 +1883,20 @@ onBeforeUnmount(() => {
                     >
                 </div>
                 <div class="flex items-center gap-2">
-                    <!-- Mobile Theme Toggle -->
+
                     <button
-                        @click="toggleTheme"
+                        @click="triggerTestPushNotification"
                         type="button"
-                        class="rounded-lg p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                        :title="isDarkMode ? 'Mode Terang' : 'Mode Gelap'"
+                        :disabled="isTestingPush"
+                        class="rounded-lg p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white disabled:opacity-50"
+                        title="Test Push Notifikasi"
                     >
-                        <Sun v-if="isDarkMode" class="h-5 w-5 text-amber-500" />
-                        <Moon
-                            v-else
-                            class="h-5 w-5 text-slate-600 dark:text-slate-400"
+                        <RefreshCw
+                            v-if="isTestingPush"
+                            class="h-5 w-5 animate-spin text-orange-500 dark:text-orange-400"
                         />
-                    </button>
-                    <button
-                        @click="testAlarmGlobal"
-                        type="button"
-                        class="rounded-lg p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                        title="Uji coba alarm"
-                    >
                         <Bell
+                            v-else
                             class="h-5 w-5 text-orange-500 dark:text-orange-400"
                         />
                     </button>
@@ -1904,7 +1923,7 @@ onBeforeUnmount(() => {
             <!-- Page Title Header (Slot) -->
             <header
                 v-if="$slots.header"
-                class="hidden shrink-0 border-b border-stone-200 bg-white/40 px-5 py-6 dark:border-slate-900 dark:bg-slate-900/20 sm:px-6 lg:block lg:px-8 xl:px-10"
+                class="shrink-0 border-b border-stone-200 bg-white/40 px-5 py-6 dark:border-slate-900 dark:bg-slate-900/20 sm:px-6 lg:px-8 xl:px-10"
             >
                 <slot name="header" />
             </header>
@@ -1912,29 +1931,24 @@ onBeforeUnmount(() => {
             <!-- Horizontal Page Tabs (for sub-menus) -->
             <div
                 v-if="activeCategory && activeCategory.pages.length > 1"
-                class="border-b border-stone-200 bg-white/60 px-5 dark:border-slate-900 dark:bg-slate-900/40 sm:px-6 lg:px-8 xl:px-10"
+                class="relative z-10 border-b border-stone-200 bg-white/60 px-5 py-2.5 dark:border-slate-900 dark:bg-slate-900/40 sm:px-6 lg:px-8 xl:px-10"
             >
                 <div
-                    class="no-scrollbar flex items-center gap-8 overflow-x-auto py-1"
+                    class="no-scrollbar flex w-full items-center gap-2.5 overflow-x-auto"
                 >
                     <Link
                         v-for="pageItem in activeCategory.pages"
                         :key="pageItem.key"
-                        :href="route(resolveSidebarRoute(pageItem))"
+                        :href="route(pageItem.route ?? 'dashboard')"
+                        prefetch
                         :class="[
-                            'relative whitespace-nowrap py-3 text-xs font-bold uppercase tracking-wider transition-colors',
-                            route().current(resolveSidebarRoute(pageItem))
-                                ? 'text-orange-600 dark:text-orange-400'
-                                : 'text-stone-500 hover:text-stone-900 dark:text-slate-400 dark:hover:text-slate-200',
+                            'flex-1 cursor-pointer whitespace-nowrap px-4 py-2 text-center text-xs font-bold uppercase tracking-wider transition-all duration-200 rounded-full border-2 border-stone-950 dark:border-slate-800',
+                            isSubPageActive(pageItem)
+                                ? 'bg-orange-500 text-stone-950 dark:border-orange-400 font-black shadow-lg shadow-orange-500/15'
+                                : 'bg-white text-stone-600 hover:bg-stone-50 hover:text-stone-950 dark:bg-slate-950 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white',
                         ]"
                     >
                         {{ pageItem.title }}
-                        <div
-                            v-if="
-                                route().current(resolveSidebarRoute(pageItem))
-                            "
-                            class="absolute bottom-0 left-0 h-0.5 w-full bg-orange-500"
-                        ></div>
                     </Link>
                 </div>
             </div>

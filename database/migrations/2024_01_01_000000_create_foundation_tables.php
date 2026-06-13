@@ -84,8 +84,12 @@ return new class extends Migration
         }
         // 6. USERS (Fix existing or create new)
         if (Schema::hasTable('users')) {
-            // Check if primary key exists
-            $pkExists = collect(DB::select("SELECT conname FROM pg_constraint WHERE conrelid = 'users'::regclass AND contype = 'p'"))->isNotEmpty();
+            // Check if primary key exists - Postgres specific check moved inside driver check
+            $pkExists = true;
+            if (DB::getDriverName() === 'pgsql') {
+                $pkExists = collect(DB::select("SELECT conname FROM pg_constraint WHERE conrelid = 'users'::regclass AND contype = 'p'"))->isNotEmpty();
+            }
+            
             if (!$pkExists) {
                 Schema::table('users', function (Blueprint $table) {
                     $table->primary('id');

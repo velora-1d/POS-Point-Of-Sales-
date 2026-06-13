@@ -165,24 +165,24 @@ const summaryCards = computed(() => [
         label: 'Kasbon Aktif',
         value: props.summary.kasbon_count,
         helper: `${formatCurrency(props.summary.kasbon_outstanding)} outstanding`,
-        tone: 'text-orange-300',
-        surface: 'border-orange-400/15 bg-orange-500/10',
+        tone: 'text-orange-700 dark:text-orange-300 font-black',
+        surface: 'border-2 border-orange-700 bg-orange-100 dark:border-orange-500 dark:bg-orange-950/80',
         icon: Wallet,
     },
     {
         label: 'Pre-Order Aktif',
         value: props.summary.preorder_count,
         helper: `DP terkumpul ${formatCurrency(props.summary.preorder_dp_collected)}`,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-700 dark:text-sky-300 font-black',
+        surface: 'border-2 border-sky-700 bg-sky-100 dark:border-sky-500 dark:bg-sky-950/80',
         icon: FileClock,
     },
     {
         label: 'Transaksi Selesai Hari Ini',
         value: props.summary.completed_today,
         helper: `${props.summary.history_count} transaksi masuk riwayat`,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-700 dark:text-emerald-300 font-black',
+        surface: 'border-2 border-emerald-700 bg-emerald-100 dark:border-emerald-500 dark:bg-emerald-950/80',
         icon: CheckCircle2,
     },
 ]);
@@ -282,10 +282,10 @@ function formatPaymentMethod(value?: string | null) {
 
 function historyStatusClass(status: string) {
     if (status === 'completed')
-        return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300';
+        return 'border-2 border-emerald-700 bg-emerald-100 text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300';
     if (status === 'cancelled')
-        return 'border-rose-500/20 bg-rose-500/10 text-rose-300';
-    return 'border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-950 text-stone-500 dark:text-slate-400';
+        return 'border-2 border-rose-700 bg-rose-100 text-rose-800 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300';
+    return 'border-2 border-stone-200 bg-stone-100 text-black dark:border-white/10 dark:bg-slate-950 dark:text-slate-400';
 }
 
 function applyFilters() {
@@ -422,11 +422,11 @@ function openReceipt(orderId: string) {
             <div class="flex flex-col gap-2">
                 <div>
                     <h2
-                        class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
+                        class="text-2xl font-black tracking-tight text-black dark:text-white"
                     >
                         Transaksi & Histori Order
                     </h2>
-                    <p class="mt-1 text-sm text-stone-500 dark:text-slate-400">
+                    <p class="mt-1 text-sm font-bold text-black dark:text-slate-300">
                         Kelola cicilan kasbon, pre-order dengan DP, preview
                         struk, dan riwayat transaksi outlet.
                     </p>
@@ -437,9 +437,9 @@ function openReceipt(orderId: string) {
         <div class="space-y-6">
             <div
                 v-if="success"
-                class="flex items-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-300"
+                class="flex items-center gap-2 rounded-2xl border-2 border-emerald-700 bg-emerald-100 px-4 py-3 text-sm font-black text-emerald-950 dark:border-emerald-500 dark:bg-emerald-950/80 dark:text-emerald-100"
             >
-                <CheckCircle2 class="h-4 w-4" />
+                <CheckCircle2 class="h-4.5 w-4.5 text-emerald-700 dark:text-emerald-500" />
                 <span>{{ success }}</span>
             </div>
 
@@ -447,13 +447,13 @@ function openReceipt(orderId: string) {
                 <div
                     v-for="card in summaryCards"
                     :key="card.label"
-                    class="rounded-3xl border p-5"
+                    class="rounded-3xl border-2 p-5"
                     :class="card.surface"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p
-                                class="text-[11px] font-bold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
+                                class="text-[11px] font-black uppercase tracking-[0.2em] text-black dark:text-slate-300"
                             >
                                 {{ card.label }}
                             </p>
@@ -464,17 +464,17 @@ function openReceipt(orderId: string) {
                                 {{ card.value }}
                             </p>
                             <p
-                                class="mt-2 text-xs leading-5 text-stone-500 dark:text-slate-400"
+                                class="mt-2 text-xs font-bold leading-5 text-black dark:text-slate-300"
                             >
                                 {{ card.helper }}
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-950/40"
+                            class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-900"
                         >
                             <component
                                 :is="card.icon"
-                                class="h-5 w-5 text-stone-800 dark:text-slate-200"
+                                class="h-5 w-5 text-black dark:text-slate-200"
                             />
                         </div>
                     </div>
@@ -482,36 +482,34 @@ function openReceipt(orderId: string) {
             </div>
 
             <section
-                class="rounded-3xl border border-stone-200 bg-stone-50 p-6 dark:border-slate-800/80 dark:bg-slate-900/80"
+                class="rounded-3xl border-2 border-stone-200 bg-stone-50/50 p-6 dark:border-white/10 dark:bg-slate-900/80"
             >
                 <div
                     class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                            class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-700 dark:text-orange-400"
                         >
                             Filter Riwayat
                         </p>
                         <h3
-                            class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                            class="mt-2 text-lg font-black text-black dark:text-white"
                         >
                             Transaksi Selesai & Dokumen Struk
                         </h3>
                         <p
-                            class="mt-1 text-sm text-stone-500 dark:text-slate-400"
+                            class="mt-1 text-sm font-bold text-black dark:text-slate-300"
                         >
-                            <span
-                                >Shortcut riwayat transaksi dan preview/cetak
-                                struk dari transaksi yang sudah selesai.</span
-                            >
+                            <span>Shortcut riwayat transaksi dan preview/cetak
+                            struk dari transaksi yang sudah selesai.</span>
                         </p>
                     </div>
 
                     <div class="flex flex-col gap-3 sm:flex-row">
                         <Link
                             :href="route('kasir.order')"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm font-bold text-stone-800 transition hover:border-stone-300 dark:border-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
+                            class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm font-black text-black transition hover:bg-stone-100 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
                         >
                             <ShoppingBag class="h-4 w-4" />
                             Buka Kasir & Voucher
@@ -519,7 +517,7 @@ function openReceipt(orderId: string) {
                         <button
                             type="button"
                             @click="openPreOrderModal"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3 text-sm font-bold text-stone-900 transition dark:text-white"
+                            class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-stone-200 bg-orange-500 hover:bg-orange-400 px-5 py-3 text-sm font-black text-stone-950 transition dark:border-white/10"
                         >
                             <CalendarClock class="h-4 w-4" />
                             Buat Pre-Order / DP
@@ -532,18 +530,18 @@ function openReceipt(orderId: string) {
                 >
                     <div class="relative">
                         <Search
-                            class="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-stone-400 dark:text-slate-500"
+                            class="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-black dark:text-slate-400"
                         />
                         <input
                             v-model="filterForm.search"
                             type="text"
                             placeholder="Cari nomor order / customer..."
-                            class="w-full rounded-2xl border border-stone-200 bg-stone-100 py-3 pl-10 pr-4 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                            class="w-full rounded-2xl border-2 border-stone-200 bg-white py-3 pl-10 pr-4 text-sm font-black text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100 placeholder-stone-600 dark:placeholder-slate-400"
                         />
                     </div>
                     <select
                         v-model="filterForm.status"
-                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                        class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm font-black text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                     >
                         <option value="all">Semua Status</option>
                         <option value="completed">Completed</option>
@@ -551,7 +549,7 @@ function openReceipt(orderId: string) {
                     </select>
                     <select
                         v-model="filterForm.payment_method"
-                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                        class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm font-black text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                     >
                         <option value="all">Semua Metode</option>
                         <option value="cash">Cash</option>
@@ -563,12 +561,12 @@ function openReceipt(orderId: string) {
                     <input
                         v-model="filterForm.start_date"
                         type="date"
-                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                        class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm font-black text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                     />
                     <input
                         v-model="filterForm.end_date"
                         type="date"
-                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                        class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm font-black text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                     />
                 </div>
 
@@ -576,14 +574,14 @@ function openReceipt(orderId: string) {
                     <button
                         type="button"
                         @click="applyFilters"
-                        class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-orange-600"
+                        class="rounded-2xl border-2 border-stone-200 bg-orange-600 px-4 py-3 text-sm font-black text-white transition hover:bg-orange-700 dark:border-white/10"
                     >
                         Terapkan Filter
                     </button>
                     <button
                         type="button"
                         @click="resetFilters"
-                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm font-bold text-stone-600 transition hover:border-stone-300 dark:border-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                        class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm font-black text-black transition hover:bg-stone-100 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300"
                     >
                         Reset
                     </button>
@@ -592,31 +590,31 @@ function openReceipt(orderId: string) {
 
             <div class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
                 <section
-                    class="rounded-3xl border border-stone-200 bg-stone-50 dark:border-slate-800/80 dark:bg-slate-900/80"
+                    class="rounded-3xl border-2 border-stone-200 bg-stone-50/50 dark:border-white/10 dark:bg-slate-900/80"
                 >
                     <div
-                        class="flex items-center justify-between gap-4 border-b border-stone-200 px-6 py-5 dark:border-slate-800/80"
+                        class="flex items-center justify-between gap-4 border-b-2 border-stone-200 px-6 py-5 dark:border-white/10"
                     >
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                                class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-700 dark:text-orange-400"
                             >
                                 Kasbon
                             </p>
                             <h3
-                                class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                                class="mt-2 text-lg font-black text-black dark:text-white"
                             >
                                 Kasbon & Cicilan
                             </h3>
                         </div>
                         <span
-                            class="rounded-full border border-stone-200 bg-stone-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-400"
+                            class="rounded-full border-2 border-stone-200 bg-stone-100 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-black dark:border-white/10 dark:bg-slate-950 dark:text-white"
                         >
                             {{ kasbonOrders.length }} order
                         </span>
                     </div>
 
-                    <div class="divide-y divide-slate-800/80">
+                    <div class="divide-y-2 divide-black dark:divide-slate-700">
                         <div
                             v-for="order in kasbonOrders"
                             :key="order.id"
@@ -625,13 +623,13 @@ function openReceipt(orderId: string) {
                             <div class="flex items-start justify-between gap-4">
                                 <div>
                                     <p
-                                        class="text-sm font-black text-stone-900 dark:text-white"
+                                        class="text-sm font-black text-black dark:text-white"
                                     >
                                         {{ order.order_number }} ·
                                         {{ order.customer_name }}
                                     </p>
                                     <p
-                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                        class="mt-1 text-xs font-bold text-black dark:text-slate-300"
                                     >
                                         {{
                                             order.customer_phone ||
@@ -641,7 +639,7 @@ function openReceipt(orderId: string) {
                                         {{ formatDateTime(order.closed_at) }}
                                     </p>
                                     <p
-                                        class="mt-2 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-2 text-xs font-black text-red-600 dark:text-red-400"
                                     >
                                         Jatuh tempo:
                                         {{ formatDate(order.due_date) }}
@@ -649,12 +647,12 @@ function openReceipt(orderId: string) {
                                 </div>
                                 <div class="text-right">
                                     <p
-                                        class="text-[11px] text-stone-400 dark:text-slate-500"
+                                        class="text-[11px] font-bold text-black dark:text-slate-400"
                                     >
                                         Sisa tagihan
                                     </p>
                                     <p
-                                        class="mt-1 text-lg font-black text-orange-300"
+                                        class="mt-1 text-lg font-black text-orange-700 dark:text-orange-400"
                                     >
                                         {{
                                             formatCurrency(
@@ -667,43 +665,43 @@ function openReceipt(orderId: string) {
 
                             <div class="mt-4 grid gap-3 sm:grid-cols-3">
                                 <div
-                                    class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/50"
+                                    class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-900"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-black dark:text-slate-400"
                                     >
                                         Total
                                     </p>
                                     <p
-                                        class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                        class="mt-2 text-sm font-black text-black dark:text-white"
                                     >
                                         {{ formatCurrency(order.total_amount) }}
                                     </p>
                                 </div>
                                 <div
-                                    class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/50"
+                                    class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-900"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-black dark:text-slate-400"
                                     >
                                         Terbayar
                                     </p>
                                     <p
-                                        class="mt-2 text-sm font-bold text-emerald-300"
+                                        class="mt-2 text-sm font-black text-emerald-700 dark:text-emerald-400"
                                     >
                                         {{ formatCurrency(order.paid_amount) }}
                                     </p>
                                 </div>
                                 <div
-                                    class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/50"
+                                    class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-900"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-black dark:text-slate-400"
                                     >
                                         Pembayaran Terakhir
                                     </p>
                                     <p
-                                        class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                        class="mt-2 text-sm font-black text-black dark:text-white"
                                     >
                                         {{
                                             order.last_payment
@@ -714,7 +712,7 @@ function openReceipt(orderId: string) {
                                         }}
                                     </p>
                                     <p
-                                        class="mt-1 text-[11px] text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-[11px] font-bold text-black dark:text-slate-400"
                                     >
                                         {{
                                             order.last_payment
@@ -729,14 +727,14 @@ function openReceipt(orderId: string) {
                                 <button
                                     type="button"
                                     @click="openInstallmentModal(order)"
-                                    class="rounded-2xl bg-orange-500 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-orange-600"
+                                    class="rounded-2xl border-2 border-stone-200 bg-orange-600 px-4 py-2.5 text-xs font-black text-white transition hover:bg-orange-700 dark:border-white/10"
                                 >
                                     Bayar Cicilan
                                 </button>
                                 <button
                                     type="button"
                                     @click="openReceipt(order.id)"
-                                    class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-2.5 text-xs font-bold text-stone-600 transition hover:border-stone-300 dark:border-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                                    class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-2.5 text-xs font-black text-black transition hover:bg-stone-50 dark:border-white/10 dark:bg-slate-950 dark:text-white"
                                 >
                                     Preview Struk
                                 </button>
@@ -748,12 +746,12 @@ function openReceipt(orderId: string) {
                             class="px-6 py-12 text-center"
                         >
                             <p
-                                class="text-sm font-semibold text-stone-900 dark:text-white"
+                                class="text-sm font-black text-black dark:text-white"
                             >
                                 Belum ada kasbon aktif.
                             </p>
                             <p
-                                class="mt-2 text-xs leading-5 text-stone-400 dark:text-slate-500"
+                                class="mt-2 text-xs font-bold leading-5 text-black dark:text-slate-400"
                             >
                                 Tutup order sebagai kasbon dari halaman kasir
                                 untuk memunculkannya di sini.
@@ -763,31 +761,31 @@ function openReceipt(orderId: string) {
                 </section>
 
                 <section
-                    class="rounded-3xl border border-stone-200 bg-stone-50 dark:border-slate-800/80 dark:bg-slate-900/80"
+                    class="rounded-3xl border-2 border-stone-200 bg-stone-50/50 dark:border-white/10 dark:bg-slate-900/80"
                 >
                     <div
-                        class="flex items-center justify-between gap-4 border-b border-stone-200 px-6 py-5 dark:border-slate-800/80"
+                        class="flex items-center justify-between gap-4 border-b-2 border-stone-200 px-6 py-5 dark:border-white/10"
                     >
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                                class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-700 dark:text-orange-400"
                             >
                                 Pre-Order
                             </p>
                             <h3
-                                class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                                class="mt-2 text-lg font-black text-black dark:text-white"
                             >
                                 Pre-Order / Down Payment
                             </h3>
                         </div>
                         <span
-                            class="rounded-full border border-stone-200 bg-stone-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-400"
+                            class="rounded-full border-2 border-stone-200 bg-stone-100 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-black dark:border-white/10 dark:bg-slate-950 dark:text-white"
                         >
                             {{ preOrders.length }} pre-order
                         </span>
                     </div>
 
-                    <div class="divide-y divide-slate-800/80">
+                    <div class="divide-y-2 divide-black dark:divide-slate-700">
                         <div
                             v-for="order in preOrders"
                             :key="order.id"
@@ -796,20 +794,20 @@ function openReceipt(orderId: string) {
                             <div class="flex items-start justify-between gap-4">
                                 <div>
                                     <p
-                                        class="text-sm font-black text-stone-900 dark:text-white"
+                                        class="text-sm font-black text-black dark:text-white"
                                     >
                                         {{ order.order_number }} ·
                                         {{ order.customer_name }}
                                     </p>
                                     <p
-                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                        class="mt-1 text-xs font-bold text-black dark:text-slate-300"
                                     >
                                         Pickup
                                         {{ formatDateTime(order.pickup_at) }} ·
                                         {{ order.items_count }} item
                                     </p>
                                     <p
-                                        class="mt-2 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-2 text-xs font-black text-black dark:text-slate-400"
                                     >
                                         DP
                                         {{
@@ -823,12 +821,12 @@ function openReceipt(orderId: string) {
                                 </div>
                                 <div class="text-right">
                                     <p
-                                        class="text-[11px] text-stone-400 dark:text-slate-500"
+                                        class="text-[11px] font-bold text-black dark:text-slate-400"
                                     >
                                         Sisa bayar
                                     </p>
                                     <p
-                                        class="mt-1 text-lg font-black text-sky-300"
+                                        class="mt-1 text-lg font-black text-sky-700 dark:text-sky-400"
                                     >
                                         {{
                                             formatCurrency(
@@ -841,43 +839,43 @@ function openReceipt(orderId: string) {
 
                             <div class="mt-4 grid gap-3 sm:grid-cols-3">
                                 <div
-                                    class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/50"
+                                    class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-900"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-black dark:text-slate-400"
                                     >
                                         Total
                                     </p>
                                     <p
-                                        class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                        class="mt-2 text-sm font-black text-black dark:text-white"
                                     >
                                         {{ formatCurrency(order.total_amount) }}
                                     </p>
                                 </div>
                                 <div
-                                    class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/50"
+                                    class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-900"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-black dark:text-slate-400"
                                     >
                                         DP Dibayar
                                     </p>
                                     <p
-                                        class="mt-2 text-sm font-bold text-emerald-300"
+                                        class="mt-2 text-sm font-black text-emerald-700 dark:text-emerald-400"
                                     >
                                         {{ formatCurrency(order.paid_amount) }}
                                     </p>
                                 </div>
                                 <div
-                                    class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/50"
+                                    class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-900"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.18em] text-black dark:text-slate-400"
                                     >
                                         Diskon
                                     </p>
                                     <p
-                                        class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                        class="mt-2 text-sm font-black text-black dark:text-white"
                                     >
                                         {{
                                             formatCurrency(
@@ -892,14 +890,14 @@ function openReceipt(orderId: string) {
                                 <button
                                     type="button"
                                     @click="activatePreOrder(order.id)"
-                                    class="rounded-2xl bg-sky-500 px-4 py-2.5 text-xs font-bold text-stone-900 transition hover:bg-sky-600 dark:text-white"
+                                    class="rounded-2xl border-2 border-stone-200 bg-sky-600 px-4 py-2.5 text-xs font-black text-white transition hover:bg-sky-700 dark:border-white/10"
                                 >
                                     Aktifkan ke Dapur
                                 </button>
                                 <button
                                     type="button"
                                     @click="openReceipt(order.id)"
-                                    class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-2.5 text-xs font-bold text-stone-600 transition hover:border-stone-300 dark:border-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                                    class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-2.5 text-xs font-black text-black transition hover:bg-stone-50 dark:border-white/10 dark:bg-slate-950 dark:text-white"
                                 >
                                     Preview Struk
                                 </button>
@@ -911,12 +909,12 @@ function openReceipt(orderId: string) {
                             class="px-6 py-12 text-center"
                         >
                             <p
-                                class="text-sm font-semibold text-stone-900 dark:text-white"
+                                class="text-sm font-black text-black dark:text-white"
                             >
                                 Belum ada pre-order aktif.
                             </p>
                             <p
-                                class="mt-2 text-xs leading-5 text-stone-400 dark:text-slate-500"
+                                class="mt-2 text-xs font-bold leading-5 text-black dark:text-slate-400"
                             >
                                 Gunakan tombol "Buat Pre-Order / DP" untuk
                                 menyimpan order pickup berikut down payment.
@@ -927,25 +925,25 @@ function openReceipt(orderId: string) {
             </div>
 
             <section
-                class="rounded-3xl border border-stone-200 bg-stone-50 dark:border-slate-800/80 dark:bg-slate-900/80"
+                class="rounded-3xl border-2 border-stone-200 bg-stone-50 dark:border-white/10 dark:bg-slate-900/80"
             >
                 <div
-                    class="flex items-center justify-between gap-4 border-b border-stone-200 px-6 py-5 dark:border-slate-800/80"
+                    class="flex items-center justify-between gap-4 border-b-2 border-stone-200 px-6 py-5 dark:border-white/10"
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                            class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-700 dark:text-orange-400"
                         >
                             Struk & Histori
                         </p>
                         <h3
-                            class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                            class="mt-2 text-lg font-black text-black dark:text-white"
                         >
                             Riwayat Transaksi & Struk
                         </h3>
                     </div>
                     <span
-                        class="rounded-full border border-stone-200 bg-stone-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-400"
+                        class="rounded-full border-2 border-stone-200 bg-stone-100 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-black dark:border-white/10 dark:bg-slate-950 dark:text-slate-400"
                     >
                         {{ historyOrders.length }} transaksi
                     </span>
@@ -953,10 +951,10 @@ function openReceipt(orderId: string) {
 
                 <div v-if="historyOrders.length" class="overflow-x-auto">
                     <table
-                        class="min-w-full divide-y divide-slate-800 text-left text-sm"
+                        class="min-w-full divide-y-2 divide-black dark:divide-slate-800 text-left text-sm"
                     >
                         <thead
-                            class="bg-white text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:bg-slate-950/70 dark:text-slate-500"
+                            class="bg-white text-[10px] font-black uppercase tracking-[0.18em] text-black dark:bg-slate-950/70 dark:text-slate-400 border-b-2 border-stone-200 dark:border-white/10"
                         >
                             <tr>
                                 <th class="px-6 py-3">Order</th>
@@ -967,7 +965,7 @@ function openReceipt(orderId: string) {
                                 <th class="px-6 py-3">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-800/80">
+                        <tbody class="divide-y-2 divide-black dark:divide-slate-800/80">
                             <tr
                                 v-for="order in historyOrders"
                                 :key="order.id"
@@ -975,12 +973,12 @@ function openReceipt(orderId: string) {
                             >
                                 <td class="px-6 py-4">
                                     <div
-                                        class="font-black text-stone-900 dark:text-white"
+                                        class="font-black text-black dark:text-white"
                                     >
                                         {{ order.order_number }}
                                     </div>
                                     <div
-                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-xs font-bold text-black dark:text-slate-400"
                                     >
                                         {{ order.service_label }} ·
                                         {{ order.items_count }} item ·
@@ -989,12 +987,12 @@ function openReceipt(orderId: string) {
                                 </td>
                                 <td class="px-6 py-4">
                                     <div
-                                        class="font-semibold text-stone-800 dark:text-slate-200"
+                                        class="font-bold text-black dark:text-slate-200"
                                     >
                                         {{ order.customer_name }}
                                     </div>
                                     <div
-                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-xs font-bold text-black dark:text-slate-400"
                                     >
                                         {{
                                             order.customer_phone ||
@@ -1005,12 +1003,12 @@ function openReceipt(orderId: string) {
                                 </td>
                                 <td class="px-6 py-4">
                                     <div
-                                        class="font-bold text-stone-900 dark:text-white"
+                                        class="font-black text-black dark:text-white"
                                     >
                                         {{ formatCurrency(order.total_amount) }}
                                     </div>
                                     <div
-                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-xs font-bold text-black dark:text-slate-400"
                                     >
                                         Bayar
                                         {{ formatCurrency(order.paid_amount) }}
@@ -1024,7 +1022,7 @@ function openReceipt(orderId: string) {
                                 </td>
                                 <td class="px-6 py-4">
                                     <div
-                                        class="font-semibold text-stone-800 dark:text-slate-200"
+                                        class="font-bold text-black dark:text-slate-200"
                                     >
                                         {{
                                             formatPaymentMethod(
@@ -1033,7 +1031,7 @@ function openReceipt(orderId: string) {
                                         }}
                                     </div>
                                     <div
-                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-xs font-bold text-black dark:text-slate-400"
                                     >
                                         {{ order.payment_status || 'n/a' }} ·
                                         {{ order.payment_logs_count }} log
@@ -1041,7 +1039,7 @@ function openReceipt(orderId: string) {
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
+                                        class="rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
                                         :class="
                                             historyStatusClass(order.status)
                                         "
@@ -1054,7 +1052,7 @@ function openReceipt(orderId: string) {
                                         <button
                                             type="button"
                                             @click="openReceipt(order.id)"
-                                            class="rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-[11px] font-bold text-stone-800 transition hover:border-stone-300 dark:border-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
+                                            class="rounded-xl border-2 border-stone-200 bg-stone-100 px-3 py-2 text-[11px] font-black text-black transition hover:bg-stone-200 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
                                         >
                                             Preview Struk
                                         </button>
@@ -1090,7 +1088,7 @@ function openReceipt(orderId: string) {
                                                     },
                                                 )
                                             "
-                                            class="rounded-xl border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-[11px] font-bold text-orange-300 transition hover:bg-orange-500/15"
+                                            class="rounded-xl border-2 border-orange-700 bg-orange-100 px-3 py-2 text-[11px] font-black text-orange-850 transition hover:bg-orange-200 dark:border-orange-500 dark:bg-orange-500/10 dark:text-orange-300 dark:hover:bg-orange-950"
                                         >
                                             Bayar Cicilan
                                         </button>
@@ -1103,12 +1101,12 @@ function openReceipt(orderId: string) {
 
                 <div v-else class="px-6 py-12 text-center">
                     <p
-                        class="text-sm font-semibold text-stone-900 dark:text-white"
+                        class="text-sm font-black text-black dark:text-white"
                     >
                         Belum ada transaksi sesuai filter.
                     </p>
                     <p
-                        class="mt-2 text-xs leading-5 text-stone-400 dark:text-slate-500"
+                        class="mt-2 text-xs font-bold leading-5 text-black dark:text-slate-500"
                     >
                         Coba ubah rentang tanggal, metode pembayaran, atau kata
                         kunci pencarian.
@@ -1119,26 +1117,26 @@ function openReceipt(orderId: string) {
 
         <div
             v-if="installmentModalOpen && selectedKasbonOrder"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white p-4 backdrop-blur-sm dark:bg-slate-950/85"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
-                class="w-full max-w-lg rounded-3xl border border-stone-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900"
+                class="w-full max-w-lg rounded-3xl border-2 border-stone-200 bg-white shadow-2xl dark:border-white/10 dark:bg-slate-900"
             >
                 <div
-                    class="border-b border-stone-200 px-6 py-5 dark:border-slate-800/80"
+                    class="border-b-2 border-stone-200 px-6 py-5 dark:border-white/10"
                 >
                     <p
-                        class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                        class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-700 dark:text-orange-400"
                     >
                         Pembayaran Cicilan
                     </p>
                     <h3
-                        class="mt-2 text-xl font-black text-stone-900 dark:text-white"
+                        class="mt-2 text-xl font-black text-black dark:text-white"
                     >
                         {{ selectedKasbonOrder.order_number }} ·
                         {{ selectedKasbonOrder.customer_name }}
                     </h3>
-                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
+                    <p class="mt-1 text-xs font-bold text-black dark:text-slate-400">
                         Sisa tagihan
                         {{
                             formatCurrency(selectedKasbonOrder.remaining_amount)
@@ -1148,13 +1146,13 @@ function openReceipt(orderId: string) {
                 <div class="space-y-4 px-6 py-5">
                     <div>
                         <label
-                            class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            class="mb-2 block text-[10px] font-black uppercase tracking-[0.18em] text-black dark:text-slate-400"
                         >
                             Metode Pembayaran
                         </label>
                         <select
                             v-model="installmentForm.payment_method"
-                            class="w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                            class="w-full rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                         >
                             <option
                                 v-for="method in referenceData.paymentMethods"
@@ -1167,7 +1165,7 @@ function openReceipt(orderId: string) {
                     </div>
                     <div>
                         <label
-                            class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            class="mb-2 block text-[10px] font-black uppercase tracking-[0.18em] text-black dark:text-slate-400"
                         >
                             Nominal Cicilan
                         </label>
@@ -1176,29 +1174,29 @@ function openReceipt(orderId: string) {
                             type="number"
                             min="1"
                             step="1000"
-                            class="w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                            class="w-full rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                         />
                     </div>
                     <div>
                         <label
-                            class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                            class="mb-2 block text-[10px] font-black uppercase tracking-[0.18em] text-black dark:text-slate-400"
                         >
                             Catatan
                         </label>
                         <textarea
                             v-model="installmentForm.notes"
                             rows="3"
-                            class="w-full rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                            class="w-full rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                         ></textarea>
                     </div>
                 </div>
                 <div
-                    class="flex justify-end gap-3 border-t border-stone-200 px-6 py-4 dark:border-slate-800/80"
+                    class="flex justify-end gap-3 border-t-2 border-stone-200 px-6 py-4 dark:border-white/10"
                 >
                     <button
                         type="button"
                         @click="closeInstallmentModal"
-                        class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm font-bold text-stone-600 transition hover:border-stone-300 dark:border-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                        class="rounded-2xl border-2 border-stone-200 bg-stone-100 px-4 py-3 text-sm font-black text-black transition hover:bg-stone-200 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300"
                     >
                         Batal
                     </button>
@@ -1206,7 +1204,7 @@ function openReceipt(orderId: string) {
                         type="button"
                         @click="submitInstallment"
                         :disabled="installmentForm.processing"
-                        class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-orange-600 disabled:pointer-events-none disabled:opacity-50"
+                        class="rounded-2xl border-2 border-stone-200 bg-orange-600 px-4 py-3 text-sm font-black text-white transition hover:bg-orange-700 disabled:pointer-events-none disabled:opacity-50"
                     >
                         {{
                             installmentForm.processing
@@ -1220,27 +1218,27 @@ function openReceipt(orderId: string) {
 
         <div
             v-if="preOrderModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white p-4 backdrop-blur-sm dark:bg-slate-950/85"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
-                class="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900"
+                class="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border-2 border-stone-200 bg-white shadow-2xl dark:border-white/10 dark:bg-slate-900"
             >
                 <div
-                    class="flex items-start justify-between gap-4 border-b border-stone-200 px-6 py-5 dark:border-slate-800/80"
+                    class="flex items-start justify-between gap-4 border-b-2 border-stone-200 px-6 py-5 dark:border-white/10"
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                            class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-700 dark:text-orange-400"
                         >
                             Pre-Order Baru
                         </p>
                         <h3
-                            class="mt-2 text-xl font-black text-stone-900 dark:text-white"
+                            class="mt-2 text-xl font-black text-black dark:text-white"
                         >
                             Buat Pre-Order / Down Payment
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                            class="mt-1 text-xs font-bold text-black dark:text-slate-400"
                         >
                             Flow ini menyimpan order pickup/delivery future
                             dengan DP cash dan aktivasi manual saat siap dikirim
@@ -1250,7 +1248,7 @@ function openReceipt(orderId: string) {
                     <button
                         type="button"
                         @click="closePreOrderModal"
-                        class="text-stone-400 transition hover:text-stone-800 dark:text-slate-200 dark:text-slate-500"
+                        class="font-black text-black transition hover:text-stone-700 dark:text-slate-400 dark:hover:text-white"
                     >
                         Tutup
                     </button>
@@ -1260,50 +1258,50 @@ function openReceipt(orderId: string) {
                     class="grid min-h-0 flex-1 gap-0 xl:grid-cols-[1.1fr_0.9fr]"
                 >
                     <div
-                        class="flex min-h-0 flex-col border-r border-stone-200 dark:border-slate-800/70"
+                        class="flex min-h-0 flex-col border-r-2 border-stone-200 dark:border-white/10"
                     >
                         <div
-                            class="grid gap-3 border-b border-stone-200 px-6 py-5 dark:border-slate-800/70 sm:grid-cols-2"
+                            class="grid gap-3 border-b-2 border-stone-200 px-6 py-5 dark:border-white/10 sm:grid-cols-2"
                         >
                             <input
                                 v-model="preOrderForm.customer_name"
                                 type="text"
                                 placeholder="Nama customer"
-                                class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                             />
                             <input
                                 v-model="preOrderForm.customer_phone"
                                 type="text"
                                 placeholder="Nomor HP customer"
-                                class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                             />
                             <input
                                 v-model="preOrderForm.customer_email"
                                 type="email"
                                 placeholder="Email customer (opsional)"
-                                class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                             />
                             <input
                                 v-model="preOrderForm.pickup_datetime"
                                 type="datetime-local"
-                                class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                             />
                             <input
                                 v-model="preOrderForm.promo_code"
                                 type="text"
                                 placeholder="Voucher / promo code"
-                                class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm uppercase text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 sm:col-span-2"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold uppercase text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100 sm:col-span-2"
                             />
                             <textarea
                                 v-model="preOrderForm.notes"
                                 rows="3"
                                 placeholder="Catatan khusus pre-order"
-                                class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 sm:col-span-2"
+                                class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100 sm:col-span-2"
                             ></textarea>
                         </div>
 
                         <div
-                            class="border-b border-stone-200 px-6 py-4 dark:border-slate-800/70"
+                            class="border-b-2 border-stone-200 px-6 py-4 dark:border-white/10"
                         >
                             <div
                                 class="flex items-center justify-between gap-3"
@@ -1314,10 +1312,10 @@ function openReceipt(orderId: string) {
                                         @click="activeCategory = 'all'"
                                         :class="
                                             activeCategory === 'all'
-                                                ? 'border-orange-500/30 bg-orange-500/10 text-orange-300'
-                                                : 'border-stone-200 bg-stone-100 text-stone-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400'
+                                                ? 'border-2 border-orange-700 bg-orange-100 text-orange-850 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-300 font-black'
+                                                : 'border-2 border-stone-200 bg-stone-100 text-black dark:border-white/10 dark:bg-slate-950 dark:text-slate-400 font-bold'
                                         "
-                                        class="rounded-xl border px-3 py-2 text-[11px] font-bold transition"
+                                        class="rounded-xl px-3 py-2 text-[11px] transition"
                                     >
                                         Semua Menu
                                     </button>
@@ -1328,10 +1326,10 @@ function openReceipt(orderId: string) {
                                         @click="activeCategory = category.id"
                                         :class="
                                             activeCategory === category.id
-                                                ? 'border-orange-500/30 bg-orange-500/10 text-orange-300'
-                                                : 'border-stone-200 bg-stone-100 text-stone-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400'
+                                                ? 'border-2 border-orange-700 bg-orange-100 text-orange-850 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-300 font-black'
+                                                : 'border-2 border-stone-200 bg-stone-100 text-black dark:border-white/10 dark:bg-slate-950 dark:text-slate-400 font-bold'
                                         "
-                                        class="rounded-xl border px-3 py-2 text-[11px] font-bold transition"
+                                        class="rounded-xl px-3 py-2 text-[11px] transition"
                                     >
                                         {{ category.name }}
                                     </button>
@@ -1340,7 +1338,7 @@ function openReceipt(orderId: string) {
                                     v-model="preOrderSearch"
                                     type="text"
                                     placeholder="Cari menu..."
-                                    class="w-full max-w-xs rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                    class="w-full max-w-xs rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                                 />
                             </div>
                         </div>
@@ -1353,20 +1351,20 @@ function openReceipt(orderId: string) {
                                 :key="product.id"
                                 type="button"
                                 @click="addProduct(product)"
-                                class="rounded-2xl border border-stone-200 bg-white p-4 text-left transition hover:border-orange-500/20 dark:border-slate-800 dark:bg-slate-950/60"
+                                class="rounded-2xl border-2 border-stone-200 bg-white p-4 text-left transition hover:border-orange-600 dark:border-white/10 dark:bg-slate-950/60"
                             >
                                 <p
-                                    class="text-sm font-bold text-stone-900 dark:text-white"
+                                    class="text-sm font-bold text-black dark:text-white"
                                 >
                                     {{ product.name }}
                                 </p>
                                 <p
-                                    class="mt-2 text-xs text-stone-400 dark:text-slate-500"
+                                    class="mt-2 text-xs font-bold text-black dark:text-slate-550"
                                 >
                                     {{ product.category_name }}
                                 </p>
                                 <p
-                                    class="mt-3 text-sm font-black text-orange-300"
+                                    class="mt-3 text-sm font-black text-orange-700 dark:text-orange-400"
                                 >
                                     {{ formatCurrency(product.unit_price) }}
                                 </p>
@@ -1376,15 +1374,15 @@ function openReceipt(orderId: string) {
 
                     <div class="flex min-h-0 flex-col">
                         <div
-                            class="border-b border-stone-200 px-6 py-5 dark:border-slate-800/70"
+                            class="border-b-2 border-stone-200 px-6 py-5 dark:border-white/10"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                                class="text-[10px] font-black uppercase tracking-[0.22em] text-orange-700 dark:text-orange-400"
                             >
                                 Ringkasan Pre-Order
                             </p>
                             <h4
-                                class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                                class="mt-2 text-lg font-black text-black dark:text-white"
                             >
                                 {{ preOrderForm.items.length }} item terpilih
                             </h4>
@@ -1396,19 +1394,19 @@ function openReceipt(orderId: string) {
                             <div
                                 v-for="(item, index) in preOrderForm.items"
                                 :key="`${item.product_id}-${index}`"
-                                class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                                class="rounded-2xl border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/60"
                             >
                                 <div
                                     class="flex items-start justify-between gap-3"
                                 >
                                     <div>
                                         <p
-                                            class="text-sm font-bold text-stone-900 dark:text-white"
+                                            class="text-sm font-bold text-black dark:text-white"
                                         >
                                             {{ item.product_name }}
                                         </p>
                                         <p
-                                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                            class="mt-1 text-xs font-bold text-black dark:text-slate-550"
                                         >
                                             {{
                                                 formatCurrency(item.unit_price)
@@ -1419,7 +1417,7 @@ function openReceipt(orderId: string) {
                                     <button
                                         type="button"
                                         @click="adjustPreOrderQty(index, -999)"
-                                        class="text-xs font-bold text-rose-300"
+                                        class="text-xs font-black text-rose-700 dark:text-rose-400"
                                     >
                                         Hapus
                                     </button>
@@ -1433,24 +1431,24 @@ function openReceipt(orderId: string) {
                                             @click="
                                                 adjustPreOrderQty(index, -1)
                                             "
-                                            class="rounded-lg border border-stone-200 px-2 py-1 text-stone-600 dark:border-slate-700 dark:text-slate-300"
+                                            class="rounded-lg border-2 border-stone-200 px-2 py-1 font-black text-black bg-stone-100 dark:border-white/10 dark:text-slate-300"
                                         >
                                             -
                                         </button>
                                         <span
-                                            class="text-sm font-black text-stone-900 dark:text-white"
+                                            class="text-sm font-black text-black dark:text-white"
                                             >{{ item.quantity }}</span
                                         >
                                         <button
                                             type="button"
                                             @click="adjustPreOrderQty(index, 1)"
-                                            class="rounded-lg border border-stone-200 px-2 py-1 text-stone-600 dark:border-slate-700 dark:text-slate-300"
+                                            class="rounded-lg border-2 border-stone-200 px-2 py-1 font-black text-black bg-stone-100 dark:border-white/10 dark:text-slate-300"
                                         >
                                             +
                                         </button>
                                     </div>
                                     <span
-                                        class="text-sm font-black text-orange-300"
+                                        class="text-sm font-black text-orange-700 dark:text-orange-400"
                                     >
                                         {{
                                             formatCurrency(
@@ -1463,7 +1461,7 @@ function openReceipt(orderId: string) {
 
                             <div
                                 v-if="!preOrderForm.items.length"
-                                class="rounded-2xl border border-dashed border-stone-200 px-4 py-10 text-center text-sm text-stone-400 dark:border-slate-800 dark:text-slate-500"
+                                class="rounded-2xl border-2 border-dashed border-stone-200 px-4 py-10 text-center text-sm font-bold text-black dark:border-white/10 dark:text-slate-500"
                             >
                                 Pilih produk dari panel kiri untuk menambahkan
                                 item pre-order.
@@ -1471,12 +1469,12 @@ function openReceipt(orderId: string) {
                         </div>
 
                         <div
-                            class="space-y-4 border-t border-stone-200 px-6 py-5 dark:border-slate-800/70"
+                            class="space-y-4 border-t-2 border-stone-200 px-6 py-5 dark:border-white/10"
                         >
                             <div class="grid gap-3 sm:grid-cols-2">
                                 <select
                                     v-model="preOrderForm.down_payment_type"
-                                    class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                    class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                                 >
                                     <option value="percentage">
                                         DP Persentase
@@ -1490,15 +1488,15 @@ function openReceipt(orderId: string) {
                                     type="number"
                                     min="0"
                                     step="1000"
-                                    class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                    class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-sm font-bold text-black focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-100"
                                 />
                             </div>
 
                             <div
-                                class="rounded-2xl border border-stone-200 bg-white p-4 text-sm dark:border-slate-800 dark:bg-slate-950/60"
+                                class="rounded-2xl border-2 border-stone-200 bg-white p-4 text-sm dark:border-white/10 dark:bg-slate-950/60"
                             >
                                 <div
-                                    class="flex justify-between text-stone-500 dark:text-slate-400"
+                                    class="flex justify-between font-bold text-black dark:text-slate-400"
                                 >
                                     <span>Subtotal</span>
                                     <span>{{
@@ -1506,7 +1504,7 @@ function openReceipt(orderId: string) {
                                     }}</span>
                                 </div>
                                 <div
-                                    class="mt-2 flex justify-between text-stone-500 dark:text-slate-400"
+                                    class="mt-2 flex justify-between font-bold text-black dark:text-slate-400"
                                 >
                                     <span>Estimasi diskon</span>
                                     <span>{{
@@ -1516,18 +1514,18 @@ function openReceipt(orderId: string) {
                                     }}</span>
                                 </div>
                                 <div
-                                    class="mt-2 flex justify-between text-stone-900 dark:text-white"
+                                    class="mt-2 flex justify-between font-black text-black dark:text-white"
                                 >
                                     <span>Total</span>
-                                    <span class="font-black text-orange-300">{{
+                                    <span class="font-black text-orange-700 dark:text-orange-400">{{
                                         formatCurrency(preOrderTotal)
                                     }}</span>
                                 </div>
                                 <div
-                                    class="mt-4 rounded-2xl border border-orange-500/20 bg-orange-500/10 p-3"
+                                    class="mt-4 rounded-2xl border-2 border-orange-700 bg-orange-100 dark:border-orange-500/20 dark:bg-orange-500/10 p-3"
                                 >
                                     <div
-                                        class="flex justify-between text-orange-100"
+                                        class="flex justify-between font-black text-orange-900 dark:text-orange-100"
                                     >
                                         <span>DP dikumpulkan</span>
                                         <span class="font-black">{{
@@ -1535,10 +1533,10 @@ function openReceipt(orderId: string) {
                                         }}</span>
                                     </div>
                                     <div
-                                        class="mt-2 flex justify-between text-stone-600 dark:text-slate-300"
+                                        class="mt-2 flex justify-between font-bold text-black dark:text-slate-350"
                                     >
                                         <span>Sisa tagihan</span>
-                                        <span class="font-bold">{{
+                                        <span class="font-black">{{
                                             formatCurrency(preOrderRemaining)
                                         }}</span>
                                     </div>
@@ -1549,7 +1547,7 @@ function openReceipt(orderId: string) {
                                 <button
                                     type="button"
                                     @click="closePreOrderModal"
-                                    class="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm font-bold text-stone-600 transition hover:border-stone-300 dark:border-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                                    class="rounded-2xl border-2 border-stone-200 bg-stone-100 px-4 py-3 text-sm font-black text-black transition hover:bg-stone-200 dark:border-slate-600 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300"
                                 >
                                     Batal
                                 </button>
@@ -1560,7 +1558,7 @@ function openReceipt(orderId: string) {
                                         preOrderForm.processing ||
                                         !preOrderForm.items.length
                                     "
-                                    class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-orange-600 disabled:pointer-events-none disabled:opacity-50"
+                                    class="rounded-2xl border-2 border-stone-200 bg-orange-600 px-4 py-3 text-sm font-black text-white transition hover:bg-orange-700 disabled:pointer-events-none disabled:opacity-50"
                                 >
                                     {{
                                         preOrderForm.processing

@@ -18,19 +18,21 @@ return new class extends Migration
         }
 
         // Backfill existing records: nomor urut per outlet per tanggal
-        DB::statement("
-            UPDATE shifts s
-            SET shift_number_of_day = sub.rn
-            FROM (
-                SELECT id,
-                       ROW_NUMBER() OVER (
-                           PARTITION BY outlet_id, DATE(opened_at)
-                           ORDER BY opened_at ASC
-                       ) AS rn
-                FROM shifts
-            ) sub
-            WHERE s.id = sub.id
-        ");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("
+                UPDATE shifts s
+                SET shift_number_of_day = sub.rn
+                FROM (
+                    SELECT id,
+                           ROW_NUMBER() OVER (
+                               PARTITION BY outlet_id, DATE(opened_at)
+                               ORDER BY opened_at ASC
+                           ) AS rn
+                    FROM shifts
+                ) sub
+                WHERE s.id = sub.id
+            ");
+        }
     }
 
     public function down(): void

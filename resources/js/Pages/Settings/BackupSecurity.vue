@@ -230,7 +230,7 @@ function downloadBackup() {
         <div class="space-y-6">
             <!-- Tab Navigation Keamanan & Notifikasi -->
             <div
-                class="flex max-w-md gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
             >
                 <Link
                     :href="route('settings.notifications.index')"
@@ -570,7 +570,7 @@ function downloadBackup() {
                                 type="button"
                                 @click="submitSave"
                                 :disabled="form.processing"
-                                class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3 text-sm font-bold text-stone-900 transition disabled:pointer-events-none disabled:opacity-50 dark:text-white"
+                                class="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-500 hover:bg-orange-400 px-5 py-3 text-sm font-bold text-stone-950 transition disabled:pointer-events-none disabled:opacity-50"
                             >
                                 {{
                                     form.processing

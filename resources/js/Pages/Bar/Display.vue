@@ -116,11 +116,11 @@ const resolveStatusLabel = (status?: string | null) => {
 const resolveHistoryTone = (status: string) => {
     switch (status) {
         case 'in_progress':
-            return 'border-amber-400/20 bg-amber-500/12 text-amber-300';
+            return 'border-amber-500/20 bg-amber-500/10 text-amber-700 dark:border-amber-400/20 dark:bg-amber-500/12 dark:text-amber-300';
         case 'waiting_bar_approval':
-            return 'border-cyan-400/20 bg-cyan-500/12 text-cyan-300';
+            return 'border-cyan-500/20 bg-cyan-500/10 text-cyan-700 dark:border-cyan-400/20 dark:bg-cyan-500/12 dark:text-cyan-300';
         case 'ready':
-            return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-300';
+            return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-500/12 dark:text-emerald-300';
         default:
             return 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300';
     }
@@ -219,7 +219,7 @@ const boardStats = computed(() => [
         value: String(filteredOrders.value.length),
         hint: 'Semua tiket bar',
         icon: ScanSearch,
-        tone: 'text-white',
+        tone: 'text-stone-850 dark:text-white',
         surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
     },
     {
@@ -227,7 +227,7 @@ const boardStats = computed(() => [
         value: String(waitingApprovalOrders.value.length),
         hint: 'Menunggu finalisasi',
         icon: CupSoda,
-        tone: 'text-cyan-300',
+        tone: 'text-cyan-700 dark:text-cyan-300',
         surface: 'border-cyan-400/15 bg-cyan-500/8',
     },
     {
@@ -235,7 +235,7 @@ const boardStats = computed(() => [
         value: String(readyOrders.value.length),
         hint: 'Siap disajikan',
         icon: CheckCheck,
-        tone: 'text-emerald-300',
+        tone: 'text-emerald-700 dark:text-emerald-300',
         surface: 'border-emerald-400/15 bg-emerald-500/8',
     },
 ]);
@@ -264,10 +264,10 @@ const approveReady = (orderId: string) => {
             <div class="flex flex-col gap-2">
                 <div>
                     <div
-                        class="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-cyan-200"
+                        class="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-cyan-700 dark:text-cyan-300"
                     >
                         <span
-                            class="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,0.65)]"
+                            class="h-2 w-2 rounded-full bg-cyan-300"
                         ></span>
                         Bar Approval Board
                     </div>
@@ -287,22 +287,22 @@ const approveReady = (orderId: string) => {
         <div class="space-y-4">
             <div
                 v-if="success"
-                class="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
+                class="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300"
             >
-                <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                <span class="h-2 w-2 rounded-full bg-emerald-450 dark:bg-emerald-400"></span>
                 <span>{{ success }}</span>
             </div>
 
             <div
                 v-if="error"
-                class="flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/12 px-4 py-3 text-sm font-medium text-rose-300"
+                class="flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/12 px-4 py-3 text-sm font-medium text-rose-700 dark:text-rose-300"
             >
-                <span class="h-2 w-2 rounded-full bg-rose-400"></span>
+                <span class="h-2 w-2 rounded-full bg-rose-450 dark:bg-rose-400"></span>
                 <span>{{ error }}</span>
             </div>
 
             <section
-                class="rounded-[22px] border border-stone-200 bg-stone-50 p-3 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/90"
+                class="rounded-[22px] border-2 border-black bg-stone-50 p-4 dark:border-slate-800/80 dark:bg-slate-900/90"
             >
                 <div
                     class="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between"
@@ -315,7 +315,7 @@ const approveReady = (orderId: string) => {
                                 :class="[
                                     'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                     selectedCategoryId === 'all'
-                                        ? 'border-cyan-500/30 bg-cyan-500/12 text-cyan-200'
+                                        ? 'border-cyan-500/30 bg-cyan-500/12 text-cyan-700 dark:text-cyan-200'
                                         : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300 hover:text-stone-800 dark:border-slate-600 dark:border-slate-700/70 dark:bg-slate-950/60 dark:text-slate-200 dark:text-slate-400',
                                 ]"
                             >
@@ -329,7 +329,7 @@ const approveReady = (orderId: string) => {
                                 :class="[
                                     'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                     selectedCategoryId === category.id
-                                        ? 'border-cyan-500/30 bg-cyan-500/12 text-cyan-200'
+                                        ? 'border-cyan-500/30 bg-cyan-500/12 text-cyan-700 dark:text-cyan-200'
                                         : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300 hover:text-stone-800 dark:border-slate-600 dark:border-slate-700/70 dark:bg-slate-950/60 dark:text-slate-200 dark:text-slate-400',
                                 ]"
                             >
@@ -348,7 +348,7 @@ const approveReady = (orderId: string) => {
                             v-for="stat in boardStats"
                             :key="stat.label"
                             :class="[
-                                'rounded-2xl border px-3 py-2 shadow-lg shadow-slate-950/10',
+                                'rounded-2xl border-2 border-black px-3 py-2 dark:border-slate-800',
                                 stat.surface,
                             ]"
                         >
@@ -383,7 +383,7 @@ const approveReady = (orderId: string) => {
 
             <div class="grid gap-4 xl:grid-cols-2">
                 <section
-                    class="rounded-[24px] border border-cyan-500/20 bg-stone-50 p-4 shadow-xl shadow-slate-950/10 dark:bg-slate-900/90"
+                    class="rounded-[24px] border-2 border-black bg-stone-50 p-4 dark:border-slate-800/90"
                 >
                     <div class="mb-4 flex items-center justify-between gap-3">
                         <div>
@@ -400,24 +400,19 @@ const approveReady = (orderId: string) => {
                             </p>
                         </div>
                         <span
-                            class="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan-200"
+                            class="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan-700 dark:text-cyan-200"
                         >
                             {{ waitingApprovalOrders.length }} tiket
                         </span>
                     </div>
 
                     <div
-                        v-if="waitingApprovalOrders.length === 0"
-                        class="rounded-2xl border border-dashed border-stone-200 px-4 py-14 text-center text-xs text-stone-400 dark:border-slate-800 dark:text-slate-500"
+                        class="custom-scrollbar space-y-3 overflow-y-auto pr-1 max-h-[1400px]"
                     >
-                        Belum ada tiket yang menunggu approval bar.
-                    </div>
-
-                    <div v-else class="space-y-3">
                         <article
                             v-for="order in waitingApprovalOrders"
                             :key="order.id"
-                            class="rounded-2xl border border-cyan-500/15 bg-cyan-500/[0.04] p-4"
+                            class="rounded-[18px] border-2 border-black bg-white p-4 transition duration-200 hover:-translate-y-0.5"
                         >
                             <div
                                 class="flex flex-col gap-3 border-b border-stone-200 pb-3 dark:border-slate-800/80 lg:flex-row lg:items-start lg:justify-between"
@@ -437,7 +432,7 @@ const approveReady = (orderId: string) => {
                                             {{ order.tableLabel }}
                                         </span>
                                         <span
-                                            class="rounded-full border border-fuchsia-400/20 bg-fuchsia-500/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-fuchsia-300"
+                                            class="rounded-full border border-fuchsia-400/20 bg-fuchsia-500/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-fuchsia-700 dark:text-fuchsia-300"
                                         >
                                             {{ order.sourceLabel }}
                                         </span>
@@ -455,7 +450,7 @@ const approveReady = (orderId: string) => {
                                         Menunggu Finalisasi
                                     </p>
                                     <p
-                                        class="mt-1 text-sm font-black text-cyan-200"
+                                        class="mt-1 text-sm font-black text-cyan-700 dark:text-cyan-200"
                                     >
                                         {{ order.waitingLabel }}
                                     </p>
@@ -490,7 +485,7 @@ const approveReady = (orderId: string) => {
                                             </p>
                                         </div>
                                         <span
-                                            class="text-xs font-bold text-cyan-200"
+                                            class="text-xs font-bold text-cyan-700 dark:text-cyan-200"
                                         >
                                             x{{ item.quantity }}
                                         </span>
@@ -513,7 +508,7 @@ const approveReady = (orderId: string) => {
                                     type="button"
                                     @click="approveReady(order.id)"
                                     :disabled="submittingOrderId === order.id"
-                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 px-4 py-2.5 text-xs font-bold text-slate-950 disabled:pointer-events-none disabled:opacity-50"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-black bg-cyan-400 hover:bg-cyan-300 px-4 py-2.5 text-xs font-black text-black active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-50 transition"
                                 >
                                     <PackageCheck class="h-4 w-4" />
                                     <span>
@@ -526,16 +521,30 @@ const approveReady = (orderId: string) => {
                                 </button>
                             </div>
                         </article>
+
+                        <!-- Empty Rows to fill up to 10 slots -->
+                        <div
+                            v-for="i in Math.max(0, 10 - waitingApprovalOrders.length)"
+                            :key="'empty-wait-' + i"
+                            class="rounded-[18px] border-2 border-dashed border-stone-200 bg-white/20 p-4 h-28 flex flex-col items-center justify-center dark:border-slate-800/80 dark:bg-slate-900/10"
+                        >
+                            <div class="h-6 w-6 rounded-full border border-dashed border-stone-300 flex items-center justify-center text-[10px] font-black text-stone-300 dark:border-slate-800 dark:text-slate-700">
+                                {{ waitingApprovalOrders.length + i }}
+                            </div>
+                            <span class="mt-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-300 dark:text-slate-600">
+                                Slot Kosong
+                            </span>
+                        </div>
                     </div>
                 </section>
 
                 <section
-                    class="rounded-[24px] border border-emerald-500/20 bg-stone-50 p-4 shadow-xl shadow-slate-950/10 dark:bg-slate-900/90"
+                    class="rounded-[24px] border-2 border-black bg-stone-50 p-4 dark:border-slate-800/90"
                 >
                     <div class="mb-4 flex items-center justify-between gap-3">
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-300"
+                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-300"
                             >
                                 Ready Board
                             </p>
@@ -552,24 +561,19 @@ const approveReady = (orderId: string) => {
                             </p>
                         </div>
                         <span
-                            class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-300"
+                            class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300"
                         >
                             {{ readyOrders.length }} tiket
                         </span>
                     </div>
 
                     <div
-                        v-if="readyOrders.length === 0"
-                        class="rounded-2xl border border-dashed border-stone-200 px-4 py-14 text-center text-xs text-stone-400 dark:border-slate-800 dark:text-slate-500"
+                        class="custom-scrollbar space-y-3 overflow-y-auto pr-1 max-h-[1400px]"
                     >
-                        Belum ada tiket ready.
-                    </div>
-
-                    <div v-else class="space-y-3">
                         <article
                             v-for="order in readyOrders"
                             :key="order.id"
-                            class="rounded-2xl border border-emerald-500/15 bg-emerald-500/[0.04] p-4"
+                            class="rounded-[18px] border-2 border-black bg-white p-4 transition duration-200 hover:-translate-y-0.5"
                         >
                             <div
                                 class="flex flex-wrap items-center justify-between gap-3"
@@ -603,7 +607,7 @@ const approveReady = (orderId: string) => {
                                         Ready Sejak
                                     </p>
                                     <p
-                                        class="mt-1 text-sm font-black text-emerald-300"
+                                        class="mt-1 text-sm font-black text-emerald-700 dark:text-emerald-300"
                                     >
                                         {{ order.waitingLabel }}
                                     </p>
@@ -615,12 +619,26 @@ const approveReady = (orderId: string) => {
                                 </div>
                             </div>
                         </article>
+
+                        <!-- Empty Rows to fill up to 10 slots -->
+                        <div
+                            v-for="i in Math.max(0, 10 - readyOrders.length)"
+                            :key="'empty-ready-' + i"
+                            class="rounded-[18px] border-2 border-dashed border-stone-200 bg-white/20 p-4 h-28 flex flex-col items-center justify-center dark:border-slate-800/80 dark:bg-slate-900/10"
+                        >
+                            <div class="h-6 w-6 rounded-full border border-dashed border-stone-300 flex items-center justify-center text-[10px] font-black text-stone-300 dark:border-slate-800 dark:text-slate-700">
+                                {{ readyOrders.length + i }}
+                            </div>
+                            <span class="mt-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-300 dark:text-slate-600">
+                                Slot Kosong
+                            </span>
+                        </div>
                     </div>
                 </section>
             </div>
 
             <section
-                class="rounded-[22px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                class="rounded-[22px] border border-stone-200 bg-stone-50 p-4 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
                 <div
                     class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"

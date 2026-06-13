@@ -12,8 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("ALTER TYPE order_source ADD VALUE IF NOT EXISTS 'shopeefood'");
-        DB::statement("ALTER TYPE order_source ADD VALUE IF NOT EXISTS 'maximfood'");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TYPE order_source ADD VALUE IF NOT EXISTS 'shopeefood'");
+            DB::statement("ALTER TYPE order_source ADD VALUE IF NOT EXISTS 'maximfood'");
+        }
     }
 
     /**

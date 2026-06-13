@@ -165,23 +165,22 @@ const onReportTypeChange = () => {
                     >
                         Export PDF & Excel
                     </h2>
-                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                        Export report aktif `#46-#52` ke PDF native backend atau
-                        CSV yang kompatibel dibuka di Excel.
+                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400 font-semibold">
+                        Export report aktif `#46-#52` ke PDF native backend atau CSV yang kompatibel dibuka di Excel.
                     </p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
                     <span
-                        class="rounded-full border border-stone-200 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:border-white/10 dark:text-slate-300"
+                        class="rounded-full border-2 border-stone-200 bg-stone-555/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:border-white/10 dark:text-slate-300"
                     >
                         {{ user?.role || '-' }}
                     </span>
                     <Link
                         :href="route('reports.expenses.index')"
-                        class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-white/[0.05] dark:border-white/10 dark:border-white/20 dark:text-slate-200"
+                        class="inline-flex items-center gap-2 rounded-2xl border-2 border-stone-200 bg-white/[0.03] px-4 py-2.5 text-xs font-bold text-stone-800 transition hover:border-stone-200 hover:bg-white/[0.05] dark:border-white/10 dark:text-slate-200"
                     >
-                        <CalendarRange class="h-4 w-4" />
+                        <CalendarRange class="h-4 w-4 text-orange-500" />
                         Laporan Aktif
                     </Link>
                 </div>
@@ -189,78 +188,77 @@ const onReportTypeChange = () => {
         </template>
 
         <div class="space-y-6">
-            <!-- Tab Navigation Laporan Sumber Daya -->
+            <!-- Tab Navigation Laporan Operasional -->
             <div
-                class="flex max-w-2xl flex-wrap gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full flex-wrap gap-2 rounded-2xl border-2 border-stone-200 bg-stone-100 p-1.5 dark:border-white/10 dark:bg-slate-950"
             >
                 <Link
                     :href="route('reports.inventory.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.inventory.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Stok & Inventori
                 </Link>
                 <Link
                     :href="route('reports.attendance-shifts.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.attendance-shifts.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Absensi & Shift
                 </Link>
                 <Link
                     :href="route('reports.exports.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.exports.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Export Data
                 </Link>
             </div>
 
-            <section class="grid gap-4 lg:grid-cols-[1.8fr_1fr]">
+            <!-- Configuration & Format Notes Layout -->
+            <section class="grid gap-6 lg:grid-cols-[1.8fr_1fr]">
+                <!-- Configuration Form -->
                 <div
-                    class="rounded-[28px] border border-stone-200 bg-white p-5 shadow-2xl shadow-slate-950/40 dark:border-white/10 dark:bg-slate-950/75"
+                    class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div class="flex items-start justify-between gap-4">
                         <div>
                             <p
-                                class="text-[11px] font-black uppercase tracking-[0.24em] text-orange-300/85"
+                                class="text-[10px] font-black uppercase tracking-[0.24em] text-orange-600 dark:text-orange-400"
                             >
                                 Konfigurasi Export
                             </p>
                             <h3
-                                class="mt-2 text-lg font-black text-stone-900 dark:text-white"
+                                class="mt-1 text-sm font-black text-stone-900 dark:text-white"
                             >
-                                Pilih report, format, dan filter yang ingin
-                                diunduh
+                                Pilih report, format, dan filter yang ingin diunduh
                             </h3>
                         </div>
                         <div
-                            class="rounded-2xl border border-orange-500/20 bg-orange-500/10 p-3 text-orange-200"
+                            class="rounded-2xl border-2 border-stone-200 bg-stone-50 p-2 text-stone-605 dark:border-white/10 dark:bg-slate-900/60 dark:text-stone-300"
                         >
-                            <Download class="h-5 w-5" />
+                            <Download class="h-4 w-4" />
                         </div>
                     </div>
 
                     <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                        <label
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Jenis Report</span>
+                        <label class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Jenis Report</span>
                             <select
                                 v-model="reportType"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                                 @change="onReportTypeChange"
                             >
                                 <option
@@ -273,13 +271,11 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Format</span>
+                        <label class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Format</span>
                             <select
                                 v-model="format"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option
                                     v-for="item in formats"
@@ -291,43 +287,33 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Tanggal mulai</span>
+                        <label class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Tanggal mulai</span>
                             <input
                                 v-model="startDate"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             />
                         </label>
 
-                        <label
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Tanggal akhir</span>
+                        <label class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Tanggal akhir</span>
                             <input
                                 v-model="endDate"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             />
                         </label>
 
-                        <label
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Outlet</span>
+                        <label class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Outlet</span>
                             <select
                                 v-model="outletId"
                                 :disabled="!canChooseOutlet"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option value="">
-                                    {{
-                                        canChooseOutlet
-                                            ? 'Semua outlet'
-                                            : 'Outlet scope aktif'
-                                    }}
+                                    {{ canChooseOutlet ? 'Semua outlet' : 'Outlet scope aktif' }}
                                 </option>
                                 <option
                                     v-for="outlet in referenceData.outlets"
@@ -339,14 +325,11 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label
-                            v-if="hasFilter('user_id')"
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Karyawan / Kasir</span>
+                        <label v-if="hasFilter('user_id')" class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Karyawan / Kasir</span>
                             <select
                                 v-model="userId"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option value="">Semua</option>
                                 <option
@@ -359,14 +342,11 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label
-                            v-if="hasFilter('category_id')"
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Kategori Produk</span>
+                        <label v-if="hasFilter('category_id')" class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Kategori Produk</span>
                             <select
                                 v-model="categoryId"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option value="">Semua kategori</option>
                                 <option
@@ -379,28 +359,22 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label
-                            v-if="hasFilter('category')"
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Kategori Pengeluaran</span>
+                        <label v-if="hasFilter('category')" class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Kategori Pengeluaran</span>
                             <input
                                 v-model="expenseCategory"
                                 type="text"
                                 list="expense-categories"
                                 placeholder="contoh: operasional"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100 dark:text-slate-500"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-555/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 placeholder:text-stone-400 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             />
                         </label>
 
-                        <label
-                            v-if="hasFilter('source')"
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Source Penjualan</span>
+                        <label v-if="hasFilter('source')" class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Source Penjualan</span>
                             <select
                                 v-model="source"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option value="">Semua source</option>
                                 <option
@@ -413,14 +387,11 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label
-                            v-if="hasFilter('payment_method')"
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Metode Bayar</span>
+                        <label v-if="hasFilter('payment_method')" class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Metode Bayar</span>
                             <select
                                 v-model="paymentMethod"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option value="">Semua metode</option>
                                 <option
@@ -433,14 +404,11 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label
-                            v-if="hasFilter('type')"
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Tipe Inventori</span>
+                        <label v-if="hasFilter('type')" class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Tipe Inventori</span>
                             <select
                                 v-model="inventoryType"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option
                                     v-for="item in referenceData.inventoryTypes"
@@ -452,14 +420,11 @@ const onReportTypeChange = () => {
                             </select>
                         </label>
 
-                        <label
-                            v-if="hasFilter('status')"
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Status Inventori</span>
+                        <label v-if="hasFilter('status')" class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Status Inventori</span>
                             <select
                                 v-model="inventoryStatus"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100"
+                                class="w-full rounded-2xl border-2 border-stone-200 bg-stone-500/5 px-3 py-2.5 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option
                                     v-for="item in referenceData.inventoryStatuses"
@@ -473,19 +438,17 @@ const onReportTypeChange = () => {
                     </div>
 
                     <div v-if="hasFilter('search')" class="mt-4">
-                        <label
-                            class="space-y-2 text-xs font-semibold text-stone-600 dark:text-slate-300"
-                        >
-                            <span>Pencarian</span>
+                        <label class="block">
+                            <span class="mb-1.5 block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400">Pencarian</span>
                             <div class="relative">
                                 <Search
-                                    class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 dark:text-slate-500"
+                                    class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-450 dark:text-slate-500"
                                 />
                                 <input
                                     v-model="search"
                                     type="text"
                                     placeholder="Cari order, catatan, atau deskripsi"
-                                    class="w-full rounded-2xl border border-stone-200 bg-stone-50 py-3 pl-11 pr-4 text-sm text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-orange-400/40 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100 dark:text-slate-500"
+                                    class="w-full rounded-2xl border-2 border-stone-200 bg-stone-555/5 py-2.5 pl-11 pr-4 text-xs font-bold text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 placeholder:text-stone-400 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                                 />
                             </div>
                         </label>
@@ -494,7 +457,7 @@ const onReportTypeChange = () => {
                     <div class="mt-5 flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-400"
+                            class="rounded-2xl border-2 border-transparent bg-orange-500 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-stone-950 transition hover:bg-orange-400 flex items-center gap-2"
                             @click="downloadReport"
                         >
                             <Download class="h-4 w-4" />
@@ -503,57 +466,50 @@ const onReportTypeChange = () => {
                     </div>
                 </div>
 
+                <!-- Alert Notes side panels -->
                 <div class="space-y-4">
+                    <!-- Format notes panel -->
                     <div
-                        class="rounded-[28px] border border-violet-400/15 bg-violet-500/10 p-5 shadow-lg shadow-violet-950/20"
+                        class="rounded-3xl border-2 border-violet-300 bg-violet-50 p-5 text-sm text-stone-900 shadow-xl dark:border-violet-550/20 dark:bg-violet-950/20 dark:text-violet-100"
                     >
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-start gap-4">
                             <div
-                                class="rounded-2xl border border-violet-300/20 bg-violet-500/10 p-3 text-violet-100"
+                                class="rounded-2xl border-2 border-violet-250 bg-violet-100/50 p-2.5 text-violet-850 dark:border-violet-500/20 dark:bg-violet-950/20 dark:text-violet-300"
                             >
-                                <FileText
-                                    v-if="format === 'pdf'"
-                                    class="h-5 w-5"
-                                />
+                                <FileText v-if="format === 'pdf'" class="h-5 w-5" />
                                 <FileSpreadsheet v-else class="h-5 w-5" />
                             </div>
-                            <div>
+                            <div class="flex-1">
                                 <p
-                                    class="text-[11px] font-black uppercase tracking-[0.24em] text-violet-200/85"
+                                    class="text-[10px] font-black uppercase tracking-[0.24em] text-violet-850 dark:text-violet-400"
                                 >
                                     Catatan Format
                                 </p>
-                                <p
-                                    class="mt-2 text-sm leading-6 text-violet-50/90"
-                                >
+                                <p class="mt-2 text-stone-605 dark:text-violet-200 font-medium leading-relaxed">
                                     {{ activeFormatNote }}
                                 </p>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Scope Notes Panel -->
                     <div
-                        class="rounded-[28px] border border-amber-400/15 bg-amber-500/10 p-5 shadow-lg shadow-amber-950/20"
+                        class="rounded-3xl border-2 border-amber-300 bg-amber-50 p-5 text-sm text-stone-900 shadow-xl dark:border-amber-550/20 dark:bg-amber-950/20 dark:text-amber-100"
                     >
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-start gap-4">
                             <div
-                                class="rounded-2xl border border-amber-300/20 bg-amber-500/10 p-3 text-amber-100"
+                                class="rounded-2xl border-2 border-amber-250 bg-amber-100/50 p-2.5 text-amber-700 dark:border-amber-500/20 dark:bg-amber-950/20 dark:text-amber-300"
                             >
                                 <Printer class="h-5 w-5" />
                             </div>
-                            <div>
+                            <div class="flex-1">
                                 <p
-                                    class="text-[11px] font-black uppercase tracking-[0.24em] text-amber-200/85"
+                                    class="text-[10px] font-black uppercase tracking-[0.24em] text-amber-800 dark:text-amber-400"
                                 >
                                     Scope Export
                                 </p>
-                                <p
-                                    class="mt-2 text-sm leading-6 text-amber-50/90"
-                                >
-                                    Menu ini mengekspor report aktif `#46-#52`
-                                    saja. Report owner-only seperti per outlet
-                                    tetap mengikuti hak akses dari service
-                                    asalnya.
+                                <p class="mt-2 text-stone-605 dark:text-amber-200 font-medium leading-relaxed">
+                                    Menu ini mengekspor report aktif `#46-#52` saja. Report owner-only seperti per outlet tetap mengikuti hak akses dari service asalnya.
                                 </p>
                             </div>
                         </div>

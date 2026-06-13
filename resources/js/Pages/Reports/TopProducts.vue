@@ -151,11 +151,11 @@ const growthClass = (value: number | null) => {
     }
 
     if (value > 0.001) {
-        return 'text-emerald-300';
+        return 'text-emerald-600 dark:text-emerald-400';
     }
 
     if (value < -0.001) {
-        return 'text-rose-300';
+        return 'text-rose-600 dark:text-rose-400';
     }
 
     return 'text-stone-600 dark:text-slate-300';
@@ -163,18 +163,18 @@ const growthClass = (value: number | null) => {
 
 const growthSurfaceClass = (value: number | null) => {
     if (value === null) {
-        return 'border-stone-200 dark:border-slate-700/60 bg-stone-50 dark:bg-slate-900/70';
+        return 'border-2 border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60';
     }
 
     if (value > 0.001) {
-        return 'border-emerald-400/15 bg-emerald-500/10';
+        return 'border-2 border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/5';
     }
 
     if (value < -0.001) {
-        return 'border-rose-400/15 bg-rose-500/10';
+        return 'border-2 border-rose-200 bg-rose-50 dark:border-rose-500/20 dark:bg-rose-500/5';
     }
 
-    return 'border-stone-200 dark:border-slate-700/60 bg-stone-50 dark:bg-slate-900/70';
+    return 'border-2 border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60';
 };
 
 const submitFilters = () => {
@@ -216,24 +216,24 @@ const summaryCards = computed(() => [
         value: props.summary.active_products,
         helper: `${props.summary.total_quantity} item terjual`,
         icon: Package,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-600 dark:text-sky-400',
+        surface: 'bg-sky-50/30 border-stone-200',
     },
     {
         label: 'Revenue Produk',
         value: formatPrice(props.summary.total_revenue),
         helper: 'Akumulasi revenue produk lunas',
         icon: Wallet,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-600 dark:text-emerald-400',
+        surface: 'bg-emerald-50/30 border-emerald-500/20',
     },
     {
         label: 'Rata-rata Revenue',
         value: formatPrice(props.summary.average_revenue_per_product),
         helper: 'Revenue rata-rata per produk',
         icon: BarChart3,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-600 dark:text-amber-400',
+        surface: 'bg-amber-50/30 border-stone-200',
     },
     {
         label: 'Produk Terlaris',
@@ -242,8 +242,8 @@ const summaryCards = computed(() => [
             ? `${props.summary.top_product.quantity} item`
             : 'Belum ada penjualan',
         icon: ShoppingBag,
-        tone: 'text-violet-300',
-        surface: 'border-violet-400/15 bg-violet-500/10',
+        tone: 'text-violet-600 dark:text-violet-400',
+        surface: 'bg-violet-50/30 border-stone-200',
     },
 ]);
 </script>
@@ -271,87 +271,88 @@ const summaryCards = computed(() => [
                     </p>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-3">
+                <div class="flex flex-wrap items-center gap-2">
                     <span
-                        class="rounded-full border border-stone-200 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:border-white/10 dark:text-slate-300"
+                        class="rounded-xl border border-emerald-500/20 bg-emerald-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
                     >
-                        {{ user?.role || '-' }}
+                        Order Lunas
                     </span>
                     <Link
-                        :href="route('reports.cashiers.index')"
-                        class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-white/[0.05] dark:border-white/10 dark:border-white/20 dark:text-slate-200"
+                        :href="route('dashboard')"
+                        class="inline-flex items-center gap-1.5 rounded-2xl border-2 border-stone-200 bg-white px-4 py-2 text-xs font-black text-stone-700 transition hover:border-stone-300 hover:bg-stone-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                     >
-                        <CalendarRange class="h-4 w-4 text-sky-300" />
-                        Lihat Laporan Kasir
+                        <CalendarRange class="h-4 w-4 text-orange-500" />
+                        Dashboard Utama
                     </Link>
                 </div>
             </div>
         </template>
 
         <div class="space-y-6">
-            <!-- Tab Navigation Laporan Transaksi & Kas -->
+            <!-- Navigasi Menu Laporan Keuangan (Horizontal Tabs) -->
             <div
-                class="flex max-w-4xl flex-wrap gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full flex-wrap gap-2 rounded-2xl border-2 border-stone-200 bg-stone-100 p-1.5 dark:border-white/10 dark:bg-slate-950"
             >
                 <Link
                     :href="route('reports.sales.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.sales.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Penjualan & Kas
                 </Link>
                 <Link
                     :href="route('reports.outlets.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.outlets.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Per Outlet
                 </Link>
                 <Link
                     :href="route('reports.cashiers.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.cashiers.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Per Kasir
                 </Link>
                 <Link
                     :href="route('reports.top-products.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.top-products.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Produk Terlaris
                 </Link>
                 <Link
                     :href="route('reports.expenses.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.expenses.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
-                    Pengeluaran
+                    Keuangan
                 </Link>
             </div>
 
+            <!-- Panel Filter -->
             <section
-                class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
             >
                 <div
                     class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
@@ -361,12 +362,12 @@ const summaryCards = computed(() => [
                     >
                         <label v-if="canChooseOutlet" class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-slate-300"
                                 >Outlet</span
                             >
                             <select
                                 v-model="outletFilter"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-3 py-2 text-xs font-bold text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                                 @change="handleOutletChange"
                             >
                                 <option value="">Semua outlet</option>
@@ -382,36 +383,36 @@ const summaryCards = computed(() => [
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-slate-300"
                                 >Dari tanggal</span
                             >
                             <input
                                 v-model="startDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-3 py-2 text-xs font-bold text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             />
                         </label>
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-slate-300"
                                 >Sampai tanggal</span
                             >
                             <input
                                 v-model="endDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-3 py-2 text-xs font-bold text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             />
                         </label>
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-slate-300"
                                 >Kategori</span
                             >
                             <select
                                 v-model="categoryFilter"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-3 py-2 text-xs font-bold text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option value="">Semua kategori</option>
                                 <option
@@ -425,38 +426,37 @@ const summaryCards = computed(() => [
                         </label>
 
                         <div
-                            class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4 dark:border-slate-700/60 dark:bg-slate-900/70"
+                            class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/40"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Periode Sebelumnya
                             </p>
                             <p
-                                class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                class="mt-1 text-xs font-black text-stone-900 dark:text-white"
                             >
                                 {{ formatDate(period.previous.start_date) }}
                             </p>
                             <p
-                                class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                class="text-[10px] font-semibold text-stone-500 dark:text-slate-400"
                             >
-                                sampai
-                                {{ formatDate(period.previous.end_date) }}
+                                s/d {{ formatDate(period.previous.end_date) }}
                             </p>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex items-center gap-2">
                         <button
                             type="button"
-                            class="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
+                            class="rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider text-stone-700 transition hover:bg-stone-100 hover:text-stone-950 dark:border-slate-800 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
                             @click="clearFilters"
                         >
-                            Reset Filter
+                            Reset
                         </button>
                         <button
                             type="button"
-                            class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400"
+                            class="rounded-xl bg-orange-500 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-stone-950 transition hover:bg-orange-400"
                             @click="submitFilters"
                         >
                             Terapkan
@@ -469,50 +469,53 @@ const summaryCards = computed(() => [
                 <article
                     v-for="card in summaryCards"
                     :key="card.label"
-                    class="rounded-3xl border p-5 shadow-[0_20px_60px_rgba(15,23,42,0.22)]"
+                    class="rounded-3xl border-2 p-6 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                     :class="card.surface"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p
-                                class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400"
+                                class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
                             >
                                 {{ card.label }}
                             </p>
                             <p
-                                class="mt-3 text-2xl font-black"
-                                :class="card.tone"
+                                class="mt-2 text-2xl font-black tracking-tight text-stone-900 dark:text-white"
                             >
                                 {{ card.value }}
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-950/30"
+                            class="rounded-2xl border-2 border-stone-100 bg-white p-2.5 dark:border-white/10 dark:bg-slate-900"
                         >
                             <component
                                 :is="card.icon"
-                                class="h-5 w-5 text-stone-900 dark:text-white"
+                                class="h-5 w-5"
+                                :class="card.tone"
                             />
                         </div>
                     </div>
-                    <p class="mt-3 text-xs text-stone-600 dark:text-slate-300">
+                    <p
+                        class="mt-6 border-t border-stone-200/50 pt-4 text-[11px] font-medium text-stone-400 dark:border-white/5 dark:text-slate-500"
+                    >
                         {{ card.helper }}
                     </p>
                 </article>
             </section>
 
+
             <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
                 <article
-                    class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                    class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div>
                         <h3
-                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-700 dark:text-slate-200"
                         >
                             Ranking Kuantitas Produk
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                         >
                             Produk terlaris berdasarkan jumlah item terjual.
                         </p>
@@ -520,7 +523,7 @@ const summaryCards = computed(() => [
 
                     <div
                         v-if="!products.length"
-                        class="mt-5 rounded-2xl border border-dashed border-stone-200 px-4 py-10 text-center text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
+                        class="mt-5 rounded-2xl border-2 border-dashed border-stone-200 px-4 py-10 text-center text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
                     >
                         Belum ada produk terjual pada periode ini.
                     </div>
@@ -529,7 +532,7 @@ const summaryCards = computed(() => [
                         <article
                             v-for="product in products"
                             :key="product.id"
-                            class="rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-4 dark:border-white/10"
+                            class="rounded-2xl border-2 border-stone-200 bg-stone-50/50 px-4 py-4 dark:border-white/10 dark:bg-slate-900/40"
                         >
                             <div
                                 class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
@@ -561,7 +564,7 @@ const summaryCards = computed(() => [
                                         />
                                     </div>
                                     <p
-                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                                     >
                                         {{
                                             product.category?.name ||
@@ -587,7 +590,7 @@ const summaryCards = computed(() => [
 
                                 <div class="md:ps-4 md:text-right">
                                     <p
-                                        class="text-lg font-black text-emerald-300"
+                                        class="text-lg font-black text-emerald-650 dark:text-emerald-400"
                                     >
                                         {{ product.current.quantity }} item
                                     </p>
@@ -614,16 +617,16 @@ const summaryCards = computed(() => [
                 </article>
 
                 <article
-                    class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                    class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div>
                         <h3
-                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-700 dark:text-slate-200"
                         >
                             Highlight Growth
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                         >
                             Produk dengan pertumbuhan quantity paling menonjol.
                         </p>
@@ -633,7 +636,7 @@ const summaryCards = computed(() => [
                         <article
                             v-for="product in products.slice(0, 4)"
                             :key="`${product.id}-growth`"
-                            class="rounded-2xl border px-4 py-4"
+                            class="rounded-2xl border-2 px-4 py-4"
                             :class="
                                 growthSurfaceClass(
                                     product.growth.quantity_percentage,
@@ -653,11 +656,9 @@ const summaryCards = computed(() => [
                                         class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                                     >
                                         {{ product.current.orders }} order • avg
-                                        {{
-                                            product.current.average_quantity_per_order.toFixed(
-                                                1,
-                                            )
-                                        }}
+                                        <span class="font-bold text-stone-850 dark:text-white">
+                                            {{ product.current.average_quantity_per_order.toFixed(1) }}
+                                        </span>
                                         item/order
                                     </p>
                                 </div>
@@ -677,18 +678,16 @@ const summaryCards = computed(() => [
                                 </p>
                             </div>
                             <p
-                                class="mt-3 text-xs text-stone-600 dark:text-slate-300"
+                                class="mt-3 text-xs text-stone-600 dark:text-slate-350"
                             >
-                                Delta quantity
-                                {{
-                                    product.growth.quantity_amount > 0
-                                        ? '+'
-                                        : ''
-                                }}{{ product.growth.quantity_amount }} dan
-                                selisih revenue
-                                {{
-                                    formatPrice(product.growth.revenue_amount)
-                                }}.
+                                Delta quantity:
+                                <span class="font-bold text-stone-850 dark:text-white">
+                                    {{ product.growth.quantity_amount > 0 ? '+' : '' }}{{ product.growth.quantity_amount }}
+                                </span>
+                                dan selisih revenue:
+                                <span class="font-bold text-stone-850 dark:text-white">
+                                    {{ formatPrice(product.growth.revenue_amount) }}
+                                </span>.
                             </p>
                         </article>
                     </div>
@@ -696,30 +695,32 @@ const summaryCards = computed(() => [
             </section>
 
             <section
-                class="rounded-3xl border border-stone-200 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                class="rounded-3xl border-2 border-stone-200 bg-white shadow-xl dark:border-white/10 dark:bg-slate-950/45"
             >
                 <div
-                    class="flex flex-col gap-3 border-b border-stone-200 px-5 py-4 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between"
+                    class="flex flex-col gap-3 border-b-2 border-stone-200 px-5 py-4 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between"
                 >
                     <div>
                         <h3
-                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-700 dark:text-slate-200"
                         >
                             Tabel Produk Terlaris
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                         >
                             Quantity, order, revenue, margin estimasi, dan
                             growth produk dibanding periode sebelumnya.
                         </p>
                     </div>
                     <div
-                        class="rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-3 text-xs text-stone-600 dark:border-white/10 dark:text-slate-300"
+                        class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-xs text-stone-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300"
                     >
                         Growth dibanding
-                        {{ formatDate(period.previous.start_date) }} -
-                        {{ formatDate(period.previous.end_date) }}
+                        <span class="font-bold text-orange-600 dark:text-orange-400">
+                            {{ formatDate(period.previous.start_date) }} -
+                            {{ formatDate(period.previous.end_date) }}
+                        </span>
                     </div>
                 </div>
 
@@ -730,11 +731,11 @@ const summaryCards = computed(() => [
                     Tidak ada produk terlaris pada filter ini.
                 </div>
 
-                <div v-else class="divide-y divide-white/10">
+                <div v-else class="divide-y-2 divide-stone-200 dark:divide-white/10">
                     <article
                         v-for="product in products"
                         :key="`${product.id}-table`"
-                        class="grid gap-4 px-5 py-5 xl:grid-cols-[1.15fr_0.9fr_0.95fr_1fr]"
+                        class="grid gap-4 px-5 py-6 xl:grid-cols-[1.15fr_0.9fr_0.95fr_1fr] hover:bg-stone-50/50 dark:hover:bg-slate-900/20 transition-colors"
                     >
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
@@ -744,7 +745,7 @@ const summaryCards = computed(() => [
                                     {{ product.name }}
                                 </h3>
                                 <span
-                                    class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
+                                    class="rounded-full border-2 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.18em]"
                                     :class="
                                         growthSurfaceClass(
                                             product.growth.quantity_percentage,
@@ -755,12 +756,12 @@ const summaryCards = computed(() => [
                                 </span>
                             </div>
                             <p
-                                class="text-sm text-stone-600 dark:text-slate-300"
+                                class="text-sm font-bold text-stone-600 dark:text-slate-350"
                             >
                                 {{ product.category?.name || 'Tanpa kategori' }}
                             </p>
                             <p
-                                class="text-xs text-stone-400 dark:text-slate-500"
+                                class="text-xs text-stone-500 dark:text-slate-400"
                             >
                                 {{ product.outlet?.name || 'Tanpa outlet' }}
                             </p>
@@ -768,20 +769,20 @@ const summaryCards = computed(() => [
 
                         <div class="space-y-2">
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Quantity saat ini
                             </p>
-                            <p class="text-lg font-black text-emerald-300">
+                            <p class="text-lg font-black text-emerald-600 dark:text-emerald-400">
                                 {{ product.current.quantity }} item
                             </p>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Orders
                             </p>
                             <p
-                                class="text-sm text-stone-600 dark:text-slate-300"
+                                class="text-sm font-bold text-stone-700 dark:text-slate-300"
                             >
                                 {{ product.current.orders }}
                             </p>
@@ -789,21 +790,21 @@ const summaryCards = computed(() => [
 
                         <div class="space-y-2">
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Revenue
                             </p>
                             <p
-                                class="text-sm font-semibold text-stone-900 dark:text-white"
+                                class="text-sm font-black text-stone-900 dark:text-white"
                             >
                                 {{ formatPrice(product.current.revenue) }}
                             </p>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Margin estimasi
                             </p>
-                            <p class="text-sm text-amber-300">
+                            <p class="text-sm font-bold text-amber-600 dark:text-amber-400">
                                 {{
                                     formatPrice(
                                         product.current.estimated_margin,
@@ -814,7 +815,7 @@ const summaryCards = computed(() => [
 
                         <div class="space-y-2">
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Growth quantity
                             </p>
@@ -835,22 +836,18 @@ const summaryCards = computed(() => [
                             <p
                                 class="text-xs text-stone-500 dark:text-slate-400"
                             >
-                                Delta quantity
-                                {{
-                                    product.growth.quantity_amount > 0
-                                        ? '+'
-                                        : ''
-                                }}{{ product.growth.quantity_amount }}
+                                Delta Qty:
+                                <span class="font-bold text-stone-850 dark:text-slate-200">
+                                    {{ product.growth.quantity_amount > 0 ? '+' : '' }}{{ product.growth.quantity_amount }}
+                                </span>
                             </p>
                             <p
                                 class="text-xs text-stone-500 dark:text-slate-400"
                             >
-                                Avg
-                                {{
-                                    product.current.average_quantity_per_order.toFixed(
-                                        1,
-                                    )
-                                }}
+                                Avg Qty:
+                                <span class="font-bold text-stone-850 dark:text-slate-200">
+                                    {{ product.current.average_quantity_per_order.toFixed(1) }}
+                                </span>
                                 item/order
                             </p>
                         </div>

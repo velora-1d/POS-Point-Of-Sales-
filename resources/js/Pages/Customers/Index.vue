@@ -180,16 +180,16 @@ const getOrderStatusLabel = (value: string | null | undefined) => {
 const getOrderStatusClass = (value: string | null | undefined) => {
     switch (value) {
         case 'completed':
-            return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300';
+            return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300';
         case 'cancelled':
-            return 'border-rose-500/20 bg-rose-500/10 text-rose-300';
+            return 'border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-300';
         case 'payment_pending':
-            return 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-300';
+            return 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300';
         case 'pending':
         case 'in_progress':
         case 'waiting_bar_approval':
         case 'ready':
-            return 'border-amber-500/20 bg-amber-500/10 text-amber-300';
+            return 'border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300';
         default:
             return 'border-stone-200 dark:border-slate-700 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300';
     }
@@ -283,7 +283,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                                 Tier Teraktif
                             </p>
                             <p
-                                class="mt-3 max-w-[170px] truncate text-2xl font-black text-amber-300"
+                                class="mt-3 max-w-[170px] truncate text-2xl font-black text-amber-600 dark:text-amber-300"
                             >
                                 {{ loyalty.topTierName || 'Belum Ada' }}
                             </p>
@@ -313,7 +313,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                             >
                                 Pelanggan Kasbon
                             </p>
-                            <p class="mt-3 text-3xl font-black text-rose-300">
+                            <p class="mt-3 text-3xl font-black text-rose-600 dark:text-rose-300">
                                 {{ kasbon.customersWithDebt }}
                             </p>
                             <p
@@ -338,11 +338,11 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-400"
+                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-600 dark:text-rose-400"
                             >
                                 Total Piutang Toko
                             </p>
-                            <p class="mt-3 text-2xl font-black text-rose-300">
+                            <p class="mt-3 text-2xl font-black text-rose-600 dark:text-rose-300">
                                 {{ formatPrice(kasbon.totalOutstanding) }}
                             </p>
                             <p
@@ -352,7 +352,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-rose-500/15 bg-rose-950/60 p-3 text-rose-300"
+                            class="rounded-2xl border border-rose-500/15 bg-rose-500/10 dark:bg-rose-950/60 p-3 text-rose-600 dark:text-rose-300"
                         >
                             <HandCoins class="h-5 w-5" />
                         </div>
@@ -502,7 +502,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                                             class="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
                                             :class="
                                                 customer.membership?.tier?.name
-                                                    ? 'border border-orange-500/20 bg-orange-500/10 text-orange-300'
+                                                    ? 'border border-orange-500/20 bg-orange-500/10 text-orange-700 dark:text-orange-300'
                                                     : 'bg-stone-100 text-stone-500 dark:bg-slate-800 dark:text-slate-400'
                                             "
                                         >
@@ -534,7 +534,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                                         "
                                     >
                                         <span
-                                            class="rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-300"
+                                            class="rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-700 dark:text-rose-300"
                                         >
                                             {{
                                                 formatPrice(
@@ -565,7 +565,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
 
                                 <!-- Total Spent -->
                                 <td
-                                    class="px-5 py-3.5 text-right font-bold text-emerald-300"
+                                    class="px-5 py-3.5 text-right font-bold text-emerald-700 dark:text-emerald-300"
                                 >
                                     {{ formatPrice(customer.total_spent) }}
                                 </td>
@@ -592,6 +592,22 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                                         Detail Riwayat
                                     </button>
                                 </td>
+                            </tr>
+                            <!-- Empty rows to fill up to exactly 20 rows -->
+                            <tr
+                                v-for="i in Math.max(0, 20 - customers.data.length)"
+                                :key="'empty-customer-' + i"
+                                class="border-b border-stone-200/50 dark:border-white/5 h-[72px]"
+                            >
+                                <td class="px-5 py-3.5 text-stone-300 dark:text-slate-700 italic">
+                                    Slot Kosong {{ customers.data.length + i }}
+                                </td>
+                                <td class="px-5 py-3.5 text-stone-300 dark:text-slate-700">-</td>
+                                <td class="px-5 py-3.5 text-stone-300 dark:text-slate-700">-</td>
+                                <td class="px-5 py-3.5 text-right text-stone-300 dark:text-slate-700">-</td>
+                                <td class="px-5 py-3.5 text-right text-stone-300 dark:text-slate-700">-</td>
+                                <td class="px-5 py-3.5 text-stone-300 dark:text-slate-700">-</td>
+                                <td class="px-5 py-3.5 text-center text-stone-300 dark:text-slate-700">-</td>
                             </tr>
                         </tbody>
                     </table>
@@ -648,7 +664,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
             >
                 <div
                     v-if="isTierModalOpen"
-                    class="fixed inset-0 z-50 flex items-center justify-center bg-white p-4 backdrop-blur-sm dark:bg-slate-950/80"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/80"
                 >
                     <div
                         class="w-full max-w-2xl rounded-3xl border border-stone-200 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-slate-900"
@@ -766,7 +782,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
             >
                 <div
                     v-if="selectedCustomerForDetail"
-                    class="fixed inset-0 z-50 flex items-center justify-center bg-white p-4 backdrop-blur-sm dark:bg-slate-950/80"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/80"
                 >
                     <div
                         class="flex max-h-[85vh] w-full max-w-3xl flex-col rounded-3xl border border-stone-200 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-slate-900"
@@ -891,7 +907,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                                                 selectedCustomerForDetail.kasbon_total_due ||
                                                     0,
                                             ) > 0
-                                                ? 'text-rose-300'
+                                                ? 'text-rose-700 dark:text-rose-300'
                                                 : 'text-stone-900 dark:text-white'
                                         "
                                     >
@@ -963,7 +979,7 @@ const getOrderTypeLabel = (value: string | null | undefined) => {
                                         </div>
                                         <div class="text-right">
                                             <p
-                                                class="text-xs font-black text-emerald-300"
+                                                class="text-xs font-black text-emerald-700 dark:text-emerald-300"
                                             >
                                                 {{
                                                     formatPrice(

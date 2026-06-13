@@ -208,29 +208,29 @@ const summaryCards = computed(() => [
     {
         label: 'Total Template',
         value: props.summary.total,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: TicketPercent,
     },
     {
         label: 'Promo Aktif',
         value: props.summary.active,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-600 dark:text-emerald-300',
+        surface: 'border-emerald-200 bg-emerald-50 dark:border-emerald-400/15 dark:bg-emerald-500/10',
         icon: Sparkles,
     },
     {
         label: 'Auto Apply',
         value: props.summary.auto_apply,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-600 dark:text-sky-300',
+        surface: 'border-sky-200 bg-sky-50 dark:border-sky-400/15 dark:bg-sky-500/10',
         icon: Clock3,
     },
     {
         label: 'Bisa Stack',
         value: props.summary.stackable,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-600 dark:text-amber-300',
+        surface: 'border-amber-200 bg-amber-50 dark:border-amber-400/15 dark:bg-amber-500/10',
         icon: Layers3,
     },
 ]);
@@ -394,12 +394,12 @@ const formatDateTime = (value?: string | null) => {
 
 const statusClass = (promoStatus: string) => {
     if (promoStatus === 'active')
-        return 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300';
+        return 'border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-400/20 dark:bg-emerald-500/10 dark:text-emerald-300';
     if (promoStatus === 'inactive')
-        return 'border-slate-500/20 bg-slate-500/10 text-stone-600 dark:text-slate-300';
+        return 'border-stone-200 bg-stone-50 text-stone-600 dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-300';
     if (promoStatus === 'expired')
-        return 'border-rose-400/20 bg-rose-500/10 text-rose-300';
-    return 'border-amber-400/20 bg-amber-500/10 text-amber-300';
+        return 'border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-300';
+    return 'border-amber-200 bg-amber-50 text-amber-600 dark:border-amber-400/20 dark:bg-amber-500/10 dark:text-amber-300';
 };
 
 const getRuleDescription = (rule: PromoRuleRow) => {
@@ -520,7 +520,7 @@ const submitPromo = () => {
         <div class="space-y-5">
             <div
                 v-if="success"
-                class="rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
+                class="rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-800 dark:text-emerald-300"
             >
                 {{ success }}
             </div>
@@ -663,7 +663,7 @@ const submitPromo = () => {
                         </button>
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl border border-orange-400/20 bg-orange-500/10 px-4 py-3 text-sm font-bold text-orange-200 transition hover:bg-orange-500/15"
+                            class="inline-flex items-center gap-2 rounded-2xl border border-orange-400/20 bg-orange-500/10 px-4 py-3 text-sm font-bold text-orange-600 dark:text-orange-300 transition hover:bg-orange-500/15"
                             @click="openCreateModal"
                         >
                             <Plus class="h-4 w-4" />
@@ -744,7 +744,7 @@ const submitPromo = () => {
                                 </span>
                                 <span
                                     v-if="promo.code"
-                                    class="rounded-full border border-orange-400/20 bg-orange-500/10 px-2.5 py-1 font-semibold text-orange-200"
+                                    class="rounded-full border border-orange-400/20 bg-orange-500/10 px-2.5 py-1 font-semibold text-orange-600 dark:text-orange-300"
                                 >
                                     {{ promo.code }}
                                 </span>
@@ -790,14 +790,14 @@ const submitPromo = () => {
                                 <span
                                     v-for="rule in promo.rules || []"
                                     :key="`${promo.id}-${rule.id || rule.trigger}-${rule.reference_id || rule.reference_value || 'none'}`"
-                                    class="rounded-full border border-sky-400/15 bg-sky-500/10 px-2.5 py-1 text-[11px] font-semibold text-sky-200"
+                                    class="rounded-full border border-sky-200 bg-sky-50 dark:border-sky-400/15 dark:bg-sky-500/10 px-2.5 py-1 text-[11px] font-semibold text-sky-600 dark:text-sky-300"
                                 >
                                     {{ getTriggerLabel(rule.trigger) }}:
                                     {{ getStoredRuleDescription(promo, rule) }}
                                 </span>
                                 <span
                                     v-if="promo.min_transaction_amount"
-                                    class="rounded-full border border-amber-400/15 bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-200"
+                                    class="rounded-full border border-amber-200 bg-amber-50 dark:border-amber-400/15 dark:bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-600 dark:text-amber-300"
                                 >
                                     Min. transaksi
                                     {{
@@ -835,7 +835,7 @@ const submitPromo = () => {
                                     promo.happy_hour_start ||
                                     promo.happy_hour_end
                                 "
-                                class="text-xs text-orange-200"
+                                class="text-xs text-orange-600 dark:text-orange-300"
                             >
                                 Happy hour
                                 {{ promo.happy_hour_start || '--:--' }} -
@@ -868,7 +868,7 @@ const submitPromo = () => {
                                 <span
                                     :class="
                                         promo.can_stack
-                                            ? 'text-emerald-300'
+                                            ? 'text-emerald-600 dark:text-emerald-300'
                                             : 'text-stone-400 dark:text-slate-500'
                                     "
                                 >
@@ -884,7 +884,7 @@ const submitPromo = () => {
                         <div class="flex items-start justify-end">
                             <button
                                 type="button"
-                                class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 px-3 py-2 text-sm font-semibold text-stone-800 transition hover:border-orange-400/30 hover:bg-orange-500/10 hover:text-orange-100 dark:border-white/10 dark:text-slate-200"
+                                class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 px-3 py-2 text-sm font-semibold text-stone-800 transition hover:border-orange-400/30 hover:bg-orange-500/10 hover:text-orange-600 dark:hover:text-orange-300 dark:border-white/10 dark:text-slate-200"
                                 @click="openEditModal(promo)"
                             >
                                 <Pencil class="h-4 w-4" />
@@ -910,7 +910,7 @@ const submitPromo = () => {
                             class="rounded-xl border px-3 py-2 text-xs font-semibold transition"
                             :class="
                                 link.active
-                                    ? 'border-orange-400/30 bg-orange-500/15 text-orange-100'
+                                    ? 'border-orange-500/20 bg-orange-500/10 text-orange-600 dark:border-orange-400/30 dark:bg-orange-500/15 dark:text-orange-200'
                                     : 'border-stone-200 text-stone-600 hover:bg-stone-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-300'
                             "
                         >
@@ -923,7 +923,7 @@ const submitPromo = () => {
 
         <div
             v-if="isModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/80"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 py-6 backdrop-blur-sm dark:bg-slate-950/80"
         >
             <div
                 class="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-stone-200 bg-stone-100 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)] dark:border-white/10 dark:bg-slate-950"
@@ -966,7 +966,7 @@ const submitPromo = () => {
                             />
                             <p
                                 v-if="promoForm.errors.name"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-300"
                             >
                                 {{ promoForm.errors.name }}
                             </p>
@@ -1028,7 +1028,7 @@ const submitPromo = () => {
                             />
                             <p
                                 v-if="promoForm.errors.code"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-300"
                             >
                                 {{ promoForm.errors.code }}
                             </p>
@@ -1051,7 +1051,7 @@ const submitPromo = () => {
                             />
                             <p
                                 v-if="promoForm.errors.discount_percent"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-300"
                             >
                                 {{ promoForm.errors.discount_percent }}
                             </p>
@@ -1092,7 +1092,7 @@ const submitPromo = () => {
                             />
                             <p
                                 v-if="promoForm.errors.discount_amount"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-300"
                             >
                                 {{ promoForm.errors.discount_amount }}
                             </p>
@@ -1130,7 +1130,7 @@ const submitPromo = () => {
                             />
                             <p
                                 v-if="promoForm.errors.buy_quantity"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-300"
                             >
                                 {{ promoForm.errors.buy_quantity }}
                             </p>
@@ -1179,7 +1179,7 @@ const submitPromo = () => {
                             />
                             <p
                                 v-if="promoForm.errors.start_date"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-300"
                             >
                                 {{ promoForm.errors.start_date }}
                             </p>
@@ -1197,7 +1197,7 @@ const submitPromo = () => {
                             />
                             <p
                                 v-if="promoForm.errors.end_date"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-300"
                             >
                                 {{ promoForm.errors.end_date }}
                             </p>
@@ -1206,7 +1206,7 @@ const submitPromo = () => {
                         <label class="block">
                             <span
                                 class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
-                                >Happy hour mulai</span
+                                >Jam Mulai (Happy Hour)</span
                             >
                             <input
                                 v-model="promoForm.happy_hour_start"
@@ -1218,7 +1218,7 @@ const submitPromo = () => {
                         <label class="block">
                             <span
                                 class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
-                                >Happy hour selesai</span
+                                >Jam Selesai (Happy Hour)</span
                             >
                             <input
                                 v-model="promoForm.happy_hour_end"
@@ -1248,7 +1248,7 @@ const submitPromo = () => {
                             </div>
                             <button
                                 type="button"
-                                class="inline-flex items-center gap-2 rounded-2xl border border-orange-400/20 bg-orange-500/10 px-3 py-2 text-sm font-semibold text-orange-200"
+                                class="inline-flex items-center gap-2 rounded-2xl border border-orange-400/20 bg-orange-500/10 px-3 py-2 text-sm font-semibold text-orange-600 dark:text-orange-300"
                                 @click="addRule"
                             >
                                 <Plus class="h-4 w-4" />
@@ -1258,7 +1258,7 @@ const submitPromo = () => {
 
                         <div
                             v-if="promoForm.errors.rules"
-                            class="mt-3 text-xs text-rose-300"
+                            class="mt-3 text-xs text-rose-600 dark:text-rose-300"
                         >
                             {{ promoForm.errors.rules }}
                         </div>
@@ -1401,7 +1401,7 @@ const submitPromo = () => {
                                     </div>
                                     <button
                                         type="button"
-                                        class="rounded-2xl border border-rose-400/20 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-200"
+                                        class="rounded-2xl border border-rose-400/20 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-600 dark:text-rose-200"
                                         @click="removeRule(index)"
                                     >
                                         Hapus

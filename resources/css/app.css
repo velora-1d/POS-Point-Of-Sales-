@@ -11,13 +11,91 @@
     }
 
     html {
-        background-color: #f5f5f4; /* bg-stone-100 */
-        color: #1c1917; /* text-stone-900 */
+        background-color: oklch(98.8% 0.003 106.5);
+        color: #000000; /* Pure black text */
         color-scheme: light;
     }
 
+    /* Force all dark and gray text color classes to pure jet black (#000000) in light mode */
+    html:not(.dark) .text-black,
+    html:not(.dark) [class*="text-stone-950"],
+    html:not(.dark) [class*="text-slate-950"],
+    html:not(.dark) [class*="text-zinc-950"],
+    html:not(.dark) [class*="text-neutral-950"],
+    html:not(.dark) [class*="text-gray-950"],
+    html:not(.dark) [class*="text-stone-900"],
+    html:not(.dark) [class*="text-slate-900"],
+    html:not(.dark) [class*="text-zinc-900"],
+    html:not(.dark) [class*="text-neutral-900"],
+    html:not(.dark) [class*="text-gray-900"],
+    html:not(.dark) [class*="text-stone-850"],
+    html:not(.dark) [class*="text-slate-850"],
+    html:not(.dark) [class*="text-zinc-850"],
+    html:not(.dark) [class*="text-neutral-850"],
+    html:not(.dark) [class*="text-gray-850"],
+    html:not(.dark) [class*="text-stone-800"],
+    html:not(.dark) [class*="text-slate-800"],
+    html:not(.dark) [class*="text-zinc-800"],
+    html:not(.dark) [class*="text-neutral-800"],
+    html:not(.dark) [class*="text-gray-800"],
+    html:not(.dark) [class*="text-stone-700"],
+    html:not(.dark) [class*="text-slate-700"],
+    html:not(.dark) [class*="text-zinc-700"],
+    html:not(.dark) [class*="text-neutral-700"],
+    html:not(.dark) [class*="text-gray-700"],
+    html:not(.dark) [class*="text-stone-600"],
+    html:not(.dark) [class*="text-slate-600"],
+    html:not(.dark) [class*="text-zinc-600"],
+    html:not(.dark) [class*="text-neutral-600"],
+    html:not(.dark) [class*="text-gray-600"],
+    html:not(.dark) [class*="text-stone-500"],
+    html:not(.dark) [class*="text-slate-500"],
+    html:not(.dark) [class*="text-zinc-500"],
+    html:not(.dark) [class*="text-neutral-500"],
+    html:not(.dark) [class*="text-gray-500"],
+    html:not(.dark) [class*="text-stone-400"],
+    html:not(.dark) [class*="text-slate-400"],
+    html:not(.dark) [class*="text-zinc-400"],
+    html:not(.dark) [class*="text-neutral-400"],
+    html:not(.dark) [class*="text-gray-400"],
+    html:not(.dark) [class*="text-stone-300"],
+    html:not(.dark) [class*="text-slate-300"],
+    html:not(.dark) [class*="text-zinc-300"],
+    html:not(.dark) [class*="text-neutral-300"],
+    html:not(.dark) [class*="text-gray-300"] {
+        color: #000000 !important;
+    }
+
+    /* Force all dark and gray border color classes to pure jet black (#000000) in light mode */
+    html:not(.dark) [class*="border-stone-"],
+    html:not(.dark) [class*="border-slate-"],
+    html:not(.dark) [class*="border-zinc-"],
+    html:not(.dark) [class*="border-neutral-"],
+    html:not(.dark) [class*="border-gray-"],
+    html:not(.dark) .border-black {
+        border-color: #000000 !important;
+    }
+
+    /* Force all green/emerald borders to deep green (#15803d) in light mode */
+    html:not(.dark) [class*="border-emerald-"],
+    html:not(.dark) [class*="border-green-"] {
+        border-color: #15803d !important;
+    }
+
+    /* Force all red/rose borders to deep red (#be123c) in light mode */
+    html:not(.dark) [class*="border-rose-"],
+    html:not(.dark) [class*="border-red-"] {
+        border-color: #be123c !important;
+    }
+
+    /* Force all amber/yellow borders to deep amber (#b45309) in light mode */
+    html:not(.dark) [class*="border-amber-"],
+    html:not(.dark) [class*="border-yellow-"] {
+        border-color: #b45309 !important;
+    }
+
     html.dark {
-        background-color: rgb(2 6 23); /* bg-slate-950 */
+        background-color: oklch(70.9% 0.01 56.259);
         color: rgb(241 245 249); /* text-slate-100 */
         color-scheme: dark;
     }

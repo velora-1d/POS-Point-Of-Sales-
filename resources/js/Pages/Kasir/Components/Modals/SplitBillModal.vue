@@ -30,10 +30,10 @@ import { Eye, EyeOff, Minus, Plus, X } from '@lucide/vue';
             class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-stone-900/40 p-4 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
-                class="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white text-stone-900 shadow-2xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                class="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border-2 border-stone-200 bg-white text-stone-900 shadow-2xl dark:border-white/10 dark:bg-slate-900 dark:text-slate-100"
             >
                 <div
-                    class="flex items-start justify-between gap-4 border-b border-stone-200 px-6 py-5 dark:border-slate-800/80"
+                    class="flex items-start justify-between gap-4 border-b-2 border-stone-200 px-6 py-5 dark:border-white/5"
                 >
                     <div>
                         <span
@@ -66,7 +66,7 @@ import { Eye, EyeOff, Minus, Plus, X } from '@lucide/vue';
                         <div
                             v-for="(item, index) in splitDraftItems"
                             :key="`split-${item.order_item_id}`"
-                            class="rounded-2xl border border-stone-200 bg-stone-50/50 p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                            class="rounded-2xl border-2 border-stone-200 bg-stone-50/50 p-4 dark:border-white/5 dark:bg-slate-950/60"
                         >
                             <div class="flex items-start justify-between gap-3">
                                 <div class="min-w-0 flex-1">
@@ -120,7 +120,7 @@ import { Eye, EyeOff, Minus, Plus, X } from '@lucide/vue';
                                                 item.split_quantity - 1,
                                             )
                                         "
-                                        class="flex h-8 w-8 items-center justify-center rounded-lg border border-stone-200 bg-stone-100 text-stone-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+                                        class="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-stone-200 bg-stone-100 text-stone-600 dark:border-white/10 dark:bg-slate-900 dark:text-slate-300"
                                     >
                                         <Minus class="h-4 w-4" />
                                     </button>
@@ -136,7 +136,7 @@ import { Eye, EyeOff, Minus, Plus, X } from '@lucide/vue';
                                                 item.split_quantity + 1,
                                             )
                                         "
-                                        class="flex h-8 w-8 items-center justify-center rounded-lg border border-stone-200 bg-stone-100 text-stone-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+                                        class="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-stone-200 bg-stone-100 text-stone-600 dark:border-white/10 dark:bg-slate-900 dark:text-slate-300"
                                     >
                                         <Plus class="h-4 w-4" />
                                     </button>
@@ -187,7 +187,7 @@ import { Eye, EyeOff, Minus, Plus, X } from '@lucide/vue';
                 </div>
 
                 <div
-                    class="flex items-center justify-between gap-4 border-t border-stone-200 px-6 py-4 dark:border-slate-800/80"
+                    class="flex items-center justify-between gap-4 border-t-2 border-stone-200 px-6 py-4 dark:border-white/5"
                 >
                     <div class="text-xs text-stone-500 dark:text-slate-400">
                         {{ splitItemCount }} item akan dipindahkan ke bill
@@ -197,14 +197,14 @@ import { Eye, EyeOff, Minus, Plus, X } from '@lucide/vue';
                         <button
                             @click="closeSplitBill"
                             type="button"
-                            class="rounded-2xl border border-stone-200 bg-white px-4 py-3 text-xs font-bold text-stone-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                            class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-xs font-bold text-stone-700 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300"
                         >
                             Batal
                         </button>
                         <button
                             @click="submitSplitBill"
                             :disabled="splitItemCount === 0 || isSplittingBill"
-                            class="rounded-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-5 py-3 text-xs font-bold text-white disabled:pointer-events-none disabled:opacity-50"
+                            class="rounded-2xl bg-fuchsia-600 hover:bg-fuchsia-500 px-5 py-3 text-xs font-bold text-white transition disabled:pointer-events-none disabled:opacity-50"
                         >
                             {{
                                 isSplittingBill

@@ -41,8 +41,14 @@ class TableController extends Controller
             });
         }
 
+        $qrConfig = $outletId ? $this->tableQrConfigService->getConfigForOutlet($outletId) : null;
+
         return Inertia::render('Settings/Tables', [
             'tables'  => $tables,
+            'qrConfig' => $qrConfig ? [
+                'primary_color' => $qrConfig->primary_color,
+                'qr_template' => $qrConfig->qr_template,
+            ] : null,
             'success' => session('success'),
         ]);
     }

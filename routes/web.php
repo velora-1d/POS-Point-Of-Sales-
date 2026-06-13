@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/notifications', [NotificationSettingController::class, 'index'])->name('settings.notifications.index');
     Route::put('/settings/notifications', [NotificationSettingController::class, 'update'])->name('settings.notifications.update');
     Route::post('/settings/notifications/fcm-token', [NotificationSettingController::class, 'updateFcmToken'])->name('settings.notifications.fcm-token');
+    Route::post('/settings/notifications/test-push', [NotificationSettingController::class, 'testPush'])->name('settings.notifications.test-push');
     Route::get('/settings/backup-security', [BackupSecurityController::class, 'index'])->name('settings.backup-security.index');
     Route::put('/settings/backup-security', [BackupSecurityController::class, 'update'])->name('settings.backup-security.update');
     Route::get('/settings/backup-security/download', [BackupSecurityController::class, 'download'])->name('settings.backup-security.download');
@@ -191,6 +192,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/audio-updates', [OrderController::class, 'audioUpdates'])->name('orders.audio-updates');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order/{order}/pay', [OrderController::class, 'pay'])->name('order.pay');
+    Route::post('/order/{order}/check-payment', [OrderController::class, 'checkPaymentStatus'])->name('order.check-payment');
     Route::post('/order/{order}/deliver', [OrderController::class, 'deliver'])->name('order.deliver');
     Route::patch('/order/{order}', [OrderController::class, 'update'])->name('order.update');
     Route::post('/order/{order}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');

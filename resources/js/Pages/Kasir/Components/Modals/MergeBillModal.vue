@@ -29,10 +29,10 @@ import { Eye, EyeOff } from '@lucide/vue';
             class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-stone-900/40 p-4 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
-                class="relative w-full max-w-2xl rounded-3xl border border-stone-200 bg-white text-stone-900 shadow-2xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                class="relative w-full max-w-2xl rounded-3xl border-2 border-stone-200 bg-white text-stone-900 shadow-2xl dark:border-white/10 dark:bg-slate-900 dark:text-slate-100"
             >
                 <div
-                    class="border-b border-stone-200 px-6 py-5 dark:border-slate-800/80"
+                    class="border-b-2 border-stone-200 px-6 py-5 dark:border-white/5"
                 >
                     <span
                         class="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-fuchsia-600 dark:text-fuchsia-300"
@@ -54,7 +54,7 @@ import { Eye, EyeOff } from '@lucide/vue';
                     <div
                         v-for="order in mergeSelectedOrders"
                         :key="`merge-${order.id}`"
-                        class="rounded-2xl border border-stone-200 bg-stone-50/50 p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                        class="rounded-2xl border-2 border-stone-200 bg-stone-50/50 p-4 dark:border-white/5 dark:bg-slate-950/60"
                     >
                         <div class="flex items-center justify-between gap-3">
                             <div>
@@ -120,19 +120,19 @@ import { Eye, EyeOff } from '@lucide/vue';
                 </div>
 
                 <div
-                    class="flex items-center justify-end gap-3 border-t border-stone-200 px-6 py-4 dark:border-slate-800/80"
+                    class="flex items-center justify-end gap-3 border-t-2 border-stone-200 px-6 py-4 dark:border-white/5 bg-stone-50 dark:bg-slate-900/80"
                 >
                     <button
                         @click="closeMergeBill"
                         type="button"
-                        class="rounded-2xl border border-stone-200 bg-white px-4 py-3 text-xs font-bold text-stone-700 hover:bg-stone-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900"
+                        class="rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-xs font-bold text-stone-700 hover:bg-stone-100 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900"
                     >
                         Batal
                     </button>
                     <button
                         @click="submitMergeBills"
                         :disabled="!canMergeSelectedOrders || isMergingBills"
-                        class="rounded-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 px-5 py-3 text-xs font-bold text-white disabled:pointer-events-none disabled:opacity-50"
+                        class="rounded-2xl bg-fuchsia-600 hover:bg-fuchsia-500 px-5 py-3 text-xs font-bold text-white transition disabled:pointer-events-none disabled:opacity-50"
                     >
                         {{
                             isMergingBills

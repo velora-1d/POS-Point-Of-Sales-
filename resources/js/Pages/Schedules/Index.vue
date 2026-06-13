@@ -182,29 +182,29 @@ const summaryCards = computed(() => [
     {
         label: 'Shift Hari Ini',
         value: props.summary.today,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: CalendarDays,
     },
     {
         label: 'Shift Pagi',
         value: props.summary.morning,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-700 dark:text-amber-300',
+        surface: 'border-amber-200 bg-amber-50 dark:border-amber-500/10 dark:bg-amber-500/10',
         icon: Clock3,
     },
     {
         label: 'Shift Malam',
         value: props.summary.evening,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-700 dark:text-sky-300',
+        surface: 'border-sky-200 bg-sky-50 dark:border-sky-500/10 dark:bg-sky-500/10',
         icon: Layers3,
     },
     {
         label: 'Karyawan Terjadwal',
         value: props.summary.employees,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-700 dark:text-emerald-300',
+        surface: 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/10 dark:bg-emerald-500/10',
         icon: Users,
     },
 ]);
@@ -549,37 +549,37 @@ const submitTakeover = () => {
 
             <!-- Tab Navigation Global -->
             <div
-                class="flex max-w-2xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full flex-wrap gap-1 rounded-2xl border border-stone-200 bg-stone-50 p-1 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/60"
             >
                 <Link
                     :href="route('shifts.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('shifts.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Shift Kasir (Laci Kas)
                 </Link>
                 <Link
                     :href="route('attendance.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('attendance.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Absensi Karyawan
                 </Link>
                 <Link
                     :href="route('schedules.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('schedules.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Jadwal Shift Kerja
@@ -604,7 +604,7 @@ const submitTakeover = () => {
                             Pengaturan Waktu Kerja Shift
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                         >
                             Atur jam mulai dan jam selesai untuk shift pagi dan
                             shift malam secara instan.
@@ -631,7 +631,7 @@ const submitTakeover = () => {
                                 class="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs text-stone-900 focus:border-orange-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
                             />
                             <span
-                                class="text-xs text-stone-400 dark:text-slate-500"
+                                class="text-xs text-stone-400 dark:text-slate-400"
                                 >s/d</span
                             >
                             <input
@@ -655,7 +655,7 @@ const submitTakeover = () => {
                                 class="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs text-stone-900 focus:border-orange-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
                             />
                             <span
-                                class="text-xs text-stone-400 dark:text-slate-500"
+                                class="text-xs text-stone-400 dark:text-slate-400"
                                 >s/d</span
                             >
                             <input
@@ -666,9 +666,9 @@ const submitTakeover = () => {
                         </div>
                     </div>
 
-                    <button
+                     <button
                         type="submit"
-                        class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400"
+                        class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 border border-orange-600 hover:bg-orange-600 px-4 py-3 text-sm font-black text-slate-955 transition shadow-md shadow-orange-500/10 active:scale-[0.98]"
                         :disabled="shiftTimesForm.processing"
                     >
                         <Save class="h-4 w-4" />
@@ -780,12 +780,10 @@ const submitTakeover = () => {
                                 </option>
                             </select>
                         </label>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-3">
+                    </div>                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
+                            class="inline-flex items-center gap-2 rounded-2xl border-2 border-stone-955 bg-stone-100 hover:bg-stone-200 px-4 py-3 text-sm font-black text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                             @click="shiftWeek(-1)"
                         >
                             <ChevronLeft class="h-4 w-4" />
@@ -793,7 +791,7 @@ const submitTakeover = () => {
                         </button>
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
+                            class="inline-flex items-center gap-2 rounded-2xl border-2 border-stone-955 bg-stone-100 hover:bg-stone-200 px-4 py-3 text-sm font-black text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                             @click="shiftWeek(1)"
                         >
                             Minggu Berikutnya
@@ -801,14 +799,14 @@ const submitTakeover = () => {
                         </button>
                         <button
                             type="button"
-                            class="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
+                            class="rounded-2xl border-2 border-stone-955 bg-stone-100 hover:bg-stone-200 px-4 py-3 text-sm font-black text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                             @click="clearFilters"
                         >
                             Reset
                         </button>
                         <button
                             type="button"
-                            class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400"
+                            class="rounded-2xl bg-orange-500 border border-orange-600 hover:bg-orange-600 px-4 py-3 text-sm font-black text-slate-950 transition active:scale-[0.98] shadow-md shadow-orange-500/10"
                             @click="submitFilters"
                         >
                             Terapkan
@@ -850,14 +848,14 @@ const submitTakeover = () => {
                                     Assign Harian
                                 </h3>
                                 <p
-                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                 >
                                     Pilih outlet, karyawan, tanggal, lalu
                                     tempelkan template shift untuk satu hari.
                                 </p>
                             </div>
                             <div
-                                class="rounded-2xl border border-orange-400/20 bg-orange-500/10 p-3 text-orange-200"
+                                class="rounded-2xl border border-orange-200 bg-orange-50 p-3 text-orange-700 dark:border-orange-400/20 dark:bg-orange-500/10 dark:text-orange-300"
                             >
                                 <Plus class="h-5 w-5" />
                             </div>
@@ -872,12 +870,12 @@ const submitTakeover = () => {
                             >
                                 <label class="block">
                                     <span
-                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                         >Outlet</span
                                     >
                                     <select
                                         v-model="dailyForm.outlet_id"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                        class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-950 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option
                                             v-for="outlet in availableFormOutlets"
@@ -889,7 +887,7 @@ const submitTakeover = () => {
                                     </select>
                                     <p
                                         v-if="dailyForm.errors.outlet_id"
-                                        class="mt-2 text-xs text-rose-300"
+                                        class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                     >
                                         {{ dailyForm.errors.outlet_id }}
                                     </p>
@@ -897,12 +895,12 @@ const submitTakeover = () => {
 
                                 <label class="block">
                                     <span
-                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                         >Karyawan</span
                                     >
                                     <select
                                         v-model="dailyForm.user_id"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                        class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option value="">Pilih karyawan</option>
                                         <option
@@ -916,7 +914,7 @@ const submitTakeover = () => {
                                     </select>
                                     <p
                                         v-if="dailyForm.errors.user_id"
-                                        class="mt-2 text-xs text-rose-300"
+                                        class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                     >
                                         {{ dailyForm.errors.user_id }}
                                     </p>
@@ -924,17 +922,17 @@ const submitTakeover = () => {
 
                                 <label class="block">
                                     <span
-                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                         >Tanggal</span
                                     >
                                     <input
                                         v-model="dailyForm.schedule_date"
                                         type="date"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                        class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                     />
                                     <p
                                         v-if="dailyForm.errors.schedule_date"
-                                        class="mt-2 text-xs text-rose-300"
+                                        class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                     >
                                         {{ dailyForm.errors.schedule_date }}
                                     </p>
@@ -942,12 +940,12 @@ const submitTakeover = () => {
 
                                 <label class="block">
                                     <span
-                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                         >Template Shift</span
                                     >
                                     <select
                                         v-model="dailyForm.shift_template_id"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                        class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option value="">Pilih template</option>
                                         <option
@@ -963,17 +961,16 @@ const submitTakeover = () => {
                                         v-if="
                                             dailyForm.errors.shift_template_id
                                         "
-                                        class="mt-2 text-xs text-rose-300"
+                                        class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                     >
                                         {{ dailyForm.errors.shift_template_id }}
                                     </p>
                                 </label>
                             </div>
-
-                            <div class="flex justify-end">
+                             <div class="flex justify-end">
                                 <button
                                     type="submit"
-                                    class="rounded-2xl bg-orange-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                                    class="rounded-2xl bg-orange-500 border border-orange-600 hover:bg-orange-600 px-5 py-3 text-sm font-black text-slate-955 transition disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-orange-500/10 active:scale-[0.98]"
                                     :disabled="dailyForm.processing"
                                 >
                                     {{
@@ -982,7 +979,7 @@ const submitTakeover = () => {
                                             : 'Simpan Jadwal Harian'
                                     }}
                                 </button>
-                            </div>
+                             </div>
                         </form>
                     </article>
 
@@ -997,14 +994,14 @@ const submitTakeover = () => {
                                     Bulk Assign Mingguan
                                 </h3>
                                 <p
-                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                 >
                                     Pilih satu karyawan lalu isi template untuk
                                     7 hari dalam minggu aktif.
                                 </p>
                             </div>
                             <div
-                                class="rounded-2xl border border-sky-400/20 bg-sky-500/10 p-3 text-sky-200"
+                                class="rounded-2xl border border-sky-200 bg-sky-50 p-3 text-sky-700 dark:border-sky-400/20 dark:bg-sky-500/10 dark:text-sky-300"
                             >
                                 <Layers3 class="h-5 w-5" />
                             </div>
@@ -1017,12 +1014,12 @@ const submitTakeover = () => {
                             <div class="grid gap-4 md:grid-cols-3">
                                 <label class="block">
                                     <span
-                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                         >Outlet</span
                                     >
                                     <select
                                         v-model="weeklyForm.outlet_id"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                        class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option
                                             v-for="outlet in availableFormOutlets"
@@ -1034,7 +1031,7 @@ const submitTakeover = () => {
                                     </select>
                                     <p
                                         v-if="weeklyForm.errors.outlet_id"
-                                        class="mt-2 text-xs text-rose-300"
+                                        class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                     >
                                         {{ weeklyForm.errors.outlet_id }}
                                     </p>
@@ -1042,12 +1039,12 @@ const submitTakeover = () => {
 
                                 <label class="block">
                                     <span
-                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                         >Karyawan</span
                                     >
                                     <select
                                         v-model="weeklyForm.user_id"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                        class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option value="">Pilih karyawan</option>
                                         <option
@@ -1061,7 +1058,7 @@ const submitTakeover = () => {
                                     </select>
                                     <p
                                         v-if="weeklyForm.errors.user_id"
-                                        class="mt-2 text-xs text-rose-300"
+                                        class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                     >
                                         {{ weeklyForm.errors.user_id }}
                                     </p>
@@ -1069,17 +1066,17 @@ const submitTakeover = () => {
 
                                 <label class="block">
                                     <span
-                                        class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                        class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                         >Minggu Mulai</span
                                     >
                                     <input
                                         v-model="weeklyForm.week_start"
                                         type="date"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                        class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                     />
                                     <p
                                         v-if="weeklyForm.errors.week_start"
-                                        class="mt-2 text-xs text-rose-300"
+                                        class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                     >
                                         {{ weeklyForm.errors.week_start }}
                                     </p>
@@ -1092,21 +1089,21 @@ const submitTakeover = () => {
                                 <label
                                     v-for="day in assignmentDays"
                                     :key="day.date"
-                                    class="block rounded-2xl border border-stone-200 bg-white/[0.03] p-4 dark:border-white/10"
+                                    class="block rounded-2xl border-2 border-stone-300 bg-white p-4 dark:border-white/20 dark:bg-slate-950/40"
                                 >
                                     <span
-                                        class="block text-xs font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                        class="block text-xs font-black uppercase tracking-[0.18em] text-stone-600 dark:text-slate-350"
                                     >
                                         {{ day.label }}
                                     </span>
                                     <span
-                                        class="mt-1 block text-sm font-bold text-stone-900 dark:text-white"
+                                        class="mt-1 block text-sm font-black text-stone-955 dark:text-white"
                                     >
                                         {{ day.shortDate }}
                                     </span>
                                     <select
                                         v-model="weeklyForm.days[day.index]"
-                                        class="mt-3 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                        class="mt-3 w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-950 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                     >
                                         <option :value="null">
                                             Libur / Kosong
@@ -1125,15 +1122,14 @@ const submitTakeover = () => {
 
                             <p
                                 v-if="weeklyForm.errors.days"
-                                class="text-xs text-rose-300"
+                                class="text-xs text-rose-600 dark:text-rose-450 font-bold"
                             >
                                 {{ weeklyForm.errors.days }}
                             </p>
-
                             <div class="flex justify-end">
                                 <button
                                     type="submit"
-                                    class="rounded-2xl bg-sky-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60"
+                                    class="rounded-2xl bg-sky-500 border border-sky-600 hover:bg-sky-600 px-5 py-3 text-sm font-black text-slate-955 transition disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-sky-500/10 active:scale-[0.98]"
                                     :disabled="weeklyForm.processing"
                                 >
                                     {{
@@ -1164,7 +1160,7 @@ const submitTakeover = () => {
                                     Jadwal Hari Ini
                                 </h3>
                                 <p
-                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                 >
                                     {{
                                         formatDate(
@@ -1200,7 +1196,7 @@ const submitTakeover = () => {
                                             {{ schedule.user?.name || '-' }}
                                         </p>
                                         <p
-                                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                            class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                         >
                                             {{
                                                 schedule.user?.outlet?.name ||
@@ -1255,7 +1251,7 @@ const submitTakeover = () => {
                                     Template Shift Aktif
                                 </h3>
                                 <p
-                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                 >
                                     Template dipakai juga untuk fondasi menu
                                     buka/tutup shift kasir berikutnya.
@@ -1290,7 +1286,7 @@ const submitTakeover = () => {
                                             {{ template.name }}
                                         </p>
                                         <p
-                                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                            class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                         >
                                             {{
                                                 referenceData.outlets.find(
@@ -1332,7 +1328,7 @@ const submitTakeover = () => {
                             Grid Jadwal Mingguan
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                         >
                             Minggu {{ weekRangeLabel }}.
                         </p>
@@ -1357,14 +1353,14 @@ const submitTakeover = () => {
                         <thead class="bg-white/[0.03]">
                             <tr>
                                 <th
-                                    class="px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
+                                    class="px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-400"
                                 >
                                     Karyawan
                                 </th>
                                 <th
                                     v-for="day in gridDays"
                                     :key="day.date"
-                                    class="min-w-[160px] px-4 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-500"
+                                    class="min-w-[160px] px-4 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-slate-400"
                                 >
                                     <div>{{ day.label }}</div>
                                     <div
@@ -1388,7 +1384,7 @@ const submitTakeover = () => {
                                         {{ employee.name }}
                                     </p>
                                     <p
-                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                     >
                                         {{
                                             employee.outlet?.name ||
@@ -1446,25 +1442,25 @@ const submitTakeover = () => {
                                             }}
                                         </p>
                                         <button
-                                            v-if="canManage"
-                                            type="button"
-                                            class="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-xl bg-stone-200 px-2 py-1 text-[10px] font-bold text-stone-900 transition duration-150 hover:bg-stone-200 dark:bg-white/10 dark:bg-white/20 dark:text-white"
-                                            @click="
-                                                openTakeoverModal(
-                                                    getScheduleForCell(
-                                                        employee.id,
-                                                        day.date,
-                                                    ),
-                                                )
-                                            "
-                                        >
-                                            <ArrowLeftRight class="h-3 w-3" />
-                                            Ambil Alih
-                                        </button>
+                                             v-if="canManage"
+                                             type="button"
+                                             class="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-stone-400 bg-stone-100 hover:bg-stone-200 px-2 py-1 text-[10px] font-black text-stone-955 transition duration-150 active:scale-[0.98] dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
+                                             @click="
+                                                 openTakeoverModal(
+                                                     getScheduleForCell(
+                                                         employee.id,
+                                                         day.date,
+                                                     ),
+                                                 )
+                                             "
+                                         >
+                                             <ArrowLeftRight class="h-3 w-3" />
+                                             Ambil Alih
+                                         </button>
                                     </div>
                                     <div
                                         v-else
-                                        class="rounded-2xl border border-dashed border-stone-200 px-3 py-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-stone-400 dark:border-white/10 dark:text-slate-500"
+                                        class="rounded-2xl border border-dashed border-stone-200 px-3 py-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-stone-400 dark:border-white/10 dark:text-slate-400"
                                     >
                                         Libur / Belum diassign
                                     </div>
@@ -1479,7 +1475,7 @@ const submitTakeover = () => {
         <!-- Modal Takeover Shift -->
         <div
             v-if="isTakeoverOpen && activeTakeoverSchedule"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/80"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 py-6 backdrop-blur-sm dark:bg-slate-950/80"
         >
             <div
                 class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-stone-200 bg-stone-100 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)] dark:border-white/10 dark:bg-slate-950"
@@ -1503,7 +1499,7 @@ const submitTakeover = () => {
                     </div>
                     <button
                         type="button"
-                        class="rounded-xl border border-stone-200 p-1.5 text-stone-500 transition hover:border-stone-200 hover:text-stone-900 dark:border-white/10 dark:border-white/20 dark:text-slate-400 dark:text-white"
+                        class="rounded-xl border-2 border-stone-955 bg-stone-50 hover:bg-stone-200 p-1.5 text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                         @click="isTakeoverOpen = false"
                     >
                         <X class="h-4 w-4" />
@@ -1517,7 +1513,7 @@ const submitTakeover = () => {
                     >
                         <div>
                             <span
-                                class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-400"
                                 >Karyawan Terjadwal</span
                             >
                             <p
@@ -1531,7 +1527,7 @@ const submitTakeover = () => {
                         >
                             <div>
                                 <span
-                                    class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-400"
                                     >Shift</span
                                 >
                                 <p class="text-xs font-bold text-orange-200">
@@ -1545,7 +1541,7 @@ const submitTakeover = () => {
                             </div>
                             <div>
                                 <span
-                                    class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-400"
                                     >Tanggal</span
                                 >
                                 <p
@@ -1595,28 +1591,28 @@ const submitTakeover = () => {
                         </label>
 
                         <div
-                            class="flex items-center justify-end gap-3 border-t border-stone-200 pt-4 dark:border-white/10"
-                        >
-                            <button
-                                type="button"
-                                class="rounded-xl border border-stone-200 px-4 py-2.5 text-xs font-semibold text-stone-600 transition hover:bg-stone-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-300"
-                                @click="isTakeoverOpen = false"
-                            >
-                                Batal
-                            </button>
-                            <button
-                                type="submit"
-                                class="inline-flex items-center gap-1.5 rounded-xl bg-orange-500 px-4 py-2.5 text-xs font-bold text-slate-950 transition hover:bg-orange-400"
-                                :disabled="takeoverForm.processing"
-                            >
-                                <Save class="h-3.5 w-3.5" />
-                                {{
-                                    takeoverForm.processing
-                                        ? 'Menyimpan...'
-                                        : 'Konfirmasi'
-                                }}
-                            </button>
-                        </div>
+                             class="flex items-center justify-end gap-3 border-t border-stone-200 pt-4 dark:border-white/10"
+                         >
+                             <button
+                                 type="button"
+                                 class="rounded-xl border-2 border-stone-955 bg-stone-100 hover:bg-stone-200 px-4 py-2.5 text-xs font-black text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                                 @click="isTakeoverOpen = false"
+                             >
+                                 Batal
+                             </button>
+                             <button
+                                 type="submit"
+                                 class="inline-flex items-center gap-1.5 rounded-xl bg-orange-500 border border-orange-600 hover:bg-orange-600 px-4 py-2.5 text-xs font-black text-stone-955 transition active:scale-[0.98] shadow-md shadow-orange-500/10"
+                                 :disabled="takeoverForm.processing"
+                             >
+                                 <Save class="h-3.5 w-3.5" />
+                                 {{
+                                     takeoverForm.processing
+                                         ? 'Menyimpan...'
+                                         : 'Konfirmasi'
+                                 }}
+                             </button>
+                         </div>
                     </form>
                 </div>
             </div>

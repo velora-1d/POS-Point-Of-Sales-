@@ -69,6 +69,8 @@ class OrderBillService
             $paymentMethod,
             data_get($order->metadata, 'promo.manual_code'),
         );
+        $sourcePricing = array_merge($sourcePricing, $this->calculateTax($sourcePricing, $order->outlet));
+
         $newOrderPricing = $this->promoEngineService->calculate(
             $order->outlet_id,
             $newOrderItems,
@@ -76,6 +78,7 @@ class OrderBillService
             $paymentMethod,
             null,
         );
+        $newOrderPricing = array_merge($newOrderPricing, $this->calculateTax($newOrderPricing, $order->outlet));
 
         $originalStatus = $order->status;
         $keepStatus = in_array($originalStatus, ['waiting_bar_approval', 'ready', 'delivered'], true);
@@ -212,6 +215,7 @@ class OrderBillService
             $paymentMethods->count() === 1 ? $paymentMethods->first() : null,
             $manualCodes->count() === 1 ? $manualCodes->first() : null,
         );
+        $mergedPricing = array_merge($mergedPricing, $this->calculateTax($mergedPricing, $baseOrder->outlet));
 
         // Cari status gabungan dengan prioritas tertinggi
         $statusPriority = [
@@ -401,6 +405,33 @@ class OrderBillService
             'discount_total' => $pricing['discount_amount'],
             'applied_promos' => $pricing['applied_promos'],
             'evaluated_at' => now()->toIso8601String(),
+        ];
+    }
+
+    protected function calculateTax(array $pricing, \App\Models\Outlet $outlet): array
+    {
+        $taxPercentage = (float) ($outlet->settings['tax_percentage'] ?? 0);
+        $isInclusive = (bool) ($outlet->settings['tax_is_inclusive'] ?? false);
+
+        $taxableAmount = (float) ($pricing['subtotal'] - $pricing['discount_amount']);
+        $taxAmount = 0;
+        $totalAmount = $taxableAmount;
+
+        if ($taxPercentage > 0) {
+            if ($isInclusive) {
+                $taxAmount = $taxableAmount - ($taxableAmount / (1 + ($taxPercentage / 100)));
+                $totalAmount = $taxableAmount;
+            } else {
+                $taxAmount = $taxableAmount * ($taxPercentage / 100);
+                $totalAmount = $taxableAmount + $taxAmount;
+            }
+        }
+
+        return [
+            'tax_amount' => round($taxAmount, 2),
+            'total_amount' => round($totalAmount, 2),
+            'tax_percentage' => $taxPercentage,
+            'tax_is_inclusive' => $isInclusive,
         ];
     }
 }

@@ -88,31 +88,31 @@ const needsExpiredStockDetails = computed(() => {
 
 const summaryCards = computed(() => [
     {
-        label: 'Bahan Aktif',
+        label: 'Bahan Baku Aktif',
         value: props.summary.total,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-slate-800 dark:bg-slate-900/40',
         icon: Boxes,
     },
     {
         label: 'Stok Sehat',
         value: props.summary.healthy,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/8',
+        tone: 'text-emerald-700 dark:text-emerald-300',
+        surface: 'border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20',
         icon: Warehouse,
     },
     {
         label: 'Stok Menipis',
         value: props.summary.low,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
+        tone: 'text-amber-700 dark:text-amber-300',
+        surface: 'border-amber-500/20 bg-amber-50/50 dark:bg-amber-950/20',
         icon: AlertTriangle,
     },
     {
         label: 'Nonaktif',
         value: props.summary.inactive,
-        tone: 'text-stone-600 dark:text-slate-300',
-        surface: 'border-slate-400/15 bg-slate-500/8',
+        tone: 'text-stone-650 dark:text-slate-350',
+        surface: 'border-stone-200 bg-stone-100 dark:border-slate-800 dark:bg-slate-900/40',
         icon: Archive,
     },
 ]);
@@ -158,14 +158,14 @@ const getStockStateClass = (material: RawMaterialRow) => {
     }
 
     if (quantity <= 0) {
-        return 'border-rose-500/20 bg-rose-500/10 text-rose-300';
+        return 'border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-300';
     }
 
     if (quantity <= minimum) {
-        return 'border-amber-500/20 bg-amber-500/10 text-amber-300';
+        return 'border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300';
     }
 
-    return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300';
+    return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300';
 };
 
 const submitFilters = () => {
@@ -305,14 +305,14 @@ const submitStockAction = () => {
                     v-for="stat in summaryCards"
                     :key="stat.label"
                     :class="[
-                        'rounded-[22px] border px-4 py-4 shadow-lg shadow-slate-950/10',
+                        'rounded-[22px] border px-4 py-4',
                         stat.surface,
                     ]"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 {{ stat.label }}
                             </p>
@@ -329,14 +329,14 @@ const submitStockAction = () => {
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
                 <div
                     class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between"
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-300"
                         >
                             Filter Inventori
                         </p>
@@ -387,7 +387,7 @@ const submitStockAction = () => {
 
                             <button
                                 type="submit"
-                                class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
+                                class="rounded-2xl bg-orange-500 hover:bg-orange-600 px-4 py-3 text-sm font-bold text-white transition"
                             >
                                 Terapkan
                             </button>
@@ -396,7 +396,7 @@ const submitStockAction = () => {
                         <button
                             type="button"
                             @click="openCreateModal"
-                            class="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-300"
+                            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 px-4 py-3 text-sm font-bold text-white transition"
                         >
                             <Plus class="h-4 w-4" />
                             Tambah Bahan
@@ -406,14 +406,14 @@ const submitStockAction = () => {
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 bg-stone-50 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
                 <div
                     class="flex flex-col gap-2 border-b border-stone-200 px-5 py-4 dark:border-slate-800/80 sm:flex-row sm:items-center sm:justify-between"
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-300"
                         >
                             Daftar Bahan Baku
                         </p>
@@ -428,7 +428,7 @@ const submitStockAction = () => {
                     </div>
                     <Link
                         :href="route('products.stock')"
-                        class="inline-flex items-center gap-2 text-xs font-semibold text-orange-300 transition hover:text-orange-200"
+                        class="inline-flex items-center gap-2 text-xs font-semibold text-orange-700 dark:text-orange-300 transition hover:text-orange-600 dark:hover:text-orange-200"
                     >
                         <Boxes class="h-4 w-4" />
                         Buka Stok Produk Jadi
@@ -494,7 +494,7 @@ const submitStockAction = () => {
                                     <button
                                         type="button"
                                         @click="openStockModal(material, 'add')"
-                                        class="inline-flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-300"
+                                        class="inline-flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300"
                                     >
                                         <Plus class="h-3.5 w-3.5" />
                                         Tambah Stok
@@ -504,7 +504,7 @@ const submitStockAction = () => {
                                         @click="
                                             openStockModal(material, 'adjust')
                                         "
-                                        class="inline-flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-300"
+                                        class="inline-flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-700 dark:text-amber-300"
                                     >
                                         <RefreshCw class="h-3.5 w-3.5" />
                                         Adjustment
@@ -593,6 +593,20 @@ const submitStockAction = () => {
                             </div>
                         </div>
                     </article>
+
+                    <!-- Empty slots to pad the list to exactly 20 items in grid -->
+                    <div
+                        v-for="i in Math.max(0, 20 - materials.data.length)"
+                        :key="'empty-material-' + i"
+                        class="rounded-[24px] border border-dashed border-stone-200 bg-white/20 p-5 h-40 flex flex-col items-center justify-center dark:border-slate-800/80 dark:bg-slate-900/10"
+                    >
+                        <div class="h-6 w-6 rounded-full border border-dashed border-stone-300 flex items-center justify-center text-[10px] font-black text-stone-300 dark:border-slate-800 dark:text-slate-700">
+                            {{ materials.data.length + i }}
+                        </div>
+                        <span class="mt-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-300 dark:text-slate-600">
+                            Slot Bahan Baku Kosong
+                        </span>
+                    </div>
                 </div>
 
                 <div
@@ -619,11 +633,11 @@ const submitStockAction = () => {
 
         <div
             v-if="isMaterialModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 backdrop-blur-sm dark:bg-slate-950/80"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 backdrop-blur-sm dark:bg-slate-950/80"
             @click.self="closeMaterialModal"
         >
             <div
-                class="w-full max-w-2xl rounded-[28px] border border-stone-200 bg-stone-100 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
+                class="w-full max-w-2xl rounded-[28px] border border-stone-200 bg-stone-100 p-5 dark:border-slate-800/80 dark:bg-slate-950"
             >
                 <div class="flex items-start justify-between gap-4">
                     <div>
@@ -670,7 +684,7 @@ const submitStockAction = () => {
                             />
                             <p
                                 v-if="materialForm.errors.name"
-                                class="mt-1 text-xs text-rose-300"
+                                class="mt-1 text-xs text-rose-700 dark:text-rose-300"
                             >
                                 {{ materialForm.errors.name }}
                             </p>
@@ -689,7 +703,7 @@ const submitStockAction = () => {
                             />
                             <p
                                 v-if="materialForm.errors.unit"
-                                class="mt-1 text-xs text-rose-300"
+                                class="mt-1 text-xs text-rose-700 dark:text-rose-300"
                             >
                                 {{ materialForm.errors.unit }}
                             </p>
@@ -709,7 +723,7 @@ const submitStockAction = () => {
                             />
                             <p
                                 v-if="materialForm.errors.quantity"
-                                class="mt-1 text-xs text-rose-300"
+                                class="mt-1 text-xs text-rose-700 dark:text-rose-300"
                             >
                                 {{ materialForm.errors.quantity }}
                             </p>
@@ -729,7 +743,7 @@ const submitStockAction = () => {
                             />
                             <p
                                 v-if="materialForm.errors.minimum_stock"
-                                class="mt-1 text-xs text-rose-300"
+                                class="mt-1 text-xs text-rose-700 dark:text-rose-300"
                             >
                                 {{ materialForm.errors.minimum_stock }}
                             </p>
@@ -750,7 +764,7 @@ const submitStockAction = () => {
                             />
                             <p
                                 v-if="materialForm.errors.cost_per_unit"
-                                class="mt-1 text-xs text-rose-300"
+                                class="mt-1 text-xs text-rose-700 dark:text-rose-300"
                             >
                                 {{ materialForm.errors.cost_per_unit }}
                             </p>
@@ -814,7 +828,7 @@ const submitStockAction = () => {
                         <button
                             type="submit"
                             :disabled="materialForm.processing"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 disabled:opacity-60 dark:text-white"
+                            class="rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition disabled:opacity-60"
                         >
                             {{
                                 materialForm.processing
@@ -829,11 +843,11 @@ const submitStockAction = () => {
 
         <div
             v-if="stockTarget"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 backdrop-blur-sm dark:bg-slate-950/80"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 backdrop-blur-sm dark:bg-slate-950/80"
             @click.self="closeStockModal"
         >
             <div
-                class="w-full max-w-xl rounded-[28px] border border-stone-200 bg-stone-100 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
+                class="w-full max-w-xl rounded-[28px] border border-stone-200 bg-stone-100 p-5 dark:border-slate-800/80 dark:bg-slate-950"
             >
                 <div class="flex items-start justify-between gap-4">
                     <div>
@@ -894,7 +908,7 @@ const submitStockAction = () => {
                         />
                         <p
                             v-if="stockForm.errors.quantity"
-                            class="mt-1 text-xs text-rose-300"
+                            class="mt-1 text-xs text-rose-700 dark:text-rose-300"
                         >
                             {{ stockForm.errors.quantity }}
                         </p>
@@ -917,7 +931,7 @@ const submitStockAction = () => {
                             />
                             <p
                                 v-if="stockForm.errors.batch_code"
-                                class="mt-1 text-xs text-rose-300"
+                                class="mt-1 text-xs text-rose-700 dark:text-rose-300"
                             >
                                 {{ stockForm.errors.batch_code }}
                             </p>
@@ -942,7 +956,7 @@ const submitStockAction = () => {
                             </p>
                             <p
                                 v-if="stockForm.errors.expired_date"
-                                class="mt-1 text-xs text-rose-300"
+                                class="mt-1 text-xs text-rose-700 dark:text-rose-300"
                             >
                                 {{ stockForm.errors.expired_date }}
                             </p>
@@ -960,7 +974,7 @@ const submitStockAction = () => {
                         <button
                             type="submit"
                             :disabled="stockForm.processing"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 disabled:opacity-60 dark:text-white"
+                            class="rounded-2xl bg-orange-500 hover:bg-orange-600 px-4 py-3 text-sm font-bold text-white disabled:opacity-60 transition"
                         >
                             {{
                                 stockForm.processing

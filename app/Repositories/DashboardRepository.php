@@ -21,10 +21,11 @@ class DashboardRepository
             ->get(['id', 'name']);
     }
 
-    public function getTodayOrders(?string $scopeOutletId, CarbonImmutable $date): Collection
+    public function getOrdersInDateRange(?string $scopeOutletId, CarbonImmutable $startDate, CarbonImmutable $endDate): Collection
     {
         return Order::query()
-            ->whereDate('created_at', $date->toDateString())
+            ->whereDate('created_at', '>=', $startDate->toDateString())
+            ->whereDate('created_at', '<=', $endDate->toDateString())
             ->when($scopeOutletId, fn (Builder $query) => $query->where('outlet_id', $scopeOutletId))
             ->where('status', '!=', 'cancelled')
             ->get([
@@ -38,15 +39,6 @@ class DashboardRepository
                 'metadata',
                 'created_at',
             ]);
-    }
-
-    public function getYesterdayOrders(?string $scopeOutletId, CarbonImmutable $date): Collection
-    {
-        return Order::query()
-            ->whereDate('created_at', $date->subDay()->toDateString())
-            ->when($scopeOutletId, fn (Builder $query) => $query->where('outlet_id', $scopeOutletId))
-            ->where('status', '!=', 'cancelled')
-            ->get(['id', 'outlet_id', 'status', 'total_amount', 'paid_amount', 'metadata', 'created_at']);
     }
 
     public function getTopProductsForOrders(array $orderIds, int $limit = 5): Collection

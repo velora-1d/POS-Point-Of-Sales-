@@ -31,6 +31,7 @@ import {
     selectTakeawayOrder,
     showTakeoverModal,
     timeRemainingText,
+    isShiftExpired,
 } from '@/Composables/useOrderState';
 
 const props = defineProps<{
@@ -105,25 +106,24 @@ onBeforeUnmount(() => {
                     >
                         <span>Layanan Transaksi Kasir</span>
                         <span
-                            class="rounded-md border border-orange-500/20 bg-orange-500/10 px-2 py-0.5 text-xs font-semibold text-orange-600 dark:text-orange-400"
+                            class="rounded-full border-2 border-stone-200 bg-stone-500/5 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-stone-600 dark:border-white/10 dark:text-slate-350"
                         >
-                            Menu 1 - 6
+                            POS Utama
                         </span>
                     </h2>
-                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400">
-                        Sistem pembuatan pesanan, pelacakan antrian aktif, dan
-                        visualisasi detail meja secara real-time.
+                    <p class="mt-1 text-xs text-stone-500 dark:text-slate-400 font-semibold">
+                        Sistem pembuatan pesanan, pelacakan antrian aktif, dan visualisasi detail meja secara real-time.
                     </p>
                 </div>
 
                 <!-- Info Kasir Bertugas & Shift (Premium Design) -->
                 <div
                     v-if="activeShift"
-                    class="flex select-none items-center gap-3 rounded-2xl border border-stone-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/50"
+                    class="flex select-none items-center gap-3 rounded-2xl border-2 border-stone-200 bg-white p-3 shadow-md dark:border-white/10 dark:bg-slate-950"
                 >
                     <!-- Foto / Inisial Profile Karyawan -->
                     <div
-                        class="flex h-10 w-10 items-center justify-center rounded-xl border border-orange-500/20 bg-orange-500/10 text-sm font-black text-orange-500 dark:text-orange-400"
+                        class="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-stone-200 bg-orange-500 text-sm font-black text-stone-950 dark:border-white/10"
                     >
                         {{
                             activeShift.user?.name
@@ -132,26 +132,32 @@ onBeforeUnmount(() => {
                         }}
                     </div>
                     <!-- Detail Nama & Info Shift -->
-                    <div class="flex min-w-[120px] flex-col">
-                        <span
-                            class="line-clamp-1 text-xs font-black leading-tight tracking-tight text-stone-900 dark:text-white"
-                            >{{ activeShift.user?.name }}</span
-                        >
+                    <div class="flex flex-col">
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <span
+                                class="line-clamp-1 text-xs font-black leading-tight tracking-tight text-stone-900 dark:text-white"
+                                >{{ activeShift.user?.name }}</span
+                            >
+                            <span
+                                v-if="activeShift.user?.role"
+                                class="rounded-full border-2 border-orange-200 bg-orange-50 dark:bg-orange-500/10 dark:border-orange-500/20 px-2 py-0.5 text-[8px] font-black uppercase text-orange-700 dark:text-orange-400"
+                            >
+                                {{ activeShift.user.role }}
+                            </span>
+                        </div>
                         <div
-                            class="mt-1 flex items-center gap-1.5 text-[9px] font-semibold text-stone-500 dark:text-slate-400"
+                            class="mt-1 flex flex-wrap items-center gap-1.5 text-[9px] font-black"
                         >
                             <span
-                                class="rounded bg-stone-100 px-1 py-0.5 font-sans tracking-wide text-stone-600 dark:bg-slate-800 dark:text-slate-300"
+                                class="rounded-full border-2 border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans tracking-wide text-stone-700 dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-300"
                             >
-                                {{
-                                    activeShift.shift_template?.name ||
-                                    'Shift Aktif'
-                                }}
+                                {{ activeShift.shift_template?.name || 'Shift Hack' }}
                             </span>
                             <span
-                                class="flex items-center gap-0.5 text-orange-500 dark:text-orange-400"
+                                class="flex items-center gap-0.5 rounded-full border-2 px-2.5 py-0.5 font-black uppercase tracking-wider text-white"
+                                :class="isShiftExpired ? 'bg-rose-600 dark:bg-rose-700 animate-pulse border-rose-700' : 'bg-emerald-600 dark:bg-emerald-700 border-emerald-700'"
                             >
-                                <Clock class="h-3 w-3 shrink-0" />
+                                <Clock class="h-2.5 w-2.5 shrink-0" />
                                 <span>{{ timeRemainingText }}</span>
                             </span>
                         </div>
@@ -160,7 +166,7 @@ onBeforeUnmount(() => {
                     <button
                         @click="showTakeoverModal = true"
                         type="button"
-                        class="ml-2 flex h-9 items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-100 px-3 text-xs font-bold text-stone-700 transition-all hover:bg-stone-200 hover:text-stone-950 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white"
+                        class="ml-2 flex h-9 items-center gap-1.5 rounded-2xl border-2 border-transparent bg-orange-500 px-3.5 text-xs font-black text-stone-950 transition hover:bg-orange-400"
                     >
                         <ArrowLeftRight class="h-3.5 w-3.5 shrink-0" />
                         <span>Ganti Shift</span>
@@ -172,27 +178,27 @@ onBeforeUnmount(() => {
         <!-- Dynamic Success Alert -->
         <div
             v-if="success"
-            class="mb-6 flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/15 p-4 text-sm font-medium text-emerald-400"
+            class="mb-6 flex items-center gap-2 rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4 text-sm font-bold text-emerald-800"
         >
             <span
-                class="h-2 w-2 animate-ping rounded-full bg-emerald-500"
+                class="h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-600"
             ></span>
             <span>{{ success }}</span>
         </div>
 
         <!-- Sub-tab Navigation (Premium Glassmorphism Switcher) -->
         <div
-            class="mb-6 flex w-full select-none items-center justify-between gap-1 rounded-2xl border border-stone-200 bg-white/80 p-2 shadow-lg backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/60"
+            class="mb-6 flex w-full select-none items-center justify-between gap-2 rounded-2xl border-2 border-stone-200 bg-stone-100 p-1.5 dark:border-white/10 dark:bg-slate-950"
         >
             <button
                 type="button"
                 @click="activeSubTab = 'new_order'"
-                :class="[
-                    'flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
+                class="flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition duration-150"
+                :class="
                     activeSubTab === 'new_order'
-                        ? 'bg-orange-500 text-white shadow-md shadow-orange-500/10'
-                        : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:bg-slate-800/40 dark:text-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-stone-800',
-                ]"
+                        ? 'bg-orange-500 text-stone-950 shadow-md'
+                        : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
+                "
             >
                 <ShoppingCart class="h-4 w-4" />
                 <span>Transaksi Baru & Meja</span>
@@ -200,23 +206,23 @@ onBeforeUnmount(() => {
             <button
                 type="button"
                 @click="activeSubTab = 'active_orders'"
-                :class="[
-                    'flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200',
+                class="flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition duration-150"
+                :class="
                     activeSubTab === 'active_orders'
-                        ? 'bg-orange-500 text-white shadow-md shadow-orange-500/10'
-                        : 'text-stone-500 hover:bg-stone-100 hover:text-stone-900 dark:bg-slate-800/40 dark:text-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-stone-800',
-                ]"
+                        ? 'bg-orange-500 text-stone-950 shadow-md'
+                        : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
+                "
             >
                 <CookingPot class="h-4 w-4" />
                 <span>Pelacakan Order Aktif</span>
                 <span
                     v-if="activeOrders.length > 0"
-                    :class="[
-                        'rounded-full px-2 py-0.5 text-[10px] font-bold transition-all duration-200',
+                    class="rounded-full px-2.5 py-0.5 text-[10px] font-black"
+                    :class="
                         activeSubTab === 'active_orders'
-                            ? 'bg-stone-200 text-white dark:bg-white/20'
-                            : 'border border-orange-500/20 bg-orange-500/10 text-orange-600 dark:text-orange-400',
-                    ]"
+                            ? 'bg-white text-orange-600'
+                            : 'bg-orange-500 text-stone-950'
+                    "
                 >
                     {{ activeOrders.length }}
                 </span>

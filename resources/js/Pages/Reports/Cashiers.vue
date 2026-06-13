@@ -163,11 +163,11 @@ const growthClass = (value: number | null) => {
     }
 
     if (value > 0.001) {
-        return 'text-emerald-300';
+        return 'text-emerald-600 dark:text-emerald-400';
     }
 
     if (value < -0.001) {
-        return 'text-rose-300';
+        return 'text-rose-600 dark:text-rose-400';
     }
 
     return 'text-stone-600 dark:text-slate-300';
@@ -175,18 +175,18 @@ const growthClass = (value: number | null) => {
 
 const growthSurfaceClass = (value: number | null) => {
     if (value === null) {
-        return 'border-stone-200 dark:border-slate-700/60 bg-stone-50 dark:bg-slate-900/70';
+        return 'border-2 border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60';
     }
 
     if (value > 0.001) {
-        return 'border-emerald-400/15 bg-emerald-500/10';
+        return 'border-2 border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/5';
     }
 
     if (value < -0.001) {
-        return 'border-rose-400/15 bg-rose-500/10';
+        return 'border-2 border-rose-200 bg-rose-50 dark:border-rose-500/20 dark:bg-rose-500/5';
     }
 
-    return 'border-stone-200 dark:border-slate-700/60 bg-stone-50 dark:bg-slate-900/70';
+    return 'border-2 border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60';
 };
 
 const submitFilters = () => {
@@ -224,24 +224,24 @@ const summaryCards = computed(() => [
         value: formatPrice(props.summary.total_revenue),
         helper: `${props.summary.total_orders} transaksi lunas`,
         icon: Wallet,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-600 dark:text-emerald-400',
+        surface: 'bg-emerald-50/30 border-emerald-500/20',
     },
     {
         label: 'Kasir Aktif',
         value: props.summary.active_cashiers,
         helper: 'Kasir dengan transaksi pada periode ini',
         icon: UserRound,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-600 dark:text-sky-400',
+        surface: 'bg-sky-50/30 border-stone-200',
     },
     {
         label: 'Rata-rata Ticket',
         value: formatPrice(props.summary.average_ticket),
         helper: 'Nilai order rata-rata per kasir',
         icon: BarChart3,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-600 dark:text-amber-400',
+        surface: 'bg-amber-50/30 border-stone-200',
     },
     {
         label: 'Top Kasir',
@@ -250,8 +250,8 @@ const summaryCards = computed(() => [
             ? formatPrice(props.summary.top_cashier.revenue)
             : 'Belum ada revenue',
         icon: CreditCard,
-        tone: 'text-violet-300',
-        surface: 'border-violet-400/15 bg-violet-500/10',
+        tone: 'text-violet-600 dark:text-violet-400',
+        surface: 'bg-violet-50/30 border-stone-200',
     },
 ]);
 </script>
@@ -279,87 +279,88 @@ const summaryCards = computed(() => [
                     </p>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-3">
+                <div class="flex flex-wrap items-center gap-2">
                     <span
-                        class="rounded-full border border-stone-200 bg-white/[0.03] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-600 dark:border-white/10 dark:text-slate-300"
+                        class="rounded-xl border border-emerald-500/20 bg-emerald-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
                     >
-                        {{ user?.role || '-' }}
+                        Order Lunas
                     </span>
                     <Link
-                        :href="route('reports.outlets.index')"
-                        class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-white/[0.05] dark:border-white/10 dark:border-white/20 dark:text-slate-200"
+                        :href="route('dashboard')"
+                        class="inline-flex items-center gap-1.5 rounded-2xl border-2 border-stone-200 bg-white px-4 py-2 text-xs font-black text-stone-700 transition hover:border-stone-300 hover:bg-stone-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                     >
-                        <CalendarRange class="h-4 w-4 text-sky-300" />
-                        Lihat Laporan Per Outlet
+                        <CalendarRange class="h-4 w-4 text-orange-500" />
+                        Dashboard Utama
                     </Link>
                 </div>
             </div>
         </template>
 
         <div class="space-y-6">
-            <!-- Tab Navigation Laporan Transaksi & Kas -->
+            <!-- Navigasi Menu Laporan Keuangan (Horizontal Tabs) -->
             <div
-                class="flex max-w-4xl flex-wrap gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full flex-wrap gap-2 rounded-2xl border-2 border-stone-200 bg-stone-100 p-1.5 dark:border-white/10 dark:bg-slate-950"
             >
                 <Link
                     :href="route('reports.sales.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.sales.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Penjualan & Kas
                 </Link>
                 <Link
                     :href="route('reports.outlets.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.outlets.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Per Outlet
                 </Link>
                 <Link
                     :href="route('reports.cashiers.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.cashiers.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Per Kasir
                 </Link>
                 <Link
                     :href="route('reports.top-products.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.top-products.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Produk Terlaris
                 </Link>
                 <Link
                     :href="route('reports.expenses.index')"
-                    class="min-w-[120px] flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
+                    class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.expenses.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
-                    Pengeluaran
+                    Keuangan
                 </Link>
             </div>
 
+            <!-- Panel Filter -->
             <section
-                class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
             >
                 <div
                     class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
@@ -369,12 +370,12 @@ const summaryCards = computed(() => [
                     >
                         <label v-if="canChooseOutlet" class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-slate-300"
                                 >Outlet</span
                             >
                             <select
                                 v-model="outletFilter"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-3 py-2 text-xs font-bold text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             >
                                 <option value="">Semua outlet</option>
                                 <option
@@ -389,42 +390,42 @@ const summaryCards = computed(() => [
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-slate-300"
                                 >Dari tanggal</span
                             >
                             <input
                                 v-model="startDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-3 py-2 text-xs font-bold text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             />
                         </label>
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-slate-300"
                                 >Sampai tanggal</span
                             >
                             <input
                                 v-model="endDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-3 py-2 text-xs font-bold text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                             />
                         </label>
 
                         <label v-if="canChooseCashier" class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-slate-300"
                                 >Kasir</span
                             >
                             <div class="relative">
                                 <span
                                     class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400 dark:text-slate-500"
                                 >
-                                    <Search class="h-4 w-4" />
+                                    <Search class="h-3.5 w-3.5" />
                                 </span>
                                 <select
                                     v-model="cashierFilter"
-                                    class="w-full rounded-2xl border border-stone-200 bg-stone-50 py-3 pl-10 pr-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                    class="w-full rounded-2xl border-2 border-stone-300 bg-white py-2 pl-9 pr-3 text-xs font-bold text-stone-900 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
                                 >
                                     <option value="">Semua kasir</option>
                                     <option
@@ -439,38 +440,37 @@ const summaryCards = computed(() => [
                         </label>
 
                         <div
-                            class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4 dark:border-slate-700/60 dark:bg-slate-900/70"
+                            class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/40"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Periode Sebelumnya
                             </p>
                             <p
-                                class="mt-2 text-sm font-bold text-stone-900 dark:text-white"
+                                class="mt-1 text-xs font-black text-stone-900 dark:text-white"
                             >
                                 {{ formatDate(period.previous.start_date) }}
                             </p>
                             <p
-                                class="mt-1 text-xs text-stone-500 dark:text-slate-400"
+                                class="text-[10px] font-semibold text-stone-500 dark:text-slate-400"
                             >
-                                sampai
-                                {{ formatDate(period.previous.end_date) }}
+                                s/d {{ formatDate(period.previous.end_date) }}
                             </p>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex items-center gap-2">
                         <button
                             type="button"
-                            class="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
+                            class="rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wider text-stone-700 transition hover:bg-stone-100 hover:text-stone-950 dark:border-slate-800 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
                             @click="clearFilters"
                         >
-                            Reset Filter
+                            Reset
                         </button>
                         <button
                             type="button"
-                            class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400"
+                            class="rounded-xl bg-orange-500 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-stone-950 transition hover:bg-orange-400"
                             @click="submitFilters"
                         >
                             Terapkan
@@ -483,50 +483,53 @@ const summaryCards = computed(() => [
                 <article
                     v-for="card in summaryCards"
                     :key="card.label"
-                    class="rounded-3xl border p-5 shadow-[0_20px_60px_rgba(15,23,42,0.22)]"
+                    class="rounded-3xl border-2 p-6 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                     :class="card.surface"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p
-                                class="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400"
+                                class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
                             >
                                 {{ card.label }}
                             </p>
                             <p
-                                class="mt-3 text-2xl font-black"
-                                :class="card.tone"
+                                class="mt-2 text-2xl font-black tracking-tight text-stone-900 dark:text-white"
                             >
                                 {{ card.value }}
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-950/30"
+                            class="rounded-2xl border-2 border-stone-100 bg-white p-2.5 dark:border-white/10 dark:bg-slate-900"
                         >
                             <component
                                 :is="card.icon"
-                                class="h-5 w-5 text-stone-900 dark:text-white"
+                                class="h-5 w-5"
+                                :class="card.tone"
                             />
                         </div>
                     </div>
-                    <p class="mt-3 text-xs text-stone-600 dark:text-slate-300">
+                    <p
+                        class="mt-6 border-t border-stone-200/50 pt-4 text-[11px] font-medium text-stone-400 dark:border-white/5 dark:text-slate-500"
+                    >
                         {{ card.helper }}
                     </p>
                 </article>
             </section>
 
+
             <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
                 <article
-                    class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                    class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div>
                         <h3
-                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-700 dark:text-slate-200"
                         >
                             Ranking Revenue Kasir
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                         >
                             Perbandingan revenue kasir pada periode aktif.
                         </p>
@@ -534,7 +537,7 @@ const summaryCards = computed(() => [
 
                     <div
                         v-if="!cashiers.length"
-                        class="mt-5 rounded-2xl border border-dashed border-stone-200 px-4 py-10 text-center text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
+                        class="mt-5 rounded-2xl border-2 border-dashed border-stone-200 px-4 py-10 text-center text-sm text-stone-500 dark:border-white/10 dark:text-slate-400"
                     >
                         Belum ada transaksi kasir pada periode ini.
                     </div>
@@ -543,7 +546,7 @@ const summaryCards = computed(() => [
                         <article
                             v-for="cashier in cashiers"
                             :key="cashier.id"
-                            class="rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-4 dark:border-white/10"
+                            class="rounded-2xl border-2 border-stone-200 bg-stone-50/50 px-4 py-4 dark:border-white/10 dark:bg-slate-900/40"
                         >
                             <div
                                 class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
@@ -575,7 +578,7 @@ const summaryCards = computed(() => [
                                         />
                                     </div>
                                     <p
-                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                                     >
                                         {{
                                             cashier.outlet?.name ||
@@ -597,7 +600,7 @@ const summaryCards = computed(() => [
 
                                 <div class="md:ps-4 md:text-right">
                                     <p
-                                        class="text-lg font-black text-emerald-300"
+                                        class="text-lg font-black text-emerald-600 dark:text-emerald-400"
                                     >
                                         {{
                                             formatPrice(cashier.current.revenue)
@@ -626,16 +629,16 @@ const summaryCards = computed(() => [
                 </article>
 
                 <article
-                    class="rounded-3xl border border-stone-200 bg-white p-5 shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                    class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div>
                         <h3
-                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-700 dark:text-slate-200"
                         >
                             Highlight Growth
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                         >
                             Kasir dengan perubahan revenue paling terlihat.
                         </p>
@@ -645,7 +648,7 @@ const summaryCards = computed(() => [
                         <article
                             v-for="cashier in cashiers.slice(0, 4)"
                             :key="`${cashier.id}-growth`"
-                            class="rounded-2xl border px-4 py-4"
+                            class="rounded-2xl border-2 px-4 py-4"
                             :class="
                                 growthSurfaceClass(
                                     cashier.growth.revenue_percentage,
@@ -688,13 +691,16 @@ const summaryCards = computed(() => [
                                 </p>
                             </div>
                             <p
-                                class="mt-3 text-xs text-stone-600 dark:text-slate-300"
+                                class="mt-3 text-xs text-stone-600 dark:text-slate-350"
                             >
                                 Selisih revenue
-                                {{ formatPrice(cashier.growth.revenue_amount) }}
+                                <span class="font-bold text-stone-850 dark:text-white">
+                                    {{ formatPrice(cashier.growth.revenue_amount) }}
+                                </span>
                                 dan delta order
-                                {{ cashier.growth.order_amount > 0 ? '+' : ''
-                                }}{{ cashier.growth.order_amount }}.
+                                <span class="font-bold text-stone-850 dark:text-white">
+                                    {{ cashier.growth.order_amount > 0 ? '+' : '' }}{{ cashier.growth.order_amount }}
+                                </span>.
                             </p>
                         </article>
                     </div>
@@ -702,30 +708,32 @@ const summaryCards = computed(() => [
             </section>
 
             <section
-                class="rounded-3xl border border-stone-200 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-slate-950/70"
+                class="rounded-3xl border-2 border-stone-200 bg-white shadow-xl dark:border-white/10 dark:bg-slate-950/45"
             >
                 <div
-                    class="flex flex-col gap-3 border-b border-stone-200 px-5 py-4 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between"
+                    class="flex flex-col gap-3 border-b-2 border-stone-200 px-5 py-4 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between"
                 >
                     <div>
                         <h3
-                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-600 dark:text-slate-300"
+                            class="text-sm font-bold uppercase tracking-[0.22em] text-stone-700 dark:text-slate-200"
                         >
                             Tabel Performa Kasir
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-500 dark:text-slate-400"
                         >
                             Revenue, order, average ticket, diskon, growth, dan
                             breakdown pembayaran per kasir.
                         </p>
                     </div>
                     <div
-                        class="rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-3 text-xs text-stone-600 dark:border-white/10 dark:text-slate-300"
+                        class="rounded-2xl border-2 border-stone-200 bg-stone-50 px-4 py-3 text-xs text-stone-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300"
                     >
                         Growth dibanding
-                        {{ formatDate(period.previous.start_date) }} -
-                        {{ formatDate(period.previous.end_date) }}
+                        <span class="font-bold text-orange-600 dark:text-orange-400">
+                            {{ formatDate(period.previous.start_date) }} -
+                            {{ formatDate(period.previous.end_date) }}
+                        </span>
                     </div>
                 </div>
 
@@ -736,11 +744,11 @@ const summaryCards = computed(() => [
                     Tidak ada data kasir pada filter ini.
                 </div>
 
-                <div v-else class="divide-y divide-white/10">
+                <div v-else class="divide-y-2 divide-stone-200 dark:divide-white/10">
                     <article
                         v-for="cashier in cashiers"
                         :key="`${cashier.id}-table`"
-                        class="grid gap-4 px-5 py-5 xl:grid-cols-[1.1fr_0.95fr_0.9fr_1.05fr]"
+                        class="grid gap-4 px-5 py-6 xl:grid-cols-[1.1fr_0.95fr_0.9fr_1.05fr] hover:bg-stone-50/50 dark:hover:bg-slate-900/20 transition-colors"
                     >
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
@@ -750,7 +758,7 @@ const summaryCards = computed(() => [
                                     {{ cashier.name }}
                                 </h3>
                                 <span
-                                    class="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
+                                    class="rounded-full border-2 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.18em]"
                                     :class="
                                         growthSurfaceClass(
                                             cashier.growth.revenue_percentage,
@@ -761,55 +769,57 @@ const summaryCards = computed(() => [
                                 </span>
                             </div>
                             <p
-                                class="text-sm text-stone-600 dark:text-slate-300"
+                                class="text-sm font-bold text-stone-600 dark:text-slate-350"
                             >
                                 {{ cashier.outlet?.name || 'Tanpa outlet' }}
                             </p>
                             <p
-                                class="text-xs text-stone-400 dark:text-slate-500"
+                                class="text-xs text-stone-500 dark:text-slate-400"
                             >
-                                Revenue sebelumnya
-                                {{ formatPrice(cashier.previous.revenue) }}
+                                Revenue sebelumnya:
+                                <span class="font-bold text-stone-850 dark:text-slate-200">
+                                    {{ formatPrice(cashier.previous.revenue) }}
+                                </span>
                             </p>
                         </div>
 
                         <div class="space-y-2">
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Revenue saat ini
                             </p>
-                            <p class="text-lg font-black text-emerald-300">
+                            <p class="text-lg font-black text-emerald-600 dark:text-emerald-400">
                                 {{ formatPrice(cashier.current.revenue) }}
                             </p>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Diskon
                             </p>
-                            <p class="text-sm text-amber-300">
+                            <p class="text-sm font-bold text-amber-600 dark:text-amber-400">
                                 {{ formatPrice(cashier.current.discount) }}
                             </p>
                         </div>
 
                         <div class="space-y-2">
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Jumlah order
                             </p>
                             <p
-                                class="text-sm font-semibold text-stone-900 dark:text-white"
+                                class="text-sm font-black text-stone-900 dark:text-white"
                             >
                                 {{ cashier.current.orders }}
                             </p>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Average ticket
                             </p>
                             <p
-                                class="text-sm text-stone-600 dark:text-slate-300"
+                                class="text-sm font-bold text-stone-700 dark:text-slate-300"
                             >
                                 {{
                                     formatPrice(cashier.current.average_ticket)
@@ -819,7 +829,7 @@ const summaryCards = computed(() => [
 
                         <div class="space-y-2">
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[9px] font-black uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 Growth revenue
                             </p>
@@ -840,15 +850,17 @@ const summaryCards = computed(() => [
                             <p
                                 class="text-xs text-stone-500 dark:text-slate-400"
                             >
-                                Selisih
-                                {{ formatPrice(cashier.growth.revenue_amount) }}
+                                Selisih:
+                                <span class="font-bold text-stone-850 dark:text-slate-200">
+                                    {{ formatPrice(cashier.growth.revenue_amount) }}
+                                </span>
                             </p>
                             <div class="flex flex-wrap gap-2 pt-2">
                                 <span
                                     v-for="payment in cashier.current
                                         .payment_breakdown"
                                     :key="`${cashier.id}-${payment.method}`"
-                                    class="rounded-full border border-stone-200 bg-white/[0.03] px-2.5 py-1 text-[10px] font-semibold text-stone-600 dark:border-white/10 dark:text-slate-300"
+                                    class="rounded-full border-2 border-stone-200 bg-stone-50 px-2 py-0.5 text-[9px] font-bold text-stone-600 dark:border-slate-850 dark:bg-slate-900/40 dark:text-slate-300"
                                 >
                                     {{ paymentMethodLabel(payment.method) }}
                                     {{ formatPrice(payment.amount) }}

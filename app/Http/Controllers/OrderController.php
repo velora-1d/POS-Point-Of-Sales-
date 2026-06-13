@@ -118,6 +118,7 @@ class OrderController extends Controller
             'activeShift' => $activeShift,
             'cashiers' => $cashiers,
             'success' => session('success'),
+            'error' => session('error'),
             'paymentCheckout' => session('paymentCheckout'),
             'alertSettings' => $outletId ? $this->tableManagementService->getAlertSettings($outletId) : null,
         ]);
@@ -151,10 +152,16 @@ class OrderController extends Controller
             'reserved' => $tables->where('status', 'reserved')->count(),
         ];
 
+        $qrConfig = $this->tableQrConfigService->getConfigForOutlet($outletId);
+
         return Inertia::render('Tables/Layout', [
             'tables' => $tables,
             'reservations' => $reservations,
             'summary' => $summary,
+            'qrConfig' => $qrConfig ? [
+                'primary_color' => $qrConfig->primary_color,
+                'qr_template' => $qrConfig->qr_template,
+            ] : null,
             'success' => session('success'),
             'alertSettings' => $outletId ? $this->tableManagementService->getAlertSettings($outletId) : null,
         ]);
@@ -233,6 +240,25 @@ class OrderController extends Controller
             ->route('kasir.order')
             ->with('success', $result['message'])
             ->with('paymentCheckout', $result['paymentCheckout']);
+    }
+
+    public function checkPaymentStatus(Order $order): RedirectResponse
+    {
+        try {
+            $result = $this->orderPaymentService->syncPaymentStatus($order);
+            if ($result['success']) {
+                return redirect()
+                    ->route('kasir.order')
+                    ->with('success', $result['message']);
+            }
+            return redirect()
+                ->route('kasir.order')
+                ->with('error', $result['message']);
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('kasir.order')
+                ->with('error', 'Gagal memeriksa status pembayaran: ' . $e->getMessage());
+        }
     }
 
     public function deliver(Order $order): RedirectResponse

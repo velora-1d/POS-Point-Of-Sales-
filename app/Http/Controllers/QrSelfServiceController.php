@@ -100,6 +100,7 @@ class QrSelfServiceController extends Controller
         $paymentCheckout = session('paymentCheckout');
         if (!$paymentCheckout && ($order->metadata['payment']['checkout_url'] ?? null) && $order->hasPendingBeforeKitchenPayment()) {
             $paymentCheckout = [
+                'id' => $order->id,
                 'provider' => 'pakasir',
                 'method' => 'qris',
                 'order_number' => $order->order_number,

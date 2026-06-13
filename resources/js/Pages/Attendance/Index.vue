@@ -194,29 +194,29 @@ const summaryCards = computed(() => [
     {
         label: 'Absensi Hari Ini',
         value: props.summary.today,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: CalendarDays,
     },
     {
         label: 'Terlambat',
         value: props.summary.late,
-        tone: 'text-rose-300',
-        surface: 'border-rose-400/15 bg-rose-500/10',
+        tone: 'text-rose-700 dark:text-rose-300',
+        surface: 'border-rose-200 bg-rose-50 dark:border-rose-500/10 dark:bg-rose-500/10',
         icon: Timer,
     },
     {
         label: 'Sudah Clock Out',
         value: props.summary.completed,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-700 dark:text-emerald-300',
+        surface: 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/10 dark:bg-emerald-500/10',
         icon: CheckCircle2,
     },
     {
         label: 'Masih Berjalan',
         value: props.summary.open,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-700 dark:text-amber-300',
+        surface: 'border-amber-200 bg-amber-50 dark:border-amber-500/10 dark:bg-amber-500/10',
         icon: Clock3,
     },
 ]);
@@ -241,36 +241,36 @@ const reportCards = computed(() => [
         label: 'Hadir Tepat Waktu',
         value: attendanceReport.value.present,
         helper: `${attendanceReport.value.recorded_days} hari terekam`,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-800 dark:text-emerald-300',
+        surface: 'border-emerald-300 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10',
     },
     {
         label: 'Terlambat',
         value: attendanceReport.value.late,
         helper: 'Masuk di atas jam jadwal',
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-800 dark:text-amber-300',
+        surface: 'border-amber-300 bg-amber-50 dark:border-amber-500/20 dark:bg-amber-500/10',
     },
     {
         label: 'Absen',
         value: attendanceReport.value.absent,
         helper: 'Jadwal aktif tanpa absensi',
-        tone: 'text-rose-300',
-        surface: 'border-rose-400/15 bg-rose-500/10',
+        tone: 'text-rose-800 dark:text-rose-300',
+        surface: 'border-rose-300 bg-rose-50 dark:border-rose-500/20 dark:bg-rose-500/10',
     },
     {
         label: 'Cuti / Leave',
         value: attendanceReport.value.leave,
         helper: `${attendanceReport.value.employee_count} karyawan tercakup`,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-800 dark:text-sky-300',
+        surface: 'border-sky-300 bg-sky-50 dark:border-sky-500/20 dark:bg-sky-500/10',
     },
     {
         label: 'Attendance Rate',
         value: `${attendanceReport.value.attendance_rate.toFixed(2)}%`,
         helper: `${attendanceReport.value.scheduled_days} jadwal pada periode ini`,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-300 dark:border-white/20 bg-white dark:bg-slate-900',
     },
 ]);
 
@@ -495,37 +495,37 @@ const quickClockOut = (employeeId: string) => {
 
             <!-- Tab Navigation Global -->
             <div
-                class="flex max-w-2xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full flex-wrap gap-1 rounded-2xl border border-stone-200 bg-stone-50 p-1 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/60"
             >
                 <Link
                     :href="route('shifts.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('shifts.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Shift Kasir (Laci Kas)
                 </Link>
                 <Link
                     :href="route('attendance.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('attendance.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Absensi Karyawan
                 </Link>
                 <Link
                     :href="route('schedules.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('schedules.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Jadwal Shift Kerja
@@ -574,7 +574,7 @@ const quickClockOut = (employeeId: string) => {
                                 Absensi Cepat Karyawan
                             </h3>
                             <p
-                                class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                             >
                                 Pilih karyawan di bawah untuk menandai kehadiran
                                 harian mereka secara cepat.
@@ -606,7 +606,7 @@ const quickClockOut = (employeeId: string) => {
                                     />
                                     <div
                                         v-else
-                                        class="flex h-full w-full items-center justify-center bg-white text-[9px] font-bold text-stone-400 dark:bg-slate-900 dark:text-slate-500"
+                                        class="flex h-full w-full items-center justify-center bg-white text-[9px] font-bold text-stone-400 dark:bg-slate-900 dark:text-slate-400"
                                     >
                                         3:4
                                     </div>
@@ -618,7 +618,7 @@ const quickClockOut = (employeeId: string) => {
                                         {{ employee.name }}
                                     </h4>
                                     <p
-                                        class="mt-0.5 text-[10px] uppercase tracking-wider text-stone-400 dark:text-slate-500"
+                                        class="mt-0.5 text-[10px] uppercase tracking-wider text-stone-400 dark:text-slate-400"
                                     >
                                         {{ employee.role?.name || '-' }}
                                     </p>
@@ -658,7 +658,7 @@ const quickClockOut = (employeeId: string) => {
                                             ?.status === 'absent'
                                     "
                                     type="button"
-                                    class="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-300 transition duration-150 hover:bg-emerald-500/20"
+                                    class="inline-flex items-center gap-1.5 rounded-xl border border-emerald-600 bg-emerald-50 px-3 py-2 text-xs font-black text-emerald-850 transition duration-150 hover:bg-emerald-100 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:bg-emerald-500/20 active:scale-[0.98]"
                                     @click="quickClockIn(employee.id)"
                                 >
                                     <LogIn class="h-3.5 w-3.5" />
@@ -672,7 +672,7 @@ const quickClockOut = (employeeId: string) => {
                                             ?.status === 'active'
                                     "
                                     type="button"
-                                    class="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/25 bg-rose-500/10 px-3 py-2 text-xs font-bold text-rose-300 transition duration-150 hover:bg-rose-500/20"
+                                    class="inline-flex items-center gap-1.5 rounded-xl border border-rose-600 bg-rose-50 px-3 py-2 text-xs font-black text-rose-855 transition duration-150 hover:bg-rose-100 dark:border-rose-500/25 dark:bg-rose-500/10 dark:text-rose-400 dark:hover:bg-rose-500/20 active:scale-[0.98]"
                                     @click="quickClockOut(employee.id)"
                                 >
                                     <LogOut class="h-3.5 w-3.5" />
@@ -682,7 +682,7 @@ const quickClockOut = (employeeId: string) => {
                                 <!-- Status Selesai -->
                                 <div
                                     v-else
-                                    class="inline-flex items-center gap-1 rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs font-semibold text-stone-400 dark:border-white/5 dark:bg-slate-900 dark:text-slate-500"
+                                    class="inline-flex items-center gap-1 rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs font-semibold text-stone-400 dark:border-white/5 dark:bg-slate-900 dark:text-slate-400"
                                 >
                                     <CheckCircle2
                                         class="h-3.5 w-3.5 text-emerald-500"
@@ -714,7 +714,7 @@ const quickClockOut = (employeeId: string) => {
                                 }}
                             </h3>
                             <p
-                                class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                             >
                                 {{
                                     canManage
@@ -743,7 +743,7 @@ const quickClockOut = (employeeId: string) => {
                                         {{ attendance.user?.name || 'Saya' }}
                                     </p>
                                     <p
-                                        class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                        class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                     >
                                         {{
                                             attendance.user?.outlet?.name ||
@@ -771,7 +771,7 @@ const quickClockOut = (employeeId: string) => {
                             <div class="mt-3 grid gap-3 sm:grid-cols-2">
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                     >
                                         Clock In
                                     </p>
@@ -783,7 +783,7 @@ const quickClockOut = (employeeId: string) => {
                                 </div>
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                     >
                                         Clock Out
                                     </p>
@@ -829,12 +829,12 @@ const quickClockOut = (employeeId: string) => {
                     >
                         <label v-if="canManage" class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                 >Outlet</span
                             >
                             <select
                                 v-model="outletFilter"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-stone-50 px-3 py-3 text-sm text-stone-950 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900/80 dark:text-white"
                             >
                                 <option value="">Semua outlet</option>
                                 <option
@@ -849,12 +849,12 @@ const quickClockOut = (employeeId: string) => {
 
                         <label v-if="canManage" class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                 >Karyawan</span
                             >
                             <select
                                 v-model="userFilter"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-stone-50 px-3 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900/80 dark:text-white"
                             >
                                 <option value="">Semua karyawan</option>
                                 <option
@@ -870,12 +870,12 @@ const quickClockOut = (employeeId: string) => {
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                 >Status</span
                             >
                             <select
                                 v-model="statusFilter"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-stone-50 px-3 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900/80 dark:text-white"
                             >
                                 <option value="">Semua status</option>
                                 <option value="present">Present</option>
@@ -887,25 +887,25 @@ const quickClockOut = (employeeId: string) => {
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                 >Dari tanggal</span
                             >
                             <input
                                 v-model="startDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-stone-50 px-3 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900/80 dark:text-white"
                             />
                         </label>
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                 >Sampai tanggal</span
                             >
                             <input
                                 v-model="endDateFilter"
                                 type="date"
-                                class="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900/80 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-stone-50 px-3 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900/80 dark:text-white"
                             />
                         </label>
                     </div>
@@ -913,14 +913,14 @@ const quickClockOut = (employeeId: string) => {
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
+                            class="rounded-2xl border-2 border-stone-955 bg-stone-100 hover:bg-stone-200 px-4 py-3 text-sm font-black text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                             @click="clearFilters"
                         >
                             Reset Filter
                         </button>
                         <button
                             type="button"
-                            class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400"
+                            class="rounded-2xl bg-orange-500 border border-orange-600 hover:bg-orange-600 px-4 py-3 text-sm font-black text-slate-950 transition active:scale-[0.98] shadow-md shadow-orange-500/10"
                             @click="submitFilters"
                         >
                             Terapkan
@@ -943,7 +943,7 @@ const quickClockOut = (employeeId: string) => {
                             Laporan Kehadiran
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                         >
                             Rekap hadir, terlambat, absen, dan cuti berdasarkan
                             filter periode, outlet, dan karyawan.
@@ -982,7 +982,7 @@ const quickClockOut = (employeeId: string) => {
                             {{ card.value }}
                         </p>
                         <p
-                            class="mt-2 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-2 text-xs text-stone-400 dark:text-slate-400"
                         >
                             {{ card.helper }}
                         </p>
@@ -1002,7 +1002,7 @@ const quickClockOut = (employeeId: string) => {
                                 Jadwal Tanpa Absensi
                             </h4>
                             <p
-                                class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                             >
                                 Dipakai sebagai indikator absen dari jadwal
                                 aktif yang tidak memiliki catatan attendance.
@@ -1030,7 +1030,7 @@ const quickClockOut = (employeeId: string) => {
                                     {{ absence.user?.name || '-' }}
                                 </p>
                                 <p
-                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                 >
                                     {{ absence.user?.outlet?.name || '-' }}
                                     <span v-if="absence.user?.role?.name"
@@ -1040,7 +1040,7 @@ const quickClockOut = (employeeId: string) => {
                             </div>
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Tanggal
                                 </p>
@@ -1052,7 +1052,7 @@ const quickClockOut = (employeeId: string) => {
                             </div>
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Jadwal
                                 </p>
@@ -1065,7 +1065,7 @@ const quickClockOut = (employeeId: string) => {
                                     }}
                                 </p>
                                 <p
-                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                 >
                                     {{ absence.shift_time || '-' }}
                                 </p>
@@ -1092,7 +1092,7 @@ const quickClockOut = (employeeId: string) => {
                             }}
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                         >
                             Menampilkan {{ attendances.from ?? 0 }} -
                             {{ attendances.to ?? 0 }} dari
@@ -1139,7 +1139,7 @@ const quickClockOut = (employeeId: string) => {
                                 {{ attendance.user?.outlet?.name || '-' }}
                             </p>
                             <p
-                                class="text-xs text-stone-400 dark:text-slate-500"
+                                class="text-xs text-stone-400 dark:text-slate-400"
                             >
                                 {{ formatDate(attendance.date) }}
                             </p>
@@ -1149,7 +1149,7 @@ const quickClockOut = (employeeId: string) => {
                             class="space-y-2 text-sm text-stone-600 dark:text-slate-300"
                         >
                             <p
-                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-400"
                             >
                                 Waktu
                             </p>
@@ -1160,7 +1160,7 @@ const quickClockOut = (employeeId: string) => {
                                 Clock out:
                                 {{ formatTime(attendance.clock_out) }}
                             </p>
-                            <p class="text-stone-400 dark:text-slate-500">
+                            <p class="text-stone-400 dark:text-slate-400">
                                 {{ attendance.work_duration_label || '-' }}
                             </p>
                         </div>
@@ -1169,7 +1169,7 @@ const quickClockOut = (employeeId: string) => {
                             class="space-y-2 text-sm text-stone-600 dark:text-slate-300"
                         >
                             <p
-                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-400"
                             >
                                 Jadwal & Koreksi
                             </p>
@@ -1179,7 +1179,7 @@ const quickClockOut = (employeeId: string) => {
                                     'Tanpa jadwal shift'
                                 }}
                             </p>
-                            <p class="text-stone-400 dark:text-slate-500">
+                            <p class="text-stone-400 dark:text-slate-400">
                                 {{
                                     attendance.corrected_by_name
                                         ? `Dikoreksi oleh ${attendance.corrected_by_name}`
@@ -1206,7 +1206,7 @@ const quickClockOut = (employeeId: string) => {
                         >
                             <button
                                 type="button"
-                                class="inline-flex items-center gap-2 rounded-2xl border border-stone-200 px-3 py-2 text-sm font-semibold text-stone-800 transition hover:border-orange-400/30 hover:bg-orange-500/10 hover:text-orange-100 dark:border-white/10 dark:text-slate-200"
+                                class="inline-flex items-center gap-2 rounded-xl border-2 border-stone-950 bg-stone-50 hover:bg-stone-200 px-3.5 py-2 text-xs font-black text-stone-900 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                                 @click="openCorrectionModal(attendance)"
                             >
                                 <Pencil class="h-4 w-4" />
@@ -1220,7 +1220,7 @@ const quickClockOut = (employeeId: string) => {
                     v-if="attendances.links.length > 3"
                     class="flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 px-5 py-4 dark:border-white/10"
                 >
-                    <p class="text-xs text-stone-400 dark:text-slate-500">
+                    <p class="text-xs text-stone-400 dark:text-slate-400">
                         Riwayat absensi dipaginasi agar monitoring tetap ringan.
                     </p>
                     <div class="flex flex-wrap gap-2">
@@ -1228,11 +1228,13 @@ const quickClockOut = (employeeId: string) => {
                             v-for="link in attendances.links"
                             :key="link.label"
                             :href="link.url || '#'"
-                            class="rounded-xl border px-3 py-2 text-xs font-semibold transition"
+                            class="rounded-xl border-2 px-3 py-2 text-xs font-black transition active:scale-[0.98]"
                             :class="
                                 link.active
-                                    ? 'border-orange-400/30 bg-orange-500/15 text-orange-100'
-                                    : 'border-stone-200 text-stone-600 hover:bg-stone-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-300'
+                                    ? 'border-orange-600 bg-orange-500 text-stone-955 shadow-sm'
+                                    : link.url
+                                      ? 'border-stone-955 bg-stone-50 text-stone-900 hover:bg-stone-200 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]'
+                                      : 'cursor-not-allowed border-stone-200 bg-stone-100 text-stone-400 dark:border-white/5 dark:bg-white/[0.01] dark:text-slate-600'
                             "
                         >
                             <span v-html="link.label"></span>
@@ -1244,7 +1246,7 @@ const quickClockOut = (employeeId: string) => {
 
         <div
             v-if="isCorrectionOpen && canManage"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/80"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 py-6 backdrop-blur-sm dark:bg-slate-950/80"
         >
             <div
                 class="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-stone-200 bg-stone-100 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.6)] dark:border-white/10 dark:bg-slate-950"
@@ -1265,7 +1267,7 @@ const quickClockOut = (employeeId: string) => {
                     </div>
                     <button
                         type="button"
-                        class="rounded-2xl border border-stone-200 p-2 text-stone-500 transition hover:border-stone-200 hover:text-stone-900 dark:border-white/10 dark:border-white/20 dark:text-slate-400 dark:text-white"
+                        class="rounded-2xl border-2 border-stone-955 bg-stone-50 hover:bg-stone-200 p-2 text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                         @click="closeCorrectionModal"
                     >
                         <X class="h-5 w-5" />
@@ -1276,17 +1278,17 @@ const quickClockOut = (employeeId: string) => {
                     <section class="grid gap-4 md:grid-cols-2">
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                 >Clock In</span
                             >
                             <input
                                 v-model="correctionForm.clock_in"
                                 type="datetime-local"
-                                class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                             />
                             <p
                                 v-if="correctionForm.errors.clock_in"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                             >
                                 {{ correctionForm.errors.clock_in }}
                             </p>
@@ -1294,17 +1296,17 @@ const quickClockOut = (employeeId: string) => {
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                 >Clock Out</span
                             >
                             <input
                                 v-model="correctionForm.clock_out"
                                 type="datetime-local"
-                                class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                             />
                             <p
                                 v-if="correctionForm.errors.clock_out"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                             >
                                 {{ correctionForm.errors.clock_out }}
                             </p>
@@ -1313,17 +1315,17 @@ const quickClockOut = (employeeId: string) => {
 
                     <label class="block">
                         <span
-                            class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                            class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                             >Catatan</span
                         >
                         <textarea
                             v-model="correctionForm.notes"
                             rows="3"
-                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-slate-500 dark:text-white"
+                            class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 placeholder:text-stone-500 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                         />
                         <p
                             v-if="correctionForm.errors.notes"
-                            class="mt-2 text-xs text-rose-300"
+                            class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                         >
                             {{ correctionForm.errors.notes }}
                         </p>
@@ -1331,18 +1333,18 @@ const quickClockOut = (employeeId: string) => {
 
                     <label class="block">
                         <span
-                            class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                            class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                             >Alasan Koreksi</span
                         >
                         <textarea
                             v-model="correctionForm.correction_reason"
                             rows="3"
                             placeholder="Contoh: device offline saat datang, supervisor input ulang berdasarkan log shift."
-                            class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-slate-500 dark:text-white"
+                            class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 placeholder:text-stone-500 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                         />
                         <p
                             v-if="correctionForm.errors.correction_reason"
-                            class="mt-2 text-xs text-rose-300"
+                            class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                         >
                             {{ correctionForm.errors.correction_reason }}
                         </p>
@@ -1351,14 +1353,14 @@ const quickClockOut = (employeeId: string) => {
                     <div class="flex justify-end gap-3">
                         <button
                             type="button"
-                            class="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
+                            class="rounded-2xl border-2 border-stone-955 bg-stone-100 hover:bg-stone-200 px-4 py-3 text-sm font-black text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                             @click="closeCorrectionModal"
                         >
                             Batal
                         </button>
                         <button
                             type="submit"
-                            class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                            class="rounded-2xl bg-orange-500 border border-orange-600 hover:bg-orange-600 px-5 py-3 text-sm font-black text-slate-955 transition disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-orange-500/10 active:scale-[0.98]"
                             :disabled="correctionForm.processing"
                         >
                             {{

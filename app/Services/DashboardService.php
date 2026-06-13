@@ -22,7 +22,48 @@ class DashboardService
     public function getDashboard(User $actor, array $filters = []): array
     {
         $scopeOutletId = $this->resolveScopeOutletId($actor, $filters['outlet_id'] ?? null);
+        $period = $filters['period'] ?? 'today';
+        
         $today = CarbonImmutable::today();
+        
+        switch ($period) {
+            case 'yesterday':
+                $startDate = $today->subDay();
+                $endDate = $today->subDay();
+                
+                $compStartDate = $today->subDays(2);
+                $compEndDate = $today->subDays(2);
+                break;
+            case 'last_7_days':
+                $startDate = $today->subDays(6);
+                $endDate = $today;
+                
+                $compStartDate = $today->subDays(13);
+                $compEndDate = $today->subDays(7);
+                break;
+            case 'last_30_days':
+                $startDate = $today->subDays(29);
+                $endDate = $today;
+                
+                $compStartDate = $today->subDays(59);
+                $compEndDate = $today->subDays(30);
+                break;
+            case 'this_month':
+                $startDate = $today->startOfMonth();
+                $endDate = $today->endOfMonth();
+                
+                $compStartDate = $today->subMonth()->startOfMonth();
+                $compEndDate = $today->subMonth()->endOfMonth();
+                break;
+            case 'today':
+            default:
+                $startDate = $today;
+                $endDate = $today;
+                
+                $compStartDate = $today->subDay();
+                $compEndDate = $today->subDay();
+                break;
+        }
 
         return [
             'alerts' => [
@@ -34,10 +75,11 @@ class DashboardService
                 ),
             ],
             'finance' => $this->canReadFinance($actor)
-                ? $this->buildFinanceSummary($scopeOutletId, $today, $actor)
+                ? $this->buildFinanceSummary($scopeOutletId, $startDate, $endDate, $compStartDate, $compEndDate, $actor)
                 : null,
             'filters' => [
                 'outlet_id' => $scopeOutletId ?? '',
+                'period' => $period,
                 'as_of_date' => $today->toDateString(),
             ],
             'referenceData' => [
@@ -48,22 +90,28 @@ class DashboardService
         ];
     }
 
-    protected function buildFinanceSummary(?string $scopeOutletId, CarbonImmutable $date, User $actor): array
-    {
-        $orders = $this->dashboardRepository->getTodayOrders($scopeOutletId, $date);
+    protected function buildFinanceSummary(
+        ?string $scopeOutletId,
+        CarbonImmutable $startDate,
+        CarbonImmutable $endDate,
+        CarbonImmutable $compStartDate,
+        CarbonImmutable $compEndDate,
+        User $actor
+    ): array {
+        $orders = $this->dashboardRepository->getOrdersInDateRange($scopeOutletId, $startDate, $endDate);
         $settledOrders = $orders->filter(fn (Order $order) => $this->isSettledOrder($order))->values();
         $pendingOrders = $orders->filter(fn (Order $order) => !$this->isSettledOrder($order))->values();
         $totalRevenue = (float) $settledOrders->sum(fn (Order $order) => (float) $order->total_amount);
         $totalDiscount = (float) $settledOrders->sum(fn (Order $order) => (float) $order->discount_amount);
         $settledCount = $settledOrders->count();
 
-        // Yesterday comparison
-        $yesterdayOrders = $this->dashboardRepository->getYesterdayOrders($scopeOutletId, $date);
-        $yesterdaySettled = $yesterdayOrders->filter(fn (Order $order) => $this->isSettledOrder($order))->values();
-        $yesterdayRevenue = (float) $yesterdaySettled->sum(fn (Order $order) => (float) $order->total_amount);
-        $yesterdayCount = $yesterdaySettled->count();
-        $revenueGrowth = $yesterdayRevenue > 0
-            ? round((($totalRevenue - $yesterdayRevenue) / $yesterdayRevenue) * 100, 1)
+        // Comparison period comparison
+        $compOrders = $this->dashboardRepository->getOrdersInDateRange($scopeOutletId, $compStartDate, $compEndDate);
+        $compSettled = $compOrders->filter(fn (Order $order) => $this->isSettledOrder($order))->values();
+        $compRevenue = (float) $compSettled->sum(fn (Order $order) => (float) $order->total_amount);
+        $compCount = $compSettled->count();
+        $revenueGrowth = $compRevenue > 0
+            ? round((($totalRevenue - $compRevenue) / $compRevenue) * 100, 1)
             : ($totalRevenue > 0 ? 100.0 : 0.0);
 
         $settledOrderIds = $settledOrders->pluck('id')->all();
@@ -85,8 +133,8 @@ class DashboardService
                 'pending_orders'   => $pendingOrders->count(),
                 'avg_order_value'  => $settledCount > 0 ? $totalRevenue / $settledCount : 0,
                 'total_discount'   => $totalDiscount,
-                'yesterday_revenue' => $yesterdayRevenue,
-                'yesterday_orders'  => $yesterdayCount,
+                'yesterday_revenue' => $compRevenue,
+                'yesterday_orders'  => $compCount,
                 'revenue_growth'    => $revenueGrowth,
                 'top_product'      => $topProducts[0] ?? null,
                 'top_products'     => $topProducts,
@@ -102,10 +150,13 @@ class DashboardService
             'scope' => [
                 'outlet_id'   => $scopeOutletId,
                 'viewer_role' => $actor->role?->type,
-                'date'        => $date->toDateString(),
+                'date'        => $startDate->toDateString() === $endDate->toDateString()
+                    ? $startDate->toDateString()
+                    : $startDate->toDateString() . ' - ' . $endDate->toDateString(),
             ],
         ];
     }
+
 
     protected function buildPaymentBreakdown(Collection $orders): array
     {

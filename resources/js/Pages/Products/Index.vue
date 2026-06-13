@@ -146,29 +146,29 @@ const summaryCards = computed(() => [
     {
         label: 'Total Produk',
         value: props.summary.total,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-slate-800 dark:bg-slate-900/40',
         icon: Boxes,
     },
     {
         label: 'Siap Dijual',
         value: props.summary.available,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/8',
+        tone: 'text-emerald-700 dark:text-emerald-300',
+        surface: 'border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20',
         icon: BadgeCheck,
     },
     {
         label: 'Punya Varian',
         value: props.summary.withVariants,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/8',
+        tone: 'text-sky-700 dark:text-sky-300',
+        surface: 'border-sky-500/20 bg-sky-50/50 dark:bg-sky-950/20',
         icon: Layers3,
     },
     {
         label: 'Multi Harga',
         value: props.summary.withMultiPrice,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
+        tone: 'text-amber-700 dark:text-amber-300',
+        surface: 'border-amber-500/20 bg-amber-50/50 dark:bg-amber-950/20',
         icon: Tags,
     },
 ]);
@@ -410,7 +410,7 @@ const deleteProduct = (product: ProductRow) => {
                 <button
                     type="button"
                     @click="openCreateModal"
-                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 shadow-lg shadow-orange-500/20 transition hover:from-orange-600 hover:to-red-600 dark:text-white"
+                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-500 hover:bg-orange-600 px-4 py-3 text-sm font-bold text-white transition"
                 >
                     <Plus class="h-4 w-4" />
                     Tambah Produk
@@ -431,14 +431,14 @@ const deleteProduct = (product: ProductRow) => {
                     v-for="stat in summaryCards"
                     :key="stat.label"
                     :class="[
-                        'rounded-[22px] border px-4 py-4 shadow-lg shadow-slate-950/10',
+                        'rounded-[22px] border px-4 py-4',
                         stat.surface,
                     ]"
                 >
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-stone-500 dark:text-slate-400"
                             >
                                 {{ stat.label }}
                             </p>
@@ -455,14 +455,14 @@ const deleteProduct = (product: ProductRow) => {
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
                 <div
                     class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between"
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-300"
                         >
                             Filter Produk
                         </p>
@@ -513,7 +513,7 @@ const deleteProduct = (product: ProductRow) => {
 
                         <button
                             type="submit"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
+                            class="rounded-2xl bg-orange-500 hover:bg-orange-600 px-4 py-3 text-sm font-bold text-white transition"
                         >
                             Terapkan
                         </button>
@@ -522,14 +522,14 @@ const deleteProduct = (product: ProductRow) => {
             </section>
 
             <section
-                class="rounded-[26px] border border-stone-200 bg-stone-50 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                class="rounded-[26px] border border-stone-200 bg-stone-50 dark:border-slate-800/80 dark:bg-slate-900/92"
             >
                 <div
                     class="flex flex-col gap-2 border-b border-stone-200 px-5 py-4 dark:border-slate-800/80 sm:flex-row sm:items-center sm:justify-between"
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-300"
                         >
                             Daftar Produk
                         </p>
@@ -591,7 +591,7 @@ const deleteProduct = (product: ProductRow) => {
                                             {{ product.name }}
                                         </h3>
                                         <span
-                                            class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-300"
+                                            class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-700 dark:text-orange-300"
                                         >
                                             {{
                                                 product.category?.name ||
@@ -615,8 +615,8 @@ const deleteProduct = (product: ProductRow) => {
                                         'rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-wider',
                                         product.is_available &&
                                         product.is_active
-                                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
-                                            : 'border-rose-500/20 bg-rose-500/10 text-rose-300',
+                                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                                            : 'border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-300',
                                     ]"
                                 >
                                     {{
@@ -809,6 +809,20 @@ const deleteProduct = (product: ProductRow) => {
                             </div>
                         </div>
                     </article>
+
+                    <!-- Empty rows to fill up to exactly 20 items in grid -->
+                    <div
+                        v-for="i in Math.max(0, 20 - products.data.length)"
+                        :key="'empty-product-' + i"
+                        class="rounded-[24px] border border-dashed border-stone-200 bg-white/20 p-4 h-40 flex flex-col items-center justify-center dark:border-slate-800/80 dark:bg-slate-900/10"
+                    >
+                        <div class="h-6 w-6 rounded-full border border-dashed border-stone-300 flex items-center justify-center text-[10px] font-black text-stone-300 dark:border-slate-800 dark:text-slate-700">
+                            {{ products.data.length + i }}
+                        </div>
+                        <span class="mt-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-300 dark:text-slate-600">
+                            Slot Produk Kosong
+                        </span>
+                    </div>
                 </div>
 
                 <div
@@ -846,11 +860,11 @@ const deleteProduct = (product: ProductRow) => {
         <!-- Create/Edit Modal -->
         <div
             v-if="isProductModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 backdrop-blur-sm dark:bg-slate-950/80"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 backdrop-blur-sm dark:bg-slate-950/80"
             @click.self="closeProductModal"
         >
             <div
-                class="flex max-h-[90vh] w-full max-w-4xl flex-col rounded-[28px] border border-stone-200 bg-stone-100 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
+                class="flex max-h-[90vh] w-full max-w-4xl flex-col rounded-[28px] border border-stone-200 bg-stone-100 dark:border-slate-800/80 dark:bg-slate-950"
             >
                 <!-- Header Modal -->
                 <div
@@ -1682,7 +1696,7 @@ const deleteProduct = (product: ProductRow) => {
                             type="submit"
                             form="productForm"
                             :disabled="productForm.processing"
-                            class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-8 py-3 text-sm font-bold text-stone-900 shadow-lg shadow-orange-500/20 disabled:opacity-60 dark:text-white"
+                            class="rounded-2xl bg-orange-500 hover:bg-orange-600 px-8 py-3 text-sm font-bold text-white disabled:opacity-60 transition"
                         >
                             {{
                                 productForm.processing

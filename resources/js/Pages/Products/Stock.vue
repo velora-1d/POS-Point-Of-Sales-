@@ -84,29 +84,29 @@ const summaryCards = computed(() => [
     {
         label: 'Produk Tracked',
         value: props.summary.tracked,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: Boxes,
     },
     {
         label: 'Stok Sehat',
         value: props.summary.healthy,
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/8',
+        tone: 'text-emerald-600 dark:text-emerald-300',
+        surface: 'border-emerald-200 bg-emerald-50 dark:border-emerald-400/15 dark:bg-emerald-500/8',
         icon: PackageCheck,
     },
     {
         label: 'Stok Menipis',
         value: props.summary.low,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
+        tone: 'text-amber-600 dark:text-amber-300',
+        surface: 'border-amber-200 bg-amber-50 dark:border-amber-400/15 dark:bg-amber-500/8',
         icon: AlertTriangle,
     },
     {
         label: 'Stok Habis',
         value: props.summary.out,
-        tone: 'text-rose-300',
-        surface: 'border-rose-400/15 bg-rose-500/8',
+        tone: 'text-rose-600 dark:text-rose-300',
+        surface: 'border-rose-200 bg-rose-50 dark:border-rose-400/15 dark:bg-rose-500/8',
         icon: Archive,
     },
 ]);
@@ -157,14 +157,14 @@ const getStockStateClass = (product: ProductStockRow) => {
     const minimum = Number(product.stock?.minimum_stock || 0);
 
     if (current <= 0) {
-        return 'border-rose-500/20 bg-rose-500/10 text-rose-300';
+        return 'border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300';
     }
 
     if (current <= minimum) {
-        return 'border-amber-500/20 bg-amber-500/10 text-amber-300';
+        return 'border-amber-200 bg-amber-50 text-amber-600 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300';
     }
 
-    return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300';
+    return 'border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300';
 };
 
 const openStockModal = (product: ProductStockRow) => {
@@ -220,15 +220,15 @@ const submitStockUpdate = () => {
         <div class="space-y-5">
             <!-- Tab Navigation Global -->
             <div
-                class="flex max-w-3xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
             >
                 <Link
                     :href="route('products.stock')"
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('products.stock')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Stok Produk Jadi
@@ -238,8 +238,8 @@ const submitStockUpdate = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('products.hpp')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     HPP & Resep
@@ -249,8 +249,8 @@ const submitStockUpdate = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('stock-alerts.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Alert Stok Menipis
@@ -260,8 +260,8 @@ const submitStockUpdate = () => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('expired-tracking.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Reminder Expired
@@ -342,7 +342,7 @@ const submitStockUpdate = () => {
 
                     <button
                         type="submit"
-                        class="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
+                        class="rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition"
                     >
                         Terapkan
                     </button>
@@ -402,7 +402,7 @@ const submitStockUpdate = () => {
                                         {{ product.name }}
                                     </h3>
                                     <span
-                                        class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-300"
+                                        class="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-600 dark:text-orange-300"
                                     >
                                         {{
                                             product.category?.name ||
@@ -483,7 +483,7 @@ const submitStockUpdate = () => {
                         <button
                             type="button"
                             @click="openStockModal(product)"
-                            class="mt-4 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 dark:text-white"
+                            class="mt-4 inline-flex w-full items-center justify-center rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition"
                         >
                             Update Stok
                         </button>
@@ -524,7 +524,7 @@ const submitStockUpdate = () => {
 
         <div
             v-if="selectedProduct"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/85"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 py-6 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
                 class="w-full max-w-xl rounded-[28px] border border-stone-200 bg-stone-100 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
@@ -688,7 +688,7 @@ const submitStockUpdate = () => {
                         <button
                             type="submit"
                             :disabled="stockForm.processing"
-                            class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-stone-900 disabled:cursor-not-allowed disabled:opacity-60 dark:text-white"
+                            class="inline-flex items-center justify-center rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             Simpan Perubahan
                         </button>

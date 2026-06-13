@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ChefAnimation from '@/Components/ChefAnimation.vue';
+
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import {
@@ -497,11 +497,11 @@ const resolveStatusLabel = (status?: string | null) => {
 const resolveHistoryTone = (status: string) => {
     switch (status) {
         case 'in_progress':
-            return 'border-amber-400/20 bg-amber-500/12 text-amber-300';
+            return 'border-amber-400/20 bg-amber-500/12 text-amber-700 dark:text-amber-300';
         case 'waiting_bar_approval':
-            return 'border-cyan-400/20 bg-cyan-500/12 text-cyan-300';
+            return 'border-cyan-400/20 bg-cyan-500/12 text-cyan-700 dark:text-cyan-300';
         case 'ready':
-            return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-300';
+            return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-700 dark:text-emerald-300';
         default:
             return 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300';
     }
@@ -578,7 +578,7 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                 lane: 'queued',
                 timerTitle: 'Menunggu',
                 timerValue: formatDuration(waitedSeconds),
-                timerTone: isWarning ? 'text-amber-300' : 'text-sky-300',
+                timerTone: isWarning ? 'text-amber-600 dark:text-amber-300' : 'text-sky-600 dark:text-sky-300',
                 laneBorder: isWarning
                     ? 'border-amber-500/25'
                     : 'border-sky-500/25',
@@ -593,10 +593,10 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                 sortValue: waitedSeconds,
                 statusBadge: isWarning ? 'Warning' : null,
                 statusBadgeClass:
-                    'border-amber-400/20 bg-amber-500/12 text-amber-300',
+                    'border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300 dark:bg-amber-500/12 dark:border-amber-400/20',
                 sourceBadgeClass:
                     sourceLabel === 'QR Meja'
-                        ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
+                        ? 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300 dark:bg-fuchsia-500/12 dark:border-fuchsia-400/20'
                         : 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300',
                 estimatedMinutes:
                     order.estimatedMinutes ||
@@ -620,10 +620,10 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                 timerTitle: isOverdue ? 'Lewat' : 'Sisa',
                 timerValue: formatDuration(Math.abs(remainingSeconds)),
                 timerTone: isOverdue
-                    ? 'text-rose-300'
+                    ? 'text-rose-600 dark:text-rose-300'
                     : isWarning
-                      ? 'text-amber-300'
-                      : 'text-white',
+                      ? 'text-amber-600 dark:text-amber-300'
+                      : 'text-stone-800 dark:text-white',
                 laneBorder: isOverdue
                     ? 'border-rose-500/25'
                     : 'border-amber-500/25',
@@ -644,11 +644,11 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
                       ? 'Warning'
                       : null,
                 statusBadgeClass: isOverdue
-                    ? 'border-rose-400/20 bg-rose-500/12 text-rose-300'
-                    : 'border-amber-400/20 bg-amber-500/12 text-amber-300',
+                    ? 'border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-300 dark:bg-rose-500/12 dark:border-rose-400/20'
+                    : 'border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300 dark:bg-amber-500/12 dark:border-amber-400/20',
                 sourceBadgeClass:
                     sourceLabel === 'QR Meja'
-                        ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
+                        ? 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300 dark:bg-fuchsia-500/12 dark:border-fuchsia-400/20'
                         : 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300',
                 estimatedMinutes:
                     order.estimatedMinutes ||
@@ -668,7 +668,7 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
             lane: 'handoff',
             timerTitle: 'Status',
             timerValue: isReady ? 'Siap Pickup' : 'Menunggu Bar',
-            timerTone: isReady ? 'text-emerald-300' : 'text-orange-300',
+            timerTone: isReady ? 'text-emerald-700 dark:text-emerald-300' : 'text-orange-700 dark:text-orange-300',
             laneBorder: 'border-emerald-500/25',
             cardSurface: isReady
                 ? 'border-emerald-500/20 bg-emerald-500/[0.04]'
@@ -681,11 +681,11 @@ const mappedTickets = computed<KitchenTicketView[]>(() => {
             sortValue: toTimestamp(order.updatedAt) ?? 0,
             statusBadge: isReady ? 'Ready' : 'Bar Approval',
             statusBadgeClass: isReady
-                ? 'border-emerald-400/20 bg-emerald-500/12 text-emerald-300'
-                : 'border-orange-400/20 bg-orange-500/12 text-orange-300',
+                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 dark:bg-emerald-500/12 dark:border-emerald-400/20'
+                : 'border-orange-500/20 bg-orange-500/10 text-orange-700 dark:text-orange-300 dark:bg-orange-500/12 dark:border-orange-400/20',
             sourceBadgeClass:
                 sourceLabel === 'QR Meja'
-                    ? 'border-fuchsia-400/20 bg-fuchsia-500/12 text-fuchsia-300'
+                    ? 'border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300 dark:bg-fuchsia-500/12 dark:border-fuchsia-400/20'
                     : 'border-stone-200 dark:border-slate-700/70 bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-300',
             estimatedMinutes:
                 order.estimatedMinutes ||
@@ -763,7 +763,7 @@ const boardStats = computed(() => [
         value: String(filteredSortedTickets.value.length),
         hint: 'Semua lane',
         icon: ScanSearch,
-        tone: 'text-white',
+        tone: 'text-stone-850 dark:text-white',
         surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
     },
     {
@@ -771,7 +771,7 @@ const boardStats = computed(() => [
         value: String(queueTickets.value.length),
         hint: 'Belum diproses',
         icon: BellRing,
-        tone: 'text-sky-300',
+        tone: 'text-sky-700 dark:text-sky-300',
         surface: 'border-sky-400/15 bg-sky-500/8',
     },
     {
@@ -779,7 +779,7 @@ const boardStats = computed(() => [
         value: String(cookingTickets.value.length),
         hint: 'Station aktif',
         icon: Flame,
-        tone: 'text-amber-300',
+        tone: 'text-amber-700 dark:text-amber-300',
         surface: 'border-amber-400/15 bg-amber-500/8',
     },
     {
@@ -787,7 +787,7 @@ const boardStats = computed(() => [
         value: String(handoffTickets.value.length),
         hint: 'Bar / pickup',
         icon: CheckCheck,
-        tone: 'text-emerald-300',
+        tone: 'text-emerald-700 dark:text-emerald-300',
         surface: 'border-emerald-400/15 bg-emerald-500/8',
     },
 ]);
@@ -799,10 +799,10 @@ const queueColumns = computed(() => [
         subtitle: 'Belum diproses',
         icon: BellRing,
         count: queueTickets.value.length,
-        accent: 'text-sky-300',
+        accent: 'text-sky-700 dark:text-sky-300',
         accentSurface: 'from-sky-500/16 via-cyan-500/10 to-transparent',
         border: 'border-sky-500/25',
-        badge: 'border-sky-400/20 bg-sky-500/12 text-sky-300',
+        badge: 'border-sky-500/20 bg-sky-500/10 text-sky-700 dark:text-sky-300 dark:bg-sky-500/12 dark:border-sky-400/20',
         tickets: queueTickets.value,
     },
     {
@@ -811,10 +811,10 @@ const queueColumns = computed(() => [
         subtitle: 'Countdown waktu masak',
         icon: Flame,
         count: cookingTickets.value.length,
-        accent: 'text-amber-300',
+        accent: 'text-amber-700 dark:text-amber-300',
         accentSurface: 'from-amber-500/16 via-orange-500/10 to-transparent',
         border: 'border-amber-500/25',
-        badge: 'border-amber-400/20 bg-amber-500/12 text-amber-300',
+        badge: 'border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300 dark:bg-amber-500/12 dark:border-amber-400/20',
         tickets: cookingTickets.value,
     },
     {
@@ -823,10 +823,10 @@ const queueColumns = computed(() => [
         subtitle: 'Menunggu bar / pickup',
         icon: CheckCheck,
         count: handoffTickets.value.length,
-        accent: 'text-emerald-300',
+        accent: 'text-emerald-700 dark:text-emerald-300',
         accentSurface: 'from-emerald-500/16 via-lime-500/10 to-transparent',
         border: 'border-emerald-500/25',
-        badge: 'border-emerald-400/20 bg-emerald-500/12 text-emerald-300',
+        badge: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 dark:bg-emerald-500/12 dark:border-emerald-400/20',
         tickets: handoffTickets.value,
     },
 ]);
@@ -878,10 +878,10 @@ const updateEstimate = (orderId: string, minutes: number) => {
             >
                 <div>
                     <div
-                        class="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/8 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-300"
+                        class="mb-2 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/8 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-orange-700 dark:text-orange-300"
                     >
                         <span
-                            class="h-2 w-2 rounded-full bg-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.65)]"
+                            class="h-2 w-2 rounded-full bg-orange-400"
                         ></span>
                         Live Kitchen Board
                     </div>
@@ -900,7 +900,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
                 <!-- Kontrol Volume Lokal -->
                 <div
-                    class="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/45 md:self-end"
+                    class="flex items-center gap-3 rounded-2xl border-2 border-stone-900 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/45 md:self-end"
                 >
                     <button
                         type="button"
@@ -943,7 +943,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
             <div
                 v-if="isAudioBlocked"
                 @click="initAudioAndDismiss"
-                class="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/12 px-5 py-4 text-amber-300 shadow-lg shadow-amber-950/10 transition hover:bg-amber-500/18"
+                class="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/12 px-5 py-4 text-amber-700 dark:text-amber-300 transition hover:bg-amber-500/18"
             >
                 <div class="flex items-center gap-3">
                     <div
@@ -976,22 +976,22 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
             <div
                 v-if="success"
-                class="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-300"
+                class="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/12 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300"
             >
-                <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                <span class="h-2 w-2 rounded-full bg-emerald-450 dark:bg-emerald-400"></span>
                 <span>{{ success }}</span>
             </div>
 
             <div
                 v-if="error"
-                class="flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/12 px-4 py-3 text-sm font-medium text-rose-300"
+                class="flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/12 px-4 py-3 text-sm font-medium text-rose-700 dark:text-rose-300"
             >
-                <span class="h-2 w-2 rounded-full bg-rose-400"></span>
+                <span class="h-2 w-2 rounded-full bg-rose-450 dark:bg-rose-400"></span>
                 <span>{{ error }}</span>
             </div>
 
             <section
-                class="rounded-[22px] border border-stone-200 bg-stone-50 p-3 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/90"
+                class="rounded-[22px] border-2 border-black bg-stone-50 p-4 dark:border-slate-800 dark:bg-slate-900/90"
             >
                 <div
                     class="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between"
@@ -1001,7 +1001,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                             class="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-slate-500"
                         >
                             <span
-                                class="rounded-full border border-emerald-500/20 bg-emerald-500/8 px-3 py-1 text-emerald-300"
+                                class="rounded-full border border-emerald-500/20 bg-emerald-500/8 px-3 py-1 text-emerald-700 dark:text-emerald-300"
                             >
                                 Sinkronisasi Aktif
                             </span>
@@ -1051,7 +1051,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                     :class="[
                                         'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                         selectedCategoryId === 'all'
-                                            ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
+                                            ? 'border-orange-500/30 bg-orange-500/12 text-orange-700 dark:text-orange-300'
                                             : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300 hover:text-stone-800 dark:border-slate-600 dark:border-slate-700/70 dark:bg-slate-950/60 dark:text-slate-400 dark:hover:text-slate-200',
                                     ]"
                                 >
@@ -1065,7 +1065,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                     :class="[
                                         'rounded-full border px-3 py-1.5 text-[11px] font-bold transition',
                                         selectedCategoryId === category.id
-                                            ? 'border-orange-500/30 bg-orange-500/12 text-orange-300'
+                                            ? 'border-orange-500/30 bg-orange-500/12 text-orange-700 dark:text-orange-300'
                                             : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300 hover:text-stone-800 dark:border-slate-600 dark:border-slate-700/70 dark:bg-slate-950/60 dark:text-slate-400 dark:hover:text-slate-200',
                                     ]"
                                 >
@@ -1082,7 +1082,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
                             v-for="stat in boardStats"
                             :key="stat.label"
                             :class="[
-                                'rounded-2xl border px-3 py-2 shadow-lg shadow-slate-950/10',
+                                'rounded-2xl border-2 border-black px-3 py-2 dark:border-slate-800',
                                 stat.surface,
                             ]"
                         >
@@ -1122,23 +1122,21 @@ const updateEstimate = (orderId: string, minutes: number) => {
                 >
                     <div
                         :class="[
-                            'relative overflow-hidden rounded-[22px] border bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:bg-slate-900/95',
-                            lane.border,
+                            'relative overflow-hidden rounded-[22px] border-2 border-black p-4 dark:border-slate-850',
+                            lane.key === 'queued'
+                                ? 'bg-sky-50 dark:bg-sky-950/20'
+                                : lane.key === 'cooking'
+                                  ? 'bg-amber-50 dark:bg-amber-950/20'
+                                  : 'bg-emerald-50 dark:bg-emerald-950/20',
                         ]"
                     >
-                        <div
-                            :class="[
-                                'pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b opacity-90',
-                                lane.accentSurface,
-                            ]"
-                        ></div>
 
                         <div
                             class="relative flex items-center justify-between gap-3"
                         >
                             <div class="flex items-center gap-3">
                                 <div
-                                    class="flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200 bg-white/[0.04] shadow-inner shadow-slate-950/30 dark:border-white/10"
+                                    class="flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200 bg-white/[0.04] dark:border-white/10"
                                 >
                                     <component
                                         :is="lane.icon"
@@ -1161,7 +1159,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
                             <div
                                 :class="[
-                                    'rounded-2xl border px-3 py-1.5 text-right shadow-lg shadow-slate-950/20',
+                                    'rounded-2xl border px-3 py-1.5 text-right',
                                     lane.badge,
                                 ]"
                             >
@@ -1178,17 +1176,16 @@ const updateEstimate = (orderId: string, minutes: number) => {
                     </div>
 
                     <div
-                        class="min-h-0 flex-1 overflow-hidden rounded-[22px] border border-stone-200 bg-stone-50 p-3 shadow-2xl shadow-slate-950/20 dark:border-slate-800/80 dark:bg-slate-900/88"
+                        class="rounded-[22px] border-2 border-black bg-stone-50 p-3 dark:border-slate-850 dark:bg-slate-900/88"
                     >
-                        <div class="flex h-full min-h-0 flex-col">
-                            <div
-                                class="custom-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
-                            >
+                        <div
+                            class="custom-scrollbar space-y-3 overflow-y-auto pr-1 max-h-[1400px]"
+                        >
                                 <div
                                     v-for="ticket in lane.tickets"
                                     :key="ticket.id"
                                     :class="[
-                                        'rounded-[22px] border p-4 shadow-lg shadow-slate-950/15 transition duration-200',
+                                        'rounded-[22px] border-2 p-4 transition duration-200 hover:-translate-y-0.5',
                                         ticket.cardSurface,
                                     ]"
                                 >
@@ -1285,10 +1282,10 @@ const updateEstimate = (orderId: string, minutes: number) => {
 
                                     <div
                                         v-if="ticket.orderNotes"
-                                        class="mt-3 rounded-2xl border border-orange-500/15 bg-orange-500/6 px-3 py-2 text-[11px] leading-relaxed text-orange-100/85"
+                                        class="mt-3 rounded-2xl border border-orange-500/15 bg-orange-500/6 px-3 py-2 text-[11px] leading-relaxed text-orange-850 dark:text-orange-100/85"
                                     >
                                         <span
-                                            class="font-bold uppercase tracking-[0.18em] text-orange-300"
+                                            class="font-bold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-300"
                                             >Catatan order</span
                                         >
                                         <p class="mt-1">
@@ -1415,29 +1412,26 @@ const updateEstimate = (orderId: string, minutes: number) => {
                                     </button>
                                 </div>
 
+                                <!-- Empty Rows to fill up to 10 slots -->
                                 <div
-                                    v-if="lane.tickets.length === 0"
-                                    class="rounded-[22px] border border-dashed border-stone-200 bg-white px-5 py-12 text-center dark:border-slate-800 dark:bg-slate-950/50"
+                                    v-for="i in Math.max(0, 10 - lane.tickets.length)"
+                                    :key="'empty-' + lane.key + '-' + i"
+                                    class="rounded-[22px] border-2 border-dashed border-stone-200 bg-white/20 p-4 h-36 flex flex-col items-center justify-center dark:border-slate-800/80 dark:bg-slate-900/10"
                                 >
-                                    <p
-                                        class="text-sm font-bold text-stone-600 dark:text-slate-300"
-                                    >
-                                        Lane kosong.
-                                    </p>
-                                    <p
-                                        class="mt-2 text-xs text-stone-400 dark:text-slate-500"
-                                    >
-                                        Tidak ada tiket aktif pada status ini.
-                                    </p>
+                                    <div class="h-6 w-6 rounded-full border border-dashed border-stone-300 flex items-center justify-center text-[10px] font-black text-stone-300 dark:border-slate-800 dark:text-slate-700">
+                                        {{ lane.tickets.length + i }}
+                                    </div>
+                                    <span class="mt-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-300 dark:text-slate-600">
+                                        Slot Kosong
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </article>
             </section>
 
             <section
-                class="rounded-[22px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                class="rounded-[22px] border-2 border-black bg-stone-50 p-4 dark:border-slate-800 dark:bg-slate-900/92"
             >
                 <div
                     class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
@@ -1533,12 +1527,7 @@ const updateEstimate = (orderId: string, minutes: number) => {
             </section>
         </div>
 
-        <!-- Widget Koki Pojok Melayang -->
-        <div
-            class="fixed bottom-6 right-6 z-40 max-w-[120px] rounded-[24px] border border-stone-200/80 bg-white/90 p-1.5 shadow-2xl backdrop-blur transition-all duration-300 hover:scale-105 dark:border-slate-800 dark:bg-slate-950/90"
-        >
-            <ChefAnimation :state="chefState" />
-        </div>
+
     </AuthenticatedLayout>
 </template>
 

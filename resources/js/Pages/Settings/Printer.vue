@@ -133,32 +133,32 @@ const summaryCards = computed(() => [
         helper: props.access.canSelectOutlet
             ? 'Owner bisa pilih outlet aktif'
             : 'Supervisor hanya outlet sendiri',
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-2 border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: Store,
     },
     {
         label: 'Sudah Terkonfigurasi',
         value: props.summary.configured_outlets,
         helper: 'Outlet yang sudah punya data printer',
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-700 dark:text-emerald-300',
+        surface: 'border-2 border-emerald-500/15 bg-emerald-50/50 dark:border-emerald-400/15 dark:bg-emerald-500/10',
         icon: CheckCircle2,
     },
     {
         label: 'Printer Network',
         value: props.summary.network_printers,
         helper: 'Butuh IP dan port di jaringan outlet',
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-700 dark:text-sky-350',
+        surface: 'border-2 border-sky-500/15 bg-sky-50/50 dark:border-sky-400/15 dark:bg-sky-500/10',
         icon: Network,
     },
     {
         label: 'Default WhatsApp',
         value: props.summary.whatsapp_defaults,
         helper: 'Outlet yang default struknya kirim WA',
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-700 dark:text-amber-300',
+        surface: 'border-2 border-amber-500/15 bg-amber-50/50 dark:border-amber-400/15 dark:bg-amber-500/10',
         icon: Send,
     },
 ]);
@@ -196,7 +196,7 @@ function openSelectedOutlet(outletId: string) {
         },
         {
             preserveScroll: true,
-            preserveState: true,
+            preserveState: false,
             replace: true,
         },
     );
@@ -319,7 +319,7 @@ function clearLogo() {
                 <article
                     v-for="card in summaryCards"
                     :key="card.label"
-                    class="rounded-[24px] border p-4"
+                    class="rounded-[24px] p-4"
                     :class="card.surface"
                 >
                     <div class="flex items-start justify-between gap-4">
@@ -342,7 +342,7 @@ function clearLogo() {
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-950/40"
+                            class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-950/40"
                         >
                             <component
                                 :is="card.icon"
@@ -355,17 +355,17 @@ function clearLogo() {
 
             <section class="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
                 <article
-                    class="rounded-[28px] border border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900/70"
+                    class="rounded-[28px] border-2 border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-white/10 dark:bg-slate-900/70"
                 >
                     <div
-                        class="flex flex-col gap-4 border-b border-stone-200 pb-5 dark:border-slate-800"
+                        class="flex flex-col gap-4 border-b-2 border-stone-200 pb-5 dark:border-white/10"
                     >
                         <div
                             class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between"
                         >
                             <div>
                                 <p
-                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300"
+                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300"
                                 >
                                     Scope Outlet
                                 </p>
@@ -376,9 +376,9 @@ function clearLogo() {
                                 </h3>
                             </div>
                             <div
-                                class="inline-flex items-center gap-2 self-start rounded-full border border-stone-200 bg-white px-3 py-1 text-[11px] font-semibold text-stone-600 dark:border-slate-700 dark:bg-slate-950/70 dark:text-slate-300"
+                                class="inline-flex items-center gap-2 self-start rounded-full border-2 border-stone-200 bg-white px-3 py-1 text-[11px] font-semibold text-stone-600 dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-300"
                             >
-                                <Radio class="h-3.5 w-3.5 text-emerald-300" />
+                                <Radio class="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-350" />
                                 {{
                                     access.canSelectOutlet
                                         ? 'Owner mode'
@@ -403,7 +403,7 @@ function clearLogo() {
                                                 .value,
                                         )
                                     "
-                                    class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                    class="w-full rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                 >
                                     <option
                                         v-for="outlet in outlets"
@@ -425,7 +425,7 @@ function clearLogo() {
                             </div>
 
                             <div
-                                class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                                class="rounded-2xl border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/60"
                             >
                                 <p
                                     class="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500 dark:text-slate-400"
@@ -500,7 +500,7 @@ function clearLogo() {
                                     <label
                                         v-for="option in printerOptions.types"
                                         :key="option.value"
-                                        class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                                        class="flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/60"
                                         :class="
                                             printerForm.printer_type ===
                                             option.value
@@ -547,7 +547,7 @@ function clearLogo() {
                                     <label
                                         v-for="option in printerOptions.connections"
                                         :key="option.value"
-                                        class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                                        class="flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/60"
                                         :class="
                                             printerForm.connection_type ===
                                             option.value
@@ -598,7 +598,7 @@ function clearLogo() {
                                     v-model="printerForm.device_name"
                                     type="text"
                                     placeholder="Contoh: EPSON-TM-T82X atau POS-USB-01"
-                                    class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                    class="w-full rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                 />
                                 <p
                                     class="mt-2 text-xs text-stone-400 dark:text-slate-500"
@@ -625,7 +625,7 @@ function clearLogo() {
                                         v-model="printerForm.ip_address"
                                         type="text"
                                         placeholder="Contoh: 192.168.10.25"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                        class="w-full rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                     />
                                     <p
                                         v-if="printerForm.errors.ip_address"
@@ -647,7 +647,7 @@ function clearLogo() {
                                         min="1"
                                         max="65535"
                                         placeholder="9100"
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                        class="w-full rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                     />
                                     <p
                                         class="mt-2 text-xs text-stone-400 dark:text-slate-500"
@@ -674,7 +674,7 @@ function clearLogo() {
                                 <label
                                     v-for="option in printerOptions.receiptMethods"
                                     :key="option.value"
-                                    class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                                    class="flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/60"
                                     :class="
                                         printerForm.default_receipt_method ===
                                         option.value
@@ -721,11 +721,11 @@ function clearLogo() {
 
                         <!-- Visual Receipt Customizer -->
                         <div
-                            class="space-y-5 border-t border-stone-200 pt-5 dark:border-slate-800"
+                            class="space-y-5 border-t-2 border-stone-200 pt-5 dark:border-white/10"
                         >
                             <div>
                                 <p
-                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300"
+                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300"
                                 >
                                     Kustomisasi Visual Struk
                                 </p>
@@ -751,14 +751,14 @@ function clearLogo() {
                                         Logo Struk (Upload)
                                     </label>
                                     <div
-                                        class="flex items-center gap-4 rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                                        class="flex items-center gap-4 rounded-2xl border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/60"
                                     >
                                         <div
                                             v-if="
                                                 printerForm.metadata
                                                     .receipt_logo
                                             "
-                                            class="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-stone-200 bg-white p-1 dark:border-slate-700"
+                                            class="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 border-stone-200 bg-white p-1 dark:border-white/10"
                                         >
                                             <img
                                                 :src="
@@ -790,7 +790,7 @@ function clearLogo() {
                                         </div>
                                         <div
                                             v-else
-                                            class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border border-dashed border-stone-200 bg-white dark:border-slate-700 dark:bg-slate-950/50"
+                                            class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border border-dashed border-stone-200 bg-white dark:border-white/10 dark:bg-slate-950/50"
                                         >
                                             <Printer
                                                 class="h-6 w-6 text-slate-600"
@@ -806,7 +806,7 @@ function clearLogo() {
                                             />
                                             <label
                                                 for="receipt_logo_input"
-                                                class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs font-semibold text-stone-800 transition hover:border-slate-500 hover:text-stone-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:text-white"
+                                                class="inline-flex cursor-pointer items-center justify-center rounded-xl border-2 border-stone-200 bg-white px-3 py-2 text-xs font-semibold text-stone-800 transition hover:border-slate-500 hover:text-stone-900 dark:border-white/10 dark:bg-slate-900 dark:text-slate-200 dark:text-white"
                                             >
                                                 Pilih Gambar
                                             </label>
@@ -832,7 +832,7 @@ function clearLogo() {
                                             printerForm.metadata
                                                 .receipt_template
                                         "
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                        class="w-full rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                     >
                                         <option value="classic">
                                             Classic (Sharp / 80mm-92mm)
@@ -865,7 +865,7 @@ function clearLogo() {
                                         v-model="
                                             printerForm.metadata.receipt_font
                                         "
-                                        class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                        class="w-full rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                     >
                                         <option value="sans">
                                             Sans-serif (Modern & Bersih)
@@ -892,7 +892,7 @@ function clearLogo() {
                                             v-for="colorOpt in [
                                                 {
                                                     value: 'mono',
-                                                    bg: 'bg-stone-100 dark:bg-slate-950 border-stone-200 dark:border-slate-700',
+                                                    bg: 'bg-stone-100 dark:bg-slate-950 border-stone-200 dark:border-white/10',
                                                     label: 'Hitam',
                                                 },
                                                 {
@@ -923,7 +923,7 @@ function clearLogo() {
                                                 printerForm.metadata
                                                     .receipt_color ===
                                                 colorOpt.value
-                                                    ? 'scale-110 ring-2 ring-white'
+                                                    ? 'scale-110 ring-2 ring-stone-900 dark:ring-white ring-offset-2 dark:ring-offset-slate-900'
                                                     : 'opacity-70 hover:opacity-100',
                                             ]"
                                             :title="colorOpt.label"
@@ -951,7 +951,7 @@ function clearLogo() {
                                     "
                                     rows="2"
                                     placeholder="Contoh: Terima kasih atas kunjungan Anda! Barang yang sudah dibeli tidak dapat ditukar."
-                                    class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                    class="w-full rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                 ></textarea>
                                 <p
                                     class="mt-1 text-xs text-stone-400 dark:text-slate-500"
@@ -963,7 +963,7 @@ function clearLogo() {
                         </div>
 
                         <div
-                            class="flex flex-col gap-3 border-t border-stone-200 pt-5 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between"
+                            class="flex flex-col gap-3 border-t-2 border-stone-200 pt-5 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between"
                         >
                             <div
                                 class="text-xs text-stone-400 dark:text-slate-500"
@@ -974,7 +974,7 @@ function clearLogo() {
                             <div class="flex flex-col gap-3 sm:flex-row">
                                 <button
                                     type="button"
-                                    class="inline-flex items-center justify-center rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-slate-500 hover:text-stone-900 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:text-white"
+                                    class="inline-flex items-center justify-center rounded-2xl border-2 border-stone-200 bg-stone-100 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-slate-500 hover:text-stone-900 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200 dark:text-white"
                                     @click="openTestPrint"
                                 >
                                     Test print preview
@@ -998,12 +998,12 @@ function clearLogo() {
                 <aside class="space-y-5">
                     <!-- Live Visual Receipt Preview -->
                     <article
-                        class="rounded-[28px] border border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900/70"
+                        class="rounded-[28px] border-2 border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-white/10 dark:bg-slate-900/70"
                     >
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p
-                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-300"
+                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300"
                                 >
                                     Live Receipt Preview
                                 </p>
@@ -1023,7 +1023,7 @@ function clearLogo() {
                         </div>
 
                         <div
-                            class="mt-5 flex items-center justify-center rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/80"
+                            class="mt-5 flex items-center justify-center rounded-2xl border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/80"
                         >
                             <!-- Paper sheet simulation -->
                             <div
@@ -1073,7 +1073,8 @@ function clearLogo() {
                                     <div class="flex justify-between">
                                         <span>No. Order</span>
                                         <span
-                                            class="font-semibold text-slate-900"
+                                            class="font-black"
+                                            :class="liveAccentColorText"
                                             >TRX-2026-0001</span
                                         >
                                     </div>
@@ -1220,12 +1221,12 @@ function clearLogo() {
                     </article>
 
                     <article
-                        class="rounded-[28px] border border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900/70"
+                        class="rounded-[28px] border-2 border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-white/10 dark:bg-slate-900/70"
                     >
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p
-                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300"
+                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-sky-600 dark:text-sky-300"
                                 >
                                     Preview Runtime
                                 </p>
@@ -1236,7 +1237,7 @@ function clearLogo() {
                                 </h3>
                             </div>
                             <div
-                                class="rounded-2xl border border-stone-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950/70"
+                                class="rounded-2xl border-2 border-stone-200 bg-white p-3 dark:border-white/10 dark:bg-slate-950/70"
                             >
                                 <Printer
                                     class="h-5 w-5 text-stone-800 dark:text-slate-200"
@@ -1245,7 +1246,7 @@ function clearLogo() {
                         </div>
 
                         <div
-                            class="mt-5 rounded-[24px] border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/70"
+                            class="mt-5 rounded-[24px] border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/70"
                         >
                             <div
                                 class="flex items-center justify-between gap-3"
@@ -1321,7 +1322,7 @@ function clearLogo() {
                         </div>
 
                         <div
-                            class="mt-4 rounded-[24px] border border-dashed border-stone-200 bg-white p-4 text-xs text-stone-500 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-400"
+                            class="mt-4 rounded-[24px] border border-dashed border-stone-200 bg-white p-4 text-xs text-stone-500 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-400"
                         >
                             <p
                                 class="font-semibold text-stone-800 dark:text-slate-200"
@@ -1347,12 +1348,12 @@ function clearLogo() {
                     </article>
 
                     <article
-                        class="rounded-[28px] border border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900/70"
+                        class="rounded-[28px] border-2 border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-white/10 dark:bg-slate-900/70"
                     >
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p
-                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300"
+                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-emerald-600 dark:text-emerald-300"
                                 >
                                     Status Outlet
                                 </p>
@@ -1368,7 +1369,7 @@ function clearLogo() {
                             <div
                                 v-for="outlet in outlets"
                                 :key="outlet.id"
-                                class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                                class="rounded-2xl border-2 border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/60"
                             >
                                 <div
                                     class="flex items-start justify-between gap-4"

@@ -589,7 +589,7 @@ function submitPlatform(platform: 'gofood' | 'grabfood') {
                                     type="button"
                                     @click="submitPlatform(entry.key)"
                                     :disabled="entry.form.processing"
-                                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3 text-sm font-bold text-stone-900 transition disabled:pointer-events-none disabled:opacity-50 dark:text-white"
+                                    class="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-500 hover:bg-orange-400 px-5 py-3 text-sm font-bold text-stone-950 transition disabled:pointer-events-none disabled:opacity-50"
                                 >
                                     {{
                                         entry.form.processing

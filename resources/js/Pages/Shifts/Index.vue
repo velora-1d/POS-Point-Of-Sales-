@@ -192,25 +192,25 @@ const summaryCards = computed(() => {
             label: 'Shift Aktif',
             value: active ? 'Aktif' : 'Tidak Ada',
             tone: active
-                ? 'text-emerald-300'
-                : 'text-stone-600 dark:text-slate-300',
+                ? 'text-emerald-700 dark:text-emerald-300'
+                : 'text-stone-900 dark:text-slate-300',
             surface: active
-                ? 'border-emerald-400/15 bg-emerald-500/10'
-                : 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+                ? 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/10 dark:bg-emerald-500/10'
+                : 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
             icon: CheckCircle2,
         },
         {
             label: 'Order Terbayar',
             value: active?.summary.total_orders ?? 0,
-            tone: 'text-white',
-            surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+            tone: 'text-stone-900 dark:text-white',
+            surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
             icon: CalendarDays,
         },
         {
             label: 'Revenue Shift',
             value: formatPrice(active?.summary.total_revenue ?? 0),
-            tone: 'text-sky-300',
-            surface: 'border-sky-400/15 bg-sky-500/10',
+            tone: 'text-sky-700 dark:text-sky-300',
+            surface: 'border-sky-200 bg-sky-50 dark:border-sky-500/10 dark:bg-sky-500/10',
             icon: Wallet,
         },
         {
@@ -218,8 +218,8 @@ const summaryCards = computed(() => {
             value: formatPrice(
                 lastClosed?.actual_cash ?? lastClosed?.expected_cash ?? 0,
             ),
-            tone: 'text-amber-300',
-            surface: 'border-amber-400/15 bg-amber-500/10',
+            tone: 'text-amber-700 dark:text-amber-300',
+            surface: 'border-amber-200 bg-amber-50 dark:border-amber-500/10 dark:bg-amber-500/10',
             icon: Clock3,
         },
     ];
@@ -241,29 +241,29 @@ const cashRecapCards = computed(() => [
         label: 'Shift Tertutup',
         value: props.cashRecap.total_shifts,
         helper: `${props.cashRecap.total_orders} order terbayar`,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
     },
     {
         label: 'Revenue Tersimpan',
         value: formatPrice(props.cashRecap.total_revenue),
         helper: 'Akumulasi laporan cash report',
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-700 dark:text-sky-300',
+        surface: 'border-sky-200 bg-sky-50 dark:border-sky-500/10 dark:bg-sky-500/10',
     },
     {
         label: 'Ekspektasi Kas',
         value: formatPrice(props.cashRecap.expected_cash),
         helper: 'Saldo awal + cash masuk',
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-700 dark:text-emerald-300',
+        surface: 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/10 dark:bg-emerald-500/10',
     },
     {
         label: 'Kas Aktual',
         value: formatPrice(props.cashRecap.actual_cash),
         helper: 'Input saat tutup shift',
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-700 dark:text-amber-300',
+        surface: 'border-amber-200 bg-amber-50 dark:border-amber-500/10 dark:bg-amber-500/10',
     },
     {
         label: 'Selisih Bersih',
@@ -272,8 +272,8 @@ const cashRecapCards = computed(() => [
         tone: differenceClass(props.cashRecap.cash_difference),
         surface:
             props.cashRecap.difference_count > 0
-                ? 'border-rose-400/15 bg-rose-500/10'
-                : 'border-emerald-400/15 bg-emerald-500/10',
+                ? 'border-rose-200 bg-rose-50 dark:border-rose-500/10 dark:bg-rose-500/10'
+                : 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/10 dark:bg-emerald-500/10',
     },
 ]);
 
@@ -310,7 +310,7 @@ const formatDateTime = (value?: string | null) => {
 
 const statusClass = (status: string) => {
     return status === 'active'
-        ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-200'
+        ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-200'
         : 'border-slate-500/20 bg-slate-500/10 text-stone-600 dark:text-slate-300';
 };
 
@@ -318,10 +318,10 @@ const differenceClass = (difference?: number | null) => {
     const value = Number(difference || 0);
 
     if (value === 0) {
-        return 'text-emerald-300';
+        return 'text-emerald-600 dark:text-emerald-300';
     }
 
-    return value > 0 ? 'text-sky-300' : 'text-rose-300';
+    return value > 0 ? 'text-sky-600 dark:text-sky-300' : 'text-rose-600 dark:text-rose-300';
 };
 
 const hasCashDifference = (shift: ShiftRow) => {
@@ -454,37 +454,37 @@ const submitCloseShift = () => {
 
             <!-- Tab Navigation Global -->
             <div
-                class="flex max-w-2xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full flex-wrap gap-1 rounded-2xl border border-stone-200 bg-stone-50 p-1 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/60"
             >
                 <Link
                     :href="route('shifts.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('shifts.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Shift Kasir (Laci Kas)
                 </Link>
                 <Link
                     :href="route('attendance.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('attendance.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Absensi Karyawan
                 </Link>
                 <Link
                     :href="route('schedules.index')"
-                    class="flex-1 rounded-xl py-2 text-center text-xs font-bold uppercase tracking-wider transition duration-150"
+                    class="flex-1 min-w-[120px] rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('schedules.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-slate-955 shadow-md shadow-orange-500/20 border border-orange-600'
+                            : 'text-stone-700 hover:bg-stone-200 hover:text-stone-955 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Jadwal Shift Kerja
@@ -537,7 +537,7 @@ const submitCloseShift = () => {
                                 }}
                             </h3>
                             <p
-                                class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                             >
                                 {{
                                     activeShift
@@ -577,7 +577,7 @@ const submitCloseShift = () => {
                                     {{ activeShift.outlet?.name || '-' }}
                                 </p>
                                 <p
-                                    class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                    class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                                 >
                                     Dibuka:
                                     {{ formatDateTime(activeShift.opened_at) }}
@@ -597,7 +597,7 @@ const submitCloseShift = () => {
                                         class="rounded-2xl border border-stone-200 bg-white px-3 py-3 dark:border-white/10 dark:bg-slate-950/50"
                                     >
                                         <p
-                                            class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                            class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                         >
                                             Saldo Awal
                                         </p>
@@ -615,7 +615,7 @@ const submitCloseShift = () => {
                                         class="rounded-2xl border border-stone-200 bg-white px-3 py-3 dark:border-white/10 dark:bg-slate-950/50"
                                     >
                                         <p
-                                            class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                            class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                         >
                                             Ekspektasi Cash
                                         </p>
@@ -635,7 +635,7 @@ const submitCloseShift = () => {
                                     class="mt-3 rounded-2xl border border-stone-200 bg-white px-3 py-3 dark:border-white/10 dark:bg-slate-950/50"
                                 >
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                     >
                                         Order Belum Final
                                     </p>
@@ -653,7 +653,7 @@ const submitCloseShift = () => {
                                 class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Order Terbayar
                                 </p>
@@ -667,7 +667,7 @@ const submitCloseShift = () => {
                                 class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Revenue
                                 </p>
@@ -685,7 +685,7 @@ const submitCloseShift = () => {
                                 class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Cash Masuk
                                 </p>
@@ -703,7 +703,7 @@ const submitCloseShift = () => {
                                 class="rounded-2xl border border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     QRIS Masuk
                                 </p>
@@ -725,7 +725,7 @@ const submitCloseShift = () => {
                             <div class="grid gap-3 md:grid-cols-3">
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                     >
                                         Debit
                                     </p>
@@ -742,7 +742,7 @@ const submitCloseShift = () => {
                                 </div>
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                     >
                                         E-Wallet
                                     </p>
@@ -759,7 +759,7 @@ const submitCloseShift = () => {
                                 </div>
                                 <div>
                                     <p
-                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                        class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                     >
                                         Kasbon
                                     </p>
@@ -802,14 +802,14 @@ const submitCloseShift = () => {
                                                 Uang Tunai (Cash)
                                             </p>
                                             <span
-                                                class="rounded border border-stone-200 bg-stone-100 px-2 py-0.5 text-[10px] font-bold uppercase text-stone-400 dark:border-white/5 dark:bg-slate-950 dark:text-slate-500"
+                                                class="rounded border border-stone-200 bg-stone-100 px-2 py-0.5 text-[10px] font-bold uppercase text-stone-400 dark:border-white/5 dark:bg-slate-950 dark:text-slate-400"
                                                 >Tunai</span
                                             >
                                         </div>
                                         <div class="grid gap-3 sm:grid-cols-2">
                                             <div>
                                                 <span
-                                                    class="text-[10px] font-medium text-stone-400 dark:text-slate-500"
+                                                    class="text-[10px] font-medium text-stone-400 dark:text-slate-400"
                                                     >Ekspektasi Sistem</span
                                                 >
                                                 <p
@@ -835,14 +835,14 @@ const submitCloseShift = () => {
                                                     type="number"
                                                     min="0"
                                                     step="1000"
-                                                    class="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs text-stone-900 focus:border-sky-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                                    class="w-full rounded-xl border-2 border-stone-300 bg-white px-3 py-2 text-xs text-stone-950 focus:border-sky-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                                 />
                                                 <p
                                                     v-if="
                                                         closeShiftForm.errors
                                                             .actual_cash
                                                     "
-                                                    class="mt-1 text-[10px] text-rose-300"
+                                                    class="mt-1 text-[10px] text-rose-600 dark:text-rose-450 font-bold"
                                                 >
                                                     {{
                                                         closeShiftForm.errors
@@ -855,7 +855,7 @@ const submitCloseShift = () => {
                                             class="flex items-center justify-between border-t border-stone-200 pt-2 dark:border-white/5"
                                         >
                                             <span
-                                                class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-500"
+                                                class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-400"
                                                 >Selisih Cash</span
                                             >
                                             <p
@@ -906,7 +906,7 @@ const submitCloseShift = () => {
                                                 Total Pembayaran Digital
                                             </p>
                                             <span
-                                                class="rounded border border-stone-200 bg-stone-100 px-2 py-0.5 text-[10px] font-bold uppercase text-stone-400 dark:border-white/5 dark:bg-slate-950 dark:text-slate-500"
+                                                class="rounded border border-stone-200 bg-stone-100 px-2 py-0.5 text-[10px] font-bold uppercase text-stone-400 dark:border-white/5 dark:bg-slate-950 dark:text-slate-400"
                                                 >Digital</span
                                             >
                                         </div>
@@ -915,7 +915,7 @@ const submitCloseShift = () => {
                                         >
                                             <div>
                                                 <span
-                                                    class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-500"
+                                                    class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-400"
                                                     >QRIS</span
                                                 >
                                                 <p
@@ -931,7 +931,7 @@ const submitCloseShift = () => {
                                             </div>
                                             <div>
                                                 <span
-                                                    class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-500"
+                                                    class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-400"
                                                     >Debit</span
                                                 >
                                                 <p
@@ -948,7 +948,7 @@ const submitCloseShift = () => {
                                             </div>
                                             <div>
                                                 <span
-                                                    class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-500"
+                                                    class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-400"
                                                     >E-Wallet</span
                                                 >
                                                 <p
@@ -1010,7 +1010,7 @@ const submitCloseShift = () => {
                                         </div>
                                         <label class="block">
                                             <span
-                                                class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-stone-400 dark:text-slate-500"
+                                                class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-stone-400 dark:text-slate-400"
                                                 >Aktual EDC</span
                                             >
                                             <input
@@ -1018,14 +1018,14 @@ const submitCloseShift = () => {
                                                 type="number"
                                                 min="0"
                                                 step="1000"
-                                                class="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs text-stone-900 focus:border-sky-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                                class="w-full rounded-xl border-2 border-stone-300 bg-white px-3 py-2 text-xs text-stone-950 focus:border-sky-500 focus:outline-none dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                             />
                                         </label>
                                         <div
                                             class="flex items-center justify-between border-t border-stone-200 pt-2 dark:border-white/5"
                                         >
                                             <span
-                                                class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-500"
+                                                class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-400"
                                                 >Selisih QRIS</span
                                             >
                                             <p
@@ -1085,7 +1085,7 @@ const submitCloseShift = () => {
                                         </div>
                                         <label class="block">
                                             <span
-                                                class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-stone-400 dark:text-slate-500"
+                                                class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-stone-400 dark:text-slate-400"
                                                 >Aktual Kartu</span
                                             >
                                             <input
@@ -1093,14 +1093,14 @@ const submitCloseShift = () => {
                                                 type="number"
                                                 min="0"
                                                 step="1000"
-                                                class="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs text-stone-900 focus:border-sky-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                                class="w-full rounded-xl border-2 border-stone-300 bg-white px-3 py-2 text-xs text-stone-955 focus:border-sky-500 focus:outline-none dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                             />
                                         </label>
                                         <div
                                             class="flex items-center justify-between border-t border-stone-200 pt-2 dark:border-white/5"
                                         >
                                             <span
-                                                class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-500"
+                                                class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-400"
                                                 >Selisih Debit</span
                                             >
                                             <p
@@ -1160,7 +1160,7 @@ const submitCloseShift = () => {
                                         </div>
                                         <label class="block">
                                             <span
-                                                class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-stone-400 dark:text-slate-500"
+                                                class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.1em] text-stone-400 dark:text-slate-400"
                                                 >Aktual Dompet</span
                                             >
                                             <input
@@ -1168,14 +1168,14 @@ const submitCloseShift = () => {
                                                 type="number"
                                                 min="0"
                                                 step="1000"
-                                                class="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs text-stone-900 focus:border-sky-400 focus:outline-none dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                                class="w-full rounded-xl border-2 border-stone-300 bg-white px-3 py-2 text-xs text-stone-955 focus:border-sky-500 focus:outline-none dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                             />
                                         </label>
                                         <div
                                             class="flex items-center justify-between border-t border-stone-200 pt-2 dark:border-white/5"
                                         >
                                             <span
-                                                class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-500"
+                                                class="text-[9px] font-bold uppercase text-stone-400 dark:text-slate-400"
                                                 >Selisih E-Wallet</span
                                             >
                                             <p
@@ -1217,24 +1217,24 @@ const submitCloseShift = () => {
 
                             <label class="mt-4 block">
                                 <span
-                                    class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                    class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                     >Catatan Tambahan Shift</span
                                 >
                                 <textarea
                                     v-model="userNotes"
                                     rows="3"
                                     placeholder="Catatan kendala, kondisi mesin kasir, atau selisih uang jika ada"
-                                    class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-sky-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-slate-500 dark:text-white"
+                                    class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-950 placeholder:text-stone-500 focus:border-sky-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                 />
                                 <p
                                     v-if="closeShiftForm.errors.notes"
-                                    class="mt-2 text-xs text-rose-300"
+                                    class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                 >
                                     {{ closeShiftForm.errors.notes }}
                                 </p>
                                 <p
                                     v-if="closeShiftGeneralError"
-                                    class="mt-2 text-xs text-rose-300"
+                                    class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                 >
                                     {{ closeShiftGeneralError }}
                                 </p>
@@ -1243,7 +1243,7 @@ const submitCloseShift = () => {
                             <div class="mt-4 flex justify-end">
                                 <button
                                     type="submit"
-                                    class="inline-flex items-center gap-2 rounded-2xl bg-sky-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60"
+                                    class="inline-flex items-center gap-2 rounded-2xl bg-sky-500 border border-sky-600 hover:bg-sky-600 px-5 py-3 text-sm font-black text-stone-955 transition disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-sky-500/20 active:scale-[0.98]"
                                     :disabled="closeShiftForm.processing"
                                 >
                                     <LogOut class="h-4 w-4" />
@@ -1274,7 +1274,7 @@ const submitCloseShift = () => {
                             class="rounded-2xl border border-stone-200 bg-white/[0.03] p-4 dark:border-white/10"
                         >
                             <p
-                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-400"
                             >
                                 Saran Jadwal Hari Ini
                             </p>
@@ -1303,12 +1303,12 @@ const submitCloseShift = () => {
                         <div class="grid gap-4 md:grid-cols-2">
                             <label class="block">
                                 <span
-                                    class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                    class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                     >Template Shift</span
                                 >
                                 <select
                                     v-model="openShiftForm.shift_template_id"
-                                    class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                    class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-950 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                 >
                                     <option value="">
                                         Manual / Tanpa Template
@@ -1327,7 +1327,7 @@ const submitCloseShift = () => {
                                     v-if="
                                         openShiftForm.errors.shift_template_id
                                     "
-                                    class="mt-2 text-xs text-rose-300"
+                                    class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                 >
                                     {{ openShiftForm.errors.shift_template_id }}
                                 </p>
@@ -1335,7 +1335,7 @@ const submitCloseShift = () => {
 
                             <label class="block">
                                 <span
-                                    class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                    class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                     >Saldo Awal Kas</span
                                 >
                                 <input
@@ -1343,11 +1343,11 @@ const submitCloseShift = () => {
                                     type="number"
                                     min="0"
                                     step="1000"
-                                    class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+                                    class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-950 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                                 />
                                 <p
                                     v-if="openShiftForm.errors.opening_cash"
-                                    class="mt-2 text-xs text-rose-300"
+                                    class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                                 >
                                     {{ openShiftForm.errors.opening_cash }}
                                 </p>
@@ -1356,24 +1356,24 @@ const submitCloseShift = () => {
 
                         <label class="block">
                             <span
-                                class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-stone-800 dark:text-stone-200"
                                 >Catatan Buka Shift</span
                             >
                             <textarea
                                 v-model="openShiftForm.notes"
                                 rows="3"
                                 placeholder="Contoh: carry over dari shift pagi, laci kas sudah dihitung bersama."
-                                class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-orange-400 focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:text-slate-500 dark:text-white"
+                                class="w-full rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-sm text-stone-955 placeholder:text-stone-500 focus:border-orange-500 focus:outline-none focus:ring-0 dark:border-white/20 dark:bg-slate-900 dark:text-white"
                             />
                             <p
                                 v-if="openShiftForm.errors.notes"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                             >
                                 {{ openShiftForm.errors.notes }}
                             </p>
                             <p
                                 v-if="openShiftGeneralError"
-                                class="mt-2 text-xs text-rose-300"
+                                class="mt-2 text-xs text-rose-600 dark:text-rose-450 font-bold"
                             >
                                 {{ openShiftGeneralError }}
                             </p>
@@ -1382,7 +1382,7 @@ const submitCloseShift = () => {
                         <div class="flex justify-end">
                             <button
                                 type="submit"
-                                class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                                class="inline-flex items-center gap-2 rounded-2xl bg-orange-500 border border-orange-600 hover:bg-orange-600 px-5 py-3 text-sm font-black text-slate-955 transition disabled:cursor-not-allowed disabled:opacity-60 shadow-md shadow-orange-500/20 active:scale-[0.98]"
                                 :disabled="openShiftForm.processing"
                             >
                                 <LogIn class="h-4 w-4" />
@@ -1420,7 +1420,7 @@ const submitCloseShift = () => {
                                 Shift Terakhir
                             </h3>
                             <p
-                                class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                             >
                                 Referensi saldo carry over dan histori tutup
                                 shift paling baru.
@@ -1458,7 +1458,7 @@ const submitCloseShift = () => {
                                 {{ lastClosedShift.outlet?.name || '-' }}
                             </p>
                             <p
-                                class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                             >
                                 Ditutup:
                                 {{ formatDateTime(lastClosedShift.closed_at) }}
@@ -1470,7 +1470,7 @@ const submitCloseShift = () => {
                                 class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Saldo Awal
                                 </p>
@@ -1488,7 +1488,7 @@ const submitCloseShift = () => {
                                 class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Ekspektasi
                                 </p>
@@ -1506,7 +1506,7 @@ const submitCloseShift = () => {
                                 class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Aktual
                                 </p>
@@ -1522,7 +1522,7 @@ const submitCloseShift = () => {
                                 class="rounded-2xl border border-stone-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-slate-950/50"
                             >
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                                 >
                                     Selisih
                                 </p>
@@ -1547,7 +1547,7 @@ const submitCloseShift = () => {
                             class="rounded-2xl border border-stone-200 bg-white px-4 py-4 dark:border-white/10 dark:bg-slate-950/50"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-500"
+                                class="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400 dark:text-slate-400"
                             >
                                 Ringkasan Revenue
                             </p>
@@ -1559,7 +1559,7 @@ const submitCloseShift = () => {
                                 }}
                             </p>
                             <p
-                                class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                                class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                             >
                                 {{ lastClosedShift.summary.total_orders }} order
                                 terbayar • Cash
@@ -1675,14 +1675,14 @@ const submitCloseShift = () => {
                     <div class="flex flex-wrap items-center gap-3">
                         <button
                             type="button"
-                            class="rounded-2xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-200 hover:bg-stone-100 dark:border-white/10 dark:border-white/20 dark:bg-white/5 dark:text-slate-200"
+                            class="rounded-2xl border-2 border-stone-955 bg-stone-100 hover:bg-stone-200 px-4 py-3 text-sm font-black text-stone-955 transition active:scale-[0.98] dark:border-white/20 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]"
                             @click="clearFilters"
                         >
                             Reset Filter
                         </button>
                         <button
                             type="button"
-                            class="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-orange-400"
+                            class="rounded-2xl bg-orange-500 border border-orange-600 hover:bg-orange-600 px-4 py-3 text-sm font-black text-slate-950 transition active:scale-[0.98] shadow-md shadow-orange-500/10"
                             @click="submitFilters"
                         >
                             Terapkan
@@ -1704,7 +1704,7 @@ const submitCloseShift = () => {
                             Rekap Kas per Shift
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                         >
                             Akumulasi semua shift tertutup sesuai filter kasir,
                             outlet, dan periode.
@@ -1743,7 +1743,7 @@ const submitCloseShift = () => {
                             {{ card.value }}
                         </p>
                         <p
-                            class="mt-2 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-2 text-xs text-stone-400 dark:text-slate-400"
                         >
                             {{ card.helper }}
                         </p>
@@ -1764,7 +1764,7 @@ const submitCloseShift = () => {
                             Riwayat Shift
                         </h3>
                         <p
-                            class="mt-1 text-xs text-stone-400 dark:text-slate-500"
+                            class="mt-1 text-xs text-stone-400 dark:text-slate-400"
                         >
                             Menampilkan {{ history.from ?? 0 }} -
                             {{ history.to ?? 0 }} dari
@@ -1818,7 +1818,7 @@ const submitCloseShift = () => {
                                 {{ shift.outlet?.name || '-' }}
                             </p>
                             <p
-                                class="text-xs text-stone-400 dark:text-slate-500"
+                                class="text-xs text-stone-400 dark:text-slate-400"
                             >
                                 {{
                                     shift.shift_template?.name ||
@@ -1831,7 +1831,7 @@ const submitCloseShift = () => {
                             class="space-y-2 text-sm text-stone-600 dark:text-slate-300"
                         >
                             <p
-                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-400"
                             >
                                 Waktu & Cash
                             </p>
@@ -1845,7 +1845,7 @@ const submitCloseShift = () => {
                             class="space-y-2 text-sm text-stone-600 dark:text-slate-300"
                         >
                             <p
-                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-500"
+                                class="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-slate-400"
                             >
                                 Ringkasan
                             </p>
@@ -1875,7 +1875,7 @@ const submitCloseShift = () => {
                     v-if="history.links.length > 3"
                     class="flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 px-5 py-4 dark:border-white/10"
                 >
-                    <p class="text-xs text-stone-400 dark:text-slate-500">
+                    <p class="text-xs text-stone-400 dark:text-slate-400">
                         Riwayat shift dipaginasi agar monitoring outlet tetap
                         ringan.
                     </p>
@@ -1884,11 +1884,13 @@ const submitCloseShift = () => {
                             v-for="link in history.links"
                             :key="link.label"
                             :href="link.url || '#'"
-                            class="rounded-xl border px-3 py-2 text-xs font-semibold transition"
+                            class="rounded-xl border-2 px-3 py-2 text-xs font-black transition active:scale-[0.98]"
                             :class="
                                 link.active
-                                    ? 'border-orange-400/30 bg-orange-500/15 text-orange-100'
-                                    : 'border-stone-200 text-stone-600 hover:bg-stone-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-300'
+                                    ? 'border-orange-600 bg-orange-500 text-stone-955 shadow-sm'
+                                    : link.url
+                                      ? 'border-stone-955 bg-stone-50 text-stone-900 hover:bg-stone-200 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-200 dark:hover:bg-white/[0.08]'
+                                      : 'cursor-not-allowed border-stone-200 bg-stone-100 text-stone-400 dark:border-white/5 dark:bg-white/[0.01] dark:text-slate-600'
                             "
                         >
                             <span v-html="link.label"></span>

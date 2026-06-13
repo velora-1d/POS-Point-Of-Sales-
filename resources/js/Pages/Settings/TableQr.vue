@@ -115,32 +115,32 @@ const summaryCards = computed(() => [
         label: 'Total Outlet',
         value: props.summary.total_outlets,
         helper: `${props.summary.configured_outlets} outlet sudah punya config QR`,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-2 border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: Store,
     },
     {
         label: 'Public QR Ready',
         value: props.summary.public_qr_ready,
         helper: 'Outlet dengan config scan URL publik aktif',
-        tone: 'text-emerald-300',
-        surface: 'border-emerald-400/15 bg-emerald-500/10',
+        tone: 'text-emerald-700 dark:text-emerald-300',
+        surface: 'border-2 border-emerald-500/15 bg-emerald-50/50 dark:border-emerald-400/15 dark:bg-emerald-500/10',
         icon: CheckCircle2,
     },
     {
         label: 'Active Tables',
         value: props.summary.active_tables,
         helper: 'Meja aktif lintas outlet',
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/10',
+        tone: 'text-sky-700 dark:text-sky-300',
+        surface: 'border-2 border-sky-500/15 bg-sky-50/50 dark:border-sky-400/15 dark:bg-sky-500/10',
         icon: QrCode,
     },
     {
         label: 'Store Slug',
         value: qrForm.store_slug || '-',
         helper: 'Prefix URL publik untuk outlet terpilih',
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/10',
+        tone: 'text-amber-700 dark:text-amber-300',
+        surface: 'border-2 border-amber-500/15 bg-amber-50/50 dark:border-amber-400/15 dark:bg-amber-500/10',
         icon: Link2,
     },
 ]);
@@ -158,7 +158,8 @@ const previewUrl = computed(() => {
 });
 
 const qrPreviewImage = computed(() => {
-    return `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=16&data=${encodeURIComponent(previewUrl.value)}`;
+    const hexColor = qrForm.primary_color.replace('#', '');
+    return `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=16&color=${hexColor}&data=${encodeURIComponent(previewUrl.value)}`;
 });
 
 const lastRegeneratedLabel = computed(() => {
@@ -286,7 +287,7 @@ function submitRegenerate() {
 
             <div class="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
                 <section
-                    class="rounded-[28px] border border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900/70"
+                    class="rounded-[28px] border border-stone-200 bg-white p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900"
                 >
                     <div class="grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
                         <div>
@@ -408,7 +409,7 @@ function submitRegenerate() {
                                     v-model="qrForm.store_slug"
                                     type="text"
                                     placeholder="contoh: mentai-central"
-                                    class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                    class="w-full rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                 />
                                 <p
                                     class="mt-2 text-xs text-stone-400 dark:text-slate-500"
@@ -434,11 +435,11 @@ function submitRegenerate() {
                                 <label
                                     v-for="option in qrOptions.templates"
                                     :key="option.value"
-                                    class="flex cursor-pointer flex-col rounded-2xl border border-stone-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                                    class="flex cursor-pointer flex-col rounded-[20px] border-2 p-4 transition-all duration-200"
                                     :class="
                                         qrForm.qr_template === option.value
-                                            ? 'border-orange-500/40 bg-orange-500/5'
-                                            : ''
+                                            ? 'border-orange-500 bg-orange-50/50 dark:border-orange-400 dark:bg-orange-950/10'
+                                            : 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.02]'
                                     "
                                 >
                                     <div
@@ -489,11 +490,11 @@ function submitRegenerate() {
                                     :key="color"
                                     type="button"
                                     :aria-label="`Pilih warna ${color}`"
-                                    class="h-9 w-9 rounded-full border-2 transition"
+                                    class="h-9 w-9 rounded-full border-2 transition focus:outline-none"
                                     :class="
                                         qrForm.primary_color === color
-                                            ? 'border-white shadow-[0_0_0_4px_rgba(249,115,22,0.18)]'
-                                            : 'border-transparent'
+                                            ? 'scale-110 ring-2 ring-stone-950 dark:ring-white ring-offset-2 dark:ring-offset-slate-900 border-transparent'
+                                            : 'border-stone-200 dark:border-white/10 opacity-70 hover:opacity-100'
                                     "
                                     :style="{ backgroundColor: color }"
                                     @click="qrForm.primary_color = color"
@@ -501,7 +502,7 @@ function submitRegenerate() {
                                 <input
                                     v-model="qrForm.primary_color"
                                     type="text"
-                                    class="w-36 rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm uppercase text-stone-900 outline-none transition focus:border-orange-500 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-100"
+                                    class="w-36 rounded-2xl border-2 border-stone-200 bg-white px-4 py-3 text-sm uppercase text-stone-900 outline-none transition focus:border-orange-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-100"
                                 />
                             </div>
                             <p
@@ -510,14 +511,11 @@ function submitRegenerate() {
                             >
                                 {{ qrForm.errors.primary_color }}
                             </p>
-                        </div>
-
-                        <div
                             class="flex justify-end border-t border-stone-200 pt-5 dark:border-slate-800"
                         >
                             <button
                                 type="submit"
-                                class="inline-flex items-center justify-center rounded-2xl bg-orange-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                                class="inline-flex items-center justify-center rounded-2xl bg-orange-500 border-2 border-stone-950 px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-orange-500/10"
                                 :disabled="qrForm.processing"
                             >
                                 {{
@@ -532,12 +530,12 @@ function submitRegenerate() {
 
                 <aside class="space-y-5">
                     <section
-                        class="rounded-[28px] border border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900/70"
+                        class="rounded-[28px] border border-stone-200 bg-white p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900"
                     >
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p
-                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300"
+                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-300"
                                 >
                                     Live Preview
                                 </p>
@@ -594,12 +592,12 @@ function submitRegenerate() {
                     </section>
 
                     <section
-                        class="rounded-[28px] border border-stone-200 bg-stone-50 p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900/70"
+                        class="rounded-[28px] border border-stone-200 bg-white p-5 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-900"
                     >
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p
-                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300"
+                                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700 dark:text-emerald-300"
                                 >
                                     Generate & Apply
                                 </p>
@@ -654,7 +652,7 @@ function submitRegenerate() {
 
                         <button
                             type="button"
-                            class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-orange-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+                            class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-orange-500 border-2 border-stone-950 px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-orange-500/10"
                             :disabled="
                                 regenerateForm.processing ||
                                 !regenerateForm.outlet_id

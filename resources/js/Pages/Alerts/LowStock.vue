@@ -32,39 +32,39 @@ const summaryCards = computed(() => [
     {
         label: 'Total Alert',
         value: props.summary.total,
-        tone: 'text-white',
-        surface: 'border-stone-200 dark:border-white/10 bg-white/[0.03]',
+        tone: 'text-stone-900 dark:text-white',
+        surface: 'border-stone-200 bg-white dark:border-white/10 dark:bg-white/[0.03]',
         icon: BellRing,
     },
     {
         label: 'Kritis / Habis',
         value: props.summary.critical,
-        tone: 'text-rose-300',
-        surface: 'border-rose-400/15 bg-rose-500/8',
+        tone: 'text-rose-600 dark:text-rose-300',
+        surface: 'border-rose-200 bg-rose-50 dark:border-rose-400/15 dark:bg-rose-500/8',
         icon: AlertTriangle,
     },
     {
         label: 'Produk Jadi',
         value: props.summary.products,
-        tone: 'text-amber-300',
-        surface: 'border-amber-400/15 bg-amber-500/8',
+        tone: 'text-amber-600 dark:text-amber-300',
+        surface: 'border-amber-200 bg-amber-50 dark:border-amber-400/15 dark:bg-amber-500/8',
         icon: Boxes,
     },
     {
         label: 'Bahan Baku',
         value: props.summary.raw_materials,
-        tone: 'text-sky-300',
-        surface: 'border-sky-400/15 bg-sky-500/8',
+        tone: 'text-sky-600 dark:text-sky-300',
+        surface: 'border-sky-200 bg-sky-50 dark:border-sky-400/15 dark:bg-sky-500/8',
         icon: PackageSearch,
     },
 ]);
 
 const getItemTone = (item: AlertItem) => {
     if (item.current_stock <= 0) {
-        return 'border-rose-500/20 bg-rose-500/10 text-rose-300';
+        return 'border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300';
     }
 
-    return 'border-amber-500/20 bg-amber-500/10 text-amber-300';
+    return 'border-amber-200 bg-amber-50 text-amber-600 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300';
 };
 
 const getItemLabel = (item: AlertItem) => {
@@ -95,17 +95,16 @@ const getItemLabel = (item: AlertItem) => {
         </template>
 
         <div class="space-y-5">
-            <!-- Tab Navigation Global -->
             <div
-                class="flex max-w-3xl gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
+                class="flex w-full gap-1 rounded-2xl border-b border-stone-200 bg-stone-50 p-1 dark:border-slate-800 dark:bg-slate-900/40"
             >
                 <Link
                     :href="route('products.stock')"
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('products.stock')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Stok Produk Jadi
@@ -115,8 +114,8 @@ const getItemLabel = (item: AlertItem) => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('products.hpp')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     HPP & Resep
@@ -126,8 +125,8 @@ const getItemLabel = (item: AlertItem) => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('stock-alerts.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Alert Stok Menipis
@@ -137,8 +136,8 @@ const getItemLabel = (item: AlertItem) => {
                     class="flex-1 rounded-xl py-2 text-center text-[10px] font-bold uppercase tracking-wider transition duration-150 sm:text-xs"
                     :class="
                         route().current('expired-tracking.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-md shadow-orange-500/10'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-400 text-black border-2 border-black font-extrabold cursor-pointer'
+                            : 'text-stone-500 hover:bg-stone-200/50 hover:text-stone-800 dark:text-slate-400 dark:hover:bg-slate-800/40 dark:hover:text-slate-200 border-2 border-transparent cursor-pointer'
                     "
                 >
                     Reminder Expired
@@ -181,7 +180,7 @@ const getItemLabel = (item: AlertItem) => {
                 >
                     <div>
                         <p
-                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300"
+                            class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
                         >
                             Prioritas Hari Ini
                         </p>
@@ -245,7 +244,7 @@ const getItemLabel = (item: AlertItem) => {
 
                                 <Link
                                     :href="route(item.route)"
-                                    class="inline-flex items-center gap-2 rounded-xl border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-300"
+                                    class="inline-flex items-center gap-2 rounded-xl border border-orange-500/20 bg-orange-500/10 px-3 py-2 text-xs font-bold text-orange-600 dark:text-orange-300"
                                 >
                                     Buka Menu
                                 </Link>

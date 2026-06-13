@@ -274,33 +274,31 @@ const getPaymentPercentage = (amount: number) => {
 
                 <div class="flex flex-wrap items-center gap-2">
                     <span
-                        class="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300"
+                        class="rounded-xl border border-emerald-500/20 bg-emerald-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
                     >
                         Order Lunas
                     </span>
                     <Link
                         :href="route('dashboard')"
-                        class="inline-flex items-center gap-1.5 rounded-2xl border border-stone-200 bg-white/[0.03] px-4 py-2 text-xs font-bold text-stone-800 transition hover:border-stone-200 hover:bg-white/[0.05] dark:border-white/10 dark:border-white/20 dark:text-slate-200"
+                        class="inline-flex items-center gap-1.5 rounded-2xl border-2 border-stone-200 bg-white px-4 py-2 text-xs font-black text-stone-700 transition hover:border-stone-300 hover:bg-stone-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                     >
-                        <CalendarRange class="h-4 w-4 text-orange-400" />
-                        Dashboard
+                        <CalendarRange class="h-4 w-4 text-orange-500" />
+                        Dashboard Utama
                     </Link>
                 </div>
             </div>
-        </template>
-
-        <div class="space-y-6">
+        </template>        <div class="space-y-6">
             <!-- Navigasi Menu Laporan Keuangan (Horizontal Tabs) -->
             <div
-                class="flex max-w-4xl flex-wrap gap-1 rounded-2xl border border-stone-200 bg-stone-50 p-1 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/60"
+                class="flex w-full flex-wrap gap-2 rounded-2xl border-2 border-stone-200 bg-stone-100 p-1.5 dark:border-white/10 dark:bg-slate-950"
             >
                 <Link
                     :href="route('reports.sales.index')"
                     class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.sales.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-lg shadow-orange-500/20'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Penjualan & Kas
@@ -310,8 +308,8 @@ const getPaymentPercentage = (amount: number) => {
                     class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.outlets.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-lg shadow-orange-500/20'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Per Outlet
@@ -321,8 +319,8 @@ const getPaymentPercentage = (amount: number) => {
                     class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.cashiers.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-lg shadow-orange-500/20'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Per Kasir
@@ -332,8 +330,8 @@ const getPaymentPercentage = (amount: number) => {
                     class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.top-products.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-lg shadow-orange-500/20'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Terlaris
@@ -343,8 +341,8 @@ const getPaymentPercentage = (amount: number) => {
                     class="min-w-[120px] flex-1 rounded-xl py-2.5 text-center text-xs font-black uppercase tracking-wider transition duration-150"
                     :class="
                         route().current('reports.expenses.index')
-                            ? 'bg-orange-500 text-slate-950 shadow-lg shadow-orange-500/20'
-                            : 'text-stone-500 hover:bg-white/[0.02] hover:text-stone-800 dark:text-slate-200 dark:text-slate-400'
+                            ? 'bg-orange-500 text-stone-950 shadow-md'
+                            : 'text-stone-700 hover:text-stone-950 hover:bg-stone-200 dark:text-slate-350 dark:hover:text-white dark:hover:bg-white/5'
                     "
                 >
                     Keuangan
@@ -353,15 +351,15 @@ const getPaymentPercentage = (amount: number) => {
 
             <!-- Panel Filter Collapsible -->
             <section
-                class="rounded-3xl border border-stone-200 bg-white p-4 shadow-[0_15px_50px_rgba(15,23,42,0.15)] dark:border-white/10 dark:bg-slate-950/40"
+                class="rounded-3xl border-2 border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
             >
                 <div class="flex items-center justify-between">
                     <button
                         type="button"
-                        class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-stone-600 transition hover:text-stone-900 dark:text-slate-300 dark:text-white"
+                        class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-stone-700 transition hover:text-stone-950 dark:text-slate-200 dark:text-white"
                         @click="isFilterExpanded = !isFilterExpanded"
                     >
-                        <Filter class="h-4 w-4 text-orange-400" />
+                        <Filter class="h-4 w-4 text-orange-500" />
                         <span>Filter & Pencarian</span>
                         <span
                             v-if="activeFiltersCount > 0"
@@ -375,7 +373,7 @@ const getPaymentPercentage = (amount: number) => {
                         />
                     </button>
                     <div
-                        class="text-[11px] font-semibold text-stone-400 dark:text-slate-500"
+                        class="text-[11px] font-bold text-stone-600 dark:text-slate-400"
                     >
                         {{ formatDate(filters.start_date) }} -
                         {{ formatDate(filters.end_date) }}
@@ -518,41 +516,41 @@ const getPaymentPercentage = (amount: number) => {
             <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <!-- Card Utama: Revenue -->
                 <article
-                    class="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-950/40 to-slate-950/60 p-6 shadow-[0_20px_60px_rgba(16,185,129,0.08)] sm:col-span-2"
+                    class="relative overflow-hidden rounded-3xl border-2 border-emerald-500/20 bg-emerald-50/30 p-6 shadow-xl dark:bg-slate-950/45 sm:col-span-2"
                 >
                     <div
-                        class="pointer-events-none absolute -bottom-10 -right-10 text-emerald-400 opacity-[0.03]"
+                        class="pointer-events-none absolute -bottom-10 -right-10 text-emerald-500 opacity-[0.05]"
                     >
                         <Wallet class="h-44 w-44" />
                     </div>
                     <div class="flex items-start justify-between">
                         <div>
                             <span
-                                class="text-[10px] font-bold uppercase tracking-[0.25em] text-emerald-400/80"
+                                class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400"
                                 >Total Pendapatan Penjualan</span
                             >
                             <p
-                                class="mt-2 text-3xl font-black leading-none tracking-tight text-emerald-300"
+                                class="mt-2 text-3xl font-black leading-none tracking-tight text-stone-900 dark:text-emerald-300"
                             >
                                 {{ formatPrice(summary.total_revenue) }}
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-emerald-300"
+                            class="rounded-2xl border-2 border-emerald-500/20 bg-white p-3 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300"
                         >
                             <Wallet class="h-6 w-6" />
                         </div>
                     </div>
                     <div
-                        class="mt-4 flex items-center gap-2 border-t border-stone-200 pt-4 dark:border-white/5"
+                        class="mt-6 flex items-center gap-2 border-t border-emerald-500/10 pt-4 dark:border-white/5"
                     >
                         <span
-                            class="rounded-full border border-emerald-500/15 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-300"
+                            class="rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-black text-white"
                         >
                             Lunas
                         </span>
                         <span
-                            class="text-[11px] font-medium text-stone-500 dark:text-slate-400"
+                            class="text-[11px] font-bold text-stone-500 dark:text-slate-400"
                         >
                             {{ summary.total_orders }} Transaksi Sukses •
                             {{ summary.total_items_sold }} Produk Terjual
@@ -562,28 +560,28 @@ const getPaymentPercentage = (amount: number) => {
 
                 <!-- Card Sekunder: Rerata Tiket -->
                 <article
-                    class="rounded-3xl border border-stone-200 bg-white p-5 shadow-lg dark:border-white/10 dark:bg-slate-950/40"
+                    class="rounded-3xl border-2 border-stone-200 bg-sky-50/30 p-6 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div class="flex items-start justify-between">
                         <div>
                             <span
-                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
                                 >Rerata Per Tiket</span
                             >
                             <p
-                                class="mt-3 text-xl font-black leading-none tracking-tight text-stone-900 dark:text-white"
+                                class="mt-2 text-2xl font-black leading-none tracking-tight text-stone-900 dark:text-white"
                             >
                                 {{ formatPrice(summary.average_ticket) }}
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-stone-200 bg-white p-2.5 text-sky-400 dark:border-white/10 dark:bg-slate-900"
+                            class="rounded-2xl border-2 border-stone-200 bg-white p-2.5 text-sky-500 dark:border-white/10 dark:bg-slate-900 dark:text-sky-400"
                         >
-                            <ReceiptText class="h-4 w-4" />
+                            <ReceiptText class="h-5 w-5" />
                         </div>
                     </div>
                     <p
-                        class="mt-4 text-[11px] text-stone-400 dark:text-slate-500"
+                        class="mt-6 border-t border-stone-200/50 pt-4 text-[11px] font-medium text-stone-400 dark:border-white/5 dark:text-slate-500"
                     >
                         Rata-rata belanja customer per transaksi.
                     </p>
@@ -591,28 +589,28 @@ const getPaymentPercentage = (amount: number) => {
 
                 <!-- Card Sekunder: Diskon & Potongan -->
                 <article
-                    class="rounded-3xl border border-stone-200 bg-white p-5 shadow-lg dark:border-white/10 dark:bg-slate-950/40"
+                    class="rounded-3xl border-2 border-stone-200 bg-orange-50/30 p-6 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
                     <div class="flex items-start justify-between">
                         <div>
                             <span
-                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
+                                class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 dark:text-slate-400"
                                 >Total Potongan Diskon</span
                             >
                             <p
-                                class="mt-3 text-xl font-black leading-none tracking-tight text-amber-300"
+                                class="mt-2 text-2xl font-black leading-none tracking-tight text-orange-500"
                             >
                                 {{ formatPrice(summary.total_discount) }}
                             </p>
                         </div>
                         <div
-                            class="rounded-2xl border border-stone-200 bg-white p-2.5 text-amber-400 dark:border-white/10 dark:bg-slate-900"
+                            class="rounded-2xl border-2 border-stone-200 bg-white p-2.5 text-orange-500 dark:border-white/10 dark:bg-slate-900 dark:text-orange-400"
                         >
-                            <CreditCard class="h-4 w-4" />
+                            <CreditCard class="h-5 w-5" />
                         </div>
                     </div>
                     <p
-                        class="mt-4 text-[11px] text-stone-400 dark:text-slate-500"
+                        class="mt-6 border-t border-stone-200/50 pt-4 text-[11px] font-medium text-stone-400 dark:border-white/5 dark:text-slate-500"
                     >
                         Akumulasi pemotongan dari diskon & promo.
                     </p>

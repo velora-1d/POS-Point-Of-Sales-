@@ -477,7 +477,7 @@ onMounted(() => {
                                 "
                                 type="button"
                                 @click="openCheckout"
-                                class="flex w-full items-center justify-center gap-2 rounded-[22px] bg-gradient-to-r from-fuchsia-500 to-pink-500 px-5 py-3 text-sm font-black text-white"
+                                class="flex w-full items-center justify-center gap-2 rounded-[22px] bg-fuchsia-600 hover:bg-fuchsia-500 px-5 py-3 text-sm font-black text-white transition"
                             >
                                 <QrCode class="h-4 w-4" />
                                 Buka Checkout QRIS

@@ -70,6 +70,10 @@ const props = defineProps<{
         occupied: number;
         reserved: number;
     };
+    qrConfig?: {
+        primary_color?: string | null;
+        qr_template?: string | null;
+    } | null;
     success?: string | null;
     error?: string | null;
     alertSettings?: any;
@@ -313,8 +317,8 @@ const qrPreviewUrl = computed(() => {
     if (!selectedQrTable.value?.qrUrl) {
         return null;
     }
-
-    return `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=16&data=${encodeURIComponent(selectedQrTable.value.qrUrl)}`;
+    const hexColor = (props.qrConfig?.primary_color || '#111827').replace('#', '');
+    return `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=16&color=${hexColor}&data=${encodeURIComponent(selectedQrTable.value.qrUrl)}`;
 });
 
 const getTableSnapshot = (table: TablePayload) =>
@@ -425,12 +429,12 @@ const getStatusLabel = (status: string) => {
 const getStatusClass = (status: string) => {
     switch (status) {
         case 'occupied':
-            return 'border-rose-400/20 bg-rose-500/12 text-rose-600 dark:text-rose-300';
+            return 'border-rose-700 bg-rose-600 text-white font-black';
         case 'reserved':
-            return 'border-amber-400/20 bg-amber-500/12 text-amber-700 dark:text-amber-300';
+            return 'border-amber-700 bg-amber-600 text-white font-black';
         case 'available':
         default:
-            return 'border-emerald-400/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300';
+            return 'border-emerald-700 bg-emerald-600 text-white font-black';
     }
 };
 
@@ -612,12 +616,12 @@ const getTableTimerClass = (table: any): string => {
     if (table.status !== 'occupied') return '';
     const m = getOccupiedMinutes(table);
     if (m >= alertSettings.value.danger_minutes) {
-        return 'border-rose-400/20 bg-rose-500/12 text-rose-600 dark:text-rose-300';
+        return 'border-rose-700 bg-rose-600 text-white font-black animate-pulse';
     }
     if (m >= alertSettings.value.warning_minutes) {
-        return 'border-amber-400/20 bg-amber-500/12 text-amber-700 dark:text-amber-300';
+        return 'border-amber-700 bg-amber-600 text-white font-black';
     }
-    return 'border-blue-400/20 bg-blue-500/12 text-blue-600 dark:text-blue-300';
+    return 'border-blue-700 bg-blue-600 text-white font-black';
 };
 </script>
 
@@ -688,10 +692,10 @@ const getTableTimerClass = (table: any): string => {
 
             <div class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
                 <section
-                    class="overflow-hidden rounded-[26px] border border-stone-200 bg-stone-50 shadow-2xl shadow-slate-950/20 dark:border-slate-800/80 dark:bg-slate-900/92"
+                    class="overflow-hidden rounded-[26px] border border-stone-200 bg-white shadow-2xl shadow-slate-950/20 dark:border-slate-800/80 dark:bg-slate-900"
                 >
                     <div
-                        class="border-b border-stone-200 bg-stone-50 px-5 py-4 dark:border-slate-800/80 dark:bg-[radial-gradient(circle_at_top_right,_rgba(249,115,22,0.14),_transparent_38%),linear-gradient(180deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))]"
+                        class="border-b border-stone-200 bg-slate-50 px-5 py-4 dark:border-slate-800/80 dark:bg-slate-900/40"
                     >
                         <div
                             class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
@@ -708,7 +712,7 @@ const getTableTimerClass = (table: any): string => {
                                     Visual map meja aktif
                                 </h3>
                                 <div
-                                    class="mt-3 flex w-fit items-center gap-1 rounded-xl border border-stone-200 bg-stone-100 p-1 dark:border-slate-800 dark:bg-slate-950"
+                                    class="mt-3 flex w-fit items-center gap-1 rounded-xl border border-stone-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-950"
                                 >
                                     <button
                                         type="button"
@@ -791,7 +795,7 @@ const getTableTimerClass = (table: any): string => {
 
                     <div class="p-4">
                         <div
-                            class="relative min-h-[36rem] overflow-hidden rounded-[24px] border border-stone-200 bg-stone-100 dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.08),_transparent_32%),linear-gradient(180deg,#020617_0%,#111827_100%)]"
+                            class="relative min-h-[36rem] overflow-hidden rounded-[24px] border border-stone-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950"
                         >
                             <div
                                 class="pointer-events-none absolute inset-0 opacity-20"
@@ -840,7 +844,12 @@ const getTableTimerClass = (table: any): string => {
                                 >
                                     <div
                                         :class="[
-                                            'rounded-[22px] border border-stone-200 bg-white p-3 shadow-[0_20px_50px_rgba(2,6,23,0.45)] backdrop-blur transition duration-300 dark:border-slate-700/80 dark:bg-slate-950/90',
+                                            'rounded-[22px] border-2 p-3 shadow-[0_4px_20px_rgba(0,0,0,0.08)] backdrop-blur transition duration-300',
+                                            table.status === 'occupied'
+                                                ? 'bg-rose-100/50 border-rose-500 text-stone-900 dark:border-rose-500 dark:bg-rose-950/30'
+                                                : (table.status === 'reserved'
+                                                    ? 'bg-amber-100/50 border-amber-500 text-stone-900 dark:border-amber-500 dark:bg-amber-950/30'
+                                                    : 'bg-emerald-50/20 border-emerald-500 text-stone-900 dark:border-emerald-500 dark:bg-emerald-950/15'),
                                             isTableChanged(table.id)
                                                 ? 'border-sky-400/40 shadow-[0_0_0_1px_rgba(56,189,248,0.18),0_20px_50px_rgba(14,165,233,0.18)]'
                                                 : '',
@@ -1075,7 +1084,7 @@ const getTableTimerClass = (table: any): string => {
                                         >
                                             <Link
                                                 :href="table.kasirUrl"
-                                                class="inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-3 py-2 text-[11px] font-bold text-white"
+                                                class="inline-flex items-center justify-center gap-1 rounded-xl bg-orange-500 hover:bg-orange-400 px-3 py-2 text-[11px] font-bold text-stone-950 transition"
                                             >
                                                 <span>Kasir</span>
                                                 <ArrowUpRight
@@ -1122,7 +1131,7 @@ const getTableTimerClass = (table: any): string => {
 
                 <aside class="space-y-4">
                     <section
-                        class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                        class="rounded-[26px] border border-stone-200 bg-white p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900"
                     >
                         <p
                             class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
@@ -1219,7 +1228,7 @@ const getTableTimerClass = (table: any): string => {
                     </section>
 
                     <section
-                        class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                        class="rounded-[26px] border border-stone-200 bg-white p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900"
                     >
                         <div class="flex items-center justify-between gap-3">
                             <p
@@ -1293,7 +1302,7 @@ const getTableTimerClass = (table: any): string => {
                                 <div class="mt-3 grid grid-cols-2 gap-2">
                                     <Link
                                         :href="reservation.kasirUrl"
-                                        class="inline-flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-3 py-2 text-[11px] font-bold text-white"
+                                        class="inline-flex items-center justify-center gap-1 rounded-xl bg-orange-500 hover:bg-orange-400 px-3 py-2 text-[11px] font-bold text-stone-950 transition"
                                     >
                                         <ArrowUpRight class="h-3.5 w-3.5" />
                                         Kasir
@@ -1314,7 +1323,7 @@ const getTableTimerClass = (table: any): string => {
                     </section>
 
                     <section
-                        class="rounded-[26px] border border-stone-200 bg-stone-50 p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900/92"
+                        class="rounded-[26px] border border-stone-200 bg-white p-4 shadow-xl shadow-slate-950/15 dark:border-slate-800/80 dark:bg-slate-900"
                     >
                         <p
                             class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300"
@@ -1412,7 +1421,7 @@ const getTableTimerClass = (table: any): string => {
 
         <div
             v-if="reservationModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/85"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 py-6 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
                 class="w-full max-w-2xl rounded-[28px] border border-stone-200 bg-stone-100 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"
@@ -1608,7 +1617,7 @@ const getTableTimerClass = (table: any): string => {
                                 reservationForm.processing ||
                                 reservationTableOptions.length === 0
                             "
-                            class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-3 text-sm font-bold text-stone-900 disabled:cursor-not-allowed disabled:opacity-60 dark:text-white"
+                            class="inline-flex items-center justify-center rounded-2xl bg-orange-500 hover:bg-orange-400 px-4 py-3 text-sm font-bold text-stone-950 transition disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             Simpan Reservasi
                         </button>
@@ -1619,7 +1628,7 @@ const getTableTimerClass = (table: any): string => {
 
         <div
             v-if="selectedQrTable"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white px-4 py-6 backdrop-blur-sm dark:bg-slate-950/85"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 px-4 py-6 backdrop-blur-sm dark:bg-slate-950/85"
         >
             <div
                 class="w-full max-w-md rounded-[28px] border border-stone-200 bg-stone-100 p-5 shadow-[0_30px_120px_rgba(2,6,23,0.7)] dark:border-slate-800/80 dark:bg-slate-950"

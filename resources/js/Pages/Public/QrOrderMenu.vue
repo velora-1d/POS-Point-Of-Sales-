@@ -3,19 +3,21 @@ import { requestNotificationPermission } from '@/firebase';
 import { Head, router } from '@inertiajs/vue3';
 import {
     Minus,
+    Moon,
     PackageCheck,
     Plus,
     QrCode,
     Search,
     ShoppingCart,
     Store,
+    Sun,
     Trash2,
     UserRound,
     Users,
     UtensilsCrossed,
     X,
 } from '@lucide/vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps<{
     table: any;
@@ -40,6 +42,34 @@ const itemQuantity = ref(1);
 const itemNotes = ref('');
 const isSubmitting = ref(false);
 const checkoutError = ref('');
+
+const isDark = ref(false);
+
+const toggleTheme = () => {
+    isDark.value = !isDark.value;
+    if (isDark.value) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    }
+};
+
+onMounted(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (
+        savedTheme === 'dark' ||
+        (!savedTheme &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+        isDark.value = true;
+        document.documentElement.classList.add('dark');
+    } else {
+        isDark.value = false;
+        document.documentElement.classList.remove('dark');
+    }
+});
 
 const formatPrice = (value: any) => {
     const num = parseFloat(value);
@@ -298,11 +328,11 @@ const submitCheckout = async () => {
 };
 </script>
 
-<template>
+<<template>
     <Head :title="`QR Order ${table.name} - ${outlet.name}`" />
 
     <div
-        class="h-screen overflow-y-auto bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),linear-gradient(180deg,#020617_0%,#0f172a_100%)] text-slate-100"
+        class="h-screen overflow-y-auto bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.06),_transparent_45%),linear-gradient(180deg,#f8fafc_0%,#f1f5f9_100%)] text-slate-800 transition-colors duration-200 dark:bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_35%),linear-gradient(180deg,#020617_0%,#0f172a_100%)] dark:text-slate-100"
     >
         <!-- MEJA PENUH: tampilkan halaman blokir -->
         <div
@@ -310,31 +340,31 @@ const submitCheckout = async () => {
             class="flex min-h-screen flex-col items-center justify-center px-6 text-center"
         >
             <div
-                class="w-full max-w-md rounded-[32px] border border-rose-500/20 bg-rose-950/30 p-10 shadow-2xl backdrop-blur"
+                class="w-full max-w-md rounded-[32px] border border-rose-200 bg-white p-10 shadow-xl backdrop-blur dark:border-rose-500/20 dark:bg-rose-950/30"
             >
                 <div
-                    class="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-rose-500/20 bg-rose-500/10 text-rose-300"
+                    class="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300"
                 >
                     <Users class="h-10 w-10" />
                 </div>
-                <h1 class="mt-6 text-2xl font-black text-white">
+                <h1 class="mt-6 text-2xl font-black text-slate-900 dark:text-white">
                     Meja Sudah Penuh
                 </h1>
-                <p class="mt-3 text-sm leading-6 text-slate-400">
+                <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
                     Kapasitas
-                    <strong class="text-white">{{ table.name }}</strong> sudah
+                    <strong class="text-slate-900 dark:text-white">{{ table.name }}</strong> sudah
                     penuh ({{ table.capacity }} Orang). Silakan hubungi kasir atau
                     tunggu hingga ada tempat kosong.
                 </p>
                 <div
-                    class="mt-6 rounded-2xl border border-white/10 bg-white/5 px-5 py-4"
+                    class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 dark:border-white/10 dark:bg-white/5"
                 >
                     <p
-                        class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                        class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400"
                     >
                         Kapasitas Meja
                     </p>
-                    <p class="mt-2 text-3xl font-black text-rose-300">
+                    <p class="mt-2 text-3xl font-black text-rose-600 dark:text-rose-300">
                         {{ table.current_guests ?? 0 }} /
                         {{ table.capacity }} Orang
                     </p>
@@ -348,26 +378,26 @@ const submitCheckout = async () => {
             class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8"
         >
             <section
-                class="rounded-[28px] border border-white/10 bg-slate-950/60 p-5 shadow-[0_24px_80px_rgba(15,23,42,0.45)] backdrop-blur"
+                class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.03)] backdrop-blur dark:border-white/10 dark:bg-slate-950/60 dark:shadow-[0_24px_80px_rgba(15,23,42,0.45)]"
             >
                 <div
                     class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
                 >
                     <div class="max-w-2xl">
                         <div
-                            class="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-orange-300"
+                            class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-orange-700 dark:border-orange-500/20 dark:bg-orange-500/10 dark:text-orange-300"
                         >
                             <QrCode class="h-3.5 w-3.5" />
                             QR Table Self-Order
                         </div>
                         <h1
-                            class="mt-4 text-3xl font-black tracking-tight text-white sm:text-4xl"
+                            class="mt-4 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl dark:text-white"
                         >
                             Pesan dari {{ table.name }}, bayar dulu, lalu tunggu
                             diproses.
                         </h1>
                         <p
-                            class="mt-3 max-w-xl text-sm leading-6 text-slate-300"
+                            class="mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300"
                         >
                             Flow ini khusus customer meja. Pilih menu, isi data
                             singkat, lalu lanjutkan pembayaran QRIS agar pesanan
@@ -377,33 +407,33 @@ const submitCheckout = async () => {
 
                     <div class="grid gap-3 sm:grid-cols-2 lg:w-[360px]">
                         <div
-                            class="rounded-2xl border border-white/10 bg-white/5 p-4"
+                            class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/5"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-550 dark:text-slate-400"
                             >
                                 Outlet
                             </p>
                             <div class="mt-3 flex items-center gap-2">
-                                <Store class="h-4 w-4 text-orange-300" />
-                                <p class="text-sm font-bold text-white">
+                                <Store class="h-4 w-4 text-orange-600 dark:text-orange-300" />
+                                <p class="text-sm font-bold text-slate-900 dark:text-white">
                                     {{ outlet.name }}
                                 </p>
                             </div>
                         </div>
                         <div
-                            class="rounded-2xl border border-white/10 bg-white/5 p-4"
+                            class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/5"
                         >
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-550 dark:text-slate-400"
                             >
                                 Meja Aktif
                             </p>
                             <div class="mt-3 flex items-center gap-2">
                                 <UtensilsCrossed
-                                    class="h-4 w-4 text-emerald-300"
+                                    class="h-4 w-4 text-emerald-600 dark:text-emerald-300"
                                 />
-                                <p class="text-sm font-bold text-white">
+                                <p class="text-sm font-bold text-slate-900 dark:text-white">
                                     {{ table.name }}
                                 </p>
                             </div>
@@ -415,25 +445,25 @@ const submitCheckout = async () => {
             <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
                 <div class="space-y-6">
                     <section
-                        class="rounded-[28px] border border-white/10 bg-slate-950/55 p-5 backdrop-blur"
+                        class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur dark:border-white/10 dark:bg-slate-950/55"
                     >
                         <div class="flex items-start justify-between gap-3">
                             <div>
                                 <p
-                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300"
                                 >
                                     Langkah 1
                                 </p>
-                                <h2 class="mt-2 text-xl font-black text-white">
+                                <h2 class="mt-2 text-xl font-black text-slate-900 dark:text-white">
                                     Data pelanggan
                                 </h2>
-                                <p class="mt-1 text-sm text-slate-400">
+                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
                                     Nama dan nomor HP dipakai untuk identifikasi
                                     member dan status order.
                                 </p>
                             </div>
                             <div
-                                class="rounded-2xl border border-orange-500/20 bg-orange-500/10 p-3 text-orange-200"
+                                class="rounded-2xl border border-orange-200 bg-orange-50 p-3 text-orange-600 dark:border-orange-500/20 dark:bg-orange-500/10 dark:text-orange-200"
                             >
                                 <UserRound class="h-5 w-5" />
                             </div>
@@ -443,30 +473,30 @@ const submitCheckout = async () => {
                             <!-- Info Kapasitas Meja -->
                             <div
                                 v-if="table.capacity"
-                                class="flex items-center justify-between gap-4 rounded-2xl border border-emerald-500/15 bg-emerald-500/8 px-4 py-3 md:col-span-2"
+                                class="flex items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 md:col-span-2 dark:border-emerald-500/15 dark:bg-emerald-500/8"
                             >
                                 <div class="flex items-center gap-2">
                                     <Users
-                                        class="h-4 w-4 shrink-0 text-emerald-300"
+                                        class="h-4 w-4 shrink-0 text-emerald-700 dark:text-emerald-300"
                                     />
                                     <span
-                                        class="text-xs font-bold text-emerald-200"
+                                        class="text-xs font-bold text-emerald-800 dark:text-emerald-200"
                                     >
                                         Kapasitas {{ table.name }}
                                     </span>
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <div
-                                        class="h-2 w-28 overflow-hidden rounded-full bg-slate-800"
+                                        class="h-2 w-28 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800"
                                     >
                                         <div
                                             class="h-full rounded-full transition-all duration-500"
                                             :class="
                                                 capacityPercent >= 90
-                                                    ? 'bg-rose-400'
+                                                    ? 'bg-rose-500 dark:bg-rose-400'
                                                     : capacityPercent >= 60
-                                                      ? 'bg-amber-400'
-                                                      : 'bg-emerald-400'
+                                                      ? 'bg-amber-500 dark:bg-amber-400'
+                                                      : 'bg-emerald-500 dark:bg-emerald-400'
                                             "
                                             :style="{
                                                 width: capacityPercent + '%',
@@ -474,7 +504,7 @@ const submitCheckout = async () => {
                                         />
                                     </div>
                                     <span
-                                        class="whitespace-nowrap text-xs font-black text-white"
+                                        class="whitespace-nowrap text-xs font-black text-slate-900 dark:text-white"
                                     >
                                         {{ table.current_guests ?? 0 }} /
                                         {{ table.capacity }} Orang
@@ -486,31 +516,31 @@ const submitCheckout = async () => {
                                 v-model="customerName"
                                 type="text"
                                 placeholder="Nama pelanggan"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                                class="w-full rounded-2xl border-2 border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-orange-400"
                             />
                             <input
                                 v-model="customerPhone"
                                 type="text"
                                 placeholder="Nomor HP"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                                class="w-full rounded-2xl border-2 border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-orange-400"
                             />
                             <input
                                 v-model="customerEmail"
                                 type="email"
                                 placeholder="Email (opsional)"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 md:col-span-2"
+                                class="w-full rounded-2xl border-2 border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-orange-400 md:col-span-2"
                             />
 
                             <!-- Input Jumlah Orang - WAJIB diisi -->
                             <div class="md:col-span-2">
                                 <label
-                                    class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                    class="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-slate-550 dark:text-slate-400"
                                 >
                                     Berapa orang dalam grup Anda?
-                                    <span class="text-rose-400">*</span>
+                                    <span class="text-rose-500 dark:text-rose-400">*</span>
                                     <span
                                         v-if="remainingCapacity !== null"
-                                        class="ml-2 normal-case tracking-normal text-emerald-400"
+                                        class="ml-2 normal-case tracking-normal text-emerald-600 dark:text-emerald-400"
                                     >
                                         (sisa: {{ remainingCapacity }} tempat)
                                     </span>
@@ -524,7 +554,7 @@ const submitCheckout = async () => {
                                                 guestsCount - 1,
                                             )
                                         "
-                                        class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-slate-300 transition hover:border-orange-500/30 hover:text-orange-300"
+                                        class="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 transition hover:border-orange-300 hover:text-orange-600 dark:border-white/10 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-orange-500/30 dark:hover:text-orange-300"
                                     >
                                         <Minus class="h-4 w-4" />
                                     </button>
@@ -533,7 +563,7 @@ const submitCheckout = async () => {
                                         type="number"
                                         :min="1"
                                         :max="maxGuests"
-                                        class="w-20 rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 text-center text-sm font-black text-white focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                                        class="w-20 rounded-2xl border-2 border-slate-200 bg-white px-3 py-3 text-center text-sm font-black text-slate-900 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-white/10 dark:bg-slate-900/80 dark:text-white dark:focus:border-orange-400"
                                     />
                                     <button
                                         type="button"
@@ -543,11 +573,11 @@ const submitCheckout = async () => {
                                                 guestsCount + 1,
                                             )
                                         "
-                                        class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-slate-300 transition hover:border-orange-500/30 hover:text-orange-300"
+                                        class="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 transition hover:border-orange-300 hover:text-orange-600 dark:border-white/10 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-orange-500/30 dark:hover:text-orange-300"
                                     >
                                         <Plus class="h-4 w-4" />
                                     </button>
-                                    <span class="text-sm text-slate-400"
+                                    <span class="text-sm text-slate-600 dark:text-slate-400"
                                         >orang</span
                                     >
                                 </div>
@@ -557,27 +587,27 @@ const submitCheckout = async () => {
                                 v-model="promoCode"
                                 type="text"
                                 placeholder="Voucher / promo code (opsional)"
-                                class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm uppercase text-slate-100 placeholder:text-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 md:col-span-2"
+                                class="w-full rounded-2xl border-2 border-slate-200 bg-white px-4 py-3 text-sm uppercase text-slate-900 placeholder:text-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-orange-400 md:col-span-2"
                             />
                         </div>
                     </section>
 
                     <section
-                        class="rounded-[28px] border border-white/10 bg-slate-950/55 p-5 backdrop-blur"
+                        class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur dark:border-white/10 dark:bg-slate-950/55"
                     >
                         <div
                             class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
                         >
                             <div>
                                 <p
-                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300"
                                 >
                                     Langkah 2
                                 </p>
-                                <h2 class="mt-2 text-xl font-black text-white">
+                                <h2 class="mt-2 text-xl font-black text-slate-900 dark:text-white">
                                     Pilih menu
                                 </h2>
-                                <p class="mt-1 text-sm text-slate-400">
+                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
                                     Semua item di halaman ini langsung mengambil
                                     data produk aktif dari database outlet.
                                 </p>
@@ -585,13 +615,13 @@ const submitCheckout = async () => {
 
                             <div class="relative w-full max-w-sm">
                                 <Search
-                                    class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+                                    class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500"
                                 />
                                 <input
                                     v-model="searchQuery"
                                     type="text"
                                     placeholder="Cari menu favorit..."
-                                    class="w-full rounded-2xl border border-white/10 bg-slate-900/80 py-3 pl-11 pr-4 text-sm text-slate-100 placeholder-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                                    class="w-full rounded-2xl border-2 border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 placeholder-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-orange-400"
                                 />
                             </div>
                         </div>
@@ -605,8 +635,8 @@ const submitCheckout = async () => {
                                 :class="[
                                     'whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold transition',
                                     activeCategory === 'all'
-                                        ? 'border-orange-500/30 bg-orange-500/10 text-orange-200'
-                                        : 'border-white/10 bg-slate-900/70 text-slate-400',
+                                        ? 'border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-200'
+                                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-400',
                                 ]"
                             >
                                 Semua Menu
@@ -619,8 +649,8 @@ const submitCheckout = async () => {
                                 :class="[
                                     'whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold transition',
                                     activeCategory === category.id
-                                        ? 'border-orange-500/30 bg-orange-500/10 text-orange-200'
-                                        : 'border-white/10 bg-slate-900/70 text-slate-400',
+                                        ? 'border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-200'
+                                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-400',
                                 ]"
                             >
                                 {{ category.name }}
@@ -636,10 +666,10 @@ const submitCheckout = async () => {
                                 :key="product.id"
                                 type="button"
                                 @click="handleProductClick(product)"
-                                class="group overflow-hidden rounded-[24px] border border-white/10 bg-slate-900/70 text-left transition hover:-translate-y-0.5 hover:border-orange-500/30"
+                                class="group overflow-hidden rounded-[24px] border border-slate-200 bg-white text-left transition hover:-translate-y-0.5 hover:border-orange-300 hover:shadow-md dark:border-white/10 dark:bg-slate-900/70 dark:hover:border-orange-500/30"
                             >
                                 <div
-                                    class="relative aspect-square w-full overflow-hidden border-b border-white/10 bg-slate-950"
+                                    class="relative aspect-square w-full overflow-hidden border-b border-slate-200 bg-slate-50 dark:border-b-white/10 dark:bg-slate-950"
                                 >
                                     <img
                                         :src="getProductImage(product)"
@@ -647,7 +677,7 @@ const submitCheckout = async () => {
                                         class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                                     />
                                     <span
-                                        class="absolute right-3 top-3 rounded-full border border-white/10 bg-slate-950/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-200"
+                                        class="absolute right-3 top-3 rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-200"
                                     >
                                         {{ product.category_name }}
                                     </span>
@@ -655,12 +685,12 @@ const submitCheckout = async () => {
                                 <div class="space-y-3 p-4">
                                     <div>
                                         <h3
-                                            class="text-sm font-black text-white"
+                                            class="text-sm font-black text-slate-900 dark:text-white"
                                         >
                                             {{ product.name }}
                                         </h3>
                                         <p
-                                            class="mt-1 line-clamp-2 text-[12px] leading-5 text-slate-400"
+                                            class="mt-1 line-clamp-2 text-[12px] leading-5 text-slate-600 dark:text-slate-400"
                                         >
                                             {{
                                                 product.description ||
@@ -669,17 +699,17 @@ const submitCheckout = async () => {
                                         </p>
                                     </div>
                                     <div
-                                        class="flex items-center justify-between border-t border-white/10 pt-3"
+                                        class="flex items-center justify-between border-t border-slate-100 pt-3 dark:border-white/10"
                                     >
                                         <span
-                                            class="text-sm font-black text-orange-300"
+                                            class="text-sm font-black text-orange-600 dark:text-orange-300"
                                         >
                                             {{
                                                 formatPrice(product.base_price)
                                             }}
                                         </span>
                                         <span
-                                            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-orange-500/20 bg-orange-500/10 text-orange-200"
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-orange-200 bg-orange-50 text-orange-600 group-hover:bg-orange-100 dark:border-orange-500/20 dark:bg-orange-500/10 dark:text-orange-200"
                                         >
                                             <Plus class="h-4 w-4" />
                                         </span>
@@ -690,12 +720,12 @@ const submitCheckout = async () => {
 
                         <div
                             v-else
-                            class="mt-5 rounded-[24px] border border-dashed border-white/10 bg-slate-900/40 px-6 py-16 text-center"
+                            class="mt-5 rounded-[24px] border border-dashed border-slate-300 bg-slate-50 px-6 py-16 text-center dark:border-white/10 dark:bg-slate-900/40"
                         >
-                            <p class="text-sm font-bold text-slate-300">
+                            <p class="text-sm font-bold text-slate-700 dark:text-slate-300">
                                 Menu tidak ditemukan
                             </p>
-                            <p class="mt-2 text-xs text-slate-500">
+                            <p class="mt-2 text-xs text-slate-500 dark:text-slate-500">
                                 Coba ganti kategori atau kata pencarian.
                             </p>
                         </div>
@@ -704,51 +734,51 @@ const submitCheckout = async () => {
 
                 <aside class="xl:sticky xl:top-5 xl:h-fit">
                     <section
-                        class="rounded-[28px] border border-white/10 bg-slate-950/70 p-5 shadow-[0_24px_80px_rgba(15,23,42,0.4)] backdrop-blur"
+                        class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur dark:border-white/10 dark:bg-slate-950/70 dark:shadow-[0_24px_80px_rgba(15,23,42,0.4)]"
                     >
                         <div class="flex items-start justify-between gap-3">
                             <div>
                                 <p
-                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                                    class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300"
                                 >
                                     Langkah 3
                                 </p>
-                                <h2 class="mt-2 text-xl font-black text-white">
+                                <h2 class="mt-2 text-xl font-black text-slate-900 dark:text-white">
                                     Ringkasan & bayar
                                 </h2>
-                                <p class="mt-1 text-sm text-slate-400">
+                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
                                     Flow QR meja saat ini wajib bayar dulu
                                     dengan QRIS.
                                 </p>
                             </div>
                             <div
-                                class="rounded-2xl border border-fuchsia-500/20 bg-fuchsia-500/10 p-3 text-fuchsia-200"
+                                class="rounded-2xl border border-fuchsia-200 bg-fuchsia-50 p-3 text-fuchsia-600 dark:border-fuchsia-500/20 dark:bg-fuchsia-500/10 dark:text-fuchsia-200"
                             >
                                 <PackageCheck class="h-5 w-5" />
                             </div>
                         </div>
 
                         <div
-                            class="mt-5 grid gap-3 rounded-[24px] border border-white/10 bg-white/5 p-4 sm:grid-cols-2 xl:grid-cols-1"
+                            class="mt-5 grid gap-3 rounded-[24px] border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2 xl:grid-cols-1 dark:border-white/10 dark:bg-white/5"
                         >
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-550 dark:text-slate-400"
                                 >
                                     Total Item
                                 </p>
-                                <p class="mt-2 text-lg font-black text-white">
+                                <p class="mt-2 text-lg font-black text-slate-900 dark:text-white">
                                     {{ cartItemCount }} item
                                 </p>
                             </div>
                             <div>
                                 <p
-                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                    class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-550 dark:text-slate-400"
                                 >
                                     Metode Bayar
                                 </p>
                                 <div
-                                    class="mt-2 inline-flex items-center gap-2 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-3 py-1 text-xs font-bold text-fuchsia-200"
+                                    class="mt-2 inline-flex items-center gap-2 rounded-full border border-fuchsia-200 bg-fuchsia-50 px-3 py-1 text-xs font-bold text-fuchsia-700 dark:border-fuchsia-500/20 dark:bg-fuchsia-500/10 dark:text-fuchsia-200"
                                 >
                                     <QrCode class="h-3.5 w-3.5" />
                                     QRIS Gateway
@@ -762,31 +792,31 @@ const submitCheckout = async () => {
                             <div
                                 v-for="(item, index) in cart"
                                 :key="`${item.product_id}-${item.variant_id || 'base'}-${index}`"
-                                class="rounded-[22px] border border-white/10 bg-slate-900/80 p-4"
+                                class="rounded-[22px] border border-slate-200 bg-slate-50/50 p-4 dark:border-white/10 dark:bg-slate-900/80"
                             >
                                 <div
                                     class="flex items-start justify-between gap-3"
                                 >
                                     <div class="min-w-0 flex-1">
                                         <p
-                                            class="truncate text-sm font-bold text-white"
+                                            class="truncate text-sm font-bold text-slate-900 dark:text-white"
                                         >
                                             {{ item.product_name }}
                                         </p>
                                         <p
                                             v-if="item.variant_name"
-                                            class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-orange-300"
+                                            class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-300"
                                         >
                                             {{ item.variant_name }}
                                         </p>
                                         <p
                                             v-if="item.notes"
-                                            class="mt-1 text-[11px] italic text-slate-500"
+                                            class="mt-1 text-[11px] italic text-slate-500 dark:text-slate-400"
                                         >
                                             "{{ item.notes }}"
                                         </p>
                                         <p
-                                            class="mt-3 text-sm font-black text-slate-200"
+                                            class="mt-3 text-sm font-black text-slate-800 dark:text-slate-200"
                                         >
                                             {{
                                                 formatPrice(
@@ -800,7 +830,7 @@ const submitCheckout = async () => {
                                     <button
                                         type="button"
                                         @click="removeCartItem(index)"
-                                        class="flex h-8 w-8 items-center justify-center rounded-full border border-red-500/20 bg-red-500/10 text-red-300 transition hover:bg-red-500/15"
+                                        class="flex h-8 w-8 items-center justify-center rounded-full border border-red-200 bg-red-50 text-red-600 transition hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-300 dark:hover:bg-red-500/15"
                                     >
                                         <Trash2 class="h-4 w-4" />
                                     </button>
@@ -810,19 +840,19 @@ const submitCheckout = async () => {
                                     <button
                                         type="button"
                                         @click="decreaseCartQty(index)"
-                                        class="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-slate-950 text-slate-300"
+                                        class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300"
                                     >
                                         <Minus class="h-4 w-4" />
                                     </button>
                                     <span
-                                        class="w-8 text-center text-sm font-bold text-white"
+                                        class="w-8 text-center text-sm font-bold text-slate-900 dark:text-white"
                                     >
                                         {{ item.quantity }}
                                     </span>
                                     <button
                                         type="button"
                                         @click="increaseCartQty(index)"
-                                        class="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-slate-950 text-slate-300"
+                                        class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300"
                                     >
                                         <Plus class="h-4 w-4" />
                                     </button>
@@ -831,17 +861,17 @@ const submitCheckout = async () => {
 
                             <div
                                 v-if="cart.length === 0"
-                                class="rounded-[22px] border border-dashed border-white/10 bg-slate-900/50 px-5 py-12 text-center"
+                                class="rounded-[22px] border border-dashed border-slate-200 bg-slate-50 px-5 py-12 text-center dark:border-white/10 dark:bg-slate-900/50"
                             >
                                 <ShoppingCart
-                                    class="mx-auto h-8 w-8 text-slate-600"
+                                    class="mx-auto h-8 w-8 text-slate-400 dark:text-slate-600"
                                 />
                                 <p
-                                    class="mt-3 text-sm font-bold text-slate-300"
+                                    class="mt-3 text-sm font-bold text-slate-600 dark:text-slate-300"
                                 >
                                     Keranjang masih kosong
                                 </p>
-                                <p class="mt-1 text-xs text-slate-500">
+                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-500">
                                     Tambahkan menu dulu sebelum lanjut checkout.
                                 </p>
                             </div>
@@ -850,7 +880,7 @@ const submitCheckout = async () => {
                         <div class="mt-5 space-y-3">
                             <div
                                 v-if="checkoutError"
-                                class="rounded-[22px] border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm font-medium text-rose-200"
+                                class="rounded-[22px] border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-200"
                             >
                                 {{ checkoutError }}
                             </div>
@@ -858,21 +888,21 @@ const submitCheckout = async () => {
                                 v-model="orderNotes"
                                 rows="3"
                                 placeholder="Catatan umum order, misal alat makan dipisah..."
-                                class="w-full resize-none rounded-[22px] border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                                class="w-full resize-none rounded-[22px] border-2 border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-orange-400"
                             ></textarea>
 
                             <div
-                                class="rounded-[22px] border border-white/10 bg-slate-900/70 p-4"
+                                class="rounded-[22px] border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-900/70"
                             >
                                 <div
-                                    class="flex items-center justify-between text-sm text-slate-400"
+                                    class="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400"
                                 >
                                     <span>Subtotal</span>
                                     <span>{{ formatPrice(cartSubtotal) }}</span>
                                 </div>
                                 <div
                                     v-if="cartTax > 0"
-                                    class="mt-3 flex items-center justify-between text-sm text-slate-400"
+                                    class="mt-3 flex items-center justify-between text-sm text-slate-600 dark:text-slate-400"
                                 >
                                     <span>
                                         Pajak ({{
@@ -897,10 +927,10 @@ const submitCheckout = async () => {
                                     <span>Dihitung saat checkout</span>
                                 </div>
                                 <div
-                                    class="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-base font-black text-white"
+                                    class="mt-3 flex items-center justify-between border-t border-slate-200 pt-3 text-base font-black text-slate-900 dark:border-white/10 dark:text-white"
                                 >
                                     <span>Total Pembayaran</span>
-                                    <span class="text-orange-300">{{
+                                    <span class="text-orange-600 dark:text-orange-300">{{
                                         formatPrice(cartTotal)
                                     }}</span>
                                 </div>
@@ -916,7 +946,7 @@ const submitCheckout = async () => {
                                     cart.length === 0 ||
                                     isSubmitting
                                 "
-                                class="flex w-full items-center justify-center gap-2 rounded-[22px] bg-gradient-to-r from-orange-500 via-red-500 to-fuchsia-500 px-5 py-4 text-sm font-black text-white shadow-[0_20px_40px_rgba(249,115,22,0.25)] transition hover:brightness-110 disabled:pointer-events-none disabled:opacity-50"
+                                class="flex w-full items-center justify-center gap-2 rounded-[22px] bg-orange-600 hover:bg-orange-500 px-5 py-4 text-sm font-black text-white transition disabled:pointer-events-none disabled:opacity-50 dark:bg-orange-500 dark:hover:bg-orange-400 dark:text-stone-950"
                             >
                                 <QrCode class="h-4 w-4" />
                                 <span>
@@ -945,26 +975,26 @@ const submitCheckout = async () => {
         >
             <div
                 v-if="variantModalOpen"
-                class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/85"
             >
                 <div
-                    class="w-full max-w-md rounded-[28px] border border-white/10 bg-slate-950 p-5 shadow-2xl"
+                    class="w-full max-w-md rounded-[28px] border border-slate-200 bg-white p-5 shadow-2xl dark:border-white/10 dark:bg-slate-950"
                 >
                     <div class="flex items-start justify-between gap-4">
                         <div>
                             <p
-                                class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300"
+                                class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600 dark:text-orange-300"
                             >
                                 Pilih varian
                             </p>
-                            <h3 class="mt-2 text-xl font-black text-white">
+                            <h3 class="mt-2 text-xl font-black text-slate-900 dark:text-white">
                                 {{ selectedProduct?.name }}
                             </h3>
                         </div>
                         <button
                             type="button"
                             @click="variantModalOpen = false"
-                            class="rounded-full border border-white/10 p-2 text-slate-400"
+                            class="rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 dark:border-white/10 dark:text-slate-400 dark:hover:bg-slate-900"
                         >
                             <X class="h-4 w-4" />
                         </button>
@@ -979,29 +1009,29 @@ const submitCheckout = async () => {
                             :class="[
                                 'flex w-full items-center justify-between rounded-2xl border p-3 text-left transition',
                                 selectedVariant?.id === variant.id
-                                    ? 'border-orange-500/30 bg-orange-500/10 text-orange-100'
-                                    : 'border-white/10 bg-slate-900 text-slate-300',
+                                    ? 'border-orange-300 bg-orange-50 text-orange-900 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-100'
+                                    : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 dark:border-white/10 dark:bg-slate-900 dark:text-slate-300',
                             ]"
                         >
                             <span class="text-sm font-bold">
                                 {{ variant.name }}
                             </span>
-                            <span class="text-sm font-black">
+                            <span class="text-sm font-black text-slate-900 dark:text-white">
                                 +{{ formatPrice(variant.additional_price) }}
                             </span>
                         </button>
                     </div>
 
                     <div
-                        class="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-slate-900 p-3"
+                        class="mt-5 flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-white/10 dark:bg-slate-900"
                     >
                         <div>
                             <p
-                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                                class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-550 dark:text-slate-400"
                             >
                                 Jumlah
                             </p>
-                            <p class="mt-1 text-xs text-slate-400">
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                 Atur kuantitas sebelum ditambahkan.
                             </p>
                         </div>
@@ -1012,19 +1042,19 @@ const submitCheckout = async () => {
                                     itemQuantity =
                                         itemQuantity > 1 ? itemQuantity - 1 : 1
                                 "
-                                class="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-slate-950 text-slate-300"
+                                class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300"
                             >
                                 <Minus class="h-4 w-4" />
                             </button>
                             <span
-                                class="w-8 text-center text-sm font-bold text-white"
+                                class="w-8 text-center text-sm font-bold text-slate-900 dark:text-white"
                             >
                                 {{ itemQuantity }}
                             </span>
                             <button
                                 type="button"
                                 @click="itemQuantity += 1"
-                                class="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-slate-950 text-slate-300"
+                                class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-white/10 dark:bg-slate-950 dark:text-slate-300"
                             >
                                 <Plus class="h-4 w-4" />
                             </button>
@@ -1035,13 +1065,13 @@ const submitCheckout = async () => {
                         v-model="itemNotes"
                         rows="3"
                         placeholder="Catatan item, misal tanpa saus atau level pedas..."
-                        class="mt-5 w-full resize-none rounded-2xl border border-white/10 bg-slate-900 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                        class="mt-5 w-full resize-none rounded-2xl border-2 border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-white/10 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-orange-400"
                     ></textarea>
 
                     <button
                         type="button"
                         @click="confirmVariantAdd"
-                        class="mt-5 flex w-full items-center justify-center gap-2 rounded-[22px] bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3.5 text-sm font-black text-white"
+                        class="mt-5 flex w-full items-center justify-center gap-2 rounded-[22px] bg-orange-600 hover:bg-orange-500 px-5 py-3.5 text-sm font-black text-white transition dark:bg-orange-500 dark:hover:bg-orange-400 dark:text-stone-950"
                     >
                         <PackageCheck class="h-4 w-4" />
                         Tambah ke keranjang
@@ -1049,5 +1079,16 @@ const submitCheckout = async () => {
                 </div>
             </div>
         </Transition>
+
+        <!-- Floating Theme Toggle -->
+        <button
+            type="button"
+            @click="toggleTheme"
+            class="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition hover:bg-slate-50 dark:border-white/10 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+            title="Toggle Dark/Light Mode"
+        >
+            <Sun v-if="isDark" class="h-5 w-5" />
+            <Moon v-else class="h-5 w-5" />
+        </button>
     </div>
 </template>
