@@ -17,7 +17,7 @@ import {
     Users,
     X,
 } from '@lucide/vue';
-import { type Component, computed, ref } from 'vue';
+import { type Component, computed, ref, inject, watch, type Ref } from 'vue';
 
 // ─── Permission icon + color helpers ──────────────────────────────────────────
 
@@ -155,6 +155,13 @@ const props = defineProps<{
 // ─── State ─────────────────────────────────────────────────────────────────────
 
 const activeTab = ref<'accounts' | 'matrix'>('matrix'); // Default to matrix for better focus on role config
+
+const activeGuideSubTab = inject<Ref<string | null> | null>('activeGuideSubTab', null);
+if (activeGuideSubTab) {
+    watch(activeTab, (val) => {
+        activeGuideSubTab.value = val;
+    }, { immediate: true });
+}
 
 const alertDialog = ref({
     show: false,

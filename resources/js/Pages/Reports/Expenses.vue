@@ -15,7 +15,7 @@ import {
     Wallet,
     X,
 } from '@lucide/vue';
-import { computed, ref } from 'vue';
+import { computed, ref, inject, watch, type Ref } from 'vue';
 
 interface OutletOption {
     id: string;
@@ -96,6 +96,13 @@ const searchFilter = ref(props.filters.search || '');
 
 // Tab state: 'expense' atau 'income'
 const activeTab = ref<'expense' | 'income'>('expense');
+
+const activeGuideSubTab = inject<Ref<string | null> | null>('activeGuideSubTab', null);
+if (activeGuideSubTab) {
+    watch(activeTab, (val) => {
+        activeGuideSubTab.value = val;
+    }, { immediate: true });
+}
 
 // Modal form states
 const expenseModalMode = ref<'create' | 'edit' | null>(null);

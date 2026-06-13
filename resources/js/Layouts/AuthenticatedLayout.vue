@@ -31,9 +31,11 @@ import {
     Users,
     Volume2,
     X,
+    HelpCircle,
+    BookOpen,
 } from '@lucide/vue';
 import axios from 'axios';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, provide, watch, type Ref } from 'vue';
 
 interface MenuItem {
     id: number;
@@ -83,6 +85,27 @@ const menuProgress = computed(() => {
 
 const isMobileOpen = ref(false);
 const searchQuery = ref('');
+
+// Guide (Panduan) Drawer States
+import { guideData, getGuideKey } from '@/Components/guideData';
+
+const isGuideOpen = ref(false);
+const activeGuideSubTab = ref<string | null>(null);
+
+provide('activeGuideSubTab', activeGuideSubTab);
+
+watch(
+    () => route().current(),
+    () => {
+        activeGuideSubTab.value = null;
+    }
+);
+
+const currentGuide = computed(() => {
+    const routeName = route().current() || 'dashboard';
+    const key = getGuideKey(routeName, activeGuideSubTab.value);
+    return guideData[key] || guideData['dashboard'];
+});
 
 const isSidebarCollapsed = ref(false);
 if (typeof window !== 'undefined') {
@@ -1967,6 +1990,128 @@ onBeforeUnmount(() => {
                 >
                     POS Mentai &copy; 2026. Hak Cipta Dilindungi.
                 </footer>
+            </div>
+        </div>
+
+        <!-- Floating Action Button (FAB) Panduan -->
+        <div class="fixed bottom-6 right-6 z-[60] flex items-center">
+            <button
+                @click="isGuideOpen = true"
+                class="group flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-3.5 text-stone-950 shadow-xl shadow-orange-500/20 hover:shadow-orange-500/40 hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 dark:focus:ring-offset-slate-950 cursor-pointer"
+                title="Buka Panduan Fitur"
+                id="btn-panduan-fab"
+            >
+                <HelpCircle class="h-5 w-5 text-stone-950 animate-pulse group-hover:rotate-12 transition-transform duration-200" />
+                <span class="text-xs font-black uppercase tracking-wider text-stone-950">Panduan</span>
+            </button>
+        </div>
+
+        <!-- Panduan Drawer (Right Side) -->
+        <div v-if="isGuideOpen" class="fixed inset-0 z-[100] overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+            <div class="absolute inset-0 overflow-hidden">
+                <!-- Backdrop overlay with blur effect -->
+                <div
+                    @click="isGuideOpen = false"
+                    class="absolute inset-0 bg-stone-950/60 backdrop-blur-sm transition-opacity duration-300 ease-out cursor-pointer"
+                ></div>
+
+                <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                    <!-- Drawer panel -->
+                    <div
+                        class="pointer-events-auto w-screen max-w-md transform transition-all duration-300 ease-in-out"
+                        :class="isGuideOpen ? 'translate-x-0' : 'translate-x-full'"
+                    >
+                        <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-2xl dark:bg-slate-900 border-l border-stone-200 dark:border-slate-800/80">
+                            <!-- Header -->
+                            <div class="bg-gradient-to-r from-stone-900 to-stone-950 px-6 py-5 dark:from-slate-950 dark:to-slate-900 border-b border-stone-800">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="rounded-xl bg-orange-500/10 p-2 border border-orange-500/20">
+                                            <BookOpen class="h-5 w-5 text-orange-500" />
+                                        </div>
+                                        <div>
+                                            <h2 class="text-sm font-black uppercase tracking-wider text-white" id="slide-over-title">
+                                                Panduan Fitur
+                                            </h2>
+                                            <p class="text-[10px] font-bold text-stone-400 dark:text-slate-400">
+                                                Informasi & Alur Operasional
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        @click="isGuideOpen = false"
+                                        class="rounded-xl border border-stone-800 p-2 text-stone-400 hover:bg-stone-800 hover:text-white transition-colors duration-150 cursor-pointer"
+                                    >
+                                        <X class="h-4.5 w-4.5" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Body Content -->
+                            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-7">
+                                <!-- Feature Title Card -->
+                                <div class="relative overflow-hidden rounded-2xl border border-stone-200/80 bg-stone-50/60 p-5 dark:border-slate-800 dark:bg-slate-950/40">
+                                    <div class="absolute -right-6 -bottom-6 opacity-5 dark:opacity-10">
+                                        <BookOpen class="h-24 w-24 text-stone-900 dark:text-white" />
+                                    </div>
+                                    <span class="inline-block rounded-lg bg-orange-500/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-orange-500 dark:bg-orange-500/20">
+                                        Fitur Aktif
+                                    </span>
+                                    <h3 class="mt-2 text-base font-black text-stone-950 dark:text-white">
+                                        {{ currentGuide.title }}
+                                    </h3>
+                                    <p class="mt-2.5 text-xs leading-relaxed text-stone-600 dark:text-slate-400 font-medium">
+                                        {{ currentGuide.description }}
+                                    </p>
+                                </div>
+
+                                <!-- Flow Section -->
+                                <div class="space-y-4">
+                                    <h4 class="text-xs font-black uppercase tracking-wider text-stone-400 dark:text-slate-500 flex items-center gap-1.5">
+                                        <span>Alur & Langkah Penggunaan</span>
+                                    </h4>
+                                    <div class="relative pl-6 border-l-2 border-stone-200 dark:border-slate-800 ml-3 space-y-6">
+                                        <div
+                                            v-for="(step, idx) in currentGuide.flow"
+                                            :key="idx"
+                                            class="relative"
+                                        >
+                                            <!-- Step number badge -->
+                                            <span class="absolute -left-9 top-0 flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-[10px] font-black text-stone-950 border-2 border-white dark:border-slate-900 shadow-md">
+                                                {{ idx + 1 }}
+                                            </span>
+                                            <p class="text-xs font-bold text-stone-800 dark:text-slate-300 leading-relaxed">
+                                                {{ step }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Relations Section -->
+                                <div class="space-y-3 pt-3 border-t border-stone-100 dark:border-slate-800/60">
+                                    <h4 class="text-xs font-black uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                        Relasi Menu Terkait
+                                    </h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span
+                                            v-for="(rel, idx) in currentGuide.relations"
+                                            :key="idx"
+                                            class="inline-flex items-center gap-1 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-[10px] font-bold text-stone-700 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-400"
+                                        >
+                                            <span class="h-1.5 w-1.5 rounded-full bg-orange-500"></span>
+                                            {{ rel }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="border-t border-stone-100 bg-stone-50/50 px-6 py-4.5 text-center text-[10px] font-bold text-stone-400 dark:border-slate-800/80 dark:bg-slate-950/30 dark:text-slate-500">
+                                Butuh bantuan lebih lanjut? Hubungi Supervisor atau IT Support.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

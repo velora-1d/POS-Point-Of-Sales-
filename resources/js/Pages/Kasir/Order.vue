@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ArrowLeftRight, Clock, CookingPot, ShoppingCart } from '@lucide/vue';
-import { onBeforeUnmount, onMounted, watch, watchEffect } from 'vue';
+import { onBeforeUnmount, onMounted, watch, watchEffect, inject, type Ref } from 'vue';
 
 // Sub-components
 import CartPanel from './Components/CartPanel.vue';
@@ -61,6 +61,13 @@ watch(
     },
     { immediate: true },
 );
+
+const activeGuideSubTab = inject<Ref<string | null> | null>('activeGuideSubTab', null);
+if (activeGuideSubTab) {
+    watch(activeSubTab, (val) => {
+        activeGuideSubTab.value = val;
+    }, { immediate: true });
+}
 
 let shiftInterval: any = null;
 
