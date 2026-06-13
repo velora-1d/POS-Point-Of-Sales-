@@ -1028,7 +1028,10 @@ const triggerTestPushNotification = async () => {
         alert(response.data.message || 'Tes push notifikasi berhasil dikirim!');
     } catch (err) {
         console.error('Error triggering test push notification:', err);
-        const errMsg = err.response?.data?.message || 'Gagal mengirim tes push notifikasi. Pastikan izin notifikasi browser sudah aktif.';
+        let errMsg = 'Gagal mengirim tes push notifikasi. Pastikan izin notifikasi browser sudah aktif.';
+        if (axios.isAxiosError(err)) {
+            errMsg = err.response?.data?.message || errMsg;
+        }
         alert(errMsg);
     } finally {
         isTestingPush.value = false;

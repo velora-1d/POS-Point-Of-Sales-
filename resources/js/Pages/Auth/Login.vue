@@ -37,59 +37,59 @@ const submit = () => {
     <Head title="Log In - POS Mentai" />
 
     <div
-        class="flex min-h-screen flex-col bg-slate-950 font-sans text-slate-100 selection:bg-orange-500 selection:text-white md:flex-row"
+        class="flex min-h-screen flex-col bg-stone-100 font-sans text-black selection:bg-orange-500 selection:text-white md:flex-row"
     >
         <!-- Left Side: Cinematic Banner (Hidden on Mobile) -->
         <div
-            class="relative hidden items-center justify-center overflow-hidden bg-slate-900 md:flex md:w-1/2 lg:w-3/5"
+            class="relative hidden items-center justify-center overflow-hidden bg-stone-200 md:flex md:w-1/2 lg:w-3/5"
         >
             <!-- Background Image with Overlay -->
             <img
                 src="/images/login_banner.png"
                 alt="Mentai Restaurant Banner"
-                class="duration-10000 absolute inset-0 h-full w-full scale-105 object-cover opacity-60 transition-transform ease-out hover:scale-100"
+                class="duration-10000 absolute inset-0 h-full w-full scale-105 object-cover opacity-80 transition-transform ease-out hover:scale-100"
             />
             <div
-                class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/70"
+                class="absolute inset-0 bg-gradient-to-t from-stone-200 via-stone-200/40 to-stone-200/70"
             ></div>
 
             <!-- Floating Premium Card on Left Side -->
             <div class="relative z-10 max-w-lg p-12 text-left">
                 <div
-                    class="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-orange-400 backdrop-blur-sm"
+                    class="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-orange-500 bg-orange-100 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-orange-700"
                 >
                     🔥 Premium Restaurant System
                 </div>
                 <h1
-                    class="mb-4 text-4xl font-black leading-tight tracking-tight text-white lg:text-5xl"
+                    class="mb-4 text-4xl font-black leading-tight tracking-tight text-black lg:text-5xl"
                 >
                     Sistem Operasional <br />
                     <span
-                        class="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent"
+                        class="bg-gradient-to-r from-orange-600 to-red-700 bg-clip-text text-transparent"
                     >
                         POS Mentai
                     </span>
                 </h1>
-                <p class="mb-8 text-lg leading-relaxed text-slate-300">
+                <p class="mb-8 text-lg font-bold leading-relaxed text-stone-700">
                     Kelola meja, dapur, pesanan, dan keuangan restoran secara
                     real-time dengan efisiensi tingkat tinggi.
                 </p>
-                <div class="flex gap-8 border-t border-slate-800/80 pt-8">
+                <div class="flex gap-8 border-t-2 border-stone-300 pt-8">
                     <div>
-                        <p class="text-2xl font-bold text-white">40+</p>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="text-2xl font-black text-black">40+</p>
+                        <p class="mt-1 text-xs font-bold text-stone-500">
                             Alur Kerja Terotomatisasi
                         </p>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-white">100%</p>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="text-2xl font-black text-black">100%</p>
+                        <p class="mt-1 text-xs font-bold text-stone-500">
                             Keamanan Isolasi Data
                         </p>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-white">Real-time</p>
-                        <p class="mt-1 text-xs text-slate-400">
+                        <p class="text-2xl font-black text-black">Real-time</p>
+                        <p class="mt-1 text-xs font-bold text-stone-500">
                             Kitchen & Bar Sync
                         </p>
                     </div>
@@ -99,7 +99,7 @@ const submit = () => {
             <!-- Subtle corner brand light -->
             <div class="absolute left-8 top-8 z-10 flex items-center gap-3">
                 <div
-                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-white p-1 shadow-lg shadow-orange-500/20"
+                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-white p-1 shadow-xl"
                 >
                     <img
                         src="/images/pos_logo.png"
@@ -107,7 +107,7 @@ const submit = () => {
                         alt="Logo"
                     />
                 </div>
-                <span class="text-xl font-bold tracking-wider text-white"
+                <span class="text-xl font-black tracking-wider text-black"
                     >POS MENTAI</span
                 >
             </div>
@@ -115,14 +115,14 @@ const submit = () => {
 
         <!-- Right Side: Login Form -->
         <div
-            class="relative flex flex-1 flex-col items-center justify-center bg-slate-950 px-6 py-12 md:px-12 lg:px-20"
+            class="relative flex flex-1 flex-col items-center justify-center bg-white px-6 py-12 md:px-12 lg:px-20"
         >
             <!-- Ambient glowing spot -->
             <div
-                class="pointer-events-none absolute right-1/4 top-1/4 h-96 w-96 rounded-full bg-orange-600/10 blur-3xl"
+                class="pointer-events-none absolute right-1/4 top-1/4 h-96 w-96 rounded-full bg-orange-500/10 blur-3xl"
             ></div>
             <div
-                class="pointer-events-none absolute bottom-1/4 left-1/4 h-96 w-96 rounded-full bg-red-600/5 blur-3xl"
+                class="pointer-events-none absolute bottom-1/4 left-1/4 h-96 w-96 rounded-full bg-red-500/5 blur-3xl"
             ></div>
 
             <div class="relative z-10 w-full max-w-md">
@@ -139,7 +139,7 @@ const submit = () => {
                             alt="Logo"
                         />
                     </div>
-                    <span class="text-2xl font-bold tracking-wider text-white"
+                    <span class="text-2xl font-black tracking-wider text-black"
                         >POS MENTAI</span
                     >
                 </div>
@@ -147,11 +147,11 @@ const submit = () => {
                 <!-- Form Header -->
                 <div class="mb-8 text-center md:text-left">
                     <h2
-                        class="text-3xl font-extrabold tracking-tight text-white"
+                        class="text-3xl font-black tracking-tight text-black"
                     >
                         Selamat Datang
                     </h2>
-                    <p class="mt-2 text-slate-400">
+                    <p class="mt-2 font-bold text-stone-500">
                         Silakan masuk menggunakan kredensial akun Anda.
                     </p>
                 </div>
@@ -159,7 +159,7 @@ const submit = () => {
                 <!-- Status Banner -->
                 <div
                     v-if="status"
-                    class="mb-6 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-medium text-emerald-400"
+                    class="mb-6 rounded-xl border-2 border-emerald-700 bg-emerald-50 p-4 text-sm font-bold text-emerald-800"
                 >
                     {{ status }}
                 </div>
@@ -170,14 +170,14 @@ const submit = () => {
                     <div class="space-y-2">
                         <label
                             for="email"
-                            class="block text-sm font-semibold text-slate-300"
+                            class="block text-sm font-black text-black"
                             >Alamat Email</label
                         >
                         <div class="group relative">
                             <input
                                 id="email"
                                 type="email"
-                                class="w-full rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3.5 text-slate-100 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                class="w-full rounded-xl border-2 border-stone-200 bg-stone-50 px-4 py-3.5 text-black placeholder-stone-400 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 font-bold"
                                 placeholder="nama@restoran.com"
                                 v-model="form.email"
                                 required
@@ -193,13 +193,13 @@ const submit = () => {
                         <div class="flex items-center justify-between">
                             <label
                                 for="password"
-                                class="block text-sm font-semibold text-slate-300"
+                                class="block text-sm font-black text-black"
                                 >Kata Sandi</label
                             >
                             <a
                                 v-if="canResetPassword"
                                 :href="route('password.request')"
-                                class="text-sm font-medium text-orange-400 transition duration-150 hover:text-orange-300"
+                                class="text-sm font-black text-orange-600 transition duration-150 hover:text-orange-700 underline underline-offset-4"
                             >
                                 Lupa sandi?
                             </a>
@@ -208,7 +208,7 @@ const submit = () => {
                             <input
                                 id="password"
                                 :type="showPassword ? 'text' : 'password'"
-                                class="w-full rounded-xl border border-slate-800 bg-slate-900/60 py-3.5 pl-4 pr-12 text-slate-100 placeholder-slate-500 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                class="w-full rounded-xl border-2 border-stone-200 bg-stone-50 py-3.5 pl-4 pr-12 text-black placeholder-stone-400 transition duration-200 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 font-bold"
                                 placeholder="••••••••"
                                 v-model="form.password"
                                 required
@@ -217,7 +217,7 @@ const submit = () => {
                             <button
                                 type="button"
                                 @click="showPassword = !showPassword"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition duration-150 hover:text-slate-200 focus:outline-none"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 transition duration-150 hover:text-black focus:outline-none"
                             >
                                 <Eye v-if="!showPassword" class="h-5 w-5" />
                                 <EyeOff v-else class="h-5 w-5" />
@@ -239,7 +239,7 @@ const submit = () => {
                                 v-model:checked="form.remember"
                             />
                             <span
-                                class="ms-2.5 text-sm text-slate-400 transition duration-150 hover:text-slate-300"
+                                class="ms-2.5 text-sm font-bold text-stone-500 transition duration-150 hover:text-black"
                             >
                                 Ingat sesi saya
                             </span>
@@ -249,7 +249,7 @@ const submit = () => {
                     <!-- Submit Button -->
                     <button
                         type="submit"
-                        class="duration-250 flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-400 px-6 py-4 font-bold text-stone-950 transition focus:outline-none focus:ring-2 focus:ring-orange-500/50 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50"
+                        class="duration-250 flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 hover:bg-orange-600 px-6 py-4 font-black text-white shadow-lg shadow-orange-500/20 transition focus:outline-none focus:ring-2 focus:ring-orange-500/50 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50"
                         :disabled="isSubmitting || form.processing"
                     >
                         <!-- Loading spinner -->
@@ -284,7 +284,7 @@ const submit = () => {
 
                 <!-- Footer branding -->
                 <div
-                    class="mt-12 border-t border-slate-900/60 pt-6 text-center text-xs text-slate-500"
+                    class="mt-12 border-t-2 border-stone-100 pt-6 text-center text-xs font-bold text-stone-400"
                 >
                     POS Mentai &copy; 2026. Hak Cipta Dilindungi.
                 </div>
