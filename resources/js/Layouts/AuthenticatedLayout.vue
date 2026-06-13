@@ -1159,6 +1159,10 @@ interface AudioUpdateOrder {
     customerName?: string | null;
     tableLabel: string;
     source: string;
+    items?: {
+        name: string;
+        quantity: number;
+    }[];
 }
 
 interface AudioUpdateResponse {
@@ -1200,7 +1204,22 @@ const checkOrderAudioUpdates = async () => {
                         order.tableLabel && order.tableLabel !== 'Takeaway'
                             ? `Meja ${order.tableLabel}`
                             : 'Takeaway';
-                    const msg = `Pesanan baru masuk atas nama ${customer}, ${tableInfo}.`;
+                    
+                    const itemsText =
+                        order.items && order.items.length > 0
+                            ? order.items
+                                  .map((item) => {
+                                      const qty = item.quantity || 1;
+                                      const cleanName = item.name
+                                          ? item.name.replace(/\s*-\s*/g, ', ')
+                                          : 'Menu';
+                                      return `${qty} porsi ${cleanName}`;
+                                  })
+                                  .join(', ')
+                            : '';
+                    const itemsSuffix = itemsText ? `, dengan menu: ${itemsText}` : '';
+                    
+                    const msg = `Pesanan baru masuk atas nama ${customer}, ${tableInfo}${itemsSuffix}.`;
                     playChimeAndSpeakGlobal(
                         msg,
                         voiceSettings.volume,
@@ -1212,9 +1231,33 @@ const checkOrderAudioUpdates = async () => {
                 knownOrders.value.set(order.id, order.status);
 
                 if (!isInitialLoad.value) {
+                    const customer =
+                        order.customerName ||
+                        (order.source === 'qr_meja'
+                            ? 'Pelanggan Meja'
+                            : 'Pelanggan');
+                    const tableInfo =
+                        order.tableLabel && order.tableLabel !== 'Takeaway'
+                            ? `Meja ${order.tableLabel}`
+                            : 'Takeaway';
+
+                    const itemsText =
+                        order.items && order.items.length > 0
+                            ? order.items
+                                  .map((item) => {
+                                      const qty = item.quantity || 1;
+                                      const cleanName = item.name
+                                          ? item.name.replace(/\s*-\s*/g, ', ')
+                                          : 'Menu';
+                                      return `${qty} porsi ${cleanName}`;
+                                  })
+                                  .join(', ')
+                            : '';
+                    const itemsSuffix = itemsText ? `, dengan menu: ${itemsText}` : '';
+
                     let msg = '';
                     if (order.status === 'in_progress') {
-                        msg = `Pesanan nomor ${order.orderNumber} mulai dimasak.`;
+                        msg = `Pesanan atas nama ${customer}, ${tableInfo}, mulai dimasak${itemsSuffix}.`;
                     } else if (
                         order.status === 'waiting_bar_approval' ||
                         order.status === 'ready'
@@ -1223,10 +1266,10 @@ const checkOrderAudioUpdates = async () => {
                             previousStatus !== 'waiting_bar_approval' &&
                             previousStatus !== 'ready'
                         ) {
-                            msg = `Pesanan nomor ${order.orderNumber} selesai dimasak.`;
+                            msg = `Pesanan atas nama ${customer}, ${tableInfo}, selesai dimasak. Silakan disajikan.`;
                         }
                     } else if (order.status === 'completed') {
-                        msg = `Pesanan nomor ${order.orderNumber} telah diterima pelanggan.`;
+                        msg = `Pesanan atas nama ${customer}, ${tableInfo}, telah diterima pelanggan. Terima kasih.`;
                     }
 
                     if (msg) {

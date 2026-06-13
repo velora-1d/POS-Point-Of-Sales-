@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, useForm, usePage } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import {
     Activity,
     CheckCircle2,
@@ -11,10 +11,10 @@ import {
     Wifi,
     Zap,
 } from '@lucide/vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 interface EffectiveConfig {
-    source: 'env';
+    source: 'env' | 'outlet' | 'missing';
     provider: string;
     is_active: boolean;
     base_url?: string;
@@ -25,21 +25,83 @@ interface EffectiveConfig {
     has_api_secret: boolean;
 }
 
+interface OutletOption {
+    id: string;
+    name: string;
+    is_active: boolean;
+    has_config: boolean;
+}
+
 const props = defineProps<{
+    outlets: OutletOption[];
+    selectedOutlet: {
+        id: string;
+        name: string;
+        is_active: boolean;
+    } | null;
+    summary: {
+        total_outlets: number;
+        override_outlets: number;
+        active_overrides: number;
+        qris_ready_outlets: number;
+    };
     effectiveConfig: EffectiveConfig;
+    formDefaults: {
+        outlet_id: string | null;
+        provider: string;
+        is_active: boolean;
+        base_url: string;
+        project_slug: string;
+        callback_url: string;
+        api_key: string;
+        api_secret: string;
+        active_payment_methods: string[];
+        has_stored_api_key: boolean;
+        has_stored_api_secret: boolean;
+    };
+    filters: {
+        outlet_id?: string | null;
+    };
+    access: {
+        canSelectOutlet: boolean;
+        role?: string | null;
+    };
     success?: string | null;
 }>();
 
 const isTesting = ref(false);
-const page = usePage<any>();
-const userOutletId = page.props.auth.user?.outlet_id;
 
 const form = useForm({
-    outlet_id: userOutletId || '',
-    provider: 'pakasir',
-    is_active: true,
-    active_payment_methods: [...props.effectiveConfig.active_payment_methods],
+    outlet_id: props.formDefaults.outlet_id || props.selectedOutlet?.id || '',
+    provider: props.formDefaults.provider || 'pakasir',
+    is_active: props.formDefaults.is_active ?? false,
+    base_url: props.formDefaults.base_url || '',
+    project_slug: props.formDefaults.project_slug || '',
+    callback_url: props.formDefaults.callback_url || '',
+    api_key: '',
+    api_secret: '',
+    active_payment_methods: [...props.formDefaults.active_payment_methods],
 });
+
+watch(
+    () => props.formDefaults,
+    (defaults) => {
+        form.defaults({
+            outlet_id: defaults.outlet_id || props.selectedOutlet?.id || '',
+            provider: defaults.provider || 'pakasir',
+            is_active: defaults.is_active ?? false,
+            base_url: defaults.base_url || '',
+            project_slug: defaults.project_slug || '',
+            callback_url: defaults.callback_url || '',
+            api_key: '',
+            api_secret: '',
+            active_payment_methods: [...defaults.active_payment_methods],
+        });
+        form.reset();
+        form.clearErrors();
+    },
+    { deep: true },
+);
 
 const availableMethods = [
     { value: 'qris', label: 'QRIS', description: 'Pembayaran instan kode QR' },
@@ -71,6 +133,20 @@ function toggleMethod(methodValue: string) {
     }
 }
 
+function changeOutlet(outletId: string) {
+    router.get(
+        route('settings.payment-gateway.index'),
+        {
+            outlet_id: outletId || undefined,
+        },
+        {
+            preserveScroll: true,
+            preserveState: false,
+            replace: true,
+        },
+    );
+}
+
 function submitSave() {
     form.put(route('settings.payment-gateway.update'), {
         preserveScroll: true,
@@ -82,7 +158,15 @@ function submitTest() {
     router.post(
         route('settings.payment-gateway.test'),
         {
-            outlet_id: userOutletId,
+            outlet_id: form.outlet_id,
+            provider: form.provider,
+            is_active: form.is_active,
+            base_url: form.base_url,
+            project_slug: form.project_slug,
+            callback_url: form.callback_url,
+            api_key: form.api_key,
+            api_secret: form.api_secret,
+            active_payment_methods: form.active_payment_methods,
         },
         {
             preserveScroll: true,
@@ -99,7 +183,7 @@ function submitTest() {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2
                         class="text-2xl font-black tracking-tight text-stone-900 dark:text-white"
@@ -112,6 +196,28 @@ function submitTest() {
                         Pusat pemantauan koneksi gateway pembayaran digital yang
                         terhubung secara global melalui konfigurasi sistem.
                     </p>
+                </div>
+
+                <!-- Outlet Scoped Selector -->
+                <div v-if="access.canSelectOutlet" class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-stone-500 dark:text-slate-400">Outlet:</span>
+                    <select
+                        :value="filters.outlet_id"
+                        @change="changeOutlet(($event.target as HTMLSelectElement).value)"
+                        class="rounded-xl border-2 border-stone-200 bg-white px-3 py-1.5 text-xs font-bold text-stone-700 shadow-sm transition-all focus:border-orange-500 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
+                    >
+                        <option
+                            v-for="ot in outlets"
+                            :key="ot.id"
+                            :value="ot.id"
+                        >
+                            {{ ot.name }} {{ ot.has_config ? '✓' : '' }}
+                        </option>
+                    </select>
+                </div>
+                <div v-else-if="selectedOutlet" class="flex items-center gap-2 rounded-xl border-2 border-stone-200 bg-stone-50 px-3 py-1.5 dark:border-white/10 dark:bg-slate-900">
+                    <span class="text-xs font-bold text-stone-500">Outlet:</span>
+                    <span class="text-xs font-extrabold text-stone-800 dark:text-slate-200">{{ selectedOutlet.name }}</span>
                 </div>
             </div>
         </template>
@@ -239,11 +345,22 @@ function submitTest() {
                                     Mode Sinkronisasi
                                 </p>
                                 <div
-                                    class="mt-3 flex items-center gap-3 text-emerald-600 dark:text-emerald-450"
+                                    class="mt-3 flex items-center gap-3"
+                                    :class="
+                                        effectiveConfig.source === 'outlet'
+                                            ? 'text-orange-600 dark:text-orange-450'
+                                            : 'text-emerald-600 dark:text-emerald-450'
+                                    "
                                 >
                                     <ShieldCheck class="h-5 w-5" />
                                     <p class="text-base font-bold uppercase">
-                                        Absolut (.env)
+                                        {{
+                                            effectiveConfig.source === 'outlet'
+                                                ? 'Override Outlet'
+                                                : effectiveConfig.source === 'env'
+                                                ? 'Absolut (.env)'
+                                                : 'Belum Diatur'
+                                        }}
                                     </p>
                                 </div>
                             </div>
@@ -351,58 +468,143 @@ function submitTest() {
                     @submit.prevent="submitSave"
                     class="flex flex-col justify-between rounded-[28px] border-2 border-stone-200 bg-white p-6 shadow-xl dark:border-white/10 dark:bg-slate-950/45"
                 >
-                    <div>
-                        <p
-                            class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-400"
-                        >
-                            Active Methods
-                        </p>
-                        <h3
-                            class="mt-1 text-xl font-black text-stone-900 dark:text-white"
-                        >
-                            Metode Bayar Digital Aktif
-                        </h3>
-                        <p
-                            class="mt-2 text-xs text-stone-500 dark:text-slate-400"
-                        >
-                            Centang metode pembayaran digital yang ingin
-                            diaktifkan di halaman kasir/order.
-                        </p>
-
-                        <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <label
-                                v-for="method in availableMethods"
-                                :key="method.value"
-                                class="flex cursor-pointer items-start gap-4 rounded-2xl border-2 p-4 transition-all duration-200"
-                                :class="
-                                    form.active_payment_methods.includes(
-                                        method.value,
-                                    )
-                                        ? 'border-orange-500 bg-orange-500/5 hover:bg-orange-500/10'
-                                        : 'border-stone-200 bg-white hover:bg-stone-50 dark:border-white/10 dark:bg-slate-900/60 dark:hover:bg-slate-900'
-                                "
-                            >
+                    <div class="space-y-6">
+                        <!-- Override Toggle -->
+                        <div class="rounded-2xl border-2 border-stone-200 bg-stone-50/50 p-4 dark:border-white/10 dark:bg-slate-900/40">
+                            <label class="flex cursor-pointer items-center justify-between">
+                                <div>
+                                    <span class="block text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white">
+                                        Override Kredensial Outlet
+                                    </span>
+                                    <span class="mt-0.5 block text-[11px] text-stone-500 dark:text-slate-400">
+                                        Aktifkan untuk mengisi kredensial khusus outlet ini. Jika mati, menggunakan fallback global .env.
+                                    </span>
+                                </div>
                                 <input
                                     type="checkbox"
-                                    :checked="
+                                    v-model="form.is_active"
+                                    class="h-4.5 w-4.5 rounded border-stone-200 text-orange-500 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-950"
+                                />
+                            </label>
+                        </div>
+
+                        <!-- Override Inputs -->
+                        <div v-if="form.is_active" class="grid grid-cols-1 gap-4 rounded-2xl border-2 border-dashed border-orange-500/30 p-4 bg-orange-500/[0.01]">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                    Base Endpoint URL
+                                </label>
+                                <input
+                                    type="url"
+                                    v-model="form.base_url"
+                                    placeholder="https://api.pakasir.com"
+                                    class="mt-1.5 block w-full rounded-xl border-2 border-stone-200 bg-white px-3 py-2 text-xs font-bold text-stone-800 focus:border-orange-500 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                    Project Slug
+                                </label>
+                                <input
+                                    type="text"
+                                    v-model="form.project_slug"
+                                    placeholder="nama-project-outlet"
+                                    class="mt-1.5 block w-full rounded-xl border-2 border-stone-200 bg-white px-3 py-2 text-xs font-bold text-stone-800 focus:border-orange-500 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                    Callback URL
+                                </label>
+                                <input
+                                    type="url"
+                                    v-model="form.callback_url"
+                                    placeholder="https://domain.com/webhook"
+                                    class="mt-1.5 block w-full rounded-xl border-2 border-stone-200 bg-white px-3 py-2 text-xs font-bold text-stone-800 focus:border-orange-500 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
+                                />
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                        API Key
+                                    </label>
+                                    <input
+                                        type="password"
+                                        v-model="form.api_key"
+                                        :placeholder="formDefaults.has_stored_api_key ? '•••••••• (Tersimpan)' : 'Masukkan API Key'"
+                                        class="mt-1.5 block w-full rounded-xl border-2 border-stone-200 bg-white px-3 py-2 text-xs font-bold text-stone-800 focus:border-orange-500 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-500">
+                                        API Secret
+                                    </label>
+                                    <input
+                                        type="password"
+                                        v-model="form.api_secret"
+                                        :placeholder="formDefaults.has_stored_api_secret ? '•••••••• (Tersimpan)' : 'Masukkan API Secret'"
+                                        class="mt-1.5 block w-full rounded-xl border-2 border-stone-200 bg-white px-3 py-2 text-xs font-bold text-stone-800 focus:border-orange-500 focus:ring-orange-500 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p
+                                class="text-[11px] font-bold uppercase tracking-[0.22em] text-orange-400"
+                            >
+                                Active Methods
+                            </p>
+                            <h3
+                                class="mt-1 text-xl font-black text-stone-900 dark:text-white"
+                            >
+                                Metode Bayar Digital Aktif
+                            </h3>
+                            <p
+                                class="mt-2 text-xs text-stone-500 dark:text-slate-400"
+                            >
+                                Centang metode pembayaran digital yang ingin
+                                diaktifkan di halaman kasir/order.
+                            </p>
+
+                            <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <label
+                                    v-for="method in availableMethods"
+                                    :key="method.value"
+                                    class="flex cursor-pointer items-start gap-4 rounded-2xl border-2 p-4 transition-all duration-200"
+                                    :class="
                                         form.active_payment_methods.includes(
                                             method.value,
                                         )
+                                            ? 'border-orange-500 bg-orange-500/5 hover:bg-orange-500/10'
+                                            : 'border-stone-200 bg-white hover:bg-stone-50 dark:border-white/10 dark:bg-slate-900/60 dark:hover:bg-slate-900'
                                     "
-                                    @change="toggleMethod(method.value)"
-                                    class="mt-1 h-4 w-4 rounded border-stone-200 bg-stone-100 text-orange-500 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-950"
-                                />
-                                <div>
-                                    <span
-                                        class="block text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white"
-                                        >{{ method.label }}</span
-                                    >
-                                    <span
-                                        class="mt-0.5 block text-[11px] text-stone-500 dark:text-slate-400"
-                                        >{{ method.description }}</span
-                                    >
-                                </div>
-                            </label>
+                                >
+                                    <input
+                                        type="checkbox"
+                                        :checked="
+                                            form.active_payment_methods.includes(
+                                                method.value,
+                                            )
+                                        "
+                                        @change="toggleMethod(method.value)"
+                                        class="mt-1 h-4 w-4 rounded border-stone-200 bg-stone-100 text-orange-500 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-950"
+                                    />
+                                    <div>
+                                        <span
+                                            class="block text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white"
+                                            >{{ method.label }}</span
+                                        >
+                                        <span
+                                            class="mt-0.5 block text-[11px] text-stone-500 dark:text-slate-400"
+                                            >{{ method.description }}</span
+                                        >
+                                    </div>
+                                </label>
+                            </div>
                         </div>
                     </div>
 

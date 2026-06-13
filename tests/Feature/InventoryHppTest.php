@@ -165,11 +165,30 @@ class InventoryHppTest extends TestCase
 
         $response->assertRedirect(route('kasir.order'));
 
-        // Kitchen completes the order
+        // Move order through the actual kitchen flow until it is served.
         $order = Order::first();
         $this->actingAs($this->kasir)->post(route('kitchen.orders.update-status', $order), [
-            'status' => 'delivered'
-        ]);
+            'action' => 'start_cooking',
+        ])->assertRedirect();
+
+        $order->refresh();
+        $this->assertEquals('in_progress', $order->status);
+
+        $this->actingAs($this->kasir)->post(route('kitchen.orders.update-status', $order), [
+            'action' => 'finish_cooking',
+        ])->assertRedirect();
+
+        $order->refresh();
+        $this->assertEquals('waiting_bar_approval', $order->status);
+
+        $this->actingAs($this->kasir)->post(route('bar.orders.approve', $order))
+            ->assertRedirect();
+
+        $order->refresh();
+        $this->assertEquals('ready', $order->status);
+
+        $this->actingAs($this->kasir)->post(route('order.deliver', $order))
+            ->assertRedirect(route('kasir.order'));
 
         $this->rawMaterial1->refresh();
         $this->rawMaterial2->refresh();
@@ -203,6 +222,70 @@ class InventoryHppTest extends TestCase
         $this->assertDatabaseHas('product_stocks', [
             'product_id' => $this->product->id,
             'current_stock' => 15,
+        ]);
+    }
+
+    public function test_owner_can_update_product_stock_without_unit_field()
+    {
+        $this->withoutExceptionHandling();
+        $this->product->update(['track_stock' => true]);
+
+        ProductStock::create([
+            'id' => (string) Str::uuid(),
+            'product_id' => $this->product->id,
+            'outlet_id' => $this->outlet->id,
+            'current_stock' => 10,
+            'minimum_stock' => 3,
+            'unit' => 'botol',
+        ]);
+
+        $response = $this->actingAs($this->owner)->patch(route('products.stock.update', $this->product), [
+            'current_stock' => 15,
+            'minimum_stock' => 5,
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('product_stocks', [
+            'product_id' => $this->product->id,
+            'current_stock' => 15,
+            'minimum_stock' => 5,
+            'unit' => 'botol',
+        ]);
+    }
+
+    public function test_owner_can_restock_expired_product_without_batch_code()
+    {
+        $this->withoutExceptionHandling();
+        $this->product->update([
+            'track_stock' => true,
+            'track_expired' => true,
+        ]);
+
+        ProductStock::create([
+            'id' => (string) Str::uuid(),
+            'product_id' => $this->product->id,
+            'outlet_id' => $this->outlet->id,
+            'current_stock' => 10,
+            'minimum_stock' => 3,
+            'unit' => 'pcs',
+        ]);
+
+        $response = $this->actingAs($this->owner)->patch(route('products.stock.update', $this->product), [
+            'current_stock' => 15,
+            'minimum_stock' => 5,
+            'unit' => 'pcs',
+            'expired_date' => '2026-12-31',
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('inventory_expiries', [
+            'outlet_id' => $this->outlet->id,
+            'trackable_type' => 'product',
+            'trackable_id' => $this->product->id,
+            'quantity' => 5,
+            'batch_code' => null,
         ]);
     }
 }

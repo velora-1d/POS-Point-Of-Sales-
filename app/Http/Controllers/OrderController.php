@@ -298,7 +298,7 @@ class OrderController extends Controller
                     });
             })
             ->select(['id', 'order_number', 'status', 'source', 'customer_id', 'table_id', 'metadata', 'updated_at'])
-            ->with(['customer:id,name', 'table:id,name'])
+            ->with(['customer:id,name', 'table:id,name', 'items.product:id,name', 'items.variant:id,name'])
             ->get()
             ->map(function ($order) {
                 return [
@@ -308,6 +308,13 @@ class OrderController extends Controller
                     'customerName' => $order->customer?->name,
                     'tableLabel' => $order->table?->name ?? 'Takeaway',
                     'source' => data_get($order->metadata, 'self_service.channel') ?? $order->source,
+                    'items' => $order->items->map(function ($item) {
+                        $variantName = $item->variant?->name ? ' - '.$item->variant->name : '';
+                        return [
+                            'name' => trim(($item->product?->name ?? 'Menu').$variantName),
+                            'quantity' => (int) $item->quantity,
+                        ];
+                    })->values()->all(),
                 ];
             });
 

@@ -43,7 +43,7 @@ class StoreOrderRequest extends FormRequest
             'payment_method' => [
                 'nullable',
                 Rule::requiredIf(fn () => $this->input('payment_option') === 'pay_now'),
-                Rule::in(['cash', 'qris', 'online_platform']),
+                Rule::in(['cash', 'qris', 'ewallet', 'debit', 'transfer', 'online_platform']),
             ],
             'cash_received' => ['nullable', 'numeric', 'min:0'],
         ];

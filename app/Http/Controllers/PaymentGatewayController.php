@@ -17,34 +17,46 @@ class PaymentGatewayController extends Controller
     ) {
     }
 
-    public function index(): Response
+    public function index(PaymentGatewayIndexRequest $request): Response
     {
-        $data = $this->paymentGatewayConfigService->getGlobalDashboard();
+        $data = $this->paymentGatewayConfigService->getDashboard(
+            $request->user(),
+            $request->validated(),
+        );
 
         return Inertia::render('Settings/PaymentGateway', [
+            'outlets' => $data['outlets'],
+            'selectedOutlet' => $data['selectedOutlet'],
+            'summary' => $data['summary'],
             'effectiveConfig' => $data['effectiveConfig'],
+            'formDefaults' => $data['formDefaults'],
+            'filters' => $data['filters'],
+            'access' => $data['access'],
             'success' => session('success'),
         ]);
     }
 
     public function update(UpsertPaymentGatewayConfigRequest $request): RedirectResponse
     {
-        $this->paymentGatewayConfigService->saveConfig(
+        $outletId = $this->paymentGatewayConfigService->saveConfig(
             $request->validated(),
             $request->user(),
         );
 
         return redirect()
-            ->route('settings.payment-gateway.index')
+            ->route('settings.payment-gateway.index', ['outlet_id' => $outletId])
             ->with('success', 'Pengaturan metode pembayaran gateway berhasil disimpan.');
     }
 
-    public function test(): RedirectResponse
+    public function test(UpsertPaymentGatewayConfigRequest $request): RedirectResponse
     {
-        $message = $this->paymentGatewayConfigService->testGlobalConnection();
+        $message = $this->paymentGatewayConfigService->testConnection(
+            $request->validated(),
+            $request->user(),
+        );
 
         return redirect()
-            ->route('settings.payment-gateway.index')
+            ->route('settings.payment-gateway.index', ['outlet_id' => $request->input('outlet_id')])
             ->with('success', $message);
     }
 }

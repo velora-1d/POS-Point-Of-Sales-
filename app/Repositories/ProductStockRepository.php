@@ -101,6 +101,7 @@ class ProductStockRepository
     public function updateStock(ProductStock $stock, array $payload): ProductStock
     {
         $lastRestockedAt = $stock->last_restocked_at;
+        $unit = trim((string) ($payload['unit'] ?? ''));
 
         if ((int) $payload['current_stock'] > (int) $stock->current_stock) {
             $lastRestockedAt = now();
@@ -109,7 +110,7 @@ class ProductStockRepository
         $stock->fill([
             'current_stock' => $payload['current_stock'],
             'minimum_stock' => $payload['minimum_stock'],
-            'unit' => $payload['unit'] ?: ($stock->unit ?: 'pcs'),
+            'unit' => $unit !== '' ? $unit : ($stock->unit ?: 'pcs'),
             'last_restocked_at' => $lastRestockedAt,
         ]);
 

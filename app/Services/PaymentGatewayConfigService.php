@@ -50,30 +50,49 @@ class PaymentGatewayConfigService
     ) {
     }
 
-    public function getGlobalDashboard(): array
+    public function getDashboard(User $actor, array $filters = []): array
     {
-        $env = $this->resolveEnvFallback();
-        $storedConfig = PaymentGatewayConfig::first();
-        $activeMethods = $storedConfig ? ($storedConfig->active_payment_methods ?? ['qris']) : ['qris', 'ewallet', 'debit', 'transfer'];
+        $this->assertCanManage($actor);
+
+        $outlets = $this->paymentGatewayConfigRepository->getOutlets();
+        $selectedOutlet = $this->resolveSelectedOutlet($outlets, $filters['outlet_id'] ?? null);
+        $selectedOutletId = $selectedOutlet['id'] ?? null;
+
+        $storedConfig = $selectedOutletId
+            ? $this->paymentGatewayConfigRepository->findByOutletId($selectedOutletId)
+            : null;
+
+        $effectiveConfig = $this->buildEffectiveConfig($selectedOutletId, $storedConfig);
+        $formDefaults = $this->buildFormDefaults($selectedOutletId, $storedConfig, $effectiveConfig);
 
         return [
-            'effectiveConfig' => [
-                'source' => 'env',
-                'provider' => 'pakasir',
-                'is_active' => $env['is_ready'],
-                'base_url' => $env['base_url'],
-                'project_slug' => $env['project_slug'],
-                'callback_url' => $env['callback_url'],
-                'active_payment_methods' => $activeMethods,
-                'has_api_key' => filled($env['api_key']),
-                'has_api_secret' => filled($env['api_secret']),
+            'outlets' => $outlets->map(function ($outlet) {
+                return [
+                    'id' => $outlet->id,
+                    'name' => $outlet->name,
+                    'is_active' => (bool) $outlet->is_active,
+                    'has_config' => (bool) $outlet->paymentGatewayConfig,
+                ];
+            })->values()->all(),
+            'selectedOutlet' => $selectedOutlet,
+            'summary' => $this->buildSummary($outlets),
+            'effectiveConfig' => $effectiveConfig,
+            'formDefaults' => $formDefaults,
+            'filters' => [
+                'outlet_id' => $selectedOutletId,
+            ],
+            'access' => [
+                'canSelectOutlet' => $actor->role?->type === 'owner',
+                'role' => $actor->role?->type,
             ],
         ];
     }
 
-    public function saveConfig(array $payload, User $actor): void
+    public function saveConfig(array $payload, User $actor): string
     {
         $this->assertCanManage($actor);
+
+        $outletId = $payload['outlet_id'];
 
         $activeMethods = collect($payload['active_payment_methods'] ?? [])
             ->map(fn ($value) => strtolower(trim((string) $value)))
@@ -88,28 +107,28 @@ class PaymentGatewayConfigService
             ]);
         }
 
-        $outlet = \App\Models\Outlet::first();
-        if (!$outlet) {
-            throw new \RuntimeException('Belum ada outlet terdaftar.');
-        }
+        $storedConfig = $this->paymentGatewayConfigRepository->findByOutletId($outletId);
+        $normalized = $this->normalizeForPersistence($payload, $storedConfig);
 
-        PaymentGatewayConfig::updateOrCreate(
-            ['outlet_id' => $outlet->id],
-            [
-                'provider' => 'pakasir',
-                'is_active' => true,
-                'active_payment_methods' => $activeMethods,
-            ]
-        );
+        $this->paymentGatewayConfigRepository->upsertByOutlet($outletId, $normalized);
+
+        return $outletId;
     }
 
-    public function testGlobalConnection(): string
+    public function testConnection(array $payload, User $actor): string
     {
-        $env = $this->resolveEnvFallback();
+        $this->assertCanManage($actor);
 
-        if (!$env['is_ready'] || !$env['api_key']) {
+        $outletId = $payload['outlet_id'] ?? null;
+        $storedConfig = $outletId
+            ? $this->paymentGatewayConfigRepository->findByOutletId($outletId)
+            : null;
+
+        $normalized = $this->normalizeForRuntime($payload, $storedConfig, false);
+
+        if (!$normalized['is_active'] || !$normalized['api_key']) {
             throw ValidationException::withMessages([
-                'test_connection' => 'Konfigurasi .env belum lengkap (API Key, Base URL, atau Slug kosong).',
+                'test_connection' => 'Konfigurasi belum lengkap (API Key, Base URL, atau Slug kosong).',
             ]);
         }
 
@@ -117,12 +136,12 @@ class PaymentGatewayConfigService
             $response = Http::acceptJson()
                 ->timeout(10)
                 ->get(
-                    rtrim((string) $env['base_url'], '/') . '/api/transactiondetail',
+                    rtrim((string) $normalized['base_url'], '/') . '/api/transactiondetail',
                     [
-                        'project' => $env['project_slug'],
+                        'project' => $normalized['project_slug'],
                         'amount' => 1,
                         'order_id' => 'connection-test-' . Str::lower(Str::random(6)),
-                        'api_key' => $env['api_key'],
+                        'api_key' => $normalized['api_key'],
                     ],
                 );
         } catch (ConnectionException) {
@@ -148,10 +167,32 @@ class PaymentGatewayConfigService
 
     public function resolvePakasirConfig(?string $outletId = null): array
     {
-        $envConfig = $this->resolveEnvFallback();
-        $storedConfig = PaymentGatewayConfig::first();
-        $activeMethods = $storedConfig ? ($storedConfig->active_payment_methods ?? ['qris']) : ['qris', 'ewallet', 'debit', 'transfer'];
+        $storedConfig = $outletId
+            ? $this->paymentGatewayConfigRepository->findByOutletId($outletId)
+            : null;
 
+        if ($storedConfig) {
+            $apiKey = $storedConfig->api_key_encrypted
+                ? Crypt::decryptString($storedConfig->api_key_encrypted)
+                : null;
+            $apiSecret = $storedConfig->api_secret_encrypted
+                ? Crypt::decryptString($storedConfig->api_secret_encrypted)
+                : null;
+
+            return [
+                'provider' => $storedConfig->provider,
+                'is_active' => (bool) $storedConfig->is_active,
+                'base_url' => $storedConfig->base_url,
+                'project_slug' => $storedConfig->project_slug,
+                'callback_url' => $storedConfig->callback_url ?: route('payments.webhook.pakasir'),
+                'api_key' => $apiKey,
+                'api_secret' => $apiSecret,
+                'active_payment_methods' => $storedConfig->active_payment_methods ?? [],
+                'source' => 'outlet',
+            ];
+        }
+
+        $envConfig = $this->resolveEnvFallback();
         if ($envConfig['is_ready']) {
             return [
                 'provider' => 'pakasir',
@@ -161,7 +202,7 @@ class PaymentGatewayConfigService
                 'callback_url' => $envConfig['callback_url'],
                 'api_key' => $envConfig['api_key'],
                 'api_secret' => $envConfig['api_secret'],
-                'active_payment_methods' => $activeMethods,
+                'active_payment_methods' => ['qris'],
                 'source' => 'env',
             ];
         }

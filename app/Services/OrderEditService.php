@@ -5,10 +5,12 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\RawMaterial;
 use App\Models\User;
 use App\Services\OnlineOrderStatusSyncService;
 use App\Services\TableReservationService;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -234,12 +236,27 @@ class OrderEditService
         }
 
         DB::transaction(function () use ($order, $actor) {
+            $order = Order::query()
+                ->with(['items.product.ingredients'])
+                ->lockForUpdate()
+                ->findOrFail($order->id);
+
             $isPaid = $order->isPaidInFull();
             $newStatus = $isPaid ? 'completed' : 'delivered';
             $oldStatus = $order->status;
+            $metadata = $order->metadata ?? [];
+
+            if ($oldStatus === 'ready' && empty(data_get($metadata, 'inventory.ingredients_consumed_at'))) {
+                $this->consumeRawMaterialsForOrder($order);
+                $metadata['inventory'] = array_merge($metadata['inventory'] ?? [], [
+                    'ingredients_consumed_at' => now()->toIso8601String(),
+                    'ingredients_consumed_by' => $actor->id,
+                ]);
+            }
 
             $order->update([
                 'status' => $newStatus,
+                'metadata' => $metadata,
             ]);
 
             $fcmToken = $order->metadata['customer_fcm_token'] ?? null;
@@ -281,5 +298,49 @@ class OrderEditService
                 $this->tableReservationService->syncTableStatus($order->table_id);
             }
         });
+    }
+
+    protected function consumeRawMaterialsForOrder(Order $order): void
+    {
+        $requiredMaterials = $this->collectRequiredRawMaterials($order);
+
+        if ($requiredMaterials->isEmpty()) {
+            return;
+        }
+
+        $rawMaterials = RawMaterial::query()
+            ->whereIn('id', $requiredMaterials->keys())
+            ->lockForUpdate()
+            ->get()
+            ->keyBy('id');
+
+        foreach ($requiredMaterials as $rawMaterialId => $requiredQuantity) {
+            $rawMaterial = $rawMaterials->get($rawMaterialId);
+
+            if (!$rawMaterial) {
+                continue;
+            }
+
+            $rawMaterial->update([
+                'quantity' => round((float) $rawMaterial->quantity - (float) $requiredQuantity, 3),
+            ]);
+        }
+    }
+
+    protected function collectRequiredRawMaterials(Order $order): Collection
+    {
+        return $order->items
+            ->flatMap(function ($item) {
+                $quantity = (int) $item->quantity;
+
+                return $item->product?->ingredients->map(function ($ingredient) use ($quantity) {
+                    return [
+                        'raw_material_id' => $ingredient->raw_material_id,
+                        'quantity' => (float) $ingredient->quantity * $quantity,
+                    ];
+                }) ?? collect();
+            })
+            ->groupBy('raw_material_id')
+            ->map(fn (Collection $rows) => $rows->sum('quantity'));
     }
 }

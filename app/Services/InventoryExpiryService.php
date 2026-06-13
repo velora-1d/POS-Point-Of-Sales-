@@ -63,6 +63,7 @@ class InventoryExpiryService
         }
 
         $expiredDate = $payload['expired_date'] ?? null;
+        $batchCode = trim((string) ($payload['batch_code'] ?? ''));
 
         if (!$expiredDate) {
             throw ValidationException::withMessages([
@@ -75,7 +76,7 @@ class InventoryExpiryService
             'trackable_type' => 'product',
             'trackable_id' => $product->id,
             'quantity' => $quantity,
-            'batch_code' => $payload['batch_code'] ?: null,
+            'batch_code' => $batchCode !== '' ? $batchCode : null,
             'expired_at' => $expiredDate,
             'reminder_days' => $product->expired_reminder_days ?: [7, 3, 1],
             'expired_action' => $product->expired_action ?: 'notify_only',
@@ -90,6 +91,7 @@ class InventoryExpiryService
         }
 
         $expiredDate = $payload['expired_date'] ?? null;
+        $batchCode = trim((string) ($payload['batch_code'] ?? ''));
 
         if (!$expiredDate) {
             throw ValidationException::withMessages([
@@ -102,7 +104,7 @@ class InventoryExpiryService
             'trackable_type' => 'raw_material',
             'trackable_id' => $rawMaterial->id,
             'quantity' => $quantity,
-            'batch_code' => $payload['batch_code'] ?: null,
+            'batch_code' => $batchCode !== '' ? $batchCode : null,
             'expired_at' => $expiredDate,
             'reminder_days' => $rawMaterial->expired_reminder_days ?: [7, 3, 1],
             'expired_action' => $rawMaterial->expired_action ?: 'notify_only',

@@ -13,6 +13,11 @@ class KitchenDisplayRepository
         return Order::query()
             ->where('outlet_id', $outletId)
             ->whereIn('status', ['pending', 'in_progress', 'waiting_bar_approval', 'ready'])
+            ->where(function ($query) {
+                $query->whereNull('metadata->payment')
+                    ->orWhere('metadata->payment->status', '!=', 'pending')
+                    ->orWhere('metadata->payment->context', '!=', 'before_kitchen');
+            })
             ->with([
                 'table:id,name',
                 'customer:id,name',

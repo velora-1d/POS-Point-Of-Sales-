@@ -15,7 +15,7 @@ class ProcessOrderPaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method' => ['required', Rule::in(['cash', 'qris'])],
+            'payment_method' => ['required', Rule::in(['cash', 'qris', 'ewallet', 'debit', 'transfer'])],
             'promo_code' => ['nullable', 'string', 'max:50'],
             'approval_pin' => ['nullable', 'string', 'max:20'],
             'cash_received' => ['nullable', 'numeric', 'min:0'],
